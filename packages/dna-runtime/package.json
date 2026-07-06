@@ -1,0 +1,49 @@
+{
+  "name": "@humaan/dna-runtime",
+  "version": "0.1.0",
+  "description": "DNA runtime observer for Node.js applications",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@humaan/dna-ai": "workspace:*",
+    "@humaan/dna-config": "workspace:*",
+    "@humaan/dna-github": "workspace:*",
+    "@humaan/dna-immune": "workspace:*"
+  },
+  "peerDependencies": {
+    "express": "^4.18.0",
+    "fastify": "^4.0.0 || ^5.0.0",
+    "@nestjs/common": "^10.0.0 || ^11.0.0",
+    "next": "^14.0.0 || ^15.0.0"
+  },
+  "peerDependenciesMeta": {
+    "express": { "optional": true },
+    "fastify": { "optional": true },
+    "@nestjs/common": { "optional": true },
+    "next": { "optional": true }
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "express": "^4.21.2",
+    "fastify": "^5.2.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

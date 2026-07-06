@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [{ "src": "src/index.ts", "use": "@vercel/node" }],
+  "routes": [
+    { "src": "/marketplace/api/(.*)", "dest": "/src/index.ts" },
+    { "src": "/marketplace", "dest": "/src/index.ts" },
+    { "src": "/marketplace/", "dest": "/src/index.ts" }
+  ],
+  "env": {
+    "MARKETPLACE_BASE_PATH": "/marketplace"
+  }
+}

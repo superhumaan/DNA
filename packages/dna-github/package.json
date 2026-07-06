@@ -1,0 +1,32 @@
+{
+  "name": "@humaan/dna-github",
+  "version": "0.1.0",
+  "description": "DNA GitHub integration — issues, PRs, branches",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@humaan/dna-config": "workspace:*",
+    "@octokit/rest": "^21.0.2"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

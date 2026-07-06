@@ -1,0 +1,54 @@
+{
+  "name": "dna-by-humaan",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DNA by Humaan — open-source project intelligence, runtime observer, knowledge marketplace, and AI-assisted repair for modern TypeScript teams",
+  "author": "Humaan by Superlite",
+  "license": "MIT",
+  "homepage": "https://github.com/superhumaan/DNA#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/superhumaan/DNA.git"
+  },
+  "bugs": {
+    "url": "https://github.com/superhumaan/DNA/issues"
+  },
+  "keywords": [
+    "dna",
+    "humaan",
+    "project-intelligence",
+    "ai-context",
+    "cursor",
+    "copilot",
+    "runtime-observer",
+    "typescript",
+    "monorepo",
+    "knowledge-packs",
+    "github-automation"
+  ],
+  "scripts": {
+    "dev": "pnpm -r --parallel run dev",
+    "build": "pnpm -r run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "typecheck": "pnpm -r run typecheck",
+    "dna": "node packages/dna-cli/dist/index.js",
+    "dna:link": "pnpm build && cd packages/dna-cli && pnpm link --global",
+    "dna:setup": "bash scripts/team-setup.sh",
+    "dna:init:examples": "node packages/dna-cli/dist/index.js init -y --cwd apps/examples/react-vite-app && node packages/dna-cli/dist/index.js init -y --cwd apps/examples/node-express-app",
+    "publish:npm": "bash scripts/publish-npm.sh"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "eslint": "^9.16.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0",
+    "vitest": "^2.1.8"
+  }
+}

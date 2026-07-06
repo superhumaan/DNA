@@ -1,0 +1,47 @@
+{
+  "name": "@humaan/dna-cli",
+  "version": "0.1.0",
+  "description": "DNA by Humaan CLI — project intelligence, runtime observer, and AI-assisted repair",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/superhumaan/DNA.git",
+    "directory": "packages/dna-cli"
+  },
+  "homepage": "https://github.com/superhumaan/DNA#readme",
+  "bugs": {
+    "url": "https://github.com/superhumaan/DNA/issues"
+  },
+  "type": "module",
+  "bin": {
+    "dna": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@humaan/dna-ai": "workspace:*",
+    "@humaan/dna-config": "workspace:*",
+    "@humaan/dna-core": "workspace:*",
+    "@humaan/dna-github": "workspace:*",
+    "@humaan/dna-immune": "workspace:*",
+    "@humaan/dna-runtime": "workspace:*",
+    "@humaan/dna-templates": "workspace:*",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}
