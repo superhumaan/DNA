@@ -15,3 +15,5 @@ export * from "./post-init.js";
 export * from "./marketplace/client.js";
 export * from "./marketplace/install.js";
 export * from "./marketplace/bundled-catalog.js";
+export * from "./rbac/plan.js";
+export * from "./rbac/inventory.js";

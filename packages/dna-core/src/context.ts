@@ -17,6 +17,7 @@ export type ContextTarget =
   | "security"
   | "qa"
   | "devops"
+  | "rbac"
   | "all";
 
 const TARGET_INTENTS: Record<ContextTarget, string[]> = {
@@ -28,9 +29,10 @@ const TARGET_INTENTS: Record<ContextTarget, string[]> = {
   gemini: ["review_architecture", "update_documentation", "investigate_bug"],
   backend: ["create_api_endpoint", "fix_runtime_error", "configure_ci_cd"],
   frontend: ["build_frontend_component", "build_pwa", "create_mobile_feature"],
-  security: ["add_authentication", "improve_security"],
+  security: ["implement_rbac", "add_authentication", "improve_security"],
   qa: ["write_tests", "investigate_bug"],
   devops: ["configure_ci_cd", "fix_runtime_error"],
+  rbac: ["implement_rbac"],
   all: [],
 };
 
@@ -46,6 +48,7 @@ const TARGET_BEHAVIOUR: Record<ContextTarget, string[]> = {
   security: ["security.behaviour.md", "runtime.behaviour.md"],
   qa: ["testing.behaviour.md", "documentation.behaviour.md"],
   devops: ["runtime.behaviour.md", "coding.behaviour.md"],
+  rbac: ["security.behaviour.md", "ai.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
   all: [],
 };
 
@@ -126,6 +129,7 @@ export async function generateContext(root: string, target: ContextTarget): Prom
     "hippocampus/project-summary.md",
     "prefrontalCortex/current-plan.md",
     "prefrontalCortex/next-actions.md",
+    "prefrontalCortex/rbac-permission-matrix.md",
     "amygdala/risks.md",
   ];
 

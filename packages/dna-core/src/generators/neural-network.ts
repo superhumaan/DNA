@@ -48,6 +48,32 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
     validationChecks: ["has_manifest", "has_service_worker"],
   },
   {
+    intent: "implement_rbac",
+    description:
+      "Implement role-based access control with zero trust — permission matrix, API enforcement, route guards, menu/notification hiding",
+    requiredKnowledge: [
+      "security/rbac-fundamentals.dna.md",
+      "security/zero-trust.dna.md",
+      "security/ui-surface-checklist.dna.md",
+      "disciplines/security/positioning.dna.md",
+    ],
+    requiredBehaviour: ["security.behaviour.md", "coding.behaviour.md", "testing.behaviour.md", "ai.behaviour.md"],
+    cellularMemory: [
+      "prefrontalCortex/rbac-permission-matrix.md",
+      "prefrontalCortex/decisions.md",
+      "amygdala/risks.md",
+    ],
+    impressions: ["security/security-baseline.md", "security/threat-model.md", "product/user-types.md"],
+    validationChecks: [
+      "rbac_permission_matrix_exists",
+      "api_enforcement",
+      "route_guards",
+      "ui_surfaces_hidden",
+      "role_verification_tests",
+      "no_default_admin_for_all_users",
+    ],
+  },
+  {
     intent: "add_authentication",
     description: "Add or modify authentication",
     requiredKnowledge: ["disciplines/security/positioning.dna.md"],

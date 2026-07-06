@@ -22,6 +22,8 @@ import {
   checkMarketplaceUpdates,
   formatMarketplaceCatalog,
   formatUpdateResult,
+  generateRbacPlan,
+  parseRolesInput,
 } from "@humaan/dna-core";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@humaan/dna-templates";
 import { createIssue, getTokenFromEnv } from "@humaan/dna-github";
@@ -88,7 +90,7 @@ program
 program
   .command("context")
   .description("Generate AI-ready context")
-  .argument("<target>", "cursor|claude|chatgpt|copilot|windsurf|gemini|backend|frontend|security|qa|devops|all")
+  .argument("<target>", "cursor|claude|chatgpt|copilot|windsurf|gemini|backend|frontend|security|qa|devops|rbac|all")
   .option("--cwd <path>", "Project root directory")
   .action(async (target: string, options: { cwd?: string }) => {
     const root = getRoot(options);
@@ -104,6 +106,7 @@ program
       "security",
       "qa",
       "devops",
+      "rbac",
       "all",
     ] as const;
 
@@ -381,5 +384,58 @@ marketplace
     files.forEach((f) => console.log(`    ${f}`));
     console.log("\nBrowse: https://dna.humaan.app/marketplace");
   });
+
+const plan = program.command("plan").description("Generate AI implementation plans from plain-language requirements");
+
+plan
+  .command("rbac")
+  .description("Plan RBAC + zero trust from a plain-language requirement")
+  .option("--quote <text>", "Plain-language requirement from the user")
+  .option("--roles <list>", "Comma-separated roles, e.g. manager,hr,operations,admin")
+  .option("--feature <name>", "Feature or area to secure, e.g. dashboard", "dashboard")
+  .option("--no-deny-by-default", "Allow access by default (not recommended)")
+  .option("--no-zero-trust", "Skip zero-trust server enforcement guidance")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: {
+      quote?: string;
+      roles?: string;
+      feature?: string;
+      denyByDefault?: boolean;
+      zeroTrust?: boolean;
+      cwd?: string;
+    }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      const roles = options.roles
+        ? parseRolesInput(options.roles)
+        : ["manager", "hr", "operations", "admin"];
+
+      const result = await generateRbacPlan({
+        root,
+        quote: options.quote,
+        roles,
+        feature: options.feature ?? "dashboard",
+        denyByDefault: options.denyByDefault !== false,
+        zeroTrust: options.zeroTrust !== false,
+      });
+
+      console.log("✓ RBAC plan generated\n");
+      console.log(`  Plan:   ${result.planPath}`);
+      console.log(`  Matrix: ${result.matrixPath}`);
+      console.log(`  JSON:   ${result.matrixJsonPath}`);
+      console.log("");
+      console.log("Paste the plan into your AI tool, or run:");
+      console.log("  dna context rbac");
+      console.log("");
+      console.log("─".repeat(60));
+      console.log(result.context);
+    },
+  );
 
 program.parse();

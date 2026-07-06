@@ -10,6 +10,7 @@
 | [Runtime Observer](./runtime.md) | Express, Fastify, NestJS, Next.js integration |
 | [Marketplace](./marketplace.md) | Knowledge packs and remote catalog |
 | [Integrations](./integrations.md) | GitHub issues, AI repair, environment variables |
+| [RBAC & Zero Trust](./rbac.md) | Permission matrix + AI coordination |
 | [Team Testing](../TEAM-TESTING.md) | Rollout guide for colleagues |
 | [Development](./development.md) | Build, test, publish, contribute |
 

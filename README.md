@@ -65,6 +65,7 @@ Requirements: **Node.js 20+**, **pnpm 9+**
 | `dna init` | Scaffold `.DNA/` + `DNA/Impressions/` |
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for your tool |
+| `dna plan rbac` | RBAC plan from plain language → permission matrix |
 | `dna validate` | Check against Behaviour rules |
 | `dna doctor` | Full health check |
 | `dna marketplace install <id>` | Install knowledge packs |
@@ -194,6 +195,7 @@ pnpm install && pnpm build && pnpm test
 | [Runtime](./docs/runtime.md) | Framework adapters |
 | [Marketplace](./docs/marketplace.md) | Knowledge packs |
 | [Integrations](./docs/integrations.md) | GitHub + AI |
+| [RBAC & Zero Trust](./docs/rbac.md) | Plain-language → permission matrix + AI coordination |
 | [Team Testing](./TEAM-TESTING.md) | Colleague pilot guide |
 | [Contributing](./CONTRIBUTING.md) | PR guidelines |
 

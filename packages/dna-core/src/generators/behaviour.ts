@@ -114,6 +114,11 @@ Compliance level: ${config.compliance}
 - Maintain .env.example with all required variables (no real values)
 - Validate and sanitize all user input
 - Apply authentication and authorization checks on protected endpoints
+- **RBAC:** enforce permissions on API, routes, menus, notifications, and actions — not API alone
+- **Default deny:** users have no access until an admin grants a role
+- **Zero trust:** never trust UI hiding alone; verify every request server-side
+- Before RBAC work: run \`dna plan rbac\` and follow \`.DNA/workflows/rbac.workflow.md\`
+- Complete Phase 6 verification checklist before marking RBAC done
 - Redact sensitive data in logs and error reports
 - Review dependencies for known vulnerabilities
 `;

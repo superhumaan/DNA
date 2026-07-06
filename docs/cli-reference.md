@@ -169,6 +169,21 @@ dna marketplace install compliance/gdpr
 
 Installs files into `.DNA/knowledge/` and records version in config.
 
+## plan rbac
+
+Generate a full RBAC + zero trust implementation plan from plain language.
+
+```bash
+dna plan rbac \
+  --quote "No employee unless I grant access. Roles: manager, hr, operations, admin" \
+  --feature dashboard
+
+dna plan rbac --roles manager,hr,operations,admin --feature dashboard
+dna context rbac
+```
+
+Writes `.DNA/plans/rbac-*.md`, permission matrix, and installs `security/rbac-zero-trust` knowledge pack.
+
 ## Environment variables
 
 | Variable | Purpose |

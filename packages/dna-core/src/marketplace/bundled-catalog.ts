@@ -106,6 +106,103 @@ const PACKS: KnowledgePack[] = [
       content: `# B2B SaaS — Multi-tenancy\n\nTenant isolation at database and application layers.\n`,
     },
   ]),
+  pack(
+    "security/rbac-zero-trust",
+    "RBAC & Zero Trust",
+    "disciplines",
+    "Role-based access control with zero trust — permission matrix, surface hiding, verification",
+    [
+      {
+        path: "security/rbac-fundamentals.dna.md",
+        content: `# RBAC Fundamentals
+
+## Core concepts
+
+- **Role:** named set of permissions (manager, hr, operations, admin)
+- **Permission:** ability to perform an action on a resource
+- **Resource:** route, API endpoint, menu item, notification type, button, data record
+- **Default deny:** no access unless explicitly granted by an admin
+
+## Permission matrix
+
+Source of truth: feature/surface × role grid in \`.DNA/CellularMemory/prefrontalCortex/rbac-permission-matrix.md\`
+
+Every layer must read from the same matrix:
+1. API middleware
+2. Server actions / route handlers
+3. Frontend route guards
+4. Menu and sidebar rendering
+5. Notification feeds
+6. Action buttons and widgets
+
+## Role management
+
+Document where admins:
+- Invite users
+- Assign roles
+- Revoke access
+
+No employee should access the platform until an admin grants a role.
+`,
+      },
+      {
+        path: "security/zero-trust.dna.md",
+        content: `# Zero Trust for Application RBAC
+
+## Principles
+
+1. **Never trust the client** — UI hiding is UX, not security
+2. **Verify every request** — API and server actions check role server-side
+3. **Least privilege** — grant minimum permissions per role
+4. **Assume breach** — log denied access; no sensitive data in error messages
+
+## Enforcement layers
+
+| Layer | Requirement |
+|-------|-------------|
+| API | Middleware returns 403 when role lacks permission |
+| Server actions | Check role before mutation |
+| Route guard | Block navigation to forbidden paths |
+| UI | Hide menus, notifications, buttons user cannot use |
+
+## Failure mode
+
+Adding auth to one endpoint while leaving menus visible is **not** zero trust and **not** complete RBAC.
+`,
+      },
+      {
+        path: "security/ui-surface-checklist.dna.md",
+        content: `# UI Surface Checklist — RBAC
+
+Audit every surface. Users must not SEE what they cannot USE.
+
+## Menus & navigation
+- [ ] Sidebar items filtered by role
+- [ ] Top nav links filtered by role
+- [ ] Mobile menu filtered by role
+- [ ] Breadcrumbs do not expose forbidden parent routes
+
+## Notifications
+- [ ] Notification bell hidden or empty for unauthorized roles
+- [ ] Toast/action notifications filtered server-side
+- [ ] Real-time feeds (WebSocket/SSE) respect permissions
+
+## Routes & pages
+- [ ] Direct URL access blocked
+- [ ] Refresh does not flash forbidden content
+- [ ] Deep links to sub-routes guarded
+
+## Actions & widgets
+- [ ] Buttons (export, shutdown, settings, delete) hidden per role
+- [ ] Dashboard widgets filtered by permission
+- [ ] Context menus filtered by role
+
+## Verification
+Test with fresh session per role. Refresh after login. Try direct URLs.
+`,
+      },
+    ],
+  ),
 ];
 
 export function getBundledCatalog(channel: "stable" | "beta" | "nightly" = "stable"): MarketplaceCatalog {
