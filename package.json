@@ -2,10 +2,10 @@
   "name": "dna-by-humaan",
   "version": "0.1.0",
   "private": true,
-  "description": "DNA by Humaan — open-source project intelligence, runtime observer, knowledge marketplace, and AI-assisted repair for modern TypeScript teams",
+  "description": "DNA by Humaan — open-source project brain, 768-pack knowledge marketplace, tiered compliance (GDPR/HIPAA/ISO/SOC2), runtime observer, and AI-assisted repair for TypeScript teams",
   "author": "Humaan by Superlite",
   "license": "MIT",
-  "homepage": "https://github.com/superhumaan/DNA#readme",
+  "homepage": "https://dna.humaan.app",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/superhumaan/DNA.git"
@@ -20,11 +20,20 @@
     "ai-context",
     "cursor",
     "copilot",
+    "claude",
     "runtime-observer",
     "typescript",
     "monorepo",
     "knowledge-packs",
-    "github-automation"
+    "marketplace",
+    "compliance",
+    "gdpr",
+    "hipaa",
+    "healthcare",
+    "fhir",
+    "github-automation",
+    "cli",
+    "devtools"
   ],
   "scripts": {
     "dev": "pnpm -r --parallel run dev",

@@ -1,5 +1,6 @@
 # DNA by Humaan
 
+[![npm](https://img.shields.io/npm/v/@superhumaan/dna-by-humaan)](https://www.npmjs.com/package/@superhumaan/dna-by-humaan)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
@@ -8,10 +9,16 @@
 
 > **Sentry tells you what broke. DNA tells you why, remembers it, and opens the PR.**
 
-**DNA by Humaan** is an open-source project brain, runtime observer, knowledge marketplace, and AI-assisted repair system for modern TypeScript teams.
+**DNA by Humaan** is an open-source project brain, runtime observer, **768-pack** knowledge marketplace, tiered compliance system, and AI-assisted repair for modern TypeScript teams.
 
-Built by **[Humaan](https://humaan.com)** · **[Superlite](https://superlite.ai)**  
-Repository: **[github.com/superhumaan/DNA](https://github.com/superhumaan/DNA)**
+| | |
+|---|---|
+| **Website** | [dna.humaan.app](https://dna.humaan.app) |
+| **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
+| **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
+| **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
+
+Built by **[Humaan](https://humaan.com)** · **[Superlite](https://superlite.ai)**
 
 ---
 
@@ -50,9 +57,9 @@ dna context cursor
 
 | Method | Command |
 |--------|---------|
-| **Team setup** (now) | `git clone https://github.com/superhumaan/DNA.git && ./scripts/team-setup.sh` |
+| **npm** (recommended) | `npx @superhumaan/dna-by-humaan init -y` |
+| **Team setup** (monorepo dev) | `git clone https://github.com/superhumaan/DNA.git && ./scripts/team-setup.sh` |
 | **Manual** | `pnpm install && pnpm build && pnpm dna:link` |
-| **npm** (after publish) | `npx @superhumaan/dna-by-humaan init -y` |
 
 Requirements: **Node.js 20+**, **pnpm 9+**
 
@@ -218,7 +225,7 @@ pnpm install && pnpm build && pnpm test
 - [ ] Real-time dashboard UI
 - [ ] Multi-project CellularMemory sync
 - [ ] Impressions drift → auto PR suggestions
-- [x] `npx @superhumaan/dna-by-humaan` on npm (v0.3.0 — CLI + `/runtime` bundle)
+- [x] `npx @superhumaan/dna-by-humaan` on npm (v0.3.1 — CLI + `/runtime` bundle, 768 packs)
 
 ---
 
