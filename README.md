@@ -218,7 +218,7 @@ pnpm install && pnpm build && pnpm test
 - [ ] Real-time dashboard UI
 - [ ] Multi-project CellularMemory sync
 - [ ] Impressions drift → auto PR suggestions
-- [x] `npx @superhumaan/dna-by-humaan` on npm (v0.2.0 — CLI + `/runtime` bundle)
+- [x] `npx @superhumaan/dna-by-humaan` on npm (v0.3.0 — CLI + `/runtime` bundle)
 
 ---
 

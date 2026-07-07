@@ -9,15 +9,16 @@ echo "DNA by Humaan — npm publish"
 echo "==========================="
 echo ""
 
-if [[ -z "${NPM_TOKEN:-}" ]] && ! npm whoami &>/dev/null; then
-  echo "Set NPM_TOKEN or run npm login first."
+if [[ -z "${NPM_TOKEN:-}" ]] && [[ -z "${NODE_AUTH_TOKEN:-}" ]] && ! npm whoami &>/dev/null; then
+  echo "Set NPM_TOKEN (or NODE_AUTH_TOKEN) or run npm login first."
   exit 1
 fi
 
-if [[ -n "${NPM_TOKEN:-}" ]]; then
+AUTH_TOKEN="${NPM_TOKEN:-${NODE_AUTH_TOKEN:-}}"
+if [[ -n "$AUTH_TOKEN" ]]; then
   NPM_USERCONFIG="$(mktemp)"
   trap 'rm -f "$NPM_USERCONFIG"' EXIT
-  printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" >"$NPM_USERCONFIG"
+  printf '//registry.npmjs.org/:_authToken=%s\n' "$AUTH_TOKEN" >"$NPM_USERCONFIG"
   export NPM_CONFIG_USERCONFIG="$NPM_USERCONFIG"
 fi
 
