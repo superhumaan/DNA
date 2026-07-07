@@ -1,4 +1,4 @@
-import type { DnaConfig, WizardAnswers } from "@humaan/dna-config";
+import type { DnaConfig, WizardAnswers } from "@superhumaan/dna-config";
 
 export function generateAiToolFiles(
   config: DnaConfig,

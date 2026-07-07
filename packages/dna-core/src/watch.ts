@@ -5,7 +5,7 @@ import { fileExists, writeJsonFile } from "./fs.js";
 import { scanProject } from "./scanner.js";
 import { generateNeuralNetwork } from "./generators/neural-network.js";
 import { loadDnaConfig } from "./validator.js";
-import { NEURAL_NETWORK_ALT, NEURAL_NETWORK_FILE } from "@humaan/dna-config";
+import { NEURAL_NETWORK_ALT, NEURAL_NETWORK_FILE } from "@superhumaan/dna-config";
 
 const log = createLogger("watch");
 

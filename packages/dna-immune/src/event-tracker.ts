@@ -1,4 +1,4 @@
-import type { RuntimeEvent } from "@humaan/dna-config";
+import type { RuntimeEvent } from "@superhumaan/dna-config";
 
 interface TrackedEvent {
   timestamp: number;

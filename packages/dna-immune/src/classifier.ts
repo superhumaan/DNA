@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import type { ClassifiedIssue, RuntimeEvent } from "@humaan/dna-config";
-import { ISSUE_CATEGORIES, SEVERITY_LEVELS } from "@humaan/dna-config";
+import type { ClassifiedIssue, RuntimeEvent } from "@superhumaan/dna-config";
+import { ISSUE_CATEGORIES, SEVERITY_LEVELS } from "@superhumaan/dna-config";
 import type { ImmuneConfig } from "./immune-config.js";
 import { loadImmuneConfig, DEFAULT_CLASSIFIERS } from "./immune-config.js";
 import { checkBehaviourViolation } from "./behaviour-check.js";

@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
 import { simpleGit } from "simple-git";
-import type { AiRepairPlan, ClassifiedIssue, DnaConfig } from "@humaan/dna-config";
+import type { AiRepairPlan, ClassifiedIssue, DnaConfig } from "@superhumaan/dna-config";
 import {
   createAiProvider,
   type RepairContext,
@@ -14,7 +14,7 @@ import {
   createPullRequest,
   getTokenFromEnv,
   linkIssueToPr,
-} from "@humaan/dna-github";
+} from "@superhumaan/dna-github";
 
 const execAsync = promisify(exec);
 

@@ -1,6 +1,7 @@
 {
-  "name": "@humaan/dna-github",
+  "name": "@superhumaan/dna-github",
   "version": "0.1.0",
+  "private": true,
   "description": "DNA GitHub integration — issues, PRs, branches",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,15 +19,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@humaan/dna-config": "workspace:*",
+    "@superhumaan/dna-config": "workspace:*",
     "@octokit/rest": "^21.0.2"
   },
   "devDependencies": {
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   },
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  }
+  "license": "MIT"
 }

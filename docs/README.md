@@ -11,6 +11,9 @@
 | [Marketplace](./marketplace.md) | Knowledge packs and remote catalog |
 | [Integrations](./integrations.md) | GitHub issues, AI repair, environment variables |
 | [RBAC & Zero Trust](./rbac.md) | Permission matrix + AI coordination |
+| [Humaan Platform](./platform.md) | Production catalog — Azure, SSO, admin, flags, CRM, CMS |
+| [Tiered Compliance](./compliance.md) | ISO, GDPR, HIPAA, SOC 2 by startup → enterprise |
+| [Brownfield / IVF](./ivf.md) | Install into existing projects — analyze, document, integrate |
 | [Team Testing](../TEAM-TESTING.md) | Rollout guide for colleagues |
 | [Development](./development.md) | Build, test, publish, contribute |
 

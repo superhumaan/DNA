@@ -1,116 +1,110 @@
 # Getting Started
 
-DNA turns your repository into a **project brain** that AI tools and your runtime can read, validate, and learn from.
+DNA by Humaan is **one npm package** with two modes:
+
+| Mode | How | When |
+|------|-----|------|
+| **Build intelligence** | `npx @superhumaan/dna-by-humaan` → `dna` CLI | Always — scaffolds `.DNA/`, feeds AI tools |
+| **Production protection** | `import from "@superhumaan/dna-by-humaan/runtime"` | When you have a Node.js API server |
+
+---
 
 ## Prerequisites
 
 - **Node.js 20+**
-- **pnpm 9+** (installed automatically by `team-setup.sh` via corepack)
 - **Git**
 
-## Install the CLI
+---
 
-### Team / from source (current)
-
-```bash
-git clone https://github.com/superhumaan/DNA.git dna
-cd dna
-chmod +x scripts/*.sh
-./scripts/team-setup.sh
-```
-
-Verify:
+## Install
 
 ```bash
-dna --help
+cd /path/to/your-project
+npx @superhumaan/dna-by-humaan init -y
+dna doctor
 ```
 
-### After npm publish
+For backend projects, add the same package to your app dependencies (runtime is a subpath export):
 
 ```bash
-npx @humaan/dna-cli init -y
+pnpm add @superhumaan/dna-by-humaan
 ```
+
+```typescript
+import { dnaRuntime } from "@superhumaan/dna-by-humaan/runtime";
+```
+
+---
 
 ## Initialise a project
 
 ```bash
-cd /path/to/your-project
-dna init -y          # non-interactive defaults
-dna doctor           # full health check
-dna validate         # behaviour + structure validation
+dna init -y
+dna doctor
+dna validate
 ```
 
-Interactive wizard (recommended for new projects):
+Interactive wizard:
 
 ```bash
 dna init
 ```
 
-The wizard asks:
-
-1. What you are building
-2. Whether to accept the architecture recommendation
-3. AI tools (Cursor, Claude Code, Copilot, Windsurf, Gemini)
-4. Compliance requirements (GDPR, SOC 2, HIPAA, etc.)
-5. Project stage (new, MVP, scaling, enterprise)
+---
 
 ## Generated structure
 
 ```
 your-project/
-├── .DNA/                    # AI-first intelligence (machine-readable)
+├── .DNA/
 │   ├── config.dna.json
-│   ├── neuralNetwork.json
 │   ├── behaviour/
 │   ├── knowledge/
 │   ├── CellularMemory/
-│   ├── immuneSystem/
-│   └── runtime/
-└── DNA/
-    └── Impressions/         # Human-facing documentation
-        ├── product/
-        ├── architecture/
-        ├── security/
-        └── ...
+│   └── runtime/             # live issues when observer is enabled
+└── DNA/Impressions/
 ```
 
-**Commit both** `.DNA/` and `DNA/` so your team shares the same brain.
+Commit both `.DNA/` and `DNA/`.
 
-Optional `.gitignore` for noisy runtime logs:
-
-```gitignore
-.DNA/runtime/events.jsonl
-.DNA/runtime/issues.jsonl
-```
+---
 
 ## Daily workflow
 
 ```bash
-# Understand the stack
 dna scan
-dna recommend --description "B2B SaaS platform"
-
-# Feed your AI tool
 dna context cursor
-dna context copilot
-
-# Install stack knowledge
-dna marketplace install frameworks/nextjs
-
-# Watch for drift (long-running)
-dna watch
+dna plan compliance
+dna validate
 ```
 
-## Add runtime observation (backend)
+### Brownfield (existing project)
 
 ```bash
-/path/to/dna/scripts/add-runtime.sh /path/to/your-project
+dna init                          # stage: legacy_modernisation
+dna analyze --deep
+dna document --from-code
+dna plan ivf --quote "Integrate DNA without a rewrite"
+dna context ivf
 ```
 
-Wire middleware for your framework — see [Runtime Observer](./runtime.md).
+See [Brownfield / IVF](./ivf.md).
+
+---
+
+## Production protection
+
+```bash
+pnpm add @superhumaan/dna-by-humaan
+dna runtime install
+```
+
+See [Runtime Observer](./runtime.md).
+
+---
 
 ## Next steps
 
-- [Concepts](./concepts.md) — how DNA thinks
-- [CLI Reference](./cli-reference.md) — all commands
-- [Team Testing](../TEAM-TESTING.md) — pilot with colleagues
+- [Concepts](./concepts.md)
+- [CLI Reference](./cli-reference.md)
+- [Team Testing](../TEAM-TESTING.md)

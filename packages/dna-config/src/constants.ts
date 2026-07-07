@@ -91,6 +91,21 @@ export const PROJECT_STAGES = [
   "audit_remediation",
 ] as const;
 
+/** Organization size band for compliance maturity — maps to control depth */
+export const ORG_TIERS = ["startup", "sme", "corporate", "enterprise"] as const;
+
+/** Default org tier inferred from project stage when not specified */
+export const STAGE_TO_ORG_TIER: Record<(typeof PROJECT_STAGES)[number], (typeof ORG_TIERS)[number]> = {
+  new: "startup",
+  mvp: "startup",
+  scaling: "sme",
+  enterprise: "enterprise",
+  legacy_modernisation: "corporate",
+  audit_remediation: "corporate",
+};
+
+export const COMPLIANCE_FRAMEWORKS = ["gdpr", "uk_gdpr", "hipaa", "soc2", "iso27001", "pci_dss"] as const;
+
 export const AI_TOOLS = [
   "cursor",
   "claude_code",

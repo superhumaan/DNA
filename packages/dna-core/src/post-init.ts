@@ -1,9 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { DnaConfig, WizardAnswers } from "@humaan/dna-config";
+import type { DnaConfig, WizardAnswers } from "@superhumaan/dna-config";
 import { writeFileEnsured } from "./fs.js";
 import { generateAiToolFiles } from "./generators/ai-tools.js";
-import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@humaan/dna-templates";
+import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
 
 export async function runPostInit(
   root: string,
@@ -36,11 +36,11 @@ export async function runPostInit(
         devDependencies?: Record<string, string>;
       };
       const deps = pkg.dependencies ?? {};
-      if (!deps["@humaan/dna-runtime"]) {
-        deps["@humaan/dna-runtime"] = "workspace:*";
+      if (!deps["@superhumaan/dna-by-humaan"]) {
+        deps["@superhumaan/dna-by-humaan"] = "^0.2.0";
         pkg.dependencies = deps;
         await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
-        created.push("package.json (added @humaan/dna-runtime)");
+        created.push("package.json (added @superhumaan/dna-by-humaan)");
       }
     } catch {
       // no package.json

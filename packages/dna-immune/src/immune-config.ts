@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { ISSUE_CATEGORIES, SEVERITY_LEVELS } from "@humaan/dna-config";
+import type { ISSUE_CATEGORIES, SEVERITY_LEVELS } from "@superhumaan/dna-config";
 
 export interface ImmuneRule {
   id: string;

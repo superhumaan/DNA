@@ -1,17 +1,18 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import fg from "fast-glob";
-import type { DnaConfig, NeuralNetwork, ValidationResult } from "@humaan/dna-config";
+import type { DnaConfig, NeuralNetwork, ValidationResult } from "@superhumaan/dna-config";
 import {
   BEHAVIOUR_FILES,
   DNA_CONFIG_FILE,
   IMPRESSIONS_PATHS,
   NEURAL_NETWORK_ALT,
   NEURAL_NETWORK_FILE,
-} from "@humaan/dna-config";
+} from "@superhumaan/dna-config";
 import { fileExists, readJsonFile } from "./fs.js";
 import { scanProject } from "./scanner.js";
-import { DnaConfigSchema, NeuralNetworkSchema } from "@humaan/dna-config";
+import { DnaConfigSchema, NeuralNetworkSchema } from "@superhumaan/dna-config";
+import { validateStackCompatibility } from "./stack/validate.js";
 
 const DANGEROUS_DEPS = ["eval", "node-eval", "vm2"];
 
@@ -266,6 +267,8 @@ export async function validateProject(root: string): Promise<ValidationResult> {
   }
 
   const config = parsed.success ? parsed.data : null;
+  errors.push(...validateStackCompatibility(config, scan));
+
   if (config?.runtime?.enabled) {
     const runtimeEvents = join(root, ".DNA", "runtime", "events.jsonl");
     if (!(await fileExists(runtimeEvents))) {
@@ -275,11 +278,11 @@ export async function validateProject(root: string): Promise<ValidationResult> {
         severity: "warning",
       });
     }
-    const hasRuntimePkg = scan.dependencies.includes("@humaan/dna-runtime");
+    const hasRuntimePkg = scan.dependencies.includes("@superhumaan/dna-by-humaan");
     if (!hasRuntimePkg) {
       errors.push({
         code: "MISSING_RUNTIME_PACKAGE",
-        message: "Runtime enabled but @humaan/dna-runtime not in dependencies",
+        message: "Runtime enabled but @superhumaan/dna-by-humaan not in dependencies",
         severity: "warning",
       });
     }

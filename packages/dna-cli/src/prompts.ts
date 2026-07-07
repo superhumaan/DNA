@@ -1,11 +1,11 @@
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import type { WizardAnswers } from "@humaan/dna-config";
+import type { WizardAnswers } from "@superhumaan/dna-config";
 import {
   AI_TOOLS,
   COMPLIANCE_OPTIONS,
   PROJECT_STAGES,
-} from "@humaan/dna-config";
+} from "@superhumaan/dna-config";
 
 export async function prompt(question: string): Promise<string> {
   const rl = readline.createInterface({ input, output });

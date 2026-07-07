@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 import { processRuntimeEvent } from "../src/pipeline.js";
 import { readJsonl } from "../src/persistence.js";
-import type { RuntimeEvent } from "@humaan/dna-config";
+import type { RuntimeEvent } from "@superhumaan/dna-config";
 
 async function setupProject(): Promise<string> {
   const root = join(tmpdir(), `dna-pipeline-${randomUUID()}`);

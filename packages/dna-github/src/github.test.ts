@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { buildIssuePayload } from "../src/index.js";
-import type { ClassifiedIssue } from "@humaan/dna-config";
+import type { ClassifiedIssue } from "@superhumaan/dna-config";
 
 const sampleIssue: ClassifiedIssue = {
   id: "issue-1",

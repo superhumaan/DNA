@@ -1,39 +1,33 @@
 #!/usr/bin/env bash
-# Publish all @humaan/dna-* packages to npm (requires npm login + @humaan scope access)
+# Publish DNA by Humaan (single bundled package) to npm
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-echo "DNA — npm publish (all packages)"
-echo "================================"
-echo ""
-echo "Prerequisites:"
-echo "  npm login"
-echo "  Access to publish @humaan/* packages"
+echo "DNA by Humaan — npm publish"
+echo "==========================="
 echo ""
 
-pnpm build
+if [[ -z "${NPM_TOKEN:-}" ]] && ! npm whoami &>/dev/null; then
+  echo "Set NPM_TOKEN or run npm login first."
+  exit 1
+fi
 
-# Dependency order — config/templates first, then layers, CLI last
-PACKAGES=(
-  packages/dna-config
-  packages/dna-templates
-  packages/dna-immune
-  packages/dna-github
-  packages/dna-ai
-  packages/dna-core
-  packages/dna-runtime
-  packages/dna-cli
-)
+if [[ -n "${NPM_TOKEN:-}" ]]; then
+  NPM_USERCONFIG="$(mktemp)"
+  trap 'rm -f "$NPM_USERCONFIG"' EXIT
+  printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" >"$NPM_USERCONFIG"
+  export NPM_CONFIG_USERCONFIG="$NPM_USERCONFIG"
+fi
 
-for pkg in "${PACKAGES[@]}"; do
-  echo "→ Publishing $(node -p "require('./$pkg/package.json').name")..."
-  cd "$ROOT/$pkg"
-  npm publish --access public
-done
+pnpm --filter './packages/*' build
+
+echo "→ Publishing @superhumaan/dna-by-humaan..."
+cd "$ROOT/packages/dna-cli"
+pnpm publish --access public --no-git-checks
 
 echo ""
-echo "✓ Published. Colleagues can now run:"
-echo "  npx @humaan/dna-cli init -y"
-echo "  pnpm add @humaan/dna-runtime"
+echo "✓ Published. Install:"
+echo "  npx @superhumaan/dna-by-humaan init -y"
+echo "  import { dnaRuntime } from '@superhumaan/dna-by-humaan/runtime'"

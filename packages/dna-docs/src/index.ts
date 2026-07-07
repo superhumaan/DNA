@@ -1,4 +1,4 @@
-import { PRODUCT_NAME, COMPANY_NAME } from "@humaan/dna-config";
+import { PRODUCT_NAME, COMPANY_NAME } from "@superhumaan/dna-config";
 
 export function getReadmeIntro(): string {
   return `# ${PRODUCT_NAME}

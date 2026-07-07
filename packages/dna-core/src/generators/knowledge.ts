@@ -1,4 +1,5 @@
-import type { DnaConfig } from "@humaan/dna-config";
+import type { DnaConfig } from "@superhumaan/dna-config";
+import { getArchetype } from "../stack/catalog.js";
 
 type KnowledgeEntry = { path: string; content: string };
 
@@ -49,52 +50,100 @@ function platformPack(name: string): KnowledgeEntry {
   };
 }
 
+const DISCIPLINE_NAMES = [
+  "solution-architecture",
+  "backend",
+  "frontend",
+  "security",
+  "devops",
+  "prompt-engineering",
+  "solution-engineering",
+  "qa",
+] as const;
+
+function frameworksForArchetype(archetypeId: string): KnowledgeEntry[] {
+  const arch = getArchetype(archetypeId);
+  const entries: KnowledgeEntry[] = [];
+  const fe = arch?.layers.frontend ?? ["react"];
+  const be = arch?.layers.backend ?? ["express"];
+  const bundler = arch?.layers.bundler ?? ["vite"];
+
+  if (fe.includes("react") || fe.includes("react-native")) entries.push(...frameworkPack("react"));
+  if (fe.includes("vue")) entries.push(...frameworkPack("vue"));
+  if (fe.includes("svelte")) entries.push(...frameworkPack("svelte"));
+  if (fe.includes("next")) entries.push(...frameworkPack("nextjs"));
+  if (fe.includes("react-native")) entries.push(...frameworkPack("react-native"));
+  if (bundler.includes("vite")) entries.push(...frameworkPack("vite", ["pwa-patterns"]));
+  if (be.includes("express")) entries.push(...frameworkPack("express"));
+  if (be.includes("fastify")) entries.push(...frameworkPack("fastify"));
+  if (be.includes("nestjs")) entries.push(...frameworkPack("nestjs"));
+  if (fe.includes("flutter")) entries.push(...frameworkPack("flutter"));
+
+  return entries;
+}
+
+function platformsForArchetype(archetypeId: string, config: DnaConfig): KnowledgeEntry[] {
+  const arch = getArchetype(archetypeId);
+  const entries: KnowledgeEntry[] = [];
+  const platform = (config.stack.platform ?? "").toLowerCase();
+
+  if (arch?.platform === "mobile") {
+    entries.push(platformPack("mobile-app"));
+    entries.push(disciplinePack("mobile-development"));
+    return entries;
+  }
+  if (arch?.platform === "cms") {
+    entries.push(platformPack("web-app"));
+    return entries;
+  }
+
+  entries.push(platformPack("web-app"), platformPack("api"));
+  if (platform.includes("saas") || platform.includes("b2b") || arch?.id === "vercel-supabase") {
+    entries.push(platformPack("b2b-saas"), platformPack("multi-tenant-saas"));
+  }
+  if (platform.includes("pwa")) entries.push(platformPack("pwa"));
+
+  return entries;
+}
+
+function languagesForArchetype(archetypeId: string): KnowledgeEntry[] {
+  const arch = getArchetype(archetypeId);
+  const langs = arch?.layers.language ?? ["typescript", "javascript"];
+  const entries: KnowledgeEntry[] = [];
+  const langMap: Record<string, string> = {
+    typescript: "ts",
+    javascript: "js",
+    python: "py",
+    go: "go",
+    php: "php",
+    java: "java",
+    csharp: "cs",
+    swift: "swift",
+    kotlin: "kt",
+  };
+  for (const lang of langs) {
+    const ext = langMap[lang];
+    if (ext) entries.push(...langPack(lang, ext));
+  }
+  return entries;
+}
+
 export function generateKnowledgePacks(config: DnaConfig): Record<string, string> {
+  const archetypeId = config.stack.archetype ?? "react-vite-api";
+  const arch = getArchetype(archetypeId);
+
   const entries: KnowledgeEntry[] = [
-    ...langPack("typescript", "ts"),
-    ...langPack("javascript", "js"),
-    ...langPack("python", "py"),
-    ...langPack("go", "go"),
-    ...langPack("php", "php"),
-    ...langPack("java", "java"),
-    ...langPack("csharp", "cs"),
-    ...langPack("swift", "swift"),
-    ...langPack("kotlin", "kt"),
-    ...frameworkPack("react"),
-    ...frameworkPack("vite", ["pwa-patterns"]),
-    ...frameworkPack("nextjs"),
-    ...frameworkPack("express"),
-    ...frameworkPack("fastify"),
-    ...frameworkPack("nestjs"),
-    ...frameworkPack("vue"),
-    ...frameworkPack("svelte"),
-    ...frameworkPack("react-native"),
-    ...frameworkPack("flutter"),
-    disciplinePack("solution-architecture"),
-    disciplinePack("backend"),
-    disciplinePack("frontend"),
-    disciplinePack("security"),
-    disciplinePack("devops"),
-    disciplinePack("prompt-engineering"),
-    disciplinePack("solution-engineering"),
-    disciplinePack("mobile-development"),
-    disciplinePack("qa"),
-    platformPack("pwa"),
-    platformPack("web-app"),
-    platformPack("mobile-app"),
-    platformPack("api"),
-    platformPack("b2b-saas"),
-    platformPack("enterprise-system"),
-    platformPack("multi-tenant-saas"),
+    ...languagesForArchetype(archetypeId),
+    ...frameworksForArchetype(archetypeId),
+    ...DISCIPLINE_NAMES.map((d) => disciplinePack(d)),
+    ...platformsForArchetype(archetypeId, config),
   ];
 
-  // Prioritise stack-specific packs
-  const stack = config.stack;
-  if (stack.frontend) {
-    const fw = stack.frontend === "next" ? "nextjs" : stack.frontend;
+  if (config.stack.frontend) {
+    const fwName = config.stack.frontend === "next" ? "nextjs" : config.stack.frontend;
     entries.push({
-      path: `frameworks/${fw}/project-active.dna.md`,
-      content: `# Active Framework: ${fw}\n\nThis is the project's primary frontend framework.\n`,
+      path: `frameworks/${fwName}/project-active.dna.md`,
+      content: `# Active Framework: ${fwName}\n\nArchetype: **${arch?.name ?? archetypeId}**\n\nThis is the project's primary frontend. Do not add excluded technologies from the stack archetype.\n`,
     });
   }
 

@@ -14,7 +14,7 @@ Share this with colleagues who want to try DNA on their own projects.
 | AI context | `dna context cursor` | Paste-ready context for your AI tool |
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |
-| Runtime observer | `@humaan/dna-runtime` | Errors/slow requests → `.DNA/runtime/issues.jsonl` |
+| Runtime observer | `@superhumaan/dna-by-humaan/runtime` | Errors/slow requests → `.DNA/runtime/issues.jsonl` |
 | GitHub (optional) | `dna github connect` | Auto-issues for high/critical runtime events |
 | AI repair (optional) | `dna ai repair --dry-run` | Branch + patch plan, never auto-merged |
 
@@ -37,7 +37,7 @@ Verify:
 dna --help
 ```
 
-> **After npm publish:** skip the clone — use `npx @humaan/dna-cli init -y` instead.
+> **After npm publish:** skip the clone — use `npx @superhumaan/dna-by-humaan init -y` instead.
 
 ---
 
@@ -92,7 +92,7 @@ Then wire up for your framework:
 ### Express
 
 ```ts
-import { dnaRuntime } from "@humaan/dna-runtime";
+import { dnaRuntime } from "@superhumaan/dna-by-humaan/runtime";
 
 dnaRuntime.start({
   projectId: "your-project",

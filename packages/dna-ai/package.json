@@ -1,6 +1,7 @@
 {
-  "name": "@humaan/dna-ai",
+  "name": "@superhumaan/dna-ai",
   "version": "0.1.0",
+  "private": true,
   "description": "DNA AI repair — optional AI-assisted issue diagnosis and PR planning",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,16 +19,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@humaan/dna-config": "workspace:*",
-    "@humaan/dna-github": "workspace:*",
+    "@superhumaan/dna-config": "workspace:*",
+    "@superhumaan/dna-github": "workspace:*",
     "simple-git": "^3.27.0"
   },
   "devDependencies": {
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   },
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  }
+  "license": "MIT"
 }

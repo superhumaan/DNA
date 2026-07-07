@@ -1,9 +1,15 @@
-import type { Recommendation, ScanResult, WizardAnswers } from "@humaan/dna-config";
+import type { Recommendation, ScanResult, WizardAnswers } from "@superhumaan/dna-config";
+import { resolveArchetype, stackFromArchetype } from "./stack/resolve.js";
+import { getArchetype } from "./stack/catalog.js";
 
 export function generateRecommendation(
   scan: ScanResult,
   description: string,
 ): Recommendation {
+  const resolution = resolveArchetype(scan, description);
+  const stack = stackFromArchetype(resolution, scan, description);
+  const { archetype } = resolution;
+
   const isSaas =
     description.toLowerCase().includes("saas") ||
     description.toLowerCase().includes("b2b") ||
@@ -29,20 +35,11 @@ export function generateRecommendation(
         "documentation baseline",
       ];
 
-  const stack = {
-    frontend: scan.frontend ?? (isSaas ? "react" : "react"),
-    backend: scan.backend ?? "express",
-    database: scan.database ?? (isSaas ? "postgresql" : "sqlite"),
-    platform: isSaas ? "B2B SaaS" : "web app",
-    hosting: "vercel-or-railway",
-    testing: scan.testFramework ?? "vitest",
-  };
-
   return {
     solution,
     stack,
     testing: [
-      "Unit tests with Vitest",
+      `Unit tests with ${stack.testing ?? "Vitest"}`,
       "Integration tests for API endpoints",
       "E2E tests for critical user flows",
       "Regression test checklist in DNA/Impressions/qa/",
@@ -61,14 +58,21 @@ export function generateRecommendation(
       "QA strategy and test plan",
       "Deployment and rollback procedures",
     ],
-    runtime: [
-      "Install @humaan/dna-runtime",
-      "Enable Express middleware",
-      "Configure GitHub issue creation",
-      "Set up Immune System classification",
-    ],
+    runtime: archetype.runtimeAdapters?.length
+      ? [
+          "Install @superhumaan/dna-by-humaan and import from /runtime",
+          `Enable ${archetype.runtimeAdapters[0]} adapter`,
+          "Configure GitHub issue creation",
+          "Set up Immune System classification",
+        ]
+      : [
+          "Install @superhumaan/dna-by-humaan when API server is present",
+          "Configure GitHub issue creation",
+          "Set up Immune System classification",
+        ],
     aiDevelopment: [
       "Run dna context cursor for AI-ready context",
+      `Stack archetype: ${archetype.id} — do not mix excluded technologies`,
       "Configure Behaviour files for AI tools",
       "Enable CellularMemory for project learning",
     ],
@@ -76,15 +80,21 @@ export function generateRecommendation(
 }
 
 export function formatRecommendation(rec: Recommendation): string {
+  const arch = rec.stack.archetype ? getArchetype(rec.stack.archetype) : undefined;
   const lines: string[] = [
     "DNA Recommendation",
     "==================",
+    "",
+    `Stack archetype: ${arch?.name ?? rec.stack.archetype ?? "—"}`,
+    arch ? `  ${arch.description}` : "",
     "",
     "Suggested solution:",
     ...rec.solution.map((s) => `  • ${s}`),
     "",
     "Suggested stack:",
+    `  Archetype: ${rec.stack.archetype ?? "—"}`,
     `  Frontend:  ${rec.stack.frontend ?? "—"}`,
+    `  Bundler:   ${rec.stack.bundler ?? "—"}`,
     `  Backend:   ${rec.stack.backend ?? "—"}`,
     `  Database:  ${rec.stack.database ?? "—"}`,
     `  Platform:  ${rec.stack.platform ?? "—"}`,
@@ -108,12 +118,15 @@ export function resolveStackFromWizard(
   if (answers.acceptRecommendation) {
     return recommendation.stack;
   }
-  return {
+  const base = {
+    archetype: recommendation.stack.archetype,
     frontend: answers.customStack?.frontend ?? scan.frontend,
+    bundler: recommendation.stack.bundler,
     backend: answers.customStack?.backend ?? scan.backend,
     database: answers.customStack?.database ?? scan.database,
     platform: answers.customStack?.platform ?? recommendation.stack.platform,
     hosting: answers.customStack?.hosting ?? recommendation.stack.hosting,
     testing: answers.customStack?.testing ?? scan.testFramework ?? "vitest",
   };
+  return base;
 }

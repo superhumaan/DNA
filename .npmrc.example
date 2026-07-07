@@ -1,0 +1,2 @@
+# Copy to .npmrc (gitignored) or export NPM_TOKEN when publishing.
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}

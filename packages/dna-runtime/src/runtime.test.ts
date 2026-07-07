@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 import { dnaRuntime } from "./index.js";
-import type { ClassifiedIssue, RuntimeEvent } from "@humaan/dna-config";
+import type { ClassifiedIssue, RuntimeEvent } from "@superhumaan/dna-config";
 
 async function setupRuntimeProject(): Promise<string> {
   const root = join(tmpdir(), `dna-runtime-${randomUUID()}`);

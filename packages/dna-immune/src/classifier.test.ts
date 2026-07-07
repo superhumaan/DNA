@@ -5,7 +5,7 @@ import {
   shouldAutoCreateIssue,
   getImmuneConfig,
 } from "../src/classifier.js";
-import type { RuntimeEvent } from "@humaan/dna-config";
+import type { RuntimeEvent } from "@superhumaan/dna-config";
 
 function makeEvent(overrides: Partial<RuntimeEvent> = {}): RuntimeEvent {
   return {

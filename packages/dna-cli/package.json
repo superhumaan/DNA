@@ -1,7 +1,7 @@
 {
-  "name": "@humaan/dna-cli",
-  "version": "0.1.0",
-  "description": "DNA by Humaan CLI — project intelligence, runtime observer, and AI-assisted repair",
+  "name": "@superhumaan/dna-by-humaan",
+  "version": "0.2.0",
+  "description": "DNA by Humaan — project intelligence, runtime protection, and AI-assisted repair",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/superhumaan/DNA.git",
@@ -17,29 +17,62 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js"
+    }
+  },
+  "files": ["dist", "assets", "README.md"],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node scripts/copy-assets.mjs",
     "dev": "tsup src/index.ts --format esm --dts --watch",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@humaan/dna-ai": "workspace:*",
-    "@humaan/dna-config": "workspace:*",
-    "@humaan/dna-core": "workspace:*",
-    "@humaan/dna-github": "workspace:*",
-    "@humaan/dna-immune": "workspace:*",
-    "@humaan/dna-runtime": "workspace:*",
-    "@humaan/dna-templates": "workspace:*",
-    "commander": "^12.1.0"
-  },
   "devDependencies": {
+    "@superhumaan/dna-ai": "workspace:*",
+    "@superhumaan/dna-config": "workspace:*",
+    "@superhumaan/dna-core": "workspace:*",
+    "@superhumaan/dna-github": "workspace:*",
+    "@superhumaan/dna-immune": "workspace:*",
+    "@superhumaan/dna-runtime": "workspace:*",
+    "@superhumaan/dna-templates": "workspace:*",
+    "commander": "^12.1.0",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
+  },
+  "peerDependencies": {
+    "express": "^4.18.0",
+    "fastify": "^4.0.0 || ^5.0.0",
+    "@nestjs/common": "^10.0.0 || ^11.0.0",
+    "next": "^14.0.0 || ^15.0.0"
+  },
+  "peerDependenciesMeta": {
+    "express": { "optional": true },
+    "fastify": { "optional": true },
+    "@nestjs/common": { "optional": true },
+    "next": { "optional": true }
   },
   "engines": {
     "node": ">=20"
   },
+  "author": "Humaan by Superlite",
+  "keywords": [
+    "dna",
+    "humaan",
+    "project-intelligence",
+    "ai-context",
+    "cursor",
+    "copilot",
+    "cli",
+    "typescript",
+    "runtime",
+    "observability"
+  ],
   "publishConfig": {
     "access": "public"
   },

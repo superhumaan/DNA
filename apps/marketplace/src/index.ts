@@ -1,6 +1,6 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
-import { MARKETPLACE_API_VERSION } from "@humaan/dna-config";
-import { getBundledCatalog, getBundledPack } from "@humaan/dna-core";
+import { MARKETPLACE_API_VERSION } from "@superhumaan/dna-config";
+import { getBundledCatalog, getBundledPack } from "@superhumaan/dna-core";
 
 const PORT = Number(process.env.PORT ?? 3100);
 const BASE_PATH = process.env.MARKETPLACE_BASE_PATH ?? "/marketplace";

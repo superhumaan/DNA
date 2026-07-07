@@ -1,9 +1,9 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
-import type { DnaConfig } from "@humaan/dna-config";
+import type { DnaConfig } from "@superhumaan/dna-config";
 import { writeFileEnsured, writeJsonFile, fileExists } from "../fs.js";
 import { loadDnaConfig } from "../validator.js";
-import { installKnowledgePackById } from "../marketplace/install.js";
+import { ensureKnowledgeForPaths } from "../marketplace/ensure.js";
 import { scanSurfaceInventory, formatInventorySummary, type SurfaceInventory } from "./inventory.js";
 
 export interface RbacPlanOptions {
@@ -216,9 +216,19 @@ export async function generateRbacPlan(options: RbacPlanOptions): Promise<RbacPl
   }
 
   try {
-    await installKnowledgePackById(root, "security/rbac-zero-trust", config.channel);
+    await ensureKnowledgeForPaths(
+      root,
+      [
+        "security/rbac-fundamentals.dna.md",
+        "security/zero-trust.dna.md",
+        "security/ui-surface-checklist.dna.md",
+        "platforms/humaan/rbac-patterns.dna.md",
+        "disciplines/security/positioning.dna.md",
+      ],
+      config.channel,
+    );
   } catch {
-    // bundled pack should always exist
+    // bundled packs should always exist
   }
 
   const inventory = await scanSurfaceInventory(root);

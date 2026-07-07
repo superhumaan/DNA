@@ -1,0 +1,1048 @@
+{
+  "version": "1.0.0",
+  "ingestedAt": "2026-07-06T05:20:32.952Z",
+  "documentCount": 104,
+  "documents": [
+    {
+      "slug": "ai-abuse-prevention-controls",
+      "title": "AI Abuse Prevention Controls",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Abuse Prevention Controls.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-abuse-prevention-controls.md",
+      "bytes": 10409
+    },
+    {
+      "slug": "ai-auditability-standard",
+      "title": "AI Auditability Standard",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Auditability Standard.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-auditability-standard.md",
+      "bytes": 11681
+    },
+    {
+      "slug": "ai-change-management-procedure",
+      "title": "AI Change Management Procedure",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Change Management Procedure.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-change-management-procedure.md",
+      "bytes": 10049
+    },
+    {
+      "slug": "ai-data-usage-statement",
+      "title": "AI Data Usage Statement",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Data Usage Statement.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-data-usage-statement.md",
+      "bytes": 8650
+    },
+    {
+      "slug": "ai-decision-boundary-document",
+      "title": "AI Decision Boundary Document",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Decision Boundary Document.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-decision-boundary-document.md",
+      "bytes": 925
+    },
+    {
+      "slug": "ai-incident-procedure",
+      "title": "AI Incident Procedure",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Incident Procedure.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-incident-procedure.md",
+      "bytes": 8764
+    },
+    {
+      "slug": "ai-output-validation-procedure",
+      "title": "AI Output Validation Procedure",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Output Validation Procedure.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-output-validation-procedure.md",
+      "bytes": 1134
+    },
+    {
+      "slug": "ai-risk-assessment",
+      "title": "AI Risk Assessment",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Risk Assessment.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-risk-assessment.md",
+      "bytes": 1015
+    },
+    {
+      "slug": "ai-system-overview",
+      "title": "AI System Overview",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI System Overview.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-system-overview.md",
+      "bytes": 1197
+    },
+    {
+      "slug": "ai-testing-evaluation-process",
+      "title": "AI Testing & Evaluation Process",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Testing & Evaluation Process.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-testing-evaluation-process.md",
+      "bytes": 8335
+    },
+    {
+      "slug": "ai-transparency-notice",
+      "title": "AI Transparency Notice",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/AI Transparency Notice.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/ai-transparency-notice.md",
+      "bytes": 818
+    },
+    {
+      "slug": "hallucination-mitigation-strategy",
+      "title": "Hallucination Mitigation Strategy",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/Hallucination Mitigation Strategy.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/hallucination-mitigation-strategy.md",
+      "bytes": 1062
+    },
+    {
+      "slug": "human-oversight-framework",
+      "title": "Human Oversight Framework",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/Human Oversight Framework.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/human-oversight-framework.md",
+      "bytes": 1107
+    },
+    {
+      "slug": "model-vendor-assessment",
+      "title": "Model Vendor Assessment",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/Model Vendor Assessment.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/model-vendor-assessment.md",
+      "bytes": 8311
+    },
+    {
+      "slug": "prompt-handling-standard",
+      "title": "Prompt Handling Standard",
+      "folder": "ai",
+      "folderLabel": "AI-Specific Documentation",
+      "type": "docx",
+      "sourceFile": "AI-Specific Documentation/Prompt Handling Standard.docx",
+      "knowledgePath": "compliance/gdpr/examples/ai/prompt-handling-standard.md",
+      "bytes": 3120
+    },
+    {
+      "slug": "ai-feature-register",
+      "title": "AI Feature Register (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/AI Feature Register (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "break-glass-access-log",
+      "title": "Break-Glass Access Log (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Break-Glass Access Log (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "change-catalogue-standard-change-list",
+      "title": "Change Catalogue (Standard Change List) (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Change Catalogue (Standard Change List) (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "dpia-register",
+      "title": "DPIA Register (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/DPIA Register (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "dpia-screening-log",
+      "title": "DPIA Screening Log (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/DPIA Screening Log (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "data-subject-rights-dsr-log",
+      "title": "Data Subject Rights (DSR) Log (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Data Subject Rights (DSR) Log (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "erasure-deletion-execution-log",
+      "title": "Erasure - Deletion Execution Log (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Erasure - Deletion Execution Log (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "executed-dpa-register",
+      "title": "Executed DPA Register (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Executed DPA Register (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "hallucination-register",
+      "title": "Hallucination Register (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Hallucination Register (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "international-transfer-register",
+      "title": "International Transfer Register (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/International Transfer Register (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "law-enforcement-request-register",
+      "title": "Law Enforcement Request Register (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Law Enforcement Request Register (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "personal-data-breach-register",
+      "title": "Personal Data Breach Register (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Personal Data Breach Register (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "quarterly-access-review-record",
+      "title": "Quarterly Access Review Record (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Quarterly Access Review Record (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "raci-matrix",
+      "title": "RACI Matrix (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/RACI Matrix (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "raid-log-risks-assumptions-issues-dependencies",
+      "title": "RAID Log (Risks, Assumptions, Issues, Dependencies)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/RAID Log (Risks, Assumptions, Issues, Dependencies).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "rbac-matrix-role-to-permission-mapping",
+      "title": "RBAC Matrix (Role-to-Permission Mapping)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/RBAC Matrix (Role-to-Permission Mapping).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "security-operational-incident-log",
+      "title": "Security - Operational Incident Log (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Security - Operational Incident Log (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "training-completion-attestation-log",
+      "title": "Training Completion & Attestation Log (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Training Completion & Attestation Log (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "uk-gdpr-audit-readiness-checklist",
+      "title": "UK GDPR Audit Readiness Checklist",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "docx",
+      "sourceFile": "Documents/UK GDPR Audit Readiness Checklist.docx",
+      "knowledgePath": "compliance/gdpr/examples/registers/uk-gdpr-audit-readiness-checklist.md",
+      "bytes": 5152
+    },
+    {
+      "slug": "vendor-due-diligence-file",
+      "title": "Vendor Due Diligence File (Template)",
+      "folder": "registers",
+      "folderLabel": "Documents",
+      "type": "xlsx",
+      "sourceFile": "Documents/Vendor Due Diligence File (Template).xlsx",
+      "knowledgePath": null,
+      "note": "Excel register template — use structure from audit readiness checklist"
+    },
+    {
+      "slug": "ai-transparency-statement",
+      "title": "AI Transparency Statement",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/AI Transparency Statement.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/ai-transparency-statement.md",
+      "bytes": 1737
+    },
+    {
+      "slug": "cookie-policy",
+      "title": "Cookie Policy",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Cookie Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/cookie-policy.md",
+      "bytes": 9234
+    },
+    {
+      "slug": "data-deletion-process",
+      "title": "Data Deletion Process",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Data Deletion Process.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/data-deletion-process.md",
+      "bytes": 8791
+    },
+    {
+      "slug": "data-processing-agreement-dpa",
+      "title": "Data Processing Agreement (DPA)",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Data Processing Agreement (DPA).docx",
+      "knowledgePath": "compliance/gdpr/examples/external/data-processing-agreement-dpa.md",
+      "bytes": 3321
+    },
+    {
+      "slug": "data-retention-schedule",
+      "title": "Data Retention Schedule",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Data Retention Schedule.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/data-retention-schedule.md",
+      "bytes": 8056
+    },
+    {
+      "slug": "law-enforcement-request-policy",
+      "title": "Law Enforcement Request Policy",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Law Enforcement Request Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/law-enforcement-request-policy.md",
+      "bytes": 3018
+    },
+    {
+      "slug": "privacy-policy",
+      "title": "Privacy Policy",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Privacy Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/privacy-policy.md",
+      "bytes": 3641
+    },
+    {
+      "slug": "responsible-ai-statement",
+      "title": "Responsible AI Statement",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Responsible AI Statement.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/responsible-ai-statement.md",
+      "bytes": 7697
+    },
+    {
+      "slug": "security-overview-whitepaper",
+      "title": "Security Overview - Whitepaper",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Security Overview - Whitepaper.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/security-overview-whitepaper.md",
+      "bytes": 1394
+    },
+    {
+      "slug": "subprocessor-list",
+      "title": "Subprocessor List",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Subprocessor List.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/subprocessor-list.md",
+      "bytes": 1387
+    },
+    {
+      "slug": "terms-of-service",
+      "title": "Terms of Service",
+      "folder": "external",
+      "folderLabel": "External - Customer-Facing Documents",
+      "type": "docx",
+      "sourceFile": "External - Customer-Facing Documents/Terms of Service.docx",
+      "knowledgePath": "compliance/gdpr/examples/external/terms-of-service.md",
+      "bytes": 13114
+    },
+    {
+      "slug": "ai-acceptable-use-policy",
+      "title": "AI Acceptable Use Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/AI Acceptable Use Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/ai-acceptable-use-policy.md",
+      "bytes": 7065
+    },
+    {
+      "slug": "ai-governance-policy",
+      "title": "AI Governance Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/AI Governance Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/ai-governance-policy.md",
+      "bytes": 3992
+    },
+    {
+      "slug": "acceptable-use-policy",
+      "title": "Acceptable Use Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Acceptable Use Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/acceptable-use-policy.md",
+      "bytes": 6259
+    },
+    {
+      "slug": "access-control-policy",
+      "title": "Access Control Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Access Control Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/access-control-policy.md",
+      "bytes": 7735
+    },
+    {
+      "slug": "asset-management-policy",
+      "title": "Asset Management Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Asset Management Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/asset-management-policy.md",
+      "bytes": 6037
+    },
+    {
+      "slug": "backup-recovery-policy",
+      "title": "Backup & Recovery Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Backup & Recovery Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/backup-recovery-policy.md",
+      "bytes": 1181
+    },
+    {
+      "slug": "business-continuity-plan-bcp",
+      "title": "Business Continuity Plan (BCP)",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Business Continuity Plan (BCP).docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/business-continuity-plan-bcp.md",
+      "bytes": 6617
+    },
+    {
+      "slug": "change-management-policy",
+      "title": "Change Management Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Change Management Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/change-management-policy.md",
+      "bytes": 6321
+    },
+    {
+      "slug": "configuration-management-policy",
+      "title": "Configuration Management Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Configuration Management Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/configuration-management-policy.md",
+      "bytes": 6173
+    },
+    {
+      "slug": "data-breach-response-procedure",
+      "title": "Data Breach Response Procedure",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Data Breach Response Procedure.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/data-breach-response-procedure.md",
+      "bytes": 7970
+    },
+    {
+      "slug": "data-classification-standard",
+      "title": "Data Classification Standard",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Data Classification Standard.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/data-classification-standard.md",
+      "bytes": 7047
+    },
+    {
+      "slug": "data-protection-impact-assessment-dpia-template",
+      "title": "Data Protection Impact Assessment (DPIA) Template",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Data Protection Impact Assessment (DPIA) Template.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/data-protection-impact-assessment-dpia-template.md",
+      "bytes": 1910
+    },
+    {
+      "slug": "data-protection-policy",
+      "title": "Data Protection Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Data Protection Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/data-protection-policy.md",
+      "bytes": 939
+    },
+    {
+      "slug": "data-subject-rights-procedure",
+      "title": "Data Subject Rights Procedure",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Data Subject Rights Procedure.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/data-subject-rights-procedure.md",
+      "bytes": 7183
+    },
+    {
+      "slug": "disaster-recovery-plan-drp",
+      "title": "Disaster Recovery Plan (DRP)",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Disaster Recovery Plan (DRP).docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/disaster-recovery-plan-drp.md",
+      "bytes": 6593
+    },
+    {
+      "slug": "employee-security-policy",
+      "title": "Employee Security Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Employee Security Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/employee-security-policy.md",
+      "bytes": 6255
+    },
+    {
+      "slug": "encryption-standard",
+      "title": "Encryption Standard",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Encryption Standard.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/encryption-standard.md",
+      "bytes": 6640
+    },
+    {
+      "slug": "gdpr-compliance-policy",
+      "title": "GDPR Compliance Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/GDPR Compliance Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/gdpr-compliance-policy.md",
+      "bytes": 1493
+    },
+    {
+      "slug": "incident-response-plan",
+      "title": "Incident Response Plan",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Incident Response Plan.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/incident-response-plan.md",
+      "bytes": 1306
+    },
+    {
+      "slug": "information-security-policy",
+      "title": "Information Security Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Information Security Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/information-security-policy.md",
+      "bytes": 7225
+    },
+    {
+      "slug": "international-transfer-assessment",
+      "title": "International Transfer Assessment",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/International Transfer Assessment.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/international-transfer-assessment.md",
+      "bytes": 6469
+    },
+    {
+      "slug": "intra-group-transfer-agreement",
+      "title": "Intra-Group Transfer Agreement",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Intra-Group Transfer Agreement.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/intra-group-transfer-agreement.md",
+      "bytes": 3909
+    },
+    {
+      "slug": "joiner-mover-leaver-procedure",
+      "title": "Joiner-Mover-Leaver Procedure",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Joiner-Mover-Leaver Procedure.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/joiner-mover-leaver-procedure.md",
+      "bytes": 6376
+    },
+    {
+      "slug": "legitimate-interest-assessments-lia",
+      "title": "Legitimate Interest Assessments (LIA)",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Legitimate Interest Assessments (LIA).docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/legitimate-interest-assessments-lia.md",
+      "bytes": 6760
+    },
+    {
+      "slug": "logging-monitoring-policy",
+      "title": "Logging & Monitoring Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Logging & Monitoring Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/logging-monitoring-policy.md",
+      "bytes": 971
+    },
+    {
+      "slug": "password-authentication-policy",
+      "title": "Password & Authentication Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Password & Authentication Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/password-authentication-policy.md",
+      "bytes": 7024
+    },
+    {
+      "slug": "physical-security-policy",
+      "title": "Physical Security Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Physical Security Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/physical-security-policy.md",
+      "bytes": 6376
+    },
+    {
+      "slug": "privacy-governance-framework",
+      "title": "Privacy Governance Framework",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Privacy Governance Framework.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/privacy-governance-framework.md",
+      "bytes": 7957
+    },
+    {
+      "slug": "processing-contracts-evidence-pack",
+      "title": "Processing Contracts Evidence Pack",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Processing Contracts Evidence Pack.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/processing-contracts-evidence-pack.md",
+      "bytes": 4631
+    },
+    {
+      "slug": "records-of-processing-activities-ropa",
+      "title": "Records of Processing Activities (ROPA)",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Records of Processing Activities (ROPA).docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/records-of-processing-activities-ropa.md",
+      "bytes": 15576
+    },
+    {
+      "slug": "remote-working-policy",
+      "title": "Remote Working Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Remote Working Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/remote-working-policy.md",
+      "bytes": 6165
+    },
+    {
+      "slug": "retention-deletion-policy",
+      "title": "Retention & Deletion Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Retention & Deletion Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/retention-deletion-policy.md",
+      "bytes": 1665
+    },
+    {
+      "slug": "secure-sdlc-policy",
+      "title": "Secure SDLC Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Secure SDLC Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/secure-sdlc-policy.md",
+      "bytes": 968
+    },
+    {
+      "slug": "platform-dpia",
+      "title": "Platform DPIA",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/[Product Name] Platform DPIA.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/platform-dpia.md",
+      "bytes": 6819
+    },
+    {
+      "slug": "subprocessor-management-procedure",
+      "title": "Subprocessor Management Procedure",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Subprocessor Management Procedure.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/subprocessor-management-procedure.md",
+      "bytes": 7336
+    },
+    {
+      "slug": "training-awareness-policy",
+      "title": "Training & Awareness Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Training & Awareness Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/training-awareness-policy.md",
+      "bytes": 6508
+    },
+    {
+      "slug": "vendor-management-policy",
+      "title": "Vendor Management Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Vendor Management Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/vendor-management-policy.md",
+      "bytes": 6517
+    },
+    {
+      "slug": "vulnerability-management-policy",
+      "title": "Vulnerability Management Policy",
+      "folder": "governance",
+      "folderLabel": "Governance & Compliance",
+      "type": "docx",
+      "sourceFile": "Governance & Compliance/Vulnerability Management Policy.docx",
+      "knowledgePath": "compliance/gdpr/examples/governance/vulnerability-management-policy.md",
+      "bytes": 6845
+    },
+    {
+      "slug": "ai-processing-flow",
+      "title": "AI Processing Flow",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/AI Processing Flow.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/ai-processing-flow.md",
+      "bytes": 2671
+    },
+    {
+      "slug": "api-security-standards",
+      "title": "API Security Standards",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/API Security Standards.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/api-security-standards.md",
+      "bytes": 8618
+    },
+    {
+      "slug": "access-review-records",
+      "title": "Access Review Records",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Access Review Records.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/access-review-records.md",
+      "bytes": 8212
+    },
+    {
+      "slug": "audit-logging-design",
+      "title": "Audit Logging Design",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Audit Logging Design.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/audit-logging-design.md",
+      "bytes": 8346
+    },
+    {
+      "slug": "authentication-architecture",
+      "title": "Authentication Architecture",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Authentication Architecture.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/authentication-architecture.md",
+      "bytes": 8613
+    },
+    {
+      "slug": "backup-architecture",
+      "title": "Backup Architecture",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Backup Architecture.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/backup-architecture.md",
+      "bytes": 874
+    },
+    {
+      "slug": "ci-cd-security-controls",
+      "title": "CI-CD Security Controls",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/CI-CD Security Controls.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/ci-cd-security-controls.md",
+      "bytes": 7581
+    },
+    {
+      "slug": "control-matrix",
+      "title": "Control Matrix",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Control Matrix.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/control-matrix.md",
+      "bytes": 1034
+    },
+    {
+      "slug": "data-flow-diagrams",
+      "title": "Data Flow Diagrams",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Data Flow Diagrams.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/data-flow-diagrams.md",
+      "bytes": 1659
+    },
+    {
+      "slug": "data-inventory",
+      "title": "Data Inventory",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Data Inventory.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/data-inventory.md",
+      "bytes": 1002
+    },
+    {
+      "slug": "data-storage-matrix",
+      "title": "Data Storage Matrix",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Data Storage Matrix.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/data-storage-matrix.md",
+      "bytes": 8691
+    },
+    {
+      "slug": "environment-segregation-standard",
+      "title": "Environment Segregation Standard",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Environment Segregation Standard.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/environment-segregation-standard.md",
+      "bytes": 7716
+    },
+    {
+      "slug": "incident-logs",
+      "title": "Incident Logs",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Incident Logs.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/incident-logs.md",
+      "bytes": 8402
+    },
+    {
+      "slug": "infrastructure-architecture-diagram",
+      "title": "Infrastructure Architecture Diagram",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Infrastructure Architecture Diagram.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/infrastructure-architecture-diagram.md",
+      "bytes": 1351
+    },
+    {
+      "slug": "owasp-sast-dast-evidence",
+      "title": "OWASP-SAST-DAST Evidence",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/OWASP-SAST-DAST Evidence.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/owasp-sast-dast-evidence.md",
+      "bytes": 8129
+    },
+    {
+      "slug": "penetration-test-reports",
+      "title": "Penetration Test Reports",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Penetration Test Reports.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/penetration-test-reports.md",
+      "bytes": 8518
+    },
+    {
+      "slug": "risk-register",
+      "title": "Risk Register",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Risk Register.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/risk-register.md",
+      "bytes": 8047
+    },
+    {
+      "slug": "secrets-management-standard",
+      "title": "Secrets Management Standard",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Secrets Management Standard.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/secrets-management-standard.md",
+      "bytes": 7699
+    },
+    {
+      "slug": "supplier-risk-assessments",
+      "title": "Supplier Risk Assessments",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Supplier Risk Assessments.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/supplier-risk-assessments.md",
+      "bytes": 8510
+    },
+    {
+      "slug": "tenant-isolation-design",
+      "title": "Tenant Isolation Design",
+      "folder": "technical",
+      "folderLabel": "Technical - Operational Evidence Documents",
+      "type": "docx",
+      "sourceFile": "Technical - Operational Evidence Documents/Tenant Isolation Design.docx",
+      "knowledgePath": "compliance/gdpr/examples/technical/tenant-isolation-design.md",
+      "bytes": 2587
+    }
+  ],
+  "description": "UK GDPR required document pack (scrubbed templates)"
+}

@@ -1,8 +1,8 @@
 import fg from "fast-glob";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { ScanResult } from "@humaan/dna-config";
-import { DNA_CONFIG_FILE, IMPRESSIONS_PATHS } from "@humaan/dna-config";
+import type { ScanResult } from "@superhumaan/dna-config";
+import { DNA_CONFIG_FILE, IMPRESSIONS_PATHS } from "@superhumaan/dna-config";
 import { fileExists } from "./fs.js";
 
 const FRONTEND_INDICATORS: Record<string, string[]> = {
@@ -11,6 +11,8 @@ const FRONTEND_INDICATORS: Record<string, string[]> = {
   svelte: ["svelte", "@sveltejs/kit"],
   next: ["next"],
   angular: ["@angular/core"],
+  "react-native": ["react-native", "expo"],
+  ghost: ["ghost"],
 };
 
 const BACKEND_INDICATORS: Record<string, string[]> = {

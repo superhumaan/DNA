@@ -25,7 +25,7 @@ pnpm build
 | `pnpm dna` | Run CLI from source |
 | `pnpm dna:link` | Build + global link |
 | `pnpm dna:setup` | Team setup script |
-| `pnpm publish:npm` | Publish all `@humaan/*` packages |
+| `pnpm publish:npm` | Publish all `@superhumaan/*` packages |
 
 ## Monorepo layout
 
@@ -48,13 +48,15 @@ apps/
 
 ## Package dependency order (publish)
 
-1. `dna-config`, `dna-templates`
-2. `dna-immune`, `dna-github`, `dna-ai`
-3. `dna-core`, `dna-runtime`
-4. `dna-cli`
+Public on npm:
+
+- `@superhumaan/dna-by-humaan` — bundled CLI + `/runtime` export
+
+Internal packages are `private` in the monorepo.
 
 ```bash
-pnpm publish:npm   # requires npm login + @humaan scope
+export NPM_TOKEN=<bypass token>
+pnpm publish:npm
 ```
 
 ## CI
@@ -71,7 +73,7 @@ GitHub Actions runs on push/PR to `main`:
 Edit `packages/dna-core/src/marketplace/bundled-catalog.ts`, rebuild, test:
 
 ```bash
-pnpm --filter @humaan/dna-core test
+pnpm --filter @superhumaan/dna-core test
 ```
 
 ## Contributing

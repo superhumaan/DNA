@@ -1,9 +1,11 @@
-import type { DnaConfig, WizardAnswers } from "@humaan/dna-config";
+import type { DnaConfig, WizardAnswers } from "@superhumaan/dna-config";
 import { readJsonFile } from "./fs.js";
 import { scanProject } from "./scanner.js";
 import { generateRecommendation, resolveStackFromWizard } from "./recommend.js";
 import { generateDnaStructure } from "./generators/init.js";
 import { runPostInit } from "./post-init.js";
+import { installFoundationKnowledge } from "./marketplace/foundation.js";
+import { loadDnaConfig } from "./validator.js";
 import { createLogger } from "./logger.js";
 
 const log = createLogger("wizard");
@@ -60,5 +62,11 @@ export async function runWizard(options: WizardOptions): Promise<WizardResult> {
   const postFiles = await runPostInit(root, config, answers);
   filesCreated.push(...postFiles);
 
-  return { config, filesCreated };
+  const foundation = await installFoundationKnowledge(root, config, scan);
+  for (const packId of foundation.installed) {
+    filesCreated.push(`.DNA/knowledge/ (marketplace: ${packId})`);
+  }
+
+  const finalConfig = (await loadDnaConfig(root)) ?? config;
+  return { config: finalConfig, filesCreated };
 }

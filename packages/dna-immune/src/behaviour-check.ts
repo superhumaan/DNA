@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { RuntimeEvent } from "@humaan/dna-config";
+import type { RuntimeEvent } from "@superhumaan/dna-config";
 
 const VIOLATION_PATTERNS = [
   /password\s*=\s*['"][^'"]+['"]/i,

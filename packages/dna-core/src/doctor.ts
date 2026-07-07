@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { BEHAVIOUR_FILES, DNA_CONFIG_FILE } from "@humaan/dna-config";
+import { BEHAVIOUR_FILES, DNA_CONFIG_FILE } from "@superhumaan/dna-config";
 import { fileExists } from "./fs.js";
 import { loadDnaConfig, validateProject } from "./validator.js";
 import { scanProject } from "./scanner.js";

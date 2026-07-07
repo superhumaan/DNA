@@ -95,7 +95,7 @@ dna marketplace install compliance/gdpr
 
 ## Runtime pipeline
 
-When `@humaan/dna-runtime` captures an event:
+When `@superhumaan/dna-by-humaan/runtime` captures an event:
 
 1. Append to `.DNA/runtime/events.jsonl`
 2. Classify via Immune System

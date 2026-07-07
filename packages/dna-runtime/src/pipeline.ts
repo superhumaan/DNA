@@ -1,15 +1,15 @@
 import { join } from "node:path";
-import type { ClassifiedIssue, DnaConfig, RuntimeEvent } from "@humaan/dna-config";
-import { DnaConfigSchema, DNA_CONFIG_FILE } from "@humaan/dna-config";
+import type { ClassifiedIssue, DnaConfig, RuntimeEvent } from "@superhumaan/dna-config";
+import { DnaConfigSchema, DNA_CONFIG_FILE } from "@superhumaan/dna-config";
 import {
   classifyIssue,
   getImmuneConfig,
   shouldAutoCreateIssue,
   eventKey,
   EventTracker,
-} from "@humaan/dna-immune";
-import { createIssue, getTokenFromEnv, commentOnIssue } from "@humaan/dna-github";
-import { executeRepairWorkflow } from "@humaan/dna-ai";
+} from "@superhumaan/dna-immune";
+import { createIssue, getTokenFromEnv, commentOnIssue } from "@superhumaan/dna-github";
+import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import { appendJsonl } from "./persistence.js";
 import { readFile } from "node:fs/promises";
 

@@ -4,7 +4,7 @@ import { mkdir, writeFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
-import type { ClassifiedIssue } from "@humaan/dna-config";
+import type { ClassifiedIssue } from "@superhumaan/dna-config";
 
 const sampleIssue: ClassifiedIssue = {
   id: "issue-abc12345",

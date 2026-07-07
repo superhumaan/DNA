@@ -1,5 +1,5 @@
 {
-  "name": "@humaan/dna-docs",
+  "name": "@superhumaan/dna-docs",
   "version": "0.1.0",
   "description": "DNA documentation utilities",
   "type": "module",
@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@humaan/dna-config": "workspace:*"
+    "@superhumaan/dna-config": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8.3.5",

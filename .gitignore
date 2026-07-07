@@ -11,5 +11,8 @@ coverage/
 .turbo/
 .pnpm-store/
 
+# Local DNA test artifacts (commit .DNA/ inside real projects, not monorepo root)
+/.DNA/
+
 # Next.js build output
 apps/web/.next/

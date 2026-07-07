@@ -1,5 +1,5 @@
 import express from "express";
-import { dnaRuntime } from "@humaan/dna-runtime";
+import { dnaRuntime } from "@superhumaan/dna-by-humaan/runtime";
 
 const PORT = process.env.PORT ?? 3456;
 

@@ -1,5 +1,5 @@
 export const RUNTIME_INSTALL_SNIPPET = `// DNA Runtime — framework adapters
-import { dnaRuntime } from "@humaan/dna-runtime";
+import { dnaRuntime } from "@superhumaan/dna-by-humaan/runtime";
 
 dnaRuntime.start({
   projectId: process.env.DNA_PROJECT_ID ?? "my-project",

@@ -1,11 +1,11 @@
-import type { DnaConfig, Recommendation, WizardAnswers } from "@humaan/dna-config";
+import type { DnaConfig, Recommendation, WizardAnswers } from "@superhumaan/dna-config";
 import {
   BEHAVIOUR_FILES,
   CELLULAR_MEMORY_REGIONS,
   DNA_CONFIG_FILE,
   IMPRESSIONS_PATHS,
   NEURAL_NETWORK_FILE,
-} from "@humaan/dna-config";
+} from "@superhumaan/dna-config";
 import { join } from "node:path";
 import { writeFileEnsured, writeJsonFile } from "../fs.js";
 import { generateNeuralNetwork } from "./neural-network.js";
@@ -16,7 +16,7 @@ import { generateImmuneSystem } from "./immune-files.js";
 import { generateCellularMemory } from "./cellular-memory.js";
 import { generateWorkflows } from "./workflows.js";
 import { generateTemplateFiles } from "./templates.js";
-import { NEURAL_NETWORK_ALT } from "@humaan/dna-config";
+import { NEURAL_NETWORK_ALT } from "@superhumaan/dna-config";
 
 export async function generateDnaStructure(
   root: string,

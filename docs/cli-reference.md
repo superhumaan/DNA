@@ -55,8 +55,11 @@ dna context frontend
 dna context security
 dna context qa
 dna context devops
+dna context multilingual
 dna context all
 ```
+
+`multilingual` loads language stem packs — bidirectional translation, sentiment, and localized documentation guidance.
 
 ## validate
 
@@ -142,6 +145,30 @@ dna ai repair --file issue.json --dry-run
 
 **Never auto-merges.** Always requires human review.
 
+## stack
+
+Approved system shapes — prevents incoherent technology mixes (e.g. Next.js + Vite, Ghost + React).
+
+### stack list
+
+```bash
+dna stack list
+```
+
+### stack recommend
+
+```bash
+dna stack recommend --description "B2B SaaS dashboard"
+```
+
+### stack show
+
+```bash
+dna stack show
+```
+
+Shows configured archetype, detected dependencies, and conflicts.
+
 ## marketplace
 
 ### marketplace list
@@ -183,6 +210,74 @@ dna context rbac
 ```
 
 Writes `.DNA/plans/rbac-*.md`, permission matrix, and installs `security/rbac-zero-trust` knowledge pack.
+
+## platform
+
+Browse and plan features DNA learned from Humaan production projects.
+
+```bash
+dna platform list
+dna platform projects
+dna platform project humaan
+```
+
+## plan feature
+
+Generate an end-to-end implementation plan for a platform feature.
+
+```bash
+dna plan feature admin-portal --quote "Admin portal with Google directory sync"
+dna plan feature sso-bridge --quote "Silent SSO between subdomains"
+dna plan feature azure-deploy --reference-project aistudio
+dna context platform
+dna context platform --feature admin-portal
+```
+
+Installs `platforms/humaan-stack` knowledge pack. See [platform.md](./platform.md).
+
+## plan compliance
+
+Generate tiered compliance controls for GDPR, HIPAA, ISO 27001, SOC 2, or PCI.
+
+```bash
+dna compliance list
+dna plan compliance --frameworks gdpr,iso27001 --tier sme --quote "EU B2B SaaS"
+dna plan compliance --framework hipaa --tier corporate
+dna context compliance --tier sme --frameworks gdpr,hipaa
+```
+
+Writes `.DNA/plans/compliance-*.md` and control matrix. See [compliance.md](./compliance.md).
+
+## analyze
+
+Deep analysis of an existing project: structure, auth, integrations, vertical gaps.
+
+```bash
+dna analyze --deep
+dna analyze --verticals behaviour,runtime,rbac
+```
+
+## document
+
+Reverse-engineer Impressions and system map from codebase.
+
+```bash
+dna document --from-code
+dna document --from-code --force
+```
+
+## plan ivf
+
+Generate an Integrating Vertical Functions plan for brownfield projects.
+
+```bash
+dna plan ivf --quote "B2B SaaS — RBAC, GDPR, runtime"
+dna plan ivf --verticals behaviour,runtime,rbac,compliance,impressions
+dna plan ivf --gaps-only
+dna context ivf
+```
+
+See [ivf.md](./ivf.md).
 
 ## Environment variables
 

@@ -1,40 +1,13 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
-import type { NeuralNetwork } from "@humaan/dna-config";
-import { NEURAL_NETWORK_FILE, NEURAL_NETWORK_ALT } from "@humaan/dna-config";
+import type { NeuralNetwork } from "@superhumaan/dna-config";
+import { NEURAL_NETWORK_FILE, NEURAL_NETWORK_ALT } from "@superhumaan/dna-config";
 import { fileExists, readJsonFile } from "./fs.js";
-import { NeuralNetworkSchema } from "@humaan/dna-config";
+import { NeuralNetworkSchema } from "@superhumaan/dna-config";
+import { ensureKnowledgeForContext } from "./marketplace/ensure.js";
+import { TARGET_INTENTS, type ContextTarget } from "./context-intents.js";
 
-export type ContextTarget =
-  | "cursor"
-  | "claude"
-  | "chatgpt"
-  | "copilot"
-  | "windsurf"
-  | "gemini"
-  | "backend"
-  | "frontend"
-  | "security"
-  | "qa"
-  | "devops"
-  | "rbac"
-  | "all";
-
-const TARGET_INTENTS: Record<ContextTarget, string[]> = {
-  cursor: ["build_frontend_component", "create_api_endpoint", "install_dependency", "create_pr"],
-  claude: ["build_frontend_component", "create_api_endpoint", "fix_runtime_error", "create_pr"],
-  chatgpt: ["review_architecture", "update_documentation", "investigate_bug"],
-  copilot: ["build_frontend_component", "create_api_endpoint", "create_pr"],
-  windsurf: ["build_frontend_component", "fix_runtime_error", "create_pr"],
-  gemini: ["review_architecture", "update_documentation", "investigate_bug"],
-  backend: ["create_api_endpoint", "fix_runtime_error", "configure_ci_cd"],
-  frontend: ["build_frontend_component", "build_pwa", "create_mobile_feature"],
-  security: ["implement_rbac", "add_authentication", "improve_security"],
-  qa: ["write_tests", "investigate_bug"],
-  devops: ["configure_ci_cd", "fix_runtime_error"],
-  rbac: ["implement_rbac"],
-  all: [],
-};
+export type { ContextTarget };
 
 const TARGET_BEHAVIOUR: Record<ContextTarget, string[]> = {
   cursor: ["ai.behaviour.md", "coding.behaviour.md"],
@@ -49,6 +22,10 @@ const TARGET_BEHAVIOUR: Record<ContextTarget, string[]> = {
   qa: ["testing.behaviour.md", "documentation.behaviour.md"],
   devops: ["runtime.behaviour.md", "coding.behaviour.md"],
   rbac: ["security.behaviour.md", "ai.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
+  platform: ["ai.behaviour.md", "security.behaviour.md", "coding.behaviour.md", "documentation.behaviour.md"],
+  compliance: ["security.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md", "coding.behaviour.md"],
+  multilingual: ["ai.behaviour.md", "documentation.behaviour.md"],
+  ivf: ["ai.behaviour.md", "documentation.behaviour.md", "security.behaviour.md", "coding.behaviour.md"],
   all: [],
 };
 
@@ -60,6 +37,8 @@ export async function generateContext(root: string, target: ContextTarget): Prom
   const neuralRaw = await readJsonFile<unknown>(neuralPath);
   const neuralParsed = NeuralNetworkSchema.safeParse(neuralRaw);
   const neuralNetwork: NeuralNetwork | null = neuralParsed.success ? neuralParsed.data : null;
+
+  await ensureKnowledgeForContext(root, target, neuralNetwork);
 
   const sections: string[] = [
     "# DNA Context",
@@ -130,6 +109,7 @@ export async function generateContext(root: string, target: ContextTarget): Prom
     "prefrontalCortex/current-plan.md",
     "prefrontalCortex/next-actions.md",
     "prefrontalCortex/rbac-permission-matrix.md",
+    "prefrontalCortex/compliance-control-matrix.md",
     "amygdala/risks.md",
   ];
 

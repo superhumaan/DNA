@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import { join } from "node:path";
 import { writeFile } from "node:fs/promises";
-import { PRODUCT_NAME } from "@humaan/dna-config";
+import { PRODUCT_NAME } from "@superhumaan/dna-config";
 import {
   scanProject,
   formatScanSummary,
@@ -24,10 +24,35 @@ import {
   formatUpdateResult,
   generateRbacPlan,
   parseRolesInput,
-} from "@humaan/dna-core";
-import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@humaan/dna-templates";
-import { createIssue, getTokenFromEnv } from "@humaan/dna-github";
-import { executeRepairWorkflow } from "@humaan/dna-ai";
+  generateFeaturePlan,
+  formatPlatformCatalog,
+  formatProjectFeatures,
+  generatePlatformContext,
+  HUMAAN_PROJECTS,
+  generateCompliancePlan,
+  formatComplianceCatalog,
+  generateComplianceContext,
+  parseFrameworksInput,
+  parseOrgTier,
+  formatGdprDocumentCatalog,
+  installGdprExamples,
+  formatStackCatalog,
+  resolveArchetype,
+  stackFromArchetype,
+  formatStackValidationSummary,
+  validateStackCompatibility,
+  getArchetype,
+  analyzeProject,
+  formatAnalysisSummary,
+  documentFromCode,
+  formatDocumentResult,
+  generateIvfPlan,
+  parseVerticalsInput,
+  generateIvfContext,
+} from "@superhumaan/dna-core";
+import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
+import { createIssue, getTokenFromEnv } from "@superhumaan/dna-github";
+import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import { runInitWizard } from "./prompts.js";
 
 const program = new Command();
@@ -60,10 +85,55 @@ program
     const result = await runWizard({ root, answers });
 
     console.log(`\n✓ DNA initialised for ${result.config.projectName}`);
+    console.log(`  Archetype: ${result.config.stack.archetype ?? "—"}`);
     console.log(`  Created ${result.filesCreated.length} files`);
     console.log(`  Config: .DNA/config.dna.json`);
     console.log(`  Docs:   DNA/Impressions/`);
     console.log(`\nNext: dna validate && dna context cursor`);
+  });
+
+program
+  .command("analyze")
+  .description("Deep analysis of an existing project (structure, auth, integrations, IVF gaps)")
+  .option("--deep", "Full analysis including vertical gap matrix (default)")
+  .option("--verticals <list>", "Comma-separated verticals for gap assessment")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { deep?: boolean; verticals?: string; cwd?: string }) => {
+    const root = getRoot(options);
+    const verticals = options.verticals ? parseVerticalsInput(options.verticals) : undefined;
+    const analysis = await analyzeProject(root, { verticals });
+    console.log(formatAnalysisSummary(analysis));
+  });
+
+program
+  .command("document")
+  .description("Generate or update documentation from codebase analysis")
+  .option("--from-code", "Reverse-engineer Impressions and system map from code")
+  .option("--merge", "Skip files with existing real content (default)")
+  .option("--no-merge", "Write all architecture docs even if content exists")
+  .option("--force", "Overwrite all target files")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { fromCode?: boolean; merge?: boolean; force?: boolean; cwd?: string }) => {
+    const root = getRoot(options);
+    if (!options.fromCode) {
+      console.error("Use --from-code to document from codebase analysis.");
+      console.error("Example: dna document --from-code");
+      process.exit(1);
+    }
+
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    const result = await documentFromCode({
+      root,
+      merge: options.merge !== false,
+      force: options.force,
+    });
+    console.log(formatDocumentResult(result));
+    console.log("\nNext: dna plan ivf --quote \"...\"");
   });
 
 program
@@ -87,12 +157,70 @@ program
     console.log(formatRecommendation(rec));
   });
 
+const stack = program.command("stack").description("Stack archetypes and compatibility");
+
+stack
+  .command("list")
+  .description("List approved stack archetypes")
+  .action(() => {
+    console.log(formatStackCatalog());
+  });
+
+stack
+  .command("recommend")
+  .description("Recommend a stack archetype for this project")
+  .option("--cwd <path>", "Project root directory")
+  .option("-d, --description <text>", "Project description")
+  .action(async (options: { cwd?: string; description?: string }) => {
+    const root = getRoot(options);
+    const scan = await scanProject(root);
+    const description = options.description ?? "software project";
+    const resolution = resolveArchetype(scan, description);
+    const stackConfig = stackFromArchetype(resolution, scan, description);
+    const arch = getArchetype(resolution.archetype.id);
+
+    console.log(formatStackValidationSummary(
+      { stack: stackConfig } as Awaited<ReturnType<typeof loadDnaConfig>>,
+      scan,
+    ));
+    console.log(`Confidence: ${resolution.confidence}`);
+    console.log(`Reason: ${resolution.reason}`);
+    if (arch) {
+      console.log("\nExcluded technologies (do not add):");
+      console.log(`  ${arch.excludes.join(", ")}`);
+    }
+  });
+
+stack
+  .command("show")
+  .description("Show current project stack archetype and detected technologies")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const scan = await scanProject(root);
+    console.log(formatStackValidationSummary(config, scan));
+    const issues = validateStackCompatibility(config, scan);
+    if (issues.length) {
+      console.log("\nStack issues:");
+      for (const issue of issues) {
+        const icon = issue.severity === "error" ? "✗" : "⚠";
+        console.log(`  ${icon} ${issue.message}`);
+      }
+    } else {
+      console.log("\n✓ No stack conflicts detected");
+    }
+  });
+
 program
   .command("context")
   .description("Generate AI-ready context")
-  .argument("<target>", "cursor|claude|chatgpt|copilot|windsurf|gemini|backend|frontend|security|qa|devops|rbac|all")
+  .argument("<target>", "cursor|claude|chatgpt|copilot|windsurf|gemini|backend|frontend|security|qa|devops|rbac|platform|compliance|multilingual|ivf|all")
   .option("--cwd <path>", "Project root directory")
-  .action(async (target: string, options: { cwd?: string }) => {
+  .option("--feature <id>", "Focus platform context on a feature id (with platform target)")
+  .option("--tier <tier>", "Org tier for compliance context: startup|sme|corporate|enterprise")
+  .option("--frameworks <list>", "Frameworks for compliance context: gdpr,hipaa,iso27001")
+  .action(async (target: string, options: { cwd?: string; feature?: string; tier?: string; frameworks?: string }) => {
     const root = getRoot(options);
     const validTargets = [
       "cursor",
@@ -107,6 +235,10 @@ program
       "qa",
       "devops",
       "rbac",
+      "platform",
+      "compliance",
+      "multilingual",
+      "ivf",
       "all",
     ] as const;
 
@@ -115,9 +247,29 @@ program
       process.exit(1);
     }
 
+    if (target === "platform") {
+      const context = await generatePlatformContext(root, options.feature);
+      console.log(context);
+      return;
+    }
+
+    if (target === "compliance") {
+      const tier = options.tier ? parseOrgTier(options.tier) : undefined;
+      const frameworks = options.frameworks ? parseFrameworksInput(options.frameworks) : undefined;
+      const context = await generateComplianceContext(root, { tier, frameworks });
+      console.log(context);
+      return;
+    }
+
+    if (target === "ivf") {
+      const context = await generateIvfContext(root);
+      console.log(context);
+      return;
+    }
+
     const context = await generateContext(
       root,
-      target as (typeof validTargets)[number],
+      target as Exclude<(typeof validTargets)[number], "platform" | "compliance" | "ivf">,
     );
     console.log(context);
   });
@@ -167,7 +319,8 @@ program
     console.log("✓ Runtime install snippets created:");
     console.log(`  ${snippetPath}`);
     console.log(`  ${envPath}`);
-    console.log("\nInstall: pnpm add @humaan/dna-runtime");
+    console.log("\nInstall: pnpm add @superhumaan/dna-by-humaan");
+    console.log("Import:  import { dnaRuntime } from '@superhumaan/dna-by-humaan/runtime'");
     console.log("Express:  app.use(dnaRuntime.express()); app.use(dnaRuntime.errorHandler());");
     console.log("Fastify:  dnaRuntime.attachFastify(fastify);");
     console.log("NestJS:   @UseInterceptors(dnaRuntime.nestInterceptor()) + @UseFilters(dnaRuntime.nestExceptionFilter())");
@@ -437,5 +590,254 @@ plan
       console.log(result.context);
     },
   );
+
+plan
+  .command("feature")
+  .description("Plan a Humaan platform feature from plain-language requirements")
+  .argument("<featureId>", "Feature id, e.g. admin-portal, sso-bridge, azure-deploy")
+  .option("--quote <text>", "Plain-language requirement from the user")
+  .option(
+    "--reference-project <id>",
+    "Reference project: aistudio|colorparty|humaan|soli",
+  )
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (
+      featureId: string,
+      options: {
+        quote?: string;
+        referenceProject?: "aistudio" | "colorparty" | "humaan" | "soli";
+        cwd?: string;
+      },
+    ) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      const result = await generateFeaturePlan({
+        root,
+        featureId,
+        quote: options.quote,
+        referenceProject: options.referenceProject,
+      });
+
+      console.log(`✓ Feature plan generated: ${result.feature.name}\n`);
+      console.log(`  Plan: ${result.planPath}`);
+      console.log("");
+      console.log("Paste the plan into your AI tool, or run:");
+      console.log("  dna context platform");
+      if (result.feature.category === "auth" || result.feature.id.includes("rbac")) {
+        console.log("  dna plan rbac --quote \"...\"  (if roles involved)");
+      }
+      console.log("");
+      console.log("─".repeat(60));
+      console.log(result.context);
+    },
+  );
+
+plan
+  .command("compliance")
+  .description("Plan tiered GDPR, HIPAA, ISO 27001, SOC 2, or PCI controls")
+  .option("--frameworks <list>", "Comma-separated: gdpr,hipaa,iso27001,soc2,pci_dss,uk_gdpr")
+  .option("--framework <id>", "Single framework (alias for --frameworks)")
+  .option("--tier <tier>", "Org tier: startup|sme|corporate|enterprise (inferred from stage if omitted)")
+  .option("--quote <text>", "Plain-language requirement")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: {
+      frameworks?: string;
+      framework?: string;
+      tier?: string;
+      quote?: string;
+      cwd?: string;
+    }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      const frameworkInput = options.frameworks ?? options.framework;
+      let frameworks = frameworkInput ? parseFrameworksInput(frameworkInput) : [];
+
+      if (!frameworks.length && config.compliance !== "none" && config.compliance !== "custom" && config.compliance !== "pdpa_thailand") {
+        frameworks = parseFrameworksInput(config.compliance);
+      }
+      if (!frameworks.length) {
+        frameworks = parseFrameworksInput("gdpr,iso27001");
+      }
+
+      const tier = options.tier ? parseOrgTier(options.tier) : undefined;
+      if (options.tier && !tier) {
+        console.error("Unknown tier. Use: startup, sme, corporate, enterprise");
+        process.exit(1);
+      }
+
+      const result = await generateCompliancePlan({
+        root,
+        frameworks,
+        tier,
+        quote: options.quote,
+      });
+
+      console.log(`✓ Compliance plan generated (${result.tier} tier)\n`);
+      console.log(`  Plan:   ${result.planPath}`);
+      console.log(`  Matrix: ${result.matrixPath}`);
+      console.log(`  Frameworks: ${result.frameworks.join(", ")}`);
+      console.log("");
+      console.log("Paste the plan into your AI tool, or run:");
+      console.log("  dna context compliance");
+      console.log("");
+      console.log("─".repeat(60));
+      console.log(result.context);
+    },
+  );
+
+plan
+  .command("ivf")
+  .description("Generate an Integrating Vertical Functions plan for brownfield projects")
+  .option("--quote <text>", "Plain-language integration requirement")
+  .option(
+    "--verticals <list>",
+    "Comma-separated: behaviour,cellularMemory,runtime,rbac,compliance,platform,knowledge,neuralNetwork,impressions",
+  )
+  .option("--gaps-only", "Only write gap matrix, skip full plan document")
+  .option("--no-document", "Skip automatic dna document --from-code")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: {
+      quote?: string;
+      verticals?: string;
+      gapsOnly?: boolean;
+      document?: boolean;
+      cwd?: string;
+    }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      const verticals = options.verticals ? parseVerticalsInput(options.verticals) : undefined;
+      if (options.verticals && verticals && !verticals.length) {
+        console.error("Unknown verticals. Use: behaviour,cellularMemory,runtime,rbac,compliance,platform,knowledge,neuralNetwork,impressions");
+        process.exit(1);
+      }
+
+      const result = await generateIvfPlan({
+        root,
+        quote: options.quote,
+        verticals,
+        gapsOnly: options.gapsOnly,
+        documentFromCode: options.document !== false,
+      });
+
+      console.log("✓ IVF plan generated\n");
+      if (!options.gapsOnly) {
+        console.log(`  Plan:  ${result.planPath}`);
+      }
+      console.log(`  Gaps:  ${result.gapsPath}`);
+      if (result.documentFiles?.length) {
+        console.log(`  Docs:  ${result.documentFiles.length} file(s) from codebase analysis`);
+      }
+      console.log("");
+      console.log("Paste the plan into your AI tool, or run:");
+      console.log("  dna context ivf");
+      console.log("");
+      console.log("─".repeat(60));
+      console.log(result.context);
+    },
+  );
+
+const compliance = program.command("compliance").description("Tiered compliance standards catalog");
+
+compliance
+  .command("list")
+  .description("List org tiers and compliance frameworks")
+  .action(() => {
+    console.log(formatComplianceCatalog());
+  });
+
+compliance
+  .command("tiers")
+  .description("Show organisation tier definitions")
+  .action(() => {
+    console.log(formatComplianceCatalog().split("Frameworks")[0]);
+  });
+
+compliance
+  .command("documents")
+  .description("UK GDPR required document catalog (scrubbed templates)")
+  .option("--tier <tier>", "Filter by org tier: startup|sme|corporate|enterprise")
+  .option("--no-ai", "Exclude AI-specific documents")
+  .action((options: { tier?: string; ai?: boolean }) => {
+    const tier = options.tier ? parseOrgTier(options.tier) : undefined;
+    if (options.tier && !tier) {
+      console.error("Unknown tier. Use: startup, sme, corporate, enterprise");
+      process.exit(1);
+    }
+    console.log(formatGdprDocumentCatalog(tier));
+  });
+
+compliance
+  .command("install-examples")
+  .description("Install GDPR reference examples into .DNA/knowledge/compliance/gdpr/examples/")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+    const installed = await installGdprExamples(root);
+    console.log(`✓ Installed ${installed.length} GDPR reference files`);
+    installed.slice(0, 5).forEach((f) => console.log(`  ${f}`));
+    if (installed.length > 5) console.log(`  ... and ${installed.length - 5} more`);
+    console.log("\nBrowse: .DNA/knowledge/compliance/gdpr/examples/INDEX.md");
+  });
+
+const platform = program.command("platform").description("Humaan production platform catalog");
+
+platform
+  .command("list")
+  .description("List platform features DNA learned from production projects")
+  .action(() => {
+    console.log(formatPlatformCatalog());
+  });
+
+platform
+  .command("projects")
+  .description("List reference production projects")
+  .action(() => {
+    console.log("Humaan production reference projects:\n");
+    for (const p of HUMAAN_PROJECTS) {
+      console.log(`• ${p.id} — ${p.name}`);
+      console.log(`  ${p.path}`);
+      console.log(`  ${p.stack}`);
+      for (const h of p.highlights) {
+        console.log(`  - ${h}`);
+      }
+      console.log("");
+    }
+  });
+
+platform
+  .command("project")
+  .description("Show features mapped to a reference project")
+  .argument("<projectId>", "aistudio|colorparty|humaan|soli")
+  .action((projectId: string) => {
+    const valid = ["aistudio", "colorparty", "humaan", "soli"] as const;
+    if (!valid.includes(projectId as (typeof valid)[number])) {
+      console.error(`Unknown project: ${projectId}`);
+      process.exit(1);
+    }
+    console.log(formatProjectFeatures(projectId as (typeof valid)[number]));
+  });
 
 program.parse();

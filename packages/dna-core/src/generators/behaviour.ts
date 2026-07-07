@@ -1,4 +1,5 @@
-import type { DnaConfig } from "@humaan/dna-config";
+import type { DnaConfig } from "@superhumaan/dna-config";
+import { getArchetype } from "../stack/catalog.js";
 
 const SHARED_PREAMBLE = `<!-- DNA Behaviour — DNA by Humaan -->
 <!-- Do not edit unless explicitly requested. Managed by DNA. -->
@@ -42,17 +43,26 @@ After completing work:
 }
 
 function codingBehaviour(config: DnaConfig): string {
+  const archetype = config.stack.archetype ? getArchetype(config.stack.archetype) : undefined;
+  const excludeLine = archetype?.excludes.length
+    ? `\n## Stack archetype: ${archetype.name} (\`${config.stack.archetype}\`)\n\n**Do NOT add these technologies to this project:** ${archetype.excludes.join(", ")}\n\n${archetype.description}\n`
+    : "";
+
   return `${SHARED_PREAMBLE}# Coding Behaviour
 
 ## Stack
 
+- Archetype: ${config.stack.archetype ?? "not set"}
 - Frontend: ${config.stack.frontend ?? "not set"}
+- Bundler: ${config.stack.bundler ?? "not set"}
 - Backend: ${config.stack.backend ?? "not set"}
 - Database: ${config.stack.database ?? "not set"}
 - Package manager: ${config.stack.packageManager ?? "not set"}
-
+${excludeLine}
 ## Rules
 
+- Follow the approved stack archetype — do not mix excluded frameworks
+- If a feature requires a different archetype, say so and propose \`dna stack recommend\` before adding dependencies
 - Follow existing code conventions in the repository
 - Use TypeScript strict mode where applicable
 - Prefer composition over inheritance
@@ -118,6 +128,8 @@ Compliance level: ${config.compliance}
 - **Default deny:** users have no access until an admin grants a role
 - **Zero trust:** never trust UI hiding alone; verify every request server-side
 - Before RBAC work: run \`dna plan rbac\` and follow \`.DNA/workflows/rbac.workflow.md\`
+- Before processing personal, health, or payment data: run \`dna plan compliance\` and follow tier + framework knowledge
+- Compliance tier: infer from project stage or set via \`dna plan compliance --tier startup|sme|corporate|enterprise\`
 - Complete Phase 6 verification checklist before marking RBAC done
 - Redact sensitive data in logs and error reports
 - Review dependencies for known vulnerabilities

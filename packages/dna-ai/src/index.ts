@@ -1,4 +1,4 @@
-import type { AiRepairPlan, ClassifiedIssue } from "@humaan/dna-config";
+import type { AiRepairPlan, ClassifiedIssue } from "@superhumaan/dna-config";
 
 export interface AiProvider {
   name: string;

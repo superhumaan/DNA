@@ -38,7 +38,11 @@
     "dna:link": "pnpm build && cd packages/dna-cli && pnpm link --global",
     "dna:setup": "bash scripts/team-setup.sh",
     "dna:init:examples": "node packages/dna-cli/dist/index.js init -y --cwd apps/examples/react-vite-app && node packages/dna-cli/dist/index.js init -y --cwd apps/examples/node-express-app",
-    "publish:npm": "bash scripts/publish-npm.sh"
+    "publish:npm": "bash scripts/publish-npm.sh",
+    "deprecate:internal-npm": "bash scripts/deprecate-internal-npm.sh",
+    "unpublish:internal-npm": "bash scripts/unpublish-internal-npm.sh",
+    "gdpr:ingest": "node scripts/ingest-gdpr-documents.mjs",
+    "gdpr:scrub": "node scripts/scrub-gdpr-branding.mjs"
   },
   "engines": {
     "node": ">=20"

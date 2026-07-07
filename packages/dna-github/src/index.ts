@@ -1,4 +1,4 @@
-import type { ClassifiedIssue, GitHubIssuePayload } from "@humaan/dna-config";
+import type { ClassifiedIssue, GitHubIssuePayload } from "@superhumaan/dna-config";
 
 export function buildIssuePayload(issue: ClassifiedIssue): GitHubIssuePayload {
   const labels = [

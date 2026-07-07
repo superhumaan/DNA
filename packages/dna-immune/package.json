@@ -1,6 +1,7 @@
 {
-  "name": "@humaan/dna-immune",
+  "name": "@superhumaan/dna-immune",
   "version": "0.1.0",
+  "private": true,
   "description": "DNA Immune System — runtime issue classification",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,14 +19,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@humaan/dna-config": "workspace:*"
+    "@superhumaan/dna-config": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   },
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  }
+  "license": "MIT"
 }

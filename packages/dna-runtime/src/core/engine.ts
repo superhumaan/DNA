@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import type { RuntimeEvent, ClassifiedIssue } from "@humaan/dna-config";
-import { EventTracker, resetImmuneCache } from "@humaan/dna-immune";
+import type { RuntimeEvent, ClassifiedIssue } from "@superhumaan/dna-config";
+import { EventTracker, resetImmuneCache } from "@superhumaan/dna-immune";
 import { processRuntimeEvent } from "../pipeline.js";
 import { redactSensitive } from "./redact.js";
 

@@ -8,7 +8,7 @@ fi
 
 PROJECT="$(cd "$1" && pwd)"
 DNA_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-RUNTIME_PKG="$DNA_ROOT/packages/dna-runtime"
+CLI_PKG="$DNA_ROOT/packages/dna-cli"
 
 if [ ! -f "$PROJECT/package.json" ]; then
   echo "Error: No package.json in $PROJECT"
@@ -20,21 +20,21 @@ if [ ! -d "$PROJECT/.DNA" ]; then
   dna init -y --cwd "$PROJECT"
 fi
 
-echo "→ Adding @humaan/dna-runtime from monorepo..."
+echo "→ Adding @superhumaan/dna-by-humaan from monorepo..."
 cd "$PROJECT"
 
 if [ -f pnpm-lock.yaml ] || [ -f pnpm-workspace.yaml ]; then
-  pnpm add "@humaan/dna-runtime@file:$RUNTIME_PKG"
+  pnpm add "@superhumaan/dna-by-humaan@file:$CLI_PKG"
 elif [ -f yarn.lock ]; then
-  yarn add "file:$RUNTIME_PKG"
+  yarn add "file:$CLI_PKG"
 else
-  npm install "file:$RUNTIME_PKG"
+  npm install "file:$CLI_PKG"
 fi
 
 echo "→ Writing runtime install snippets..."
 dna runtime install --cwd "$PROJECT"
 
 echo ""
-echo "✓ Runtime package installed"
+echo "✓ DNA by Humaan installed"
+echo "  Import: import { dnaRuntime } from '@superhumaan/dna-by-humaan/runtime'"
 echo "  Snippets: $PROJECT/.DNA/runtime/install-snippet.ts"
-echo "  Wire up per framework — see TEAM-TESTING.md § Runtime"

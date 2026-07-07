@@ -1,6 +1,7 @@
 {
-  "name": "@humaan/dna-config",
+  "name": "@superhumaan/dna-config",
   "version": "0.1.0",
+  "private": true,
   "description": "DNA configuration schemas and constants",
   "type": "module",
   "main": "./dist/index.js",
@@ -24,8 +25,5 @@
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   },
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  }
+  "license": "MIT"
 }

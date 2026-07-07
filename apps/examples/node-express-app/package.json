@@ -9,7 +9,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@humaan/dna-runtime": "workspace:*",
+    "@superhumaan/dna-by-humaan": "workspace:*",
     "express": "^4.21.2"
   },
   "devDependencies": {

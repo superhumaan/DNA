@@ -16,7 +16,9 @@ export const DnaConfigSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   stack: z.object({
+    archetype: z.string().optional(),
     frontend: z.string().optional(),
+    bundler: z.string().optional(),
     backend: z.string().optional(),
     database: z.string().optional(),
     platform: z.string().optional(),
@@ -102,7 +104,9 @@ export type ScanResult = z.infer<typeof ScanResultSchema>;
 export const RecommendationSchema = z.object({
   solution: z.array(z.string()),
   stack: z.object({
+    archetype: z.string().optional(),
     frontend: z.string().optional(),
+    bundler: z.string().optional(),
     backend: z.string().optional(),
     database: z.string().optional(),
     platform: z.string().optional(),
