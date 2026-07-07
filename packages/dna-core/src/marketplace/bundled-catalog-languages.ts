@@ -1,0 +1,103 @@
+import type { KnowledgePack } from "@superhumaan/dna-config";
+import { languagePack } from "./bundled-catalog-helpers.js";
+
+export const LANGUAGE_PACKS: KnowledgePack[] = [
+  languagePack(
+    "typescript",
+    "TypeScript",
+    "ts",
+    "Node, Deno, Bun, browsers. Prefer strict mode, \`noUncheckedIndexedAccess\` for new repos.",
+    `- Strict \`tsconfig\` — no implicit any\n- Zod at API boundaries\n- Prefer \`type\` for unions; \`interface\` for extendable objects\n- Avoid \`enum\` — use const objects or unions`,
+  ),
+  languagePack(
+    "javascript",
+    "JavaScript",
+    "js",
+    "Node, browsers, serverless. Use only when TS migration is not yet feasible.",
+    `- ES modules (\`import\`/\`export\`)\n- JSDoc types where TS is absent\n- No \`var\`; const by default\n- Align with project ESLint flat config`,
+  ),
+  languagePack(
+    "python",
+    "Python",
+    "py",
+    "FastAPI, Django, data tooling, ML pipelines, scripting.",
+    `- Python 3.11+; type hints on public APIs\n- \`ruff\` + \`mypy\` or pyright in CI\n- Virtual env per project (\`uv\` or \`poetry\`)\n- Never commit \`.env\` or notebooks with secrets`,
+  ),
+  languagePack(
+    "go",
+    "Go",
+    "go",
+    "CLI tools, microservices, high-concurrency APIs, Kubernetes operators.",
+    `- \`gofmt\` / \`goimports\` mandatory\n- Explicit error handling — no silent ignores\n- Context on all IO-bound calls\n- Module path matches repo (no \`GOPATH\` hacks)`,
+  ),
+  languagePack(
+    "rust",
+    "Rust",
+    "rs",
+    "Tauri, systems tooling, performance-critical services, WASM.",
+    `- \`clippy\` clean on CI\n- \`unwrap\` only in tests or with documented invariants\n- \`cargo fmt\` before commit\n- Pair with \`platforms/desktop-cross-platform\` for Tauri`,
+  ),
+  languagePack(
+    "php",
+    "PHP",
+    "php",
+    "Laravel, WordPress plugins, legacy modernisation.",
+    `- PHP 8.2+ with strict types where possible\n- Composer lock committed\n- Laravel: Form Requests + Policies\n- WordPress: escape output, prepare SQL, capability checks`,
+  ),
+  languagePack(
+    "java",
+    "Java",
+    "java",
+    "Spring Boot, Android (legacy), enterprise APIs.",
+    `- Java 21 LTS default\n- Records for DTOs; avoid Lombok unless team standard\n- Spring: constructor injection, validate at boundary\n- Maven or Gradle — one build tool per repo`,
+  ),
+  languagePack(
+    "kotlin",
+    "Kotlin",
+    "kt",
+    "Android (Jetpack Compose), Ktor server, multiplatform (KMP).",
+    `- Prefer immutable data classes\n- Coroutines + structured concurrency\n- Android: Compose + ViewModel + Hilt\n- Server: Ktor or Spring with Kotlin idioms`,
+  ),
+  languagePack(
+    "swift",
+    "Swift",
+    "swift",
+    "iOS, macOS, SwiftUI, server-side Swift (Vapor) niche.",
+    `- Swift 5.9+; async/await over callbacks\n- SwiftUI + @Observable for new UI\n- Sendable conformance for concurrency boundaries\n- Pair with \`platforms/ios-swift\` / \`platforms/macos-swift\``,
+  ),
+  languagePack(
+    "dart",
+    "Dart",
+    "dart",
+    "Flutter mobile/web/desktop, server (Dart Frog niche).",
+    `- Effective Dart style guide\n- \`flutter analyze\` clean\n- Freezed/json_serializable for models when team uses codegen\n- Pair with \`frameworks/flutter\``,
+  ),
+  languagePack(
+    "ruby",
+    "Ruby",
+    "rb",
+    "Rails, scripting, DevOps (Chef legacy), APIs.",
+    `- Ruby 3.2+\n- RuboCop in CI\n- Rails: strong params, policy objects, avoid fat controllers\n- Bundler lock committed`,
+  ),
+  languagePack(
+    "csharp",
+    "C#",
+    "cs",
+    ".NET 8+, ASP.NET Core, Blazor, Unity (games), WinUI.",
+    `- Nullable reference types enabled\n- async/await end-to-end — no \`.Result\` blocking\n- ASP.NET: minimal APIs or controllers with FluentValidation\n- Pair with \`platforms/windows-native\` for WinUI`,
+  ),
+  languagePack(
+    "elixir",
+    "Elixir",
+    "ex",
+    "Phoenix LiveView, real-time APIs, telephony, fault-tolerant backends.",
+    `- OTP supervision trees for failure domains\n- Ecto for DB; changesets at boundary\n- Phoenix: contexts, not fat controllers\n- \`mix format\` + Credo in CI`,
+  ),
+  languagePack(
+    "scala",
+    "Scala",
+    "scala",
+    "Akka/Pekko, Spark, JVM services with functional style.",
+    `- Scala 3 preferred for greenfield\n- Explicit effect systems (ZIO/Cats) when team agrees\n- Avoid implicits soup — document type classes\n- sbt or Gradle — consistent per monorepo`,
+  ),
+];

@@ -1,25 +1,10 @@
-import type { KnowledgePack, MarketplaceCatalog } from "@humaan/dna-config";
-
-function pack(
-  id: string,
-  name: string,
-  category: KnowledgePack["category"],
-  description: string,
-  files: Array<{ path: string; content: string }>,
-): KnowledgePack {
-  return {
-    id,
-    name,
-    version: "1.0.0",
-    description,
-    category,
-    channel: "stable",
-    tags: [category, id.split("/").pop() ?? id],
-    files: files.map((f) => ({ path: f.path, content: f.content })),
-    minDnaVersion: "0.1.0",
-    publishedAt: "2026-01-01T00:00:00.000Z",
-  };
-}
+import type { KnowledgePack, MarketplaceCatalog } from "@superhumaan/dna-config";
+import { pack } from "./bundled-catalog-helpers.js";
+import { HUMAAN_STACK_PACK } from "./bundled-humaan-stack.js";
+import { TIERED_STANDARDS_PACK } from "./bundled-compliance-tiered.js";
+import { STEM_PACKS } from "./bundled-stem-packs.js";
+import { CATALOG_EXPANSION_PACKS } from "./bundled-catalog-expansion.js";
+import { LANGUAGE_STEM_PACKS } from "./bundled-language-stem-packs.js";
 
 const PACKS: KnowledgePack[] = [
   pack("frameworks/vite", "Vite", "frameworks", "Vite framework knowledge for DNA projects", [
@@ -203,6 +188,11 @@ Test with fresh session per role. Refresh after login. Try direct URLs.
       },
     ],
   ),
+  HUMAAN_STACK_PACK,
+  TIERED_STANDARDS_PACK,
+  ...STEM_PACKS,
+  ...LANGUAGE_STEM_PACKS,
+  ...CATALOG_EXPANSION_PACKS,
 ];
 
 export function getBundledCatalog(channel: "stable" | "beta" | "nightly" = "stable"): MarketplaceCatalog {

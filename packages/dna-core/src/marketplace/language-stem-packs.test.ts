@@ -1,0 +1,78 @@
+import { describe, it, expect } from "vitest";
+import { getBundledCatalog } from "./bundled-catalog.js";
+import {
+  LANGUAGE_STEM_PACKS,
+  LANGUAGE_STEM_PACK_IDS,
+  LANGUAGE_STEM_BRIDGE_PACK,
+} from "./bundled-language-stem-packs.js";
+import { STEM_PACKS } from "./bundled-stem-packs.js";
+import { CATALOG_EXPANSION_PACKS } from "./bundled-catalog-expansion.js";
+import { resolveFoundationPackIds } from "./foundation.js";
+import { resolvePackIdsForIntents, resetKnowledgePathIndex } from "./resolve.js";
+import { generateNeuralNetwork } from "../generators/neural-network.js";
+import type { DnaConfig } from "@superhumaan/dna-config";
+
+describe("language stem packs", () => {
+  it("exports bridge + 17 locale packs with stem tag", () => {
+    expect(LANGUAGE_STEM_PACKS).toHaveLength(18);
+    for (const pack of LANGUAGE_STEM_PACKS) {
+      expect(pack.tags).toContain("stem");
+      expect(pack.category).toBe("languages");
+      expect(pack.files.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("bridge pack has inbound, outbound, sentiment, and documentation files", () => {
+    const paths = LANGUAGE_STEM_BRIDGE_PACK.files.map((f) => f.path);
+    expect(paths).toContain("languages/stem-bridge/inbound.dna.md");
+    expect(paths).toContain("languages/stem-bridge/outbound.dna.md");
+    expect(paths).toContain("languages/stem-bridge/sentiment.dna.md");
+    expect(paths).toContain("languages/stem-bridge/documentation.dna.md");
+  });
+
+  it("includes all language stem packs in bundled catalog", () => {
+    const catalog = getBundledCatalog();
+    expect(catalog.packs.length).toBe(
+      11 + STEM_PACKS.length + LANGUAGE_STEM_PACKS.length + CATALOG_EXPANSION_PACKS.length,
+    );
+    for (const id of LANGUAGE_STEM_PACK_IDS) {
+      expect(catalog.packs.some((p) => p.id === id)).toBe(true);
+    }
+  });
+
+  it("resolves multilingual intents to stem-bridge pack", () => {
+    resetKnowledgePathIndex();
+    const neural = generateNeuralNetwork({} as DnaConfig);
+    const packs = resolvePackIdsForIntents(
+      ["communicate_in_user_language", "translate_documentation"],
+      neural,
+    );
+    expect(packs).toContain("languages/stem-bridge");
+  });
+
+  it("auto-installs stem-bridge for multilingual project descriptions", () => {
+    const config = {
+      description: "Multilingual B2B SaaS with i18n",
+      stack: { frontend: "next", backend: "fastify" },
+      autoUpdate: true,
+      channel: "stable",
+    } as DnaConfig;
+
+    const packs = resolveFoundationPackIds(config);
+    expect(packs).toContain("languages/stem-bridge");
+  });
+
+  it("auto-installs healthcare packs for FHIR/HIPAA project descriptions", () => {
+    const config = {
+      description: "HIPAA patient portal with FHIR R4 and Epic integration",
+      stack: { frontend: "next", backend: "fastify" },
+      autoUpdate: true,
+      channel: "stable",
+    } as DnaConfig;
+
+    const packs = resolveFoundationPackIds(config);
+    expect(packs).toContain("healthcare/overview");
+    expect(packs).toContain("healthcare/fhir-r4");
+    expect(packs).toContain("healthcare/redox");
+  });
+});

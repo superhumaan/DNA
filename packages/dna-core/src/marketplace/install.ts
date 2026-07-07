@@ -1,9 +1,9 @@
 import { join } from "node:path";
-import type { DnaConfig, KnowledgePack, MarketplaceUpdateResult } from "@humaan/dna-config";
+import type { DnaConfig, KnowledgePack, MarketplaceUpdateResult } from "@superhumaan/dna-config";
 import { writeFileEnsured, readJsonFile, writeJsonFile } from "../fs.js";
 import { loadDnaConfig } from "../validator.js";
 import { fetchMarketplaceCatalog, fetchKnowledgePack } from "./client.js";
-import { getBundledCatalog } from "./bundled-catalog.js";
+import { getBundledCatalog, getBundledPack } from "./bundled-catalog.js";
 
 export async function installKnowledgePack(
   root: string,
@@ -43,7 +43,7 @@ export async function installKnowledgePackById(
   packId: string,
   channel?: DnaConfig["channel"],
 ): Promise<{ pack: KnowledgePack; files: string[] }> {
-  const pack = await fetchKnowledgePack(packId, { channel });
+  const pack = getBundledPack(packId) ?? (await fetchKnowledgePack(packId, { channel }));
   if (!pack) {
     throw new Error(`Knowledge pack not found: ${packId}`);
   }

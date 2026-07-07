@@ -4,7 +4,7 @@ import {
   MarketplaceCatalogSchema,
   type MarketplaceCatalog,
   type KnowledgePack,
-} from "@humaan/dna-config";
+} from "@superhumaan/dna-config";
 import { getBundledCatalog, getBundledPack } from "./bundled-catalog.js";
 
 export interface MarketplaceClientOptions {

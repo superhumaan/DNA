@@ -23,7 +23,7 @@ DNA is not a documentation generator. It is:
 - An **AI behaviour layer** — rules that govern how Cursor, Copilot, and Claude work on *your* project
 - A **runtime issue detector** — classifies errors with project-specific context
 - A **GitHub automation engine** — contextual issues and repair PRs
-- A **knowledge marketplace** — stack and compliance packs for `.DNA/knowledge/`
+- A **knowledge marketplace** — **768** stack, compliance, and industry packs for `.DNA/knowledge/`
 - A **software immune system** — severity, category, and discipline classification
 - A **memory layer** — CellularMemory that learns from your project's history
 
@@ -52,7 +52,7 @@ dna context cursor
 |--------|---------|
 | **Team setup** (now) | `git clone https://github.com/superhumaan/DNA.git && ./scripts/team-setup.sh` |
 | **Manual** | `pnpm install && pnpm build && pnpm dna:link` |
-| **npm** (after publish) | `npx @humaan/dna-cli init -y` |
+| **npm** (after publish) | `npx @superhumaan/dna-by-humaan init -y` |
 
 Requirements: **Node.js 20+**, **pnpm 9+**
 
@@ -63,9 +63,17 @@ Requirements: **Node.js 20+**, **pnpm 9+**
 | Command | What it does |
 |---------|--------------|
 | `dna init` | Scaffold `.DNA/` + `DNA/Impressions/` |
+| `dna analyze` | Deep brownfield analysis (structure, auth, IVF gaps) |
+| `dna document --from-code` | Reverse-engineer Impressions from existing code |
+| `dna plan ivf` | Integrating Vertical Functions plan — before/after, phased migration |
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for your tool |
 | `dna plan rbac` | RBAC plan from plain language → permission matrix |
+| `dna platform list` | Humaan production feature catalog (AIStudio, ColorParty, Humaan, Soli) |
+| `dna plan feature <id>` | End-to-end feature plan — Azure, SSO, admin, flags, CRM, CMS |
+| `dna plan compliance` | Tiered ISO/GDPR/HIPAA/SOC 2 plan by org size |
+| `dna compliance list` | Startup → enterprise compliance catalog |
+| `dna context compliance` | Load tiered compliance knowledge for AI |
 | `dna validate` | Check against Behaviour rules |
 | `dna doctor` | Full health check |
 | `dna marketplace install <id>` | Install knowledge packs |
@@ -108,21 +116,21 @@ your-project/
 
 ## Runtime observer
 
+DNA ships as **one package**. The CLI runs in your terminal; the runtime imports from a subpath in your server:
+
 ```bash
-pnpm add @humaan/dna-runtime   # or: scripts/add-runtime.sh
+pnpm add @superhumaan/dna-by-humaan
 ```
 
-Supports **Express**, **Fastify**, **NestJS**, and **Next.js**.
-
 ```typescript
-import { dnaRuntime } from "@humaan/dna-runtime";
+import { dnaRuntime } from "@superhumaan/dna-by-humaan/runtime";
 
 dnaRuntime.start({ projectId: "my-app", projectRoot: process.cwd() });
 app.use(dnaRuntime.express());
 app.use(dnaRuntime.errorHandler());
 ```
 
-Captures errors → classifies via Immune System → writes `.DNA/runtime/issues.jsonl` → optional GitHub issue → optional AI repair PR.
+Supports **Express**, **Fastify**, **NestJS**, and **Next.js**.
 
 [Runtime guide →](./docs/runtime.md)
 
@@ -174,7 +182,8 @@ packages/
 
 apps/
   examples/       Express + Vite demos
-  marketplace/  API for dna.humaan.app
+  web/            dna.humaan.app — landing + marketplace
+  marketplace/    Legacy standalone API (local dev)
 ```
 
 ```bash
@@ -190,6 +199,7 @@ pnpm install && pnpm build && pnpm test
 | Doc | Description |
 |-----|-------------|
 | [Getting Started](./docs/getting-started.md) | First project in 10 minutes |
+| [Brownfield / IVF](./docs/ivf.md) | Install into existing projects |
 | [Concepts](./docs/concepts.md) | Behaviour, memory, immune system |
 | [CLI Reference](./docs/cli-reference.md) | Every command |
 | [Runtime](./docs/runtime.md) | Framework adapters |
@@ -208,7 +218,7 @@ pnpm install && pnpm build && pnpm test
 - [ ] Real-time dashboard UI
 - [ ] Multi-project CellularMemory sync
 - [ ] Impressions drift → auto PR suggestions
-- [ ] `npx @humaan/dna-cli` on npm
+- [x] `npx @superhumaan/dna-by-humaan` on npm (v0.2.0 — CLI + `/runtime` bundle)
 
 ---
 

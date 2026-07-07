@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-dna-bg text-dna-text antialiased;
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-dna-accent to-emerald-300 bg-clip-text text-transparent;
+  }
+}
