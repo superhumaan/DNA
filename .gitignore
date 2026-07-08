@@ -14,5 +14,5 @@ coverage/
 # Local DNA test artifacts (commit .DNA/ inside real projects, not monorepo root)
 /.DNA/
 
-# Next.js build output
-apps/web/.next/
+# Next.js build output (web app lives in DNA-Web repo)
+.vercel
