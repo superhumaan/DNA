@@ -64,7 +64,7 @@ import {
   runDockerBuild,
 } from "@superhumaan/dna-core";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
-import { createIssue, getTokenFromEnv, loginWithWebFlow, pushFeatureToGitHub } from "@superhumaan/dna-github";
+import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import { runInitWizard } from "./prompts.js";
 import { connectGitHubDuringOnboarding } from "./github-onboarding.js";
@@ -698,18 +698,20 @@ github
 
     const { readFile } = await import("node:fs/promises");
     const issue = JSON.parse(await readFile(options.file, "utf-8"));
+    const creds = await resolveGitHubToken();
     const result = await createIssue(
       {
         owner: config.github.owner,
         repo: config.github.repo,
-        token: getTokenFromEnv(),
+        token: creds?.token,
       },
       issue,
     );
 
     if ("dryRun" in result) {
-      console.log("Dry run (no GITHUB_TOKEN):");
+      console.log("Dry run (not signed in to GitHub):");
       console.log(JSON.stringify(result.payload, null, 2));
+      console.log("\nRun `dna github login` to create issues for real.");
     } else {
       console.log(`✓ Issue created: ${result.url}`);
     }

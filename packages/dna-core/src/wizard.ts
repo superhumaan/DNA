@@ -107,6 +107,7 @@ export async function runWizard(options: WizardOptions): Promise<WizardResult> {
       perFileCoverage: true,
       owasp: true,
       pushToPreview: true,
+      previewProvider: "vercel",
     },
   };
 

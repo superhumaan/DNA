@@ -66,6 +66,7 @@ export async function runPostInit(
     perFileCoverage: true,
     owasp: true,
     pushToPreview: true,
+    previewProvider: "vercel",
   };
   config.updatedAt = new Date().toISOString();
   await writeJsonFile(join(root, ".DNA", "config.dna.json"), config);

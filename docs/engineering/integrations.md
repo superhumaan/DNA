@@ -6,12 +6,16 @@ DNA connects to GitHub and AI providers for issue automation and repair workflow
 
 ## GitHub
 
-### Setup
+### Setup (browser login — recommended)
+
+During `dna init`, DNA opens a browser login. You can also sign in anytime:
 
 ```bash
+dna github login
 dna github connect --owner superhumaan --repo your-project
-export GITHUB_TOKEN=ghp_xxxxxxxx   # fine-grained or classic PAT
 ```
+
+Credentials are stored in `~/.config/dna/github-credentials.json` (mode `0600`). DNA also reads `GITHUB_TOKEN` / `GH_TOKEN` or the GitHub CLI session if present.
 
 Enable in `.DNA/config.dna.json`:
 
@@ -26,6 +30,17 @@ Enable in `.DNA/config.dna.json`:
 ```
 
 **Never** store tokens in config files or commit them to git.
+
+### Device flow without GitHub CLI
+
+If `gh` is not installed, set a GitHub OAuth App client ID:
+
+```bash
+export DNA_GITHUB_CLIENT_ID=your_oauth_app_client_id
+dna github login
+```
+
+Register a GitHub OAuth App with **Device flow** enabled. A first-party DNA OAuth app is planned ([#11](https://github.com/superhumaan/DNA/issues/11)).
 
 ### Auto-issues from runtime
 
@@ -44,7 +59,32 @@ When runtime is enabled and severity is **high** or **critical**, DNA creates Gi
 dna github issue --file path/to/issue.json
 ```
 
-Without `GITHUB_TOKEN`, runs in dry-run mode and prints the payload.
+Without a stored token or env var, runs in dry-run mode and prints the payload. Run `dna github login` first.
+
+---
+
+## Preview deploy
+
+When `ci.pushToPreview` is true (default), `dna ci install` scaffolds `.github/workflows/dna-preview.yml`.
+
+Configure in `.DNA/config.dna.json`:
+
+```json
+{
+  "ci": {
+    "pushToPreview": true,
+    "previewProvider": "vercel",
+    "previewBranch": "main"
+  }
+}
+```
+
+| Provider | GitHub secrets |
+|----------|----------------|
+| `vercel` (default) | `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` |
+| `netlify` | `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID` |
+
+Run `dna doctor` to verify the preview workflow is installed and see setup hints.
 
 ---
 
@@ -106,7 +146,8 @@ Runtime event → classify → GitHub issue (optional)
 
 | Variable | Required for | Notes |
 |----------|--------------|-------|
-| `GITHUB_TOKEN` | GitHub issues/PRs | Never commit; never put in config |
+| `GITHUB_TOKEN` / `GH_TOKEN` | GitHub issues/PRs (CI) | Optional locally if you use `dna github login` |
+| `DNA_GITHUB_CLIENT_ID` | Device flow without `gh` CLI | OAuth App with device flow enabled |
 | `OPENAI_API_KEY` | OpenAI repair | |
 | `ANTHROPIC_API_KEY` | Anthropic repair | |
 | `DNA_PROJECT_ID` | Runtime | Defaults to `config.projectId` |

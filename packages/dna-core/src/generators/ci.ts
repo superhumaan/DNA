@@ -62,6 +62,27 @@ function scriptStep(
         continue-on-error: ${continueOnError}`;
 }
 
+function deleteFailedRunJob(needs: string | string[]): string {
+  const needsList = Array.isArray(needs) ? needs.join(", ") : needs;
+  return `  cleanup-on-failure:
+    name: Delete failed run
+    runs-on: ubuntu-latest
+    needs: [${needsList}]
+    if: failure() && !cancelled()
+    permissions:
+      actions: write
+    steps:
+      - name: Delete this workflow run
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.deleteWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            });`;
+}
+
 export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string {
   const pm = scan.packageManager ?? "npm";
   const cache = pmCache(pm);
@@ -171,6 +192,8 @@ ${cacheBlock}
       - name: Dependency audit (OWASP-aligned)
         run: npm audit --audit-level=high
         continue-on-error: ${continueOnError}
+
+${deleteFailedRunJob(["quality", "docker", "security"])}
 `;
 }
 
@@ -180,8 +203,30 @@ export function generatePreviewWorkflow(config: DnaConfig, scan: ScanResult): st
   const strict = config.ci?.strict ?? false;
   const continueOnError = !strict;
   const qualityReportFlags = strict ? " --fail" : "";
+  const previewBranch = config.ci?.previewBranch;
+  const branchFilter = previewBranch ? `    branches: ["${previewBranch}"]` : `    branches: ["**"]`;
+  const provider = config.ci?.previewProvider ?? "vercel";
+
+  const deployStep =
+    provider === "netlify"
+      ? `      - name: Deploy to Netlify preview
+        run: npx --yes netlify-cli deploy --build --message="DNA preview"
+        env:
+          NETLIFY_AUTH_TOKEN: \${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: \${{ secrets.NETLIFY_SITE_ID }}`
+      : `      - name: Deploy to Vercel preview
+        run: npx --yes vercel deploy --token=\${{ secrets.VERCEL_TOKEN }} --yes
+        env:
+          VERCEL_ORG_ID: \${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: \${{ secrets.VERCEL_PROJECT_ID }}`;
+
+  const deployIf =
+    provider === "netlify"
+      ? "secrets.NETLIFY_AUTH_TOKEN != '' && secrets.NETLIFY_SITE_ID != ''"
+      : "secrets.VERCEL_TOKEN != ''";
 
   return `# DNA Preview — deploy preview after quality gates pass
+# Provider: ${provider}${previewBranch ? ` | branch: ${previewBranch}` : " | all branches"}
 # Cursor: always push to preview; CI runs gates on every push.
 # Coverage threshold: ${threshold}% per file and overall
 
@@ -189,7 +234,7 @@ name: DNA Preview
 
 on:
   push:
-    branches: ["**"]
+${branchFilter}
 
 permissions:
   contents: read
@@ -212,46 +257,18 @@ jobs:
   deploy-preview:
     name: Deploy preview
     needs: gate-before-preview
-    if: \${{ secrets.VERCEL_TOKEN != '' }}
+    if: \${{ ${deployIf} }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to Vercel preview
-        run: npx --yes vercel deploy --token=\${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: \${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: \${{ secrets.VERCEL_PROJECT_ID }}
+${deployStep}
+
+${deleteFailedRunJob(["gate-before-preview", "deploy-preview"])}
 `;
 }
 
-export function generateCleanupWorkflow(): string {
-  return `name: Cleanup failed runs
-
-on:
-  workflow_run:
-    types: [completed]
-
-jobs:
-  delete-failed-run:
-    if: >-
-      github.event.workflow_run.conclusion == 'failure' &&
-      github.event.workflow_run.name != 'Cleanup failed runs'
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-    steps:
-      - uses: actions/github-script@v7
-        with:
-          script: |
-            const runId = context.payload.workflow_run.id;
-            const name = context.payload.workflow_run.name;
-            console.log(\`Deleting failed workflow run \${runId} (\${name})\`);
-            await github.rest.actions.deleteWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: runId,
-            });
-`;
+export function generateDeleteFailedRunJob(needs: string | string[]): string {
+  return deleteFailedRunJob(needs);
 }
 
 export function generateSecurityWorkflow(): string {
@@ -281,6 +298,8 @@ jobs:
         with:
           target: \${{ vars.STAGING_URL }}
           allow_issue_writing: false
+
+${deleteFailedRunJob("zap-baseline")}
 `;
 }
 
@@ -364,7 +383,6 @@ export async function installCiPipeline(options: InstallCiOptions): Promise<Inst
 
   const workflowsDir = join(root, ".github", "workflows");
   const ciPath = join(workflowsDir, "dna-ci.yml");
-  const cleanupPath = join(workflowsDir, "cleanup-failed-runs.yml");
   const securityPath = join(workflowsDir, "dna-security.yml");
   const previewPath = join(workflowsDir, "dna-preview.yml");
 
@@ -376,16 +394,6 @@ export async function installCiPipeline(options: InstallCiOptions): Promise<Inst
     created.push(ciExists ? ".github/workflows/dna-ci.yml (updated)" : ".github/workflows/dna-ci.yml");
   } else {
     skipped.push("dna-ci.yml (already exists — use dna ci install --force)");
-  }
-
-  const cleanupExists = await fileExists(cleanupPath);
-  if (!skipIfExists || !cleanupExists) {
-    await writeFileEnsured(cleanupPath, generateCleanupWorkflow());
-    created.push(
-      cleanupExists
-        ? ".github/workflows/cleanup-failed-runs.yml (updated)"
-        : ".github/workflows/cleanup-failed-runs.yml",
-    );
   }
 
   const securityExists = await fileExists(securityPath);

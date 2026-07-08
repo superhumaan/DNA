@@ -74,6 +74,10 @@ export const DnaConfigSchema = z.object({
       perFileCoverage: z.boolean().default(true),
       owasp: z.boolean().default(true),
       pushToPreview: z.boolean().default(true),
+      /** Preview host provider for dna-preview.yml */
+      previewProvider: z.enum(["vercel", "netlify"]).default("vercel"),
+      /** Limit preview deploys to this branch (default: all branches) */
+      previewBranch: z.string().optional(),
     })
     .optional(),
   featureFactory: z

@@ -109,7 +109,7 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
   if (!config.github?.enabled) {
     config.github = { ...config.github, enabled: true };
     changed = true;
-    actions.push("GitHub integration enabled (set GITHUB_TOKEN + dna github connect)");
+    actions.push("GitHub integration enabled — run `dna github login` then `dna github connect`");
   }
 
   if (!config.ci?.enabled) {
@@ -120,6 +120,7 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
       perFileCoverage: true,
       owasp: true,
       pushToPreview: true,
+      previewProvider: "vercel",
     };
     changed = true;
     actions.push("CI quality gates enabled (80% coverage, OWASP)");
@@ -345,6 +346,11 @@ export function formatDoctorOrchestratorResult(result: DoctorOrchestratorResult)
     lines.push("DNA not installed. Run `dna doctor` (without --check-only) to scaffold.");
   } else {
     lines.push("DNA is up to date. Push to preview — CI quality gates run on every push.");
+    if (result.report.preview.enabled && !result.report.preview.workflowInstalled) {
+      lines.push(
+        "Preview deploy: run `dna ci install` and set GitHub secrets for your provider (Vercel: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID; Netlify: NETLIFY_AUTH_TOKEN, NETLIFY_SITE_ID).",
+      );
+    }
   }
 
   if (result.ivfRun) {

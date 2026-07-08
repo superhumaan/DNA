@@ -13,6 +13,7 @@ export interface DoctorReport {
   github: { enabled: boolean; configured: boolean };
   ai: { enabled: boolean; provider?: string };
   runtime: { enabled: boolean; configured: boolean };
+  preview: { enabled: boolean; workflowInstalled: boolean; provider: string };
   validation: { valid: boolean; issueCount: number };
 }
 
@@ -35,6 +36,7 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
   const runtimeDb = await fileExists(join(root, DNA_RUNTIME_DB));
   const runtimeJsonl = await fileExists(join(root, ".DNA", "runtime", "events.jsonl"));
   const runtimeConfigured = runtimeDb || runtimeJsonl;
+  const previewWorkflow = await fileExists(join(root, ".github", "workflows", "dna-preview.yml"));
 
   return {
     dna: {
@@ -63,6 +65,11 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
       enabled: config?.runtime?.enabled ?? false,
       configured: runtimeConfigured,
     },
+    preview: {
+      enabled: config?.ci?.pushToPreview ?? false,
+      workflowInstalled: previewWorkflow,
+      provider: config?.ci?.previewProvider ?? "vercel",
+    },
     validation: {
       valid: validation.valid,
       issueCount: validation.errors.length,
@@ -84,6 +91,7 @@ export function formatDoctorReport(report: DoctorReport): string {
     `${status(report.github.configured || !report.github.enabled)} GitHub integration${report.github.enabled ? "" : " (disabled)"}`,
     `${status(!report.ai.enabled || !!report.ai.provider)} AI integration${report.ai.enabled ? ` (${report.ai.provider})` : " (disabled)"}`,
     `${status(report.runtime.configured || !report.runtime.enabled)} Runtime database${report.runtime.enabled ? "" : " (disabled)"}`,
+    `${status(!report.preview.enabled || report.preview.workflowInstalled)} Preview deploy${report.preview.enabled ? ` (${report.preview.provider})` : " (disabled)"}`,
     "",
     `${status(report.validation.valid)} Validation (${report.validation.issueCount} issues)`,
   ];

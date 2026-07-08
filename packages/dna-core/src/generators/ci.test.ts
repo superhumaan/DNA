@@ -6,7 +6,8 @@ import { randomUUID } from "node:crypto";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import {
   generateCiWorkflow,
-  generateCleanupWorkflow,
+  generateDeleteFailedRunJob,
+  generatePreviewWorkflow,
   generateSecurityWorkflow,
   installCiPipeline,
   generateVitestCoverageConfig,
@@ -34,7 +35,7 @@ function testConfig(): DnaConfig {
 describe("CI generator", () => {
   it("generates strict workflow when ci.strict is enabled", () => {
     const yaml = generateCiWorkflow(
-      { ...testConfig(), ci: { strict: true, enabled: true, perFileCoverage: true, owasp: true, pushToPreview: true, coverageThreshold: 80 } },
+      { ...testConfig(), ci: { strict: true, enabled: true, perFileCoverage: true, owasp: true, pushToPreview: true, previewProvider: "vercel", coverageThreshold: 80 } },
       {
         packageManager: "npm",
         ciCd: [],
@@ -88,12 +89,69 @@ describe("CI generator", () => {
     expect(yaml).toContain("STAGING_URL");
   });
 
-  it("generates cleanup workflow for failed runs", () => {
-    const yaml = generateCleanupWorkflow();
-    expect(yaml).toContain("name: Cleanup failed runs");
-    expect(yaml).toContain("workflow_run");
+  it("generates delete-failed-run cleanup job", () => {
+    const job = generateDeleteFailedRunJob("build");
+    expect(job).toContain("cleanup-on-failure");
+    expect(job).toContain("deleteWorkflowRun");
+    expect(job).toContain("needs: [build]");
+    expect(job).toContain("actions: write");
+  });
+
+  it("includes cleanup job in CI workflow", () => {
+    const yaml = generateCiWorkflow(testConfig(), {
+      packageManager: "npm",
+      ciCd: [],
+      docker: false,
+      envFiles: [],
+      docs: [],
+      aiRules: [],
+      securityRisks: [],
+      missingDocs: [],
+      missingTests: false,
+      dependencies: [],
+      scripts: { test: "vitest run" },
+      hasDna: false,
+    });
+
+    expect(yaml).toContain("cleanup-on-failure");
     expect(yaml).toContain("deleteWorkflowRun");
-    expect(yaml).toContain("Cleanup failed runs");
+  });
+
+  it("generates preview workflow with branch and netlify provider", () => {
+    const yaml = generatePreviewWorkflow(
+      {
+        ...testConfig(),
+        ci: {
+          enabled: true,
+          strict: false,
+          perFileCoverage: true,
+          owasp: true,
+          pushToPreview: true,
+          previewProvider: "netlify",
+          previewBranch: "main",
+          coverageThreshold: 80,
+        },
+      },
+      {
+        packageManager: "npm",
+        ciCd: [],
+        docker: false,
+        envFiles: [],
+        docs: [],
+        aiRules: [],
+        securityRisks: [],
+        missingDocs: [],
+        missingTests: false,
+        dependencies: [],
+        scripts: { test: "vitest run" },
+        hasDna: false,
+      },
+    );
+
+    expect(yaml).toContain('branches: ["main"]');
+    expect(yaml).toContain("netlify-cli deploy");
+    expect(yaml).toContain("NETLIFY_AUTH_TOKEN");
+    expect(yaml).toContain("cleanup-on-failure");
   });
 
   it("generates vitest coverage config with thresholds", () => {
@@ -116,7 +174,6 @@ describe("CI generator", () => {
     const result = await installCiPipeline({ root, config: testConfig() });
 
     expect(result.created).toContain(".github/workflows/dna-ci.yml");
-    expect(result.created).toContain(".github/workflows/cleanup-failed-runs.yml");
     expect(result.created).toContain(".github/workflows/dna-security.yml");
     expect(await fileExists(join(root, "vitest.config.ts"))).toBe(true);
 

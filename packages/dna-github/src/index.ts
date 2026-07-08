@@ -108,7 +108,7 @@ export async function createBranch(
   branchName: string,
   fromRef = "main",
 ): Promise<void> {
-  if (!config.token) throw new Error("GitHub token required. Set GITHUB_TOKEN env var.");
+  if (!config.token) throw new Error("GitHub token required. Run `dna github login` or set GITHUB_TOKEN.");
 
   const { Octokit } = await import("@octokit/rest");
   const octokit = new Octokit({ auth: config.token });
@@ -131,7 +131,7 @@ export async function createPullRequest(
   config: GitHubConfig,
   options: { title: string; body: string; head: string; base?: string },
 ): Promise<{ number: number; url: string }> {
-  if (!config.token) throw new Error("GitHub token required. Set GITHUB_TOKEN env var.");
+  if (!config.token) throw new Error("GitHub token required. Run `dna github login` or set GITHUB_TOKEN.");
 
   const { Octokit } = await import("@octokit/rest");
   const octokit = new Octokit({ auth: config.token });
@@ -153,7 +153,7 @@ export async function commentOnIssue(
   issueNumber: number,
   body: string,
 ): Promise<void> {
-  if (!config.token) throw new Error("GitHub token required. Set GITHUB_TOKEN env var.");
+  if (!config.token) throw new Error("GitHub token required. Run `dna github login` or set GITHUB_TOKEN.");
 
   const { Octokit } = await import("@octokit/rest");
   const octokit = new Octokit({ auth: config.token });

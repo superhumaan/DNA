@@ -25,3 +25,21 @@ jobs:
       - run: pnpm build
       - run: pnpm test
       - run: pnpm typecheck
+
+  cleanup-on-failure:
+    name: Delete failed run
+    runs-on: ubuntu-latest
+    needs: build
+    if: failure() && !cancelled()
+    permissions:
+      actions: write
+    steps:
+      - name: Delete this workflow run
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.deleteWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            });
