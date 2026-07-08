@@ -13,6 +13,33 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const docsDir = path.join(root, 'docs');
 const wikiCloneDir = path.join(root, '.github-wiki');
 
+const WIKI_REMOTE = 'https://github.com/superhumaan/DNA.wiki.git';
+
+function wikiToken() {
+  if (process.env.GH_TOKEN) return process.env.GH_TOKEN;
+  if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN;
+  const gh = spawnSync('gh', ['auth', 'token'], { encoding: 'utf8' });
+  if (gh.status === 0) return gh.stdout.trim();
+  return '';
+}
+
+function wikiRemoteUrl() {
+  const token = wikiToken();
+  if (!token) return WIKI_REMOTE;
+  return WIKI_REMOTE.replace('https://', `https://x-access-token:${token}@`);
+}
+
+function runGit(args, cwd = wikiCloneDir) {
+  return spawnSync('git', args, {
+    cwd,
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      GIT_TERMINAL_PROMPT: '0',
+    },
+  });
+}
+
 const SECTIONS = [
   { dir: 'business', label: 'Business' },
   { dir: 'product', label: 'Product' },
@@ -151,11 +178,8 @@ async function pushWiki() {
   const isGit = await fs.stat(path.join(wikiCloneDir, '.git')).then(() => true).catch(() => false);
 
   if (!isGit) {
-    const clone = spawnSync(
-      'git',
-      ['clone', 'https://github.com/superhumaan/DNA.wiki.git', wikiCloneDir],
-      { cwd: root, stdio: 'inherit' },
-    );
+    await fs.rm(wikiCloneDir, { recursive: true, force: true });
+    const clone = runGit(['clone', wikiRemoteUrl(), wikiCloneDir], root);
     if (clone.status !== 0) {
       console.error('');
       console.error('GitHub wiki repo does not exist yet.');
@@ -164,34 +188,35 @@ async function pushWiki() {
       console.error('');
       process.exit(1);
     }
+  } else {
+    runGit(['remote', 'set-url', 'origin', wikiRemoteUrl()]);
   }
 
   await buildWikiPages();
 
-  spawnSync('git', ['add', '-A'], { cwd: wikiCloneDir, stdio: 'inherit' });
+  runGit(['add', '-A']);
   const status = spawnSync('git', ['status', '--porcelain'], {
     cwd: wikiCloneDir,
     encoding: 'utf8',
+    env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
   });
   if (!status.stdout?.trim()) {
     console.log('No wiki changes to push.');
     return;
   }
 
-  spawnSync(
-    'git',
-    ['commit', '-m', 'Sync wiki from docs/ (Docusaurus structure)'],
-    { cwd: wikiCloneDir, stdio: 'inherit' },
-  );
-  const push = spawnSync('git', ['push', '-u', 'origin', 'master'], {
-    cwd: wikiCloneDir,
-    stdio: 'inherit',
-  });
-  if (push.status !== 0) {
-    spawnSync('git', ['push', '-u', 'origin', 'main'], {
+  runGit(['commit', '-m', 'Sync wiki from docs/ (Docusaurus structure)']);
+
+  const branch =
+    spawnSync('git', ['symbolic-ref', '--short', 'HEAD'], {
       cwd: wikiCloneDir,
-      stdio: 'inherit',
-    });
+      encoding: 'utf8',
+      env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
+    }).stdout?.trim() || 'master';
+
+  const push = runGit(['push', '-u', 'origin', branch]);
+  if (push.status !== 0 && branch === 'master') {
+    runGit(['push', '-u', 'origin', 'main']);
   }
   console.log('GitHub wiki pushed: https://github.com/superhumaan/DNA/wiki');
 }

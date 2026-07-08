@@ -21,4 +21,5 @@ jobs:
       - name: Sync docs to GitHub wiki
         env:
           GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/sync-github-wiki.mjs
