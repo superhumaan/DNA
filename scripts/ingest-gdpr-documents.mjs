@@ -5,7 +5,7 @@
  * Usage:
  *   node scripts/ingest-gdpr-documents.mjs [sourceDir]
  *
- * Default source: ~/Downloads/GDPR Documents
+ * Source resolution: CLI arg → DNA_GDPR_SOURCE_DOCS → ~/Downloads/GDPR Documents
  * Output: packages/dna-core/assets/gdpr-reference/
  */
 import { execFileSync } from "node:child_process";
@@ -18,15 +18,12 @@ import {
 } from "node:fs";
 import { join, relative, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { homedir } from "node:os";
 import { scrubGdprText } from "./scrub-gdpr-branding.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "..");
-const DEFAULT_SOURCE = join(
-  process.env.HOME ?? "/Users/place",
-  "Downloads",
-  "GDPR Documents",
-);
+const DEFAULT_SOURCE = join(homedir(), "Downloads", "GDPR Documents");
 const OUT_ROOT = join(REPO_ROOT, "packages", "dna-core", "assets", "gdpr-reference");
 
 const FOLDER_MAP = {
@@ -123,7 +120,7 @@ function extractDocxMarkdown(path) {
   }
 }
 
-const source = process.argv[2] ?? DEFAULT_SOURCE;
+const source = process.argv[2] ?? process.env.DNA_GDPR_SOURCE_DOCS?.trim() ?? DEFAULT_SOURCE;
 
 if (!existsSync(source)) {
   console.error(`Source not found: ${source}`);

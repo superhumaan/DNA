@@ -1,5 +1,9 @@
 # Integrations
 
+DNA connects to GitHub and AI providers for issue automation and repair workflows. This guide covers setup, safety boundaries, and environment configuration.
+
+---
+
 ## GitHub
 
 ### Setup
@@ -21,6 +25,8 @@ Enable in `.DNA/config.dna.json`:
 }
 ```
 
+**Never** store tokens in config files or commit them to git.
+
 ### Auto-issues from runtime
 
 When runtime is enabled and severity is **high** or **critical**, DNA creates GitHub issues with:
@@ -39,6 +45,8 @@ dna github issue --file path/to/issue.json
 ```
 
 Without `GITHUB_TOKEN`, runs in dry-run mode and prints the payload.
+
+---
 
 ## AI repair
 
@@ -92,6 +100,8 @@ Runtime event → classify → GitHub issue (optional)
   → diagnose → branch → patch → test → PR → comment on issue
 ```
 
+---
+
 ## Environment variables
 
 | Variable | Required for | Notes |
@@ -99,9 +109,15 @@ Runtime event → classify → GitHub issue (optional)
 | `GITHUB_TOKEN` | GitHub issues/PRs | Never commit; never put in config |
 | `OPENAI_API_KEY` | OpenAI repair | |
 | `ANTHROPIC_API_KEY` | Anthropic repair | |
-| `DNA_PROJECT_ID` | Runtime | Defaults to config projectId |
-| `DNA_MARKETPLACE_URL` | Custom marketplace | Default: dna.humaan.app |
+| `DNA_PROJECT_ID` | Runtime | Defaults to `config.projectId` |
+| `DNA_MARKETPLACE_URL` | Custom marketplace | Default: `https://dna.humaan.app/marketplace` |
+| `DNA_REFERENCE_ROOT` | Platform reference repos | Parent of `AIStudio/`, `ColorParty/`, `Humaan/`, `Soli/` — see [Platform](./platform.md#reference-repos-on-your-machine) |
+| `DNA_GDPR_SOURCE_DOCS` | GDPR doc ingest (contributors) | Source folder for `pnpm gdpr:ingest` |
 | `GIT_SHA` | Runtime release tracking | CI commit SHA |
+
+Set in shell, `.env` (not committed), or CI secrets — never in `.DNA/config.dna.json`.
+
+---
 
 ## Recommended pilot stack
 
@@ -111,3 +127,11 @@ Runtime event → classify → GitHub issue (optional)
 | Intelligence | DNA | Context, behaviour, classification |
 | Issues | GitHub | DNA auto-creates contextual issues |
 | AI repair | DNA + human review | Draft PRs, never auto-merge |
+
+---
+
+## See also
+
+- [Runtime Observer](./runtime.md)
+- [CLI Reference — github & ai](./cli-reference.md)
+- [Development](./development.md)

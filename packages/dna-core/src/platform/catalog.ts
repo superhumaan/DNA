@@ -1,80 +1,37 @@
 /**
- * Humaan platform reference — distilled from production projects.
+ * DNA platform reference — distilled from production projects.
  * Used by dna plan feature and knowledge packs to guide AI builds.
  */
+
+import {
+  DNA_REFERENCE_PROJECT_DEFS,
+  getReferenceProject,
+  type ReferenceProjectDef,
+  type ReferenceProjectId,
+} from "./reference-projects.js";
+
+export type { ReferenceProjectDef, ReferenceProjectId };
+export {
+  DNA_REFERENCE_PROJECT_DEFS,
+  resolveReferenceProjects,
+  getReferenceProject,
+  formatReferencePath,
+  formatCodeReference,
+  getReferenceRoot,
+} from "./reference-projects.js";
+
+/** @deprecated Use `DNA_REFERENCE_PROJECT_DEFS` or `resolveReferenceProjects()`. */
+export const HUMAAN_PROJECTS = DNA_REFERENCE_PROJECT_DEFS;
 
 export interface PlatformFeature {
   id: string;
   name: string;
   category: "auth" | "admin" | "integration" | "cloud" | "product" | "ai" | "ops";
-  sourceProjects: Array<"aistudio" | "colorparty" | "humaan" | "soli">;
+  sourceProjects: Array<ReferenceProjectId>;
   description: string;
   knowledgeFiles: string[];
   referencePaths?: Record<string, string>;
 }
-
-export interface PlatformProject {
-  id: "aistudio" | "colorparty" | "humaan" | "soli";
-  name: string;
-  path: string;
-  stack: string;
-  highlights: string[];
-}
-
-export const HUMAAN_PROJECTS: PlatformProject[] = [
-  {
-    id: "aistudio",
-    name: "AI Studio",
-    path: "/Users/place/Desktop/Projects/AIStudio",
-    stack: "React 19, Express 5, SQLite, Azure Container Apps, OpenAI/Gemini",
-    highlights: [
-      "Custom GPT with clinical safeguards and content policy",
-      "Admin portal: directory, AI governance, audit, analytics",
-      "Azure AD B2C SSO + local OTP auth",
-      "RBAC: owner/admin/employee",
-      "Usage quotas, rate limits, knowledge ingest",
-    ],
-  },
-  {
-    id: "colorparty",
-    name: "ColorParty",
-    path: "/Users/place/Desktop/Projects/ColorParty",
-    stack: "React 18, Express, Supabase, Vercel, Google OAuth",
-    highlights: [
-      "Location-based proximity praise canvas",
-      "Badges, scoreboards, gamification",
-      "Invitrace SSO bridge (cross-subdomain JWT)",
-      "Google Directory sync",
-      "Admin: live map, users, feedback, profanity policy",
-    ],
-  },
-  {
-    id: "humaan",
-    name: "Humaan Operations",
-    path: "/Users/place/Desktop/Projects/Humaan",
-    stack: "React 18, Express, Supabase, Vercel, Google/Harvest/Jira/Pipedrive",
-    highlights: [
-      "Operational dashboard: pipeline, delivery, reporting",
-      "ProdPad alternative: products, initiatives, epics, roadmap",
-      "CSS/NPS survey programmes with full customisation",
-      "Google Directory sync, permission matrix RBAC",
-      "Admin portal: org, reports config, audit",
-    ],
-  },
-  {
-    id: "soli",
-    name: "Soli",
-    path: "/Users/place/Desktop/Projects/Soli",
-    stack: "React 18, Express 5, multi-tenant, Azure SQL/B2C",
-    highlights: [
-      "Notes + markdown + speech-to-text",
-      "Kanban personal + team boards",
-      "Multi-tenant workspaces, custom entities",
-      "Shared team tasks, team schedules",
-      "Admin portal: users, entity templates, data export",
-    ],
-  },
-];
 
 export const PLATFORM_FEATURES: PlatformFeature[] = [
   {
@@ -84,8 +41,8 @@ export const PLATFORM_FEATURES: PlatformFeature[] = [
     sourceProjects: ["aistudio", "colorparty", "humaan", "soli"],
     description: "Full admin shell with nav groups, directory, settings, audit, analytics",
     knowledgeFiles: [
-      "platforms/humaan/admin-portal.dna.md",
-      "platforms/humaan/rbac-patterns.dna.md",
+      "platforms/dna/admin-portal.dna.md",
+      "platforms/dna/rbac-patterns.dna.md",
     ],
     referencePaths: {
       aistudio: "src/admin/AdminPortal.jsx",
@@ -104,7 +61,7 @@ export const PLATFORM_FEATURES: PlatformFeature[] = [
       "security/rbac-fundamentals.dna.md",
       "security/zero-trust.dna.md",
       "security/ui-surface-checklist.dna.md",
-      "platforms/humaan/rbac-patterns.dna.md",
+      "platforms/dna/rbac-patterns.dna.md",
     ],
   },
   {
@@ -175,7 +132,7 @@ export const PLATFORM_FEATURES: PlatformFeature[] = [
     category: "product",
     sourceProjects: ["humaan"],
     description: "Initiative→epic→story hierarchy, roadmap, kanban lanes, delivery tracking",
-    knowledgeFiles: ["platforms/humaan/product-roadmap.dna.md", "disciplines/feature-management.dna.md"],
+    knowledgeFiles: ["platforms/dna/product-roadmap.dna.md", "disciplines/feature-management.dna.md"],
     referencePaths: { humaan: "docs/delivery/features/products-and-roadmap/" },
   },
   {
@@ -184,7 +141,7 @@ export const PLATFORM_FEATURES: PlatformFeature[] = [
     category: "ops",
     sourceProjects: ["humaan"],
     description: "Configurable surveys: audience, email, login branding, form builder, scheduler",
-    knowledgeFiles: ["platforms/humaan/surveys.dna.md"],
+    knowledgeFiles: ["platforms/dna/surveys.dna.md"],
     referencePaths: { humaan: "src/pages/surveys/" },
   },
   {
@@ -210,7 +167,7 @@ export const PLATFORM_FEATURES: PlatformFeature[] = [
     category: "product",
     sourceProjects: ["aistudio", "soli"],
     description: "Tenant isolation, account URL, per-tenant store buckets, provision",
-    knowledgeFiles: ["platforms/humaan/multi-tenant.dna.md"],
+    knowledgeFiles: ["platforms/dna/multi-tenant.dna.md"],
   },
   {
     id: "custom-entities",
@@ -251,7 +208,7 @@ export const PLATFORM_FEATURES: PlatformFeature[] = [
     category: "ops",
     sourceProjects: ["humaan", "aistudio", "colorparty"],
     description: "Ops reporting, Harvest time, delivery insights, admin KPIs",
-    knowledgeFiles: ["platforms/humaan/reporting.dna.md"],
+    knowledgeFiles: ["platforms/dna/reporting.dna.md"],
   },
   {
     id: "azure-deploy",
@@ -267,7 +224,7 @@ export const PLATFORM_FEATURES: PlatformFeature[] = [
     name: "AWS Deployment",
     category: "cloud",
     sourceProjects: [],
-    description: "ECS/Fargate, ALB, RDS, Cognito, S3, CloudFront — Humaan reference patterns",
+    description: "ECS/Fargate, ALB, RDS, Cognito, S3, CloudFront — DNA reference patterns",
     knowledgeFiles: ["cloud/aws.dna.md"],
   },
   {
@@ -300,7 +257,7 @@ export const PLATFORM_FEATURES: PlatformFeature[] = [
     category: "admin",
     sourceProjects: ["aistudio", "humaan", "soli"],
     description: "Append-only audit, admin UI, client allowlist, compliance export",
-    knowledgeFiles: ["platforms/humaan/audit.dna.md"],
+    knowledgeFiles: ["platforms/dna/audit.dna.md"],
   },
 ];
 
@@ -308,10 +265,10 @@ export function getFeature(id: string): PlatformFeature | undefined {
   return PLATFORM_FEATURES.find((f) => f.id === id);
 }
 
-export function getProject(id: PlatformFeature["sourceProjects"][number]): PlatformProject | undefined {
-  return HUMAAN_PROJECTS.find((p) => p.id === id);
+export async function getProject(id: ReferenceProjectId) {
+  return getReferenceProject(id);
 }
 
-export function featuresForProject(projectId: PlatformFeature["sourceProjects"][number]): PlatformFeature[] {
+export function featuresForProject(projectId: ReferenceProjectId): PlatformFeature[] {
   return PLATFORM_FEATURES.filter((f) => f.sourceProjects.includes(projectId));
 }

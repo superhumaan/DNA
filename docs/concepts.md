@@ -1,6 +1,6 @@
 # Concepts
 
-DNA separates **human documentation** from **machine intelligence**.
+DNA separates **human documentation** from **machine intelligence**. Understanding that split is the foundation for everything else.
 
 ## Two worlds
 
@@ -11,6 +11,8 @@ DNA separates **human documentation** from **machine intelligence**.
 
 Never mix them. Impressions are prose for people. `.DNA` is structured for machines.
 
+---
+
 ## config.dna.json
 
 The project manifest at `.DNA/config.dna.json`:
@@ -20,6 +22,8 @@ The project manifest at `.DNA/config.dna.json`:
 - AI tool configuration
 - GitHub and runtime toggles
 - Installed knowledge pack versions
+
+---
 
 ## neuralNetwork
 
@@ -32,6 +36,7 @@ Example intents:
 - `fix_runtime_error`
 - `improve_security`
 - `configure_ci_cd`
+- `implement_admin_portal` (platform catalog)
 
 Each intent declares:
 
@@ -42,6 +47,8 @@ Each intent declares:
 - Validation steps
 
 `dna context <target>` uses neuralNetwork to return only relevant chunks.
+
+---
 
 ## Behaviour
 
@@ -57,6 +64,8 @@ Six behaviour files in `.DNA/behaviour/` govern how AI works on this project:
 | `runtime.behaviour.md` | Incident and observability rules |
 
 `dna validate` checks projects against these rules.
+
+---
 
 ## CellularMemory
 
@@ -74,6 +83,8 @@ Project-specific learning in `.DNA/CellularMemory/`:
 
 `dna watch` updates memory when files change. Runtime repeated failures append to `amygdala/repeated-failures.md`.
 
+---
+
 ## Immune System
 
 `.DNA/immuneSystem/` classifies runtime events:
@@ -84,6 +95,8 @@ Project-specific learning in `.DNA/CellularMemory/`:
 
 Output dimensions: **severity**, **category**, **discipline**, **confidence**.
 
+---
+
 ## Knowledge packs
 
 Stack and compliance guidance in `.DNA/knowledge/`. Install from the [marketplace](./marketplace.md):
@@ -91,7 +104,12 @@ Stack and compliance guidance in `.DNA/knowledge/`. Install from the [marketplac
 ```bash
 dna marketplace install frameworks/vite
 dna marketplace install compliance/gdpr
+dna marketplace install platforms/dna-stack
 ```
+
+Retired pack IDs (e.g. `platforms/humaan-stack`) still resolve to current packs. See [CHANGELOG](../CHANGELOG.md).
+
+---
 
 ## Runtime pipeline
 
@@ -104,6 +122,10 @@ When `@superhumaan/dna-by-humaan/runtime` captures an event:
 5. Optionally create GitHub issue (high/critical)
 6. Optionally trigger AI repair workflow
 
+See [Runtime Observer](./runtime.md).
+
+---
+
 ## AI tool files
 
 `dna init` generates tool-specific config:
@@ -112,3 +134,11 @@ When `@superhumaan/dna-by-humaan/runtime` captures an event:
 - Claude, Copilot, Windsurf, Gemini context files
 
 These point AI at Behaviour, knowledge, and CellularMemory before any task.
+
+---
+
+## See also
+
+- [Getting Started](./getting-started.md)
+- [CLI Reference](./cli-reference.md)
+- [Naming conventions](./naming.md)

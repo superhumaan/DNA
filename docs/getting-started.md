@@ -78,6 +78,16 @@ dna plan compliance
 dna validate
 ```
 
+### Platform features (admin, SSO, deploy)
+
+```bash
+dna platform list
+dna plan feature admin-portal --quote "Admin portal with Google directory sync"
+dna context platform
+```
+
+See [Platform Catalog](./platform.md).
+
 ### Brownfield (existing project)
 
 ```bash
@@ -103,8 +113,25 @@ See [Runtime Observer](./runtime.md).
 
 ---
 
+## Optional: local reference repos
+
+If you clone DNA's reference production apps (AIStudio, ColorParty, Humaan Ops, Soli), point the CLI at them:
+
+```bash
+export DNA_REFERENCE_ROOT=~/Projects
+dna platform projects
+```
+
+See [Platform Catalog](./platform.md#reference-repos-on-your-machine).
+
+---
+
 ## Next steps
 
-- [Concepts](./concepts.md)
-- [CLI Reference](./cli-reference.md)
-- [Team Testing](../TEAM-TESTING.md)
+| Topic | Guide |
+|-------|-------|
+| Core concepts | [Concepts](./concepts.md) |
+| All commands | [CLI Reference](./cli-reference.md) |
+| Knowledge packs | [Marketplace](./marketplace.md) |
+| Team rollout | [Team Testing](../TEAM-TESTING.md) |
+| Naming (Humaan vs DNA) | [Naming conventions](./naming.md) |

@@ -15,6 +15,7 @@ export * from "./post-init.js";
 export * from "./marketplace/client.js";
 export * from "./marketplace/install.js";
 export * from "./marketplace/resolve.js";
+export * from "./marketplace/aliases.js";
 export * from "./marketplace/ensure.js";
 export * from "./marketplace/foundation.js";
 export * from "./marketplace/bundled-catalog.js";

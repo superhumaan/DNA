@@ -90,7 +90,7 @@ dna context ivf
 | `runtime` | Production error classifier |
 | `rbac` | Permission matrix + zero trust |
 | `compliance` | Tiered GDPR/HIPAA/ISO controls |
-| `platform` | Admin portal, SSO, flags (Humaan patterns) |
+| `platform` | Admin portal, SSO, flags (DNA platform patterns) |
 | `knowledge` | Marketplace packs in `.DNA/knowledge/` |
 | `neuralNetwork` | Intent → resource routing |
 | `impressions` | Human docs in `DNA/Impressions/` |

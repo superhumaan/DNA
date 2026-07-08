@@ -80,7 +80,8 @@ dna compliance install-examples     # Install templates into .DNA/knowledge/
 Re-ingest from updated source `.docx` files:
 
 ```bash
-pnpm gdpr:ingest ~/Downloads/GDPR\ Documents
+export DNA_GDPR_SOURCE_DOCS=~/Downloads/GDPR\ Documents
+pnpm gdpr:ingest
 node scripts/scrub-gdpr-branding.mjs
 ```
 

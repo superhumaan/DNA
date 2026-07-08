@@ -49,7 +49,7 @@ dna context cursor
 ```
 
 **Team rollout guide:** [TEAM-TESTING.md](./TEAM-TESTING.md)  
-**Full documentation:** [docs/](./docs/README.md)
+**Full documentation:** [docs/](./docs/README.md) · **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
 
 ---
 
@@ -76,7 +76,7 @@ Requirements: **Node.js 20+**, **pnpm 9+**
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for your tool |
 | `dna plan rbac` | RBAC plan from plain language → permission matrix |
-| `dna platform list` | Humaan production feature catalog (AIStudio, ColorParty, Humaan, Soli) |
+| `dna platform list` | DNA production feature catalog (AIStudio, ColorParty, Humaan Ops, Soli) |
 | `dna plan feature <id>` | End-to-end feature plan — Azure, SSO, admin, flags, CRM, CMS |
 | `dna plan compliance` | Tiered ISO/GDPR/HIPAA/SOC 2 plan by org size |
 | `dna compliance list` | Startup → enterprise compliance catalog |
@@ -205,14 +205,18 @@ pnpm install && pnpm build && pnpm test
 
 | Doc | Description |
 |-----|-------------|
+| [Documentation hub](./docs/README.md) | Index of all guides |
 | [Getting Started](./docs/getting-started.md) | First project in 10 minutes |
 | [Brownfield / IVF](./docs/ivf.md) | Install into existing projects |
 | [Concepts](./docs/concepts.md) | Behaviour, memory, immune system |
+| [Platform Catalog](./docs/platform.md) | Production patterns — admin, SSO, deploy |
 | [CLI Reference](./docs/cli-reference.md) | Every command |
 | [Runtime](./docs/runtime.md) | Framework adapters |
 | [Marketplace](./docs/marketplace.md) | Knowledge packs |
 | [Integrations](./docs/integrations.md) | GitHub + AI |
-| [RBAC & Zero Trust](./docs/rbac.md) | Plain-language → permission matrix + AI coordination |
+| [RBAC & Zero Trust](./docs/rbac.md) | Plain-language → permission matrix |
+| [Naming conventions](./docs/naming.md) | Humaan vs DNA vs pack IDs |
+| [Changelog](./CHANGELOG.md) | Releases and migrations |
 | [Team Testing](./TEAM-TESTING.md) | Colleague pilot guide |
 | [Contributing](./CONTRIBUTING.md) | PR guidelines |
 

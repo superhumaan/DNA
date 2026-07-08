@@ -79,4 +79,4 @@ RBAC is **not complete** if a user without permission can still **see** a menu i
 dna marketplace install security/rbac-zero-trust
 ```
 
-[CLI reference](./cli-reference.md) · [Concepts](./concepts.md)
+[CLI reference](./cli-reference.md) · [Platform catalog](./platform.md) · [Concepts](./concepts.md)

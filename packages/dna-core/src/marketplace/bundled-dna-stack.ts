@@ -1,15 +1,15 @@
 import type { KnowledgePack } from "@superhumaan/dna-config";
 import { pack } from "./bundled-catalog-helpers.js";
 
-export const HUMAAN_STACK_PACK: KnowledgePack = pack(
-  "platforms/humaan-stack",
-  "Humaan Production Stack",
+export const DNA_STACK_PACK: KnowledgePack = pack(
+  "platforms/dna-stack",
+  "DNA Production Stack",
   "platforms",
   "Full-stack patterns from AIStudio, ColorParty, Humaan Ops, and Soli — auth, admin, integrations, cloud",
   [
     {
-      path: "platforms/humaan/admin-portal.dna.md",
-      content: `# Admin Portal Pattern (Humaan)
+      path: "platforms/dna/admin-portal.dna.md",
+      content: `# Admin Portal Pattern (DNA)
 
 ## Shell structure
 - Separate route prefix: \`/admin\` or \`/app/admin\`
@@ -32,20 +32,20 @@ export const HUMAAN_STACK_PACK: KnowledgePack = pack(
 ## Reference projects
 - AIStudio: AI governance, content policy, data export
 - ColorParty: live map, feedback moderation, profanity
-- Humaan: org (people, departments), report config
+- Humaan Ops: org (people, departments), report config
 - Soli: entity templates, data export, usage
 `,
     },
     {
-      path: "platforms/humaan/rbac-patterns.dna.md",
-      content: `# Humaan RBAC Patterns
+      path: "platforms/dna/rbac-patterns.dna.md",
+      content: `# DNA RBAC Patterns
 
 ## Role hierarchies used in production
 | Project | Roles |
 |---------|-------|
 | AIStudio | owner → admin → employee |
 | ColorParty | user → manager → hr → admin → owner |
-| Humaan | employee → manager → admin (+ custom per-person) |
+| Humaan Ops | employee → manager → admin (+ custom per-person) |
 | Soli | employee → admin → owner |
 
 ## Capability model
@@ -63,7 +63,7 @@ Cross-app auth between \`*.humaan.app\` subdomains — see integrations/sso-brid
 `,
     },
     {
-      path: "platforms/humaan/multi-tenant.dna.md",
+      path: "platforms/dna/multi-tenant.dna.md",
       content: `# Multi-Tenant (AIStudio, Soli)
 
 ## Models
@@ -78,7 +78,7 @@ Cross-app auth between \`*.humaan.app\` subdomains — see integrations/sso-brid
 `,
     },
     {
-      path: "platforms/humaan/product-roadmap.dna.md",
+      path: "platforms/dna/product-roadmap.dna.md",
       content: `# Product Roadmap (Humaan Ops — ProdPad alternative)
 
 ## Hierarchy
@@ -101,7 +101,7 @@ Run \`dna plan feature feature-management\` before greenfield product tooling.
 `,
     },
     {
-      path: "platforms/humaan/surveys.dna.md",
+      path: "platforms/dna/surveys.dna.md",
       content: `# Survey Programme (CSS + NPS)
 
 ## Types
@@ -122,11 +122,11 @@ Run \`dna plan feature feature-management\` before greenfield product tooling.
 \`/operations/surveys\` — manager role required
 
 ## Scheduler
-Cron checks campaign_enabled; NPS tied to active CSS campaign in Humaan production rule.
+Cron checks campaign_enabled; NPS tied to active CSS campaign in DNA production rule.
 `,
     },
     {
-      path: "platforms/humaan/reporting.dna.md",
+      path: "platforms/dna/reporting.dna.md",
       content: `# Reporting (Humaan Ops)
 
 ## Layers
@@ -144,7 +144,7 @@ Cron checks campaign_enabled; NPS tied to active CSS campaign in Humaan producti
 `,
     },
     {
-      path: "platforms/humaan/audit.dna.md",
+      path: "platforms/dna/audit.dna.md",
       content: `# Audit Logging
 
 ## Storage
@@ -302,7 +302,7 @@ Use with \`dna plan feature aws-deploy\` and \`integrations/nginx.dna.md\`.
     },
     {
       path: "cloud/vercel-supabase.dna.md",
-      content: `# Vercel + Supabase (ColorParty, Humaan)
+      content: `# Vercel + Supabase (ColorParty, Ops)
 
 ## Topology
 - Vercel frontend (\`dist/\`)
@@ -352,7 +352,7 @@ Route \`/legacy/\` to older upstream; document in Impressions integration-map.
     },
     {
       path: "integrations/sso-bridge.dna.md",
-      content: `# Cross-App SSO Bridge (Humaan)
+      content: `# Cross-App SSO Bridge (DNA)
 
 ## Pattern
 Apps on \`*.humaan.app\` share \`JWT_SECRET\`.
@@ -365,12 +365,12 @@ Apps on \`*.humaan.app\` share \`JWT_SECRET\`.
 
 ## Implementation
 - CORS allow \`*.humaan.app\`
-- Verify Humaan JWT; re-issue app-specific token
+- Verify shared SSO JWT; re-issue app-specific token
 - Upsert user record on first bridge login
 
 ## Reference
 ColorParty: \`invitraceSsoBridge.js\`
-Humaan: \`SsoBridge.jsx\`
+Ops: \`SsoBridge.jsx\`
 `,
     },
     {
@@ -385,11 +385,11 @@ Humaan: \`SsoBridge.jsx\`
 ## Directory sync (admin)
 - Service account + domain-wide delegation
 - Sync: email, name, title, department, manager, photo
-- Map job titles via Job Directory (Humaan)
+- Map job titles via Job Directory (Ops)
 - Archive leavers; never auto-create departments from people alone
 
 ## Cron
-Daily sync (Bangkok midnight in Humaan production).
+Daily sync (Bangkok midnight in DNA production).
 
 ## Admin UI
 Manual sync button + per-person resync.
@@ -436,7 +436,7 @@ Integration routes in modular register; secrets from Vercel env.
       path: "disciplines/feature-flags.dna.md",
       content: `# Feature Flags
 
-## Humaan production approach (no LaunchDarkly)
+## DNA production approach (no LaunchDarkly)
 1. **Env toggles** — \`ENFORCE_USAGE_QUOTA\`, \`KNOWLEDGE_OCR\`, etc.
 2. **Admin KV store** — per-tenant slices (content policy enabled, share redact default)
 3. **Capability gates** — role-based feature visibility
@@ -447,7 +447,7 @@ Integration routes in modular register; secrets from Vercel env.
 - Document each flag in \`.DNA/CellularMemory/prefrontalCortex/decisions.md\`
 
 ## When to add LaunchDarkly/Unleash
-Multi-tenant SaaS with per-user gradual rollout — not yet in Humaan stack.
+Multi-tenant SaaS with per-user gradual rollout — not yet in DNA stack.
 `,
     },
     {
@@ -497,7 +497,7 @@ MFA policies configured in B2C tenant for production.
     },
     {
       path: "disciplines/crm.dna.md",
-      content: `# CRM Patterns (Humaan)
+      content: `# CRM Patterns (DNA)
 
 ## Pipeline kanban
 - Pipedrive integration or native deals board
@@ -518,9 +518,9 @@ Dept reports can pull pipeline snapshots.
       path: "disciplines/cms.dna.md",
       content: `# CMS & Content Management
 
-## Patterns in Humaan stack
+## Patterns in DNA stack
 - **AIStudio knowledge docs** — admin PDF/URL ingest into chat context
-- **Humaan job directory** — structured content for people sync mapping
+- **Ops job directory** — structured content for people sync mapping
 - **Survey form builder** — JSON-driven sections/fields (CMS-like)
 - **Soli note/entity templates** — admin-managed content schemas
 

@@ -45,8 +45,8 @@ describe("platform feature plan", () => {
     });
 
     expect(result.context).toContain("Admin Portal");
-    expect(result.context).toContain("Humaan production reference");
-    expect(result.context).toContain("platforms/humaan/admin-portal.dna.md");
+    expect(result.context).toContain("DNA production reference");
+    expect(result.context).toContain("platforms/dna/admin-portal.dna.md");
     expect(result.planPath).toContain("feature-admin-portal.md");
 
     await rm(root, { recursive: true, force: true });

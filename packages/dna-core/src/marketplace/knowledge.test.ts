@@ -23,10 +23,10 @@ describe("knowledge resolve", () => {
     resetKnowledgePathIndex();
     const packs = resolvePackIdsForKnowledgePaths([
       "security/rbac-fundamentals.dna.md",
-      "platforms/humaan/admin-portal.dna.md",
+      "platforms/dna/admin-portal.dna.md",
     ]);
     expect(packs).toContain("security/rbac-zero-trust");
-    expect(packs).toContain("platforms/humaan-stack");
+    expect(packs).toContain("platforms/dna-stack");
   });
 
   it("resolves pack IDs from neural network intents", () => {
@@ -41,7 +41,7 @@ describe("knowledge resolve", () => {
     const feature = getFeature("admin-portal");
     expect(feature).toBeDefined();
     const packs = resolveFeaturePlanPackIds(feature!);
-    expect(packs).toContain("platforms/humaan-stack");
+    expect(packs).toContain("platforms/dna-stack");
     expect(packs).toContain("security/rbac-zero-trust");
   });
 });

@@ -120,4 +120,10 @@ export const AI_TOOLS = [
 export const MARKETPLACE_BASE_URL =
   process.env.DNA_MARKETPLACE_URL ?? "https://dna.humaan.app/marketplace";
 
+/** Parent directory containing DNA reference repos (AIStudio, ColorParty, Humaan, Soli). */
+export const DNA_REFERENCE_ROOT_ENV = "DNA_REFERENCE_ROOT";
+
+/** Local path to source GDPR .docx pack for `pnpm gdpr:ingest` (optional). */
+export const DNA_GDPR_SOURCE_DOCS_ENV = "DNA_GDPR_SOURCE_DOCS";
+
 export const MARKETPLACE_API_VERSION = "v1";

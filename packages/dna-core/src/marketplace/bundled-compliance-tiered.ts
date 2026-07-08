@@ -517,9 +517,9 @@ Scrubbing removes vendor-specific names automatically.
     },
     {
       path: "compliance/gdpr/ux-design.dna.md",
-      content: `# GDPR UX Design (Humaan)
+      content: `# GDPR UX Design (DNA)
 
-From Humaan production — pair with legal/DPO for policy text.
+From DNA production — pair with legal/DPO for policy text.
 
 ## Data subjects
 - **Employees** — people records, allocations, admin views

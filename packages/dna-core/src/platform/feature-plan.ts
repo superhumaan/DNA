@@ -7,17 +7,22 @@ import { ensureKnowledgeInstalled } from "../marketplace/ensure.js";
 import { resolveFeaturePlanPackIds } from "./knowledge.js";
 import {
   PLATFORM_FEATURES,
-  HUMAAN_PROJECTS,
+  DNA_REFERENCE_PROJECT_DEFS,
   getFeature,
   featuresForProject,
   type PlatformFeature,
 } from "./catalog.js";
+import {
+  formatCodeReference,
+  getReferenceProject,
+  type ReferenceProject,
+} from "./reference-projects.js";
 
 export interface FeaturePlanOptions {
   root: string;
   featureId: string;
   quote?: string;
-  /** Reference a Humaan production project for patterns */
+  /** Reference a DNA production project for patterns */
   referenceProject?: "aistudio" | "colorparty" | "humaan" | "soli";
 }
 
@@ -91,10 +96,10 @@ function buildFeatureBrief(
   options: FeaturePlanOptions,
   config: DnaConfig | null,
   installedPacks: string[],
+  project: ReferenceProject | undefined,
 ): string {
   const phases = PHASE_TEMPLATES[feature.category] ?? PHASE_TEMPLATES.product;
   const refProject = options.referenceProject ?? feature.sourceProjects[0];
-  const project = HUMAAN_PROJECTS.find((p) => p.id === refProject);
 
   const lines = [
     `# DNA Feature Plan: ${feature.name}`,
@@ -110,16 +115,16 @@ function buildFeatureBrief(
     `- **ID:** ${feature.id}`,
     `- **Category:** ${feature.category}`,
     `- **Description:** ${feature.description}`,
-    `- **Reference project:** ${project?.name ?? refProject} (${project?.stack ?? "see Humaan catalog"})`,
+    `- **Reference project:** ${project?.name ?? refProject} (${project?.stack ?? "see DNA catalog"})`,
     "",
-    "## Humaan production reference",
+    "## DNA production reference",
     "",
     "DNA has shipped this in production. Study these patterns before improvising:",
     "",
     ...(project?.highlights.map((h) => `- ${h}`) ?? ["- See platform catalog"]),
     "",
     ...(feature.referencePaths && refProject && feature.referencePaths[refProject]
-      ? [`**Code reference:** \`${feature.referencePaths[refProject]}\` in ${project?.path}`]
+      ? [`**Code reference:** ${formatCodeReference(project, feature.referencePaths[refProject])}`]
       : []),
     "",
     "## Knowledge to load (mandatory)",
@@ -142,7 +147,7 @@ function buildFeatureBrief(
     "",
     ...phases.map((p, i) => `${i + 1}. ${p}`),
     "",
-    "## Cross-cutting requirements (all Humaan features)",
+    "## Cross-cutting requirements (all DNA features)",
     "",
     "### Access control",
     "- Permission matrix before UI work (`dna plan rbac` if roles involved)",
@@ -178,7 +183,7 @@ function buildFeatureBrief(
     `- [ ] Impressions/security docs updated`,
     `- [ ] \`dna validate\` passes`,
     "",
-    "## Related features in Humaan stack",
+    "## Related features in DNA stack",
     "",
     ...PLATFORM_FEATURES.filter(
       (f) =>
@@ -210,7 +215,9 @@ export async function generateFeaturePlan(options: FeaturePlanOptions): Promise<
   const ensureResult = await ensureKnowledgeInstalled(options.root, packIds, config.channel);
   const installedPacks = [...ensureResult.installed, ...ensureResult.refreshed];
 
-  const context = buildFeatureBrief(feature, options, config, installedPacks);
+  const refProject = options.referenceProject ?? feature.sourceProjects[0];
+  const project = refProject ? await getReferenceProject(refProject) : undefined;
+  const context = buildFeatureBrief(feature, options, config, installedPacks, project);
   const slug = feature.id;
   const planPath = join(options.root, ".DNA", "plans", `feature-${slug}.md`);
   await writeFileEnsured(planPath, context);
@@ -229,14 +236,14 @@ export async function loadFeatureKnowledgeSnippet(
 
 export function formatPlatformCatalog(): string {
   const lines = [
-    "Humaan Platform Feature Catalog",
+    "DNA Platform Feature Catalog",
     "===============================",
     "",
     "Production projects DNA learned from:",
     "",
   ];
 
-  for (const p of HUMAAN_PROJECTS) {
+  for (const p of DNA_REFERENCE_PROJECT_DEFS) {
     lines.push(`• ${p.id} — ${p.name}`);
     lines.push(`  ${p.stack}`);
     for (const h of p.highlights.slice(0, 3)) {
@@ -265,7 +272,7 @@ export function formatPlatformCatalog(): string {
 }
 
 export function formatProjectFeatures(projectId: "aistudio" | "colorparty" | "humaan" | "soli"): string {
-  const project = HUMAAN_PROJECTS.find((p) => p.id === projectId);
+  const project = DNA_REFERENCE_PROJECT_DEFS.find((p) => p.id === projectId);
   if (!project) return `Unknown project: ${projectId}`;
 
   const features = featuresForProject(projectId);
@@ -291,7 +298,7 @@ export function formatProjectFeatures(projectId: "aistudio" | "colorparty" | "hu
 
 export {
   PLATFORM_FEATURES,
-  HUMAAN_PROJECTS,
+  DNA_REFERENCE_PROJECT_DEFS,
   getFeature,
   featuresForProject,
 };

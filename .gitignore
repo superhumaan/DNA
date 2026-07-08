@@ -15,4 +15,5 @@ coverage/
 /.DNA/
 
 # Next.js build output (web app lives in DNA-Web repo)
+apps/web/.next/
 .vercel

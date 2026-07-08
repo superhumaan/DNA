@@ -1,6 +1,7 @@
 import type { KnowledgePack, MarketplaceCatalog } from "@superhumaan/dna-config";
 import { pack } from "./bundled-catalog-helpers.js";
-import { HUMAAN_STACK_PACK } from "./bundled-humaan-stack.js";
+import { normalizePackId } from "./aliases.js";
+import { DNA_STACK_PACK } from "./bundled-dna-stack.js";
 import { TIERED_STANDARDS_PACK } from "./bundled-compliance-tiered.js";
 import { STEM_PACKS } from "./bundled-stem-packs.js";
 import { CATALOG_EXPANSION_PACKS } from "./bundled-catalog-expansion.js";
@@ -188,7 +189,7 @@ Test with fresh session per role. Refresh after login. Try direct URLs.
       },
     ],
   ),
-  HUMAAN_STACK_PACK,
+  DNA_STACK_PACK,
   TIERED_STANDARDS_PACK,
   ...STEM_PACKS,
   ...LANGUAGE_STEM_PACKS,
@@ -207,5 +208,6 @@ export function getBundledCatalog(channel: "stable" | "beta" | "nightly" = "stab
 }
 
 export function getBundledPack(packId: string): KnowledgePack | undefined {
-  return getBundledCatalog().packs.find((p) => p.id === packId);
+  const id = normalizePackId(packId);
+  return getBundledCatalog().packs.find((p) => p.id === id);
 }

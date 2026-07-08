@@ -48,7 +48,7 @@ DNA is **not** a documentation generator. It is:
 | **Knowledge marketplace** | **768** curated packs — frameworks, cloud, healthcare, compliance, payments, gaming, ERP |
 | **Tiered compliance** | GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS — startup → enterprise |
 | **GDPR reference library** | **85+** governance, technical, and AI policy templates (bundled in CLI assets) |
-| **Platform catalog** | Production patterns from Humaan systems (AIStudio, ColorParty, Humaan Ops, Soli) |
+| **Platform catalog** | Production patterns from DNA reference systems (AIStudio, ColorParty, Humaan Ops, Soli) |
 | **IVF (brownfield)** | Install into existing codebases — analyze, document, phased migration plans |
 | **GitHub automation** | Contextual issues and AI-assisted repair PRs |
 | **Software immune system** | Severity, category, and discipline classification |
@@ -89,7 +89,7 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna plan compliance` | ISO / GDPR / HIPAA / SOC 2 by org tier |
 | `dna compliance list` | Startup → enterprise compliance catalog |
 | `dna context compliance` | Load tiered compliance knowledge for AI |
-| `dna platform list` | Humaan production feature catalog |
+| `dna platform list` | DNA production feature catalog |
 | `dna plan feature <id>` | End-to-end plans — SSO, admin, flags, Azure, CRM, CMS |
 | `dna marketplace list` | Browse 768 knowledge packs |
 | `dna marketplace install <id>` | Install packs into `.DNA/knowledge/` |
@@ -119,7 +119,7 @@ dna update
 
 | Layer | Count | Examples |
 |-------|------:|----------|
-| Core (frameworks, compliance, Humaan stack) | 11 | Next.js, GDPR, RBAC |
+| Core (frameworks, compliance, DNA stack) | 11 | Next.js, GDPR, RBAC |
 | Stem delivery surfaces | 21 | `stem/*` |
 | Language stems (i18n AI) | 18 | `languages/en`, `languages/vi`, … |
 | Catalog expansion v1 | 79 | CMS, payments, modern frameworks |
@@ -258,7 +258,8 @@ Commit `.DNA/` and `DNA/` so your team shares one brain.
 | [Runtime observer](https://github.com/superhumaan/DNA/blob/main/docs/runtime.md) | Express, Fastify, NestJS, Next.js |
 | [Marketplace](https://github.com/superhumaan/DNA/blob/main/docs/marketplace.md) | 768 knowledge packs |
 | [Compliance](https://github.com/superhumaan/DNA/blob/main/docs/compliance.md) | Tiered GDPR, HIPAA, ISO, SOC 2 |
-| [Platform catalog](https://github.com/superhumaan/DNA/blob/main/docs/platform.md) | Humaan production patterns |
+| [Platform catalog](https://github.com/superhumaan/DNA/blob/main/docs/platform.md) | DNA production patterns |
+| [Changelog](https://github.com/superhumaan/DNA/blob/main/CHANGELOG.md) | Releases and migrations |
 | [Integrations](https://github.com/superhumaan/DNA/blob/main/docs/integrations.md) | GitHub issues + AI repair |
 | [Team testing](https://github.com/superhumaan/DNA/blob/main/TEAM-TESTING.md) | Colleague pilot guide |
 

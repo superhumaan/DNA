@@ -4,12 +4,12 @@ import { mergePackIds, resolvePackIdsForKnowledgePaths } from "../marketplace/re
 /** Extra packs pulled when planning a feature (transitive dependencies). */
 const CATEGORY_EXTRA_PACKS: Partial<Record<PlatformFeature["category"], string[]>> = {
   auth: ["security/rbac-zero-trust"],
-  admin: ["security/rbac-zero-trust", "platforms/humaan-stack"],
-  integration: ["platforms/humaan-stack"],
-  cloud: ["platforms/humaan-stack"],
-  product: ["platforms/humaan-stack"],
-  ai: ["platforms/humaan-stack", "security/rbac-zero-trust"],
-  ops: ["platforms/humaan-stack"],
+  admin: ["security/rbac-zero-trust", "platforms/dna-stack"],
+  integration: ["platforms/dna-stack"],
+  cloud: ["platforms/dna-stack"],
+  product: ["platforms/dna-stack"],
+  ai: ["platforms/dna-stack", "security/rbac-zero-trust"],
+  ops: ["platforms/dna-stack"],
 };
 
 const FEATURE_EXTRA_PACKS: Record<string, string[]> = {

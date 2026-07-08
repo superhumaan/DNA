@@ -77,9 +77,9 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
     intent: "implement_admin_portal",
     description: "Build admin portal shell with directory, settings, audit, and requireAdmin APIs",
     requiredKnowledge: [
-      "platforms/humaan/admin-portal.dna.md",
-      "platforms/humaan/rbac-patterns.dna.md",
-      "platforms/humaan/audit.dna.md",
+      "platforms/dna/admin-portal.dna.md",
+      "platforms/dna/rbac-patterns.dna.md",
+      "platforms/dna/audit.dna.md",
     ],
     requiredBehaviour: ["security.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
     cellularMemory: ["prefrontalCortex/decisions.md", "parietalLobe/system-map.md"],
@@ -125,7 +125,7 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
   {
     intent: "implement_google_directory",
     description: "Google OAuth sign-in and Workspace Directory sync with domain lock",
-    requiredKnowledge: ["integrations/google-directory.dna.md", "platforms/humaan/rbac-patterns.dna.md"],
+    requiredKnowledge: ["integrations/google-directory.dna.md", "platforms/dna/rbac-patterns.dna.md"],
     requiredBehaviour: ["security.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
     cellularMemory: ["prefrontalCortex/decisions.md"],
     impressions: ["architecture/data-flow.md", "security/security-baseline.md"],
@@ -134,7 +134,7 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
   {
     intent: "implement_ai_governance",
     description: "AI chat with content policy, quotas, server-proxy models, and admin governance",
-    requiredKnowledge: ["platforms/aistudio/ai-governance.dna.md", "platforms/humaan/audit.dna.md"],
+    requiredKnowledge: ["platforms/aistudio/ai-governance.dna.md", "platforms/dna/audit.dna.md"],
     requiredBehaviour: ["security.behaviour.md", "ai.behaviour.md", "coding.behaviour.md"],
     cellularMemory: ["amygdala/risks.md", "prefrontalCortex/decisions.md"],
     impressions: ["security/threat-model.md"],
@@ -143,7 +143,7 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
   {
     intent: "implement_multi_tenant",
     description: "Multi-tenant isolation with tenant-scoped APIs and admin provisioning",
-    requiredKnowledge: ["platforms/humaan/multi-tenant.dna.md", "platforms/humaan/rbac-patterns.dna.md"],
+    requiredKnowledge: ["platforms/dna/multi-tenant.dna.md", "platforms/dna/rbac-patterns.dna.md"],
     requiredBehaviour: ["security.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
     cellularMemory: ["prefrontalCortex/decisions.md", "parietalLobe/system-map.md"],
     impressions: ["architecture/system-boundaries.md"],

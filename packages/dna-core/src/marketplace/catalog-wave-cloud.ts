@@ -37,7 +37,7 @@ export const CLOUD_PACK_DEFS = [
   C("cloud/circleci", "CircleCI", "CI platform", "Docker-first pipelines.", "Contexts for secrets. Orbs."),
   C("cloud/sst", "SST", "Serverless IaC for AWS", "TypeScript infra for Lambda/Next.", "Live dev. Ion version migration."),
   C("cloud/serverless-framework", "Serverless Framework", "Multi-cloud serverless deploy", "Lambda + API Gateway YAML.", "Plugin ecosystem."),
-  C("cloud/azure-overview", "Microsoft Azure", "Azure platform (extend Humaan pack)", "Enterprise Microsoft shops.", "Entra ID, Key Vault, Container Apps — see cloud/azure.dna.md in humaan-stack."),
+  C("cloud/azure-overview", "Microsoft Azure", "Azure platform (extend DNA stack pack)", "Enterprise Microsoft shops.", "Entra ID, Key Vault, Container Apps — see cloud/azure.dna.md in dna-stack."),
 ];
 
 export const CLOUD_PACKS = packsFromDefs(CLOUD_PACK_DEFS);

@@ -38,7 +38,7 @@ export const STACK_ARCHETYPES: StackArchetype[] = [
     id: "react-vite-api",
     name: "React SPA + API",
     description:
-      "React single-page app with Vite, separate Express or Fastify API. Humaan ColorParty / default web pattern.",
+      "React single-page app with Vite, separate Express or Fastify API. ColorParty-style DNA web pattern.",
     platform: "web",
     layers: {
       language: ["typescript", "javascript"],
@@ -57,7 +57,7 @@ export const STACK_ARCHETYPES: StackArchetype[] = [
   {
     id: "vercel-supabase",
     name: "Vercel + Supabase",
-    description: "React + Vite frontend, Express API on Vercel, Supabase Postgres. Humaan Ops pattern.",
+    description: "React + Vite frontend, Express API on Vercel, Supabase Postgres. DNA Ops pattern.",
     platform: "web",
     layers: {
       language: ["typescript", "javascript"],

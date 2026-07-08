@@ -3,6 +3,7 @@ import type { DnaConfig, NeuralNetwork } from "@superhumaan/dna-config";
 import { readJsonFile } from "../fs.js";
 import { loadDnaConfig } from "../validator.js";
 import { installKnowledgePackById } from "./install.js";
+import { normalizePackId } from "./aliases.js";
 import { resolvePackIdsForIntents, resolvePackIdsForKnowledgePaths } from "./resolve.js";
 import type { ContextTarget } from "../context-intents.js";
 import { TARGET_INTENTS } from "../context-intents.js";
@@ -28,9 +29,10 @@ export async function ensureKnowledgeInstalled(
     (await readJsonFile<Record<string, { version: string }>>(registryPath)) ?? {};
 
   for (const packId of unique) {
-    const wasInstalled = Boolean(registry[packId]);
+    const resolvedId = normalizePackId(packId);
+    const wasInstalled = Boolean(registry[packId] || registry[resolvedId]);
     try {
-      await installKnowledgePackById(root, packId, channel);
+      await installKnowledgePackById(root, resolvedId, channel);
       if (wasInstalled) result.refreshed.push(packId);
       else result.installed.push(packId);
     } catch (error) {

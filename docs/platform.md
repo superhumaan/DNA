@@ -1,6 +1,8 @@
-# Humaan Platform Catalog
+# DNA Platform Catalog
 
-DNA learned production patterns from four Humaan systems and encodes them as **knowledge packs**, **feature plans**, and **neuralNetwork intents** so AI can build end-to-end — from Azure/AWS deploy through nginx, directory sync, SSO bridges, admin portals, feature flags, CRM, CMS, and RBAC.
+DNA learned production patterns from four reference systems and encodes them as **knowledge packs**, **feature plans**, and **neuralNetwork intents** so AI can build end-to-end — from Azure/AWS deploy through nginx, directory sync, SSO bridges, admin portals, feature flags, CRM, CMS, and RBAC.
+
+See [naming conventions](./naming.md) for how **DNA** (product) relates to **Humaan** (company) and reference project IDs.
 
 ## Reference projects
 
@@ -10,6 +12,17 @@ DNA learned production patterns from four Humaan systems and encodes them as **k
 | `colorparty` | ColorParty | Location praise, gamification, Google OAuth, SSO bridge |
 | `humaan` | Humaan Ops | ProdPad-style roadmap, CSS/NPS surveys, Harvest/Jira, reporting |
 | `soli` | Soli | Multi-tenant, notes/STT, kanban, custom entities |
+
+## Reference repos on your machine
+
+`dna platform projects` and feature plans can point at real code paths when you clone the reference apps. Set the parent directory:
+
+```bash
+export DNA_REFERENCE_ROOT=~/Projects   # contains AIStudio/, ColorParty/, Humaan/, Soli/
+dna platform projects
+```
+
+Without `DNA_REFERENCE_ROOT`, the CLI shows folder names only (no author-specific paths). Knowledge packs and plans still work — they use `.DNA/knowledge/`, not your local clones.
 
 ## Commands
 
@@ -38,14 +51,16 @@ dna context rbac
 
 Installing a feature plan auto-installs:
 
-- `platforms/humaan-stack` — admin, auth, cloud, integrations, product patterns
+- `platforms/dna-stack` — admin, auth, cloud, integrations, product patterns
 - `security/rbac-zero-trust` — permission matrix and surface hiding
 
 Manual install:
 
 ```bash
-dna marketplace install platforms/humaan-stack
+dna marketplace install platforms/dna-stack
 ```
+
+> **Upgrading?** `platforms/humaan-stack` is retired — DNA resolves it automatically. Run `dna marketplace install platforms/dna-stack` to refresh files. See [CHANGELOG](../CHANGELOG.md).
 
 ## Feature categories
 
@@ -62,7 +77,7 @@ dna marketplace install platforms/humaan-stack
 ## Typical workflow
 
 1. **Describe** what you need in plain language.
-2. **`dna plan feature <id> --quote "..."`** — DNA writes `.DNA/plans/feature-<id>.md` with phases, knowledge paths, and Humaan reference notes.
+2. **`dna plan feature <id> --quote "..."`** — DNA writes `.DNA/plans/feature-<id>.md` with phases, knowledge paths, and production reference notes.
 3. **`dna context platform`** — paste into Cursor/Claude with behaviour + knowledge loaded.
 4. **`dna plan rbac`** — if roles/permissions are involved (menus, routes, APIs must all align).
 5. **`dna validate`** — confirm DNA structure before shipping.

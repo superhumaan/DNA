@@ -222,7 +222,7 @@ export async function generateRbacPlan(options: RbacPlanOptions): Promise<RbacPl
         "security/rbac-fundamentals.dna.md",
         "security/zero-trust.dna.md",
         "security/ui-surface-checklist.dna.md",
-        "platforms/humaan/rbac-patterns.dna.md",
+        "platforms/dna/rbac-patterns.dna.md",
         "disciplines/security/positioning.dna.md",
       ],
       config.channel,

@@ -1,5 +1,6 @@
 import type { NeuralNetwork } from "@superhumaan/dna-config";
 import { getBundledCatalog } from "./bundled-catalog.js";
+import { normalizeKnowledgePath } from "./aliases.js";
 
 let knowledgePathToPackId: Map<string, string> | null = null;
 
@@ -20,7 +21,7 @@ export function resolvePackIdsForKnowledgePaths(paths: string[]): string[] {
   const index = getKnowledgePathIndex();
   const packIds = new Set<string>();
   for (const path of paths) {
-    const normalized = path.replace(/^\//, "");
+    const normalized = normalizeKnowledgePath(path);
     const packId = index.get(normalized);
     if (packId) packIds.add(packId);
   }

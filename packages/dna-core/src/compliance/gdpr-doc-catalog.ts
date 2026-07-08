@@ -4,6 +4,7 @@
  */
 
 import type { OrgTier } from "./catalog.js";
+import { DNA_GDPR_SOURCE_DOCS_ENV } from "@superhumaan/dna-config";
 
 export type GdprDocFolder = "governance" | "external" | "technical" | "ai";
 
@@ -31,8 +32,14 @@ export const GDPR_PLACEHOLDERS = {
   region: "[UK Hosting Region]",
 } as const;
 
-/** Optional path to source .docx pack for re-ingest (local dev only) */
-export const GDPR_SOURCE_DOCS_PATH = "/Users/place/Downloads/GDPR Documents";
+/** Optional path to source .docx pack for re-ingest (local dev only). */
+export function getGdprSourceDocsPath(): string | undefined {
+  const value = process.env[DNA_GDPR_SOURCE_DOCS_ENV]?.trim();
+  return value || undefined;
+}
+
+/** @deprecated Use getGdprSourceDocsPath() — path is no longer hardcoded. */
+export const GDPR_SOURCE_DOCS_PATH = process.env[DNA_GDPR_SOURCE_DOCS_ENV] ?? "";
 
 /** Production document catalog (70+ artefacts) */
 export const GDPR_DOCUMENTS: GdprDocument[] = [

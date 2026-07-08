@@ -18,7 +18,7 @@ export async function generatePlatformContext(
   const sections: string[] = [
     "# DNA Platform Context",
     "",
-    "_Humaan production patterns from AIStudio, ColorParty, Humaan Ops, and Soli._",
+    "_DNA production patterns from AIStudio, ColorParty, Humaan Ops, and Soli._",
     "",
     formatPlatformCatalog(),
     "",
@@ -39,7 +39,7 @@ export async function generatePlatformContext(
 
   await ensureKnowledgeForPaths(root, [...knowledgePaths], config.channel);
 
-  sections.push("## Knowledge (Humaan stack)", "");
+  sections.push("## Knowledge (DNA stack)", "");
   for (const kPath of [...knowledgePaths].sort()) {
     const fullPath = join(root, ".DNA", "knowledge", kPath);
     if (await fileExists(fullPath)) {

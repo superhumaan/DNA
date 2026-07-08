@@ -1,10 +1,17 @@
 # Knowledge Pack Marketplace
 
-Curated guidance packs install into `.DNA/knowledge/`.
+Curated guidance packs install into `.DNA/knowledge/`. DNA ships **768 packs** in the stable channel — frameworks, compliance, cloud, healthcare, and production platform patterns.
 
-**Live URL:** [dna.humaan.app](https://dna.humaan.app) · [Marketplace](https://dna.humaan.app/marketplace)  
-**Web app:** [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web) (Next.js — landing + marketplace UI + API)  
-**Legacy API:** `apps/marketplace` (standalone Node server for local dev)
+| | |
+|---|---|
+| **Live catalog** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
+| **Web app** | [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web) (Next.js — landing + marketplace UI + API) |
+| **Offline fallback** | Bundled catalog in `@superhumaan/dna-by-humaan` when remote is unavailable |
+| **Legacy API** | `apps/marketplace` (standalone Node server for local dev) |
+
+> **Pack renames:** `platforms/humaan-stack` → `platforms/dna-stack` — retired IDs resolve automatically. See [CHANGELOG](../CHANGELOG.md).
+
+---
 
 ## CLI usage
 
@@ -26,7 +33,7 @@ dna update
 
 | Layer | Count | Tag / prefix |
 |-------|------:|--------------|
-| Core (frameworks, compliance, Humaan stack) | 11 | — |
+| Core (frameworks, compliance, DNA stack) | 11 | — |
 | Stim / stem delivery surfaces | 21 | `stem` |
 | Human language stems (i18n AI) | 18 | `languages/en`, `languages/vi`, … |
 | **Catalog expansion (v1)** | **79** | `catalog` |
@@ -322,3 +329,12 @@ Pack schema (`@superhumaan/dna-config`):
   "files": [{ "path": "cms/sanity/positioning.dna.md", "content": "..." }]
 }
 ```
+
+---
+
+## See also
+
+- [CLI Reference — marketplace](./cli-reference.md#marketplace)
+- [Platform Catalog](./platform.md) — `platforms/dna-stack`
+- [Naming conventions](./naming.md) — pack IDs and retired aliases
+- [CHANGELOG](../CHANGELOG.md) — migration notes

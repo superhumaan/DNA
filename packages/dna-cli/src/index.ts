@@ -28,7 +28,8 @@ import {
   formatPlatformCatalog,
   formatProjectFeatures,
   generatePlatformContext,
-  HUMAAN_PROJECTS,
+  resolveReferenceProjects,
+  formatReferencePath,
   generateCompliancePlan,
   formatComplianceCatalog,
   generateComplianceContext,
@@ -802,7 +803,7 @@ compliance
     console.log("\nBrowse: .DNA/knowledge/compliance/gdpr/examples/INDEX.md");
   });
 
-const platform = program.command("platform").description("Humaan production platform catalog");
+const platform = program.command("platform").description("DNA production platform catalog");
 
 platform
   .command("list")
@@ -814,11 +815,12 @@ platform
 platform
   .command("projects")
   .description("List reference production projects")
-  .action(() => {
-    console.log("Humaan production reference projects:\n");
-    for (const p of HUMAAN_PROJECTS) {
+  .action(async () => {
+    const projects = await resolveReferenceProjects();
+    console.log("DNA production reference projects:\n");
+    for (const p of projects) {
       console.log(`• ${p.id} — ${p.name}`);
-      console.log(`  ${p.path}`);
+      console.log(`  ${formatReferencePath(p)}`);
       console.log(`  ${p.stack}`);
       for (const h of p.highlights) {
         console.log(`  - ${h}`);

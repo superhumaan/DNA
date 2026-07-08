@@ -4,6 +4,7 @@ import { writeFileEnsured, readJsonFile, writeJsonFile } from "../fs.js";
 import { loadDnaConfig } from "../validator.js";
 import { fetchMarketplaceCatalog, fetchKnowledgePack } from "./client.js";
 import { getBundledCatalog, getBundledPack } from "./bundled-catalog.js";
+import { normalizePackId } from "./aliases.js";
 
 export async function installKnowledgePack(
   root: string,
@@ -43,7 +44,8 @@ export async function installKnowledgePackById(
   packId: string,
   channel?: DnaConfig["channel"],
 ): Promise<{ pack: KnowledgePack; files: string[] }> {
-  const pack = getBundledPack(packId) ?? (await fetchKnowledgePack(packId, { channel }));
+  const resolvedId = normalizePackId(packId);
+  const pack = getBundledPack(resolvedId) ?? (await fetchKnowledgePack(resolvedId, { channel }));
   if (!pack) {
     throw new Error(`Knowledge pack not found: ${packId}`);
   }

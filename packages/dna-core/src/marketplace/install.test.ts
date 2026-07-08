@@ -41,4 +41,29 @@ describe("marketplace install", () => {
 
     await rm(root, { recursive: true, force: true });
   });
+
+  it("installs retired pack IDs via alias", async () => {
+    const root = join(tmpdir(), `dna-marketplace-alias-${randomUUID()}`);
+    await mkdir(root, { recursive: true });
+    await writeFile(join(root, "package.json"), JSON.stringify({ name: "alias-test" }));
+
+    await runWizard({
+      root,
+      answers: {
+        projectDescription: "test",
+        acceptRecommendation: true,
+        aiTools: [],
+        compliance: "none",
+        stage: "new",
+        installRuntime: false,
+        configureGithub: false,
+        configureAi: false,
+      },
+    });
+
+    const { pack } = await installKnowledgePackById(root, "platforms/humaan-stack");
+    expect(pack.id).toBe("platforms/dna-stack");
+
+    await rm(root, { recursive: true, force: true });
+  });
 });

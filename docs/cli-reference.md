@@ -213,13 +213,15 @@ Writes `.DNA/plans/rbac-*.md`, permission matrix, and installs `security/rbac-ze
 
 ## platform
 
-Browse and plan features DNA learned from Humaan production projects.
+Browse and plan features DNA learned from production reference projects (AIStudio, ColorParty, Humaan Ops, Soli).
 
 ```bash
 dna platform list
 dna platform projects
 dna platform project humaan
 ```
+
+See [platform.md](./platform.md).
 
 ## plan feature
 
@@ -233,7 +235,7 @@ dna context platform
 dna context platform --feature admin-portal
 ```
 
-Installs `platforms/humaan-stack` knowledge pack. See [platform.md](./platform.md).
+Installs `platforms/dna-stack` knowledge pack. See [platform.md](./platform.md).
 
 ## plan compliance
 
@@ -288,4 +290,8 @@ See [ivf.md](./ivf.md).
 | `ANTHROPIC_API_KEY` | Anthropic repair provider |
 | `DNA_PROJECT_ID` | Runtime project identifier |
 | `DNA_MARKETPLACE_URL` | Override marketplace base URL |
+| `DNA_REFERENCE_ROOT` | Parent directory for platform reference repos |
+| `DNA_GDPR_SOURCE_DOCS` | Source path for GDPR doc ingest (contributors) |
 | `GIT_SHA` | Runtime release tag |
+
+Full notes: [integrations.md](./integrations.md#environment-variables).
