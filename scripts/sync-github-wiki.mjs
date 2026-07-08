@@ -157,12 +157,12 @@ async function pushWiki() {
       { cwd: root, stdio: 'inherit' },
     );
     if (clone.status !== 0) {
-      await fs.mkdir(wikiCloneDir, { recursive: true });
-      spawnSync('git', ['init'], { cwd: wikiCloneDir, stdio: 'inherit' });
-      spawnSync('git', ['remote', 'add', 'origin', 'https://github.com/superhumaan/DNA.wiki.git'], {
-        cwd: wikiCloneDir,
-        stdio: 'inherit',
-      });
+      console.error('');
+      console.error('GitHub wiki repo does not exist yet.');
+      console.error('Create the first page manually: https://github.com/superhumaan/DNA/wiki/_new');
+      console.error('Title: Home · Body: DNA wiki bootstrap · Then re-run: pnpm run wiki:github-push');
+      console.error('');
+      process.exit(1);
     }
   }
 

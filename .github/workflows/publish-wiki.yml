@@ -1,0 +1,24 @@
+name: Publish wiki
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'scripts/sync-github-wiki.mjs'
+      - '.github/workflows/publish-wiki.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync docs to GitHub wiki
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/sync-github-wiki.mjs

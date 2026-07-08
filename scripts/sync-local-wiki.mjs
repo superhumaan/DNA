@@ -253,6 +253,7 @@ async function writeWikiTheme() {
   if (!config.includes("onBrokenLinks: 'warn'")) {
     config = config.replace(/onBrokenLinks:\s*'[^']*'/, "onBrokenLinks: 'warn'");
   }
+  if (!config.includes("projectName: 'DNA'")) {
     config = config.replace(/projectName: '[^']*'/, "projectName: 'DNA'");
   }
   if (!config.includes("organizationName: 'superhumaan'")) {
