@@ -1,4 +1,6 @@
-export function generateWorkflows(): Record<string, string> {
+import { generateDeliveryWorkflow } from "./delivery-pipeline.js";
+
+export function generateWorkflows(threshold = 80): Record<string, string> {
   return {
     "build.workflow.md": `# Build Workflow
 
@@ -77,5 +79,6 @@ RBAC is NOT complete if a user without permission can still SEE a menu item, not
 - Update CellularMemory decisions
 - Run \`dna validate\`
 `,
+    "delivery.workflow.md": generateDeliveryWorkflow(threshold),
   };
 }

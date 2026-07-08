@@ -2,6 +2,14 @@ export const DNA_DIR = ".DNA";
 export const DNA_DOCS_DIR = "DNA";
 export const IMPRESSIONS_DIR = "DNA/Impressions";
 export const DNA_CONFIG_FILE = ".DNA/config.dna.json";
+export const DNA_DATA_DIR = ".DNA/data";
+export const DNA_RUNTIME_DB = ".DNA/data/runtime.db";
+export const DNA_GITIGNORE_ENTRIES = [
+  ".DNA/data/",
+  ".DNA/runtime/*.jsonl",
+  ".DNA/reports/",
+  ".DNA/credentials/",
+] as const;
 export const NEURAL_NETWORK_FILE = ".DNA/neuralNetwork.json";
 export const NEURAL_NETWORK_ALT = ".DNA/neuralNetwork";
 

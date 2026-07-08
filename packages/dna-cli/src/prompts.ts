@@ -2,10 +2,13 @@ import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import type { WizardAnswers } from "@superhumaan/dna-config";
 import {
-  AI_TOOLS,
-  COMPLIANCE_OPTIONS,
-  PROJECT_STAGES,
-} from "@superhumaan/dna-config";
+  detectAiTools,
+  inferCompliance,
+  inferProjectStage,
+  ONBOARDING_PLATFORMS,
+  onboardingFeatureOptions,
+} from "@superhumaan/dna-core";
+import type { ScanResult } from "@superhumaan/dna-config";
 
 export async function prompt(question: string): Promise<string> {
   const rl = readline.createInterface({ input, output });
@@ -28,74 +31,101 @@ export async function promptChoice<T extends string>(
   return options[0];
 }
 
-export async function promptYesNo(question: string, defaultYes = true): Promise<boolean> {
-  const hint = defaultYes ? "[Y/n]" : "[y/N]";
-  const answer = await prompt(`${question} ${hint}: `);
-  if (!answer) return defaultYes;
-  return answer.toLowerCase().startsWith("y");
+function defaultAnswers(scan: ScanResult, overrides: Partial<WizardAnswers> = {}): WizardAnswers {
+  return {
+    projectDescription: "Software project",
+    acceptRecommendation: true,
+    platformFeatures: [],
+    aiTools: detectAiTools(scan),
+    compliance: "none",
+    stage: inferProjectStage(scan),
+    installRuntime: true,
+    installFeatureFactory: true,
+    installCi: true,
+    configureGithub: true,
+    configureAi: true,
+    ...overrides,
+  };
 }
 
-export async function runInitWizard(nonInteractive = false): Promise<WizardAnswers> {
+export async function runInitWizard(
+  nonInteractive = false,
+  scan?: ScanResult,
+  defaultProjectName?: string,
+): Promise<WizardAnswers> {
+  const emptyScan: ScanResult = {
+    ciCd: [],
+    docker: false,
+    envFiles: [],
+    docs: [],
+    aiRules: [],
+    securityRisks: [],
+    missingDocs: [],
+    missingTests: false,
+    dependencies: [],
+    scripts: {},
+    hasDna: false,
+  };
+  const projectScan = scan ?? emptyScan;
+
   if (nonInteractive) {
-    return {
+    return defaultAnswers(projectScan, {
       projectDescription: "Demo project",
-      acceptRecommendation: true,
-      aiTools: ["cursor"],
-      compliance: "none",
-      stage: "new",
-      installRuntime: false,
-      configureGithub: false,
-      configureAi: false,
-    };
+      aiTools: ["cursor", "claude_code"],
+    });
   }
 
-  console.log("\n🧬 DNA by Humaan — Project Initialisation\n");
+  console.log("\n🧬 DNA by Humaan\n");
+  console.log("Quick setup — then just describe what you want to build in Cursor or Claude.\n");
 
-  const projectDescription = await prompt("What are you building?\n> ");
-  const acceptRecommendation = await promptYesNo("\nAccept DNA recommendation?", true);
+  const nameAnswer = await prompt(
+    `Project name${defaultProjectName ? ` [${defaultProjectName}]` : ""}:\n> `,
+  );
+  const projectName = nameAnswer || defaultProjectName;
 
-  let customStack: WizardAnswers["customStack"];
-  if (!acceptRecommendation) {
-    console.log("\nEnter custom stack (press Enter to skip):");
-    customStack = {
-      frontend: await prompt("Frontend: ") || undefined,
-      backend: await prompt("Backend: ") || undefined,
-      database: await prompt("Database: ") || undefined,
-      platform: await prompt("Platform: ") || undefined,
-      hosting: await prompt("Hosting: ") || undefined,
-      testing: await prompt("Testing: ") || undefined,
-    };
-  }
+  const projectDescription = await prompt("\nWhat are you building?\n> ");
 
-  console.log("\nAI development environment? (comma-separated numbers, or 8 for None)");
-  AI_TOOLS.forEach((tool, i) => console.log(`  ${i + 1}. ${tool}`));
-  const aiAnswer = await prompt("Selection: ");
-  const aiTools: WizardAnswers["aiTools"] = [];
-  if (aiAnswer && !aiAnswer.includes("8")) {
-    const indices = aiAnswer.split(",").map((s) => parseInt(s.trim(), 10) - 1);
-    for (const idx of indices) {
-      if (idx >= 0 && idx < AI_TOOLS.length) {
-        aiTools.push(AI_TOOLS[idx]);
+  console.log("\nPlatform:");
+  ONBOARDING_PLATFORMS.forEach((p, i) => console.log(`  ${i + 1}. ${p.label}`));
+  const platformAnswer = await prompt("Enter number [1]: ");
+  const platformIndex = platformAnswer ? parseInt(platformAnswer, 10) - 1 : 0;
+  const appPlatform =
+    ONBOARDING_PLATFORMS[platformIndex >= 0 && platformIndex < ONBOARDING_PLATFORMS.length
+      ? platformIndex
+      : 0].id;
+
+  const features = onboardingFeatureOptions();
+  console.log("\nAny specific features? (comma-separated numbers, or Enter to skip)");
+  features.forEach((f, i) => console.log(`  ${i + 1}. ${f.name}`));
+  const featureAnswer = await prompt("Selection: ");
+  const platformFeatures: string[] = [];
+  if (featureAnswer) {
+    for (const part of featureAnswer.split(",")) {
+      const idx = parseInt(part.trim(), 10) - 1;
+      if (idx >= 0 && idx < features.length) {
+        platformFeatures.push(features[idx].id);
       }
     }
   }
 
-  const compliance = await promptChoice("\nCompliance?", COMPLIANCE_OPTIONS);
-  const stage = await promptChoice("\nProject stage?", PROJECT_STAGES);
+  const description = projectDescription || "Software project";
 
-  const installRuntime = await promptYesNo("\nInstall runtime observer?", false);
-  const configureGithub = await promptYesNo("Configure GitHub integration?", false);
-  const configureAi = await promptYesNo("Configure AI provider?", false);
+  console.log("\n✓ Setting up DNA, Cursor rules, Claude context, and knowledge packs...");
+  console.log("  Next: GitHub browser login (one time — no tokens to copy)\n");
 
   return {
-    projectDescription: projectDescription || "Software project",
-    acceptRecommendation,
-    customStack,
-    aiTools,
-    compliance,
-    stage,
-    installRuntime,
-    configureGithub,
-    configureAi,
+    projectName,
+    projectDescription: description,
+    appPlatform,
+    platformFeatures,
+    acceptRecommendation: true,
+    aiTools: detectAiTools(projectScan),
+    compliance: inferCompliance(description),
+    stage: inferProjectStage(projectScan),
+    installRuntime: true,
+    installFeatureFactory: true,
+    installCi: true,
+    configureGithub: true,
+    configureAi: true,
   };
 }

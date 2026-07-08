@@ -26,6 +26,7 @@ describe("behaviour generator", () => {
     expect(files["coding.behaviour.md"]).toContain("react");
     expect(files["security.behaviour.md"]).toContain("gdpr");
     expect(files["testing.behaviour.md"]).toContain("vitest");
+    expect(files["testing.behaviour.md"]).toContain("80%");
     expect(Object.keys(files)).toHaveLength(6);
   });
 });

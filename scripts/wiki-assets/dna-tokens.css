@@ -1,0 +1,37 @@
+/**
+ * DNA wiki design tokens — aligned with dna.humaan.app brand.
+ */
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --color-brand-primary: #5b21b6;
+  --color-brand-primary-hover: #4c1d95;
+  --color-brand-primary-mid: #7c3aed;
+  --color-brand-primary-soft: #ede9fe;
+
+  --color-bg-app: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f1f5f9;
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-border: #e2e8f0;
+  --color-border-muted: #f1f5f9;
+  --color-table-border: #e2e8f0;
+  --color-link: #5b21b6;
+  --color-link-hover: #4c1d95;
+  --color-hover-overlay: rgba(91, 33, 182, 0.06);
+  --color-code-bg: #f1f5f9;
+
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+
+  --text-page-title: 2rem;
+  --text-2xl: 1.5rem;
+  --text-xl: 1.25rem;
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --leading-tight: 1.25;
+  --letter-spacing-tight: -0.02em;
+}

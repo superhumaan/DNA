@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { BEHAVIOUR_FILES, DNA_CONFIG_FILE } from "@superhumaan/dna-config";
+import { BEHAVIOUR_FILES, DNA_CONFIG_FILE, DNA_RUNTIME_DB } from "@superhumaan/dna-config";
 import { fileExists } from "./fs.js";
 import { loadDnaConfig, validateProject } from "./validator.js";
 import { scanProject } from "./scanner.js";
@@ -32,7 +32,9 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
   const memoryConfigured = await fileExists(
     join(root, ".DNA", "CellularMemory", "hippocampus", "project-summary.md"),
   );
-  const runtimeConfigured = await fileExists(join(root, ".DNA", "runtime", "events.jsonl"));
+  const runtimeDb = await fileExists(join(root, DNA_RUNTIME_DB));
+  const runtimeJsonl = await fileExists(join(root, ".DNA", "runtime", "events.jsonl"));
+  const runtimeConfigured = runtimeDb || runtimeJsonl;
 
   return {
     dna: {
@@ -81,7 +83,7 @@ export function formatDoctorReport(report: DoctorReport): string {
     `${status(report.cellularMemory.configured)} CellularMemory`,
     `${status(report.github.configured || !report.github.enabled)} GitHub integration${report.github.enabled ? "" : " (disabled)"}`,
     `${status(!report.ai.enabled || !!report.ai.provider)} AI integration${report.ai.enabled ? ` (${report.ai.provider})` : " (disabled)"}`,
-    `${status(report.runtime.configured || !report.runtime.enabled)} Runtime${report.runtime.enabled ? "" : " (disabled)"}`,
+    `${status(report.runtime.configured || !report.runtime.enabled)} Runtime database${report.runtime.enabled ? "" : " (disabled)"}`,
     "",
     `${status(report.validation.valid)} Validation (${report.validation.issueCount} issues)`,
   ];

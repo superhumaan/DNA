@@ -34,31 +34,63 @@ export const DnaConfigSchema = z.object({
   knowledgePacks: z.array(z.string()).default([]),
   github: z
     .object({
-      enabled: z.boolean().default(false),
+      enabled: z.boolean().default(true),
       owner: z.string().optional(),
       repo: z.string().optional(),
+      /** Set after web-flow login — never stores the token */
+      authenticated: z.boolean().optional(),
     })
     .optional(),
   ai: z
     .object({
-      enabled: z.boolean().default(false),
+      enabled: z.boolean().default(true),
       provider: z.enum(AI_PROVIDERS).default("mock"),
       model: z.string().optional(),
       endpoint: z.string().optional(),
+      repair: z
+        .object({
+          enabled: z.boolean().default(true),
+          autoPr: z.boolean().default(true),
+          requireReview: z.boolean().default(true),
+        })
+        .optional(),
     })
     .optional(),
   runtime: z
     .object({
-      enabled: z.boolean().default(false),
+      enabled: z.boolean().default(true),
       environment: z.string().optional(),
+      storage: z.enum(["sqlite", "jsonl"]).default("sqlite"),
+      watchBackend: z.boolean().default(true),
+      watchFrontend: z.boolean().default(true),
     })
     .optional(),
+  ci: z
+    .object({
+      enabled: z.boolean().default(true),
+      /** When false (default), DNA CI workflows report issues without failing the run — safe for public repos. */
+      strict: z.boolean().default(false),
+      coverageThreshold: z.number().min(0).max(100).default(80),
+      perFileCoverage: z.boolean().default(true),
+      owasp: z.boolean().default(true),
+      pushToPreview: z.boolean().default(true),
+    })
+    .optional(),
+  featureFactory: z
+    .object({
+      enabled: z.boolean().default(true),
+    })
+    .optional(),
+  platformFeatures: z.array(z.string()).default([]),
 });
 
 export type DnaConfig = z.infer<typeof DnaConfigSchema>;
 
 export const WizardAnswersSchema = z.object({
+  projectName: z.string().optional(),
   projectDescription: z.string(),
+  appPlatform: z.enum(["web", "mobile", "desktop", "cms"]).optional(),
+  platformFeatures: z.array(z.string()).default([]),
   acceptRecommendation: z.boolean(),
   customStack: z
     .object({
@@ -73,9 +105,11 @@ export const WizardAnswersSchema = z.object({
   aiTools: z.array(z.enum(AI_TOOLS)),
   compliance: z.enum(COMPLIANCE_OPTIONS),
   stage: z.enum(PROJECT_STAGES),
-  installRuntime: z.boolean().default(false),
-  configureGithub: z.boolean().default(false),
-  configureAi: z.boolean().default(false),
+  installRuntime: z.boolean().default(true),
+  installFeatureFactory: z.boolean().default(true),
+  installCi: z.boolean().default(true),
+  configureGithub: z.boolean().default(true),
+  configureAi: z.boolean().default(true),
 });
 
 export type WizardAnswers = z.infer<typeof WizardAnswersSchema>;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getBundledCatalog } from "./bundled-catalog.js";
+import { getBundledCatalog, BUNDLED_CATALOG_PACK_COUNT } from "./bundled-catalog.js";
 import {
   LANGUAGE_STEM_PACKS,
   LANGUAGE_STEM_PACK_IDS,
@@ -32,9 +32,7 @@ describe("language stem packs", () => {
 
   it("includes all language stem packs in bundled catalog", () => {
     const catalog = getBundledCatalog();
-    expect(catalog.packs.length).toBe(
-      11 + STEM_PACKS.length + LANGUAGE_STEM_PACKS.length + CATALOG_EXPANSION_PACKS.length,
-    );
+    expect(catalog.packs.length).toBe(BUNDLED_CATALOG_PACK_COUNT);
     for (const id of LANGUAGE_STEM_PACK_IDS) {
       expect(catalog.packs.some((p) => p.id === id)).toBe(true);
     }

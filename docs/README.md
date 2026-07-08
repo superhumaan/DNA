@@ -8,65 +8,34 @@
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
+| **GitHub Wiki** | [github.com/superhumaan/DNA/wiki](https://github.com/superhumaan/DNA/wiki) |
 | **Changelog** | [CHANGELOG.md](../CHANGELOG.md) |
 
----
+Browse locally: **`pnpm run wiki:dev`** → http://localhost:3000/docs/
 
-## Start here
-
-| Guide | When to read |
-|-------|----------------|
-| [Getting Started](./getting-started.md) | First install, `dna init`, daily workflow |
-| [Concepts](./concepts.md) | How `.DNA/` and `DNA/Impressions/` fit together |
-| [Naming conventions](./naming.md) | Humaan vs DNA vs pack IDs — read once |
+See [LOCAL_WIKI.md](./LOCAL_WIKI.md) for wiki commands.
 
 ---
 
-## Guides
+## Sections
 
-| Guide | Description |
-|-------|-------------|
-| [Platform Catalog](./platform.md) | Production patterns — admin, SSO, Azure, flags, CRM, CMS |
-| [RBAC & Zero Trust](./rbac.md) | Plain language → permission matrix + AI coordination |
-| [Tiered Compliance](./compliance.md) | GDPR, HIPAA, ISO 27001, SOC 2 by org size |
-| [Brownfield / IVF](./ivf.md) | Install DNA into existing codebases |
-| [Runtime Observer](./runtime.md) | Express, Fastify, NestJS, Next.js integration |
-| [Marketplace](./marketplace.md) | 768 knowledge packs — install, search, update |
-| [Integrations](./integrations.md) | GitHub issues, AI repair, environment variables |
-
----
-
-## Reference
-
-| Doc | Description |
-|-----|-------------|
-| [CLI Reference](./cli-reference.md) | Every `dna` command and option |
-| [Development](./development.md) | Build, test, publish, contribute to the monorepo |
-| [Team Testing](../TEAM-TESTING.md) | Rollout guide for colleagues |
-
----
-
-## Quick commands
-
-```bash
-npx @superhumaan/dna-by-humaan init -y
-dna doctor
-dna context cursor
-dna marketplace list
-dna plan feature admin-portal --quote "Admin portal with directory sync"
-```
+| Section | Start here |
+|---------|------------|
+| **Business** | [Business strategy](./business/business-strategy.md) |
+| **Product** | [Product concept](./product/product-concept.md) |
+| **Design** | [Naming conventions](./design/naming-conventions.md) |
+| **Delivery** | [Current version scope](./delivery/current-version-scope.md) |
+| **Engineering** | [Quick start](./engineering/quick-start.md) · [CLI reference](./engineering/cli-reference.md) |
+| **Quality Assurance** | [Testing strategy](./quality-assurance/testing-strategy.md) |
 
 ---
 
 ## Documentation map
 
 ```
-getting-started ──► concepts ──► cli-reference
-       │                │
-       ├─ ivf (brownfield)
-       ├─ platform + rbac + compliance
-       ├─ runtime + marketplace + integrations
-       └─ development + CONTRIBUTING
+business ──► product ──► design
+     │            │
+     └─ delivery ─┴─ engineering ──► quality-assurance
 ```
 
-**Product naming:** [naming.md](./naming.md) · **Upgrades:** [CHANGELOG.md](../CHANGELOG.md)
+**Team rollout:** [TEAM-TESTING.md](../TEAM-TESTING.md) · **Contributing:** [CONTRIBUTING.md](../CONTRIBUTING.md)

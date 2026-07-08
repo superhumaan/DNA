@@ -11,6 +11,7 @@ import {
 import { createIssue, getTokenFromEnv, commentOnIssue } from "@superhumaan/dna-github";
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import { appendJsonl } from "./persistence.js";
+import { appendRuntimeRecord } from "./storage.js";
 import { readFile } from "node:fs/promises";
 
 export interface PipelineResult {
@@ -70,8 +71,15 @@ export async function processRuntimeEvent(
     repeated: repeatCount >= 3 || event.type === "repeated_error",
   });
 
-  await appendJsonl(join(dnaRoot, "runtime", "events.jsonl"), event);
-  await appendJsonl(join(dnaRoot, "runtime", "issues.jsonl"), issue);
+  const storage = config?.runtime?.storage ?? "sqlite";
+
+  if (storage === "sqlite") {
+    await appendRuntimeRecord(projectRoot, "events", event);
+    await appendRuntimeRecord(projectRoot, "issues", issue);
+  } else {
+    await appendJsonl(join(dnaRoot, "runtime", "events.jsonl"), event);
+    await appendJsonl(join(dnaRoot, "runtime", "issues.jsonl"), issue);
+  }
   await updateRepeatedFailuresMemory(dnaRoot, issue);
 
   const result: PipelineResult = { event, issue };

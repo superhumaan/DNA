@@ -6,6 +6,9 @@ import { TIERED_STANDARDS_PACK } from "./bundled-compliance-tiered.js";
 import { STEM_PACKS } from "./bundled-stem-packs.js";
 import { CATALOG_EXPANSION_PACKS } from "./bundled-catalog-expansion.js";
 import { LANGUAGE_STEM_PACKS } from "./bundled-language-stem-packs.js";
+import { MUI_REPORT_PATTERN_PACK } from "./bundled-stem-mui.js";
+import { MOBILE_UI_PACK } from "./bundled-stem-mobile-ui.js";
+import { QUALITY_STEM_PACKS } from "./bundled-stem-quality.js";
 
 const PACKS: KnowledgePack[] = [
   pack("frameworks/vite", "Vite", "frameworks", "Vite framework knowledge for DNA projects", [
@@ -194,16 +197,27 @@ Test with fresh session per role. Refresh after login. Try direct URLs.
   ...STEM_PACKS,
   ...LANGUAGE_STEM_PACKS,
   ...CATALOG_EXPANSION_PACKS,
+  MUI_REPORT_PATTERN_PACK,
+  MOBILE_UI_PACK,
+  ...QUALITY_STEM_PACKS,
 ];
 
+/** Deduped pack count (matches `getBundledCatalog().packs.length`). */
+export const BUNDLED_CATALOG_PACK_COUNT = new Set(PACKS.map((p) => p.id)).size;
+
 export function getBundledCatalog(channel: "stable" | "beta" | "nightly" = "stable"): MarketplaceCatalog {
+  const filtered = PACKS.filter((p) => p.channel === channel || channel === "stable");
+  const byId = new Map<string, KnowledgePack>();
+  for (const pack of filtered) {
+    byId.set(pack.id, pack);
+  }
   return {
     version: "1.0.0",
     channel,
     updatedAt: new Date().toISOString(),
     source: "bundled",
     marketplaceUrl: "https://dna.humaan.app/marketplace",
-    packs: PACKS.filter((p) => p.channel === channel || channel === "stable"),
+    packs: [...byId.values()],
   };
 }
 

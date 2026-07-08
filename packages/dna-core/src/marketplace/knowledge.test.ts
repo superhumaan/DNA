@@ -59,6 +59,10 @@ describe("knowledge foundation", () => {
     const packs = resolveFoundationPackIds(config);
     expect(packs).toContain("disciplines/security");
     expect(packs).toContain("compliance/tiered-standards");
+    expect(packs).toContain("disciplines/qa");
+    expect(packs).toContain("testing/code-coverage");
+    expect(packs).toContain("cloud/github-actions");
+    expect(packs).toContain("testing/owasp-zap");
     expect(packs).toContain("frameworks/nextjs");
     expect(packs).toContain("frameworks/fastify");
     expect(packs).toContain("platforms/b2b-saas");

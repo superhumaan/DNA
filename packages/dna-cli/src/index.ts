@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { join } from "node:path";
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { PRODUCT_NAME } from "@superhumaan/dna-config";
 import {
   scanProject,
@@ -11,8 +11,8 @@ import {
   validateProject,
   formatValidationResult,
   generateContext,
-  runDoctor,
-  formatDoctorReport,
+  runDoctorOrchestrator,
+  formatDoctorOrchestratorResult,
   startWatch,
   loadDnaConfig,
   writeJsonFile,
@@ -37,6 +37,14 @@ import {
   parseOrgTier,
   formatGdprDocumentCatalog,
   installGdprExamples,
+  installFeatureFactory,
+  uninstallFeatureFactory,
+  refreshAiToolsForFeatureFactory,
+  beginFeatureFromQuote,
+  runAndWriteQualityReport,
+  runQualityAnalysis,
+  formatQualityReportSummary,
+  slugifyFeature,
   formatStackCatalog,
   resolveArchetype,
   stackFromArchetype,
@@ -50,11 +58,16 @@ import {
   generateIvfPlan,
   parseVerticalsInput,
   generateIvfContext,
+  installCiPipeline,
+  installGitHooks,
+  installDockerScaffold,
+  runDockerBuild,
 } from "@superhumaan/dna-core";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
-import { createIssue, getTokenFromEnv } from "@superhumaan/dna-github";
+import { createIssue, getTokenFromEnv, loginWithWebFlow, pushFeatureToGitHub } from "@superhumaan/dna-github";
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import { runInitWizard } from "./prompts.js";
+import { connectGitHubDuringOnboarding } from "./github-onboarding.js";
 
 const program = new Command();
 
@@ -75,22 +88,44 @@ program
   .action(async (options: { yes?: boolean; cwd?: string }) => {
     const root = getRoot(options);
     const scan = await scanProject(root);
-    const recommendation = generateRecommendation(scan, "project");
 
-    if (!options.yes) {
-      console.log(formatRecommendation(recommendation));
-      console.log("");
+    let defaultProjectName: string | undefined;
+    const existing = await loadDnaConfig(root);
+    if (existing?.projectName) {
+      defaultProjectName = existing.projectName;
+    } else {
+      try {
+        const raw = await readFile(join(root, "package.json"), "utf-8");
+        defaultProjectName = (JSON.parse(raw) as { name?: string }).name;
+      } catch {
+        // no package.json
+      }
     }
 
-    const answers = await runInitWizard(!!options.yes);
+    const answers = await runInitWizard(!!options.yes, scan, defaultProjectName);
     const result = await runWizard({ root, answers });
 
-    console.log(`\n✓ DNA initialised for ${result.config.projectName}`);
+    if (answers.configureGithub && !options.yes) {
+      const gh = await connectGitHubDuringOnboarding(root, result.config, {
+        onStatus: (msg) => console.log(msg),
+      });
+      if (gh.connected && gh.owner && gh.repo) {
+        console.log(`✓ GitHub: ${gh.owner}/${gh.repo} (@${gh.username ?? "signed in"})`);
+      } else if (gh.username) {
+        console.log(`✓ GitHub: signed in as @${gh.username}`);
+      } else {
+        console.log(`⚠ GitHub: ${gh.message}`);
+      }
+    }
+
+    console.log(`\n✓ ${result.config.projectName} is ready.\n`);
+    console.log("Describe what you want to build in Cursor or Claude — DNA runs the feature factory automatically.");
+    console.log('  Example: "I want providers to record phone calls and transcribe the notes"\n');
     console.log(`  Archetype: ${result.config.stack.archetype ?? "—"}`);
-    console.log(`  Created ${result.filesCreated.length} files`);
-    console.log(`  Config: .DNA/config.dna.json`);
-    console.log(`  Docs:   DNA/Impressions/`);
-    console.log(`\nNext: dna validate && dna context cursor`);
+    if (result.config.platformFeatures?.length) {
+      console.log(`  Features:  ${result.config.platformFeatures.join(", ")}`);
+    }
+    console.log(`  AI tools:  ${result.config.aiTools.join(", ")}`);
   });
 
 program
@@ -313,7 +348,13 @@ program
 
     const config = await loadDnaConfig(root);
     if (config) {
-      config.runtime = { ...config.runtime, enabled: true };
+      config.runtime = {
+        storage: "sqlite",
+        watchBackend: true,
+        watchFrontend: true,
+        ...config.runtime,
+        enabled: true,
+      };
       await writeJsonFile(join(root, ".DNA/config.dna.json"), config);
     }
 
@@ -328,7 +369,252 @@ program
     console.log("Next.js:  export const middleware = dnaRuntime.nextMiddleware();");
   });
 
+program
+  .command("feature-factory install")
+  .description("Install or re-enable Cursor feature factory rules and /ai agent templates")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    const installed = await installFeatureFactory(root, config);
+    installed.push(...(await refreshAiToolsForFeatureFactory(root, config, true)));
+
+    config.featureFactory = { enabled: true };
+    config.updatedAt = new Date().toISOString();
+    await writeJsonFile(join(root, ".DNA/config.dna.json"), config);
+
+    console.log(`✓ Feature factory installed (${installed.length} files):`);
+    installed.forEach((f) => console.log(`  ${f}`));
+  });
+
+program
+  .command("feature")
+  .description("Start the feature factory from a plain-language request")
+  .argument("<quote>", "What you want to build, in plain language")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (quote: string, options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    const written = await beginFeatureFromQuote(root, config, quote);
+    console.log("✓ Feature factory started:");
+    written.forEach((f) => console.log(`  ${f}`));
+    console.log("\nContinue in Cursor or Claude — the agent loop runs automatically from your message.");
+  });
+
+const quality = program.command("quality").description("Local code quality analysis (SonarQube-style, no server)");
+
+quality
+  .command("report")
+  .description("Run local SAST + toolchain checks and write a quality report")
+  .option("--cwd <path>", "Project root directory")
+  .option("--feature", "Scope to git-changed files for the current feature")
+  .option("--slug <name>", "Report filename slug (default: derived from feature request or 'latest')")
+  .option("--paths <paths...>", "Limit scan to specific paths")
+  .option("--no-toolchain", "Skip running lint/typecheck scripts")
+  .option("--fail", "Exit non-zero when quality gate fails (strict CI only)")
+  .option("--json", "Print report summary as JSON to stdout")
+  .action(
+    async (options: {
+      cwd?: string;
+      feature?: boolean;
+      slug?: string;
+      paths?: string[];
+      toolchain?: boolean;
+      fail?: boolean;
+      json?: boolean;
+    }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      let featureSlug = options.slug;
+      if (!featureSlug && options.feature) {
+        try {
+          const req = await readFile(join(root, "ai/feature-request.md"), "utf-8");
+          const match = req.match(/^>\s*(.+)$/m);
+          featureSlug = slugifyFeature(match?.[1] ?? "feature");
+        } catch {
+          featureSlug = "feature";
+        }
+      }
+
+      const result = await runAndWriteQualityReport(root, {
+        projectName: config.projectName,
+        featureSlug: featureSlug ?? (options.feature ? "feature" : undefined),
+        featureScope: options.feature ?? false,
+        paths: options.paths,
+        runToolchain: options.toolchain !== false,
+      });
+
+      if (options.json) {
+        console.log(JSON.stringify(result.report, null, 2));
+      } else {
+        console.log(`✓ Quality report written: ${result.reportPath}`);
+        console.log(formatQualityReportSummary(result.report));
+        const shouldFail = options.fail === true || (config.ci?.strict ?? false);
+        if (shouldFail && result.report.gate === "fail") {
+          process.exit(1);
+        }
+      }
+    },
+  );
+
+quality
+  .command("scan")
+  .description("Run analysis without writing a report file")
+  .option("--cwd <path>", "Project root directory")
+  .option("--feature", "Scope to git-changed files")
+  .option("--paths <paths...>", "Limit scan to specific paths")
+  .action(async (options: { cwd?: string; feature?: boolean; paths?: string[] }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const projectName = config?.projectName ?? "project";
+
+    const report = await runQualityAnalysis({
+      root,
+      projectName,
+      featureScope: options.feature ?? false,
+      paths: options.paths,
+      runToolchain: false,
+    });
+
+    console.log(formatQualityReportSummary(report));
+    for (const issue of report.issues.slice(0, 30)) {
+      const loc = issue.file ? `${issue.file}${issue.line ? `:${issue.line}` : ""}` : "project";
+      console.log(`  [${issue.severity}] ${issue.rule}: ${issue.message} (${loc})`);
+    }
+    if (report.issues.length > 30) {
+      console.log(`  ... and ${report.issues.length - 30} more`);
+    }
+    if (report.gate === "fail") process.exit(1);
+  });
+
+const ci = program.command("ci").description("CI/CD pipeline scaffolding");
+
+ci.command("install")
+  .description("Scaffold GitHub Actions workflows (lint, test, coverage, security)")
+  .option("--cwd <path>", "Project root directory")
+  .option("--force", "Install even when existing CI is detected")
+  .action(async (options: { cwd?: string; force?: boolean }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    const scan = await scanProject(root);
+    const result = await installCiPipeline({
+      root,
+      config,
+      scan,
+      skipIfExists: !options.force,
+    });
+
+    const hooks = await installGitHooks(root, config);
+
+    console.log("✓ CI pipeline install complete\n");
+    for (const f of result.created) console.log(`  + ${f}`);
+    for (const f of hooks) console.log(`  + ${f}`);
+    for (const s of result.skipped) console.log(`  (skipped: ${s})`);
+    if (result.created.length === 0 && result.skipped.length > 0) {
+      console.log("\nUse --force to add DNA workflows alongside existing CI.");
+    }
+  });
+
+program
+  .command("feature-factory uninstall")
+  .description("Remove feature factory rules and /ai templates from the project")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    const removed = await uninstallFeatureFactory(root, config);
+
+    config.featureFactory = { enabled: false };
+    config.updatedAt = new Date().toISOString();
+    await writeJsonFile(join(root, ".DNA/config.dna.json"), config);
+
+    if (removed.length === 0) {
+      console.log("Feature factory was not installed (no files removed).");
+      return;
+    }
+
+    console.log(`✓ Feature factory removed (${removed.length} files):`);
+    removed.forEach((f) => console.log(`  ${f}`));
+    console.log("\nRe-enable anytime with: dna feature-factory install");
+  });
+
 const github = program.command("github").description("GitHub integration");
+
+github
+  .command("login")
+  .description("Sign in to GitHub via browser (web flow — no manual tokens)")
+  .action(async () => {
+    try {
+      const result = await loginWithWebFlow({
+        onStatus: (msg) => console.log(msg),
+        force: true,
+      });
+      console.log(`\n✓ Signed in as @${result.username}`);
+      console.log("  Token stored in ~/.config/dna/github-credentials.json");
+      console.log("  Never committed to your repo.");
+    } catch (err) {
+      console.error(err instanceof Error ? err.message : err);
+      process.exit(1);
+    }
+  });
+
+github
+  .command("push")
+  .description("Commit and push current feature branch to GitHub")
+  .option("--cwd <path>", "Project root directory")
+  .option("-m, --message <text>", "Commit message")
+  .option("--branch <name>", "Branch name (default: current or auto feature/*)")
+  .option("--create-branch", "Create feature/* branch from main if on main")
+  .action(
+    async (options: {
+      cwd?: string;
+      message?: string;
+      branch?: string;
+      createBranch?: boolean;
+    }) => {
+      const root = getRoot(options);
+      try {
+        const result = await pushFeatureToGitHub({
+          root,
+          message: options.message ?? "feat: DNA feature factory delivery",
+          branch: options.branch,
+          createBranch: options.createBranch ?? true,
+        });
+        console.log(`✓ Pushed to ${result.owner}/${result.repo}`);
+        console.log(`  Branch: ${result.branch}`);
+        if (result.committed) console.log("  (committed local changes)");
+      } catch (err) {
+        console.error(err instanceof Error ? err.message : err);
+        console.error("\nRun `dna github login` if you have not signed in yet.");
+        process.exit(1);
+      }
+    },
+  );
 
 github
   .command("connect")
@@ -344,13 +630,57 @@ github
       process.exit(1);
     }
 
-    config.github = { enabled: true, owner: options.owner, repo: options.repo };
+    config.github = { enabled: true, owner: options.owner, repo: options.repo, authenticated: true };
     config.updatedAt = new Date().toISOString();
     await writeJsonFile(join(root, ".DNA/config.dna.json"), config);
 
     console.log(`✓ GitHub connected: ${options.owner}/${options.repo}`);
-    console.log("  Set GITHUB_TOKEN environment variable for API access.");
-    console.log("  Never store tokens in config.dna.json.");
+    console.log("  Run `dna github login` if push fails — browser login, no manual tokens.");
+  });
+
+const docker = program.command("docker").description("Docker build verification");
+
+docker
+  .command("install")
+  .description("Scaffold Dockerfile, docker-compose, and npm scripts")
+  .option("--cwd <path>", "Project root directory")
+  .option("--force", "Overwrite existing Dockerfile")
+  .action(async (options: { cwd?: string; force?: boolean }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+    const result = await installDockerScaffold({
+      root,
+      config,
+      skipIfExists: !options.force,
+    });
+    console.log("✓ Docker scaffold installed\n");
+    for (const f of result.created) console.log(`  + ${f}`);
+    for (const s of result.skipped) console.log(`  (skipped: ${s})`);
+  });
+
+docker
+  .command("build")
+  .description("Build Docker image — mandatory feature factory close-out gate")
+  .option("--cwd <path>", "Project root directory")
+  .option("--tag <tag>", "Image tag", "dna-app:local")
+  .action(async (options: { cwd?: string; tag?: string }) => {
+    const root = getRoot(options);
+    const result = await runDockerBuild(root, options.tag ?? "dna-app:local");
+    if (result.skipped) {
+      console.error(`⚠ Docker build skipped: ${result.reason}`);
+      process.exit(1);
+    }
+    if (result.success) {
+      console.log(`✓ Docker build succeeded: ${result.imageTag}`);
+    } else {
+      console.error(`✗ Docker build failed`);
+      if (result.output) console.error(result.output);
+      process.exit(1);
+    }
   });
 
 github
@@ -461,11 +791,36 @@ ai
 
 program
   .command("doctor")
-  .description("Run full DNA health check")
+  .description("Scaffold, repair, and health-check DNA (orchestrator — runs by default)")
   .option("--cwd <path>", "Project root directory")
-  .action(async (options: { cwd?: string }) => {
-    const report = await runDoctor(getRoot(options));
-    console.log(formatDoctorReport(report));
+  .option("--check-only", "Report only — do not scaffold or fix")
+  .option("--ivf", "Run brownfield IVF pipeline (analyze → document → plan)")
+  .option("--quote <text>", "IVF integration quote")
+  .action(async (options: { cwd?: string; checkOnly?: boolean; ivf?: boolean; quote?: string }) => {
+    const result = await runDoctorOrchestrator({
+      root: getRoot(options),
+      checkOnly: options.checkOnly,
+      runIvf: options.ivf,
+      quote: options.quote,
+    });
+    console.log(formatDoctorOrchestratorResult(result));
+    if (!result.report.validation.valid && !options.checkOnly) {
+      process.exit(1);
+    }
+  });
+
+program
+  .command("ivf")
+  .description("Brownfield orchestrator — analyze, document, plan, and wire DNA into existing projects")
+  .option("--quote <text>", "Plain-language integration requirement")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { quote?: string; cwd?: string }) => {
+    const result = await runDoctorOrchestrator({
+      root: getRoot(options),
+      runIvf: true,
+      quote: options.quote ?? "Integrate DNA without a rewrite",
+    });
+    console.log(formatDoctorOrchestratorResult(result));
   });
 
 program
@@ -704,7 +1059,7 @@ plan
   .option("--quote <text>", "Plain-language integration requirement")
   .option(
     "--verticals <list>",
-    "Comma-separated: behaviour,cellularMemory,runtime,rbac,compliance,platform,knowledge,neuralNetwork,impressions",
+    "Comma-separated: behaviour,cellularMemory,runtime,rbac,compliance,platform,knowledge,neuralNetwork,mui,buildRules,sharedLibrary,mobileTheming,mobileBuildRules,impressions",
   )
   .option("--gaps-only", "Only write gap matrix, skip full plan document")
   .option("--no-document", "Skip automatic dna document --from-code")
@@ -726,7 +1081,7 @@ plan
 
       const verticals = options.verticals ? parseVerticalsInput(options.verticals) : undefined;
       if (options.verticals && verticals && !verticals.length) {
-        console.error("Unknown verticals. Use: behaviour,cellularMemory,runtime,rbac,compliance,platform,knowledge,neuralNetwork,impressions");
+        console.error("Unknown verticals. Use: behaviour,cellularMemory,runtime,rbac,compliance,platform,knowledge,neuralNetwork,mui,buildRules,sharedLibrary,mobileTheming,mobileBuildRules,impressions");
         process.exit(1);
       }
 
@@ -745,6 +1100,9 @@ plan
       console.log(`  Gaps:  ${result.gapsPath}`);
       if (result.documentFiles?.length) {
         console.log(`  Docs:  ${result.documentFiles.length} file(s) from codebase analysis`);
+      }
+      if (result.sharedLibraryPlanPath) {
+        console.log(`  Shared library: ${result.sharedLibraryPlanPath}`);
       }
       console.log("");
       console.log("Paste the plan into your AI tool, or run:");

@@ -9,7 +9,7 @@
 
 > **Sentry tells you what broke. DNA tells you why, remembers it, and opens the PR.**
 
-**DNA by Humaan** is an open-source project brain, runtime observer, **768-pack** knowledge marketplace, tiered compliance system, and AI-assisted repair for modern TypeScript teams.
+**DNA by Humaan** is an open-source delivery platform for TypeScript teams — describe features in plain language, run quality gates, push to GitHub, and ship with a **768-pack** knowledge marketplace, tiered compliance, runtime observer, and AI-assisted repair.
 
 | | |
 |---|---|
@@ -203,33 +203,52 @@ pnpm install && pnpm build && pnpm test
 
 ## Documentation
 
-| Doc | Description |
-|-----|-------------|
-| [Documentation hub](./docs/README.md) | Index of all guides |
-| [Getting Started](./docs/getting-started.md) | First project in 10 minutes |
-| [Brownfield / IVF](./docs/ivf.md) | Install into existing projects |
-| [Concepts](./docs/concepts.md) | Behaviour, memory, immune system |
-| [Platform Catalog](./docs/platform.md) | Production patterns — admin, SSO, deploy |
-| [CLI Reference](./docs/cli-reference.md) | Every command |
-| [Runtime](./docs/runtime.md) | Framework adapters |
-| [Marketplace](./docs/marketplace.md) | Knowledge packs |
-| [Integrations](./docs/integrations.md) | GitHub + AI |
-| [RBAC & Zero Trust](./docs/rbac.md) | Plain-language → permission matrix |
-| [Naming conventions](./docs/naming.md) | Humaan vs DNA vs pack IDs |
+Full wiki: **[docs/README.md](./docs/README.md)** · Browse locally: `pnpm run wiki:dev` · [GitHub Wiki](https://github.com/superhumaan/DNA/wiki)
+
+| Section | Start here |
+|---------|------------|
+| **Business** | [Business strategy](./docs/business/business-strategy.md) |
+| **Product** | [Product concept](./docs/product/product-concept.md) · [Marketplace](./docs/product/marketplace.md) |
+| **Design** | [Naming conventions](./docs/design/naming-conventions.md) |
+| **Delivery** | [Brownfield / IVF](./docs/delivery/features/brownfield-ivf.md) |
+| **Engineering** | [Quick start](./docs/engineering/quick-start.md) · [CLI reference](./docs/engineering/cli-reference.md) |
+| **Quality** | [Testing strategy](./docs/quality-assurance/testing-strategy.md) |
+
+| Also | |
+|------|---|
 | [Changelog](./CHANGELOG.md) | Releases and migrations |
 | [Team Testing](./TEAM-TESTING.md) | Colleague pilot guide |
 | [Contributing](./CONTRIBUTING.md) | PR guidelines |
+| [LOCAL_WIKI.md](./docs/LOCAL_WIKI.md) | Wiki commands |
 
 ---
 
 ## Roadmap
 
-- [x] Knowledge pack marketplace
-- [x] Fastify, NestJS, Next.js runtime adapters
-- [ ] Real-time dashboard UI
-- [ ] Multi-project CellularMemory sync
-- [ ] Impressions drift → auto PR suggestions
-- [x] `npx @superhumaan/dna-by-humaan` on npm (v0.3.1 — CLI + `/runtime` bundle, 768 packs)
+DNA is evolving from project scaffold to a full delivery loop: init → feature factory → quality → Docker → GitHub push → CI. Track progress on the [DNA Roadmap project board](https://github.com/users/superhumaan/projects/3/views/1).
+
+| Item | Start | End | Status |
+|------|-------|-----|--------|
+| Knowledge pack marketplace (768 packs) | Jan 2026 | Mar 2026 | Shipped |
+| Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |
+| `npx @superhumaan/dna-by-humaan` on npm (v0.3.1) | Mar 2026 | Apr 2026 | Shipped |
+| [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped (unreleased) |
+| [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped (unreleased) |
+| [Feature factory v2 + admin portal pattern](https://github.com/superhumaan/DNA/issues/3) | May 2026 | Jun 2026 | Shipped (unreleased) |
+| [Local quality module (`dna quality`)](https://github.com/superhumaan/DNA/issues/4) | May 2026 | Jul 2026 | Shipped (unreleased) |
+| [CI, Docker, and git hooks generators](https://github.com/superhumaan/DNA/issues/5) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
+| [Doctor orchestrator + `dna ivf`](https://github.com/superhumaan/DNA/issues/6) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
+| [IVF UI layer stack (MUI, mobile, shared library)](https://github.com/superhumaan/DNA/issues/7) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
+| [GitHub integration package](https://github.com/superhumaan/DNA/issues/8) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
+| [Runtime SQLite storage](https://github.com/superhumaan/DNA/issues/9) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
+| [Preview deployment workflow](https://github.com/superhumaan/DNA/issues/10) | Jul 2026 | Aug 2026 | In progress |
+| [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | In progress |
+| [Real-time dashboard UI](https://github.com/superhumaan/DNA/issues/12) | Sep 2026 | Dec 2026 | Planned |
+| [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Planned |
+| [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Planned |
+| [Impressions drift → auto PR suggestions](https://github.com/superhumaan/DNA/issues/14) | Oct 2026 | Feb 2027 | Planned |
+| [Platform feature codegen (SSO, multi-tenant, flags)](https://github.com/superhumaan/DNA/issues/17) | Nov 2026 | Feb 2027 | Planned |
+| [Multi-tenant gradual rollout patterns](https://github.com/superhumaan/DNA/issues/15) | Jan 2027 | Mar 2027 | Planned |
 
 ---
 

@@ -8,11 +8,55 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
       "frameworks/react/positioning.dna.md",
       "frameworks/vite/positioning.dna.md",
       "disciplines/frontend/positioning.dna.md",
+      "tools/mui/positioning.dna.md",
+      "project/feature-folder-structure.dna.md",
     ],
-    requiredBehaviour: ["coding.behaviour.md", "testing.behaviour.md"],
-    cellularMemory: ["occipitalLobe/ui-patterns.md", "hippocampus/recent-changes.md"],
+    requiredBehaviour: ["coding.behaviour.md", "testing.behaviour.md", "ai.behaviour.md"],
+    cellularMemory: ["occipitalLobe/ui-patterns.md", "prefrontalCortex/feature-building-rules.md", "hippocampus/recent-changes.md"],
     impressions: ["architecture/solution-architecture.md"],
     validationChecks: ["has_tests", "no_duplicate_components"],
+  },
+  {
+    intent: "consolidate_shared_library",
+    description:
+      "Scaffold a shared component library, extract duplicated UI, and replace local copies with standardised imports",
+    requiredKnowledge: [
+      "tools/mui/positioning.dna.md",
+      "tools/mui/list-report-pages.dna.md",
+      "disciplines/monorepo/positioning.dna.md",
+      "frameworks/react/positioning.dna.md",
+      "project/list-report-pattern.dna.md",
+    ],
+    requiredBehaviour: ["coding.behaviour.md", "ai.behaviour.md", "testing.behaviour.md"],
+    cellularMemory: [
+      "occipitalLobe/ui-patterns.md",
+      "occipitalLobe/feature-templates.md",
+      "prefrontalCortex/feature-building-rules.md",
+      "parietalLobe/system-map.md",
+      "prefrontalCortex/decisions.md",
+    ],
+    impressions: ["architecture/solution-architecture.md"],
+    validationChecks: ["no_duplicate_components", "has_tests"],
+  },
+  {
+    intent: "build_list_report_page",
+    description:
+      "Create a new list or report page (e.g. ABC Report) — same title row, padding, search, filters, table, pagination as existing pages",
+    requiredKnowledge: [
+      "tools/mui/list-report-pages.dna.md",
+      "tools/mui/positioning.dna.md",
+      "project/list-report-pattern.dna.md",
+      "project/feature-folder-structure.dna.md",
+    ],
+    requiredBehaviour: ["coding.behaviour.md", "ai.behaviour.md", "testing.behaviour.md"],
+    cellularMemory: [
+      "prefrontalCortex/feature-building-rules.md",
+      "occipitalLobe/ui-patterns.md",
+      "occipitalLobe/feature-templates.md",
+      "hippocampus/recent-changes.md",
+    ],
+    impressions: ["architecture/solution-architecture.md"],
+    validationChecks: ["no_duplicate_components", "has_tests"],
   },
   {
     intent: "create_api_endpoint",
@@ -75,16 +119,25 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
   },
   {
     intent: "implement_admin_portal",
-    description: "Build admin portal shell with directory, settings, audit, and requireAdmin APIs",
+    description:
+      "Build admin/backoffice portal at /admin — new-tab entry, RBAC-wrapped link, route guards, requireAdmin APIs",
     requiredKnowledge: [
       "platforms/dna/admin-portal.dna.md",
       "platforms/dna/rbac-patterns.dna.md",
       "platforms/dna/audit.dna.md",
+      "security/ui-surface-checklist.dna.md",
     ],
     requiredBehaviour: ["security.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
     cellularMemory: ["prefrontalCortex/decisions.md", "parietalLobe/system-map.md"],
     impressions: ["architecture/solution-architecture.md", "security/security-baseline.md"],
-    validationChecks: ["has_auth_check", "ui_surfaces_hidden", "api_enforcement"],
+    validationChecks: [
+      "has_auth_check",
+      "ui_surfaces_hidden",
+      "api_enforcement",
+      "admin_link_hidden_without_access",
+      "admin_route_guard_blocks_direct_url",
+      "admin_opens_new_tab",
+    ],
   },
   {
     intent: "implement_sso_bridge",
@@ -452,6 +505,41 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
     cellularMemory: ["parietalLobe/system-map.md"],
     impressions: ["architecture/system-boundaries.md"],
     validationChecks: ["no_secrets_in_code", "api_enforcement"],
+  },
+  {
+    intent: "implement_feature",
+    description:
+      "Build a new product feature using the feature factory — intake, role-by-role agent loop, and completion gates",
+    requiredKnowledge: [
+      "disciplines/solution-architecture/positioning.dna.md",
+      "disciplines/backend/positioning.dna.md",
+      "disciplines/frontend/positioning.dna.md",
+      "disciplines/qa/positioning.dna.md",
+    ],
+    requiredBehaviour: [
+      "coding.behaviour.md",
+      "testing.behaviour.md",
+      "security.behaviour.md",
+      "ai.behaviour.md",
+    ],
+    cellularMemory: [
+      "prefrontalCortex/decisions.md",
+      "hippocampus/recent-changes.md",
+      "parietalLobe/system-map.md",
+    ],
+    impressions: [
+      "architecture/solution-architecture.md",
+      "product/product-overview.md",
+      "qa/regression-risks.md",
+    ],
+    validationChecks: [
+      "feature_request_exists",
+      "tests_pass",
+      "quality_gate_pass",
+      "no_unrelated_files_modified",
+      "permissions_correct",
+      "qa_checklist_completed",
+    ],
   },
   {
     intent: "review_architecture",

@@ -44,6 +44,31 @@ export const IVF_VERTICALS = [
     name: "Impressions",
     description: "Human-facing documentation in DNA/Impressions/",
   },
+  {
+    id: "sharedLibrary",
+    name: "Shared Library",
+    description: "Consolidate duplicated UI into a shared component package",
+  },
+  {
+    id: "mui",
+    name: "MUI Foundation",
+    description: "Web UI foundation — Material UI theme, tokens, primitives (use MUI fully when no build rules yet)",
+  },
+  {
+    id: "buildRules",
+    name: "Build Rules",
+    description: "Web feature patterns on top of MUI — list/report pages, folder structure, reference cloning",
+  },
+  {
+    id: "mobileTheming",
+    name: "Mobile Theming",
+    description: "Mobile UI foundation — theme provider, Paper/Tamagui tokens (full defaults when no build rules yet)",
+  },
+  {
+    id: "mobileBuildRules",
+    name: "Mobile Build Rules",
+    description: "Mobile screen patterns on top of mobile theming — list screens, navigation, reference cloning",
+  },
 ] as const;
 
 export type IvfVerticalId = (typeof IVF_VERTICALS)[number]["id"];
@@ -54,6 +79,9 @@ export const DEFAULT_IVF_VERTICALS: IvfVerticalId[] = [
   "runtime",
   "knowledge",
   "neuralNetwork",
+  "mui",
+  "buildRules",
+  "sharedLibrary",
   "impressions",
 ];
 

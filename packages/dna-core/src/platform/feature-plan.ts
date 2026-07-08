@@ -42,12 +42,13 @@ const PHASE_TEMPLATES: Record<string, string[]> = {
     "Verification: login, refresh, logout, role switch",
   ],
   admin: [
-    "Scaffold admin shell with nav groups (General, Directory, Security, Data, Logging)",
+    "Scaffold /admin as separate route tree with AdminPortal shell and nav groups",
+    "Add AdminPortalLink in main app — target=_blank, hidden without admin capability",
+    "Add AdminRouteGuard on /admin — block direct URL for unauthorized users",
+    "Wire requireAdmin middleware on all /api/**/admin/** routes",
     "Implement directory/users CRUD with invite flow",
-    "Add settings pages per domain",
-    "Wire requireAdmin middleware on all admin APIs",
-    "Hide admin nav from non-admin roles in main app",
-    "Audit log for admin mutations",
+    "Add settings pages per domain + audit log for admin mutations",
+    "Verify: non-admin sees no link, /admin blocked, admin API 403",
   ],
   integration: [
     "Document integration contract (auth, scopes, webhooks)",

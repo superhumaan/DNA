@@ -5,6 +5,7 @@ import { NEURAL_NETWORK_FILE, NEURAL_NETWORK_ALT } from "@superhumaan/dna-config
 import { fileExists, readJsonFile } from "./fs.js";
 import { NeuralNetworkSchema } from "@superhumaan/dna-config";
 import { ensureKnowledgeForContext } from "./marketplace/ensure.js";
+import { ensureProjectUiStandards } from "./ivf/ui-standards.js";
 import { TARGET_INTENTS, type ContextTarget } from "./context-intents.js";
 
 export type { ContextTarget };
@@ -30,6 +31,10 @@ const TARGET_BEHAVIOUR: Record<ContextTarget, string[]> = {
 };
 
 export async function generateContext(root: string, target: ContextTarget): Promise<string> {
+  if (target === "cursor" || target === "frontend" || target === "ivf" || target === "copilot" || target === "windsurf") {
+    await ensureProjectUiStandards({ root, includeSharedLibrary: false });
+  }
+
   let neuralPath = join(root, NEURAL_NETWORK_FILE);
   if (!(await fileExists(neuralPath))) {
     neuralPath = join(root, NEURAL_NETWORK_ALT);
@@ -108,8 +113,11 @@ export async function generateContext(root: string, target: ContextTarget): Prom
     "hippocampus/project-summary.md",
     "prefrontalCortex/current-plan.md",
     "prefrontalCortex/next-actions.md",
+    "prefrontalCortex/feature-building-rules.md",
     "prefrontalCortex/rbac-permission-matrix.md",
     "prefrontalCortex/compliance-control-matrix.md",
+    "occipitalLobe/ui-patterns.md",
+    "occipitalLobe/feature-templates.md",
     "amygdala/risks.md",
   ];
 

@@ -1,0 +1,106 @@
+import type { QualityIssue, QualitySeverity } from "./types.js";
+
+export interface StaticPattern {
+  id: string;
+  category: QualityIssue["category"];
+  severity: QualitySeverity;
+  pattern: RegExp;
+  message: string;
+  /** Skip files matching these path fragments */
+  skipPaths?: RegExp[];
+}
+
+export const STATIC_PATTERNS: StaticPattern[] = [
+  {
+    id: "hardcoded-secret",
+    category: "security",
+    severity: "blocker",
+    pattern:
+      /(?:password|api[_-]?key|secret|token|private[_-]?key)\s*[:=]\s*['"][^'"]{8,}['"]/i,
+    message: "Possible hardcoded secret or credential",
+    skipPaths: [/\.test\./, /\.spec\./, /__tests__/, /\.md$/, /\.example\./],
+  },
+  {
+    id: "private-key",
+    category: "security",
+    severity: "blocker",
+    pattern: /BEGIN (?:RSA |OPENSSH )?PRIVATE KEY/,
+    message: "Private key material detected in source",
+  },
+  {
+    id: "eval-usage",
+    category: "security",
+    severity: "critical",
+    pattern: /\beval\s*\(/,
+    message: "Avoid eval() — security and reliability risk",
+  },
+  {
+    id: "dangerous-inner-html",
+    category: "security",
+    severity: "critical",
+    pattern: /dangerouslySetInnerHTML|\.innerHTML\s*=/,
+    message: "Unsanitized HTML injection risk",
+    skipPaths: [/\.test\./, /\.spec\./],
+  },
+  {
+    id: "sql-concat",
+    category: "security",
+    severity: "major",
+    pattern: /(?:query|execute)\s*\(\s*[`'"].*\$\{/,
+    message: "Possible SQL injection — use parameterized queries",
+    skipPaths: [/\.test\./, /\.spec\./],
+  },
+  {
+    id: "debugger",
+    category: "reliability",
+    severity: "major",
+    pattern: /\bdebugger\b/,
+    message: "debugger statement left in code",
+    skipPaths: [/\.test\./, /\.spec\./],
+  },
+  {
+    id: "empty-catch",
+    category: "reliability",
+    severity: "major",
+    pattern: /catch\s*\([^)]*\)\s*\{\s*\}/,
+    message: "Empty catch block swallows errors",
+    skipPaths: [/\.test\./, /\.spec\./],
+  },
+  {
+    id: "console-log",
+    category: "maintainability",
+    severity: "minor",
+    pattern: /console\.(?:log|debug|info)\s*\(/,
+    message: "Debug logging — remove or use structured logger",
+    skipPaths: [/\.test\./, /\.spec\./, /__tests__/, /\.config\./, /scripts\//],
+  },
+  {
+    id: "todo-without-ref",
+    category: "maintainability",
+    severity: "info",
+    pattern: /\/\/\s*TODO(?!\s*\[|\s*#\d|\s*[A-Z]+-\d+)/i,
+    message: "TODO without ticket reference — link to issue ID",
+  },
+  {
+    id: "any-type",
+    category: "maintainability",
+    severity: "minor",
+    pattern: /:\s*any\b|as\s+any\b/,
+    message: "Avoid `any` — prefer explicit types",
+    skipPaths: [/\.test\./, /\.spec\./, /\.d\.ts$/],
+  },
+];
+
+export const LARGE_FILE_LINE_THRESHOLD = 400;
+
+export const SOURCE_GLOBS = ["**/*.{ts,tsx,js,jsx,mjs,cjs}"];
+
+export const SOURCE_IGNORE = [
+  "**/node_modules/**",
+  "**/dist/**",
+  "**/build/**",
+  "**/.next/**",
+  "**/coverage/**",
+  "**/.DNA/**",
+  "**/DNA/**",
+];

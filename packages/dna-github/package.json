@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "@superhumaan/dna-config": "workspace:*",
-    "@octokit/rest": "^21.0.2"
+    "@octokit/rest": "^21.0.2",
+    "simple-git": "^3.27.0"
   },
   "devDependencies": {
     "tsup": "^8.3.5",

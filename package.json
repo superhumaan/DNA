@@ -51,7 +51,14 @@
     "deprecate:internal-npm": "bash scripts/deprecate-internal-npm.sh",
     "unpublish:internal-npm": "bash scripts/unpublish-internal-npm.sh",
     "gdpr:ingest": "node scripts/ingest-gdpr-documents.mjs",
-    "gdpr:scrub": "node scripts/scrub-gdpr-branding.mjs"
+    "gdpr:scrub": "node scripts/scrub-gdpr-branding.mjs",
+    "wiki:init": "[ -d .local-wiki ] || npx create-docusaurus@latest .local-wiki classic --typescript --package-manager npm",
+    "wiki:sync": "node scripts/sync-local-wiki.mjs",
+    "wiki:kill": "node scripts/wiki-refresh.mjs --kill-only",
+    "wiki:refresh": "node scripts/wiki-refresh.mjs",
+    "wiki:dev": "pnpm run wiki:refresh",
+    "wiki:build": "pnpm run wiki:sync && npm run build --prefix .local-wiki",
+    "wiki:github-push": "node scripts/sync-github-wiki.mjs"
   },
   "engines": {
     "node": ">=20"

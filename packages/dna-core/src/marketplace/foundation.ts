@@ -27,7 +27,15 @@ export function detectAppPlatform(config: DnaConfig, scan?: ScanResult): AppPlat
 
 /** Foundation marketplace packs from stack archetype + compliance (Layer 1). */
 export function resolveFoundationPackIds(config: DnaConfig, scan?: ScanResult): string[] {
-  const packs = new Set<string>(["disciplines/security", "compliance/tiered-standards"]);
+  const packs = new Set<string>([
+    "disciplines/security",
+    "compliance/tiered-standards",
+    "disciplines/qa",
+    "testing/code-coverage",
+    "cloud/github-actions",
+    "tools/eslint-prettier",
+    "testing/owasp-zap",
+  ]);
 
   const archetype = getArchetype(config.stack.archetype ?? "react-vite-api");
   if (archetype) {

@@ -170,6 +170,18 @@ export function getTokenFromEnv(): string | undefined {
   return process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN;
 }
 
+export {
+  loginWithWebFlow,
+  resolveGitHubToken,
+  requireGitHubToken,
+  loadStoredCredentials,
+  GITHUB_SCOPES,
+  type GitHubCredentials,
+  type GitHubLoginResult,
+} from "./auth.js";
+export { detectGitHubRemote, parseGitHubRemoteUrl, type ParsedGitHubRemote } from "./git-remote.js";
+export { pushFeatureToGitHub, type PushFeatureOptions, type PushFeatureResult } from "./push.js";
+
 export async function linkIssueToPr(
   config: GitHubConfig,
   issueNumber: number,

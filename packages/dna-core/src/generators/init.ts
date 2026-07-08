@@ -17,6 +17,7 @@ import { generateCellularMemory } from "./cellular-memory.js";
 import { generateWorkflows } from "./workflows.js";
 import { generateTemplateFiles } from "./templates.js";
 import { NEURAL_NETWORK_ALT } from "@superhumaan/dna-config";
+import { ensureRuntimeDatabase } from "../storage/runtime-db.js";
 
 export async function generateDnaStructure(
   root: string,
@@ -70,7 +71,7 @@ export async function generateDnaStructure(
     created.push(`.DNA/CellularMemory/${relPath}`);
   }
 
-  for (const [file, content] of Object.entries(generateWorkflows())) {
+  for (const [file, content] of Object.entries(generateWorkflows(config.ci?.coverageThreshold ?? 80))) {
     const path = join(root, ".DNA", "workflows", file);
     await writeFileEnsured(path, content);
     created.push(`.DNA/workflows/${file}`);
@@ -82,11 +83,9 @@ export async function generateDnaStructure(
     created.push(`.DNA/${relPath}`);
   }
 
-  // Runtime event logs
-  await writeFileEnsured(join(root, ".DNA", "runtime", "events.jsonl"), "");
-  created.push(".DNA/runtime/events.jsonl");
-  await writeFileEnsured(join(root, ".DNA", "runtime", "issues.jsonl"), "");
-  created.push(".DNA/runtime/issues.jsonl");
+  // Runtime database (replaces legacy JSONL logs)
+  const db = await ensureRuntimeDatabase(root);
+  created.push(db.path);
 
   // Ensure all impression paths exist (fallback empty)
   for (const relPath of IMPRESSIONS_PATHS) {

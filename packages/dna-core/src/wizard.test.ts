@@ -28,8 +28,10 @@ describe("init generation", () => {
         compliance: "gdpr",
         stage: "mvp",
         installRuntime: true,
-        configureGithub: false,
-        configureAi: false,
+        installFeatureFactory: true,
+        installCi: true,
+        configureGithub: true,
+        configureAi: true,
       },
       nonInteractive: true,
     });
@@ -44,6 +46,11 @@ describe("init generation", () => {
     expect(await fileExists(join(root, ".DNA/CellularMemory/hippocampus/project-summary.md"))).toBe(
       true,
     );
+    expect(await fileExists(join(root, "ai/feature-request.md"))).toBe(true);
+    expect(await fileExists(join(root, ".cursor/rules/product-process.mdc"))).toBe(true);
+    expect(await fileExists(join(root, ".github/workflows/dna-ci.yml"))).toBe(true);
+    expect(await fileExists(join(root, ".github/workflows/dna-security.yml"))).toBe(true);
+    expect(await fileExists(join(root, ".DNA/hooks/pre-push"))).toBe(true);
     expect(result.filesCreated.length).toBeGreaterThan(20);
   });
 });

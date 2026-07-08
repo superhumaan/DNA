@@ -1,7 +1,9 @@
 import { join } from "node:path";
 import { readFile } from "node:fs/promises";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
 import fg from "fast-glob";
-import type { DnaConfig, NeuralNetwork, ValidationResult } from "@superhumaan/dna-config";
+import type { DnaConfig, NeuralNetwork, ScanResult, ValidationResult } from "@superhumaan/dna-config";
 import {
   BEHAVIOUR_FILES,
   DNA_CONFIG_FILE,
@@ -13,6 +15,9 @@ import { fileExists, readJsonFile } from "./fs.js";
 import { scanProject } from "./scanner.js";
 import { DnaConfigSchema, NeuralNetworkSchema } from "@superhumaan/dna-config";
 import { validateStackCompatibility } from "./stack/validate.js";
+import { runQualityAnalysis } from "./quality/analyze.js";
+
+const execAsync = promisify(exec);
 
 const DANGEROUS_DEPS = ["eval", "node-eval", "vm2"];
 
@@ -49,9 +54,71 @@ async function findDuplicateDependencies(root: string): Promise<string[]> {
   return duplicates;
 }
 
+async function runProjectTests(
+  root: string,
+  scripts: Record<string, string>,
+  pm: string | undefined,
+): Promise<{ success: boolean; output: string }> {
+  if (!scripts.test && !scripts["test:unit"]) {
+    return { success: false, output: "No test script in package.json" };
+  }
+
+  const script = scripts.test ? "test" : "test:unit";
+  const cmd =
+    pm === "pnpm"
+      ? `pnpm run ${script}`
+      : pm === "yarn"
+        ? `yarn ${script}`
+        : `npm run ${script}`;
+
+  try {
+    const { stdout, stderr } = await execAsync(cmd, {
+      cwd: root,
+      maxBuffer: 4 * 1024 * 1024,
+      timeout: 120_000,
+    });
+    return { success: true, output: (stdout + stderr).trim().slice(0, 2000) };
+  } catch (err) {
+    const e = err as { stdout?: string; stderr?: string; message?: string };
+    const output = [e.stdout, e.stderr, e.message].filter(Boolean).join("\n").slice(0, 2000);
+    return { success: false, output };
+  }
+}
+
+function parseUncheckedCriteria(content: string): string[] {
+  const unchecked: string[] = [];
+  const inCriteria =
+    content.includes("## Success Criteria") || content.includes("Success Criteria");
+  if (!inCriteria) return unchecked;
+
+  const lines = content.split("\n");
+  let inSection = false;
+  for (const line of lines) {
+    if (line.startsWith("## Success Criteria")) {
+      inSection = true;
+      continue;
+    }
+    if (inSection && line.startsWith("## ") && !line.includes("Success Criteria")) {
+      break;
+    }
+    if (inSection && /^- \[ \]/.test(line.trim())) {
+      unchecked.push(line.trim().replace(/^- \[ \]\s*/, ""));
+    }
+  }
+  return unchecked;
+}
+
+async function hasActiveFeatureRequest(root: string): Promise<boolean> {
+  const reqPath = join(root, "ai/feature-request.md");
+  if (!(await fileExists(reqPath))) return false;
+  const content = await readFile(reqPath, "utf-8");
+  return !content.includes("Waiting for your first feature request");
+}
+
 async function runNeuralValidationChecks(
   root: string,
   neuralNetwork: NeuralNetwork,
+  scan: ScanResult,
 ): Promise<ValidationResult["errors"]> {
   const errors: ValidationResult["errors"] = [];
   const checks = new Set<string>();
@@ -114,6 +181,83 @@ async function runNeuralValidationChecks(
     }
   }
 
+  if (checks.has("feature_request_exists")) {
+    const reqPath = join(root, "ai/feature-request.md");
+    if (!(await fileExists(reqPath))) {
+      errors.push({
+        code: "NEURAL_CHECK_FEATURE_REQUEST",
+        message: "Missing ai/feature-request.md for active feature",
+        severity: "warning",
+      });
+    } else {
+      const content = await readFile(reqPath, "utf-8");
+      if (content.includes("Waiting for your first feature request")) {
+        errors.push({
+          code: "NEURAL_CHECK_FEATURE_REQUEST",
+          message: "feature-request.md has no active feature request",
+          severity: "info",
+        });
+      }
+    }
+  }
+
+  if (checks.has("qa_checklist_completed") && (await hasActiveFeatureRequest(root))) {
+    const reqPath = join(root, "ai/feature-request.md");
+    if (await fileExists(reqPath)) {
+      const content = await readFile(reqPath, "utf-8");
+      const unchecked = parseUncheckedCriteria(content);
+      if (unchecked.length > 0) {
+        errors.push({
+          code: "NEURAL_CHECK_QA_CHECKLIST",
+          message: `Feature success criteria incomplete: ${unchecked.slice(0, 3).join("; ")}${unchecked.length > 3 ? "…" : ""}`,
+          severity: "warning",
+        });
+      }
+    }
+  }
+
+  if (checks.has("tests_pass") && (await hasActiveFeatureRequest(root))) {
+    const result = await runProjectTests(root, scan.scripts, scan.packageManager);
+    if (!scan.scripts.test && !scan.scripts["test:unit"]) {
+      errors.push({
+        code: "NEURAL_CHECK_TESTS_PASS",
+        message: "tests_pass required but no test script configured",
+        severity: "warning",
+      });
+    } else if (!result.success) {
+      errors.push({
+        code: "NEURAL_CHECK_TESTS_PASS",
+        message: `Test suite failed: ${result.output.slice(0, 300)}`,
+        severity: "error",
+      });
+    }
+  }
+
+  if (checks.has("quality_gate_pass") && (await hasActiveFeatureRequest(root))) {
+    try {
+      const config = await loadDnaConfig(root);
+      const report = await runQualityAnalysis({
+        root,
+        projectName: config?.projectName ?? "project",
+        featureScope: true,
+        runToolchain: true,
+      });
+      if (report.gate === "fail") {
+        errors.push({
+          code: "NEURAL_CHECK_QUALITY_GATE",
+          message: `Quality gate FAIL — ${report.summary.blocker} blocker(s), ${report.summary.critical} critical issue(s)`,
+          severity: "error",
+        });
+      }
+    } catch {
+      errors.push({
+        code: "NEURAL_CHECK_QUALITY_GATE",
+        message: "Quality analysis failed to run",
+        severity: "warning",
+      });
+    }
+  }
+
   return errors;
 }
 
@@ -160,7 +304,8 @@ export async function validateProject(root: string): Promise<ValidationResult> {
         severity: "error",
       });
     } else {
-      errors.push(...(await runNeuralValidationChecks(root, neuralParsed.data)));
+      const scan = await scanProject(root);
+      errors.push(...(await runNeuralValidationChecks(root, neuralParsed.data, scan)));
     }
   }
 
@@ -217,6 +362,14 @@ export async function validateProject(root: string): Promise<ValidationResult> {
 
   const scan = await scanProject(root);
 
+  if (scan.ciCd.length === 0 && !(await fileExists(join(root, ".github", "workflows", "dna-ci.yml")))) {
+    errors.push({
+      code: "MISSING_CI",
+      message: "No CI pipeline detected — run `dna init` or add .github/workflows/dna-ci.yml",
+      severity: "warning",
+    });
+  }
+
   if (scan.missingTests) {
     errors.push({
       code: "MISSING_TESTS",
@@ -270,11 +423,12 @@ export async function validateProject(root: string): Promise<ValidationResult> {
   errors.push(...validateStackCompatibility(config, scan));
 
   if (config?.runtime?.enabled) {
-    const runtimeEvents = join(root, ".DNA", "runtime", "events.jsonl");
-    if (!(await fileExists(runtimeEvents))) {
+    const runtimeDb = join(root, ".DNA", "data", "runtime.db");
+    const runtimeJsonl = join(root, ".DNA", "runtime", "events.jsonl");
+    if (!(await fileExists(runtimeDb)) && !(await fileExists(runtimeJsonl))) {
       errors.push({
         code: "MISSING_RUNTIME_SETUP",
-        message: "Runtime enabled but .DNA/runtime/ not configured",
+        message: "Runtime enabled but .DNA/data/runtime.db not configured — run dna doctor",
         severity: "warning",
       });
     }

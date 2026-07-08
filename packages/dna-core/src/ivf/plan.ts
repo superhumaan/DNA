@@ -11,6 +11,8 @@ import {
   type IvfVerticalId,
   type VerticalGap,
 } from "./verticals.js";
+import { ensureSharedLibrary } from "./shared-library.js";
+import { ensureProjectUiStandards } from "./ui-standards.js";
 
 export interface IvfPlanOptions {
   root: string;
@@ -28,6 +30,7 @@ export interface IvfPlanResult {
   context: string;
   analysis: DeepAnalysis;
   documentFiles?: string[];
+  sharedLibraryPlanPath?: string;
 }
 
 function slugify(name: string): string {
@@ -74,6 +77,10 @@ function buildAfterStructure(analysis: DeepAnalysis, verticals: IvfVerticalId[])
         lines.push("│   └── admin/          # admin route group");
       }
     }
+  }
+
+  if (selected.has("sharedLibrary")) {
+    lines.push(`├── ${analysis.sharedLibrary.recommendedPackagePath}/  # shared UI library`);
   }
 
   lines.push("├── .DNA/");
@@ -160,6 +167,54 @@ function buildPhases(gaps: VerticalGap[], verticals: IvfVerticalId[]): string[] 
       phases.push(`- **${g.name}:** ${g.actions[0]}`);
     }
     phases.push("", "**Output:** PR with before/after, updated system-map", "");
+  }
+
+  if (verticals.includes("sharedLibrary")) {
+    phases.push(
+      "### Phase 4b — Shared library consolidation",
+      "",
+      "AI scaffolds a shared component package, extracts duplicates, and replaces local copies with imports.",
+      "",
+      "```bash",
+      "dna plan ivf --verticals sharedLibrary   # writes .DNA/plans/shared-library-<project>.md",
+      "dna context ivf",
+      "```",
+      "",
+      "**Workflow:**",
+      "1. Scaffold `packages/ui` (or detected shared package path)",
+      "2. Move canonical components into shared lib",
+      "3. Replace imports across apps — delete duplicate files",
+      "4. Standardise prop APIs and document in `occipitalLobe/ui-patterns.md`",
+      "",
+      "**Output:** Zero cross-scope duplicate components, `dna validate` clean",
+      "",
+    );
+  }
+
+  if (verticals.includes("mui") || verticals.includes("buildRules")) {
+    phases.push(
+      "### Phase 4c — Web UI layers (automatic on init/context)",
+      "",
+      "| Layer | What |",
+      "|-------|------|",
+      "| **MUI foundation** | Theme, tokens, primitives — use MUI fully if no build rules |",
+      "| **Build rules** | Clone reference list/report pages for new features |",
+      "",
+      "Configured automatically — no extra commands. Cursor rules: `.cursor/rules/list-report-pages.mdc`",
+      "",
+    );
+  }
+
+  if (verticals.includes("mobileTheming") || verticals.includes("mobileBuildRules")) {
+    phases.push(
+      "### Phase 4d — Mobile UI layers (automatic on init/context)",
+      "",
+      "| Layer | What |",
+      "|-------|------|",
+      "| **Mobile theming** | Paper/Tamagui theme provider + tokens |",
+      "| **Mobile build rules** | Clone reference list screens |",
+      "",
+    );
   }
 
   phases.push(
@@ -258,6 +313,9 @@ function buildIvfBrief(
     "- [ ] Chosen verticals have plans in `.DNA/plans/`",
     "- [ ] `dna context ivf` loads this plan for AI sessions",
     "- [ ] Runtime classifies errors (if backend + runtime vertical selected)",
+    verticals.includes("sharedLibrary")
+      ? "- [ ] Shared library plan executed — no DUPLICATE_COMPONENTS warnings"
+      : "",
     "",
     "## Related commands",
     "",
@@ -282,6 +340,13 @@ export async function generateIvfPlan(options: IvfPlanOptions): Promise<IvfPlanR
   const verticals = options.verticals?.length ? options.verticals : DEFAULT_IVF_VERTICALS;
   const analysis = await analyzeProject(options.root, { verticals });
 
+  // Auto-bootstrap UI layers for web/mobile (idempotent)
+  await ensureProjectUiStandards({
+    root: options.root,
+    quote: options.quote,
+    includeSharedLibrary: verticals.includes("sharedLibrary"),
+  });
+
   let documentFiles: string[] | undefined;
   if (options.documentFromCode !== false) {
     const docResult = await documentFromCode({
@@ -297,6 +362,17 @@ export async function generateIvfPlan(options: IvfPlanOptions): Promise<IvfPlanR
   const slug = slugify(config.projectName);
   const planPath = join(options.root, ".DNA", "plans", `ivf-${slug}.md`);
   const gapsPath = join(options.root, ".DNA", "CellularMemory", "prefrontalCortex", "ivf-gaps.md");
+
+  let sharedLibraryPlanPath: string | undefined;
+  if (verticals.includes("sharedLibrary")) {
+    const slResult = await ensureSharedLibrary({
+      root: options.root,
+      quote: options.quote,
+    });
+    if (!slResult.skipped) {
+      sharedLibraryPlanPath = slResult.planPath;
+    }
+  }
 
   if (!options.gapsOnly) {
     await writeFileEnsured(planPath, context);
@@ -359,9 +435,29 @@ ${analysis.verticalGaps
     context: options.gapsOnly ? gapsContent : context,
     analysis,
     documentFiles,
+    sharedLibraryPlanPath,
   };
 }
 
-export { parseVerticalsInput, DEFAULT_IVF_VERTICALS, IVF_VERTICALS } from "./verticals.js";
+export {
+  parseVerticalsInput,
+  DEFAULT_IVF_VERTICALS,
+  IVF_VERTICALS,
+} from "./verticals.js";
 export { analyzeProject, formatAnalysisSummary } from "./analyze.js";
 export { documentFromCode, formatDocumentResult } from "./document.js";
+export {
+  analyzeSharedLibrary,
+  ensureSharedLibrary,
+  buildSharedLibraryBrief,
+  formatSharedLibrarySummary,
+} from "./shared-library.js";
+export {
+  analyzeFeaturePatterns,
+  ensureFeatureBuildingRules,
+  formatFeaturePatternSummary,
+} from "./build-rules.js";
+export { analyzeMuiFoundation, ensureMuiFoundation, formatMuiFoundationSummary } from "./mui-foundation.js";
+export { ensureMobileTheming, analyzeMobileTheming } from "./mobile-theming.js";
+export { ensureMobileBuildRules, analyzeMobileBuildRules } from "./mobile-build-rules.js";
+export { ensureProjectUiStandards } from "./ui-standards.js";

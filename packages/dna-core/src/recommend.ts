@@ -71,6 +71,7 @@ export function generateRecommendation(
           "Set up Immune System classification",
         ],
     aiDevelopment: [
+      "Describe features in plain language — DNA runs the feature factory automatically",
       "Run dna context cursor for AI-ready context",
       `Stack archetype: ${archetype.id} — do not mix excluded technologies`,
       "Configure Behaviour files for AI tools",

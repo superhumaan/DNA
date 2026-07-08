@@ -21,6 +21,11 @@ import {
   type VerticalGap,
   type VerticalGapPriority,
 } from "./verticals.js";
+import { analyzeSharedLibrary, type SharedLibraryAnalysis } from "./shared-library.js";
+import { analyzeMuiFoundation, type MuiFoundationAnalysis } from "./mui-foundation.js";
+import { analyzeFeaturePatterns, type FeaturePatternAnalysis } from "./build-rules.js";
+import { analyzeMobileTheming, type MobileThemingAnalysis } from "./mobile-theming.js";
+import { analyzeMobileBuildRules, type MobileBuildRulesAnalysis } from "./mobile-build-rules.js";
 
 const SOURCE_GLOB = ["**/*.{ts,tsx,js,jsx,vue}"];
 const IGNORE = ["**/node_modules/**", "**/dist/**", "**/.DNA/**", "**/DNA/**", "**/.next/**"];
@@ -85,6 +90,11 @@ export interface DeepAnalysis {
   authPatterns: AuthPattern[];
   integrations: DetectedIntegration[];
   behaviourState: BehaviourState;
+  sharedLibrary: SharedLibraryAnalysis;
+  muiFoundation: MuiFoundationAnalysis;
+  buildRules: FeaturePatternAnalysis;
+  mobileTheming: MobileThemingAnalysis;
+  mobileBuildRules: MobileBuildRulesAnalysis;
   stackErrors: ReturnType<typeof validateStackCompatibility>;
   verticalGaps: VerticalGap[];
 }
@@ -389,6 +399,138 @@ export function assessVerticalGaps(
     );
   }
 
+  if (selected.has("sharedLibrary")) {
+    const sl = analysis.sharedLibrary;
+    const needsPackage = !sl.hasSharedPackage;
+    const hasDupes = sl.duplicateCount > 0;
+    gaps.push(
+      gap(
+        "sharedLibrary",
+        sl.hasSharedPackage
+          ? `Shared package at ${sl.sharedPackagePaths.join(", ")}${hasDupes ? `, ${sl.duplicateCount} duplicate component name(s)` : ""}`
+          : hasDupes
+            ? `No shared library — ${sl.duplicateCount} duplicate component name(s) across scopes`
+            : sl.scatteredComponentDirs
+              ? `Scattered component dirs (${sl.componentDirs.length}) — no shared package`
+              : "No shared component library",
+        `Canonical UI in ${sl.recommendedPackagePath} (${sl.recommendedPackageName})`,
+        needsPackage || hasDupes || sl.scatteredComponentDirs,
+        sl.health === "critical" ? "P0" : sl.health === "needs-work" ? "P1" : "P3",
+        "Duplicated components drift in style and behaviour — a shared library standardises UI and reduces maintenance",
+        [
+          "Run ensureSharedLibrary (via dna plan ivf --verticals sharedLibrary)",
+          sl.hasSharedPackage
+            ? `Extract duplicates into ${sl.sharedPackagePaths[0]} — see shared-library plan`
+            : `Scaffold ${sl.recommendedPackagePath} and wire workspace imports`,
+          hasDupes
+            ? `Replace copies: ${sl.duplicateComponents
+                .slice(0, 3)
+                .map((d) => d.name)
+                .join(", ")}${sl.duplicateCount > 3 ? "…" : ""}`
+            : "Move primitives (Button, Input, Modal) into shared lib before they duplicate",
+          "Update occipitalLobe/ui-patterns.md with import conventions",
+          "dna validate — confirm no DUPLICATE_COMPONENTS warnings",
+        ],
+      ),
+    );
+  }
+
+  if (selected.has("mui")) {
+    const mui = analysis.muiFoundation;
+    if (mui.isWebProject) {
+      gaps.push(
+        gap(
+          "mui",
+          mui.usesMui
+            ? `MUI installed (${mui.muiPackages.join(", ")})${mui.hasThemeProvider ? ", ThemeProvider present" : ", no ThemeProvider"}`
+            : "Web project without MUI foundation",
+          "Material UI theme + primitives — use MUI fully when no build rules exist",
+          !mui.usesMui || !mui.hasThemeProvider,
+          !mui.usesMui ? "P1" : !mui.hasThemeProvider ? "P2" : "P3",
+          "MUI is the web foundation layer; build rules sit on top",
+          [
+            "MUI foundation auto-configured on init/context (tools/mui knowledge pack)",
+            !mui.usesMui ? "Install @mui/material @mui/icons-material @emotion/react @emotion/styled" : "Wire ThemeProvider at app root",
+            "Document tokens in occipitalLobe/visual-standards.md",
+          ],
+        ),
+      );
+    }
+  }
+
+  if (selected.has("buildRules")) {
+    const br = analysis.buildRules;
+    if (br.isWebProject) {
+      const hasRef = !!br.referenceListPage;
+      gaps.push(
+        gap(
+          "buildRules",
+          hasRef
+            ? `Reference list page: ${br.referenceListPage!.path}`
+            : br.listReportPages.length
+              ? `${br.listReportPages.length} list page candidate(s) — no strong reference`
+              : "No build rules captured — using MUI defaults",
+          "Project build rules on top of MUI (clone reference for new reports)",
+          !hasRef,
+          hasRef ? "P3" : "P2",
+          "Build rules prevent Cursor from inventing layout; without them, MUI foundation defaults apply",
+          [
+            "Build rules auto-configured on init/context",
+            hasRef ? `Clone ${br.referenceListPage!.path} for new list/report pages` : "Add a list page, then DNA captures it as reference",
+            "Read prefrontalCortex/feature-building-rules.md before new features",
+          ],
+        ),
+      );
+    }
+  }
+
+  if (selected.has("mobileTheming")) {
+    const mt = analysis.mobileTheming;
+    if (mt.isMobileProject) {
+      gaps.push(
+        gap(
+          "mobileTheming",
+          mt.uiPackages.length
+            ? `${mt.uiLibrary} (${mt.uiPackages.slice(0, 3).join(", ")})`
+            : "Mobile project without theme foundation",
+          "Single mobile theme provider + design tokens",
+          !mt.hasThemeProvider,
+          !mt.uiPackages.length ? "P1" : !mt.hasThemeProvider ? "P2" : "P3",
+          "Mobile theming is the foundation; mobile build rules sit on top",
+          [
+            "Mobile theming auto-configured on init/context",
+            mt.uiLibrary === "none" ? "Default to react-native-paper (MD3)" : `Standardise on ${mt.uiLibrary}`,
+            "Document tokens in occipitalLobe/visual-standards.md",
+          ],
+        ),
+      );
+    }
+  }
+
+  if (selected.has("mobileBuildRules")) {
+    const mbr = analysis.mobileBuildRules;
+    if (mbr.isMobileProject) {
+      const hasRef = !!mbr.referenceListScreen;
+      gaps.push(
+        gap(
+          "mobileBuildRules",
+          hasRef
+            ? `Reference list screen: ${mbr.referenceListScreen!.path}`
+            : "No mobile build rules — using mobile-ui defaults",
+          "Mobile screen patterns on top of theming",
+          !hasRef,
+          hasRef ? "P3" : "P2",
+          "Without build rules, use platforms/mobile-ui/list-screens.dna.md in full",
+          [
+            "Mobile build rules auto-configured on init/context",
+            hasRef ? `Clone ${mbr.referenceListScreen!.path} for new list screens` : "Add a list screen to capture reference",
+            "Read prefrontalCortex/mobile-building-rules.md",
+          ],
+        ),
+      );
+    }
+  }
+
   if (selected.has("impressions")) {
     const missing = scan.hasDna
       ? scan.missingDocs.length
@@ -423,6 +565,11 @@ export async function analyzeProject(
   const authPatterns = await detectAuthPatterns(root);
   const integrations = await detectIntegrations(root);
   const behaviourState = await assessBehaviourState(root, scan);
+  const sharedLibrary = await analyzeSharedLibrary(root);
+  const muiFoundation = await analyzeMuiFoundation(root);
+  const buildRules = await analyzeFeaturePatterns(root);
+  const mobileTheming = await analyzeMobileTheming(root);
+  const mobileBuildRules = await analyzeMobileBuildRules(root);
   const stackErrors = validateStackCompatibility(config, scan);
 
   const partial = {
@@ -433,6 +580,11 @@ export async function analyzeProject(
     authPatterns,
     integrations,
     behaviourState,
+    sharedLibrary,
+    muiFoundation,
+    buildRules,
+    mobileTheming,
+    mobileBuildRules,
     stackErrors,
   };
 
@@ -442,7 +594,7 @@ export async function analyzeProject(
 }
 
 export function formatAnalysisSummary(analysis: DeepAnalysis): string {
-  const { scan, structure, inventory, authPatterns, integrations, verticalGaps, stackErrors } =
+  const { scan, structure, inventory, authPatterns, integrations, sharedLibrary, verticalGaps, stackErrors } =
     analysis;
 
   const lines = [
@@ -474,6 +626,12 @@ export function formatAnalysisSummary(analysis: DeepAnalysis): string {
     "",
     `Integrations: ${integrations.length}`,
     ...integrations.map((i) => `  • ${i.name} (${i.sources.length} file(s))`),
+    "",
+    "Shared library",
+    `  Health:        ${sharedLibrary.health}`,
+    `  Shared pkg:    ${sharedLibrary.hasSharedPackage ? sharedLibrary.sharedPackagePaths.join(", ") : "none"}`,
+    `  Duplicates:    ${sharedLibrary.duplicateCount}`,
+    `  Recommended:   ${sharedLibrary.recommendedPackagePath}`,
     "",
   ];
 

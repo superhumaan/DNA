@@ -4,12 +4,13 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 import { processRuntimeEvent } from "../src/pipeline.js";
-import { readJsonl } from "../src/persistence.js";
+import { readRuntimeRecords } from "../src/storage.js";
 import type { RuntimeEvent } from "@superhumaan/dna-config";
 
 async function setupProject(): Promise<string> {
   const root = join(tmpdir(), `dna-pipeline-${randomUUID()}`);
   await mkdir(join(root, ".DNA", "runtime"), { recursive: true });
+  await mkdir(join(root, ".DNA", "data"), { recursive: true });
   await mkdir(join(root, ".DNA", "immuneSystem"), { recursive: true });
   await mkdir(join(root, ".DNA", "behaviour"), { recursive: true });
   await mkdir(join(root, ".DNA", "CellularMemory", "amygdala"), { recursive: true });
@@ -30,6 +31,7 @@ async function setupProject(): Promise<string> {
       channel: "stable",
       knowledgePacks: [],
       github: { enabled: false },
+      runtime: { enabled: true, storage: "sqlite" },
     }),
   );
 
@@ -52,7 +54,7 @@ async function setupProject(): Promise<string> {
 }
 
 describe("runtime pipeline", () => {
-  it("persists events and issues to jsonl", async () => {
+  it("persists events and issues to runtime database", async () => {
     const root = await setupProject();
     const event: RuntimeEvent = {
       id: "e1",
@@ -69,8 +71,8 @@ describe("runtime pipeline", () => {
 
     expect(result.issue.severity).toBe("critical");
 
-    const events = await readJsonl(join(root, ".DNA", "runtime", "events.jsonl"));
-    const issues = await readJsonl(join(root, ".DNA", "runtime", "issues.jsonl"));
+    const events = await readRuntimeRecords<RuntimeEvent>(root, "events");
+    const issues = await readRuntimeRecords(root, "issues");
     expect(events.length).toBe(1);
     expect(issues.length).toBe(1);
 

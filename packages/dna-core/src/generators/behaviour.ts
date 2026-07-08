@@ -23,6 +23,10 @@ Before designing, building, testing, or documenting features:
 10. Do not duplicate components
 11. Do not ignore testing rules
 12. Do not ignore security rules
+13. **Always push to preview** after local gates pass — never leave work un-deployed
+14. **On bugs:** create issue → fix → retest → re-push → confirm CI green
+15. **Before every push:** lint, test, ${config.ci?.coverageThreshold ?? 80}% coverage, \`dna quality report --feature\`
+16. Run feature factory roles for every user-facing change
 
 After completing work:
 
@@ -81,13 +85,20 @@ function testingBehaviour(config: DnaConfig): string {
 
 Primary test framework: ${config.stack.testing ?? "vitest"}
 
+## Coverage (DNA default)
+
+- Minimum thresholds: **${config.ci?.coverageThreshold ?? 80}%** per file AND overall (lines, branches, functions, statements)
+- Enforced via \`npm run test:coverage\` locally and in \`.github/workflows/dna-ci.yml\`
+- OWASP dependency audit runs on every push
+
 ## Rules
 
 - Write tests for all new features and bug fixes
 - Include unit tests for business logic
 - Include integration tests for API endpoints
 - Name test files with .test.ts or .spec.ts convention
-- Tests must pass before creating a PR
+- Tests must pass before creating a PR — CI blocks merge on failure
+- Run \`dna quality report --feature\` before marking features complete
 - Document regression risks in DNA/Impressions/qa/regression-risks.md
 `;
 }
@@ -133,6 +144,8 @@ Compliance level: ${config.compliance}
 - Complete Phase 6 verification checklist before marking RBAC done
 - Redact sensitive data in logs and error reports
 - Review dependencies for known vulnerabilities
+- CI runs \`npm audit --audit-level=high\` and optional OWASP ZAP baseline — see \`.github/workflows/dna-security.yml\`
+- Follow OWASP ASVS L1 checklist in \`.DNA/knowledge/testing/owasp-zap/\` for DAST setup
 `;
 }
 
@@ -142,13 +155,19 @@ function runtimeBehaviour(config: DnaConfig): string {
 ## Runtime Status
 
 Runtime enabled: ${config.runtime?.enabled ? "yes" : "no"}
+Backend watching: ${config.runtime?.watchBackend !== false ? "yes" : "no"}
+Frontend watching: ${config.runtime?.watchFrontend !== false ? "yes" : "no"}
+Storage: ${config.runtime?.storage ?? "sqlite"} (\`.DNA/data/runtime.db\`)
+AI repair: ${config.ai?.repair?.enabled !== false ? "yes" : "no"}
 
 ## Rules
 
-- All production errors must be captured by DNA runtime
+- All production errors must be captured by DNA runtime (backend + frontend)
+- Runtime issues are stored in \`.DNA/data/runtime.db\` (not JSONL)
 - Runtime issues are classified by the Immune System
 - GitHub issues are created for high/critical severity issues
 - AI repair creates PRs but never auto-merges
+- **Bug loop:** issue → fix → retest → push preview → CI green
 - Never deploy fixes without human approval
 - Update CellularMemory amygdala/repeated-failures.md for recurring issues
 `;
