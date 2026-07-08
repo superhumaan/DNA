@@ -18,8 +18,8 @@ fi
 ISSUES=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17)
 
 # Status field values — adjust if your project uses different option names
-SHIPPED=(1 2 3 4 5 6 7 8 9)
-IN_PROGRESS=(10 11)
+SHIPPED=(1 2 3 4 5 6 7 8 9 10)
+IN_PROGRESS=(11)
 PLANNED=(12 13 14 15 16 17)
 
 echo "Adding ${#ISSUES[@]} roadmap issues to project..."
@@ -38,3 +38,6 @@ echo "  Planned:              ${PLANNED[*]}"
 echo ""
 echo "Date fields (set on project board Start/End date columns):"
 echo "  See README.md Roadmap table or run: ./scripts/update-roadmap-dates.sh"
+echo ""
+echo "Setting Status column..."
+"$(dirname "$0")/sync-project-status.sh" "$PROJECT_NUMBER"

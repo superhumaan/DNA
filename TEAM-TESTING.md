@@ -136,8 +136,8 @@ cat .DNA/runtime/issues.jsonl | tail -1 | jq .
 ## 4. GitHub integration (optional)
 
 ```bash
+dna github login
 dna github connect --owner YOUR_ORG --repo YOUR_REPO
-export GITHUB_TOKEN=ghp_...   # never commit this
 
 # Enable in .DNA/config.dna.json:
 # "github": { "enabled": true, "owner": "...", "repo": "..." }
@@ -207,7 +207,7 @@ Copy this into Slack / Linear / GitHub issue when reporting back:
 | `DNA not installed` | Run `dna init -y` in project root |
 | Runtime not capturing | Ensure `dnaRuntime.start({ projectRoot })` and middleware is registered |
 | Marketplace empty | Offline — bundled catalog still has 8 packs |
-| `GITHUB_TOKEN` errors | Export token; never put in `config.dna.json` |
+| GitHub auth errors | Run `dna github login`; optional `export GITHUB_TOKEN=...` for CI only — never put in `config.dna.json` |
 
 ---
 

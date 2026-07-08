@@ -21,6 +21,8 @@ Checks include:
 - Knowledge pack integrity
 - Runtime configuration (if enabled)
 - AI tool file sync
+- GitHub connection (`dna github login` / connect)
+- Preview deploy workflow when `ci.pushToPreview` is enabled
 
 ---
 

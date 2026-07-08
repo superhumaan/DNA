@@ -161,8 +161,8 @@ Remote: [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · Offl
 ## GitHub & AI repair
 
 ```bash
+dna github login
 dna github connect --owner ORG --repo REPO
-export GITHUB_TOKEN=ghp_...
 
 dna ai connect --provider mock
 dna ai repair --file issue.json --dry-run
@@ -241,7 +241,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | [IVF UI layer stack (MUI, mobile, shared library)](https://github.com/superhumaan/DNA/issues/7) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
 | [GitHub integration package](https://github.com/superhumaan/DNA/issues/8) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
 | [Runtime SQLite storage](https://github.com/superhumaan/DNA/issues/9) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
-| [Preview deployment workflow](https://github.com/superhumaan/DNA/issues/10) | Jul 2026 | Aug 2026 | In progress |
+| [Preview deployment workflow](https://github.com/superhumaan/DNA/issues/10) | Jul 2026 | Aug 2026 | Shipped (unreleased) |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | In progress |
 | [Real-time dashboard UI](https://github.com/superhumaan/DNA/issues/12) | Sep 2026 | Dec 2026 | Planned |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Planned |

@@ -4,8 +4,19 @@ All notable changes to DNA are documented here.
 
 ## Unreleased
 
+### Added
+
+- **Preview deploy config:** `ci.previewProvider` (`vercel` | `netlify`) and optional `ci.previewBranch` in generated `dna-preview.yml`.
+- **Doctor preview checks:** `dna doctor` reports preview workflow status and setup hints when `pushToPreview` is enabled.
+- `DNA_REFERENCE_ROOT` environment variable for locating DNA reference repos on your machine. See [integrations.md](./docs/integrations.md).
+- `DNA_GDPR_SOURCE_DOCS` environment variable for GDPR doc ingest (`pnpm gdpr:ingest`).
+- [Naming conventions](./docs/naming.md) — how **Humaan** (company), **DNA** (product), and pack IDs relate.
+- **Backward-compatible aliases** — `platforms/humaan-stack` and `platforms/humaan/*` knowledge paths resolve to `platforms/dna-stack` / `platforms/dna/*` automatically.
+
 ### Changed
 
+- **Workflow cleanup:** Failed runs are deleted inline from each workflow (`ci.yml`, `publish-npm.yml`, generated `dna-ci.yml`) with explicit `actions: write` — replaces the broken `workflow_run` cleanup workflow.
+- **GitHub auth UX:** Doctor and docs steer users to `dna github login` + `dna github connect` instead of `GITHUB_TOKEN`-only setup. `dna github issue` resolves stored, `gh`, and env tokens.
 - **Platform knowledge pack rename:** `platforms/humaan-stack` → `platforms/dna-stack`; knowledge files moved from `platforms/humaan/*.dna.md` to `platforms/dna/*.dna.md`.
 - **Reference project paths:** `dna platform projects` no longer prints author-specific absolute paths. Set `DNA_REFERENCE_ROOT` to the parent folder containing `AIStudio`, `ColorParty`, `Humaan`, and `Soli` clones.
 
@@ -30,10 +41,3 @@ If you installed the platform pack before this rename:
 4. **Committed config** — if `neuralNetwork.json` or feature plans reference `platforms/humaan/*.dna.md`, update to `platforms/dna/*.dna.md` or regenerate plans with `dna plan feature <id>`.
 
 5. **Remote marketplace** — online catalog at [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) should list `platforms/dna-stack`; bundled offline catalog always includes the new ID.
-
-### Added
-
-- `DNA_REFERENCE_ROOT` environment variable for locating DNA reference repos on your machine. See [integrations.md](./docs/integrations.md).
-- `DNA_GDPR_SOURCE_DOCS` environment variable for GDPR doc ingest (`pnpm gdpr:ingest`).
-- [Naming conventions](./docs/naming.md) — how **Humaan** (company), **DNA** (product), and pack IDs relate.
-- **Backward-compatible aliases** — `platforms/humaan-stack` and `platforms/humaan/*` knowledge paths resolve to `platforms/dna-stack` / `platforms/dna/*` automatically.

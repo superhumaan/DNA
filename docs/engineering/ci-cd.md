@@ -17,7 +17,13 @@ pnpm typecheck
 
 Workflow: `.github/workflows/` in this repository.
 
+Failed workflow runs are cleaned up inline by a `cleanup-on-failure` job in each workflow (requires `actions: write`). DNA-generated consumer workflows (`dna-ci.yml`, `dna-preview.yml`) follow the same pattern.
+
 ---
+
+## Preview deploy (consumer projects)
+
+When `ci.pushToPreview` is true, `dna ci install` scaffolds `.github/workflows/dna-preview.yml` with Vercel or Netlify templates and an optional branch filter. See [Integrations](./integrations.md#preview-deploy).
 
 ## Recommended consumer project CI
 

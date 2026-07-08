@@ -1,0 +1,37 @@
+---
+description: Keep docs, issues, and project boards in sync when shipping work
+alwaysApply: true
+---
+
+# Ship sync — docs, issues, and boards
+
+When you ship a feature, fix a defect, or close a roadmap item, update **all** of the following in the same session:
+
+## Repository docs
+
+- `README.md` roadmap table (status column)
+- `CHANGELOG.md` (Unreleased section)
+- `docs/product/planning.md` roadmap table
+- `docs/delivery/current-version-scope.md` when scope changes
+- `docs/engineering/integrations.md`, `cli-reference.md`, `ci-cd.md`, `doctor-and-validation.md` when behaviour changes
+- `TEAM-TESTING.md` and `packages/dna-cli/README.md` for user-facing setup flows
+- `scripts/sync-roadmap-to-project.sh` status arrays if issue statuses changed
+
+## GitHub issues
+
+- Update issue body checklists and **Status** line (Shipped / In progress / Planned)
+- Close issues when work is complete; leave open with **Remaining** checklist when partially done
+- Add a closing comment referencing the commit SHA
+
+## Project boards
+
+- [DNA Roadmap](https://github.com/users/superhumaan/projects/3/views/1) — Shipped / In progress / Planned columns
+- [DNA - Defects](https://github.com/users/superhumaan/projects/4/views/1) — Done / In progress / Backlog columns
+
+Run `./scripts/sync-roadmap-to-project.sh` after updating status arrays. Requires `gh auth refresh -s read:project,project`.
+
+## Do not leave stale
+
+- `GITHUB_TOKEN`-only setup in docs when browser login (`dna github login`) is the recommended path
+- Roadmap rows marked "In progress" after the work shipped
+- Open GitHub issues for completed roadmap items

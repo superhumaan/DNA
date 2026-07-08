@@ -182,8 +182,8 @@ Bundled **GDPR reference library** (85+ documents): policies, DPIA templates, AI
 ## GitHub & AI repair
 
 ```bash
+dna github login
 dna github connect --owner ORG --repo REPO
-export GITHUB_TOKEN=ghp_...
 
 dna ai connect --provider mock
 dna ai repair --file issue.json --dry-run
