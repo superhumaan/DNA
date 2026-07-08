@@ -42,8 +42,15 @@ export const WAVE3_PAYMENTS_PACK_DEFS = [
 
 export const WAVE3_PAYMENTS_PACKS = packsFromDefs(WAVE3_PAYMENTS_PACK_DEFS);
 
-const V = (id: string, name: string, desc: string, when: string, how: string, tags: string[], category: "compliance" | "disciplines" = "compliance") =>
-  def(`compliance/${id}`, name, desc, when, how, tags, category);
+const V = (
+  id: string,
+  name: string,
+  desc: string,
+  when: string,
+  how: string,
+  tags: string[] = [],
+  category: KnowledgePack["category"] = "compliance",
+) => def(`compliance/${id}`, name, desc, when, how, tags, category);
 
 export const WAVE3_COMPLIANCE_PACK_DEFS = [
   V("pipeda", "PIPEDA", "Canadian privacy law", "Canadian users and data.", "Privacy commissioner requirements. Breach notification."),

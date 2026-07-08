@@ -1,4 +1,5 @@
-import type { DnaConfig, WizardAnswers } from "@superhumaan/dna-config";
+import type { DnaConfig, WizardAnswersInput } from "@superhumaan/dna-config";
+import { WizardAnswersSchema } from "@superhumaan/dna-config";
 import { readJsonFile } from "./fs.js";
 import { scanProject } from "./scanner.js";
 import { generateRecommendation, resolveStackFromWizard } from "./recommend.js";
@@ -15,7 +16,7 @@ const log = createLogger("wizard");
 
 export interface WizardOptions {
   root: string;
-  answers: WizardAnswers;
+  answers: WizardAnswersInput;
   nonInteractive?: boolean;
 }
 
@@ -50,7 +51,8 @@ async function installOnboardingFeaturePacks(
 }
 
 export async function runWizard(options: WizardOptions): Promise<WizardResult> {
-  const { root, answers } = options;
+  const { root } = options;
+  const answers = WizardAnswersSchema.parse(options.answers);
   const scan = await scanProject(root);
   const platformHint = answers.appPlatform ? ` ${answers.appPlatform} application` : "";
   const recommendation = generateRecommendation(

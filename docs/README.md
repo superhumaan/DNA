@@ -8,7 +8,6 @@
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
-| **GitHub Wiki** | [github.com/superhumaan/DNA/wiki](https://github.com/superhumaan/DNA/wiki) |
 | **Changelog** | [CHANGELOG.md](../CHANGELOG.md) |
 
 Browse locally: **`pnpm run wiki:dev`** → http://localhost:3000/docs/

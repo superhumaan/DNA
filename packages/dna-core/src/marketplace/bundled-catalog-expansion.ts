@@ -1,4 +1,3 @@
-import type { KnowledgePack } from "@superhumaan/dna-config";
 import { LANGUAGE_PACKS } from "./bundled-catalog-languages.js";
 import { CMS_PACKS } from "./bundled-catalog-cms.js";
 import { BROWSER_PACKS } from "./bundled-catalog-browsers.js";

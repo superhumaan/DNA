@@ -1,6 +1,6 @@
 import { def, packsFromDefs } from "./bundled-catalog-pack-factory.js";
 
-const E = (id: string, name: string, desc: string, when: string, how: string, tags: string[]) =>
+const E = (id: string, name: string, desc: string, when: string, how: string, tags: string[] = ["enterprise"]) =>
   def(id, name, desc, when, how, tags, "platforms");
 
 export const WAVE3_ENTERPRISE_PACK_DEFS = [

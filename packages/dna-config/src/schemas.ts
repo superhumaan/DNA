@@ -85,6 +85,7 @@ export const DnaConfigSchema = z.object({
 });
 
 export type DnaConfig = z.infer<typeof DnaConfigSchema>;
+export type DnaConfigInput = z.input<typeof DnaConfigSchema>;
 
 export const WizardAnswersSchema = z.object({
   projectName: z.string().optional(),
@@ -113,6 +114,7 @@ export const WizardAnswersSchema = z.object({
 });
 
 export type WizardAnswers = z.infer<typeof WizardAnswersSchema>;
+export type WizardAnswersInput = z.input<typeof WizardAnswersSchema>;
 
 export const ScanResultSchema = z.object({
   packageManager: z.string().optional(),

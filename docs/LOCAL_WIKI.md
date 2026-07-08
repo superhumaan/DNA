@@ -10,7 +10,6 @@ pnpm run wiki:refresh   # kill server → sync → restart in background (prefer
 pnpm run wiki:sync      # copy docs/ only (no restart)
 pnpm run wiki:kill      # stop dev server on port 3000
 pnpm run wiki:build     # production build
-pnpm run wiki:github-push  # sync to GitHub wiki
 ```
 
 **URL:** http://localhost:3000/docs/  
@@ -30,7 +29,3 @@ After editing `docs/`, run **`pnpm run wiki:refresh`**.
 | Quality Assurance | Testing, doctor, quality reports |
 
 Index: [docs/README.md](./README.md)
-
-## GitHub wiki
-
-The same `docs/` tree syncs to [github.com/superhumaan/DNA/wiki](https://github.com/superhumaan/DNA/wiki) via `pnpm run wiki:github-push`.

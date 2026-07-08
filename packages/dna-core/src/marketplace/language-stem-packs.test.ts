@@ -5,8 +5,6 @@ import {
   LANGUAGE_STEM_PACK_IDS,
   LANGUAGE_STEM_BRIDGE_PACK,
 } from "./bundled-language-stem-packs.js";
-import { STEM_PACKS } from "./bundled-stem-packs.js";
-import { CATALOG_EXPANSION_PACKS } from "./bundled-catalog-expansion.js";
 import { resolveFoundationPackIds } from "./foundation.js";
 import { resolvePackIdsForIntents, resetKnowledgePathIndex } from "./resolve.js";
 import { generateNeuralNetwork } from "../generators/neural-network.js";

@@ -15,6 +15,7 @@ const baseConfig = {
   autoUpdate: true,
   channel: "stable" as const,
   knowledgePacks: [],
+  platformFeatures: [],
 };
 
 describe("behaviour generator", () => {

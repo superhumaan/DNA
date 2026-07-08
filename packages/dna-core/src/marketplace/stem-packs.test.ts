@@ -1,8 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { getBundledCatalog, BUNDLED_CATALOG_PACK_COUNT } from "./bundled-catalog.js";
 import { STEM_PACKS, STEM_PACK_IDS } from "./bundled-stem-packs.js";
-import { LANGUAGE_STEM_PACKS } from "./bundled-language-stem-packs.js";
-import { CATALOG_EXPANSION_PACKS } from "./bundled-catalog-expansion.js";
 import { STACK_ARCHETYPES } from "../stack/catalog.js";
 
 describe("stem packs", () => {

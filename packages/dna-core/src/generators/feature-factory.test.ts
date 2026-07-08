@@ -32,6 +32,7 @@ function testConfig(): DnaConfig {
     autoUpdate: true,
     channel: "stable",
     knowledgePacks: [],
+    platformFeatures: [],
   };
 }
 

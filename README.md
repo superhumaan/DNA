@@ -203,7 +203,7 @@ pnpm install && pnpm build && pnpm test
 
 ## Documentation
 
-Full wiki: **[docs/README.md](./docs/README.md)** · Browse locally: `pnpm run wiki:dev` · [GitHub Wiki](https://github.com/superhumaan/DNA/wiki)
+Full wiki: **[docs/README.md](./docs/README.md)** · Browse locally: `pnpm run wiki:dev`
 
 | Section | Start here |
 |---------|------------|

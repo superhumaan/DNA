@@ -6,11 +6,7 @@ import {
   CATALOG_EXPANSION_COUNTS,
 } from "./bundled-catalog-expansion.js";
 import { CATALOG_WAVE_COUNTS } from "./catalog-waves.js";
-import { STEM_PACKS } from "./bundled-stem-packs.js";
-import { LANGUAGE_STEM_PACKS } from "./bundled-language-stem-packs.js";
 import { STACK_ARCHETYPES } from "../stack/catalog.js";
-
-const CORE_PACK_COUNT = 11;
 
 describe("catalog expansion", () => {
   it("exports expected expansion pack counts", () => {
@@ -64,7 +60,7 @@ describe("catalog expansion", () => {
 
   it("wordpress CMS pack recommends modern alternatives", () => {
     const wp = getBundledCatalog().packs.find((p) => p.id === "cms/wordpress");
-    expect(wp?.files.some((f) => f.content.includes("cms/sanity"))).toBe(true);
+    expect(wp?.files.some((f) => f.content?.includes("cms/sanity"))).toBe(true);
   });
 
   it("CMS and framework archetypes reference catalog packs", () => {
@@ -88,13 +84,13 @@ describe("catalog expansion", () => {
 
   it("data HQ pack explains why and how", () => {
     const hq = getBundledCatalog().packs.find((p) => p.id === "data/data-hq");
-    expect(hq?.files.some((f) => f.content.includes("Why it matters"))).toBe(true);
-    expect(hq?.files.some((f) => f.content.includes("How to establish"))).toBe(true);
+    expect(hq?.files.some((f) => f.content?.includes("Why it matters"))).toBe(true);
+    expect(hq?.files.some((f) => f.content?.includes("How to establish"))).toBe(true);
   });
 
   it("disaster recovery pack covers active-active and passive topologies", () => {
     const dr = getBundledCatalog().packs.find((p) => p.id === "data/disaster-recovery");
-    const text = dr?.files.map((f) => f.content).join("\n") ?? "";
+    const text = dr?.files.map((f) => f.content ?? "").join("\n") ?? "";
     expect(text).toContain("Active–Active");
     expect(text).toContain("Active–Passive");
     expect(text).toContain("Passive–Passive");
@@ -124,7 +120,7 @@ describe("catalog expansion", () => {
     }
     const redox = catalog.packs.find((p) => p.id === "healthcare/redox");
     expect(redox?.tags).toContain("healthcare");
-    expect(redox?.files.some((f) => f.content.includes("Redox"))).toBe(true);
+    expect(redox?.files.some((f) => f.content?.includes("Redox"))).toBe(true);
   });
 
   it("healthcare-fhir archetype references bundled healthcare packs", () => {

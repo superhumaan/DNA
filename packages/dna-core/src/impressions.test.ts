@@ -17,6 +17,7 @@ describe("impressions generator", () => {
       autoUpdate: true,
       channel: "stable" as const,
       knowledgePacks: [],
+      platformFeatures: [],
     };
 
     const rec = generateRecommendation(
@@ -32,7 +33,10 @@ describe("impressions generator", () => {
         aiTools: [],
         compliance: "soc2",
         stage: "scaling",
+        platformFeatures: [],
         installRuntime: false,
+        installFeatureFactory: false,
+        installCi: false,
         configureGithub: false,
         configureAi: false,
       },

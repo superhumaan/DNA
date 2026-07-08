@@ -224,6 +224,36 @@ jobs:
 `;
 }
 
+export function generateCleanupWorkflow(): string {
+  return `name: Cleanup failed runs
+
+on:
+  workflow_run:
+    types: [completed]
+
+jobs:
+  delete-failed-run:
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.name != 'Cleanup failed runs'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const runId = context.payload.workflow_run.id;
+            const name = context.payload.workflow_run.name;
+            console.log(\`Deleting failed workflow run \${runId} (\${name})\`);
+            await github.rest.actions.deleteWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId,
+            });
+`;
+}
+
 export function generateSecurityWorkflow(): string {
   return `# DNA Security — OWASP ZAP baseline (optional)
 # Set repository variable STAGING_URL (e.g. https://staging.example.com) to enable DAST.
@@ -334,6 +364,7 @@ export async function installCiPipeline(options: InstallCiOptions): Promise<Inst
 
   const workflowsDir = join(root, ".github", "workflows");
   const ciPath = join(workflowsDir, "dna-ci.yml");
+  const cleanupPath = join(workflowsDir, "cleanup-failed-runs.yml");
   const securityPath = join(workflowsDir, "dna-security.yml");
   const previewPath = join(workflowsDir, "dna-preview.yml");
 
@@ -345,6 +376,16 @@ export async function installCiPipeline(options: InstallCiOptions): Promise<Inst
     created.push(ciExists ? ".github/workflows/dna-ci.yml (updated)" : ".github/workflows/dna-ci.yml");
   } else {
     skipped.push("dna-ci.yml (already exists — use dna ci install --force)");
+  }
+
+  const cleanupExists = await fileExists(cleanupPath);
+  if (!skipIfExists || !cleanupExists) {
+    await writeFileEnsured(cleanupPath, generateCleanupWorkflow());
+    created.push(
+      cleanupExists
+        ? ".github/workflows/cleanup-failed-runs.yml (updated)"
+        : ".github/workflows/cleanup-failed-runs.yml",
+    );
   }
 
   const securityExists = await fileExists(securityPath);

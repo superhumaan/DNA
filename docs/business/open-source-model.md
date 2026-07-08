@@ -11,7 +11,7 @@ DNA is **MIT licensed** and developed in the open at [github.com/superhumaan/DNA
 | CLI + runtime bundle | `@superhumaan/dna-by-humaan` on npm |
 | Knowledge marketplace | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
 | Web UI | [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web) |
-| Documentation | This wiki (`docs/` → Docusaurus) + GitHub wiki |
+| Documentation | This wiki (`docs/` → local Docusaurus) |
 
 ---
 

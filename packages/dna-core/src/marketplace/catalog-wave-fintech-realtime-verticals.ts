@@ -1,3 +1,4 @@
+import type { KnowledgePack } from "@superhumaan/dna-config";
 import { def, packsFromDefs } from "./bundled-catalog-pack-factory.js";
 
 const P = (id: string, name: string, desc: string, when: string, how: string) =>
@@ -38,8 +39,15 @@ export const REALTIME_PACK_DEFS = [
 
 export const REALTIME_PACKS = packsFromDefs(REALTIME_PACK_DEFS);
 
-const V = (id: string, name: string, desc: string, when: string, how: string, tags: string[], category?: "platforms" | "disciplines") =>
-  def(id, name, desc, when, how, tags, category);
+const V = (
+  id: string,
+  name: string,
+  desc: string,
+  when: string,
+  how: string,
+  tags: string[] = [],
+  category?: KnowledgePack["category"],
+) => def(id, name, desc, when, how, tags, category);
 
 export const VERTICAL_MISC_PACK_DEFS = [
   V("edtech/moodle", "Moodle", "Open-source LMS", "Universities, training.", "Plugins. LTI integration. Self-host security.", ["edtech"]),

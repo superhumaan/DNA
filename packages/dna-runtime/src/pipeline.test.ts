@@ -30,6 +30,7 @@ async function setupProject(): Promise<string> {
       autoUpdate: true,
       channel: "stable",
       knowledgePacks: [],
+      platformFeatures: [],
       github: { enabled: false },
       runtime: { enabled: true, storage: "sqlite" },
     }),

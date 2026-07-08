@@ -6,6 +6,7 @@ import { randomUUID } from "node:crypto";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import {
   generateCiWorkflow,
+  generateCleanupWorkflow,
   generateSecurityWorkflow,
   installCiPipeline,
   generateVitestCoverageConfig,
@@ -26,6 +27,7 @@ function testConfig(): DnaConfig {
     autoUpdate: true,
     channel: "stable",
     knowledgePacks: [],
+    platformFeatures: [],
   };
 }
 
@@ -86,6 +88,14 @@ describe("CI generator", () => {
     expect(yaml).toContain("STAGING_URL");
   });
 
+  it("generates cleanup workflow for failed runs", () => {
+    const yaml = generateCleanupWorkflow();
+    expect(yaml).toContain("name: Cleanup failed runs");
+    expect(yaml).toContain("workflow_run");
+    expect(yaml).toContain("deleteWorkflowRun");
+    expect(yaml).toContain("Cleanup failed runs");
+  });
+
   it("generates vitest coverage config with thresholds", () => {
     const config = generateVitestCoverageConfig();
     expect(config).toContain("thresholds");
@@ -106,6 +116,7 @@ describe("CI generator", () => {
     const result = await installCiPipeline({ root, config: testConfig() });
 
     expect(result.created).toContain(".github/workflows/dna-ci.yml");
+    expect(result.created).toContain(".github/workflows/cleanup-failed-runs.yml");
     expect(result.created).toContain(".github/workflows/dna-security.yml");
     expect(await fileExists(join(root, "vitest.config.ts"))).toBe(true);
 

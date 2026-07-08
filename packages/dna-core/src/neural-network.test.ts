@@ -16,6 +16,7 @@ describe("neuralNetwork generator", () => {
       autoUpdate: true,
       channel: "stable",
       knowledgePacks: [],
+      platformFeatures: [],
     });
 
     expect(network.version).toBe("0.1.0");

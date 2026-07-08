@@ -1,4 +1,4 @@
-import type { DnaConfig, NeuralNetwork } from "@superhumaan/dna-config";
+import type { DnaConfigInput, NeuralNetwork } from "@superhumaan/dna-config";
 
 const INTENTS: NeuralNetwork["intents"][string][] = [
   {
@@ -620,7 +620,7 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
   },
 ];
 
-export function generateNeuralNetwork(_config: DnaConfig): NeuralNetwork {
+export function generateNeuralNetwork(_config: DnaConfigInput): NeuralNetwork {
   const intents: NeuralNetwork["intents"] = {};
   for (const intent of INTENTS) {
     intents[intent.intent] = intent;

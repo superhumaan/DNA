@@ -1,7 +1,15 @@
+import type { KnowledgePack } from "@superhumaan/dna-config";
 import { def, packsFromDefs } from "./bundled-catalog-pack-factory.js";
 
-const V = (id: string, name: string, desc: string, when: string, how: string, tags: string[], category?: "platforms" | "disciplines" | "compliance") =>
-  def(id, name, desc, when, how, tags, category);
+const V = (
+  id: string,
+  name: string,
+  desc: string,
+  when: string,
+  how: string,
+  tags: string[] = [],
+  category?: KnowledgePack["category"],
+) => def(id, name, desc, when, how, tags, category);
 
 export const WAVE4_VERTICALS_PACK_DEFS = [
   V("gov/govuk-one-login", "GOV.UK One Login", "UK government identity", "Citizen auth for UK gov services.", "OIDC integration. Identity assurance levels.", ["gov", "auth"]),

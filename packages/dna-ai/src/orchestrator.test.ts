@@ -58,6 +58,7 @@ describe("executeRepairWorkflow", () => {
         autoUpdate: true,
         channel: "stable",
         knowledgePacks: [],
+        platformFeatures: [],
         ai: { enabled: true, provider: "mock" },
       },
       dryRun: true,
