@@ -44,9 +44,10 @@ git clone https://github.com/superhumaan/DNA.git dna && cd dna
 chmod +x scripts/*.sh && ./scripts/team-setup.sh
 
 cd /path/to/your-project
-dna init -y
-dna doctor
-dna context cursor
+npx @superhumaan/dna-by-humaan doctor
+
+# In Cursor: copy a prompt from dna.humaan.app/intelligence
+# or type /analyze-project, /ship-feature, /agent-loop
 ```
 
 **Team rollout guide:** [TEAM-TESTING.md](./TEAM-TESTING.md)  
@@ -232,7 +233,8 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 |------|-------|-----|--------|
 | Knowledge pack marketplace (768 packs) | Jan 2026 | Mar 2026 | Shipped |
 | Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |
-| `npx @superhumaan/dna-by-humaan` on npm (v0.3.5) | Mar 2026 | Jul 2026 | Shipped |
+| `npx @superhumaan/dna-by-humaan` on npm (v0.4.0) | Mar 2026 | Jul 2026 | Shipped |
+| [Prompt stem packs + intelligence library](https://dna.humaan.app/intelligence) | Jul 2026 | Jul 2026 | Shipped |
 | [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped |
 | [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped |
 | [Feature factory v2 + admin portal pattern](https://github.com/superhumaan/DNA/issues/3) | May 2026 | Jun 2026 | Shipped |

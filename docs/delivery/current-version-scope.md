@@ -16,6 +16,8 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Brownfield** | IVF plans, `document --from-code`, deep analyze |
 | **Feature factory** | Plain-language features + quality gates |
 | **AI Workbench** | Prompt-first Cursor/Claude packages — default on init, doctor, update |
+| **Prompt stem packs** | 43 copy-paste workflows in `.DNA/stems/` — guidelines, expectations, agent-loop roles |
+| **`dna stems`** | List, show, and refresh prompt stem packs |
 | **GitHub** | Connect, auto-issues, push gates, browser login (`dna github login`) |
 | **Preview deploy** | `dna-preview.yml` scaffold with Vercel/Netlify + branch filter |
 | **CI hygiene** | Inline failed-run cleanup in DNA-generated workflows |

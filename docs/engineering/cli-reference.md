@@ -245,49 +245,58 @@ Re-enable with `dna feature-factory install`.
 
 ## commands
 
-Install **DNA Workbench** (`.cursor/skills/dna-workbench/`, `/work-with-dna`, `/ship-feature`, …) by default on init, doctor, and update. Optional CLI catalog: `dna commands install`.
+Install **DNA Workbench** and **43 prompt stem packs** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rule) by default on init, doctor, and update. Optional CLI catalog: `dna commands install`.
 
 ```bash
-dna commands install
+dna workbench install
+dna stems list
+dna stems show analyze-project
+dna stems install
+dna commands install    # optional /dna-* CLI wrappers
 dna commands list
 dna commands export-catalog --out .DNA/intelligence-catalog.json
 dna commands uninstall
 ```
 
-**Installed automatically** with `dna init`, `dna feature-factory install`, and `dna doctor` (when feature factory is enabled).
+**Installed automatically** with `dna init`, `dna doctor`, and `dna update` (workbench + stems).
 
-Type `/` in Cursor or Claude Code and search for `dna-` — e.g. `/dna-doctor`, `/dna-analyze`, `/dna-feature`.
-
-Full catalog: [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence)
+Copy-paste library: [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence)
 
 ## workbench
 
 **DNA Workbench** — prompt-first Cursor and Claude packages. Installed **by default** on `dna init`, `dna doctor`, and `dna update`.
 
-The user works in plain language inside Cursor; the agent runs `npx dna` on their behalf and loads `.DNA/` context.
+The user works in plain language inside Cursor; the agent runs `npx dna` on their behalf, reads `.DNA/stems/` guidelines, and loads `.DNA/` context.
 
 ```bash
-dna workbench install      # refresh prompts (also runs automatically)
+dna workbench install      # refresh prompts + stem packs (also runs automatically)
 dna workbench uninstall    # opt out — sets aiWorkbench.enabled=false
 dna update                 # refreshes workbench + checks pack updates
 dna update --skip-workbench
 ```
 
+### Prompt stem packs (`.DNA/stems/<id>/`)
+
+Each stem includes: `prompt.md`, `guidelines.md`, `expectations.md`, `context.md`, `examples.md`.
+
+| Category | Examples |
+|----------|----------|
+| Analysis | `/analyze-project`, `/what-next`, `/scan-project` |
+| Features | `/ship-feature`, `/plan-rbac`, `/generate-feature` |
+| Agent loop | `/agent-loop`, `/product-analyst`, `/solution-architect`, `/backend-engineer`, … |
+| Quality | `/quality-gate`, `/pre-push-review` |
+| IVF | `/ivf-shared-library`, `/plan-ivf` |
+
+```bash
+dna stems list
+dna stems show what-next-after-analyze
+```
+
 ### Slash prompts (type `/` in chat)
 
-| Command | Purpose |
-|---------|---------|
-| `/work-with-dna` | Start any DNA-aware session |
-| `/ship-feature` | Feature factory → plan → ship |
-| `/analyze-project` | Deep analysis + gap plan |
-| `/health-check` | Doctor + validate |
-| `/quality-gate` | Pre-push SAST gate |
-| `/plan-compliance` | Tiered compliance |
-| `/debug-issue` | Runtime debug loop |
-| `/sync-impressions` | Doc/code reconciliation |
-| `/load-context` | Load domain context |
+Workbench installs slash commands for every stem that has one — e.g. `/work-with-dna`, `/ship-feature`, `/analyze-project`, `/agent-loop`, `/solution-architect`.
 
-Files: `.cursor/rules/dna-workbench.mdc`, `.cursor/skills/dna-workbench/`, `.cursor/commands/*.md` (and `.claude/` mirror).
+Files: `.cursor/rules/dna-workbench.mdc`, `.cursor/skills/dna-workbench/`, `.cursor/commands/*.md`, `.DNA/stems/` (and `.claude/` mirror).
 
 Optional: `dna commands install` adds per-CLI `/dna-*` slash commands for power users.
 

@@ -4,6 +4,19 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-10
+
+### Added
+
+- **43 prompt stem packs** — copy-paste Cursor and Claude prompt engineering installed to `.DNA/stems/<id>/`. Each stem includes `prompt.md`, `guidelines.md` (MUST/NEVER), `expectations.md`, `context.md`, and `examples.md` so agents stick to the workflow per prompt.
+- **Agent-loop role stems** (10) — `/product-analyst`, `/solution-architect`, `/backend-engineer`, `/frontend-engineer`, `/ux-reviewer`, `/qa-engineer`, `/code-quality`, `/refactor-reviewer`, `/final-release`, plus `/agent-loop` orchestrator.
+- **`dna stems`** — `list`, `show <id>`, `install` for prompt stem packs.
+- **[dna.humaan.app/intelligence](https://dna.humaan.app/intelligence)** — copy-paste stem library with guidelines preview (catalog v4). Replaces CLI-first command grid.
+
+### Changed
+
+- **DNA Workbench** now installs all stem packs and slash commands by default on `init`, `doctor`, and `update` (was 9 prompts; now 43+ stems with full engineering data).
+
 ### Fixed
 
 - **`dna context` with `--cwd`** — bad relative `--cwd` paths no longer return empty Behaviour/CellularMemory sections. DNA validates that `.DNA/` exists at the resolved path and explains when to omit `--cwd` (already inside the project) or pass it from the monorepo root.

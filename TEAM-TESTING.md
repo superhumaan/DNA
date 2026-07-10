@@ -12,7 +12,8 @@ Share this with colleagues who want to try DNA on their own projects.
 |-------|-------------------|----------------|
 | Project brain | `dna init` | `.DNA/` + `DNA/Impressions/` scaffolded |
 | AI context | `dna context cursor` | Paste-ready context for your AI tool |
-| **Cursor workbench** | `dna init` / `dna doctor` | Prompt-first `/ship-feature`, `/analyze-project`, … — talk in plain language |
+| **Cursor workbench** | `dna init` / `dna doctor` | 43 prompt stem packs in `.DNA/stems/` — copy-paste or `/analyze-project`, `/ship-feature`, `/agent-loop` |
+| **Stem library** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) | Copy prompts + guidelines; each stem has MUST/NEVER rules and expectations |
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |
 | Runtime observer | `@superhumaan/dna-by-humaan/runtime` | Errors/slow requests → `.DNA/data/runtime.db` |
