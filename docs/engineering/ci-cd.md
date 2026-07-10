@@ -17,7 +17,7 @@ pnpm typecheck
 
 Workflow: `.github/workflows/` in this repository.
 
-Failed workflow runs are cleaned up inline by a `cleanup-on-failure` job in each workflow (requires `actions: write`). DNA-generated consumer workflows (`dna-ci.yml`, `dna-preview.yml`) follow the same pattern.
+Failed workflow runs are cleaned up by `.github/workflows/cleanup-failed-runs.yml`, which listens for completed `workflow_run` events and deletes failures after they finish (inline delete jobs cannot remove the current run while it is still in progress). A six-hourly schedule and manual `workflow_dispatch` sweep any backlog. DNA `ci install` scaffolds the same cleanup workflow for consumer projects.
 
 ---
 
