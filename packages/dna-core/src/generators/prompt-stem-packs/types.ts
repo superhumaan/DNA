@@ -2,6 +2,7 @@ export const STEM_CATEGORIES = [
   "session",
   "analysis",
   "features",
+  "agent-loop",
   "quality",
   "compliance",
   "debug",

@@ -45,7 +45,7 @@ describe("ai workbench", () => {
 
     const shipClaude = files[".claude/commands/ship-feature.md"];
     expect(shipClaude).toContain("---");
-    expect(getPromptStemPacks().length).toBeGreaterThanOrEqual(30);
+    expect(getPromptStemPacks().length).toBeGreaterThanOrEqual(40);
   });
 
   it("respects aiWorkbench.enabled=false", () => {

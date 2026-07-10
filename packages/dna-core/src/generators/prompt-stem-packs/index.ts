@@ -175,6 +175,7 @@ export const STEM_CATEGORY_LABELS: Record<StemCategory, { label: string; descrip
   session: { label: "Session", description: "Bootstrap, context, health checks" },
   analysis: { label: "Analysis", description: "Understand codebase, gaps, audits" },
   features: { label: "Features", description: "Plan and ship through agent loop" },
+  "agent-loop": { label: "Agent loop", description: "Per-role feature factory prompts — PA, SA, BE, FE, UX, QA, ship" },
   quality: { label: "Quality", description: "Gates, scans, pre-push review" },
   compliance: { label: "Compliance", description: "GDPR, HIPAA, documents, engineering" },
   debug: { label: "Debug", description: "Runtime issues, AI repair" },

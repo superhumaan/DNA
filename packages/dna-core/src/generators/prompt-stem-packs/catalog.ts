@@ -1,4 +1,5 @@
 import type { PromptStemPackDef } from "./types.js";
+import { AGENT_LOOP_STEM_DEFS } from "./catalog-agent-loop.js";
 
 const GROUND = {
   must: [
@@ -401,7 +402,7 @@ Product Analyst → Solution Architect → **STOP for approval** → Backend →
         goodResponse: "Captured in feature-request.md. Architect plan: 1 new route, RBAC support role, 3 API endpoints. Approve before I implement?",
       },
     ],
-    workflow: ["quality-gate", "github-push"],
+    workflow: ["role-product-analyst", "agent-loop-full", "quality-gate", "github-push"],
   },
   {
     id: "plan-feature",
@@ -1004,4 +1005,6 @@ Confirm merge result. Never overwrite without user consent.`,
     cliCommands: ["npx dna memory import <file> --merge"],
     examples: [{ userSays: "Import memory backup", goodResponse: "Merged 3 segments. 0 conflicts." }],
   },
+
+  ...AGENT_LOOP_STEM_DEFS,
 ];

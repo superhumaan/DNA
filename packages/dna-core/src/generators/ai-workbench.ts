@@ -240,7 +240,9 @@ Each command maps to \`.DNA/stems/<id>/\` — read **prompt.md, guidelines.md, e
 | \`/work-with-dna\` | work-with-dna | Start any DNA-aware session |
 | \`/analyze-project\` | analyze-project | Brownfield analysis + gap plan |
 | \`/what-next\` | what-next-after-analyze | Turn analyze output into action plan |
-| \`/ship-feature\` | ship-feature | Plain-language feature → factory → ship |
+| \`/ship-feature\` | ship-feature | Plain-language feature → full agent loop |
+| \`/agent-loop\` | agent-loop-full | All 9 roles in sequence |
+| \`/product-analyst\` … \`/final-release\` | role-* | One agent-loop role at a time |
 | \`/health-check\` | health-check | Doctor + validate |
 | \`/quality-gate\` | quality-gate | Pre-push gate |
 | \`/plan-compliance\` | plan-compliance | Compliance rollout |
