@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Sync sponsors.json → README ledger, npm package credits, and DNA-Web data.
+ * Sync sponsors.json → README ledger, npm package credits, GitHub FUNDING.yml, and DNA-Web data.
  *
  * Usage:
  *   node scripts/sync-sponsors.mjs
@@ -18,6 +18,38 @@ const DNA_WEB_DATA = join(DNA_WEB_ROOT, "apps", "web", "src", "data", "sponsors.
 
 const MARKER_START = "<!-- sponsors:ledger:start -->";
 const MARKER_END = "<!-- sponsors:ledger:end -->";
+const FUNDING_PATH = join(ROOT, ".github", "FUNDING.yml");
+const FUNDING_DOCS =
+  "https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository";
+
+function githubUsernameFromSponsorUrl(url) {
+  const match = url?.match(/^https:\/\/github\.com\/sponsors\/([^/?#]+)/);
+  return match?.[1] ?? null;
+}
+
+function renderFundingYml(data) {
+  const github = githubUsernameFromSponsorUrl(data.sponsorUrl);
+  const custom = [data.servicesUrl].filter(Boolean);
+
+  const lines = [
+    "# DNA by Humaan — sponsorship",
+    "# Synced from sponsors.json via `pnpm sponsors:sync`. Do not edit manually.",
+    `# ${FUNDING_DOCS}`,
+    "",
+  ];
+
+  if (github) {
+    lines.push(`github: ${github}`);
+  }
+  if (custom.length) {
+    lines.push("custom:");
+    for (const url of custom) {
+      lines.push(`  - ${url}`);
+    }
+  }
+  lines.push("");
+  return lines.join("\n");
+}
 
 function tierLabel(tierId, tiers) {
   const tier = tiers.find((t) => t.id === tierId);
@@ -177,6 +209,7 @@ async function main() {
 
   await updateReadme(join(ROOT, "README.md"), data);
   await updateReadme(join(CLI_PKG, "README.md"), data);
+  await writeFile(FUNDING_PATH, renderFundingYml(data));
 
   try {
     await mkdir(dirname(DNA_WEB_DATA), { recursive: true });

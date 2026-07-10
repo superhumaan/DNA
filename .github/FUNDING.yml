@@ -1,5 +1,7 @@
 # DNA by Humaan — sponsorship
+# Synced from sponsors.json via `pnpm sponsors:sync`. Do not edit manually.
 # https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
 
+github: superhumaan
 custom:
-  - https://dna.humaan.app
+  - https://dna.humaan.app/services

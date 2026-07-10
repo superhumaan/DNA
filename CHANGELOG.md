@@ -6,7 +6,7 @@ All notable changes to DNA are documented here.
 
 ### Added
 
-- **Sponsors & commercial services:** public sponsor ledger ([`sponsors.json`](./sponsors.json)), `pnpm sponsors:sync`, `dna credits`, bundled `CREDITS.md` / `SPONSORS.md`, npm `funding` + `contributors`. DNA-Web `/sponsors` and `/services` pages with monthly homepage logo rotation for company sponsors.
+- **Sponsors & commercial services:** public sponsor ledger ([`sponsors.json`](./sponsors.json)), `pnpm sponsors:sync`, `.github/FUNDING.yml` (GitHub **Sponsor** button), `dna credits`, bundled `CREDITS.md` / `SPONSORS.md`, npm `funding` + `contributors`. DNA-Web `/sponsors` and `/services` pages with monthly homepage logo rotation for company sponsors.
 - **Doctor preview checks:** `dna doctor` reports preview workflow status and setup hints when `pushToPreview` is enabled.
 - `DNA_REFERENCE_ROOT` environment variable for locating DNA reference repos on your machine. See [integrations.md](./docs/integrations.md).
 - `DNA_GDPR_SOURCE_DOCS` environment variable for GDPR doc ingest (`pnpm gdpr:ingest`).

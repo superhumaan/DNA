@@ -55,6 +55,7 @@ The sync script updates:
 - `packages/dna-cli/package.json` → `funding` + `contributors`
 - `packages/dna-cli/SPONSORS.md` and `CREDITS.md`
 - `packages/dna-cli/assets/sponsors.json` (bundled for `dna credits`)
+- `.github/FUNDING.yml` (GitHub repo **Sponsor** button)
 - `DNA-Web/apps/web/src/data/sponsors.json` (when `DNA - Web` is alongside the monorepo)
 
 `scripts/publish-npm.sh` runs `sponsors:sync` before publish.
