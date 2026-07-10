@@ -71,6 +71,10 @@ name: Cleanup failed runs
 
 on:
   workflow_run:
+    workflows:
+      - DNA CI
+      - DNA Preview
+      - DNA Security
     types: [completed]
   workflow_dispatch:
   schedule:

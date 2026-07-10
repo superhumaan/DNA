@@ -2,6 +2,9 @@ name: Cleanup failed runs
 
 on:
   workflow_run:
+    workflows:
+      - CI
+      - Publish npm
     types: [completed]
   workflow_dispatch:
   schedule:
