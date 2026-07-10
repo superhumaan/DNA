@@ -1,7 +1,6 @@
 import { join } from "node:path";
-import { readFile } from "node:fs/promises";
-import { homedir } from "node:os";
 import { BEHAVIOUR_FILES, DNA_CONFIG_FILE, DNA_RUNTIME_DB } from "@superhumaan/dna-config";
+import { resolveGitHubToken } from "@superhumaan/dna-github";
 import { fileExists } from "./fs.js";
 import { loadDnaConfig, validateProject } from "./validator.js";
 import { scanProject } from "./scanner.js";
@@ -23,13 +22,8 @@ export interface DoctorReport {
 }
 
 async function isGitHubSignedIn(): Promise<boolean> {
-  if (process.env.GITHUB_TOKEN || process.env.GH_TOKEN) return true;
-  try {
-    const raw = await readFile(join(homedir(), ".config", "dna", "github-credentials.json"), "utf-8");
-    return !!(JSON.parse(raw) as { token?: string }).token;
-  } catch {
-    return false;
-  }
+  const creds = await resolveGitHubToken();
+  return !!creds?.token;
 }
 
 export async function runDoctor(root: string): Promise<DoctorReport> {

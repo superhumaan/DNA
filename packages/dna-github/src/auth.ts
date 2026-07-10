@@ -1,4 +1,4 @@
-import { exec } from "node:child_process";
+import { exec, spawn } from "node:child_process";
 import { mkdir, readFile, writeFile, chmod } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
@@ -73,6 +73,45 @@ async function isGhCliInstalled(): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+async function saveGhCliCredentials(token: string, username: string): Promise<GitHubCredentials> {
+  const creds: GitHubCredentials = {
+    token,
+    username,
+    scopes: [...GITHUB_SCOPES],
+    obtainedAt: new Date().toISOString(),
+    method: "gh_cli",
+  };
+  await saveCredentials(creds);
+  return creds;
+}
+
+function runGhAuthLogin(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(
+      "gh",
+      ["auth", "login", "--web", "--git-protocol", "https", "--scopes", GITHUB_SCOPES.join(",")],
+      { stdio: "inherit" },
+    );
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(`gh auth login exited with code ${code ?? "unknown"}`));
+    });
+  });
+}
+
+async function adoptGitHubCliSession(
+  onStatus?: (message: string) => void,
+): Promise<GitHubLoginResult | null> {
+  const token = await tokenFromGhCli();
+  if (!token) return null;
+
+  onStatus?.("Using existing GitHub CLI session...");
+  const username = await fetchGitHubUser(token);
+  const creds = await saveGhCliCredentials(token, username);
+  return { credentials: creds, username };
 }
 
 async function fetchGitHubUser(token: string): Promise<string> {
@@ -182,30 +221,23 @@ export async function loginWithWebFlow(options?: {
   if (!options?.force) {
     const existing = await resolveGitHubToken();
     if (existing) {
-      const username = await fetchGitHubUser(existing.token);
+      const username = existing.username ?? (await fetchGitHubUser(existing.token));
       return { credentials: existing, username };
     }
   }
+
+  const adopted = await adoptGitHubCliSession(log);
+  if (adopted) return adopted;
 
   if (await isGhCliInstalled()) {
     log("Opening GitHub in your browser via GitHub CLI...");
     log("Complete the login in the browser window.");
     try {
-      await execAsync(
-        `gh auth login --web --git-protocol https --scopes ${GITHUB_SCOPES.join(",")}`,
-        { timeout: 300_000 },
-      );
+      await runGhAuthLogin();
       const token = await tokenFromGhCli();
       if (token) {
         const username = await fetchGitHubUser(token);
-        const creds: GitHubCredentials = {
-          token,
-          username,
-          scopes: [...GITHUB_SCOPES],
-          obtainedAt: new Date().toISOString(),
-          method: "gh_cli",
-        };
-        await saveCredentials(creds);
+        const creds = await saveGhCliCredentials(token, username);
         return { credentials: creds, username };
       }
     } catch {
@@ -264,11 +296,16 @@ export async function resolveGitHubToken(): Promise<GitHubCredentials | null> {
 
   const ghToken = await tokenFromGhCli();
   if (ghToken) {
-    return {
-      token: ghToken,
-      obtainedAt: new Date().toISOString(),
-      method: "gh_cli",
-    };
+    try {
+      const username = await fetchGitHubUser(ghToken);
+      return saveGhCliCredentials(ghToken, username);
+    } catch {
+      return {
+        token: ghToken,
+        obtainedAt: new Date().toISOString(),
+        method: "gh_cli",
+      };
+    }
   }
 
   return null;

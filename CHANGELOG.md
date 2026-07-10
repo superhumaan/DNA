@@ -4,6 +4,12 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.3.5] - 2026-07-10
+
+### Fixed
+
+- **GitHub login:** DNA now automatically adopts an existing GitHub CLI (`gh`) session — no browser step or manual credential copy when `gh auth token` already works. `dna github login`, `dna doctor`, and runtime GitHub automation persist the CLI token to `~/.config/dna/github-credentials.json`. Interactive `gh auth login` now inherits your terminal so the browser can open when a fresh sign-in is required.
+
 ## [0.3.4] - 2026-07-10
 
 ### Fixed
