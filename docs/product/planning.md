@@ -11,7 +11,8 @@ DNA development priorities and public roadmap.
 - Platform catalog from four reference production apps
 - Tiered compliance (GDPR, HIPAA, ISO, SOC 2)
 - Feature factory with quality gates
-- GitHub onboarding (browser auth during init)
+- GitHub onboarding (browser auth during `dna doctor`)
+- One-command onboarding: `npx @superhumaan/dna-by-humaan doctor` scaffolds CI, runtime, Docker, hooks, and auto-wires middleware
 
 See [Current version scope](../delivery/current-version-scope.md).
 
@@ -23,16 +24,16 @@ See [Current version scope](../delivery/current-version-scope.md).
 |------|--------|
 | Knowledge pack marketplace | ✅ Shipped |
 | Fastify, NestJS, Next.js runtime adapters | ✅ Shipped |
-| End-to-end delivery pipeline ([#1](https://github.com/superhumaan/DNA/issues/1)) | ✅ Shipped (unreleased) |
-| Interactive onboarding wizard ([#2](https://github.com/superhumaan/DNA/issues/2)) | ✅ Shipped (unreleased) |
-| Feature factory v2 + admin portal ([#3](https://github.com/superhumaan/DNA/issues/3)) | ✅ Shipped (unreleased) |
-| Local quality module ([#4](https://github.com/superhumaan/DNA/issues/4)) | ✅ Shipped (unreleased) |
-| CI, Docker, and git hooks ([#5](https://github.com/superhumaan/DNA/issues/5)) | ✅ Shipped (unreleased) |
-| Doctor orchestrator + `dna ivf` ([#6](https://github.com/superhumaan/DNA/issues/6)) | ✅ Shipped (unreleased) |
-| IVF UI layer stack ([#7](https://github.com/superhumaan/DNA/issues/7)) | ✅ Shipped (unreleased) |
-| GitHub integration package ([#8](https://github.com/superhumaan/DNA/issues/8)) | ✅ Shipped (unreleased) |
-| Runtime SQLite storage ([#9](https://github.com/superhumaan/DNA/issues/9)) | ✅ Shipped (unreleased) |
-| Preview deployment workflow ([#10](https://github.com/superhumaan/DNA/issues/10)) | ✅ Shipped (unreleased) |
+| End-to-end delivery pipeline ([#1](https://github.com/superhumaan/DNA/issues/1)) | ✅ Shipped |
+| Interactive onboarding wizard ([#2](https://github.com/superhumaan/DNA/issues/2)) | ✅ Shipped |
+| Feature factory v2 + admin portal ([#3](https://github.com/superhumaan/DNA/issues/3)) | ✅ Shipped |
+| Local quality module ([#4](https://github.com/superhumaan/DNA/issues/4)) | ✅ Shipped |
+| CI, Docker, and git hooks ([#5](https://github.com/superhumaan/DNA/issues/5)) | ✅ Shipped |
+| Doctor orchestrator + `dna ivf` ([#6](https://github.com/superhumaan/DNA/issues/6)) | ✅ Shipped |
+| IVF UI layer stack ([#7](https://github.com/superhumaan/DNA/issues/7)) | ✅ Shipped |
+| GitHub integration package ([#8](https://github.com/superhumaan/DNA/issues/8)) | ✅ Shipped |
+| Runtime SQLite storage ([#9](https://github.com/superhumaan/DNA/issues/9)) | ✅ Shipped |
+| Preview deployment workflow ([#10](https://github.com/superhumaan/DNA/issues/10)) | ✅ Shipped |
 | First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress |
 | Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | Planned |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | Planned |

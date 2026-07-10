@@ -12,6 +12,8 @@ Full project health check:
 dna doctor
 ```
 
+Doctor scaffolds and repairs DNA in one pass. When GitHub is enabled and you are not signed in, it opens browser login (via `gh` or device flow). Skips login in CI or with `--check-only`.
+
 Checks include:
 
 - `.DNA/` structure completeness
@@ -19,9 +21,10 @@ Checks include:
 - Behaviour files present
 - neuralNetwork.json valid
 - Knowledge pack integrity
-- Runtime configuration (if enabled)
+- Runtime storage (`.DNA/data/runtime.db`) and auto-wire status
+- CI, Docker, and git hooks scaffolding
 - AI tool file sync
-- GitHub connection (`dna github login` / connect)
+- GitHub connection (browser login + remote auto-detect)
 - Preview deploy workflow when `ci.pushToPreview` is enabled
 
 ---
@@ -52,7 +55,7 @@ Validates the project against all six Behaviour files:
 
 | Moment | Command |
 |--------|---------|
-| After `dna init` | `dna doctor` |
+| After first setup | `dna doctor` (replaces separate `init` + `ci install` + `runtime install`) |
 | Before commits | `dna validate` |
 | In CI | Both |
 | After marketplace update | `dna doctor` |

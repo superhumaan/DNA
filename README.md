@@ -231,17 +231,17 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 |------|-------|-----|--------|
 | Knowledge pack marketplace (768 packs) | Jan 2026 | Mar 2026 | Shipped |
 | Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |
-| `npx @superhumaan/dna-by-humaan` on npm (v0.3.1) | Mar 2026 | Apr 2026 | Shipped |
-| [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped (unreleased) |
-| [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped (unreleased) |
-| [Feature factory v2 + admin portal pattern](https://github.com/superhumaan/DNA/issues/3) | May 2026 | Jun 2026 | Shipped (unreleased) |
-| [Local quality module (`dna quality`)](https://github.com/superhumaan/DNA/issues/4) | May 2026 | Jul 2026 | Shipped (unreleased) |
-| [CI, Docker, and git hooks generators](https://github.com/superhumaan/DNA/issues/5) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
-| [Doctor orchestrator + `dna ivf`](https://github.com/superhumaan/DNA/issues/6) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
-| [IVF UI layer stack (MUI, mobile, shared library)](https://github.com/superhumaan/DNA/issues/7) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
-| [GitHub integration package](https://github.com/superhumaan/DNA/issues/8) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
-| [Runtime SQLite storage](https://github.com/superhumaan/DNA/issues/9) | Jun 2026 | Jul 2026 | Shipped (unreleased) |
-| [Preview deployment workflow](https://github.com/superhumaan/DNA/issues/10) | Jul 2026 | Aug 2026 | Shipped (unreleased) |
+| `npx @superhumaan/dna-by-humaan` on npm (v0.3.2) | Mar 2026 | Jul 2026 | Shipped |
+| [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped |
+| [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped |
+| [Feature factory v2 + admin portal pattern](https://github.com/superhumaan/DNA/issues/3) | May 2026 | Jun 2026 | Shipped |
+| [Local quality module (`dna quality`)](https://github.com/superhumaan/DNA/issues/4) | May 2026 | Jul 2026 | Shipped |
+| [CI, Docker, and git hooks generators](https://github.com/superhumaan/DNA/issues/5) | Jun 2026 | Jul 2026 | Shipped |
+| [Doctor orchestrator + `dna ivf`](https://github.com/superhumaan/DNA/issues/6) | Jun 2026 | Jul 2026 | Shipped |
+| [IVF UI layer stack (MUI, mobile, shared library)](https://github.com/superhumaan/DNA/issues/7) | Jun 2026 | Jul 2026 | Shipped |
+| [GitHub integration package](https://github.com/superhumaan/DNA/issues/8) | Jun 2026 | Jul 2026 | Shipped |
+| [Runtime SQLite storage](https://github.com/superhumaan/DNA/issues/9) | Jun 2026 | Jul 2026 | Shipped |
+| [Preview deployment workflow](https://github.com/superhumaan/DNA/issues/10) | Jul 2026 | Aug 2026 | Shipped |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | In progress |
 | [Real-time dashboard UI](https://github.com/superhumaan/DNA/issues/12) | Sep 2026 | Dec 2026 | Planned |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Planned |
@@ -251,6 +251,14 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | [Multi-tenant gradual rollout patterns](https://github.com/superhumaan/DNA/issues/15) | Jan 2027 | Mar 2027 | Planned |
 
 ---
+
+## Sponsors
+
+<!-- sponsors:ledger:start -->
+DNA is MIT-licensed and maintained in the open. Sponsorship funds hosting, security updates, and the marketplace — not premium features.
+
+_No sponsors yet — [be the first](https://github.com/sponsors/superhumaan)._
+<!-- sponsors:ledger:end -->
 
 ## License
 

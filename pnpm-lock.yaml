@@ -175,6 +175,9 @@ importers:
       '@superhumaan/dna-config':
         specifier: workspace:*
         version: link:../dna-config
+      '@superhumaan/dna-github':
+        specifier: workspace:*
+        version: link:../dna-github
       '@superhumaan/dna-templates':
         specifier: workspace:*
         version: link:../dna-templates

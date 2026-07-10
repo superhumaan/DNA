@@ -18,7 +18,9 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **GitHub** | Connect, auto-issues, push gates, browser login (`dna github login`) |
 | **Preview deploy** | `dna-preview.yml` scaffold with Vercel/Netlify + branch filter |
 | **CI hygiene** | Inline failed-run cleanup in DNA-generated workflows |
-| **npm** | `@superhumaan/dna-by-humaan` single package |
+| **Doctor orchestrator** | `dna doctor` — scaffold, CI, runtime auto-wire, GitHub browser login |
+| **Runtime auto-wire** | Express, Fastify, Next.js middleware; preload fallback for other stacks |
+| **Sponsors & credits** | `dna credits`, public sponsor ledger, npm `funding` |
 
 ---
 

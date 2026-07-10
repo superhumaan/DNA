@@ -17,4 +17,8 @@ export default defineConfig([
     ...bundle,
     entry: ["src/runtime.ts"],
   },
+  {
+    ...bundle,
+    entry: ["src/runtime-preload.ts"],
+  },
 ]);

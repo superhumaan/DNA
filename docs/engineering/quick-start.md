@@ -20,14 +20,16 @@ DNA by Humaan is **one npm package** with two modes:
 
 ```bash
 cd /path/to/your-project
-npx @superhumaan/dna-by-humaan init -y
-dna doctor
+npx @superhumaan/dna-by-humaan doctor
+npm install   # if doctor added @superhumaan/dna-by-humaan to package.json
 ```
 
-For backend projects, add the same package to your app dependencies (runtime is a subpath export):
+Doctor scaffolds `.DNA/`, CI workflows, Docker, git hooks, runtime storage, opens GitHub browser sign-in when needed, and auto-wires the runtime observer for Express, Fastify, and Next.js.
+
+For backend projects, the runtime package is added automatically when missing:
 
 ```bash
-pnpm add @superhumaan/dna-by-humaan
+pnpm add @superhumaan/dna-by-humaan   # only if not already added by doctor
 ```
 
 ```typescript

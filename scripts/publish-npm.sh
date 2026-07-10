@@ -22,6 +22,8 @@ if [[ -n "$AUTH_TOKEN" ]]; then
   export NPM_CONFIG_USERCONFIG="$NPM_USERCONFIG"
 fi
 
+node "$ROOT/scripts/sync-sponsors.mjs"
+
 pnpm --filter './packages/*' build
 
 echo "→ Publishing @superhumaan/dna-by-humaan..."

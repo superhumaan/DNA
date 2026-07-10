@@ -57,7 +57,7 @@ export async function connectGitHubDuringOnboarding(
       enabled: true,
       owner: remote.owner,
       repo: remote.repo,
-      authenticated: true,
+      authenticated: !!username || !!(await resolveGitHubToken())?.token,
     };
     config.updatedAt = new Date().toISOString();
     await writeJsonFile(join(root, DNA_CONFIG_FILE), config);

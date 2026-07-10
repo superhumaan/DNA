@@ -57,7 +57,8 @@
     "wiki:kill": "node scripts/wiki-refresh.mjs --kill-only",
     "wiki:refresh": "node scripts/wiki-refresh.mjs",
     "wiki:dev": "pnpm run wiki:refresh",
-    "wiki:build": "pnpm run wiki:sync && npm run build --prefix .local-wiki"
+    "wiki:build": "pnpm run wiki:sync && npm run build --prefix .local-wiki",
+    "sponsors:sync": "node scripts/sync-sponsors.mjs"
   },
   "engines": {
     "node": ">=20"

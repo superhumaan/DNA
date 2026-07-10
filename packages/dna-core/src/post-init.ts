@@ -7,6 +7,8 @@ import { installFeatureFactory } from "./generators/feature-factory.js";
 import { installCiPipeline } from "./generators/ci.js";
 import { installGitHooks } from "./generators/git-hooks.js";
 import { installDockerScaffold } from "./generators/docker.js";
+import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
+import { wireRuntimeMiddleware } from "./generators/wire-runtime.js";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
 
 export async function runPostInit(
@@ -75,6 +77,10 @@ export async function runPostInit(
   );
 
   if (answers.installRuntime) {
+    const db = await ensureRuntimeDatabase(root);
+    if (db.created) created.push(db.path);
+    if (db.migrated > 0) created.push(`.DNA/data/runtime.db (migrated ${db.migrated} jsonl records)`);
+
     await writeFileEnsured(
       join(root, ".DNA", "runtime", "install-snippet.ts"),
       RUNTIME_INSTALL_SNIPPET,
@@ -98,7 +104,7 @@ export async function runPostInit(
       };
       const deps = pkg.dependencies ?? {};
       if (!deps["@superhumaan/dna-by-humaan"]) {
-        deps["@superhumaan/dna-by-humaan"] = "^0.3.1";
+        deps["@superhumaan/dna-by-humaan"] = "^0.3.2";
         pkg.dependencies = deps;
         await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
         created.push("package.json (added @superhumaan/dna-by-humaan)");
@@ -106,6 +112,9 @@ export async function runPostInit(
     } catch {
       // no package.json
     }
+
+    const wire = await wireRuntimeMiddleware({ root, config });
+    created.push(...wire.wired.map((f) => `runtime auto-wired: ${f}`));
   }
 
   if (answers.configureGithub) {

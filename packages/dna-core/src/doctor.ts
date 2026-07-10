@@ -1,4 +1,6 @@
 import { join } from "node:path";
+import { readFile } from "node:fs/promises";
+import { homedir } from "node:os";
 import { BEHAVIOUR_FILES, DNA_CONFIG_FILE, DNA_RUNTIME_DB } from "@superhumaan/dna-config";
 import { fileExists } from "./fs.js";
 import { loadDnaConfig, validateProject } from "./validator.js";
@@ -10,11 +12,24 @@ export interface DoctorReport {
   behaviour: { files: number; missing: string[] };
   immuneSystem: { configured: boolean };
   cellularMemory: { configured: boolean };
-  github: { enabled: boolean; configured: boolean };
+  github: { enabled: boolean; configured: boolean; signedIn: boolean };
   ai: { enabled: boolean; provider?: string };
   runtime: { enabled: boolean; configured: boolean };
+  ci: { enabled: boolean; workflowInstalled: boolean };
+  docker: { dockerfileInstalled: boolean };
+  hooks: { prePushInstalled: boolean; hooksPathConfigured: boolean };
   preview: { enabled: boolean; workflowInstalled: boolean; provider: string };
   validation: { valid: boolean; issueCount: number };
+}
+
+async function isGitHubSignedIn(): Promise<boolean> {
+  if (process.env.GITHUB_TOKEN || process.env.GH_TOKEN) return true;
+  try {
+    const raw = await readFile(join(homedir(), ".config", "dna", "github-credentials.json"), "utf-8");
+    return !!(JSON.parse(raw) as { token?: string }).token;
+  } catch {
+    return false;
+  }
 }
 
 export async function runDoctor(root: string): Promise<DoctorReport> {
@@ -36,7 +51,22 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
   const runtimeDb = await fileExists(join(root, DNA_RUNTIME_DB));
   const runtimeJsonl = await fileExists(join(root, ".DNA", "runtime", "events.jsonl"));
   const runtimeConfigured = runtimeDb || runtimeJsonl;
+  const ciWorkflow = await fileExists(join(root, ".github", "workflows", "dna-ci.yml"));
   const previewWorkflow = await fileExists(join(root, ".github", "workflows", "dna-preview.yml"));
+  const dockerfile = await fileExists(join(root, "Dockerfile"));
+  const prePushHook = await fileExists(join(root, ".DNA", "hooks", "pre-push"));
+  let hooksPathConfigured = false;
+  try {
+    const { simpleGit } = await import("simple-git");
+    const git = simpleGit(root);
+    if (await git.checkIsRepo()) {
+      const hooksPath = await git.getConfig("core.hooksPath");
+      hooksPathConfigured = hooksPath.value === ".DNA/hooks";
+    }
+  } catch {
+    // not a git repo
+  }
+  const githubSignedIn = await isGitHubSignedIn();
 
   return {
     dna: {
@@ -56,6 +86,7 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
     github: {
       enabled: config?.github?.enabled ?? false,
       configured: !!(config?.github?.owner && config?.github?.repo),
+      signedIn: githubSignedIn,
     },
     ai: {
       enabled: config?.ai?.enabled ?? false,
@@ -65,6 +96,12 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
       enabled: config?.runtime?.enabled ?? false,
       configured: runtimeConfigured,
     },
+    ci: {
+      enabled: config?.ci?.enabled ?? false,
+      workflowInstalled: ciWorkflow,
+    },
+    docker: { dockerfileInstalled: dockerfile },
+    hooks: { prePushInstalled: prePushHook, hooksPathConfigured },
     preview: {
       enabled: config?.ci?.pushToPreview ?? false,
       workflowInstalled: previewWorkflow,
@@ -88,9 +125,20 @@ export function formatDoctorReport(report: DoctorReport): string {
     `${status(report.behaviour.missing.length === 0)} Behaviour (${report.behaviour.files}/${BEHAVIOUR_FILES.length} files)`,
     `${status(report.immuneSystem.configured)} Immune System`,
     `${status(report.cellularMemory.configured)} CellularMemory`,
-    `${status(report.github.configured || !report.github.enabled)} GitHub integration${report.github.enabled ? "" : " (disabled)"}`,
+    `${status(report.github.configured && (!report.github.enabled || report.github.signedIn))} GitHub integration${
+      report.github.enabled
+        ? report.github.configured
+          ? report.github.signedIn
+            ? ""
+            : " (run dna github login)"
+          : " (run dna github connect)"
+        : " (disabled)"
+    }`,
     `${status(!report.ai.enabled || !!report.ai.provider)} AI integration${report.ai.enabled ? ` (${report.ai.provider})` : " (disabled)"}`,
-    `${status(report.runtime.configured || !report.runtime.enabled)} Runtime database${report.runtime.enabled ? "" : " (disabled)"}`,
+    `${status(report.runtime.configured || !report.runtime.enabled)} Runtime storage${report.runtime.enabled ? "" : " (disabled)"}`,
+    `${status(!report.ci.enabled || report.ci.workflowInstalled)} CI pipeline${report.ci.enabled ? "" : " (disabled)"}`,
+    `${status(report.docker.dockerfileInstalled || !report.ci.enabled)} Docker scaffold`,
+    `${status(report.hooks.prePushInstalled && report.hooks.hooksPathConfigured)} Git hooks (pre-push quality gate)`,
     `${status(!report.preview.enabled || report.preview.workflowInstalled)} Preview deploy${report.preview.enabled ? ` (${report.preview.provider})` : " (disabled)"}`,
     "",
     `${status(report.validation.valid)} Validation (${report.validation.issueCount} issues)`,

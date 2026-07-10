@@ -42,4 +42,8 @@ See [CONTRIBUTING.md](../../CONTRIBUTING.md) and [Local development](../engineer
 
 Built by **[Humaan](https://humaan.com)** · **[Superlite](https://superlite.ai)**
 
+- **Sponsors:** [dna.humaan.app/sponsors](https://dna.humaan.app/sponsors) · [Sponsor on GitHub](https://github.com/sponsors/superhumaan)
+- **Commercial services:** [dna.humaan.app/services](https://dna.humaan.app/services)
+- Maintainer docs: [Sponsors](./sponsors.md) · [Commercial services](./commercial-services.md)
+
 Product naming: [Naming conventions](../design/naming-conventions.md)

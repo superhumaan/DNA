@@ -1,0 +1,57 @@
+{
+  "updated": "2026-07-09",
+  "sponsorUrl": "https://github.com/sponsors/superhumaan",
+  "servicesUrl": "https://dna.humaan.app/services",
+  "goalUsd": 500,
+  "goalDescription": "Keeps dna.humaan.app online, maintains the marketplace catalog, funds security updates, and supports community issue triage.",
+  "tiers": [
+    {
+      "id": "supporter",
+      "name": "Supporter",
+      "amountUsd": 5,
+      "summary": "Help keep DNA free and maintained.",
+      "benefits": [
+        "Public sponsor ledger (website + repository + npm credits)",
+        "GitHub Sponsor badge on your profile"
+      ]
+    },
+    {
+      "id": "developer",
+      "name": "Developer",
+      "amountUsd": 25,
+      "summary": "For engineers who run DNA regularly.",
+      "benefits": [
+        "Everything in Supporter",
+        "Linked name in README sponsor ledger",
+        "Sponsor-only release updates"
+      ]
+    },
+    {
+      "id": "team",
+      "name": "Team",
+      "amountUsd": 100,
+      "summary": "For engineering teams standardising on DNA.",
+      "benefits": [
+        "Everything in Developer",
+        "Team or company name + link in README",
+        "Priority issue triage for your stack",
+        "Quarterly sponsor roadmap update"
+      ]
+    },
+    {
+      "id": "company",
+      "name": "Company",
+      "amountUsd": 500,
+      "summary": "For organisations depending on DNA in production.",
+      "benefits": [
+        "Everything in Team",
+        "Logo on dna.humaan.app (monthly homepage rotation when provided)",
+        "Featured placement in README sponsor ledger",
+        "Direct line for security disclosures",
+        "Input on marketplace pack priorities",
+        "Quarterly check-in with maintainers"
+      ]
+    }
+  ],
+  "sponsors": []
+}

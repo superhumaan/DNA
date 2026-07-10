@@ -14,8 +14,8 @@ Share this with colleagues who want to try DNA on their own projects.
 | AI context | `dna context cursor` | Paste-ready context for your AI tool |
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |
-| Runtime observer | `@superhumaan/dna-by-humaan/runtime` | Errors/slow requests → `.DNA/runtime/issues.jsonl` |
-| GitHub (optional) | `dna github connect` | Auto-issues for high/critical runtime events |
+| Runtime observer | `@superhumaan/dna-by-humaan/runtime` | Errors/slow requests → `.DNA/data/runtime.db` |
+| GitHub (optional) | `dna doctor` (auto) | Browser login + remote detect; auto-issues for high/critical events |
 | AI repair (optional) | `dna ai repair --dry-run` | Branch + patch plan, never auto-merged |
 
 ---
@@ -46,21 +46,17 @@ dna --help
 ```bash
 cd /path/to/your-project
 
-# Initialise (non-interactive defaults)
-dna init -y
+# One command — scaffolds DNA, CI, runtime, Docker, hooks, and GitHub (browser login)
+npx @superhumaan/dna-by-humaan doctor
 
-# Health check
-dna doctor
+# If doctor added the runtime package
+npm install
+
+# Health check (optional — doctor already validates)
 dna validate
-
-# Install a knowledge pack matching your stack
-dna marketplace list
-dna marketplace install frameworks/nextjs    # or vite, fastify, nestjs, etc.
-
-# Generate AI context (pick your tool)
-dna context cursor
-dna context copilot
 ```
+
+`dna doctor` replaces the older multi-step flow (`init`, `ci install`, `runtime install`, `github connect`). It auto-detects your GitHub remote, opens browser sign-in when needed, and **auto-wires the runtime observer** into Express/Fastify entry files or Next.js `middleware.ts`.
 
 ### What to commit
 

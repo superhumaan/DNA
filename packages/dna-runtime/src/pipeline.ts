@@ -8,7 +8,7 @@ import {
   eventKey,
   EventTracker,
 } from "@superhumaan/dna-immune";
-import { createIssue, getTokenFromEnv, commentOnIssue } from "@superhumaan/dna-github";
+import { createIssue, resolveGitHubToken, commentOnIssue } from "@superhumaan/dna-github";
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import { appendJsonl } from "./persistence.js";
 import { appendRuntimeRecord } from "./storage.js";
@@ -88,11 +88,12 @@ export async function processRuntimeEvent(
   const autoIssue = shouldAutoCreateIssue(issue, immuneConfig);
 
   if (config?.github?.enabled && config.github.owner && config.github.repo && autoIssue) {
+    const creds = await resolveGitHubToken();
     const ghResult = await createIssue(
       {
         owner: config.github.owner,
         repo: config.github.repo,
-        token: getTokenFromEnv(),
+        token: creds?.token,
       },
       issue,
     );
@@ -113,12 +114,12 @@ export async function processRuntimeEvent(
           prUrl: repair.prUrl,
         };
 
-        if (repair.prUrl && getTokenFromEnv()) {
+        if (repair.prUrl && creds?.token) {
           await commentOnIssue(
             {
               owner: config.github.owner,
               repo: config.github.repo,
-              token: getTokenFromEnv(),
+              token: creds.token,
             },
             ghResult.number,
             `DNA AI repair opened PR: ${repair.prUrl}\n\n**Never auto-merged** — requires human review.`,

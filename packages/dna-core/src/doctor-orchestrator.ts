@@ -11,12 +11,15 @@ import { installFoundationKnowledge } from "./marketplace/foundation.js";
 import { checkMarketplaceUpdates } from "./marketplace/install.js";
 import { installCiPipeline } from "./generators/ci.js";
 import { installGitHooks } from "./generators/git-hooks.js";
+import { installDockerScaffold } from "./generators/docker.js";
+import { wireRuntimeMiddleware } from "./generators/wire-runtime.js";
 import { installFeatureFactory } from "./generators/feature-factory.js";
 import { generateAiToolFiles } from "./generators/ai-tools.js";
 import { generateBehaviourFiles } from "./generators/behaviour.js";
 import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { writeFileEnsured, writeJsonFile, fileExists, ensureDir } from "./fs.js";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
+import { detectGitHubRemote, resolveGitHubToken, loginWithWebFlow } from "@superhumaan/dna-github";
 import { analyzeProject } from "./ivf/analyze.js";
 import { documentFromCode } from "./ivf/document.js";
 import { generateIvfPlan } from "./ivf/plan.js";
@@ -28,6 +31,14 @@ export interface DoctorOrchestratorOptions {
   /** Run brownfield IVF pipeline when legacy project detected */
   runIvf?: boolean;
   quote?: string;
+  /** Status lines during interactive steps (e.g. GitHub browser login) */
+  onStatus?: (message: string) => void;
+}
+
+function shouldAttemptGitHubLogin(): boolean {
+  if (process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true") return false;
+  if (process.env.DNA_SKIP_GITHUB_LOGIN === "1") return false;
+  return Boolean(process.stdin.isTTY);
 }
 
 export interface DoctorOrchestratorResult {
@@ -109,7 +120,7 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
   if (!config.github?.enabled) {
     config.github = { ...config.github, enabled: true };
     changed = true;
-    actions.push("GitHub integration enabled — run `dna github login` then `dna github connect`");
+    actions.push("GitHub integration enabled");
   }
 
   if (!config.ci?.enabled) {
@@ -130,6 +141,76 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
     config.featureFactory = { enabled: true };
     changed = true;
     actions.push("feature factory enabled");
+  }
+
+  if (changed) {
+    config.updatedAt = new Date().toISOString();
+    await writeJsonFile(join(root, DNA_CONFIG_FILE), config);
+  }
+
+  return actions;
+}
+
+async function ensureGitHubConnection(
+  root: string,
+  config: DnaConfig,
+  options?: { interactive?: boolean; onStatus?: (message: string) => void },
+): Promise<string[]> {
+  const actions: string[] = [];
+  if (!config.github?.enabled) return actions;
+
+  const log = options?.onStatus ?? (() => {});
+  let changed = false;
+  let creds = await resolveGitHubToken();
+
+  if (
+    !creds?.token &&
+    options?.interactive !== false &&
+    shouldAttemptGitHubLogin()
+  ) {
+    log("\n🔗 GitHub — sign in with your browser (one time)\n");
+    log("DNA needs repo access to push features and open issues. No tokens to copy.\n");
+    try {
+      const login = await loginWithWebFlow({ onStatus: log });
+      creds = login.credentials;
+      actions.push(`GitHub signed in as @${login.username}`);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      actions.push(`GitHub login skipped: ${msg}`);
+    }
+  }
+
+  const remote = await detectGitHubRemote(root);
+
+  if (remote) {
+    const needsRepo =
+      config.github.owner !== remote.owner ||
+      config.github.repo !== remote.repo ||
+      !config.github.owner ||
+      !config.github.repo;
+    if (needsRepo) {
+      config.github = {
+        ...config.github,
+        enabled: true,
+        owner: remote.owner,
+        repo: remote.repo,
+        authenticated: !!creds?.token,
+      };
+      changed = true;
+      actions.push(`GitHub repo: ${remote.owner}/${remote.repo}`);
+    }
+  }
+
+  if (creds?.token && !config.github.authenticated) {
+    config.github = { ...config.github, authenticated: true };
+    changed = true;
+    if (!actions.some((a) => a.startsWith("GitHub signed in"))) {
+      actions.push(`GitHub signed in${creds.username ? ` as @${creds.username}` : ""}`);
+    }
+  } else if (!creds?.token && options?.interactive === false) {
+    actions.push("GitHub: not signed in (run `dna doctor` in a terminal to use browser login)");
+  } else if (!creds?.token && !shouldAttemptGitHubLogin()) {
+    actions.push("GitHub: not signed in (non-interactive — run `dna github login` locally)");
   }
 
   if (changed) {
@@ -162,7 +243,7 @@ async function repairMissingStructure(root: string, config: DnaConfig): Promise<
   return actions;
 }
 
-async function ensureRuntimeAssets(root: string): Promise<string[]> {
+async function ensureRuntimeAssets(root: string, config: DnaConfig): Promise<string[]> {
   const actions: string[] = [];
   const runtimeDir = join(root, ".DNA", "runtime");
 
@@ -187,6 +268,29 @@ async function ensureRuntimeAssets(root: string): Promise<string[]> {
   if (!(await fileExists(envPath))) {
     await writeFileEnsured(envPath, ENV_EXAMPLE_SNIPPET);
     actions.push(".DNA/runtime/env.example.snippet");
+  }
+
+  const pkgPath = join(root, "package.json");
+  try {
+    const raw = await readFile(pkgPath, "utf-8");
+    const pkg = JSON.parse(raw) as { dependencies?: Record<string, string> };
+    const deps = pkg.dependencies ?? {};
+    if (!deps["@superhumaan/dna-by-humaan"]) {
+      deps["@superhumaan/dna-by-humaan"] = "^0.3.2";
+      pkg.dependencies = deps;
+      await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
+      actions.push("package.json (added @superhumaan/dna-by-humaan — run npm install)");
+    }
+  } catch {
+    // no package.json
+  }
+
+  const wire = await wireRuntimeMiddleware({ root, config });
+  for (const file of wire.wired) {
+    actions.push(`runtime auto-wired: ${file}`);
+  }
+  for (const skip of wire.skipped) {
+    actions.push(`(runtime wire: ${skip})`);
   }
 
   return actions;
@@ -229,6 +333,12 @@ async function ensureAiAndCi(root: string, config: DnaConfig): Promise<string[]>
 
   const hooks = await installGitHooks(root, config);
   actions.push(...hooks);
+
+  const docker = await installDockerScaffold({ root, config, scan });
+  actions.push(...docker.created);
+  for (const skip of docker.skipped) {
+    actions.push(`(docker skipped: ${skip})`);
+  }
 
   return actions;
 }
@@ -279,7 +389,7 @@ async function runBrownfieldPipeline(
 export async function runDoctorOrchestrator(
   options: DoctorOrchestratorOptions,
 ): Promise<DoctorOrchestratorResult> {
-  const { root, checkOnly = false, runIvf = false, quote } = options;
+  const { root, checkOnly = false, runIvf = false, quote, onStatus } = options;
   const actions: string[] = [];
   let initialized = false;
   let ivfRun = false;
@@ -299,9 +409,14 @@ export async function runDoctorOrchestrator(
     actions.push(...(await ensureGitignore(root)));
     actions.push(...(await ensureEnabledDefaults(root, config)));
     config = (await loadDnaConfig(root)) ?? config;
+    actions.push(...(await ensureGitHubConnection(root, config, {
+      interactive: !checkOnly,
+      onStatus,
+    })));
+    config = (await loadDnaConfig(root)) ?? config;
 
     actions.push(...(await repairMissingStructure(root, config)));
-    actions.push(...(await ensureRuntimeAssets(root)));
+    actions.push(...(await ensureRuntimeAssets(root, config)));
     actions.push(...(await ensureAiAndCi(root, config)));
     actions.push(...(await pullEssentials(root, config)));
 
@@ -341,11 +456,21 @@ export function formatDoctorOrchestratorResult(result: DoctorOrchestratorResult)
   }
 
   if (result.initialized) {
-    lines.push("DNA is ready. Describe what you want to build in Cursor or Claude.");
+    lines.push("DNA is ready. Run `npm install` if package.json was updated, then start your app.");
   } else if (!result.report.dna.installed) {
     lines.push("DNA not installed. Run `dna doctor` (without --check-only) to scaffold.");
   } else {
-    lines.push("DNA is up to date. Push to preview — CI quality gates run on every push.");
+    const needsNpmInstall = result.actions.some((a) => a.includes("package.json (added"));
+    if (needsNpmInstall) {
+      lines.push("Run `npm install` to install @superhumaan/dna-by-humaan for the runtime observer.");
+    }
+    lines.push("DNA is up to date.");
+    if (result.report.github.enabled && !result.report.github.signedIn) {
+      lines.push("GitHub: sign in failed or was skipped — run `dna github login` in a terminal.");
+    }
+    if (result.report.github.enabled && !result.report.github.configured) {
+      lines.push("GitHub: add a GitHub `origin` remote and re-run `dna doctor`.");
+    }
     if (result.report.preview.enabled && !result.report.preview.workflowInstalled) {
       lines.push(
         "Preview deploy: run `dna ci install` and set GitHub secrets for your provider (Vercel: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID; Netlify: NETLIFY_AUTH_TOKEN, NETLIFY_SITE_ID).",

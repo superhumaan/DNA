@@ -62,6 +62,8 @@ import {
   installGitHooks,
   installDockerScaffold,
   runDockerBuild,
+  ensureRuntimeDatabase,
+  wireRuntimeMiddleware,
 } from "@superhumaan/dna-core";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
@@ -105,15 +107,18 @@ program
     const answers = await runInitWizard(!!options.yes, scan, defaultProjectName);
     const result = await runWizard({ root, answers });
 
-    if (answers.configureGithub && !options.yes) {
+    if (answers.configureGithub) {
       const gh = await connectGitHubDuringOnboarding(root, result.config, {
-        onStatus: (msg) => console.log(msg),
+        onStatus: (msg) => {
+          if (!options.yes) console.log(msg);
+        },
+        skipLogin: !!options.yes,
       });
       if (gh.connected && gh.owner && gh.repo) {
-        console.log(`✓ GitHub: ${gh.owner}/${gh.repo} (@${gh.username ?? "signed in"})`);
+        console.log(`✓ GitHub: ${gh.owner}/${gh.repo}${gh.username ? ` (@${gh.username})` : ""}`);
       } else if (gh.username) {
         console.log(`✓ GitHub: signed in as @${gh.username}`);
-      } else {
+      } else if (!options.yes || gh.message !== "GitHub integration disabled") {
         console.log(`⚠ GitHub: ${gh.message}`);
       }
     }
@@ -346,6 +351,14 @@ program
     await writeFile(snippetPath, RUNTIME_INSTALL_SNIPPET, "utf-8");
     await writeFile(envPath, ENV_EXAMPLE_SNIPPET, "utf-8");
 
+    const db = await ensureRuntimeDatabase(root);
+    if (db.created) {
+      console.log(`  ${db.path}`);
+    }
+    if (db.migrated > 0) {
+      console.log(`  Migrated ${db.migrated} legacy jsonl record(s) to runtime.db`);
+    }
+
     const config = await loadDnaConfig(root);
     if (config) {
       config.runtime = {
@@ -356,17 +369,21 @@ program
         enabled: true,
       };
       await writeJsonFile(join(root, ".DNA/config.dna.json"), config);
+
+      const wire = await wireRuntimeMiddleware({ root, config });
+      if (wire.wired.length > 0) {
+        console.log("\n✓ Runtime auto-wired:");
+        wire.wired.forEach((f) => console.log(`  ${f}`));
+      }
+      for (const s of wire.skipped) console.log(`  (skipped: ${s})`);
     }
 
-    console.log("✓ Runtime install snippets created:");
+    console.log("\n✓ Runtime install complete");
     console.log(`  ${snippetPath}`);
     console.log(`  ${envPath}`);
-    console.log("\nInstall: pnpm add @superhumaan/dna-by-humaan");
-    console.log("Import:  import { dnaRuntime } from '@superhumaan/dna-by-humaan/runtime'");
-    console.log("Express:  app.use(dnaRuntime.express()); app.use(dnaRuntime.errorHandler());");
-    console.log("Fastify:  dnaRuntime.attachFastify(fastify);");
-    console.log("NestJS:   @UseInterceptors(dnaRuntime.nestInterceptor()) + @UseFilters(dnaRuntime.nestExceptionFilter())");
-    console.log("Next.js:  export const middleware = dnaRuntime.nextMiddleware();");
+    if (!config) {
+      console.log("\nRun `dna doctor` to auto-wire middleware for your stack.");
+    }
   });
 
 program
@@ -525,11 +542,14 @@ ci.command("install")
     });
 
     const hooks = await installGitHooks(root, config);
+    const docker = await installDockerScaffold({ root, config, scan });
 
     console.log("✓ CI pipeline install complete\n");
     for (const f of result.created) console.log(`  + ${f}`);
     for (const f of hooks) console.log(`  + ${f}`);
+    for (const f of docker.created) console.log(`  + ${f}`);
     for (const s of result.skipped) console.log(`  (skipped: ${s})`);
+    for (const s of docker.skipped) console.log(`  (docker skipped: ${s})`);
     if (result.created.length === 0 && result.skipped.length > 0) {
       console.log("\nUse --force to add DNA workflows alongside existing CI.");
     }
@@ -630,12 +650,24 @@ github
       process.exit(1);
     }
 
-    config.github = { enabled: true, owner: options.owner, repo: options.repo, authenticated: true };
+    config.github = {
+      enabled: true,
+      owner: options.owner,
+      repo: options.repo,
+      authenticated: false,
+    };
     config.updatedAt = new Date().toISOString();
     await writeJsonFile(join(root, ".DNA/config.dna.json"), config);
 
+    const creds = await resolveGitHubToken();
     console.log(`✓ GitHub connected: ${options.owner}/${options.repo}`);
-    console.log("  Run `dna github login` if push fails — browser login, no manual tokens.");
+    if (creds?.token) {
+      config.github.authenticated = true;
+      await writeJsonFile(join(root, ".DNA/config.dna.json"), config);
+      console.log(`  Signed in${creds.username ? ` as @${creds.username}` : ""}`);
+    } else {
+      console.log("  Run `dna github login` — browser login, no manual tokens.");
+    }
   });
 
 const docker = program.command("docker").description("Docker build verification");
@@ -804,6 +836,7 @@ program
       checkOnly: options.checkOnly,
       runIvf: options.ivf,
       quote: options.quote,
+      onStatus: (msg) => console.log(msg),
     });
     console.log(formatDoctorOrchestratorResult(result));
     if (!result.report.validation.valid && !options.checkOnly) {
@@ -821,6 +854,7 @@ program
       root: getRoot(options),
       runIvf: true,
       quote: options.quote ?? "Integrate DNA without a rewrite",
+      onStatus: (msg) => console.log(msg),
     });
     console.log(formatDoctorOrchestratorResult(result));
   });
@@ -1200,6 +1234,24 @@ platform
       process.exit(1);
     }
     console.log(formatProjectFeatures(projectId as (typeof valid)[number]));
+  });
+
+program
+  .command("credits")
+  .description("Show sponsors, funding links, and package credits")
+  .action(async () => {
+    const { loadSponsorLedger, formatCredits } = await import("./credits.js");
+    try {
+      console.log(formatCredits(await loadSponsorLedger()));
+    } catch {
+      console.log("DNA by Humaan — credits");
+      console.log("");
+      console.log("Maintained by Humaan by Superlite (https://humaan.com)");
+      console.log("Sponsor: https://github.com/sponsors/superhumaan");
+      console.log("Services: https://dna.humaan.app/services");
+      console.log("");
+      console.log("Also try: npm fund @superhumaan/dna-by-humaan");
+    }
   });
 
 program.parse();

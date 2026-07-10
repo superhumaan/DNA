@@ -24,10 +24,10 @@ Built by [Humaan](https://humaan.com) · [Superlite](https://superlite.ai)
 ## Install
 
 ```bash
-npx @superhumaan/dna-by-humaan init -y
+npx @superhumaan/dna-by-humaan doctor
 ```
 
-That's the whole product on npm — **CLI + `/runtime` subpath**, fully bundled. No separate `@superhumaan/dna-core` install required.
+Doctor is the recommended entry point — it scaffolds `.DNA/`, CI, runtime, Docker, hooks, GitHub sign-in, and auto-wires middleware. Use `init` only when you want the interactive wizard first.
 
 ```bash
 # Production runtime (same package)
@@ -59,8 +59,8 @@ DNA is **not** a documentation generator. It is:
 ## Quick start
 
 ```bash
-npx @superhumaan/dna-by-humaan init -y
-dna doctor
+npx @superhumaan/dna-by-humaan doctor
+npm install   # if package.json was updated
 dna scan
 dna context cursor
 ```
@@ -272,6 +272,16 @@ Commit `.DNA/` and `DNA/` so your team shares one brain.
 
 ---
 
+
+---
+
+## Sponsors
+
+<!-- sponsors:ledger:start -->
+DNA is MIT-licensed and maintained in the open. Sponsorship funds hosting, security updates, and the marketplace — not premium features.
+
+_No sponsors yet — [be the first](https://github.com/sponsors/superhumaan)._
+<!-- sponsors:ledger:end -->
 ## License
 
 MIT © [Humaan by Superlite](https://humaan.com)

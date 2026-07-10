@@ -12,7 +12,7 @@ import {
 import {
   createBranch,
   createPullRequest,
-  getTokenFromEnv,
+  resolveGitHubToken,
   linkIssueToPr,
 } from "@superhumaan/dna-github";
 
@@ -150,7 +150,8 @@ export async function executeRepairWorkflow(
     };
   }
 
-  const token = getTokenFromEnv();
+  const creds = await resolveGitHubToken();
+  const token = creds?.token;
   const git = simpleGit(projectRoot);
 
   if (token) {

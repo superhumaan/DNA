@@ -1,6 +1,6 @@
 {
   "name": "@superhumaan/dna-by-humaan",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "DNA by Humaan — open-source project brain, 768-pack knowledge marketplace, tiered compliance (GDPR/HIPAA/ISO/SOC2), runtime observer, and AI-assisted repair for TypeScript teams",
   "repository": {
     "type": "git",
@@ -25,9 +25,18 @@
     "./runtime": {
       "types": "./dist/runtime.d.ts",
       "import": "./dist/runtime.js"
+    },
+    "./runtime/preload": {
+      "import": "./dist/runtime-preload.js"
     }
   },
-  "files": ["dist", "assets", "README.md"],
+  "files": [
+    "dist",
+    "assets",
+    "README.md",
+    "SPONSORS.md",
+    "CREDITS.md"
+  ],
   "scripts": {
     "build": "tsup && node scripts/copy-assets.mjs",
     "dev": "tsup src/index.ts --format esm --dts --watch",
@@ -52,10 +61,18 @@
     "next": "^14.0.0 || ^15.0.0"
   },
   "peerDependenciesMeta": {
-    "express": { "optional": true },
-    "fastify": { "optional": true },
-    "@nestjs/common": { "optional": true },
-    "next": { "optional": true }
+    "express": {
+      "optional": true
+    },
+    "fastify": {
+      "optional": true
+    },
+    "@nestjs/common": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=20"
@@ -93,5 +110,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/superhumaan"
+  },
+  "contributors": []
 }

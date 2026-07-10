@@ -83,10 +83,25 @@ Runs until interrupted.
 
 ## doctor
 
-Full DNA health check (structure, deps, docs, runtime).
+One-command onboarding — scaffolds DNA, CI, Docker, hooks, runtime storage, GitHub sign-in, and auto-wires middleware for Express, Fastify, and Next.js.
 
 ```bash
-dna doctor
+npx @superhumaan/dna-by-humaan doctor
+npm install   # when package.json was updated
+```
+
+Report only (no fixes, no browser login):
+
+```bash
+dna doctor --check-only
+```
+
+## credits
+
+Show sponsors, funding links, and bundled package credits (also via `npm fund @superhumaan/dna-by-humaan`).
+
+```bash
+dna credits
 ```
 
 ## update
