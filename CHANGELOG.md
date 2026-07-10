@@ -4,11 +4,17 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-07-10
+
+### Fixed
+
+- **Runtime preload (`NODE_OPTIONS='--import @superhumaan/dna-by-humaan/runtime/preload'`):** no longer crashes with `Dynamic require of "fs" is not supported` on Node 20+. `tsup` now sets `skipNodeModulesBundle: true` for `runtime`, `runtime-preload`, and `@superhumaan/dna-runtime` so CommonJS npm deps (`simple-git`, `@kwsites/file-exists`, etc.) stay external and use Node's native `require` under ESM `--import`.
+
 ## [0.3.3] - 2026-07-10
 
 ### Fixed
 
-- **CLI startup (`npx @superhumaan/dna-by-humaan doctor`):** no longer crashes with `Dynamic require of "fs" is not supported` on Node 20+. The published bundle now inlines only `@superhumaan/*` workspace code and keeps npm dependencies (e.g. `commander`, `simple-git`) external so CommonJS packages can use Node's native `require`.
+- **CLI startup (`npx @superhumaan/dna-by-humaan doctor`):** bundle config updated to inline only `@superhumaan/*` workspace code (runtime preload fix completed in 0.3.4).
 - **`dna feature-factory` commands:** `install` and `uninstall` register under one `feature-factory` command group (fixes duplicate-command crash at CLI startup).
 
 ### Added

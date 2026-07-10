@@ -231,7 +231,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 |------|-------|-----|--------|
 | Knowledge pack marketplace (768 packs) | Jan 2026 | Mar 2026 | Shipped |
 | Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |
-| `npx @superhumaan/dna-by-humaan` on npm (v0.3.3) | Mar 2026 | Jul 2026 | Shipped |
+| `npx @superhumaan/dna-by-humaan` on npm (v0.3.4) | Mar 2026 | Jul 2026 | Shipped |
 | [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped |
 | [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped |
 | [Feature factory v2 + admin portal pattern](https://github.com/superhumaan/DNA/issues/3) | May 2026 | Jun 2026 | Shipped |
