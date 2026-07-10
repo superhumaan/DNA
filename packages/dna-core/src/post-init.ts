@@ -122,7 +122,7 @@ export async function runPostInit(
   }
 
   if (answers.configureAi) {
-    created.push("AI: run `dna ai connect --provider mock`");
+    created.push("AI: run `dna ai connect`");
   }
 
   return created;

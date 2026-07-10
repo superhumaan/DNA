@@ -103,7 +103,7 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
   if (!config.ai?.enabled) {
     config.ai = { ...config.ai, enabled: true, provider: config.ai?.provider ?? "mock" };
     changed = true;
-    actions.push("AI repair armed (provider: mock until API key set)");
+    actions.push("AI repair armed (run `dna ai connect` to pick a provider)");
   }
 
   if (!config.ai?.repair?.enabled) {

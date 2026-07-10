@@ -4,6 +4,7 @@ import { resolveGitHubToken } from "@superhumaan/dna-github";
 import { fileExists } from "./fs.js";
 import { loadDnaConfig, validateProject } from "./validator.js";
 import { scanProject } from "./scanner.js";
+import { isRealAiProvider } from "./ai-connect.js";
 
 export interface DoctorReport {
   dna: { installed: boolean; version?: string };
@@ -12,7 +13,7 @@ export interface DoctorReport {
   immuneSystem: { configured: boolean };
   cellularMemory: { configured: boolean };
   github: { enabled: boolean; configured: boolean; signedIn: boolean };
-  ai: { enabled: boolean; provider?: string };
+  ai: { enabled: boolean; provider?: string; connected: boolean };
   runtime: { enabled: boolean; configured: boolean };
   ci: { enabled: boolean; workflowInstalled: boolean };
   docker: { dockerfileInstalled: boolean };
@@ -85,6 +86,7 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
     ai: {
       enabled: config?.ai?.enabled ?? false,
       provider: config?.ai?.provider,
+      connected: isRealAiProvider(config?.ai?.provider),
     },
     runtime: {
       enabled: config?.runtime?.enabled ?? false,
@@ -128,7 +130,13 @@ export function formatDoctorReport(report: DoctorReport): string {
           : " (run dna github connect)"
         : " (disabled)"
     }`,
-    `${status(!report.ai.enabled || !!report.ai.provider)} AI integration${report.ai.enabled ? ` (${report.ai.provider})` : " (disabled)"}`,
+    `${status(!report.ai.enabled || report.ai.connected)} AI integration${
+      report.ai.enabled
+        ? report.ai.connected
+          ? ` (${report.ai.provider})`
+          : " (run dna ai connect)"
+        : " (disabled)"
+    }`,
     `${status(report.runtime.configured || !report.runtime.enabled)} Runtime storage${report.runtime.enabled ? "" : " (disabled)"}`,
     `${status(!report.ci.enabled || report.ci.workflowInstalled)} CI pipeline${report.ci.enabled ? "" : " (disabled)"}`,
     `${status(report.docker.dockerfileInstalled || !report.ci.enabled)} Docker scaffold`,

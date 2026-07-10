@@ -40,6 +40,7 @@ import {
   installFeatureFactory,
   uninstallFeatureFactory,
   refreshAiToolsForFeatureFactory,
+  formatAiConnectGuide,
   beginFeatureFromQuote,
   runAndWriteQualityReport,
   runQualityAnalysis,
@@ -779,14 +780,14 @@ const ai = program.command("ai").description("AI provider configuration");
 
 ai
   .command("connect")
-  .description("Configure AI provider")
-  .option("--provider <name>", "mock|openai|anthropic", "mock")
+  .description("Configure AI provider — run without flags to see supported services")
+  .option("--provider <name>", "openai|anthropic|mock")
   .option("--model <model>", "Model name")
   .option("--endpoint <url>", "API endpoint URL")
   .option("--cwd <path>", "Project root directory")
   .action(
     async (options: {
-      provider: string;
+      provider?: string;
       model?: string;
       endpoint?: string;
       cwd?: string;
@@ -798,20 +799,43 @@ ai
         process.exit(1);
       }
 
+      if (!options.provider) {
+        console.log(
+          formatAiConnectGuide({
+            enabled: config.ai?.enabled,
+            provider: config.ai?.provider,
+            model: config.ai?.model,
+          }),
+        );
+        return;
+      }
+
       const provider = options.provider as "mock" | "openai" | "anthropic";
+      if (!["mock", "openai", "anthropic"].includes(provider)) {
+        console.error(`Unknown provider "${options.provider}". Run \`dna ai connect\` for supported services.`);
+        process.exit(1);
+      }
+
       config.ai = {
+        ...config.ai,
         enabled: true,
         provider,
-        model: options.model,
-        endpoint: options.endpoint,
+        model: options.model ?? config.ai?.model,
+        endpoint: options.endpoint ?? config.ai?.endpoint,
       };
       config.updatedAt = new Date().toISOString();
       await writeJsonFile(join(root, ".DNA/config.dna.json"), config);
 
-      console.log(`✓ AI provider configured: ${provider}`);
-      if (provider !== "mock") {
-        console.log(`  Set ${provider === "openai" ? "OPENAI_API_KEY" : "ANTHROPIC_API_KEY"} env var.`);
+      if (provider === "mock") {
+        console.log("✓ AI provider configured: mock (local testing only)");
+        console.log("  Run `dna ai connect` to connect OpenAI or Anthropic for real repairs.");
+        return;
       }
+
+      const envVar = provider === "openai" ? "OPENAI_API_KEY" : "ANTHROPIC_API_KEY";
+      console.log(`✓ AI provider configured: ${provider}`);
+      console.log(`  Set ${envVar} in your environment.`);
+      console.log("  Test: dna ai repair --file issue.json --dry-run");
     },
   );
 

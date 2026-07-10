@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { mkdir, writeFile, rm } from "node:fs/promises";
+import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
@@ -73,5 +73,34 @@ describe("doctor", () => {
     expect(formatted).toContain("Docker scaffold");
     expect(formatted).toContain("Git hooks");
     expect(formatted).toContain("Runtime storage");
+  });
+
+  it("prompt local testing hint when AI uses mock provider", async () => {
+    root = await scaffoldProject();
+    const configPath = join(root, ".DNA", "config.dna.json");
+    const config = JSON.parse(await readFile(configPath, "utf-8"));
+    config.ai = { enabled: true, provider: "mock" };
+    await writeFile(configPath, JSON.stringify(config));
+
+    const report = await runDoctor(root);
+    const formatted = formatDoctorReport(report);
+
+    expect(report.ai.connected).toBe(false);
+    expect(formatted).toContain("AI integration (run dna ai connect)");
+    expect(formatted).not.toContain("(mock)");
+  });
+
+  it("shows provider name when a real AI provider is configured", async () => {
+    root = await scaffoldProject();
+    const configPath = join(root, ".DNA", "config.dna.json");
+    const config = JSON.parse(await readFile(configPath, "utf-8"));
+    config.ai = { enabled: true, provider: "openai" };
+    await writeFile(configPath, JSON.stringify(config));
+
+    const report = await runDoctor(root);
+    const formatted = formatDoctorReport(report);
+
+    expect(report.ai.connected).toBe(true);
+    expect(formatted).toContain("AI integration (openai)");
   });
 });

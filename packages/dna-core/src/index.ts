@@ -8,6 +8,7 @@ export * from "./wizard.js";
 export * from "./validator.js";
 export * from "./context.js";
 export * from "./doctor.js";
+export * from "./ai-connect.js";
 export * from "./doctor-orchestrator.js";
 export * from "./watch.js";
 export * from "./generators/init.js";
