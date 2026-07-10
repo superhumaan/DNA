@@ -4,6 +4,19 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-07-10
+
+### Added
+
+- **Smart `dna init`** — detects empty folder vs greenfield vs existing codebase; skips fake stack on non-code folders.
+- **Full init analysis** — existing projects get all 14 IVF verticals, platform feature detection, `document --from-code`, gap matrix, and IVF plan on init.
+- **Monorepo scanner** — reads `backend/`, `apps/*`, and `packages/*` for stack detection (fixes React + Express repos like Humaan).
+
+### Changed
+
+- Init uses `package.json` description and folder-aware messaging instead of generic "Demo project" output.
+- CLI logs silent by default (`DNA_LOG_LEVEL` to enable).
+
 ## [0.4.1] - 2026-07-10
 
 ### Added
@@ -108,9 +121,9 @@ All notable changes to DNA are documented here.
 - **GitHub integration:** `dna github connect` no longer marks `authenticated` without a real token; `dna init -y` auto-connects from git remote; **`dna doctor` opens browser GitHub sign-in automatically** when not signed in (skips in CI / `--check-only`).
 - **CI / Docker / hooks:** doctor and `dna ci install` now scaffold Docker alongside workflows and pre-push hooks; doctor reports CI, Docker, hooks, and runtime storage status with setup hints.
 
-### Changed
+### Fixed
 
-- **Workflow cleanup:** Failed runs are deleted inline from each workflow (`ci.yml`, `publish-npm.yml`, generated `dna-ci.yml`) with explicit `actions: write` — replaces the broken `workflow_run` cleanup workflow.
+- **Workflow cleanup:** Restore `cleanup-failed-runs.yml` with `workflow_run` deletion after completion — inline delete jobs returned 403 because GitHub cannot delete a run while it is still in progress. Scheduled and manual sweeps remove failed/cancelled backlog.
 - **GitHub auth UX:** Doctor and docs steer users to `dna github login` + `dna github connect` instead of `GITHUB_TOKEN`-only setup. `dna github issue` resolves stored, `gh`, and env tokens.
 - **Platform knowledge pack rename:** `platforms/humaan-stack` → `platforms/dna-stack`; knowledge files moved from `platforms/humaan/*.dna.md` to `platforms/dna/*.dna.md`.
 - **Reference project paths:** `dna platform projects` no longer prints author-specific absolute paths. Set `DNA_REFERENCE_ROOT` to the parent folder containing `AIStudio`, `ColorParty`, `Humaan`, and `Soli` clones.

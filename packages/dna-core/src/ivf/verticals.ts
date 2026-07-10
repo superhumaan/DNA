@@ -85,6 +85,9 @@ export const DEFAULT_IVF_VERTICALS: IvfVerticalId[] = [
   "impressions",
 ];
 
+/** All verticals — used by `dna init` on existing projects for full gap analysis */
+export const ALL_IVF_VERTICALS: IvfVerticalId[] = IVF_VERTICALS.map((v) => v.id);
+
 export type VerticalGapPriority = "P0" | "P1" | "P2" | "P3";
 
 export interface VerticalGap {

@@ -165,6 +165,11 @@ export const ScanResultSchema = z.object({
   dependencies: z.array(z.string()),
   scripts: z.record(z.string()),
   hasDna: z.boolean(),
+  /** Total project files (excluding node_modules, .git, .DNA) */
+  fileCount: z.number().default(0),
+  hasPackageJson: z.boolean().default(false),
+  /** True when src/app/lib or common source manifests are present */
+  hasSourceCode: z.boolean().default(false),
   impressionsDrift: ImpressionsDriftSchema.optional(),
 });
 

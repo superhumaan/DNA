@@ -11,6 +11,8 @@ import { getFeature } from "./platform/catalog.js";
 import { resolveFeaturePlanPackIds } from "./platform/knowledge.js";
 import { loadDnaConfig } from "./validator.js";
 import { createLogger } from "./logger.js";
+import { detectProjectContext, type ProjectContextResult } from "./onboarding.js";
+import { runFullInitAnalysis, type FullInitAnalysisResult } from "./ivf/init-analysis.js";
 
 const log = createLogger("wizard");
 
@@ -23,6 +25,8 @@ export interface WizardOptions {
 export interface WizardResult {
   config: DnaConfig;
   filesCreated: string[];
+  projectContext: ProjectContextResult;
+  initAnalysis?: FullInitAnalysisResult;
 }
 
 async function installOnboardingFeaturePacks(
@@ -54,12 +58,16 @@ export async function runWizard(options: WizardOptions): Promise<WizardResult> {
   const { root } = options;
   const answers = WizardAnswersSchema.parse(options.answers);
   const scan = await scanProject(root);
+  const projectContext = detectProjectContext(scan);
   const platformHint = answers.appPlatform ? ` ${answers.appPlatform} application` : "";
   const recommendation = generateRecommendation(
     scan,
     `${answers.projectDescription}${platformHint}`,
   );
-  const stack = resolveStackFromWizard(scan, answers, recommendation);
+  const stack =
+    projectContext.context === "empty"
+      ? { platform: answers.appPlatform === "mobile" ? "mobile app" : "web app" }
+      : resolveStackFromWizard(scan, answers, recommendation);
 
   const pkgName =
     answers.projectName ??
@@ -129,5 +137,21 @@ export async function runWizard(options: WizardOptions): Promise<WizardResult> {
   filesCreated.push(...featurePacks);
 
   const finalConfig = (await loadDnaConfig(root)) ?? config;
-  return { config: finalConfig, filesCreated };
+
+  let initAnalysis: FullInitAnalysisResult | undefined;
+  const shouldAnalyze =
+    projectContext.context === "existing" ||
+    projectContext.context === "dna_refresh" ||
+    (projectContext.context === "greenfield" && scan.hasSourceCode);
+
+  if (shouldAnalyze) {
+    log.info({ projectId: config.projectId }, "Running full init analysis (all verticals + features)");
+    initAnalysis = await runFullInitAnalysis(root, {
+      quote: answers.projectDescription,
+      config: finalConfig,
+    });
+  }
+
+  const resolvedConfig = (await loadDnaConfig(root)) ?? finalConfig;
+  return { config: resolvedConfig, filesCreated, projectContext, initAnalysis };
 }

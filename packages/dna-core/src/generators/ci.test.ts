@@ -6,7 +6,7 @@ import { randomUUID } from "node:crypto";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import {
   generateCiWorkflow,
-  generateDeleteFailedRunJob,
+  generateCleanupFailedRunsWorkflow,
   generatePreviewWorkflow,
   generateSecurityWorkflow,
   installCiPipeline,
@@ -89,15 +89,15 @@ describe("CI generator", () => {
     expect(yaml).toContain("STAGING_URL");
   });
 
-  it("generates delete-failed-run cleanup job", () => {
-    const job = generateDeleteFailedRunJob("build");
-    expect(job).toContain("cleanup-on-failure");
-    expect(job).toContain("deleteWorkflowRun");
-    expect(job).toContain("needs: [build]");
-    expect(job).toContain("actions: write");
+  it("generates cleanup workflow for failed runs", () => {
+    const yaml = generateCleanupFailedRunsWorkflow();
+    expect(yaml).toContain("name: Cleanup failed runs");
+    expect(yaml).toContain("workflow_run:");
+    expect(yaml).toContain("deleteWorkflowRun");
+    expect(yaml).toContain("actions: write");
   });
 
-  it("includes cleanup job in CI workflow", () => {
+  it("does not embed inline cleanup jobs in CI workflow", () => {
     const yaml = generateCiWorkflow(testConfig(), {
       packageManager: "npm",
       ciCd: [],
@@ -113,8 +113,8 @@ describe("CI generator", () => {
       hasDna: false,
     });
 
-    expect(yaml).toContain("cleanup-on-failure");
-    expect(yaml).toContain("deleteWorkflowRun");
+    expect(yaml).not.toContain("cleanup-on-failure");
+    expect(yaml).not.toContain("deleteWorkflowRun");
   });
 
   it("generates preview workflow with branch and netlify provider", () => {
@@ -151,7 +151,7 @@ describe("CI generator", () => {
     expect(yaml).toContain('branches: ["main"]');
     expect(yaml).toContain("netlify-cli deploy");
     expect(yaml).toContain("NETLIFY_AUTH_TOKEN");
-    expect(yaml).toContain("cleanup-on-failure");
+    expect(yaml).not.toContain("cleanup-on-failure");
   });
 
   it("generates vitest coverage config with thresholds", () => {
@@ -174,6 +174,7 @@ describe("CI generator", () => {
     const result = await installCiPipeline({ root, config: testConfig() });
 
     expect(result.created).toContain(".github/workflows/dna-ci.yml");
+    expect(result.created).toContain(".github/workflows/cleanup-failed-runs.yml");
     expect(result.created).toContain(".github/workflows/dna-security.yml");
     expect(await fileExists(join(root, "vitest.config.ts"))).toBe(true);
 

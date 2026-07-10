@@ -24,6 +24,7 @@ import { detectGitHubRemote, resolveGitHubToken, loginWithWebFlow } from "@super
 import { analyzeProject } from "./ivf/analyze.js";
 import { documentFromCode } from "./ivf/document.js";
 import { generateIvfPlan } from "./ivf/plan.js";
+import { ALL_IVF_VERTICALS } from "./ivf/verticals.js";
 
 export interface DoctorOrchestratorOptions {
   root: string;
@@ -387,6 +388,7 @@ async function runBrownfieldPipeline(
     root,
     quote: quote ?? "Integrate DNA without a rewrite",
     documentFromCode: false,
+    verticals: ALL_IVF_VERTICALS,
   });
   actions.push("IVF plan + gap matrix");
 

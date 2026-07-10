@@ -34,6 +34,28 @@ describe("scanner", () => {
     expect(scan.packageManager).toBe("pnpm");
   });
 
+  it("detects backend from backend/package.json monorepo layout", async () => {
+    const root = await createTempProject({
+      "package.json": JSON.stringify({
+        name: "app",
+        dependencies: { react: "^18.0.0", vite: "^5.0.0" },
+        devDependencies: { vitest: "^2.0.0" },
+      }),
+      "backend/package.json": JSON.stringify({
+        name: "app-backend",
+        dependencies: { express: "^4.18.0", pg: "^8.0.0" },
+      }),
+      "backend/server.js": "import express from 'express';",
+      "src/App.tsx": "export default function App() { return null; }",
+    });
+
+    const scan = await scanProject(root);
+    expect(scan.frontend).toBe("react");
+    expect(scan.backend).toBe("express");
+    expect(scan.database).toBe("postgresql");
+    expect(scan.hasSourceCode).toBe(true);
+  });
+
   it("flags missing env example", async () => {
     const root = await createTempProject({
       "package.json": JSON.stringify({ name: "test" }),

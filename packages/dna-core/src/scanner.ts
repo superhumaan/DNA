@@ -60,6 +60,48 @@ async function readPackageJson(root: string): Promise<Record<string, unknown> | 
   return JSON.parse(raw) as Record<string, unknown>;
 }
 
+function mergeDeps(target: Record<string, string>, pkg: Record<string, unknown> | null): void {
+  if (!pkg) return;
+  Object.assign(target, (pkg.dependencies as Record<string, string>) ?? {});
+  Object.assign(target, (pkg.devDependencies as Record<string, string>) ?? {});
+}
+
+/** Collect deps from root + common monorepo layouts (backend/, apps/*, packages/*). */
+async function collectProjectDependencies(root: string): Promise<Record<string, string>> {
+  const deps: Record<string, string> = {};
+  mergeDeps(deps, await readPackageJson(root));
+
+  const workspacePkgPaths = [
+    "backend",
+    "server",
+    "api",
+    "apps/api",
+    "apps/backend",
+    "apps/web",
+    "apps/server",
+  ];
+
+  for (const dir of workspacePkgPaths) {
+    mergeDeps(deps, await readPackageJson(join(root, dir)));
+  }
+
+  try {
+    const { readdir } = await import("node:fs/promises");
+    for (const parent of [join(root, "apps"), join(root, "packages")]) {
+      if (!(await fileExists(parent))) continue;
+      const entries = await readdir(parent, { withFileTypes: true });
+      for (const entry of entries) {
+        if (!entry.isDirectory()) continue;
+        mergeDeps(deps, await readPackageJson(join(parent, entry.name)));
+      }
+    }
+  } catch {
+    // optional workspace scan
+  }
+
+  return deps;
+}
+
 function detectPackageManager(files: string[]): string | undefined {
   if (files.includes("pnpm-lock.yaml")) return "pnpm";
   if (files.includes("yarn.lock")) return "yarn";
@@ -71,16 +113,26 @@ function detectPackageManager(files: string[]): string | undefined {
 export async function scanProject(root: string): Promise<ScanResult> {
   const files = await fg(["**/*"], {
     cwd: root,
-    ignore: ["node_modules/**", "dist/**", ".git/**", ".DNA/**"],
+    ignore: [
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      ".git/**",
+      ".DNA/**",
+      "coverage/**",
+      ".scannerwork/**",
+      ".jscpd-report/**",
+      ".local-wiki/**",
+      ".vercel/**",
+      "**/*.log",
+      "**/.tmp-*",
+    ],
     dot: true,
     onlyFiles: true,
   });
 
   const pkg = await readPackageJson(root);
-  const deps: Record<string, string> = {
-    ...((pkg?.dependencies as Record<string, string>) ?? {}),
-    ...((pkg?.devDependencies as Record<string, string>) ?? {}),
-  };
+  const deps = await collectProjectDependencies(root);
 
   const packageManager = detectPackageManager(files);
   const frontend = detectFromDeps(deps, FRONTEND_INDICATORS);
@@ -131,6 +183,17 @@ export async function scanProject(root: string): Promise<ScanResult> {
   const missingTests = !testFramework && !hasTestFiles;
 
   const hasDna = await fileExists(join(root, DNA_CONFIG_FILE));
+  const hasPackageJson = pkg !== null;
+  const hasSourceCode =
+    files.some((f) =>
+      /^(src|app|lib|server|api|backend|packages\/[^/]+\/src|apps\/[^/]+)\//.test(f) ||
+      /\.(tsx?|jsx?|vue|svelte|py|go|rs|java|kt|swift|rb|php)$/.test(f),
+    ) ||
+    files.some((f) =>
+      ["pyproject.toml", "go.mod", "Cargo.toml", "pom.xml", "build.gradle", "build.gradle.kts"].includes(f),
+    ) ||
+    (await fileExists(join(root, "backend", "server.js"))) ||
+    (await fileExists(join(root, "backend", "package.json")));
 
   const baseResult = {
     packageManager,
@@ -149,6 +212,9 @@ export async function scanProject(root: string): Promise<ScanResult> {
     dependencies: Object.keys(deps),
     scripts: (pkg?.scripts as Record<string, string>) ?? {},
     hasDna,
+    fileCount: files.length,
+    hasPackageJson,
+    hasSourceCode,
   };
 
   if (!hasDna) return baseResult;

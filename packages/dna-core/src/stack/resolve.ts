@@ -235,7 +235,7 @@ export function resolveArchetype(
     return { archetype: a, confidence: "high", reason: "Description mentions Next.js" };
   }
 
-  let best: StackArchetype = STACK_ARCHETYPES.find((a) => a.id === "react-vite-api")!;
+  let best: StackArchetype | undefined;
   let bestScore = -1;
 
   for (const archetype of STACK_ARCHETYPES) {
@@ -245,6 +245,24 @@ export function resolveArchetype(
       best = archetype;
     }
   }
+
+  // No stack signals — do not invent react-vite-api for empty/non-code folders
+  if (
+    bestScore < 50 &&
+    detected.technologies.size === 0 &&
+    !scan.frontend &&
+    !scan.backend &&
+    scan.dependencies.length === 0
+  ) {
+    const placeholder = STACK_ARCHETYPES.find((a) => a.id === "react-vite-api")!;
+    return {
+      archetype: placeholder,
+      confidence: "low",
+      reason: "No package.json dependencies or source stack detected",
+    };
+  }
+
+  best ??= STACK_ARCHETYPES.find((a) => a.id === "react-vite-api")!;
 
   // SaaS without supabase still defaults react-vite-api
   const isSaas =
@@ -310,12 +328,12 @@ export function stackFromArchetype(
 
   return {
     archetype: archetype.id,
-    frontend: pick("frontend", scan.frontend ?? "react"),
-    bundler: pick("bundler", archetype.id === "next-fullstack" ? "next" : "vite"),
-    backend: pick("backend", scan.backend ?? "express"),
+    frontend: pick("frontend", scan.frontend),
+    bundler: pick("bundler", archetype.id === "next-fullstack" ? "next" : scan.frontend ? "vite" : undefined),
+    backend: pick("backend", scan.backend),
     database:
-      pick("database", isSaas ? "postgresql" : "sqlite") ??
-      (detected.technologies.has("supabase") ? "supabase" : "sqlite"),
+      pick("database", isSaas ? "postgresql" : scan.database) ??
+      (detected.technologies.has("supabase") ? "supabase" : scan.database),
     platform:
       archetype.platform === "cms"
         ? "CMS"

@@ -89,6 +89,9 @@ import {
   generateAuditLoggingScaffold,
   startDashboard,
   formatDashboardStart,
+  formatInitCompleteMessage,
+  formatInitContextBanner,
+  detectProjectContext,
 } from "@superhumaan/dna-core";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
@@ -116,21 +119,28 @@ program
   .action(async (options: { yes?: boolean; cwd?: string }) => {
     const root = getRoot(options);
     const scan = await scanProject(root);
+    const projectContext = detectProjectContext(scan);
 
     let defaultProjectName: string | undefined;
+    let defaultDescription: string | undefined;
     const existing = await loadDnaConfig(root);
     if (existing?.projectName) {
       defaultProjectName = existing.projectName;
+      defaultDescription = existing.description;
     } else {
       try {
         const raw = await readFile(join(root, "package.json"), "utf-8");
-        defaultProjectName = (JSON.parse(raw) as { name?: string }).name;
+        const pkg = JSON.parse(raw) as { name?: string; description?: string };
+        defaultProjectName = pkg.name;
+        defaultDescription = pkg.description;
       } catch {
-        // no package.json
+        defaultProjectName = root.split(/[/\\]/).pop() || undefined;
       }
     }
 
-    const answers = await runInitWizard(!!options.yes, scan, defaultProjectName);
+    console.log(formatInitContextBanner(projectContext, defaultProjectName ?? "project"));
+
+    const answers = await runInitWizard(!!options.yes, scan, defaultProjectName, defaultDescription);
     const result = await runWizard({ root, answers });
 
     if (answers.configureGithub) {
@@ -149,14 +159,27 @@ program
       }
     }
 
-    console.log(`\n✓ ${result.config.projectName} is ready.\n`);
-    console.log("Describe what you want to build in Cursor or Claude — DNA runs the feature factory automatically.");
-    console.log('  Example: "I want providers to record phone calls and transcribe the notes"\n');
-    console.log(`  Archetype: ${result.config.stack.archetype ?? "—"}`);
-    if (result.config.platformFeatures?.length) {
-      console.log(`  Features:  ${result.config.platformFeatures.join(", ")}`);
+    if (result.initAnalysis) {
+      console.log("\n" + result.initAnalysis.summary);
     }
-    console.log(`  AI tools:  ${result.config.aiTools.join(", ")}`);
+
+    const topGaps =
+      result.initAnalysis?.analysis.verticalGaps
+        .filter((g) => g.priority === "P0" || g.priority === "P1")
+        .slice(0, 5)
+        .map((g) => `[${g.priority}] ${g.name}: ${g.currentState}`) ?? [];
+
+    console.log(
+      formatInitCompleteMessage({
+        projectName: result.config.projectName,
+        context: result.projectContext,
+        archetype: result.config.stack.archetype,
+        aiTools: result.config.aiTools,
+        topGaps,
+        detectedFeatures: result.initAnalysis?.detectedFeatures,
+        planPath: result.initAnalysis?.planPath,
+      }),
+    );
   });
 
 program

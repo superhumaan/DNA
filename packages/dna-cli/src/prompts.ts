@@ -5,6 +5,7 @@ import {
   detectAiTools,
   inferCompliance,
   inferProjectStage,
+  detectProjectContext,
   ONBOARDING_PLATFORMS,
   onboardingFeatureOptions,
 } from "@superhumaan/dna-core";
@@ -32,13 +33,14 @@ export async function promptChoice<T extends string>(
 }
 
 function defaultAnswers(scan: ScanResult, overrides: Partial<WizardAnswers> = {}): WizardAnswers {
+  const context = detectProjectContext(scan);
   return {
     projectDescription: "Software project",
     acceptRecommendation: true,
     platformFeatures: [],
     aiTools: detectAiTools(scan),
     compliance: "none",
-    stage: inferProjectStage(scan),
+    stage: inferProjectStage(scan, context.context),
     installRuntime: true,
     installFeatureFactory: true,
     installCi: true,
@@ -52,6 +54,7 @@ export async function runInitWizard(
   nonInteractive = false,
   scan?: ScanResult,
   defaultProjectName?: string,
+  defaultDescription?: string,
 ): Promise<WizardAnswers> {
   const emptyScan: ScanResult = {
     ciCd: [],
@@ -65,13 +68,20 @@ export async function runInitWizard(
     dependencies: [],
     scripts: {},
     hasDna: false,
+    fileCount: 0,
+    hasPackageJson: false,
+    hasSourceCode: false,
   };
   const projectScan = scan ?? emptyScan;
 
   if (nonInteractive) {
+    const name = defaultProjectName ?? "my-project";
+    const description = defaultDescription ?? name;
     return defaultAnswers(projectScan, {
-      projectDescription: "Demo project",
+      projectName: name,
+      projectDescription: description,
       aiTools: ["cursor", "claude_code"],
+      stage: inferProjectStage(projectScan, detectProjectContext(projectScan).context),
     });
   }
 
@@ -121,7 +131,7 @@ export async function runInitWizard(
     acceptRecommendation: true,
     aiTools: detectAiTools(projectScan),
     compliance: inferCompliance(description),
-    stage: inferProjectStage(projectScan),
+    stage: inferProjectStage(projectScan, detectProjectContext(projectScan).context),
     installRuntime: true,
     installFeatureFactory: true,
     installCi: true,

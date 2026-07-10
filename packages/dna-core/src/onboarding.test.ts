@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import type { ScanResult } from "@superhumaan/dna-config";
 import {
   detectAiTools,
+  detectProjectContext,
   inferCompliance,
   inferProjectStage,
   onboardingFeatureOptions,
@@ -19,6 +20,9 @@ const baseScan: ScanResult = {
   dependencies: [],
   scripts: {},
   hasDna: false,
+  fileCount: 0,
+  hasPackageJson: false,
+  hasSourceCode: false,
 };
 
 describe("onboarding", () => {
@@ -38,8 +42,23 @@ describe("onboarding", () => {
   });
 
   it("infers project stage", () => {
-    expect(inferProjectStage({ ...baseScan, frontend: "react", backend: "express" })).toBe("mvp");
-    expect(inferProjectStage(baseScan)).toBe("new");
+    expect(inferProjectStage({ ...baseScan, frontend: "react", backend: "express", hasSourceCode: true, fileCount: 50 }, "existing")).toBe("mvp");
+    expect(inferProjectStage(baseScan, "empty")).toBe("new");
+  });
+
+  it("detects project context", () => {
+    expect(detectProjectContext(baseScan).context).toBe("empty");
+    expect(detectProjectContext({ ...baseScan, hasPackageJson: true }).context).toBe("greenfield");
+    expect(
+      detectProjectContext({
+        ...baseScan,
+        hasPackageJson: true,
+        hasSourceCode: true,
+        frontend: "react",
+        fileCount: 120,
+      }).context,
+    ).toBe("existing");
+    expect(detectProjectContext({ ...baseScan, hasDna: true }).context).toBe("dna_refresh");
   });
 
   it("lists onboarding features from catalog", () => {

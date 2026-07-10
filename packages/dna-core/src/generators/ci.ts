@@ -62,25 +62,82 @@ function scriptStep(
         continue-on-error: ${continueOnError}`;
 }
 
-function deleteFailedRunJob(needs: string | string[]): string {
-  const needsList = Array.isArray(needs) ? needs.join(", ") : needs;
-  return `  cleanup-on-failure:
-    name: Delete failed run
+
+export function generateCleanupFailedRunsWorkflow(): string {
+  return `# DNA cleanup — delete failed workflow runs after completion
+# Inline delete jobs cannot remove the current run (GitHub returns 403 while in progress).
+
+name: Cleanup failed runs
+
+on:
+  workflow_run:
+    types: [completed]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"
+
+permissions:
+  actions: write
+
+jobs:
+  delete-failed-run:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (
+        (github.event.workflow_run.conclusion == 'failure' ||
+          github.event.workflow_run.conclusion == 'cancelled') &&
+        github.event.workflow_run.name != 'Cleanup failed runs'
+      )
     runs-on: ubuntu-latest
-    needs: [${needsList}]
-    if: failure() && !cancelled()
-    permissions:
-      actions: write
     steps:
-      - name: Delete this workflow run
+      - name: Delete failed workflow runs
         uses: actions/github-script@v7
         with:
           script: |
-            await github.rest.actions.deleteWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.runId,
-            });`;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const cleanupName = "Cleanup failed runs";
+
+            async function deleteRun(runId) {
+              try {
+                await github.rest.actions.deleteWorkflowRun({
+                  owner,
+                  repo,
+                  run_id: runId,
+                });
+                console.log(\`Deleted run \${runId}\`);
+              } catch (error) {
+                console.log(\`Skip run \${runId}: \${error.message}\`);
+              }
+            }
+
+            if (context.eventName === "workflow_run") {
+              await deleteRun(context.payload.workflow_run.id);
+              return;
+            }
+
+            const perPage = 100;
+            for (let page = 1; ; page++) {
+              const { data } = await github.rest.actions.listWorkflowRunsForRepo({
+                owner,
+                repo,
+                status: "completed",
+                per_page: perPage,
+                page,
+              });
+
+              for (const run of data.workflow_runs) {
+                if (
+                  (run.conclusion === "failure" || run.conclusion === "cancelled") &&
+                  run.name !== cleanupName
+                ) {
+                  await deleteRun(run.id);
+                }
+              }
+
+              if (data.workflow_runs.length < perPage) break;
+            }
+`;
 }
 
 export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string {
@@ -193,7 +250,6 @@ ${cacheBlock}
         run: npm audit --audit-level=high
         continue-on-error: ${continueOnError}
 
-${deleteFailedRunJob(["quality", "docker", "security"])}
 `;
 }
 
@@ -262,13 +318,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 ${deployStep}
-
-${deleteFailedRunJob(["gate-before-preview", "deploy-preview"])}
 `;
-}
-
-export function generateDeleteFailedRunJob(needs: string | string[]): string {
-  return deleteFailedRunJob(needs);
 }
 
 export function generateSecurityWorkflow(): string {
@@ -298,8 +348,6 @@ jobs:
         with:
           target: \${{ vars.STAGING_URL }}
           allow_issue_writing: false
-
-${deleteFailedRunJob("zap-baseline")}
 `;
 }
 
@@ -385,8 +433,19 @@ export async function installCiPipeline(options: InstallCiOptions): Promise<Inst
   const ciPath = join(workflowsDir, "dna-ci.yml");
   const securityPath = join(workflowsDir, "dna-security.yml");
   const previewPath = join(workflowsDir, "dna-preview.yml");
+  const cleanupPath = join(workflowsDir, "cleanup-failed-runs.yml");
 
   await ensureDir(workflowsDir);
+
+  const cleanupExists = await fileExists(cleanupPath);
+  if (!skipIfExists || !cleanupExists) {
+    await writeFileEnsured(cleanupPath, generateCleanupFailedRunsWorkflow());
+    created.push(
+      cleanupExists
+        ? ".github/workflows/cleanup-failed-runs.yml (updated)"
+        : ".github/workflows/cleanup-failed-runs.yml",
+    );
+  }
 
   const ciExists = await fileExists(ciPath);
   if (!skipIfExists || !ciExists) {
