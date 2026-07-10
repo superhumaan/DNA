@@ -2,6 +2,8 @@
 
 All commands run from your **project root** unless `--cwd` is specified.
 
+`--cwd` is resolved relative to your **current shell directory**. If your shell is already inside the DNA project, omit `--cwd` or pass `--cwd .`. From a monorepo root, pass the path to the package that contains `.DNA/` (for example `packages/dna-cli`).
+
 ## Global
 
 ```bash

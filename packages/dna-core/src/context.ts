@@ -31,6 +31,14 @@ const TARGET_BEHAVIOUR: Record<ContextTarget, string[]> = {
 };
 
 export async function generateContext(root: string, target: ContextTarget): Promise<string> {
+  const dnaDir = join(root, ".DNA");
+  if (!(await fileExists(dnaDir))) {
+    throw new Error(
+      `No .DNA/ directory at ${root}.\n` +
+        `Run \`dna init\` first, or omit --cwd when your shell is already in the project.`,
+    );
+  }
+
   if (target === "cursor" || target === "frontend" || target === "ivf" || target === "copilot" || target === "windsurf") {
     await ensureProjectUiStandards({ root, includeSharedLibrary: false });
   }

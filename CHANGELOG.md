@@ -4,6 +4,10 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Fixed
+
+- **`dna context` with `--cwd`** — bad relative `--cwd` paths no longer return empty Behaviour/CellularMemory sections. DNA validates that `.DNA/` exists at the resolved path and explains when to omit `--cwd` (already inside the project) or pass it from the monorepo root.
+
 ## [0.3.9] - 2026-07-10
 
 ### Fixed

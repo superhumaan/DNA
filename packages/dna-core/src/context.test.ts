@@ -7,6 +7,15 @@ import { randomUUID } from "node:crypto";
 import { runWizard } from "../src/wizard.js";
 
 describe("context", () => {
+  it("throws when .DNA is missing", async () => {
+    const root = join(tmpdir(), `dna-ctx-${randomUUID()}`);
+    await mkdir(root, { recursive: true });
+
+    await expect(generateContext(root, "cursor")).rejects.toThrow(/No \.DNA\/ directory/);
+
+    await rm(root, { recursive: true, force: true });
+  });
+
   it("generates copilot context with behaviour", async () => {
     const root = join(tmpdir(), `dna-ctx-${randomUUID()}`);
     await mkdir(root, { recursive: true });

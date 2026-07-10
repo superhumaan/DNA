@@ -1,6 +1,5 @@
 import { Command } from "commander";
-import { join, resolve } from "node:path";
-import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 import { PRODUCT_NAME } from "@superhumaan/dna-config";
 import {
@@ -92,6 +91,7 @@ import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken 
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import { runInitWizard } from "./prompts.js";
 import { connectGitHubDuringOnboarding } from "./github-onboarding.js";
+import { resolveProjectRoot } from "./project-root.js";
 
 const program = new Command();
 
@@ -101,14 +101,7 @@ program
   .version("0.1.0");
 
 function getRoot(options: { cwd?: string }): string {
-  const root = resolve(options.cwd ?? process.cwd());
-  if (!existsSync(root)) {
-    throw new Error(
-      `Project directory not found: ${options.cwd ?? process.cwd()}\n` +
-        `Run DNA from your project root (where .DNA/ lives), or pass an absolute --cwd path.`,
-    );
-  }
-  return root;
+  return resolveProjectRoot(options.cwd);
 }
 
 program
