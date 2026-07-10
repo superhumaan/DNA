@@ -4,6 +4,7 @@ import { join } from "node:path";
 import type { ScanResult } from "@superhumaan/dna-config";
 import { DNA_CONFIG_FILE, IMPRESSIONS_PATHS } from "@superhumaan/dna-config";
 import { fileExists } from "./fs.js";
+import { detectImpressionsDrift } from "./impressions/drift.js";
 
 const FRONTEND_INDICATORS: Record<string, string[]> = {
   react: ["react", "@vitejs/plugin-react"],
@@ -131,7 +132,7 @@ export async function scanProject(root: string): Promise<ScanResult> {
 
   const hasDna = await fileExists(join(root, DNA_CONFIG_FILE));
 
-  return {
+  const baseResult = {
     packageManager,
     frontend,
     backend,
@@ -149,6 +150,11 @@ export async function scanProject(root: string): Promise<ScanResult> {
     scripts: (pkg?.scripts as Record<string, string>) ?? {},
     hasDna,
   };
+
+  if (!hasDna) return baseResult;
+
+  const impressionsDrift = await detectImpressionsDrift(root, baseResult);
+  return { ...baseResult, impressionsDrift };
 }
 
 export function formatScanSummary(scan: ScanResult): string {
@@ -179,6 +185,18 @@ export function formatScanSummary(scan: ScanResult): string {
   }
   if (scan.missingDocs.length) {
     lines.push("", `Missing Impressions: ${scan.missingDocs.length} files`);
+  }
+  if (scan.impressionsDrift) {
+    lines.push(
+      "",
+      `Impressions drift: ${scan.impressionsDrift.score}/100 (${scan.impressionsDrift.level})`,
+    );
+    if (scan.impressionsDrift.findings.length) {
+      scan.impressionsDrift.findings.slice(0, 5).forEach((f) => lines.push(`  • ${f.message}`));
+    }
+    if (scan.impressionsDrift.level !== "ok") {
+      lines.push("", "Run: dna plan impressions-sync");
+    }
   }
 
   return lines.join("\n");

@@ -64,6 +64,19 @@ import {
   runDockerBuild,
   ensureRuntimeDatabase,
   wireRuntimeMiddleware,
+  formatImpressionsDriftReport,
+  generateImpressionsSyncPlan,
+  exportCellularMemory,
+  importCellularMemory,
+  formatMemoryExportSummary,
+  formatMemoryImportSummary,
+  analyzeSharedLibrary,
+  planSharedLibraryExecution,
+  formatSharedLibraryDryRun,
+  scaffoldSharedLibraryPackage,
+  generateAuditLoggingScaffold,
+  startDashboard,
+  formatDashboardStart,
 } from "@superhumaan/dna-core";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
@@ -181,9 +194,18 @@ program
   .command("scan")
   .description("Scan the current project")
   .option("--cwd <path>", "Project root directory")
-  .action(async (options: { cwd?: string }) => {
-    const scan = await scanProject(getRoot(options));
+  .option("--open-pr", "Open a GitHub PR with Impressions sync plan when drift is critical")
+  .action(async (options: { cwd?: string; openPr?: boolean }) => {
+    const root = getRoot(options);
+    const scan = await scanProject(root);
     console.log(formatScanSummary(scan));
+
+    if (options.openPr && scan.impressionsDrift && scan.impressionsDrift.level === "critical") {
+      const result = await generateImpressionsSyncPlan({ root, openPr: true });
+      console.log("\n" + formatImpressionsDriftReport(scan.impressionsDrift));
+      console.log(`\nSync plan written: ${result.planPath}`);
+      console.log("Open a PR manually with the plan, or use: dna document --from-code");
+    }
   });
 
 program
@@ -386,8 +408,12 @@ program
     }
   });
 
-program
-  .command("feature-factory install")
+const featureFactory = program
+  .command("feature-factory")
+  .description("Cursor feature factory rules and /ai agent templates");
+
+featureFactory
+  .command("install")
   .description("Install or re-enable Cursor feature factory rules and /ai agent templates")
   .option("--cwd <path>", "Project root directory")
   .action(async (options: { cwd?: string }) => {
@@ -555,8 +581,8 @@ ci.command("install")
     }
   });
 
-program
-  .command("feature-factory uninstall")
+featureFactory
+  .command("uninstall")
   .description("Remove feature factory rules and /ai templates from the project")
   .option("--cwd <path>", "Project root directory")
   .action(async (options: { cwd?: string }) => {
@@ -844,9 +870,13 @@ program
     }
   });
 
-program
+const ivfCmd = program
   .command("ivf")
-  .description("Brownfield orchestrator — analyze, document, plan, and wire DNA into existing projects")
+  .description("Brownfield IVF — integrate DNA into existing projects");
+
+ivfCmd
+  .command("run", { isDefault: true })
+  .description("Analyze, document, plan, and wire DNA into existing projects")
   .option("--quote <text>", "Plain-language integration requirement")
   .option("--cwd <path>", "Project root directory")
   .action(async (options: { quote?: string; cwd?: string }) => {
@@ -857,6 +887,35 @@ program
       onStatus: (msg) => console.log(msg),
     });
     console.log(formatDoctorOrchestratorResult(result));
+  });
+
+ivfCmd
+  .command("shared-library")
+  .description("Shared library extraction — analyze, dry-run, scaffold")
+  .option("--dry-run", "List files that would be moved")
+  .option("--scaffold", "Create shared package skeleton")
+  .option("--execute", "Execute extraction (not yet implemented)")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { dryRun?: boolean; scaffold?: boolean; execute?: boolean; cwd?: string }) => {
+    const root = getRoot(options);
+
+    if (options.execute) {
+      console.error("Full --execute extraction is planned for IVF Phase 4b (#16).");
+      console.error("Use --dry-run and --scaffold for now.");
+      process.exit(1);
+    }
+
+    if (options.scaffold) {
+      const result = await scaffoldSharedLibraryPackage(root);
+      console.log("✓ Shared library package scaffolded\n");
+      console.log(`  Path: ${result.packagePath}`);
+      result.created.forEach((f) => console.log(`    ${f}`));
+      return;
+    }
+
+    const analysis = await analyzeSharedLibrary(root);
+    const plan = planSharedLibraryExecution(analysis);
+    console.log(formatSharedLibraryDryRun(plan));
   });
 
 program
@@ -1148,6 +1207,99 @@ plan
       console.log(result.context);
     },
   );
+
+plan
+  .command("impressions-sync")
+  .description("Generate a plan to reconcile Impressions drift with the codebase")
+  .option("--cwd <path>", "Project root directory")
+  .option("--open-pr", "Include PR automation guidance")
+  .action(async (options: { cwd?: string; openPr?: boolean }) => {
+    const root = getRoot(options);
+    const result = await generateImpressionsSyncPlan({ root, openPr: options.openPr });
+    console.log("✓ Impressions sync plan generated\n");
+    console.log(`  Plan: ${result.planPath}`);
+    console.log(`  Drift: ${result.driftReport.score}/100 (${result.driftReport.level})`);
+    console.log("");
+    console.log("─".repeat(60));
+    console.log(result.context);
+  });
+
+const memory = program.command("memory").description("CellularMemory export and import across projects");
+
+memory
+  .command("export")
+  .description("Export CellularMemory segments to a JSON file")
+  .option("--cwd <path>", "Project root directory")
+  .option("--segments <list>", "Comma-separated segments (default: all)")
+  .option("--out <path>", "Output file", ".DNA/exports/cellular-memory.json")
+  .action(async (options: { cwd?: string; segments?: string; out?: string }) => {
+    const root = getRoot(options);
+    const outPath = join(root, options.out ?? ".DNA/exports/cellular-memory.json");
+    const result = await exportCellularMemory({
+      root,
+      segments: options.segments?.split(",").map((s) => s.trim()).filter(Boolean),
+      outPath,
+    });
+    console.log(formatMemoryExportSummary(result));
+  });
+
+memory
+  .command("import")
+  .description("Import CellularMemory from an export file")
+  .argument("<file>", "Export JSON file")
+  .option("--cwd <path>", "Project root directory")
+  .option("--merge", "Merge with existing files (skip conflicts)")
+  .option("--segments <list>", "Only import listed segments")
+  .action(async (file: string, options: { cwd?: string; merge?: boolean; segments?: string }) => {
+    const root = getRoot(options);
+    const inPath = file.startsWith("/") ? file : join(root, file);
+    const result = await importCellularMemory({
+      root,
+      inPath,
+      merge: options.merge,
+      segments: options.segments?.split(",").map((s) => s.trim()).filter(Boolean),
+    });
+    console.log(formatMemoryImportSummary(result));
+  });
+
+program
+  .command("dashboard")
+  .description("Start local read-only dashboard (runtime, quality, doctor, memory)")
+  .option("--cwd <path>", "Project root directory")
+  .option("--port <number>", "Port", "3200")
+  .action(async (options: { cwd?: string; port?: string }) => {
+    const root = getRoot(options);
+    const { url } = await startDashboard({ root, port: Number(options.port ?? 3200) });
+    console.log(formatDashboardStart(url));
+    await new Promise(() => {});
+  });
+
+const generate = program.command("generate").description("Generate platform feature scaffolds");
+
+generate
+  .command("feature")
+  .description("Generate code scaffold for a platform feature")
+  .argument("<featureId>", "Platform feature id, e.g. audit-logging")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (featureId: string, options: { cwd?: string }) => {
+    const root = getRoot(options);
+    if (featureId !== "audit-logging") {
+      console.error(`Codegen not yet available for: ${featureId}`);
+      console.error("Available: audit-logging");
+      process.exit(1);
+    }
+    const result = await generateAuditLoggingScaffold({ root, feature: featureId });
+    console.log("✓ Audit logging scaffold generated\n");
+    console.log(`  Plan: ${result.planPath}`);
+    if (result.created.length) {
+      console.log("  Created:");
+      result.created.forEach((f) => console.log(`    ${f}`));
+    }
+    if (result.skipped.length) {
+      console.log("  Skipped (already exist):");
+      result.skipped.forEach((f) => console.log(`    ${f}`));
+    }
+  });
 
 const compliance = program.command("compliance").description("Tiered compliance standards catalog");
 

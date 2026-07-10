@@ -1,6 +1,6 @@
 {
   "name": "@superhumaan/dna-by-humaan",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "DNA by Humaan — open-source project brain, 768-pack knowledge marketplace, tiered compliance (GDPR/HIPAA/ISO/SOC2), runtime observer, and AI-assisted repair for TypeScript teams",
   "repository": {
     "type": "git",
@@ -39,8 +39,13 @@
   ],
   "scripts": {
     "build": "tsup && node scripts/copy-assets.mjs",
-    "dev": "tsup src/index.ts --format esm --dts --watch",
-    "typecheck": "tsc --noEmit"
+    "dev": "NODE_OPTIONS='--import @superhumaan/dna-by-humaan/runtime/preload' tsup src/index.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "docker:build": "docker build -t dna-app:local .",
+    "docker:verify": "docker build -t dna-app:local . && docker run --rm dna-app:local node -e \"console.log('ok')\""
   },
   "devDependencies": {
     "@superhumaan/dna-ai": "workspace:*",
@@ -50,9 +55,17 @@
     "@superhumaan/dna-immune": "workspace:*",
     "@superhumaan/dna-runtime": "workspace:*",
     "@superhumaan/dna-templates": "workspace:*",
-    "commander": "^12.1.0",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.0.2",
+    "chokidar": "^4.0.1",
+    "commander": "^12.1.0",
+    "fast-glob": "^3.3.2",
+    "pino": "^9.6.0",
+    "simple-git": "^3.27.0",
+    "zod": "^3.24.1"
   },
   "peerDependencies": {
     "express": "^4.18.0",

@@ -40,7 +40,7 @@ export DNA_GITHUB_CLIENT_ID=your_oauth_app_client_id
 dna github login
 ```
 
-Register a GitHub OAuth App with **Device flow** enabled. A first-party DNA OAuth app is planned ([#11](https://github.com/superhumaan/DNA/issues/11)).
+Register a GitHub OAuth App with **Device flow** enabled. Maintainers run `./scripts/setup-github-oauth-app.sh` to register the first-party app and patch the client ID ([#11](https://github.com/superhumaan/DNA/issues/11)).
 
 ### Auto-issues from runtime
 

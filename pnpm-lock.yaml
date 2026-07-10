@@ -116,15 +116,36 @@ importers:
       '@nestjs/common':
         specifier: ^10.0.0 || ^11.0.0
         version: 11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@octokit/rest':
+        specifier: ^21.0.2
+        version: 21.1.1
+      chokidar:
+        specifier: ^4.0.1
+        version: 4.0.3
+      commander:
+        specifier: ^12.1.0
+        version: 12.1.0
       express:
         specifier: ^4.18.0
         version: 4.22.2
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.3
       fastify:
         specifier: ^4.0.0 || ^5.0.0
         version: 5.9.0
       next:
         specifier: ^14.0.0 || ^15.0.0
         version: 15.5.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      pino:
+        specifier: ^9.6.0
+        version: 9.14.0
+      simple-git:
+        specifier: ^3.27.0
+        version: 3.36.0
+      zod:
+        specifier: ^3.24.1
+        version: 3.25.76
     devDependencies:
       '@superhumaan/dna-ai':
         specifier: workspace:*
@@ -147,9 +168,6 @@ importers:
       '@superhumaan/dna-templates':
         specifier: workspace:*
         version: link:../dna-templates
-      commander:
-        specifier: ^12.1.0
-        version: 12.1.0
       tsup:
         specifier: ^8.3.5
         version: 8.5.1(jiti@1.21.7)(postcss@8.5.16)(tsx@4.22.5)(typescript@5.9.3)

@@ -28,6 +28,53 @@ Detect stack, dependencies, tests, CI, and risks.
 ```bash
 dna scan
 dna scan --cwd ./my-app
+dna scan --open-pr          # when drift is critical, write sync plan
+```
+
+Includes an **Impressions drift** score when DNA is installed (missing docs, stack mismatch, stale CellularMemory).
+
+## dashboard
+
+Local read-only dashboard — runtime issues, quality reports, doctor health, Impressions, and CellularMemory.
+
+```bash
+dna dashboard
+dna dashboard --port 3200
+```
+
+## memory
+
+Export and import CellularMemory segments across projects.
+
+```bash
+dna memory export --out .DNA/exports/memory.json
+dna memory import .DNA/exports/memory.json --merge
+```
+
+## generate
+
+Platform feature code scaffolds.
+
+```bash
+dna generate feature audit-logging
+```
+
+## plan impressions-sync
+
+Generate a plan to reconcile Impressions with the codebase when drift is detected.
+
+```bash
+dna plan impressions-sync
+dna plan impressions-sync --open-pr
+```
+
+## ivf shared-library
+
+Shared library extraction for monorepos.
+
+```bash
+dna ivf shared-library --dry-run
+dna ivf shared-library --scaffold
 ```
 
 ## recommend

@@ -25,11 +25,10 @@ export interface GitHubLoginResult {
 const CREDENTIALS_DIR = join(homedir(), ".config", "dna");
 const CREDENTIALS_FILE = join(CREDENTIALS_DIR, "github-credentials.json");
 
-/** Override with your GitHub OAuth App client ID (device flow enabled) */
-const DEFAULT_CLIENT_ID = "DNA_GITHUB_OAUTH_APP";
+import { DNA_OAUTH_CLIENT_ID, isPlaceholderClientId } from "./oauth-config.js";
 
 function resolveClientId(): string {
-  return process.env.DNA_GITHUB_CLIENT_ID ?? DEFAULT_CLIENT_ID;
+  return process.env.DNA_GITHUB_CLIENT_ID ?? DNA_OAUTH_CLIENT_ID;
 }
 
 export function getTokenFromEnv(): string | undefined {
@@ -215,10 +214,11 @@ export async function loginWithWebFlow(options?: {
   }
 
   const clientId = resolveClientId();
-  if (clientId === DEFAULT_CLIENT_ID && !process.env.DNA_GITHUB_CLIENT_ID) {
+  if (isPlaceholderClientId(clientId) && !process.env.DNA_GITHUB_CLIENT_ID) {
     throw new Error(
       "GitHub login requires GitHub CLI (`brew install gh`) or DNA_GITHUB_CLIENT_ID for device flow.\n" +
-        "Install gh and run: dna github login",
+        "Install gh and run: dna github login\n" +
+        "Maintainers: run ./scripts/setup-github-oauth-app.sh to register the first-party OAuth app.",
     );
   }
 

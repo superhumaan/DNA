@@ -3,7 +3,10 @@ import { defineConfig } from "tsup";
 const bundle = {
   format: ["esm"] as const,
   dts: true,
-  noExternal: [/.*/] as RegExp[],
+  splitting: false,
+  // Bundle monorepo packages only; leave npm deps external so CJS packages
+  // (commander, simple-git, etc.) can use Node's native require at runtime.
+  noExternal: [/^@superhumaan\//],
   external: ["fsevents", "express", "fastify", "@nestjs/common", "next"],
 };
 

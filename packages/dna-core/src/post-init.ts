@@ -104,7 +104,7 @@ export async function runPostInit(
       };
       const deps = pkg.dependencies ?? {};
       if (!deps["@superhumaan/dna-by-humaan"]) {
-        deps["@superhumaan/dna-by-humaan"] = "^0.3.2";
+        deps["@superhumaan/dna-by-humaan"] = "^0.3.3";
         pkg.dependencies = deps;
         await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
         created.push("package.json (added @superhumaan/dna-by-humaan)");

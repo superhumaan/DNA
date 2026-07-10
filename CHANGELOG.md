@@ -2,6 +2,25 @@
 
 All notable changes to DNA are documented here.
 
+## [Unreleased]
+
+## [0.3.3] - 2026-07-10
+
+### Fixed
+
+- **CLI startup (`npx @superhumaan/dna-by-humaan doctor`):** no longer crashes with `Dynamic require of "fs" is not supported` on Node 20+. The published bundle now inlines only `@superhumaan/*` workspace code and keeps npm dependencies (e.g. `commander`, `simple-git`) external so CommonJS packages can use Node's native `require`.
+- **`dna feature-factory` commands:** `install` and `uninstall` register under one `feature-factory` command group (fixes duplicate-command crash at CLI startup).
+
+### Added
+
+- **`dna dashboard`** — local read-only dashboard for runtime issues, quality reports, doctor health, Impressions, and CellularMemory ([#12](https://github.com/superhumaan/DNA/issues/12)).
+- **`dna memory export` / `dna memory import`** — share CellularMemory segments across DNA-enabled projects ([#13](https://github.com/superhumaan/DNA/issues/13)).
+- **`dna plan impressions-sync`** and **Impressions drift score in `dna scan`** — detect doc/code divergence and generate sync plans ([#14](https://github.com/superhumaan/DNA/issues/14)).
+- **`disciplines/gradual-rollout` knowledge pack** — tenant-scoped rollout patterns ([#15](https://github.com/superhumaan/DNA/issues/15)).
+- **`dna ivf shared-library --dry-run` / `--scaffold`** — shared library extraction foundation ([#16](https://github.com/superhumaan/DNA/issues/16)).
+- **`dna generate feature audit-logging`** — platform feature codegen scaffold ([#17](https://github.com/superhumaan/DNA/issues/17)).
+- **`scripts/setup-github-oauth-app.sh`** — maintainer script to register the first-party OAuth app and ship client ID ([#11](https://github.com/superhumaan/DNA/issues/11)).
+
 ## [0.3.2] - 2026-07-10
 
 ### Added

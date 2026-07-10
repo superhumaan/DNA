@@ -120,6 +120,22 @@ export const WizardAnswersSchema = z.object({
 export type WizardAnswers = z.infer<typeof WizardAnswersSchema>;
 export type WizardAnswersInput = z.input<typeof WizardAnswersSchema>;
 
+export const ImpressionsDriftSchema = z.object({
+  score: z.number(),
+  level: z.enum(["ok", "warning", "critical"]),
+  findings: z.array(
+    z.object({
+      category: z.enum(["stack", "docs", "architecture", "staleness"]),
+      message: z.string(),
+      weight: z.number(),
+    }),
+  ),
+  missingDocs: z.number(),
+  stackMismatches: z.array(z.string()),
+});
+
+export type ImpressionsDrift = z.infer<typeof ImpressionsDriftSchema>;
+
 export const ScanResultSchema = z.object({
   packageManager: z.string().optional(),
   frontend: z.string().optional(),
@@ -137,6 +153,7 @@ export const ScanResultSchema = z.object({
   dependencies: z.array(z.string()),
   scripts: z.record(z.string()),
   hasDna: z.boolean(),
+  impressionsDrift: ImpressionsDriftSchema.optional(),
 });
 
 export type ScanResult = z.infer<typeof ScanResultSchema>;

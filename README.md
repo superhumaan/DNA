@@ -231,7 +231,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 |------|-------|-----|--------|
 | Knowledge pack marketplace (768 packs) | Jan 2026 | Mar 2026 | Shipped |
 | Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |
-| `npx @superhumaan/dna-by-humaan` on npm (v0.3.2) | Mar 2026 | Jul 2026 | Shipped |
+| `npx @superhumaan/dna-by-humaan` on npm (v0.3.3) | Mar 2026 | Jul 2026 | Shipped |
 | [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped |
 | [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped |
 | [Feature factory v2 + admin portal pattern](https://github.com/superhumaan/DNA/issues/3) | May 2026 | Jun 2026 | Shipped |
@@ -243,12 +243,12 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | [Runtime SQLite storage](https://github.com/superhumaan/DNA/issues/9) | Jun 2026 | Jul 2026 | Shipped |
 | [Preview deployment workflow](https://github.com/superhumaan/DNA/issues/10) | Jul 2026 | Aug 2026 | Shipped |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | In progress |
-| [Real-time dashboard UI](https://github.com/superhumaan/DNA/issues/12) | Sep 2026 | Dec 2026 | Planned |
-| [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Planned |
-| [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Planned |
-| [Impressions drift → auto PR suggestions](https://github.com/superhumaan/DNA/issues/14) | Oct 2026 | Feb 2027 | Planned |
-| [Platform feature codegen (SSO, multi-tenant, flags)](https://github.com/superhumaan/DNA/issues/17) | Nov 2026 | Feb 2027 | Planned |
-| [Multi-tenant gradual rollout patterns](https://github.com/superhumaan/DNA/issues/15) | Jan 2027 | Mar 2027 | Planned |
+| [Real-time dashboard UI](https://github.com/superhumaan/DNA/issues/12) | Sep 2026 | Dec 2026 | In progress |
+| [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | In progress |
+| [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | In progress |
+| [Impressions drift → auto PR suggestions](https://github.com/superhumaan/DNA/issues/14) | Oct 2026 | Feb 2027 | In progress |
+| [Platform feature codegen (SSO, multi-tenant, flags)](https://github.com/superhumaan/DNA/issues/17) | Nov 2026 | Feb 2027 | In progress |
+| [Multi-tenant gradual rollout patterns](https://github.com/superhumaan/DNA/issues/15) | Jan 2027 | Mar 2027 | In progress |
 
 ---
 

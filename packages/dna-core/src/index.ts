@@ -47,3 +47,16 @@ export * from "./quality/index.js";
 export * from "./generators/docker.js";
 export * from "./generators/wire-runtime.js";
 export * from "./storage/runtime-db.js";
+export * from "./impressions/drift.js";
+export * from "./impressions/sync-plan.js";
+export * from "./memory/sync.js";
+export * from "./dashboard/server.js";
+export * from "./platform/codegen/audit-logging.js";
+export {
+  analyzeSharedLibrary,
+  ensureSharedLibrary,
+  formatSharedLibrarySummary,
+  planSharedLibraryExecution,
+  formatSharedLibraryDryRun,
+  scaffoldSharedLibraryPackage,
+} from "./ivf/shared-library.js";

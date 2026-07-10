@@ -1,0 +1,183 @@
+import fg from "fast-glob";
+import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { join } from "node:path";
+import { runDoctor, type DoctorReport } from "../doctor.js";
+import { readRuntimeRecords } from "../storage/runtime-db.js";
+import { fileExists } from "../fs.js";
+
+export interface DashboardOptions {
+  root: string;
+  port?: number;
+  host?: string;
+}
+
+export interface DashboardData {
+  doctor: DoctorReport;
+  runtimeIssues: unknown[];
+  runtimeEvents: unknown[];
+  qualityReports: { name: string; mtime: string }[];
+  impressions: string[];
+  cellularMemory: string[];
+}
+
+async function listMarkdownFiles(dir: string, prefix: string): Promise<string[]> {
+  if (!(await fileExists(dir))) return [];
+  const files = await fg("**/*.md", { cwd: dir, onlyFiles: true });
+  return files.map((f) => `${prefix}/${f}`);
+}
+
+async function listQualityReports(root: string): Promise<{ name: string; mtime: string }[]> {
+  const dir = join(root, ".DNA", "reports", "quality");
+  if (!(await fileExists(dir))) return [];
+  const files = await fg("*.md", { cwd: dir, onlyFiles: true });
+  return files.map((name) => ({ name, mtime: "" }));
+}
+
+export async function collectDashboardData(root: string): Promise<DashboardData> {
+  const [doctor, runtimeIssues, runtimeEvents, qualityReports, impressions, cellularMemory] =
+    await Promise.all([
+      runDoctor(root),
+      readRuntimeRecords(root, "issues"),
+      readRuntimeRecords(root, "events"),
+      listQualityReports(root),
+      listMarkdownFiles(join(root, "DNA", "Impressions"), "DNA/Impressions"),
+      listMarkdownFiles(join(root, ".DNA", "CellularMemory"), ".DNA/CellularMemory"),
+    ]);
+
+  return { doctor, runtimeIssues, runtimeEvents, qualityReports, impressions, cellularMemory };
+}
+
+function sendJson(res: ServerResponse, status: number, body: unknown): void {
+  res.writeHead(status, {
+    "Content-Type": "application/json",
+    "Cache-Control": "no-store",
+  });
+  res.end(JSON.stringify(body));
+}
+
+function renderHtml(data: DashboardData): string {
+  const issueCount = data.runtimeIssues.length;
+  const eventCount = data.runtimeEvents.length;
+  const valid = data.doctor.validation.valid;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DNA Dashboard</title>
+  <style>
+    :root { font-family: system-ui, sans-serif; color: #111; background: #f6f7f9; }
+    body { margin: 0; padding: 24px; }
+    h1 { margin: 0 0 8px; font-size: 1.5rem; }
+    .sub { color: #555; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; }
+    .card h2 { margin: 0 0 12px; font-size: 1rem; }
+    .stat { font-size: 2rem; font-weight: 700; }
+    .ok { color: #0a7; }
+    .warn { color: #c80; }
+    .bad { color: #c22; }
+    ul { margin: 0; padding-left: 18px; max-height: 200px; overflow: auto; font-size: 0.875rem; }
+    pre { background: #f0f0f0; padding: 12px; border-radius: 6px; overflow: auto; font-size: 0.75rem; max-height: 240px; }
+    .refresh { margin-top: 24px; font-size: 0.875rem; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>DNA Dashboard</h1>
+  <p class="sub">Local read-only view — runtime, quality, doctor, and memory</p>
+  <div class="grid">
+    <div class="card">
+      <h2>Doctor</h2>
+      <div class="stat ${valid ? "ok" : "bad"}">${valid ? "Healthy" : "Issues"}</div>
+      <ul>
+        <li>DNA: ${data.doctor.dna.installed ? "installed" : "missing"}</li>
+        <li>GitHub: ${data.doctor.github.signedIn ? "signed in" : "not signed in"}</li>
+        <li>Runtime: ${data.doctor.runtime.configured ? "configured" : "not configured"}</li>
+        <li>Missing docs: ${data.doctor.documentation.missing}</li>
+        <li>Validation issues: ${data.doctor.validation.issueCount}</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Runtime issues</h2>
+      <div class="stat ${issueCount ? "warn" : "ok"}">${issueCount}</div>
+      <pre>${escapeHtml(JSON.stringify(data.runtimeIssues.slice(-5), null, 2))}</pre>
+    </div>
+    <div class="card">
+      <h2>Runtime events</h2>
+      <div class="stat">${eventCount}</div>
+      <pre>${escapeHtml(JSON.stringify(data.runtimeEvents.slice(-5), null, 2))}</pre>
+    </div>
+    <div class="card">
+      <h2>Quality reports</h2>
+      <div class="stat">${data.qualityReports.length}</div>
+      <ul>${data.qualityReports.map((r) => `<li>${escapeHtml(r.name)}</li>`).join("") || "<li>None yet</li>"}</ul>
+    </div>
+    <div class="card">
+      <h2>Impressions</h2>
+      <div class="stat">${data.impressions.length}</div>
+      <ul>${data.impressions.slice(0, 12).map((f) => `<li>${escapeHtml(f)}</li>`).join("")}${data.impressions.length > 12 ? "<li>…</li>" : ""}</ul>
+    </div>
+    <div class="card">
+      <h2>CellularMemory</h2>
+      <div class="stat">${data.cellularMemory.length}</div>
+      <ul>${data.cellularMemory.slice(0, 12).map((f) => `<li>${escapeHtml(f)}</li>`).join("")}${data.cellularMemory.length > 12 ? "<li>…</li>" : ""}</ul>
+    </div>
+  </div>
+  <p class="refresh">Auto-refresh: reload page · API: <code>/api/data</code></p>
+  <script>setTimeout(() => location.reload(), 30000);</script>
+</body>
+</html>`;
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+export async function startDashboard(options: DashboardOptions): Promise<{ url: string; close: () => void }> {
+  const port = options.port ?? 3200;
+  const host = options.host ?? "127.0.0.1";
+
+  const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
+    const url = new URL(req.url ?? "/", `http://${host}:${port}`);
+
+    if (url.pathname === "/api/data") {
+      const data = await collectDashboardData(options.root);
+      sendJson(res, 200, data);
+      return;
+    }
+
+    if (url.pathname === "/" || url.pathname === "/index.html") {
+      const data = await collectDashboardData(options.root);
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(renderHtml(data));
+      return;
+    }
+
+    sendJson(res, 404, { error: "Not found" });
+  });
+
+  await new Promise<void>((resolve) => server.listen(port, host, resolve));
+  const url = `http://${host}:${port}`;
+
+  return {
+    url,
+    close: () => server.close(),
+  };
+}
+
+export function formatDashboardStart(url: string): string {
+  return [
+    "DNA Dashboard",
+    "=============",
+    "",
+    `Open: ${url}`,
+    `API:  ${url}/api/data`,
+    "",
+    "Press Ctrl+C to stop.",
+  ].join("\n");
+}

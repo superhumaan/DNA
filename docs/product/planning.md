@@ -34,13 +34,13 @@ See [Current version scope](../delivery/current-version-scope.md).
 | GitHub integration package ([#8](https://github.com/superhumaan/DNA/issues/8)) | ✅ Shipped |
 | Runtime SQLite storage ([#9](https://github.com/superhumaan/DNA/issues/9)) | ✅ Shipped |
 | Preview deployment workflow ([#10](https://github.com/superhumaan/DNA/issues/10)) | ✅ Shipped |
-| First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress |
-| Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | Planned |
-| Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | Planned |
-| Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | Planned |
-| Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | Planned |
-| IVF Phase 4b — shared library extraction ([#16](https://github.com/superhumaan/DNA/issues/16)) | Planned |
-| Platform feature codegen ([#17](https://github.com/superhumaan/DNA/issues/17)) | Planned |
+| First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress — setup script shipped |
+| Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | 🚧 In progress — `dna dashboard` MVP |
+| Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | 🚧 In progress — export/import CLI |
+| Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | 🚧 In progress — drift score + sync plan |
+| Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | 🚧 In progress — knowledge pack |
+| IVF Phase 4b — shared library extraction ([#16](https://github.com/superhumaan/DNA/issues/16)) | 🚧 In progress — dry-run + scaffold |
+| Platform feature codegen ([#17](https://github.com/superhumaan/DNA/issues/17)) | 🚧 In progress — audit-logging scaffold |
 | Hosted DNA Cloud (optional) | Exploring |
 
 Track on the [DNA Roadmap project board](https://github.com/users/superhumaan/projects/3/views/1). Defect and gap fixes are tracked on [DNA - Defects](https://github.com/users/superhumaan/projects/4/views/1).

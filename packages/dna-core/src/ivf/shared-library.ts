@@ -460,3 +460,123 @@ export function formatSharedLibrarySummary(analysis: SharedLibraryAnalysis): str
 
   return lines.join("\n");
 }
+
+export interface SharedLibraryExecutionItem {
+  component: string;
+  sourcePath: string;
+  targetPath: string;
+  action: "move" | "scaffold";
+}
+
+export interface SharedLibraryExecutionPlan {
+  analysis: SharedLibraryAnalysis;
+  items: SharedLibraryExecutionItem[];
+  packagePath: string;
+  packageName: string;
+}
+
+export function planSharedLibraryExecution(analysis: SharedLibraryAnalysis): SharedLibraryExecutionPlan {
+  const packagePath = analysis.recommendedPackagePath;
+  const packageName = analysis.recommendedPackageName;
+  const items: SharedLibraryExecutionItem[] = [];
+
+  for (const dup of analysis.duplicateComponents) {
+    const source = dup.paths[0]!;
+    const fileName = source.split("/").pop()!;
+    items.push({
+      component: dup.name,
+      sourcePath: source,
+      targetPath: `${packagePath}/src/components/${fileName}`,
+      action: "move",
+    });
+  }
+
+  if (!items.length) {
+    items.push({
+      component: "index",
+      sourcePath: "(new)",
+      targetPath: `${packagePath}/src/index.ts`,
+      action: "scaffold",
+    });
+  }
+
+  return { analysis, items, packagePath, packageName };
+}
+
+export function formatSharedLibraryDryRun(plan: SharedLibraryExecutionPlan): string {
+  const lines = [
+    "Shared Library Execution Plan (dry-run)",
+    "========================================",
+    "",
+    formatSharedLibrarySummary(plan.analysis),
+    "",
+    `Target package: ${plan.packagePath} (${plan.packageName})`,
+    "",
+    "Planned actions:",
+  ];
+
+  for (const item of plan.items) {
+    lines.push(`  • ${item.action.toUpperCase()} ${item.component}`);
+    lines.push(`      ${item.sourcePath} → ${item.targetPath}`);
+  }
+
+  lines.push(
+    "",
+    "Next steps:",
+    "  dna ivf shared-library --scaffold   # create package skeleton",
+    "  dna ivf shared-library --execute    # full extraction (coming soon)",
+  );
+
+  return lines.join("\n");
+}
+
+export async function scaffoldSharedLibraryPackage(root: string): Promise<{ created: string[]; packagePath: string }> {
+  const analysis = await analyzeSharedLibrary(root);
+  const config = await loadDnaConfig(root);
+  if (!config) throw new Error("DNA not installed. Run `dna init` first.");
+
+  const created: string[] = [];
+  const pkgPath = join(root, analysis.recommendedPackagePath);
+
+  const pkgJson = {
+    name: analysis.recommendedPackageName,
+    version: "0.1.0",
+    private: true,
+    type: "module",
+    main: "./src/index.ts",
+    exports: { ".": "./src/index.ts" },
+  };
+
+  const tsconfig = {
+    compilerOptions: {
+      target: "ES2022",
+      module: "ESNext",
+      moduleResolution: "bundler",
+      jsx: "react-jsx",
+      strict: true,
+      skipLibCheck: true,
+      declaration: true,
+      outDir: "dist",
+    },
+    include: ["src"],
+  };
+
+  const indexTs = `/** Shared UI library — ${config.projectName} */\nexport {};\n`;
+
+  await writeFileEnsured(join(pkgPath, "package.json"), JSON.stringify(pkgJson, null, 2) + "\n");
+  created.push(join(analysis.recommendedPackagePath, "package.json"));
+
+  await writeFileEnsured(join(pkgPath, "tsconfig.json"), JSON.stringify(tsconfig, null, 2) + "\n");
+  created.push(join(analysis.recommendedPackagePath, "tsconfig.json"));
+
+  await writeFileEnsured(join(pkgPath, "src", "index.ts"), indexTs);
+  created.push(join(analysis.recommendedPackagePath, "src/index.ts"));
+
+  await writeFileEnsured(
+    join(pkgPath, "src", "components", ".gitkeep"),
+    "# Components extracted by dna ivf shared-library --execute\n",
+  );
+  created.push(join(analysis.recommendedPackagePath, "src/components/.gitkeep"));
+
+  return { created, packagePath: analysis.recommendedPackagePath };
+}

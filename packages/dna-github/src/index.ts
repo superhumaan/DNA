@@ -181,6 +181,7 @@ export {
 } from "./auth.js";
 export { detectGitHubRemote, parseGitHubRemoteUrl, type ParsedGitHubRemote } from "./git-remote.js";
 export { pushFeatureToGitHub, type PushFeatureOptions, type PushFeatureResult } from "./push.js";
+export { DNA_OAUTH_CLIENT_ID, isPlaceholderClientId } from "./oauth-config.js";
 
 export async function linkIssueToPr(
   config: GitHubConfig,
