@@ -20,6 +20,7 @@ export * from "./generators/feature-factory.js";
 export * from "./generators/ai-commands.js";
 export * from "./generators/ai-command-specs.js";
 export * from "./generators/ai-workbench.js";
+export * from "./generators/prompt-stem-packs/index.js";
 export * from "./ai-connect.js";
 export * from "./generators/ci.js";
 export * from "./generators/git-hooks.js";

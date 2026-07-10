@@ -6,12 +6,14 @@ import { randomUUID } from "node:crypto";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import { fileExists } from "../fs.js";
 import {
-  AI_WORKBENCH_PATHS,
+  AI_WORKBENCH_CORE_PATHS,
   generateAiWorkbenchFiles,
   installAiWorkbench,
   uninstallAiWorkbench,
   isAiWorkbenchEnabled,
+  getAiWorkbenchPaths,
 } from "./ai-workbench.js";
+import { getPromptStemPacks } from "./prompt-stem-packs/index.js";
 
 function testConfig(): DnaConfig {
   return {
@@ -32,18 +34,18 @@ function testConfig(): DnaConfig {
 }
 
 describe("ai workbench", () => {
-  it("generates prompt-first cursor and claude packages", () => {
+  it("generates prompt-first cursor and claude packages with stem packs", () => {
     const files = generateAiWorkbenchFiles(testConfig());
-    expect(Object.keys(files).length).toBeGreaterThanOrEqual(AI_WORKBENCH_PATHS.length);
+    expect(Object.keys(files).length).toBeGreaterThan(getAiWorkbenchPaths().length / 2);
 
     expect(files[".cursor/rules/dna-workbench.mdc"]).toContain("engineering co-pilot");
     expect(files[".cursor/commands/ship-feature.md"]).toContain("feature factory");
-    expect(files[".cursor/commands/work-with-dna.md"]).toContain("speak normally");
-    expect(files[".cursor/skills/dna-workbench/prompt-patterns.md"]).toContain("Plan-then-act");
+    expect(files[".DNA/stems/analyze-project/prompt.md"]).toContain("Analyze project");
+    expect(files[".DNA/stems/what-next-after-analyze/guidelines.md"]).toContain("MUST");
 
     const shipClaude = files[".claude/commands/ship-feature.md"];
     expect(shipClaude).toContain("---");
-    expect(shipClaude).not.toContain("npx dna generate feature");
+    expect(getPromptStemPacks().length).toBeGreaterThanOrEqual(30);
   });
 
   it("respects aiWorkbench.enabled=false", () => {

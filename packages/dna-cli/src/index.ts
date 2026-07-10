@@ -46,6 +46,10 @@ import {
   installAiWorkbench,
   uninstallAiWorkbench,
   persistAiWorkbenchEnabled,
+  getPromptStemPacks,
+  getPromptStemPack,
+  installPromptStemPacks,
+  STEM_CATEGORY_LABELS,
   formatAiConnectGuide,
   intelligenceCatalogJson,
   beginFeatureFromQuote,
@@ -691,9 +695,9 @@ workbenchCmd
     }
     await persistAiWorkbenchEnabled(root, config, true);
     const created = await installAiWorkbench(root, config);
-    console.log(`✓ DNA Workbench installed (${created.length} files)`);
-    console.log("\nIn Cursor, type `/` → work-with-dna, ship-feature, analyze-project, …");
-    console.log("Plain language in chat works too — DNA runs CLI on your behalf.");
+    console.log(`✓ DNA Workbench installed (${created.length} files, ${getPromptStemPacks().length} stem packs)`);
+    console.log("\nIn Cursor, type `/` → analyze-project, what-next, ship-feature, …");
+    console.log("Copy-paste library: https://dna.humaan.app/intelligence#stem-library");
   });
 
 workbenchCmd
@@ -711,6 +715,69 @@ workbenchCmd
     await persistAiWorkbenchEnabled(root, config, false);
     console.log(`✓ DNA Workbench removed (${removed.length} files)`);
     console.log("Re-enable: dna workbench install");
+  });
+
+const stemsCmd = program
+  .command("stems")
+  .description("DNA prompt stem packs — copy-paste prompts with guidelines and expectations");
+
+stemsCmd
+  .command("list")
+  .description("List installed prompt stem packs")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const packs = getPromptStemPacks();
+    console.log(`DNA Prompt Stem Packs (${packs.length})\n`);
+    for (const [cat, meta] of Object.entries(STEM_CATEGORY_LABELS)) {
+      const inCat = packs.filter((p) => p.category === cat);
+      if (!inCat.length) continue;
+      console.log(`${meta.label}`);
+      for (const p of inCat) {
+        const slash = p.slash ? ` /${p.slash}` : "";
+        console.log(`  ${p.id}${slash} — ${p.summary}`);
+      }
+      console.log("");
+    }
+    console.log("Catalog: https://dna.humaan.app/intelligence#stem-library");
+  });
+
+stemsCmd
+  .command("show <id>")
+  .description("Show a stem pack — copy variants and file paths")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (id: string) => {
+    const pack = getPromptStemPack(id);
+    if (!pack) {
+      console.error(`Unknown stem: ${id}`);
+      process.exit(1);
+    }
+    console.log(`${pack.name} (${pack.id})`);
+    console.log(pack.summary);
+    if (pack.slash) console.log(`Slash: /${pack.slash}`);
+    console.log(`\nCopy-paste:\n`);
+    for (const v of pack.copyVariants) {
+      console.log(`  "${v}"`);
+    }
+    console.log(`\nFiles: .DNA/stems/${pack.id}/`);
+    for (const f of pack.files) {
+      console.log(`  ${f.path}`);
+    }
+  });
+
+stemsCmd
+  .command("install")
+  .description("Install or refresh all prompt stem packs")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+    const created = await installPromptStemPacks(root, config);
+    console.log(`✓ Prompt stem packs installed (${created.length} files, ${getPromptStemPacks().length} stems)`);
+    console.log("https://dna.humaan.app/intelligence#stem-library");
   });
 
 const github = program.command("github").description("GitHub integration");

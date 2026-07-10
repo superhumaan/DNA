@@ -2,35 +2,32 @@ import { unlink } from "node:fs/promises";
 import { join } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import { fileExists, writeFileEnsured, writeJsonFile } from "../fs.js";
+import {
+  generatePromptStemPackFiles,
+  getPromptStemInstallPaths,
+  getPromptStemPacks,
+  intelligenceStemPackEntries,
+  STEM_CATEGORY_LABELS,
+  uninstallPromptStemPacks,
+} from "./prompt-stem-packs/index.js";
 
-/** Paths installed by the DNA AI Workbench (prompt-first Cursor + Claude package). */
-export const AI_WORKBENCH_PATHS = [
+/** Core workbench paths (stem packs add `.DNA/stems/` and slash commands separately). */
+export const AI_WORKBENCH_CORE_PATHS = [
   ".cursor/rules/dna-workbench.mdc",
   ".cursor/skills/dna-workbench/SKILL.md",
   ".cursor/skills/dna-workbench/prompt-patterns.md",
   ".cursor/skills/dna-workbench/dna-session-flow.md",
-  ".cursor/commands/work-with-dna.md",
-  ".cursor/commands/ship-feature.md",
-  ".cursor/commands/analyze-project.md",
-  ".cursor/commands/health-check.md",
-  ".cursor/commands/quality-gate.md",
-  ".cursor/commands/plan-compliance.md",
-  ".cursor/commands/debug-issue.md",
-  ".cursor/commands/sync-impressions.md",
-  ".cursor/commands/load-context.md",
   ".claude/skills/dna-workbench/SKILL.md",
   ".claude/skills/dna-workbench/prompt-patterns.md",
   ".claude/skills/dna-workbench/dna-session-flow.md",
-  ".claude/commands/work-with-dna.md",
-  ".claude/commands/ship-feature.md",
-  ".claude/commands/analyze-project.md",
-  ".claude/commands/health-check.md",
-  ".claude/commands/quality-gate.md",
-  ".claude/commands/plan-compliance.md",
-  ".claude/commands/debug-issue.md",
-  ".claude/commands/sync-impressions.md",
-  ".claude/commands/load-context.md",
 ] as const;
+
+/** @deprecated Use getAiWorkbenchPaths() — includes all stem pack paths */
+export const AI_WORKBENCH_PATHS = AI_WORKBENCH_CORE_PATHS;
+
+export function getAiWorkbenchPaths(): string[] {
+  return [...AI_WORKBENCH_CORE_PATHS, ...getPromptStemInstallPaths(), ".cursor/commands/README.md", ".claude/commands/README.md"];
+}
 
 function mdcRule(description: string, alwaysApply = false): string {
   const lines = [`description: ${description}`];
@@ -96,11 +93,13 @@ When the user describes something to build, add, enable, or fix:
 
 See \`.cursor/rules/product-process.mdc\` and \`.cursor/skills/dna-workbench/dna-session-flow.md\`.
 
-## Slash commands (prompt templates)
+## Slash commands & stem packs
 
-Type \`/\` in chat: \`work-with-dna\`, \`ship-feature\`, \`analyze-project\`, \`health-check\`, \`quality-gate\`, etc.
+Type \`/\` in chat for **${getPromptStemPacks().length}** prompt stems (e.g. \`work-with-dna\`, \`analyze-project\`, \`what-next\`, \`ship-feature\`).
 
-Catalog: https://dna.humaan.app/intelligence
+Each stem has full guidelines in \`.DNA/stems/<id>/\` — read **all files** before executing.
+
+Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 
 ## Hard gates
 
@@ -232,21 +231,25 @@ The user works in **plain language**. You run **DNA CLI in shell**, load **\`.DN
 - \`.cursor/rules/dna-workbench.mdc\` — always-on obedience (Cursor)
 - \`ai/agent-loop.md\` — feature factory roles
 
-## Slash prompts
+## Slash prompts & stem packs
 
-| Command | Use when |
-|---------|----------|
-| \`/work-with-dna\` | Start or reset a DNA-aware session |
-| \`/analyze-project\` | Brownfield analysis + gap plan |
-| \`/ship-feature\` | Plain-language feature → factory → ship |
-| \`/health-check\` | Doctor + validate |
-| \`/quality-gate\` | Pre-push SAST + toolchain |
-| \`/plan-compliance\` | Tiered compliance rollout |
-| \`/debug-issue\` | Runtime / defect loop |
-| \`/sync-impressions\` | Docs drift reconciliation |
-| \`/load-context\` | Load domain context for a target |
+Each command maps to \`.DNA/stems/<id>/\` — read **prompt.md, guidelines.md, expectations.md, context.md, examples.md** before acting.
 
-Commands live in \`${cmdPath}/\`.
+| Command | Stem | Use when |
+|---------|------|----------|
+| \`/work-with-dna\` | work-with-dna | Start any DNA-aware session |
+| \`/analyze-project\` | analyze-project | Brownfield analysis + gap plan |
+| \`/what-next\` | what-next-after-analyze | Turn analyze output into action plan |
+| \`/ship-feature\` | ship-feature | Plain-language feature → factory → ship |
+| \`/health-check\` | health-check | Doctor + validate |
+| \`/quality-gate\` | quality-gate | Pre-push gate |
+| \`/plan-compliance\` | plan-compliance | Compliance rollout |
+| \`/debug-issue\` | debug-issue | Debug + fix loop |
+| \`/ivf-shared-library\` | ivf-shared-library | Extract shared UI library |
+
+Full library (${getPromptStemPacks().length} stems): https://dna.humaan.app/intelligence#stem-library
+
+Commands live in \`${cmdPath}/\`. Stem data: \`.DNA/stems/\`.
 
 ## Non-negotiable
 
@@ -256,380 +259,6 @@ Commands live in \`${cmdPath}/\`.
 `;
 }
 
-function buildWorkWithDnaPrompt(config: DnaConfig): string {
-  return `# Work with DNA
-
-You are in **${config.projectName}** with DNA by Humaan installed. The user wants a DNA-aware session.
-
-## Your job
-
-Be their engineering co-pilot. They speak normally; you use DNA intelligence and CLI tools.
-
-## Step 1 — Understand the ask
-
-Restate what they want in one sentence. If ambiguous, ask **one** clarifying question.
-
-User context: $ARGUMENTS
-
-## Step 2 — Load project intelligence
-
-Read in order:
-1. \`.DNA/neuralNetwork.json\`
-2. Relevant \`.DNA/behaviour/*.behaviour.md\`
-3. Matching \`.DNA/knowledge/\` packs for their intent
-4. \`DNA/Impressions/\` if architecture or product questions
-
-## Step 3 — Run DNA if applicable
-
-| If they want… | Shell |
-|---------------|-------|
-| Health / setup | \`npx dna doctor\` |
-| Understanding / gaps | \`npx dna analyze\` |
-| Domain pack | \`npx dna context <target>\` |
-| Feature | follow \`/ship-feature\` |
-
-Execute commands. Read full output.
-
-## Step 4 — Respond
-
-- Plain-language summary
-- Concrete next step (one primary action)
-- No jargon about "prompts" or "templates"
-`;
-}
-
-function buildShipFeaturePrompt(): string {
-  return `# Ship a feature (DNA feature factory)
-
-The user wants to build or change something. Run the **feature factory** — they do not manage files manually.
-
-User request: $ARGUMENTS
-
-## Phase 1 — Capture (do now)
-
-1. Write or update \`ai/feature-request.md\` from their request (Problem, Users, Desired Behaviour, Edge Cases, Success Criteria).
-2. If admin/backoffice mentioned: read \`.cursor/rules/admin-portal.mdc\`.
-
-## Phase 2 — Agent loop (read \`ai/agent-loop.md\`)
-
-Execute each role in order. **Complete one before the next.**
-
-### Product Analyst
-Refine \`ai/feature-request.md\`. Output: acceptance criteria.
-
-### Solution Architect
-Produce implementation plan: scope, files, data model, API, security, risks, tests.
-
-**STOP HERE. Present plan. Wait for explicit user approval before any code.**
-
----
-
-*(After approval only)*
-
-### Backend → Frontend → UX → QA → Code Quality → Refactor → Final Review
-
-Code Quality must run \`npx dna quality report --feature\` until **PASS**.
-
-## Phase 3 — Close-out (mandatory)
-
-1. \`npx dna quality report --feature\` — PASS
-2. \`npx dna docker build\`
-3. \`npx dna github push --message "feat: <summary>"\`
-
-Report: gate status, docker result, branch URL.
-
-## Rules
-
-- Smallest correct diff
-- No unrelated file changes
-- Never skip approval before implementation
-`;
-}
-
-function buildAnalyzeProjectPrompt(): string {
-  return `# Analyze project
-
-Deep understanding of this codebase through DNA — for brownfield, onboarding, or architecture review.
-
-Focus: $ARGUMENTS
-
-## Run analysis
-
-\`\`\`bash
-npx dna analyze
-npx dna scan
-\`\`\`
-
-Read full output. Do not invent findings.
-
-## Deliver report
-
-### Stack & surfaces
-Package manager, frontend/backend, routes, APIs, test count.
-
-### Auth & integrations
-Patterns detected and where they live.
-
-### Vertical gaps
-List **P1** first, then P2/P3. For each: what's missing and recommended DNA action (\`plan ivf\`, marketplace pack, feature, etc.).
-
-### Recommended path
-Ordered 3–5 steps the user should take next.
-
-## Optional follow-up
-
-If P1 includes Impressions or Behaviour gaps:
-\`\`\`bash
-npx dna document --from-code
-npx dna plan ivf
-\`\`\`
-`;
-}
-
-function buildHealthCheckPrompt(): string {
-  return `# DNA health check
-
-Verify DNA and project scaffolding are healthy.
-
-Scope: $ARGUMENTS
-
-## Run
-
-\`\`\`bash
-npx dna doctor
-npx dna validate
-\`\`\`
-
-Use \`npx dna doctor --check-only\` only if user asked for report-only.
-
-## Report
-
-For each check: ✓ or ✗ in plain language.
-
-List doctor actions taken (files created/updated).
-
-If git hooks or CI failed: explain fix and offer to repair (re-run doctor without --check-only).
-
-## After health is green
-
-Suggest one high-value next command based on user goal (\`analyze\`, \`ship-feature\`, \`load-context\`).
-`;
-}
-
-function buildQualityGatePrompt(): string {
-  return `# Quality gate
-
-Local SonarQube-style gate before ship. **Required** before marking work complete or pushing.
-
-Scope: $ARGUMENTS
-
-## Run
-
-\`\`\`bash
-npm run lint
-npm run test:coverage
-npx dna quality report --feature
-\`\`\`
-
-Add \`--paths\` if scoping to specific files.
-
-## Interpret
-
-- **PASS** — no blocker/critical; safe to proceed to docker + push
-- **FAIL** — list blockers/criticals with file paths; fix and re-run until PASS
-
-Read \`.DNA/reports/quality/latest.md\` when written.
-
-## On PASS
-
-Offer: \`npx dna docker build\` then \`npx dna github push\` if user is shipping.
-`;
-}
-
-function buildPlanCompliancePrompt(): string {
-  return `# Plan compliance
-
-Tiered GDPR, HIPAA, ISO 27001, SOC 2, or PCI planning.
-
-Requirement: $ARGUMENTS
-
-## Discover tier
-
-\`\`\`bash
-npx dna compliance list
-npx dna plan compliance
-\`\`\`
-
-Ask user for org tier (startup → enterprise) and frameworks if not in message.
-
-## Deliver
-
-- Controls mapped to tier
-- Knowledge packs to install (\`npx dna marketplace install …\`)
-- Engineering checklist from plan output
-- Impressions/docs to update
-
-Load compliance context:
-\`\`\`bash
-npx dna context compliance
-\`\`\`
-
-**Not legal advice** — flag human review for policy sign-off.
-`;
-}
-
-function buildDebugIssuePrompt(): string {
-  return `# Debug issue
-
-Systematic debug with DNA runtime context and quality loop.
-
-Issue: $ARGUMENTS
-
-## Gather
-
-1. Error message, stack, endpoint, repro steps
-2. \`.DNA/data/runtime.db\` or \`npx dna dashboard\` for classified events
-3. Relevant \`.DNA/behaviour/\` (security, runtime)
-
-## Fix loop
-
-1. Reproduce → root cause → minimal fix
-2. Tests for regression
-3. \`npx dna quality report --feature\` — PASS
-4. Push when user wants ship
-
-Optional classified repair (never auto-merge):
-\`\`\`bash
-npx dna ai repair --dry-run
-\`\`\`
-`;
-}
-
-function buildSyncImpressionsPrompt(): string {
-  return `# Sync Impressions
-
-Reconcile human docs (\`DNA/Impressions/\`) with the codebase.
-
-Context: $ARGUMENTS
-
-## Assess drift
-
-\`\`\`bash
-npx dna scan
-npx dna plan impressions-sync
-\`\`\`
-
-## Execute plan
-
-Apply doc updates from plan. Prefer \`npx dna document --from-code\` when reverse-engineering.
-
-Confirm drift score improved on re-scan.
-`;
-}
-
-function buildLoadContextPrompt(): string {
-  return `# Load DNA context
-
-Load AI-ready domain context into this session.
-
-Target: $ARGUMENTS
-
-## Run
-
-\`\`\`bash
-npx dna context <target>
-\`\`\`
-
-Valid targets include: \`cursor\`, \`claude\`, \`backend\`, \`frontend\`, \`security\`, \`qa\`, \`devops\`, \`compliance\`, \`rbac\`, \`ivf\`, \`platform\`, \`all\`.
-
-## Apply
-
-Use the emitted context for all subsequent work in this session. Load referenced \`.DNA/knowledge/\` files.
-
-Confirm to user which domains are now active.
-`;
-}
-
-function claudeFrontmatter(description: string, hint?: string): string {
-  return [
-    "---",
-    `description: ${description}`,
-    hint ? `argument-hint: ${hint}` : null,
-    "allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write",
-    "---",
-    "",
-  ]
-    .filter(Boolean)
-    .join("\n");
-}
-
-type PromptDef = { cursor: string; claude: string; description: string; hint?: string };
-
-function promptFiles(config: DnaConfig): Record<string, string> {
-  const defs: Record<string, PromptDef> = {
-    "work-with-dna": {
-      description: "Start a DNA-aware Cursor session — plain language, DNA runs the CLI",
-      hint: "[what you want to do]",
-      cursor: buildWorkWithDnaPrompt(config),
-      claude: buildWorkWithDnaPrompt(config),
-    },
-    "ship-feature": {
-      description: "Ship a feature via DNA factory — plan, approve, implement, quality, push",
-      hint: "[plain-language feature request]",
-      cursor: buildShipFeaturePrompt(),
-      claude: buildShipFeaturePrompt(),
-    },
-    "analyze-project": {
-      description: "Deep DNA analysis — stack, gaps, and recommended next steps",
-      hint: "[optional focus area]",
-      cursor: buildAnalyzeProjectPrompt(),
-      claude: buildAnalyzeProjectPrompt(),
-    },
-    "health-check": {
-      description: "DNA doctor + validate — scaffold health and behaviour compliance",
-      hint: "[--check-only optional]",
-      cursor: buildHealthCheckPrompt(),
-      claude: buildHealthCheckPrompt(),
-    },
-    "quality-gate": {
-      description: "Pre-ship quality gate — lint, coverage, dna quality report",
-      hint: "[files or feature scope]",
-      cursor: buildQualityGatePrompt(),
-      claude: buildQualityGatePrompt(),
-    },
-    "plan-compliance": {
-      description: "Plan tiered compliance (GDPR, HIPAA, ISO, SOC2, PCI)",
-      hint: "[tier and frameworks]",
-      cursor: buildPlanCompliancePrompt(),
-      claude: buildPlanCompliancePrompt(),
-    },
-    "debug-issue": {
-      description: "Debug with DNA runtime context and fix loop",
-      hint: "[error or symptom]",
-      cursor: buildDebugIssuePrompt(),
-      claude: buildDebugIssuePrompt(),
-    },
-    "sync-impressions": {
-      description: "Reconcile DNA Impressions docs with codebase",
-      hint: "[optional scope]",
-      cursor: buildSyncImpressionsPrompt(),
-      claude: buildSyncImpressionsPrompt(),
-    },
-    "load-context": {
-      description: "Load DNA domain context (security, backend, compliance, etc.)",
-      hint: "<target>",
-      cursor: buildLoadContextPrompt(),
-      claude: buildLoadContextPrompt(),
-    },
-  };
-
-  const files: Record<string, string> = {};
-  for (const [name, def] of Object.entries(defs)) {
-    files[`.cursor/commands/${name}.md`] = def.cursor;
-    files[`.claude/commands/${name}.md`] = claudeFrontmatter(def.description, def.hint) + def.claude;
-  }
-  return files;
-}
 
 export function generateAiWorkbenchFiles(config: DnaConfig): Record<string, string> {
   return {
@@ -640,9 +269,10 @@ export function generateAiWorkbenchFiles(config: DnaConfig): Record<string, stri
     ".claude/skills/dna-workbench/SKILL.md": buildSkill(config, "claude"),
     ".claude/skills/dna-workbench/prompt-patterns.md": buildPromptPatterns(),
     ".claude/skills/dna-workbench/dna-session-flow.md": buildSessionFlow(),
-    ...promptFiles(config),
+    ...generatePromptStemPackFiles(config),
   };
 }
+
 
 export function isAiWorkbenchEnabled(config: DnaConfig): boolean {
   return config.aiWorkbench?.enabled !== false;
@@ -657,29 +287,29 @@ export async function installAiWorkbench(root: string, config: DnaConfig): Promi
     created.push(relPath);
   }
 
+  const stemCount = getPromptStemPacks().length;
+  const slashTable = getPromptStemPacks()
+    .filter((p) => p.slash)
+    .map((p) => `| \`/${p.slash}\` | ${p.name} |`)
+    .join("\n");
+
   await writeFileEnsured(
     join(root, ".cursor", "commands", "README.md"),
     `# DNA Workbench — Cursor prompts
 
-**${config.projectName}** — installed by DNA by Humaan.
+**${config.projectName}** — ${stemCount} prompt stem packs installed by DNA by Humaan.
 
-These are **prompt templates**, not CLI cheatsheets. Type \`/\` and pick a command; describe your goal in plain language.
+Each stem includes **prompt + guidelines + expectations + context + examples** in \`.DNA/stems/<id>/\`.
 
-| Command | Purpose |
-|---------|---------|
-| \`/work-with-dna\` | Start any DNA-aware task |
-| \`/ship-feature\` | Build and ship via feature factory |
-| \`/analyze-project\` | Understand codebase + gaps |
-| \`/health-check\` | Doctor + validate |
-| \`/quality-gate\` | Pre-push gate |
-| \`/plan-compliance\` | Compliance rollout |
-| \`/debug-issue\` | Debug + fix loop |
-| \`/sync-impressions\` | Doc/code sync |
-| \`/load-context\` | Load domain context |
+| Slash | Stem |
+|-------|------|
+${slashTable}
+
+Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 
 Skill: \`.cursor/skills/dna-workbench/\` · Rule: \`.cursor/rules/dna-workbench.mdc\`
 
-Remove: \`npx dna workbench uninstall\` · https://dna.humaan.app/intelligence
+Remove: \`npx dna workbench uninstall\`
 `,
   );
   created.push(".cursor/commands/README.md");
@@ -700,21 +330,15 @@ Remove: \`npx dna workbench uninstall\`
 
 export async function uninstallAiWorkbench(root: string): Promise<string[]> {
   const removed: string[] = [];
-  for (const relPath of AI_WORKBENCH_PATHS) {
+  for (const relPath of getAiWorkbenchPaths()) {
     const path = join(root, relPath);
     if (await fileExists(path)) {
       await unlink(path);
       removed.push(relPath);
     }
   }
-  for (const readme of [".cursor/commands/README.md", ".claude/commands/README.md"]) {
-    const path = join(root, readme);
-    if (await fileExists(path)) {
-      await unlink(path);
-      removed.push(readme);
-    }
-  }
-  return removed;
+  removed.push(...(await uninstallPromptStemPacks(root)));
+  return [...new Set(removed)];
 }
 
 export async function persistAiWorkbenchEnabled(
@@ -727,190 +351,49 @@ export async function persistAiWorkbenchEnabled(
   await writeJsonFile(join(root, ".DNA", "config.dna.json"), config);
 }
 
-/** Public catalog for dna.humaan.app/intelligence — prompts & scenarios, not CLI cheatsheets */
+/** Public catalog for dna.humaan.app/intelligence */
 export function intelligenceWorkbenchCatalogJson(): string {
+  const stems = intelligenceStemPackEntries();
+  const prompts = stems
+    .filter((s) => s.slash)
+    .map((s) => ({
+      id: s.id,
+      slash: `/${s.slash}`,
+      category: s.category,
+      title: s.name,
+      summary: s.summary,
+      sayInCursor: s.copyVariants,
+      cursorDoes: [...s.cliCommands.slice(0, 3), ...s.expectations.slice(0, 2)],
+      stemPath: `.DNA/stems/${s.id}/`,
+    }));
+
   return JSON.stringify(
     {
-      version: 3,
+      version: 4,
       type: "workbench",
       catalogUrl: "https://dna.humaan.app/intelligence",
       generatedBy: "dna workbench install",
       tagline:
-        "Talk to Cursor in plain language. DNA runs the CLI, loads project intelligence, and walks the full agent loop for you.",
+        "Copy-paste prompt stem packs for Cursor. Each stem includes guidelines, expectations, and context so the AI sticks to the workflow.",
       packages: {
         cursor: {
           rule: ".cursor/rules/dna-workbench.mdc",
           skill: ".cursor/skills/dna-workbench/SKILL.md",
           prompts: ".cursor/commands/*.md",
+          stems: ".DNA/stems/<id>/",
         },
         claude: {
           skill: ".claude/skills/dna-workbench/SKILL.md",
           prompts: ".claude/commands/*.md",
+          stems: ".DNA/stems/<id>/",
         },
       },
       defaultInstall: ["dna init", "dna doctor", "dna update"],
       optOut: "dna workbench uninstall",
-      categories: {
-        session: { label: "Session", description: "Start or reset a DNA-aware Cursor session" },
-        analysis: { label: "Analysis", description: "Understand the codebase and prioritize gaps" },
-        features: { label: "Features", description: "Build and ship through the agent loop" },
-        quality: { label: "Quality & ship", description: "Gates before push and release" },
-        compliance: { label: "Compliance", description: "Regulated rollout planning" },
-        debug: { label: "Debug", description: "Runtime issues and fix loops" },
-        docs: { label: "Documentation", description: "Impressions and doc/code sync" },
-      },
-      prompts: [
-        {
-          id: "work-with-dna",
-          slash: "/work-with-dna",
-          category: "session",
-          title: "Work with DNA",
-          summary: "Start any task — you talk normally, Cursor runs DNA and loads context.",
-          sayInCursor: [
-            "Help me with this project using DNA",
-            "I just ran dna init — what should we do first?",
-            "Use DNA to figure out what this repo needs",
-          ],
-          cursorDoes: [
-            "Reads .DNA/neuralNetwork.json and behaviour files",
-            "Runs npx dna when health or analysis is needed",
-            "Responds in plain English with one clear next step",
-          ],
-        },
-        {
-          id: "analyze-project",
-          slash: "/analyze-project",
-          category: "analysis",
-          title: "Analyze project",
-          summary: "Full deep analysis — stack, auth, integrations, P1–P3 gaps — then a prioritized plan.",
-          sayInCursor: [
-            "Run a full analysis on my project",
-            "Analyze this codebase and tell me what's missing for DNA maturity",
-            "What are the P1 gaps in this repo?",
-          ],
-          cursorDoes: [
-            "Runs npx dna analyze and npx dna scan",
-            "Summarizes structure, surfaces, auth, integrations",
-            "Lists P1 gaps first, then P2/P3",
-            "Proposes ordered next steps (IVF plan, shared library, feature factory, packs)",
-          ],
-        },
-        {
-          id: "ship-feature",
-          slash: "/ship-feature",
-          category: "features",
-          title: "Ship a feature",
-          summary: "Plain-language feature → agent loop → plan approval → implement → quality → push.",
-          sayInCursor: [
-            "Add an admin portal for support staff",
-            "I want providers to record phone calls and transcribe notes",
-            "Build RBAC for managers and HR",
-          ],
-          cursorDoes: [
-            "Writes ai/feature-request.md from your words",
-            "Runs ai/agent-loop.md role by role",
-            "Stops after Solution Architect plan for your approval",
-            "Implements Backend → Frontend → UX → QA → Quality → Docker → GitHub push",
-          ],
-        },
-        {
-          id: "health-check",
-          slash: "/health-check",
-          category: "session",
-          title: "Health check",
-          summary: "Is DNA set up correctly? Doctor + validate with plain-English results.",
-          sayInCursor: [
-            "Is DNA healthy?",
-            "Check if DNA is set up correctly",
-            "Fix my git hooks / CI / DNA scaffolding",
-          ],
-          cursorDoes: [
-            "Runs npx dna doctor and npx dna validate",
-            "Explains every ✓ and ✗",
-            "Repairs scaffolding when needed (hooks, workflows, rules)",
-          ],
-        },
-        {
-          id: "quality-gate",
-          slash: "/quality-gate",
-          category: "quality",
-          title: "Quality gate",
-          summary: "Pre-ship lint, coverage, and SAST — must PASS before push.",
-          sayInCursor: [
-            "Are we ready to push?",
-            "Run the quality gate on my changes",
-            "Check if this feature passes DNA quality",
-          ],
-          cursorDoes: [
-            "Runs lint, test:coverage, npx dna quality report --feature",
-            "Fixes blockers until PASS",
-            "Offers docker build + github push when green",
-          ],
-        },
-        {
-          id: "plan-compliance",
-          slash: "/plan-compliance",
-          category: "compliance",
-          title: "Plan compliance",
-          summary: "Tiered GDPR, HIPAA, ISO, SOC 2, PCI — plan, packs, implementation checklist.",
-          sayInCursor: [
-            "Are we GDPR ready?",
-            "Plan HIPAA controls for this app",
-            "What compliance do we need for EU B2B SaaS?",
-          ],
-          cursorDoes: [
-            "Runs npx dna compliance list and plan compliance",
-            "Maps controls to org tier",
-            "Installs marketplace packs and loads context",
-          ],
-        },
-        {
-          id: "debug-issue",
-          slash: "/debug-issue",
-          category: "debug",
-          title: "Debug issue",
-          summary: "Runtime error → classify → fix → test → quality → push.",
-          sayInCursor: [
-            "Users get 403 on the admin API — debug it",
-            "Fix this production error with DNA context",
-          ],
-          cursorDoes: [
-            "Checks .DNA/runtime and dashboard",
-            "Root-cause fix with tests",
-            "Quality gate before ship",
-          ],
-        },
-        {
-          id: "sync-impressions",
-          slash: "/sync-impressions",
-          category: "docs",
-          title: "Sync Impressions",
-          summary: "Reconcile DNA/Impressions/ with the codebase when docs drift.",
-          sayInCursor: [
-            "Our docs are out of date with the code",
-            "Sync Impressions with the codebase",
-          ],
-          cursorDoes: [
-            "Runs npx dna scan and plan impressions-sync",
-            "Updates or generates Impressions from code",
-          ],
-        },
-        {
-          id: "load-context",
-          slash: "/load-context",
-          category: "session",
-          title: "Load context",
-          summary: "Load domain packs — security, backend, frontend, QA, compliance, etc.",
-          sayInCursor: [
-            "Load security context for this session",
-            "Give yourself full backend DNA context",
-          ],
-          cursorDoes: [
-            "Runs npx dna context <target>",
-            "Loads referenced .DNA/knowledge/ files into the session",
-          ],
-        },
-      ],
+      stemCategories: STEM_CATEGORY_LABELS,
+      stemPacks: stems,
+      categories: STEM_CATEGORY_LABELS,
+      prompts,
       agentLoop: [
         {
           role: "Product Analyst",
@@ -970,7 +453,7 @@ export function intelligenceWorkbenchCatalogJson(): string {
             "Cursor prioritizes P1 items (shared library, behaviour restructure, build rules)",
             "Cursor proposes: IVF plan, marketplace packs, or first feature via /ship-feature",
           ],
-          exampleAsk: "Doctor passed except git hooks — fix hooks then run full analysis",
+          stems: ["health-check", "analyze-project", "what-next-after-analyze"],
         },
         {
           id: "after-analyze-what-next",
@@ -978,17 +461,16 @@ export function intelligenceWorkbenchCatalogJson(): string {
           userSays:
             "I ran analyze. React frontend, 80 API routes, P1 shared library gap, P1 build rules missing. What now?",
           flow: [
-            "Cursor explains P1 gaps in plain English (not raw CLI dump)",
-            "Shared library → npx dna ivf shared-library --dry-run, scaffold packages/humaan-ui",
-            "Build rules → capture MUI patterns from reference pages into .DNA/knowledge/",
-            "Behaviour restructure → validate against .DNA/behaviour/, update if needed",
-            "Optional: npx dna plan ivf for phased migration plan",
-            "Ask: 'Want me to start on P1 shared library or plan IVF first?'",
+            "Use stem: what-next-after-analyze",
+            "Cursor explains P1 gaps in plain English",
+            "Shared library → ivf-shared-library stem",
+            "Build rules → capture MUI patterns into .DNA/knowledge/",
+            "Ask which path to start",
           ],
+          stems: ["what-next-after-analyze", "ivf-shared-library", "plan-ivf"],
           exampleOutput: {
             stack: "npm · React · 80 API routes · MUI installed",
             p1: ["Shared library → packages/humaan-ui", "Build rules on top of MUI", "Behaviour layer restructure"],
-            p2: ["CellularMemory live map", "neuralNetwork routing"],
           },
         },
         {
@@ -996,50 +478,42 @@ export function intelligenceWorkbenchCatalogJson(): string {
           title: "Build a feature end-to-end",
           userSays: "Add an admin dashboard for support — new tab, RBAC, only visible to admins",
           flow: [
-            "Product Analyst updates ai/feature-request.md",
-            "Solution Architect plan → **wait for your OK**",
-            "Backend → Frontend → UX → QA",
-            "Code Quality: quality report PASS",
-            "Docker build + github push",
+            "Stem: ship-feature → agent loop",
+            "Solution Architect plan → wait for OK",
+            "Backend → Frontend → UX → QA → quality-gate → github-push",
           ],
           usesAgentLoop: true,
+          stems: ["ship-feature", "quality-gate", "github-push"],
         },
         {
           id: "brownfield-ivf",
           title: "Brownfield — integrate DNA without rewrite",
           userSays: "This is a legacy React monolith. Integrate DNA properly without a rewrite.",
-          flow: [
-            "npx dna analyze + npx dna document --from-code",
-            "npx dna plan ivf — phased migration plan",
-            "Implement phase 1 only — never big-bang rewrite",
-            "Refresh CellularMemory and Impressions as you go",
-          ],
+          flow: ["Stems: analyze-project → plan-ivf → ivf-run (phase 1 only)"],
+          stems: ["analyze-project", "plan-ivf", "ivf-run"],
         },
         {
           id: "ready-to-ship",
           title: "Feature done — ship it",
           userSays: "The feature works locally. Ship it.",
-          flow: [
-            "npx dna quality report --feature — must PASS",
-            "npx dna docker build",
-            "npx dna github push",
-            "Confirm CI / preview deploy triggered",
-          ],
+          flow: ["quality-gate → docker-build → github-push"],
+          stems: ["quality-gate", "docker-build", "github-push"],
         },
         {
-          id: "plain-chat-no-slash",
-          title: "No slash command needed",
-          userSays: "Just type in chat — DNA workbench rule is always on after init",
+          id: "copy-paste-stem",
+          title: "Copy-paste from stem library",
+          userSays: "Pick a stem from dna.humaan.app/intelligence, paste into Cursor",
           flow: [
-            "dna-workbench.mdc applies to every session",
-            "Say: 'analyze my project' or 'what should we build next?'",
-            "Cursor runs DNA CLI itself — you never need /dna-analyze",
-            "Use /ship-feature or /analyze-project when you want the full structured prompt",
+            "Copy a copyVariant or full prompt from stem library",
+            "AI reads .DNA/stems/<id>/ guidelines + expectations",
+            "AI follows MUST/NEVER rules for that workflow",
           ],
+          stems: ["work-with-dna", "analyze-project", "what-next-after-analyze"],
         },
       ],
       counts: {
-        prompts: 9,
+        stemPacks: stems.length,
+        prompts: prompts.length,
         scenarios: 6,
         agentRoles: 9,
       },
