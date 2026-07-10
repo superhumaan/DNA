@@ -119,6 +119,9 @@ importers:
       '@octokit/rest':
         specifier: ^21.0.2
         version: 21.1.1
+      '@superhumaan/dna-by-humaan':
+        specifier: ^0.3.3
+        version: 0.3.5(@nestjs/common@11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2))(express@4.22.2)(fastify@5.9.0)(next@15.5.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))
       chokidar:
         specifier: ^4.0.1
         version: 4.0.3
@@ -1519,6 +1522,25 @@ packages:
 
   '@simple-git/argv-parser@1.1.1':
     resolution: {integrity: sha512-Q9lBcfQ+VQCpQqGJFHe5yooOS5hGdLFFbJ5R+R5aDsnkPCahtn1hSkMcORX65J2Z5lxSkD0lQorMsncuBQxYUw==}
+
+  '@superhumaan/dna-by-humaan@0.3.5':
+    resolution: {integrity: sha512-tSLamEc7nIlIW0SFFdO5x+hIJ3TRh0iWt5irbmFk3cv1PpIe2y37qiDCvc8C40Lls5t17aGsL+tE2MKqAJ8JBQ==}
+    engines: {node: '>=20'}
+    hasBin: true
+    peerDependencies:
+      '@nestjs/common': ^10.0.0 || ^11.0.0
+      express: ^4.18.0
+      fastify: ^4.0.0 || ^5.0.0
+      next: ^14.0.0 || ^15.0.0
+    peerDependenciesMeta:
+      '@nestjs/common':
+        optional: true
+      express:
+        optional: true
+      fastify:
+        optional: true
+      next:
+        optional: true
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
@@ -3865,6 +3887,23 @@ snapshots:
   '@simple-git/argv-parser@1.1.1':
     dependencies:
       '@simple-git/args-pathspec': 1.0.3
+
+  '@superhumaan/dna-by-humaan@0.3.5(@nestjs/common@11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2))(express@4.22.2)(fastify@5.9.0)(next@15.5.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))':
+    dependencies:
+      '@octokit/rest': 21.1.1
+      chokidar: 4.0.3
+      commander: 12.1.0
+      fast-glob: 3.3.3
+      pino: 9.14.0
+      simple-git: 3.36.0
+      zod: 3.25.76
+    optionalDependencies:
+      '@nestjs/common': 11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      express: 4.22.2
+      fastify: 5.9.0
+      next: 15.5.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+    transitivePeerDependencies:
+      - supports-color
 
   '@swc/helpers@0.5.15':
     dependencies:
