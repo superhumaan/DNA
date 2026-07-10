@@ -1,7 +1,7 @@
 import { join } from "node:path";
-import { readFile, rm } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 import type { DnaConfig } from "@superhumaan/dna-config";
-import { fileExists, writeFileEnsured } from "../../fs.js";
+import { fileExists } from "../../fs.js";
 import { PROMPT_STEM_DEFS } from "./catalog.js";
 import { finalizeStemPack, stemInstallPrefix } from "./builder.js";
 import { syncPromptStemPacks } from "./sync.js";

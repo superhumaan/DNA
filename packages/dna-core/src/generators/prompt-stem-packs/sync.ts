@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import { writeFileEnsured, writeJsonFile } from "../../fs.js";
-import { buildStemPackFiles, finalizeStemPack, stemInstallPrefix } from "./builder.js";
+import { finalizeStemPack, stemInstallPrefix } from "./builder.js";
 import { PROMPT_STEM_DEFS } from "./catalog.js";
 import { fetchIntelligenceCatalog, getBundledIntelligenceCatalog } from "./remote.js";
 import type { IntelligenceStemPackEntry, PromptStemPack, PromptStemPackDef, StemCategory } from "./types.js";
@@ -34,10 +34,6 @@ function stripStemHeader(copyPrompt: string): string {
 
 function bundledPacks(): PromptStemPack[] {
   return PROMPT_STEM_DEFS.map(finalizeStemPack);
-}
-
-function getBundledStemPack(id: string): PromptStemPack | undefined {
-  return bundledPacks().find((p) => p.id === id);
 }
 
 function examplesFromEntry(entry: IntelligenceStemPackEntry, bundled?: PromptStemPack) {

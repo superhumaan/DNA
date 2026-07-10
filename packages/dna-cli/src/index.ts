@@ -725,7 +725,7 @@ stemsCmd
   .command("list")
   .description("List installed prompt stem packs")
   .option("--cwd <path>", "Project root directory")
-  .action(async (options: { cwd?: string }) => {
+  .action(async (_options: { cwd?: string }) => {
     const packs = getPromptStemPacks();
     console.log(`DNA Prompt Stem Packs (${packs.length})\n`);
     for (const [cat, meta] of Object.entries(STEM_CATEGORY_LABELS)) {
