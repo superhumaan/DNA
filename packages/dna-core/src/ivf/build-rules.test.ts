@@ -157,4 +157,40 @@ export function OrdersListPage() {
 
     await rm(root, { recursive: true, force: true });
   });
+
+  it("detects JSX list/report pages with MUI and ListPageShell", async () => {
+    const root = join(tmpdir(), `dna-fp-jsx-${randomUUID()}`);
+    await mkdir(join(root, "src", "pages", "surveys"), { recursive: true });
+    await writeFile(
+      join(root, "package.json"),
+      JSON.stringify({
+        name: "humaan-app",
+        dependencies: { "@mui/material": "^6.0.0", react: "^18.0.0" },
+      }),
+    );
+    await writeFile(
+      join(root, "src", "pages", "surveys", "SurveysListPage.jsx"),
+      `import { Table, TablePagination, Typography, TextField } from "@mui/material";
+import ListPageShell from "../../components/shell/ListPageShell";
+import ListPageFilter from "../../components/ListPageFilter";
+export default function SurveysListPage() {
+  return (
+    <ListPageShell title="Surveys" filters={<ListPageFilter />}>
+      <Typography variant="h5">Surveys</Typography>
+      <TextField size="small" placeholder="Search surveys" />
+      <Table />
+      <TablePagination rowsPerPage={25} />
+    </ListPageShell>
+  );
+}`,
+    );
+
+    const analysis = await analyzeFeaturePatterns(root);
+
+    expect(analysis.referenceListPage?.path).toContain("SurveysListPage.jsx");
+    expect(analysis.structureCaptured).toBe(true);
+    expect(analysis.projectKind).toBe("web-ui");
+
+    await rm(root, { recursive: true, force: true });
+  });
 });

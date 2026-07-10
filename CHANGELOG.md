@@ -4,9 +4,13 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.3.9] - 2026-07-10
+
 ### Fixed
 
 - **Build rules from existing structure** — IVF build rules now scan monorepo workspaces and detect domain module patterns (`packages/*/src/{module}/`) even when no MUI list/report pages exist. `dna analyze` reports captured structure instead of "No build rules captured", and `feature-building-rules.md` instructs AI to clone the reference module layout.
+- **JSX list pages (Humaan and similar)** — build rules now detect `.jsx` list/report pages and project shells (`ListPageShell`, `HumaanPageShell`, `ListPageFilter`). Humaan-style apps capture `SurveysListPage.jsx` as the reference list page.
+- **`--cwd` validation** — DNA now resolves `--cwd` to an absolute path and prints a clear error when the directory does not exist.
 
 ## [0.3.8] - 2026-07-10
 

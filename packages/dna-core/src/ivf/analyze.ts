@@ -477,7 +477,9 @@ export function assessVerticalGaps(
           currentState,
           br.referenceModule
             ? "Clone reference module layout for new features"
-            : "Project build rules on top of MUI (clone reference for new reports)",
+            : br.referenceListPage
+              ? "Clone reference list/report page for new features"
+              : "Project build rules on top of MUI (clone reference for new reports)",
           !hasStructure,
           hasStructure ? "P3" : "P2",
           br.referenceModule

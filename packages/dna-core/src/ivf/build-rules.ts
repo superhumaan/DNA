@@ -141,6 +141,8 @@ function isListPageFile(filePath: string): boolean {
       /Report|List/.test(basename(filePath)))
   );
 }
+
+function isWebFrontend(frontend: string | null | undefined): boolean {
   if (!frontend) return false;
   return ["react", "next", "nextjs", "vue", "angular"].includes(frontend.toLowerCase());
 }
@@ -184,9 +186,9 @@ async function resolveScanRoots(root: string): Promise<string[]> {
 function hasWebUiSource(files: string[]): boolean {
   return files.some(
     (f) =>
-      f.endsWith(".tsx") &&
+      isUiSourceFile(f) &&
       (/\/(pages|features|app|components|routes|views)\//i.test(f) ||
-        /Page\.tsx$/i.test(f) ||
+        /Page\.(tsx|jsx)$/i.test(f) ||
         /Report|List/.test(basename(f))),
   );
 }
@@ -238,19 +240,22 @@ function scoreDomainModule(modulePath: string, files: string[]): DomainModuleCan
   }
 
   const implFiles = files.filter(
-    (f) => !/\.(test|spec)\.(ts|tsx)$/.test(f) && !f.endsWith(".d.ts"),
+    (f) => !/\.(test|spec)\.(ts|tsx|js|jsx)$/.test(f) && !f.endsWith(".d.ts"),
   );
   const moduleName = modulePath.split("/").pop() ?? modulePath;
-  const nameBonus = /^(ivf|compliance|rbac|platform|marketplace|quality|admin)/i.test(moduleName) ? 1 : 0;
+  const depth = modulePath.split("/").length;
+  const nameBonus = /^(ivf|compliance|rbac|platform|marketplace|quality|surveys|survey)/i.test(moduleName) ? 2 : 0;
+  const depthBonus = depth >= 3 ? 2 : 0;
 
   const score =
-    implFiles.length +
+    Math.min(implFiles.length, 8) +
     (hasTests ? 3 : 0) +
     (signals.includes("plan") ? 2 : 0) +
     (signals.includes("context") ? 2 : 0) +
     (signals.includes("index") ? 1 : 0) +
     (signals.includes("plan") && signals.includes("context") && hasTests ? 4 : 0) +
-    nameBonus;
+    nameBonus +
+    depthBonus;
 
   return {
     path: modulePath,
@@ -269,14 +274,17 @@ function detectDomainModules(files: string[]): DomainModuleCandidate[] {
     if (!/\.(ts|tsx|js|jsx)$/.test(file)) continue;
 
     const match =
-      file.match(/^(packages\/[^/]+\/src\/([^/]+))\//) ??
-      file.match(/^(apps\/[^/]+\/src\/([^/]+))\//) ??
-      file.match(/^(src\/([^/]+))\//);
+      file.match(/^(packages\/[^/]+\/src\/[^/]+\/[^/]+)\//) ??
+      file.match(/^(apps\/[^/]+\/src\/[^/]+\/[^/]+)\//) ??
+      file.match(/^(src\/[^/]+\/[^/]+)\//) ??
+      file.match(/^(packages\/[^/]+\/src\/[^/]+)\//) ??
+      file.match(/^(apps\/[^/]+\/src\/[^/]+)\//) ??
+      file.match(/^(src\/[^/]+)\//);
 
     if (!match) continue;
 
     const modulePath = match[1]!;
-    const moduleName = match[2]!;
+    const moduleName = modulePath.split("/").pop() ?? modulePath;
     if (DOMAIN_MODULE_EXCLUDED.has(moduleName) || moduleName.startsWith(".")) continue;
 
     const list = moduleFiles.get(modulePath) ?? [];
@@ -365,10 +373,13 @@ function detectFeatureFolders(files: string[]): FeatureFolderPattern[] {
 }
 
 function extractLayoutTokens(content: string): { padding: string | null; titleVariant: string | null } {
-  const paddingMatch = content.match(/sx=\{\{[^}]*\bp:\s*(\d+)/) ?? content.match(/padding:\s*theme\.spacing\((\d+)\)/);
+  const paddingMatch =
+    content.match(/sx=\{\{[^}]*\bp:\s*(\d+)/) ??
+    content.match(/padding:\s*theme\.spacing\((\d+)\)/) ??
+    content.match(/ListPageShell|HumaanPageShell/);
   const titleMatch = content.match(/Typography[^>]*variant=["'`](h[4-6])["'`]/);
   return {
-    padding: paddingMatch ? `theme.spacing(${paddingMatch[1]})` : null,
+    padding: paddingMatch?.[1] ? `theme.spacing(${paddingMatch[1]})` : paddingMatch ? "ListPageShell/HumaanPageShell" : null,
     titleVariant: titleMatch?.[1] ?? null,
   };
 }
@@ -404,13 +415,7 @@ export async function analyzeFeaturePatterns(root: string): Promise<FeaturePatte
   let titleVariant: string | null = null;
   let tableStyle: FeaturePatternAnalysis["tableStyle"] = "unknown";
 
-  const pageFiles = files.filter(
-    (f) =>
-      f.endsWith(".tsx") &&
-      (/page\.tsx$/i.test(f) ||
-        /\/(pages|reports|lists|features)\//i.test(f) ||
-        /Report|List|Index/.test(basename(f))),
-  );
+  const pageFiles = files.filter((f) => isListPageFile(f));
 
   for (const rel of pageFiles.slice(0, 150)) {
     const absRoot = fileOrigins.get(rel) ?? resolve(root);

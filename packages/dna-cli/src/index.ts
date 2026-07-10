@@ -1,5 +1,6 @@
 import { Command } from "commander";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { PRODUCT_NAME } from "@superhumaan/dna-config";
 import {
@@ -100,7 +101,14 @@ program
   .version("0.1.0");
 
 function getRoot(options: { cwd?: string }): string {
-  return options.cwd ?? process.cwd();
+  const root = resolve(options.cwd ?? process.cwd());
+  if (!existsSync(root)) {
+    throw new Error(
+      `Project directory not found: ${options.cwd ?? process.cwd()}\n` +
+        `Run DNA from your project root (where .DNA/ lives), or pass an absolute --cwd path.`,
+    );
+  }
+  return root;
 }
 
 program
