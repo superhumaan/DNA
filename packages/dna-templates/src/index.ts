@@ -71,7 +71,7 @@ export function initDnaBrowserRuntime(options?: { projectId?: string }): void {
 
 export const ENV_EXAMPLE_SNIPPET = `# DNA Runtime (enabled by default — opt out in .DNA/config.dna.json)
 DNA_PROJECT_ID=my-project
-GITHUB_TOKEN=          # Optional locally if you use `dna github login`; required in CI
+GITHUB_TOKEN=          # Optional locally if you use dna github login; required in CI
 ANTHROPIC_API_KEY=     # Required for live AI repair (mock until set)
 OPENAI_API_KEY=        # Alternative AI provider
 VITE_DNA_PROJECT_ID=my-project
