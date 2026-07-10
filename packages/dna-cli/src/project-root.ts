@@ -1,7 +1,8 @@
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-export function resolveProjectRoot(cwd?: string): string {
+/** Resolve a target directory without requiring `.DNA/` (for `dna init`). */
+export function resolveTargetDirectory(cwd?: string): string {
   const shellCwd = process.cwd();
   const root = resolve(cwd ?? shellCwd);
 
@@ -17,6 +18,13 @@ export function resolveProjectRoot(cwd?: string): string {
         `Run DNA from your project root (where .DNA/ lives), or pass an absolute --cwd path.`,
     );
   }
+
+  return root;
+}
+
+export function resolveProjectRoot(cwd?: string): string {
+  const shellCwd = process.cwd();
+  const root = resolveTargetDirectory(cwd);
 
   if (!existsSync(join(root, ".DNA"))) {
     if (cwd && existsSync(join(shellCwd, ".DNA"))) {

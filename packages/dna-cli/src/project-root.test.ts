@@ -4,7 +4,7 @@ import { realpathSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
-import { resolveProjectRoot } from "./project-root.js";
+import { resolveProjectRoot, resolveTargetDirectory } from "./project-root.js";
 
 function samePath(a: string, b: string): void {
   expect(realpathSync(a)).toBe(realpathSync(b));
@@ -53,5 +53,32 @@ describe("resolveProjectRoot", () => {
     const empty = join(projectRoot, "empty");
     await mkdir(empty, { recursive: true });
     expect(() => resolveProjectRoot(empty)).toThrow(/No \.DNA\/ directory/);
+  });
+});
+
+describe("resolveTargetDirectory", () => {
+  let previousCwd: string;
+  let projectRoot: string;
+
+  afterEach(async () => {
+    process.chdir(previousCwd);
+    await rm(projectRoot, { recursive: true, force: true });
+  });
+
+  it("resolves a directory without .DNA (for dna init)", async () => {
+    previousCwd = process.cwd();
+    projectRoot = join(tmpdir(), `dna-root-${randomUUID()}`);
+    await mkdir(projectRoot, { recursive: true });
+    process.chdir(projectRoot);
+
+    samePath(resolveTargetDirectory(), projectRoot);
+  });
+
+  it("rejects a missing directory", async () => {
+    previousCwd = process.cwd();
+    projectRoot = join(tmpdir(), `dna-root-${randomUUID()}`);
+    process.chdir(tmpdir());
+
+    expect(() => resolveTargetDirectory(projectRoot)).toThrow(/Project directory not found/);
   });
 });

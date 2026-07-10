@@ -4,6 +4,12 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-07-10
+
+### Fixed
+
+- **`dna init` on fresh projects** — init no longer requires an existing `.DNA/` directory; `resolveTargetDirectory()` resolves the project path before scaffolding.
+
 ## [0.4.2] - 2026-07-10
 
 ### Added

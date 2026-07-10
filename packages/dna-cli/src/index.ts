@@ -98,7 +98,7 @@ import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken 
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import { runInitWizard } from "./prompts.js";
 import { connectGitHubDuringOnboarding } from "./github-onboarding.js";
-import { resolveProjectRoot } from "./project-root.js";
+import { resolveProjectRoot, resolveTargetDirectory } from "./project-root.js";
 
 const program = new Command();
 
@@ -117,7 +117,7 @@ program
   .option("-y, --yes", "Non-interactive mode with defaults")
   .option("--cwd <path>", "Project root directory")
   .action(async (options: { yes?: boolean; cwd?: string }) => {
-    const root = getRoot(options);
+    const root = resolveTargetDirectory(options.cwd);
     const scan = await scanProject(root);
     const projectContext = detectProjectContext(scan);
 
