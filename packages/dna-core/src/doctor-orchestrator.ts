@@ -327,9 +327,9 @@ async function ensureAiAndCi(root: string, config: DnaConfig): Promise<string[]>
   }
 
   if (config.aiWorkbench?.enabled !== false) {
-    config.aiWorkbench = { enabled: true };
-    const workbench = await installAiWorkbench(root, config);
-    actions.push(`AI workbench refreshed (${workbench.length} prompt files)`);
+    config.aiWorkbench = { enabled: true, ...config.aiWorkbench };
+    await installAiWorkbench(root, config);
+    actions.push("AI workbench + prompt stems synced (dna update refreshes from dna.humaan.app)");
   }
 
   const ci = await installCiPipeline({ root, config, scan, skipIfExists: false });

@@ -271,7 +271,7 @@ The user works in plain language inside Cursor; the agent runs `npx dna` on thei
 ```bash
 dna workbench install      # refresh prompts + stem packs (also runs automatically)
 dna workbench uninstall    # opt out — sets aiWorkbench.enabled=false
-dna update                 # refreshes workbench + checks pack updates
+dna update                 # download latest prompt stems from dna.humaan.app + pack updates
 dna update --skip-workbench
 ```
 
@@ -286,6 +286,8 @@ Each stem includes: `prompt.md`, `guidelines.md`, `expectations.md`, `context.md
 | Agent loop | `/agent-loop`, `/product-analyst`, `/solution-architect`, `/backend-engineer`, … |
 | Quality | `/quality-gate`, `/pre-push-review` |
 | IVF | `/ivf-shared-library`, `/plan-ivf` |
+
+Refresh: `npx dna update` downloads the latest catalog from `https://dna.humaan.app/intelligence/api/v1/catalog` (offline: bundled fallback).
 
 ```bash
 dna stems list

@@ -8,6 +8,7 @@ import {
   getPromptStemPacks,
   intelligenceStemPackEntries,
   STEM_CATEGORY_LABELS,
+  syncPromptStemPacks,
   uninstallPromptStemPacks,
 } from "./prompt-stem-packs/index.js";
 
@@ -262,7 +263,7 @@ Commands live in \`${cmdPath}/\`. Stem data: \`.DNA/stems/\`.
 }
 
 
-export function generateAiWorkbenchFiles(config: DnaConfig): Record<string, string> {
+export function generateAiWorkbenchCoreFiles(config: DnaConfig): Record<string, string> {
   return {
     ".cursor/rules/dna-workbench.mdc": buildWorkbenchRule(config),
     ".cursor/skills/dna-workbench/SKILL.md": buildSkill(config, "cursor"),
@@ -271,6 +272,13 @@ export function generateAiWorkbenchFiles(config: DnaConfig): Record<string, stri
     ".claude/skills/dna-workbench/SKILL.md": buildSkill(config, "claude"),
     ".claude/skills/dna-workbench/prompt-patterns.md": buildPromptPatterns(),
     ".claude/skills/dna-workbench/dna-session-flow.md": buildSessionFlow(),
+  };
+}
+
+/** @deprecated Stems are synced via syncPromptStemPacks — use generateAiWorkbenchCoreFiles + sync */
+export function generateAiWorkbenchFiles(config: DnaConfig): Record<string, string> {
+  return {
+    ...generateAiWorkbenchCoreFiles(config),
     ...generatePromptStemPackFiles(config),
   };
 }
@@ -283,13 +291,18 @@ export function isAiWorkbenchEnabled(config: DnaConfig): boolean {
 export async function installAiWorkbench(root: string, config: DnaConfig): Promise<string[]> {
   if (!isAiWorkbenchEnabled(config)) return [];
 
+  config.aiWorkbench = { enabled: true, ...config.aiWorkbench };
+
   const created: string[] = [];
-  for (const [relPath, content] of Object.entries(generateAiWorkbenchFiles(config))) {
+  for (const [relPath, content] of Object.entries(generateAiWorkbenchCoreFiles(config))) {
     await writeFileEnsured(join(root, relPath), content);
     created.push(relPath);
   }
 
-  const stemCount = getPromptStemPacks().length;
+  const stemSync = await syncPromptStemPacks(root, config);
+  created.push(...stemSync.paths);
+
+  const stemCount = stemSync.stemCount;
   const slashTable = getPromptStemPacks()
     .filter((p) => p.slash)
     .map((p) => `| \`/${p.slash}\` | ${p.name} |`)
@@ -299,7 +312,7 @@ export async function installAiWorkbench(root: string, config: DnaConfig): Promi
     join(root, ".cursor", "commands", "README.md"),
     `# DNA Workbench — Cursor prompts
 
-**${config.projectName}** — ${stemCount} prompt stem packs installed by DNA by Humaan.
+**${config.projectName}** — ${stemCount} prompt stem packs (${stemSync.source} catalog v${stemSync.catalogVersion}).
 
 Each stem includes **prompt + guidelines + expectations + context + examples** in \`.DNA/stems/<id>/\`.
 

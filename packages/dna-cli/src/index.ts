@@ -1114,7 +1114,7 @@ ivfCmd
 
 program
   .command("update")
-  .description("Check for DNA knowledge pack updates and refresh AI workbench prompts")
+  .description("Check for DNA knowledge pack updates and download latest prompt stem packs")
   .option("--cwd <path>", "Project root directory")
   .option("--channel <channel>", "stable|beta|nightly", "stable")
   .option("--skip-workbench", "Do not refresh Cursor/Claude workbench prompts")
@@ -1131,7 +1131,18 @@ program
 
     if (!options.skipWorkbench && config && config.aiWorkbench?.enabled !== false) {
       const refreshed = await installAiWorkbench(root, config);
-      console.log(`\n✓ AI Workbench refreshed (${refreshed.length} prompt files)`);
+      const stems = refreshed.filter((p) => p.startsWith(".DNA/stems/"));
+      console.log(`\n✓ AI Workbench refreshed (${refreshed.length} files, ${stems.length ? "stems synced" : "prompts updated"})`);
+      const indexPath = join(root, ".DNA", "stems", "index.json");
+      try {
+        const raw = await readFile(indexPath, "utf-8");
+        const idx = JSON.parse(raw) as { source?: string; count?: number; catalogVersion?: number };
+        if (idx.source && idx.count) {
+          console.log(`  Prompt stems: ${idx.count} from ${idx.source} (catalog v${idx.catalogVersion ?? "?"})`);
+        }
+      } catch {
+        // no index yet
+      }
     }
   });
 

@@ -1,13 +1,16 @@
 import { join } from "node:path";
-import { rm } from "node:fs/promises";
+import { readFile, rm } from "node:fs/promises";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import { fileExists, writeFileEnsured } from "../../fs.js";
 import { PROMPT_STEM_DEFS } from "./catalog.js";
 import { finalizeStemPack, stemInstallPrefix } from "./builder.js";
+import { syncPromptStemPacks } from "./sync.js";
 import type { IntelligenceStemPackEntry, PromptStemPack, StemCategory } from "./types.js";
 
 export * from "./types.js";
 export { PROMPT_STEM_DEFS } from "./catalog.js";
+export * from "./sync.js";
+export * from "./remote.js";
 
 const STEM_INDEX = ".DNA/stems/index.json";
 
@@ -132,12 +135,8 @@ Refresh: \`npx dna workbench install\` or \`npx dna stems install\`
 }
 
 export async function installPromptStemPacks(root: string, config: DnaConfig): Promise<string[]> {
-  const created: string[] = [];
-  for (const [relPath, content] of Object.entries(generatePromptStemPackFiles(config))) {
-    await writeFileEnsured(join(root, relPath), content);
-    created.push(relPath);
-  }
-  return created;
+  const result = await syncPromptStemPacks(root, config);
+  return result.paths;
 }
 
 export async function uninstallPromptStemPacks(root: string): Promise<string[]> {

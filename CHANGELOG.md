@@ -4,6 +4,17 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-07-10
+
+### Added
+
+- **Remote prompt stem sync** — `dna update` and `dna doctor` download the latest stem catalog from [dna.humaan.app/intelligence/api/v1/catalog](https://dna.humaan.app/intelligence/api/v1/catalog) (bundled fallback when offline).
+- **Default install** — new projects get all prompt stems on `init` / `doctor`; `config.dna.json` records `aiWorkbench.lastSyncAt`, `catalogVersion`, and `stemSource`.
+
+### Changed
+
+- Stem packs install via `syncPromptStemPacks()` instead of CLI-only bundled files — always refreshed on update.
+
 ## [0.4.0] - 2026-07-10
 
 ### Added

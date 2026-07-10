@@ -89,6 +89,12 @@ export const DnaConfigSchema = z.object({
     .object({
       /** Prompt-first Cursor/Claude package — installed by default on init and update */
       enabled: z.boolean().default(true),
+      /** Last successful stem catalog sync */
+      lastSyncAt: z.string().optional(),
+      /** Remote intelligence catalog version (e.g. 4) */
+      catalogVersion: z.number().optional(),
+      /** Where stem packs were last installed from */
+      stemSource: z.enum(["remote", "bundled"]).optional(),
     })
     .optional(),
   platformFeatures: z.array(z.string()).default([]),

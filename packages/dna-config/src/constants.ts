@@ -135,3 +135,11 @@ export const DNA_REFERENCE_ROOT_ENV = "DNA_REFERENCE_ROOT";
 export const DNA_GDPR_SOURCE_DOCS_ENV = "DNA_GDPR_SOURCE_DOCS";
 
 export const MARKETPLACE_API_VERSION = "v1";
+
+/** Public intelligence / prompt stem catalog (DNA-Web). */
+export const INTELLIGENCE_BASE_URL =
+  process.env.DNA_INTELLIGENCE_URL ?? "https://dna.humaan.app/intelligence";
+
+export function intelligenceCatalogUrl(): string {
+  return `${INTELLIGENCE_BASE_URL.replace(/\/$/, "")}/api/v1/catalog`;
+}
