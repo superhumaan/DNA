@@ -1,9 +1,10 @@
 {
-  "updated": "2026-07-09",
+  "updated": "2026-07-10",
   "sponsorUrl": "https://github.com/sponsors/superhumaan",
   "servicesUrl": "https://dna.humaan.app/services",
   "goalUsd": 500,
   "goalDescription": "Keeps dna.humaan.app online, maintains the marketplace catalog, funds security updates, and supports community issue triage.",
+  "oneTimeDisclaimer": "One-time partnership tiers are commercial collaborations — not equity or securities. DNA remains MIT. Partnership terms (custom repo access, duration) begin on payment confirmation.",
   "tiers": [
     {
       "id": "supporter",
@@ -50,6 +51,66 @@
         "Direct line for security disclosures",
         "Input on marketplace pack priorities",
         "Quarterly check-in with maintainers"
+      ]
+    }
+  ],
+  "oneTimeTiers": [
+    {
+      "id": "backer-partner",
+      "name": "Backer partner",
+      "amountUsd": 6000,
+      "durationMonths": 6,
+      "priority": "standard",
+      "summary": "Shape DNA's future with recognition, feature access, and a private collaboration repo.",
+      "benefits": [
+        "Public sponsor ledger + partner recognition on dna.humaan.app and the repository",
+        "Access to all upcoming features during your 6-month partnership",
+        "Contribute and shape features on the roadmap",
+        "Private custom collaboration repository",
+        "Standard priority on feature requests"
+      ]
+    },
+    {
+      "id": "contributor-partner",
+      "name": "Contributor partner",
+      "amountUsd": 8000,
+      "durationMonths": 8,
+      "priority": "elevated",
+      "summary": "Same as Backer partner with higher priority and 8 months of involvement.",
+      "benefits": [
+        "Everything in Backer partner",
+        "8-month partnership (vs 6 months)",
+        "Elevated priority on feature shaping and roadmap input"
+      ]
+    },
+    {
+      "id": "feature-partner",
+      "name": "Feature partner",
+      "amountUsd": 10000,
+      "durationMonths": 10,
+      "priority": "high",
+      "summary": "Full recognition, all upcoming features, and high-priority feature shaping for 10 months.",
+      "benefits": [
+        "Public sponsor ledger + featured partner recognition",
+        "Access to all upcoming features during your 10-month partnership",
+        "Contribute and shape features on the roadmap",
+        "Private custom collaboration repository",
+        "High priority on feature requests and roadmap input"
+      ]
+    },
+    {
+      "id": "build-partner",
+      "name": "Build partner",
+      "amountUsd": 12000,
+      "durationMonths": 10,
+      "priority": "maximum",
+      "summary": "Work directly with maintainers to build DNA — named partner with shared recognition.",
+      "benefits": [
+        "Everything in Feature partner",
+        "Work directly with maintainers on building DNA",
+        "Named partner — shared recognition for making DNA happen",
+        "Maximum priority — your ideas prioritised and implemented",
+        "10-month partnership with private custom collaboration repository"
       ]
     }
   ],

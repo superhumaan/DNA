@@ -40,7 +40,7 @@ See [CONTRIBUTING.md](../../CONTRIBUTING.md) and [Local development](../engineer
 
 ## Sponsorship & attribution
 
-Built by **[Humaan](https://humaan.com)** · **[Superlite](https://superlite.ai)**
+Built by **[Humaan](https://dna.humaan.app)** · **[Superlite](https://superlite.ai)**
 
 - **Sponsors:** [dna.humaan.app/sponsors](https://dna.humaan.app/sponsors) · [Sponsor on GitHub](https://github.com/sponsors/superhumaan)
 - **Commercial services:** [dna.humaan.app/services](https://dna.humaan.app/services)

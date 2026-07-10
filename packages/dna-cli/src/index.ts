@@ -1246,7 +1246,7 @@ program
     } catch {
       console.log("DNA by Humaan — credits");
       console.log("");
-      console.log("Maintained by Humaan by Superlite (https://humaan.com)");
+      console.log("Maintained by Humaan by Superlite (https://dna.humaan.app)");
       console.log("Sponsor: https://github.com/sponsors/superhumaan");
       console.log("Services: https://dna.humaan.app/services");
       console.log("");

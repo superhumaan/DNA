@@ -10,7 +10,7 @@
 
 DNA by Humaan is an open-source **project brain**, **runtime observer**, **768-pack knowledge marketplace**, and **AI-assisted repair** system for modern TypeScript teams.
 
-Built by [Humaan](https://humaan.com) · [Superlite](https://superlite.ai)
+Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 
 | | |
 |---|---|
@@ -284,4 +284,4 @@ _No sponsors yet — [be the first](https://github.com/sponsors/superhumaan)._
 <!-- sponsors:ledger:end -->
 ## License
 
-MIT © [Humaan by Superlite](https://humaan.com)
+MIT © [Humaan by Superlite](https://dna.humaan.app)

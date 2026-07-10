@@ -1,6 +1,6 @@
 # Credits
 
-**DNA by Humaan** is built and maintained by [Humaan by Superlite](https://humaan.com).
+**DNA by Humaan** is built and maintained by [Humaan by Superlite](https://dna.humaan.app).
 
 After install, view sponsors and funding links:
 

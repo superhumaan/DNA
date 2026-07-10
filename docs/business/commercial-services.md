@@ -68,6 +68,6 @@ DNA drives adoption. Humaan ships the build — admin portals, SSO, RBAC, Azure 
 
 ## Contact
 
-- **Website:** [humaan.com](https://humaan.com)
-- **DNA product:** [dna.humaan.app](https://dna.humaan.app)
-- **Open-source sponsorship:** [github.com/sponsors/superhumaan](https://github.com/sponsors/superhumaan)
+- **Website:** [dna.humaan.app](https://dna.humaan.app)
+- **Sponsors & partnerships:** [github.com/sponsors/superhumaan](https://github.com/sponsors/superhumaan)
+- **Open-source repository:** [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA)

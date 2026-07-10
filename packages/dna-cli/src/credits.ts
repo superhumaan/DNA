@@ -44,7 +44,7 @@ export function formatCredits(ledger: SponsorLedger): string {
     "DNA by Humaan — credits",
     "═".repeat(40),
     "",
-    "Maintained by Humaan by Superlite (https://humaan.com)",
+    "Maintained by Humaan by Superlite (https://dna.humaan.app)",
     `Sponsor DNA: ${ledger.sponsorUrl}`,
     `Commercial services: ${ledger.servicesUrl}`,
     "",

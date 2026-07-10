@@ -18,7 +18,7 @@
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 
-Built by **[Humaan](https://humaan.com)** · **[Superlite](https://superlite.ai)**
+Built by **[Humaan](https://dna.humaan.app)** · **[Superlite](https://superlite.ai)**
 
 ---
 
@@ -262,6 +262,6 @@ _No sponsors yet — [be the first](https://github.com/sponsors/superhumaan)._
 
 ## License
 
-MIT © 2026 [Humaan by Superlite](https://humaan.com)
+MIT © 2026 [Humaan by Superlite](https://dna.humaan.app)
 
 See [LICENSE](./LICENSE) for full text.

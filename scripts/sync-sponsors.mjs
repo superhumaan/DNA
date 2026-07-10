@@ -51,12 +51,15 @@ function renderFundingYml(data) {
   return lines.join("\n");
 }
 
-function tierLabel(tierId, tiers) {
-  const tier = tiers.find((t) => t.id === tierId);
-  return tier ? `${tier.name} ($${tier.amountUsd}/mo)` : tierId;
+function tierLabel(tierId, data) {
+  const monthly = data.tiers.find((t) => t.id === tierId);
+  if (monthly) return `${monthly.name} ($${monthly.amountUsd}/mo)`;
+  const once = (data.oneTimeTiers ?? []).find((t) => t.id === tierId);
+  if (once) return `${once.name} ($${once.amountUsd.toLocaleString()} one-time)`;
+  return tierId;
 }
 
-function renderLedgerTable(sponsors, tiers) {
+function renderLedgerTable(sponsors, data) {
   if (!sponsors.length) {
     return [
       "DNA is MIT-licensed and maintained in the open. Sponsorship funds hosting, security updates, and the marketplace — not premium features.",
@@ -68,7 +71,7 @@ function renderLedgerTable(sponsors, tiers) {
   const rows = sponsors
     .map((s) => {
       const name = s.url ? `[${s.name}](${s.url})` : s.name;
-      return `| ${name} | ${tierLabel(s.tier, tiers)} | ${s.since ?? "—"} |`;
+      return `| ${name} | ${tierLabel(s.tier, data)} | ${s.since ?? "—"} |`;
     })
     .join("\n");
 
@@ -95,9 +98,9 @@ function renderSponsorsMd(data) {
     "",
     "## Sponsor ledger",
     "",
-    renderLedgerTable(data.sponsors, data.tiers),
+    renderLedgerTable(data.sponsors, data),
     "",
-    "## Tiers",
+    "## Monthly tiers",
     "",
   ];
 
@@ -112,6 +115,25 @@ function renderSponsorsMd(data) {
     lines.push("");
   }
 
+  if (data.oneTimeTiers?.length) {
+    lines.push("## One-time build partnerships");
+    lines.push("");
+    if (data.oneTimeDisclaimer) {
+      lines.push(data.oneTimeDisclaimer);
+      lines.push("");
+    }
+    for (const tier of data.oneTimeTiers) {
+      lines.push(`### ${tier.name} — $${tier.amountUsd.toLocaleString()} one-time (${tier.durationMonths} months)`);
+      lines.push("");
+      lines.push(tier.summary);
+      lines.push("");
+      for (const benefit of tier.benefits) {
+        lines.push(`- ${benefit}`);
+      }
+      lines.push("");
+    }
+  }
+
   lines.push("## Commercial services");
   lines.push("");
   lines.push(`Enterprise support, compliance implementation, pack authoring, and Humaan platform services: [${data.servicesUrl}](${data.servicesUrl})`);
@@ -124,7 +146,7 @@ function renderCreditsMd(data) {
   const lines = [
     "# Credits",
     "",
-    "**DNA by Humaan** is built and maintained by [Humaan by Superlite](https://humaan.com).",
+    "**DNA by Humaan** is built and maintained by [Humaan by Superlite](https://dna.humaan.app).",
     "",
     "After install, view sponsors and funding links:",
     "",
@@ -142,7 +164,7 @@ function renderCreditsMd(data) {
   } else {
     for (const s of data.sponsors) {
       const link = s.url ? `[${s.name}](${s.url})` : s.name;
-      lines.push(`- ${link} — ${tierLabel(s.tier, data.tiers)}`);
+      lines.push(`- ${link} — ${tierLabel(s.tier, data)}`);
     }
   }
 
@@ -191,7 +213,7 @@ async function updatePackageJson(data) {
 
 async function updateReadme(path, data) {
   const readme = await readFile(path, "utf8");
-  const ledgerBlock = renderLedgerTable(data.sponsors, data.tiers);
+  const ledgerBlock = renderLedgerTable(data.sponsors, data);
   const next = injectLedger(readme, ledgerBlock);
   await writeFile(path, next);
 }

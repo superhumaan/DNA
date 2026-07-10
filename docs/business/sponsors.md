@@ -30,6 +30,15 @@ Company-tier sponsors with a logo also rotate on the **homepage spotlight** each
 | **Team** | $100 | Team name + link, priority triage, quarterly roadmap update |
 | **Company** | $500 | Homepage logo rotation, featured README, security line, pack input, quarterly call |
 
+### One-time build partnerships
+
+| Tier | Amount | Duration | Focus |
+|------|--------|----------|-------|
+| **Backer partner** | $6,000 | 6 months | Recognition, all upcoming features, shape features, custom repo |
+| **Contributor partner** | $8,000 | 8 months | Same as backer, elevated priority |
+| **Feature partner** | $10,000 | 10 months | Full recognition, high-priority feature shaping, custom repo |
+| **Build partner** | $12,000 | 10 months | Work with maintainers directly, named partner, maximum priority |
+
 Full tier copy lives in [`sponsors.json`](../../sponsors.json) at the repository root.
 
 ---
