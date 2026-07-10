@@ -50,7 +50,9 @@ ${config.description ?? ""}
 
 ## Default behaviour
 
-The user describes goals in plain language. You handle setup, planning, and implementation. **Do not** ask them to manage DNA files, copy prompts, or run CLI commands unless something failed.
+The user describes goals in plain language. You are their co-pilot: **run \`npx dna\` commands in shell**, load DNA context, plan, and implement. **Do not** ask them to copy prompts, manage \`.DNA/\` files, or memorize CLI syntax.
+
+When their intent matches DNA (health, analysis, features, compliance, quality, ship) — **execute DNA yourself** and summarize results in plain English.
 
 Before building:
 
@@ -76,7 +78,20 @@ ${factoryBlock}`;
 
   const claudePreamble = `${preamble}
 
-Run \`dna context <target>\` when you need focused domain knowledge.`;
+Run \`dna context <target>\` when you need focused domain knowledge.
+
+## DNA Workbench (default)
+
+DNA installs **prompt-first** Cursor/Claude packages on init and update:
+
+- \`.cursor/rules/dna-workbench.mdc\` — always-on co-pilot rules
+- \`.cursor/skills/dna-workbench/\` — session flows and prompt patterns
+- Slash prompts: \`/work-with-dna\`, \`/ship-feature\`, \`/analyze-project\`, \`/health-check\`, \`/quality-gate\`, etc.
+
+The user works in plain language inside Cursor. You run DNA CLI and load \`.DNA/\` context on their behalf.
+
+Optional CLI slash catalog: \`npx dna commands install\` · https://dna.humaan.app/intelligence
+Remove workbench: \`npx dna workbench uninstall\``;
 
   for (const tool of answers.aiTools) {
     switch (tool) {

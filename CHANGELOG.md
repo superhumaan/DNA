@@ -4,6 +4,32 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Build rules from existing structure** — IVF build rules now scan monorepo workspaces and detect domain module patterns (`packages/*/src/{module}/`) even when no MUI list/report pages exist. `dna analyze` reports captured structure instead of "No build rules captured", and `feature-building-rules.md` instructs AI to clone the reference module layout.
+
+## [0.3.8] - 2026-07-10
+
+### Added
+
+- **DNA Workbench** — prompt-first Cursor/Claude package installed by default on `init`, `doctor`, and `update`. Users work in plain language; agents run `npx dna` and load `.DNA/` context. Slash prompts: `/work-with-dna`, `/ship-feature`, `/analyze-project`, `/health-check`, `/quality-gate`, and more. Opt out: `dna workbench uninstall`.
+
+## [0.3.7] - 2026-07-10
+
+### Added
+
+- **`dna workbench`** — prompt-first Cursor/Claude package (default on `init`, `doctor`, `update`): `/work-with-dna`, `/ship-feature`, `/analyze-project`, skills, and always-on co-pilot rule. Opt out: `dna workbench uninstall`.
+
+## [0.3.6] - 2026-07-10
+
+### Added
+
+- **`dna commands` packages** — full **Cursor** (`.cursor/skills/dna-cli/`, obedience rule, 44 detailed slash commands) and **Claude Code** (`.claude/skills/dna-cli/`, 44 commands with frontmatter) packages. Each command includes purpose, when to use/not use, **MUST/NEVER** obedience rules, output interpretation, exit codes, workflows, and examples.
+- **`dna commands`** — install, list, export-catalog, and uninstall (v0.3.6 baseline; packages expanded in 0.3.7).
+- Commands scaffold automatically on **`dna init`**, **`dna feature-factory install`**, and **`dna doctor`**.
+- **`pnpm intelligence:sync`** — sync command catalog JSON to [DNA-Web](https://github.com/superhumaan/DNA-Web) for [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence).
+- DNA-Web **`/intelligence`** page — browse all Cursor and Claude commands with CLI equivalents.
+
 ## [0.3.5] - 2026-07-10
 
 ### Fixed

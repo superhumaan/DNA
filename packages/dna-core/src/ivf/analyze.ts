@@ -460,23 +460,36 @@ export function assessVerticalGaps(
 
   if (selected.has("buildRules")) {
     const br = analysis.buildRules;
-    if (br.isWebProject) {
-      const hasRef = !!br.referenceListPage;
+    const hasStructure = br.structureCaptured || !!br.referenceListPage || !!br.referenceModule || br.featureFolders.length > 0;
+    if (br.isWebProject || hasStructure) {
+      const currentState = br.referenceListPage
+        ? `Reference list page: ${br.referenceListPage.path}`
+        : br.referenceModule
+          ? `Reference module: ${br.referenceModule.path}/ (${br.referenceModule.files.length} files)`
+          : br.featureFolders.length
+            ? `Feature structure: ${br.featureFolders[0]!.template}`
+            : br.listReportPages.length
+              ? `${br.listReportPages.length} list page candidate(s) — no strong reference`
+              : "No build rules captured — using MUI defaults";
       gaps.push(
         gap(
           "buildRules",
-          hasRef
-            ? `Reference list page: ${br.referenceListPage!.path}`
-            : br.listReportPages.length
-              ? `${br.listReportPages.length} list page candidate(s) — no strong reference`
-              : "No build rules captured — using MUI defaults",
-          "Project build rules on top of MUI (clone reference for new reports)",
-          !hasRef,
-          hasRef ? "P3" : "P2",
-          "Build rules prevent Cursor from inventing layout; without them, MUI foundation defaults apply",
+          currentState,
+          br.referenceModule
+            ? "Clone reference module layout for new features"
+            : "Project build rules on top of MUI (clone reference for new reports)",
+          !hasStructure,
+          hasStructure ? "P3" : "P2",
+          br.referenceModule
+            ? "Build rules capture domain module structure so AI clones existing folders instead of inventing layout"
+            : "Build rules prevent Cursor from inventing layout; without them, MUI foundation defaults apply",
           [
             "Build rules auto-configured on init/context",
-            hasRef ? `Clone ${br.referenceListPage!.path} for new list/report pages` : "Add a list page, then DNA captures it as reference",
+            br.referenceListPage
+              ? `Clone ${br.referenceListPage.path} for new list/report pages`
+              : br.referenceModule
+                ? `Clone ${br.referenceModule.path}/ for new domain features`
+                : "Add a reference feature, then DNA captures it automatically",
             "Read prefrontalCortex/feature-building-rules.md before new features",
           ],
         ),

@@ -4,6 +4,7 @@ import type { DnaConfig, WizardAnswers } from "@superhumaan/dna-config";
 import { writeFileEnsured, writeJsonFile } from "./fs.js";
 import { generateAiToolFiles } from "./generators/ai-tools.js";
 import { installFeatureFactory } from "./generators/feature-factory.js";
+import { installAiWorkbench } from "./generators/ai-workbench.js";
 import { installCiPipeline } from "./generators/ci.js";
 import { installGitHooks } from "./generators/git-hooks.js";
 import { installDockerScaffold } from "./generators/docker.js";
@@ -29,6 +30,10 @@ export async function runPostInit(
     const factoryFiles = await installFeatureFactory(root, config);
     created.push(...factoryFiles);
   }
+
+  config.aiWorkbench = { enabled: true };
+  const workbenchFiles = await installAiWorkbench(root, config);
+  created.push(...workbenchFiles);
 
   if (answers.installCi ?? true) {
     const ci = await installCiPipeline({ root, config, skipIfExists: false });

@@ -241,7 +241,53 @@ dna feature-factory uninstall
 
 Re-enable with `dna feature-factory install`.
 
-## github
+## commands
+
+Install **DNA Workbench** (`.cursor/skills/dna-workbench/`, `/work-with-dna`, `/ship-feature`, …) by default on init, doctor, and update. Optional CLI catalog: `dna commands install`.
+
+```bash
+dna commands install
+dna commands list
+dna commands export-catalog --out .DNA/intelligence-catalog.json
+dna commands uninstall
+```
+
+**Installed automatically** with `dna init`, `dna feature-factory install`, and `dna doctor` (when feature factory is enabled).
+
+Type `/` in Cursor or Claude Code and search for `dna-` — e.g. `/dna-doctor`, `/dna-analyze`, `/dna-feature`.
+
+Full catalog: [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence)
+
+## workbench
+
+**DNA Workbench** — prompt-first Cursor and Claude packages. Installed **by default** on `dna init`, `dna doctor`, and `dna update`.
+
+The user works in plain language inside Cursor; the agent runs `npx dna` on their behalf and loads `.DNA/` context.
+
+```bash
+dna workbench install      # refresh prompts (also runs automatically)
+dna workbench uninstall    # opt out — sets aiWorkbench.enabled=false
+dna update                 # refreshes workbench + checks pack updates
+dna update --skip-workbench
+```
+
+### Slash prompts (type `/` in chat)
+
+| Command | Purpose |
+|---------|---------|
+| `/work-with-dna` | Start any DNA-aware session |
+| `/ship-feature` | Feature factory → plan → ship |
+| `/analyze-project` | Deep analysis + gap plan |
+| `/health-check` | Doctor + validate |
+| `/quality-gate` | Pre-push SAST gate |
+| `/plan-compliance` | Tiered compliance |
+| `/debug-issue` | Runtime debug loop |
+| `/sync-impressions` | Doc/code reconciliation |
+| `/load-context` | Load domain context |
+
+Files: `.cursor/rules/dna-workbench.mdc`, `.cursor/skills/dna-workbench/`, `.cursor/commands/*.md` (and `.claude/` mirror).
+
+Optional: `dna commands install` adds per-CLI `/dna-*` slash commands for power users.
 
 ## github
 

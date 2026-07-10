@@ -58,7 +58,8 @@
     "wiki:refresh": "node scripts/wiki-refresh.mjs",
     "wiki:dev": "pnpm run wiki:refresh",
     "wiki:build": "pnpm run wiki:sync && npm run build --prefix .local-wiki",
-    "sponsors:sync": "node scripts/sync-sponsors.mjs"
+    "sponsors:sync": "node scripts/sync-sponsors.mjs",
+    "intelligence:sync": "pnpm --filter @superhumaan/dna-core build && node scripts/sync-intelligence-commands.mjs"
   },
   "engines": {
     "node": ">=20"

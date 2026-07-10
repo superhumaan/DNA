@@ -12,6 +12,7 @@ Share this with colleagues who want to try DNA on their own projects.
 |-------|-------------------|----------------|
 | Project brain | `dna init` | `.DNA/` + `DNA/Impressions/` scaffolded |
 | AI context | `dna context cursor` | Paste-ready context for your AI tool |
+| **Cursor workbench** | `dna init` / `dna doctor` | Prompt-first `/ship-feature`, `/analyze-project`, … — talk in plain language |
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |
 | Runtime observer | `@superhumaan/dna-by-humaan/runtime` | Errors/slow requests → `.DNA/data/runtime.db` |

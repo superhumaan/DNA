@@ -15,6 +15,7 @@
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
+| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 

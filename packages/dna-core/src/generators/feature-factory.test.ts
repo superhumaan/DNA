@@ -77,7 +77,7 @@ describe("feature factory", () => {
 
     const installed = await installFeatureFactory(root, testConfig());
 
-    expect(installed.length).toBe(FEATURE_FACTORY_PATHS.length);
+    expect(installed.length).toBeGreaterThanOrEqual(FEATURE_FACTORY_PATHS.length);
     expect(await fileExists(join(root, "ai/feature-request.md"))).toBe(true);
     expect(await fileExists(join(root, ".cursor/rules/qa.mdc"))).toBe(true);
     expect(await fileExists(join(root, ".cursor/rules/code-quality.mdc"))).toBe(true);

@@ -85,6 +85,12 @@ export const DnaConfigSchema = z.object({
       enabled: z.boolean().default(true),
     })
     .optional(),
+  aiWorkbench: z
+    .object({
+      /** Prompt-first Cursor/Claude package — installed by default on init and update */
+      enabled: z.boolean().default(true),
+    })
+    .optional(),
   platformFeatures: z.array(z.string()).default([]),
 });
 

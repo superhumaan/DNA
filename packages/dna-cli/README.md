@@ -16,6 +16,7 @@ Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
+| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — Cursor & Claude slash commands |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 
@@ -85,6 +86,8 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna plan ivf` | Integrating Vertical Functions — phased migration plan |
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for Cursor / Copilot / Claude |
+| `dna commands install` | Install `/dna-*` slash commands for Cursor and Claude Code |
+| `dna commands list` | List all DNA slash commands |
 | `dna plan rbac` | RBAC from plain language → permission matrix |
 | `dna plan compliance` | ISO / GDPR / HIPAA / SOC 2 by org tier |
 | `dna compliance list` | Startup → enterprise compliance catalog |

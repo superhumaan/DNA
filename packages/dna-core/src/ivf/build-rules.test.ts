@@ -108,4 +108,53 @@ export function OrdersListPage() {
 
     await rm(root, { recursive: true, force: true });
   });
+
+  it("detects domain module structure from monorepo workspace", async () => {
+    const root = join(tmpdir(), `dna-fp-monorepo-${randomUUID()}`);
+    const cliRoot = join(root, "packages", "cli");
+    await mkdir(join(root, "packages", "core", "src", "billing"), { recursive: true });
+    await mkdir(join(root, "packages", "core", "src", "compliance"), { recursive: true });
+    await mkdir(join(cliRoot, "src"), { recursive: true });
+    await writeFile(join(root, "pnpm-workspace.yaml"), "packages:\n  - packages/*\n");
+    await writeFile(
+      join(cliRoot, "package.json"),
+      JSON.stringify({ name: "cli-app", dependencies: { commander: "^12.0.0" } }),
+    );
+    await writeFile(join(root, "packages", "core", "src", "billing", "plan.ts"), "export function buildPlan() {}");
+    await writeFile(join(root, "packages", "core", "src", "billing", "context.ts"), "export function buildContext() {}");
+    await writeFile(join(root, "packages", "core", "src", "billing", "plan.test.ts"), "import { describe, it } from 'vitest';");
+    await writeFile(join(root, "packages", "core", "src", "compliance", "plan.ts"), "export function buildCompliancePlan() {}");
+    await writeFile(join(root, "packages", "core", "src", "compliance", "context.ts"), "export function buildComplianceContext() {}");
+    await writeFile(join(root, "packages", "core", "src", "compliance", "plan.test.ts"), "import { describe, it } from 'vitest';");
+
+    await runWizard({
+      root: cliRoot,
+      answers: {
+        projectDescription: "CLI monorepo package",
+        acceptRecommendation: true,
+        aiTools: ["cursor"],
+        compliance: "none",
+        stage: "legacy_modernisation",
+        installRuntime: false,
+        configureGithub: false,
+        configureAi: false,
+      },
+    });
+
+    const analysis = await analyzeFeaturePatterns(cliRoot);
+
+    expect(analysis.structureCaptured).toBe(true);
+    expect(analysis.referenceModule?.path).toContain("packages/core/src/");
+    expect(analysis.projectKind).toBe("library");
+    expect(analysis.featureFolders.length).toBeGreaterThan(0);
+
+    const result = await ensureFeatureBuildingRules({ root: cliRoot });
+    expect(result.skipped).toBe(false);
+
+    const rules = await import("node:fs/promises").then((fs) => fs.readFile(result.rulesPath, "utf-8"));
+    expect(rules).toContain("Never invent folder or module layout");
+    expect(rules).toContain("Reference module");
+
+    await rm(root, { recursive: true, force: true });
+  });
 });

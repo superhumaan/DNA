@@ -14,6 +14,7 @@ import { installGitHooks } from "./generators/git-hooks.js";
 import { installDockerScaffold } from "./generators/docker.js";
 import { wireRuntimeMiddleware } from "./generators/wire-runtime.js";
 import { installFeatureFactory } from "./generators/feature-factory.js";
+import { installAiWorkbench } from "./generators/ai-workbench.js";
 import { generateAiToolFiles } from "./generators/ai-tools.js";
 import { generateBehaviourFiles } from "./generators/behaviour.js";
 import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
@@ -323,6 +324,12 @@ async function ensureAiAndCi(root: string, config: DnaConfig): Promise<string[]>
   if (config.featureFactory?.enabled !== false) {
     const factoryFiles = await installFeatureFactory(root, config);
     actions.push(`feature factory refreshed (${factoryFiles.length} files)`);
+  }
+
+  if (config.aiWorkbench?.enabled !== false) {
+    config.aiWorkbench = { enabled: true };
+    const workbench = await installAiWorkbench(root, config);
+    actions.push(`AI workbench refreshed (${workbench.length} prompt files)`);
   }
 
   const ci = await installCiPipeline({ root, config, scan, skipIfExists: false });

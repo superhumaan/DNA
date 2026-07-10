@@ -15,6 +15,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Compliance** | Tiered GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS |
 | **Brownfield** | IVF plans, `document --from-code`, deep analyze |
 | **Feature factory** | Plain-language features + quality gates |
+| **AI Workbench** | Prompt-first Cursor/Claude packages — default on init, doctor, update |
 | **GitHub** | Connect, auto-issues, push gates, browser login (`dna github login`) |
 | **Preview deploy** | `dna-preview.yml` scaffold with Vercel/Netlify + branch filter |
 | **CI hygiene** | Inline failed-run cleanup in DNA-generated workflows |

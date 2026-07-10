@@ -40,7 +40,14 @@ import {
   installFeatureFactory,
   uninstallFeatureFactory,
   refreshAiToolsForFeatureFactory,
+  installAiCommands,
+  uninstallAiCommands,
+  formatAiCommandsCatalog,
+  installAiWorkbench,
+  uninstallAiWorkbench,
+  persistAiWorkbenchEnabled,
   formatAiConnectGuide,
+  intelligenceCatalogJson,
   beginFeatureFromQuote,
   runAndWriteQualityReport,
   runQualityAnalysis,
@@ -610,6 +617,101 @@ featureFactory
     console.log("\nRe-enable anytime with: dna feature-factory install");
   });
 
+const commandsCmd = program
+  .command("commands")
+  .description("Cursor and Claude slash commands for DNA CLI");
+
+commandsCmd
+  .command("install")
+  .description("Install /dna-* slash commands for Cursor and Claude Code")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    const created = await installAiCommands(root, config);
+    console.log(`✓ DNA slash commands installed (${created.length} files)`);
+    console.log("\nCursor: type `/` and search for `dna-` (e.g. `/dna-doctor`, `/dna-analyze`)");
+    console.log("Claude: type `/` and search for `dna-` in Claude Code");
+    console.log("\nCatalog: https://dna.humaan.app/intelligence");
+  });
+
+commandsCmd
+  .command("list")
+  .description("List available DNA slash commands")
+  .action(() => {
+    console.log(formatAiCommandsCatalog());
+  });
+
+commandsCmd
+  .command("export-catalog")
+  .description("Write intelligence catalog JSON (for DNA-Web sync)")
+  .option("--out <path>", "Output file path", ".DNA/intelligence-catalog.json")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { out?: string; cwd?: string }) => {
+    const root = getRoot(options);
+    const outPath = join(root, options.out ?? ".DNA/intelligence-catalog.json");
+    await writeFile(outPath, intelligenceCatalogJson(), "utf-8");
+    console.log(`✓ Intelligence catalog written to ${outPath}`);
+  });
+
+commandsCmd
+  .command("uninstall")
+  .description("Remove DNA slash commands from Cursor and Claude")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const removed = await uninstallAiCommands(root);
+    if (removed.length === 0) {
+      console.log("No DNA slash commands found.");
+      return;
+    }
+    console.log(`✓ Removed ${removed.length} command files`);
+  });
+
+const workbenchCmd = program
+  .command("workbench")
+  .description("DNA Workbench — prompt-first Cursor and Claude packages (default on init/update)");
+
+workbenchCmd
+  .command("install")
+  .description("Install or refresh DNA Workbench prompts and skills")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+    await persistAiWorkbenchEnabled(root, config, true);
+    const created = await installAiWorkbench(root, config);
+    console.log(`✓ DNA Workbench installed (${created.length} files)`);
+    console.log("\nIn Cursor, type `/` → work-with-dna, ship-feature, analyze-project, …");
+    console.log("Plain language in chat works too — DNA runs CLI on your behalf.");
+  });
+
+workbenchCmd
+  .command("uninstall")
+  .description("Remove DNA Workbench (opt out of default prompts)")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed.");
+      process.exit(1);
+    }
+    const removed = await uninstallAiWorkbench(root);
+    await persistAiWorkbenchEnabled(root, config, false);
+    console.log(`✓ DNA Workbench removed (${removed.length} files)`);
+    console.log("Re-enable: dna workbench install");
+  });
+
 const github = program.command("github").description("GitHub integration");
 
 github
@@ -944,15 +1046,25 @@ ivfCmd
 
 program
   .command("update")
-  .description("Check for DNA knowledge pack updates")
+  .description("Check for DNA knowledge pack updates and refresh AI workbench prompts")
   .option("--cwd <path>", "Project root directory")
   .option("--channel <channel>", "stable|beta|nightly", "stable")
-  .action(async (options: { cwd?: string; channel?: "stable" | "beta" | "nightly" }) => {
+  .option("--skip-workbench", "Do not refresh Cursor/Claude workbench prompts")
+  .action(async (options: {
+    cwd?: string;
+    channel?: "stable" | "beta" | "nightly";
+    skipWorkbench?: boolean;
+  }) => {
     const root = getRoot(options);
     const config = await loadDnaConfig(root);
     const channel = options.channel ?? config?.channel ?? "stable";
     const result = await checkMarketplaceUpdates(root, channel);
     console.log(formatUpdateResult(result));
+
+    if (!options.skipWorkbench && config && config.aiWorkbench?.enabled !== false) {
+      const refreshed = await installAiWorkbench(root, config);
+      console.log(`\n✓ AI Workbench refreshed (${refreshed.length} prompt files)`);
+    }
   });
 
 const marketplace = program.command("marketplace").description("Remote knowledge pack marketplace");

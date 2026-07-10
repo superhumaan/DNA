@@ -1,6 +1,6 @@
 {
   "name": "@superhumaan/dna-by-humaan",
-  "version": "0.3.5",
+  "version": "0.3.8",
   "description": "DNA by Humaan — open-source project brain, 768-pack knowledge marketplace, tiered compliance (GDPR/HIPAA/ISO/SOC2), runtime observer, and AI-assisted repair for TypeScript teams",
   "repository": {
     "type": "git",
@@ -65,7 +65,8 @@
     "fast-glob": "^3.3.2",
     "pino": "^9.6.0",
     "simple-git": "^3.27.0",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "@superhumaan/dna-by-humaan": "^0.3.3"
   },
   "peerDependencies": {
     "express": "^4.18.0",
