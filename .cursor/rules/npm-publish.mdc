@@ -1,0 +1,40 @@
+---
+description: npm publish — always use GitHub Actions, never ask for local npm login
+alwaysApply: true
+---
+
+# npm publish (DNA monorepo)
+
+**Never** tell the user to run `npm login` or claim npm auth is missing without trying GitHub Actions first.
+
+## How publishing works
+
+- `NPM_TOKEN` is stored as a **GitHub Actions secret** on `superhumaan/DNA` (not on the local machine).
+- Local `bash scripts/publish-npm.sh` only works when `NPM_TOKEN` / `NODE_AUTH_TOKEN` is in the shell env — **this environment usually does not have it**.
+
+## Default publish command
+
+```bash
+gh workflow run "Publish npm" --repo superhumaan/DNA -f confirm=publish
+```
+
+Then watch:
+
+```bash
+gh run watch --repo superhumaan/DNA --exit-status
+```
+
+Workflow file: `.github/workflows/publish-npm.yml`
+
+## Before publishing
+
+1. Bump version in `packages/dna-cli/package.json`
+2. Update CHANGELOG + ship-sync docs
+3. **Commit `pnpm-lock.yaml`** whenever `package.json` dependencies change — CI `pnpm install` fails without it
+4. Push to `main`, then trigger the workflow
+
+## Do not
+
+- Ask "do you have an npm token?" or suggest `npm login` as the first step
+- Run `pnpm publish:npm` locally and give up when `npm whoami` fails
+- Forget that successful publishes have been done dozens of times via this workflow
