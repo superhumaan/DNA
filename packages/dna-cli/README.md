@@ -103,10 +103,13 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna plan ivf` | Integrating Vertical Functions — phased migration plan |
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for Cursor / Copilot / Claude |
+| `dna update` | Upgrade CLI + refresh stems, `/dna-*` commands, and knowledge packs |
 | `dna workbench install` | Refresh DNA Workbench + 50 prompt stem packs + `/dna-*` commands |
 | `dna stems list` | List prompt stem packs (analyze, ship, agent-loop roles, …) |
 | `dna stems show <id>` | Copy variants and file paths for one stem |
-| `dna commands install` | Optional — install `/dna-*` CLI slash commands for power users |
+| `dna commands install` | Refresh `/dna-*` CLI slash commands only (also installed by init/doctor/update) |
+| `dna generate feature <id>` | Scaffold audit-logging, sso, multi-tenant, feature-flags, gradual-rollout |
+| `dna memory sync` | Sync CellularMemory from team registry |
 | `dna plan rbac` | RBAC from plain language → permission matrix |
 | `dna plan compliance` | ISO / GDPR / HIPAA / SOC 2 by org tier |
 | `dna compliance list` | Startup → enterprise compliance catalog |
