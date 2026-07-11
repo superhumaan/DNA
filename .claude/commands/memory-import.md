@@ -6,10 +6,7 @@ allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
 
 ```bash
 npx dna memory import <file> --merge
-npx dna memory import <file> --on-conflict newest
 ```
-
-Conflict strategies: `newest` (default), `keep-local`, `keep-remote`.
 
 File: $ARGUMENTS
 

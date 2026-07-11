@@ -83,6 +83,26 @@ describe("CI generator", () => {
     expect(yaml).toContain("quality report");
   });
 
+  it("adds pnpm setup when package manager is pnpm", () => {
+    const yaml = generateCiWorkflow(testConfig(), {
+      packageManager: "pnpm",
+      ciCd: [],
+      docker: false,
+      envFiles: [],
+      docs: [],
+      aiRules: [],
+      securityRisks: [],
+      missingDocs: [],
+      missingTests: false,
+      dependencies: [],
+      scripts: { test: "vitest run" },
+      hasDna: false,
+    });
+
+    expect(yaml).toContain("pnpm/action-setup@v4");
+    expect(yaml).toContain("cache: pnpm");
+  });
+
   it("generates OWASP ZAP security workflow", () => {
     const yaml = generateSecurityWorkflow();
     expect(yaml).toContain("zaproxy/action-baseline");

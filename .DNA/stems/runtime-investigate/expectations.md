@@ -1,7 +1,6 @@
 # Expectations
 
-- Dashboard URL shared
-- Incident summary from live feed
+- Incident summary
 - Classification breakdown
 - Top recurring issues
 - Recommended fixes

@@ -51,6 +51,19 @@ function pmCache(pm: string | undefined): string | undefined {
   }
 }
 
+function pmSetupStep(pm: string | undefined): string {
+  switch (pm) {
+    case "pnpm":
+      return `      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+`;
+    default:
+      return "";
+  }
+}
+
 function scriptStep(
   name: string,
   script: string,
@@ -217,7 +230,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+${pmSetupStep(pm)}      - uses: actions/setup-node@v4
         with:
           node-version: "22"
 ${cacheBlock}
@@ -248,7 +261,7 @@ ${qualitySteps.length > 0 ? qualitySteps.join("\n\n") : `      - name: No test s
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+${pmSetupStep(pm)}      - uses: actions/setup-node@v4
         with:
           node-version: "22"
 ${cacheBlock}
@@ -311,7 +324,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+${pmSetupStep(pm)}      - uses: actions/setup-node@v4
         with:
           node-version: "22"
       - name: Install

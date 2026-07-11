@@ -1,6 +1,6 @@
 # DNA Prompt Stem Packs
 
-**dna-by-humaan** — 50 prompt stem packs (remote catalog v5).
+**dna-by-humaan** — 43 prompt stem packs (bundled catalog v4).
 
 Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, context, and examples**.
 
@@ -14,13 +14,11 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `work-with-dna` — Work with DNA
 - `load-context` — Load context
 - `health-check` — Health check
-- `keep-dna-current` — Keep DNA current
 
 ### analysis
 - `analyze-project` — Analyze project
 - `what-next-after-analyze` — What next after analyze?
 - `scan-project` — Scan project
-- `stack-hosting` — Stack & hosting
 - `recommend-architecture` — Recommend architecture
 - `security-audit` — Security audit
 
@@ -29,7 +27,6 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `plan-feature` — Plan feature
 - `plan-rbac` — Plan RBAC
 - `generate-feature` — Generate feature scaffold
-- `platform-codegen` — Platform codegen
 
 ### quality
 - `quality-gate` — Quality gate
@@ -45,18 +42,15 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `debug-issue` — Debug issue
 - `ai-repair` — AI repair
 - `runtime-investigate` — Runtime investigate
-- `dashboard-monitor` — Dashboard monitor
 
 ### docs
 - `sync-impressions` — Sync Impressions
-- `impressions-drift-pr` — Impressions drift PR
 - `document-from-code` — Document from code
 
 ### ivf
 - `plan-ivf` — Plan IVF
 - `ivf-run` — Run IVF
 - `ivf-shared-library` — IVF shared library
-- `ivf-shared-library-execute` — IVF shared library execute
 
 ### delivery
 - `docker-build` — Docker build
@@ -70,7 +64,6 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 ### memory
 - `memory-export` — Memory export
 - `memory-import` — Memory import
-- `memory-sync` — Memory sync
 
 ### agent-loop
 - `role-product-analyst` — Product Analyst

@@ -5,4 +5,3 @@
 
 ## DNA CLI
 - `npx dna memory import <file> --merge`
-- `npx dna memory import <file> --on-conflict newest`

@@ -7,4 +7,3 @@
 ## DNA CLI
 - `npx dna doctor`
 - `npx dna validate`
-- `npx dna update --check-only`

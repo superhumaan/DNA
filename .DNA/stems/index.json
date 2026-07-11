@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "catalogVersion": 5,
-  "source": "remote",
-  "syncedAt": "2026-07-11T10:46:54.832Z",
-  "count": 50,
+  "catalogVersion": 4,
+  "source": "bundled",
+  "syncedAt": "2026-07-11T10:55:33.583Z",
+  "count": 43,
   "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
   "packs": [
     {
@@ -54,22 +54,6 @@
       ]
     },
     {
-      "id": "keep-dna-current",
-      "name": "Keep DNA current",
-      "category": "session",
-      "slash": "dna-update",
-      "path": ".DNA/stems/keep-dna-current",
-      "files": [
-        "README.md",
-        "prompt.md",
-        "guidelines.md",
-        "expectations.md",
-        "context.md",
-        "examples.md",
-        "workflow.md"
-      ]
-    },
-    {
       "id": "analyze-project",
       "name": "Analyze project",
       "category": "analysis",
@@ -107,22 +91,6 @@
       "category": "analysis",
       "slash": "scan-project",
       "path": ".DNA/stems/scan-project",
-      "files": [
-        "README.md",
-        "prompt.md",
-        "guidelines.md",
-        "expectations.md",
-        "context.md",
-        "examples.md",
-        "workflow.md"
-      ]
-    },
-    {
-      "id": "stack-hosting",
-      "name": "Stack & hosting",
-      "category": "analysis",
-      "slash": "stack-hosting",
-      "path": ".DNA/stems/stack-hosting",
       "files": [
         "README.md",
         "prompt.md",
@@ -217,22 +185,6 @@
       "category": "features",
       "slash": "generate-feature",
       "path": ".DNA/stems/generate-feature",
-      "files": [
-        "README.md",
-        "prompt.md",
-        "guidelines.md",
-        "expectations.md",
-        "context.md",
-        "examples.md",
-        "workflow.md"
-      ]
-    },
-    {
-      "id": "platform-codegen",
-      "name": "Platform codegen",
-      "category": "features",
-      "slash": "platform-codegen",
-      "path": ".DNA/stems/platform-codegen",
       "files": [
         "README.md",
         "prompt.md",
@@ -385,22 +337,6 @@
       ]
     },
     {
-      "id": "dashboard-monitor",
-      "name": "Dashboard monitor",
-      "category": "debug",
-      "slash": "dashboard-monitor",
-      "path": ".DNA/stems/dashboard-monitor",
-      "files": [
-        "README.md",
-        "prompt.md",
-        "guidelines.md",
-        "expectations.md",
-        "context.md",
-        "examples.md",
-        "workflow.md"
-      ]
-    },
-    {
       "id": "sync-impressions",
       "name": "Sync Impressions",
       "category": "docs",
@@ -412,24 +348,7 @@
         "guidelines.md",
         "expectations.md",
         "context.md",
-        "examples.md",
-        "workflow.md"
-      ]
-    },
-    {
-      "id": "impressions-drift-pr",
-      "name": "Impressions drift PR",
-      "category": "docs",
-      "slash": "drift-pr",
-      "path": ".DNA/stems/impressions-drift-pr",
-      "files": [
-        "README.md",
-        "prompt.md",
-        "guidelines.md",
-        "expectations.md",
-        "context.md",
-        "examples.md",
-        "workflow.md"
+        "examples.md"
       ]
     },
     {
@@ -486,22 +405,6 @@
       "category": "ivf",
       "slash": "ivf-shared-library",
       "path": ".DNA/stems/ivf-shared-library",
-      "files": [
-        "README.md",
-        "prompt.md",
-        "guidelines.md",
-        "expectations.md",
-        "context.md",
-        "examples.md",
-        "workflow.md"
-      ]
-    },
-    {
-      "id": "ivf-shared-library-execute",
-      "name": "IVF shared library execute",
-      "category": "ivf",
-      "slash": "ivf-execute",
-      "path": ".DNA/stems/ivf-shared-library-execute",
       "files": [
         "README.md",
         "prompt.md",
@@ -617,24 +520,7 @@
         "guidelines.md",
         "expectations.md",
         "context.md",
-        "examples.md",
-        "workflow.md"
-      ]
-    },
-    {
-      "id": "memory-sync",
-      "name": "Memory sync",
-      "category": "memory",
-      "slash": "memory-sync",
-      "path": ".DNA/stems/memory-sync",
-      "files": [
-        "README.md",
-        "prompt.md",
-        "guidelines.md",
-        "expectations.md",
-        "context.md",
-        "examples.md",
-        "workflow.md"
+        "examples.md"
       ]
     },
     {

@@ -13,9 +13,7 @@ User context / analyze output: $ARGUMENTS
    - Shared library → `npx dna ivf shared-library --dry-run`, scaffold `packages/humaan-ui`
    - Build rules → capture MUI/patterns into `.DNA/knowledge/`
    - Behaviour restructure → `npx dna validate`, update behaviour files
-   - Impressions drift → `npx dna plan impressions-sync` or `npx dna scan --open-pr`
-   - Platform features → `npx dna generate feature <id>` (sso, multi-tenant, feature-flags, gradual-rollout, audit-logging)
-   - Team memory → `npx dna memory sync`
+   - Impressions drift → `npx dna plan impressions-sync`
 3. Optional: `npx dna plan ivf` for phased migration.
 
 ## Ask

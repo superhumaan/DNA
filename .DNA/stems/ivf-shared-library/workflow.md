@@ -1,5 +1,4 @@
 # Workflow chain
 
-1. ivf-shared-library-execute
-2. ship-feature
-3. quality-gate
+1. ship-feature
+2. quality-gate
