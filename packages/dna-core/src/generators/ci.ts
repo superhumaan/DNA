@@ -274,7 +274,7 @@ ${cacheBlock}
 `;
 }
 
-export function generatePreviewWorkflow(config: DnaConfig, scan: ScanResult): string {
+export function generatePreviewWorkflow(config: DnaConfig, _scan: ScanResult): string {
   const provider = config.ci?.previewProvider ?? "vercel";
 
   const deployStep =

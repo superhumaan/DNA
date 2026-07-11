@@ -69,7 +69,20 @@ describe("language stem packs", () => {
 
     const packs = resolveFoundationPackIds(config);
     expect(packs).toContain("healthcare/overview");
+    expect(packs).toContain("healthcare/overview-us");
     expect(packs).toContain("healthcare/fhir-r4");
     expect(packs).toContain("healthcare/redox");
+  });
+
+  it("auto-installs UK healthcare overview for NHS descriptions", () => {
+    const config = {
+      description: "NHS GP Connect integration with UK Core FHIR",
+      stack: { frontend: "next", backend: "fastify" },
+      autoUpdate: true,
+      channel: "stable",
+    } as DnaConfig;
+
+    const packs = resolveFoundationPackIds(config);
+    expect(packs).toContain("healthcare/overview-uk");
   });
 });

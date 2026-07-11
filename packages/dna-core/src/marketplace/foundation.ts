@@ -1,8 +1,65 @@
 import type { DnaConfig, ScanResult } from "@superhumaan/dna-config";
 import { ensureKnowledgeInstalled, type EnsureKnowledgeResult } from "./ensure.js";
 import { getArchetype } from "../stack/catalog.js";
+import { HEALTHCARE_OVERVIEW_COUNTRY_IDS } from "./catalog-wave-healthcare-overview-countries.js";
 
 export type AppPlatform = "web" | "mobile" | "desktop" | "cms";
+
+/** Map project description keywords to country-specific healthcare overview stem packs. */
+export function resolveHealthcareCountryOverviewPackIds(description: string): string[] {
+  const d = description.toLowerCase();
+  const matches = new Set<string>();
+
+  const rules: Array<{ pack: string; patterns: RegExp[] }> = [
+    { pack: "healthcare/overview-us", patterns: [/\b(us|usa|united states|american)\b/, /\bhipaa\b/, /\b(epic|cerner|cms|medicare|medicaid)\b/, /\btefca\b/] },
+    { pack: "healthcare/overview-uk", patterns: [/\b(uk|united kingdom|britain|british|england|scotland|wales)\b/, /\bnhs\b/, /\buk gdpr\b/, /\bdspt\b/] },
+    { pack: "healthcare/overview-ca", patterns: [/\b(canada|canadian)\b/, /\bpipeda\b/, /\b(ontario|quebec|alberta|bc)\b.*\bhealth\b/] },
+    { pack: "healthcare/overview-au", patterns: [/\b(australia|australian)\b/, /\bmy health record\b/, /\bmhr\b/] },
+    { pack: "healthcare/overview-nz", patterns: [/\b(new zealand|aotearoa)\b/, /\bhipc\b/] },
+    { pack: "healthcare/overview-eu", patterns: [/\b(european union|eu)\b.*\bhealth\b/, /\behds\b/] },
+    { pack: "healthcare/overview-de", patterns: [/\b(germany|german)\b/, /\bgematik\b/, /\bdiga\b/, /\bepa\b.*\bgerman\b/] },
+    { pack: "healthcare/overview-fr", patterns: [/\b(france|french)\b/, /\bhds\b/, /\bdmp\b/, /\bmon espace santé\b/] },
+    { pack: "healthcare/overview-ie", patterns: [/\b(ireland|irish)\b/, /\bhse\b.*\bhealth\b/] },
+    { pack: "healthcare/overview-nl", patterns: [/\b(netherlands|dutch)\b/, /\bnictiz\b/, /\bmedmij\b/] },
+    { pack: "healthcare/overview-ch", patterns: [/\b(switzerland|swiss)\b/, /\behealth suisse\b/] },
+    { pack: "healthcare/overview-jp", patterns: [/\b(japan|japanese)\b/, /\bappi\b/] },
+    { pack: "healthcare/overview-kr", patterns: [/\b(south korea|korean)\b/, /\b(nhis|pipa)\b.*\bkorea\b/] },
+    { pack: "healthcare/overview-sg", patterns: [/\b(singapore)\b/, /\bnehr\b/] },
+    { pack: "healthcare/overview-in", patterns: [/\b(india|indian)\b/, /\babdm\b/, /\babha\b/] },
+    { pack: "healthcare/overview-br", patterns: [/\b(brazil|brazilian)\b/, /\brnds\b/, /\blgpd\b.*\bhealth\b/] },
+    { pack: "healthcare/overview-mx", patterns: [/\b(mexico|mexican)\b/, /\bnom-024\b/] },
+    { pack: "healthcare/overview-za", patterns: [/\b(south africa)\b/, /\bpopia\b/] },
+    { pack: "healthcare/overview-sa", patterns: [/\b(saudi arabia|saudi)\b/, /\bnphies\b/] },
+    { pack: "healthcare/overview-ae", patterns: [/\b(uae|dubai|abu dhabi|emirates)\b/, /\b(malaffi|nabidh)\b/] },
+    { pack: "healthcare/overview-il", patterns: [/\b(israel|israeli)\b/] },
+    { pack: "healthcare/overview-it", patterns: [/\b(italy|italian)\b/, /\bfse\b/] },
+    { pack: "healthcare/overview-es", patterns: [/\b(spain|spanish)\b/] },
+    { pack: "healthcare/overview-se", patterns: [/\b(sweden|swedish)\b/] },
+    { pack: "healthcare/overview-no", patterns: [/\b(norway|norwegian)\b/] },
+    { pack: "healthcare/overview-dk", patterns: [/\b(denmark|danish)\b/] },
+    { pack: "healthcare/overview-fi", patterns: [/\b(finland|finnish)\b/, /\bkanta\b/] },
+    { pack: "healthcare/overview-at", patterns: [/\b(austria|austrian)\b/, /\belga\b/] },
+    { pack: "healthcare/overview-be", patterns: [/\b(belgium|belgian)\b/, /\behealth platform\b/] },
+    { pack: "healthcare/overview-pl", patterns: [/\b(poland|polish)\b/] },
+    { pack: "healthcare/overview-pt", patterns: [/\b(portugal|portuguese)\b/] },
+    { pack: "healthcare/overview-tw", patterns: [/\b(taiwan|taiwanese)\b/] },
+    { pack: "healthcare/overview-hk", patterns: [/\b(hong kong)\b/, /\behrss\b/] },
+    { pack: "healthcare/overview-my", patterns: [/\b(malaysia|malaysian)\b/] },
+    { pack: "healthcare/overview-th", patterns: [/\b(thailand|thai)\b/] },
+    { pack: "healthcare/overview-ph", patterns: [/\b(philippines|filipino)\b/, /\bphilhealth\b/] },
+    { pack: "healthcare/overview-id", patterns: [/\b(indonesia|indonesian)\b/, /\bsatusehat\b/] },
+    { pack: "healthcare/overview-vn", patterns: [/\b(vietnam|vietnamese)\b/] },
+    { pack: "healthcare/overview-cn", patterns: [/\b(china|chinese)\b/, /\bpipl\b/] },
+  ];
+
+  for (const { pack, patterns } of rules) {
+    if (patterns.some((p) => p.test(d)) && HEALTHCARE_OVERVIEW_COUNTRY_IDS.includes(pack)) {
+      matches.add(pack);
+    }
+  }
+
+  return [...matches];
+}
 
 export function detectAppPlatform(config: DnaConfig, scan?: ScanResult): AppPlatform {
   const archetype = config.stack.archetype ? getArchetype(config.stack.archetype) : undefined;
@@ -98,6 +155,9 @@ export function resolveFoundationPackIds(config: DnaConfig, scan?: ScanResult): 
     packs.add("healthcare/fhir-r4");
     packs.add("healthcare/phi-engineering");
     packs.add("healthcare/redox");
+    for (const countryPack of resolveHealthcareCountryOverviewPackIds(desc)) {
+      packs.add(countryPack);
+    }
   }
 
   const isFintech =

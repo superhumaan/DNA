@@ -1,4 +1,5 @@
 import { def, packsFromDefs } from "./bundled-catalog-pack-factory.js";
+import { HEALTHCARE_OVERVIEW_COUNTRY_DEFS } from "./catalog-wave-healthcare-overview-countries.js";
 
 const HIPAA_BASE = `## HIPAA baseline (all healthcare packs)
 - BAA with every vendor touching PHI
@@ -11,24 +12,51 @@ export const HEALTHCARE_PACK_DEFS = [
   def(
     "healthcare/overview",
     "Healthcare Technology Overview",
-    "US/EU healthcare software — PHI, HIPAA, FHIR-first integration strategy",
-    `# Healthcare Tech — Overview
+    "Country router — FHIR-first strategy; install one country overview stem pack",
+    `# Healthcare Tech — Overview (Country Router)
 
-DNA default for clinical and health-adjacent products: **FHIR-first**, HIPAA-compliant, integration-platform aware.
+DNA default for clinical and health-adjacent products: **FHIR-first**, compliance-aware, integration-platform aware.
 
-## Stack recommendation
+## Install your country stem pack
+
+Always pair this router with **one** country overview (\`healthcare/overview-{iso}\`):
+
+| Region | Pack | Regulation highlight |
+|--------|------|----------------------|
+| United States | \`healthcare/overview-us\` | HIPAA, CMS interoperability |
+| United Kingdom | \`healthcare/overview-uk\` | UK GDPR, NHS DSPT, UK Core |
+| Canada | \`healthcare/overview-ca\` | PIPEDA, provincial health laws |
+| Australia | \`healthcare/overview-au\` | Privacy Act, My Health Record |
+| European Union | \`healthcare/overview-eu\` | GDPR, EU MDR, EHDS |
+| Germany | \`healthcare/overview-de\` | Gematik, DiGA, ePA |
+| France | \`healthcare/overview-fr\` | HDS hosting, DMP |
+| Japan | \`healthcare/overview-jp\` | APPI, FHIR JP Core |
+| India | \`healthcare/overview-in\` | ABDM, DPDP |
+| Brazil | \`healthcare/overview-br\` | LGPD, RNDS |
+| Singapore | \`healthcare/overview-sg\` | PDPA, NEHR |
+| Saudi Arabia | \`healthcare/overview-sa\` | PDPL, NPHIES |
+| UAE | \`healthcare/overview-ae\` | Malaffi, NABIDH |
+| + 26 more | \`healthcare/overview-*\` | See marketplace catalog |
+
+\`\`\`bash
+dna marketplace install healthcare/overview
+dna marketplace install healthcare/overview-us   # example
+dna marketplace install healthcare/fhir-r4
+\`\`\`
+
+## Universal stack recommendation
 - API: FastAPI/NestJS/Next route handlers with strict auth
 - Clinical data: FHIR R4 server (Medplum, HAPI, Firely) or EHR integration via Redox/Health Gorilla
 - Never build custom clinical record storage without compliance sign-off
 
 ## Integration strategy tiers
-1. **Direct EHR FHIR** (Epic, Cerner) — app approval, sandbox, production keys
+1. **Direct EHR FHIR** (Epic, Cerner, NHS) — app approval, sandbox, production keys
 2. **Health data networks** (Redox, Zus, Health Gorilla, Particle) — faster time-to-market
 3. **Standards-only** (HL7 v2, X12) — legacy hospital interfaces
 
 ${HIPAA_BASE}`,
-    `Document in Impressions: data categories (PHI vs de-identified), treatment vs payment vs operations (TPO), and subprocessors.`,
-    ["healthcare", "overview"],
+    `Document in Impressions: deployment country, data categories (PHI vs de-identified), lawful basis, and subprocessors. Load the matching \`healthcare/overview-{iso}\` pack before implementing clinical features.`,
+    ["healthcare", "overview", "stem"],
     "disciplines",
   ),
   def(
@@ -719,6 +747,7 @@ Rules pushing FHIR APIs for Medicare Advantage, ACA plans, hospitals.
     ["healthcare", "policy", "us"],
     "disciplines",
   ),
+  ...HEALTHCARE_OVERVIEW_COUNTRY_DEFS,
 ];
 
 export const HEALTHCARE_PACKS = packsFromDefs(HEALTHCARE_PACK_DEFS);

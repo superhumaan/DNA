@@ -18,7 +18,7 @@ describe("catalog expansion", () => {
     expect(CATALOG_EXPANSION_COUNTS.disciplines).toBe(15);
     expect(CATALOG_EXPANSION_COUNTS.payments).toBe(12);
     expect(CATALOG_EXPANSION_COUNTS.data).toBe(3);
-    expect(CATALOG_WAVE_COUNTS.healthcare).toBe(45);
+    expect(CATALOG_WAVE_COUNTS.healthcare).toBe(84);
     expect(CATALOG_WAVE_COUNTS.wave3.healthcareExtended).toBe(10);
     expect(CATALOG_WAVE_COUNTS.wave3.total).toBeGreaterThan(150);
     expect(CATALOG_WAVE_COUNTS.wave4.total).toBeGreaterThan(120);
@@ -114,6 +114,10 @@ describe("catalog expansion", () => {
       "healthcare/phi-engineering",
       "healthcare/patient-portal",
       "healthcare/mdr-eu",
+      "healthcare/overview-us",
+      "healthcare/overview-uk",
+      "healthcare/overview-au",
+      "healthcare/overview-in",
       "erp/sap",
     ];
     for (const id of ids) {
