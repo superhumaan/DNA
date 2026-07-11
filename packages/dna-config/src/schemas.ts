@@ -775,6 +775,17 @@ export interface MarketplaceUpdateResult {
   newPacks: string[];
 }
 
+export interface CliUpgradeCheckResult {
+  currentVersion: string;
+  latestVersion: string | null;
+  updateAvailable: boolean;
+  skipped: boolean;
+  skipReason?: string;
+  installed: boolean;
+  installMode?: "project" | "global";
+  message?: string;
+}
+
 // --- Schema exports (zod-compatible API) ---
 
 export const DnaConfigSchema = schema(parseDnaConfig);

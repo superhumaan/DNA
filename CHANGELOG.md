@@ -20,6 +20,7 @@ All notable changes to DNA are documented here.
 - **CellularMemory team sync** — `dna memory import --on-conflict`, `dna memory sync` from team registry path.
 - **Dashboard live feed** — 5s auto-refresh via `/api/data` and quality trend chart.
 - **GitHub OAuth** — device flow reads `github.oauthClientId` from project config; maintainer script `scripts/setup-github-oauth-app.sh` patches the shipped client ID.
+- **CLI auto-upgrade** — `dna doctor` and startup check npm for newer `@superhumaan/dna-by-humaan`; `dna update` installs CLI + refreshes knowledge packs.
 
 ## [0.4.5] - 2026-07-11
 

@@ -9,6 +9,7 @@ import { loadDnaConfig, validateProject } from "./validator.js";
 import { runDoctor, formatDoctorReport, type DoctorReport } from "./doctor.js";
 import { installFoundationKnowledge } from "./marketplace/foundation.js";
 import { checkMarketplaceUpdates } from "./marketplace/install.js";
+import { maybeAutoUpgradeCli } from "./cli-upgrade.js";
 import { installCiPipeline } from "./generators/ci.js";
 import { installGitHooks } from "./generators/git-hooks.js";
 import { installDockerScaffold } from "./generators/docker.js";
@@ -33,6 +34,10 @@ export interface DoctorOrchestratorOptions {
   /** Run brownfield IVF pipeline when legacy project detected */
   runIvf?: boolean;
   quote?: string;
+  /** Installed DNA CLI version (for auto-upgrade checks). */
+  currentCliVersion?: string;
+  /** Resolved CLI entry path (import.meta.url). */
+  cliEntryPath?: string;
   /** Status lines during interactive steps (e.g. GitHub browser login) */
   onStatus?: (message: string) => void;
 }
@@ -351,13 +356,38 @@ async function ensureAiAndCi(root: string, config: DnaConfig): Promise<string[]>
   return actions;
 }
 
-async function pullEssentials(root: string, config: DnaConfig): Promise<string[]> {
+async function pullEssentials(
+  root: string,
+  config: DnaConfig,
+  currentCliVersion?: string,
+  cliEntryPath?: string,
+): Promise<string[]> {
   const actions: string[] = [];
   const scan = await scanProject(root);
 
   const foundation = await installFoundationKnowledge(root, config, scan);
   for (const packId of foundation.installed) {
     actions.push(`knowledge pack: ${packId}`);
+  }
+
+  if (currentCliVersion) {
+    try {
+      const cliUpgrade = await maybeAutoUpgradeCli({
+        root,
+        currentVersion: currentCliVersion,
+        cliEntryPath,
+        channel: config.channel,
+      });
+      if (cliUpgrade?.installed && cliUpgrade.latestVersion) {
+        actions.push(`CLI upgraded: ${cliUpgrade.currentVersion} → ${cliUpgrade.latestVersion}`);
+      } else if (cliUpgrade?.updateAvailable && cliUpgrade.latestVersion) {
+        actions.push(
+          `CLI update available: ${cliUpgrade.currentVersion} → ${cliUpgrade.latestVersion} — run dna update`,
+        );
+      }
+    } catch {
+      // npm registry offline — skip
+    }
   }
 
   try {
@@ -398,7 +428,8 @@ async function runBrownfieldPipeline(
 export async function runDoctorOrchestrator(
   options: DoctorOrchestratorOptions,
 ): Promise<DoctorOrchestratorResult> {
-  const { root, checkOnly = false, runIvf = false, quote, onStatus } = options;
+  const { root, checkOnly = false, runIvf = false, quote, onStatus, currentCliVersion, cliEntryPath } =
+    options;
   const actions: string[] = [];
   let initialized = false;
   let ivfRun = false;
@@ -427,7 +458,7 @@ export async function runDoctorOrchestrator(
     actions.push(...(await repairMissingStructure(root, config)));
     actions.push(...(await ensureRuntimeAssets(root, config)));
     actions.push(...(await ensureAiAndCi(root, config)));
-    actions.push(...(await pullEssentials(root, config)));
+    actions.push(...(await pullEssentials(root, config, currentCliVersion, cliEntryPath)));
 
     const isBrownfield = runIvf;
 

@@ -1,6 +1,8 @@
 import { Command } from "./cli.js";
-import { join } from "node:path";
+import { join, dirname } from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { PRODUCT_NAME } from "@superhumaan/dna-config";
 import {
   scanProject,
@@ -101,6 +103,9 @@ import {
   formatInitCompleteMessage,
   formatInitContextBanner,
   detectProjectContext,
+  checkAndUpgradeCli,
+  formatCliUpgradeResult,
+  maybeAutoUpgradeCli,
 } from "@superhumaan/dna-core";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
@@ -109,12 +114,18 @@ import { runInitWizard } from "./prompts.js";
 import { connectGitHubDuringOnboarding } from "./github-onboarding.js";
 import { resolveProjectRoot, resolveTargetDirectory } from "./project-root.js";
 
+const CLI_ENTRY_PATH = fileURLToPath(import.meta.url);
+const CLI_PACKAGE_JSON = JSON.parse(
+  readFileSync(join(dirname(CLI_ENTRY_PATH), "../package.json"), "utf-8"),
+) as { version: string };
+const CLI_VERSION = CLI_PACKAGE_JSON.version;
+
 const program = new Command();
 
 program
   .name("dna")
   .description(`${PRODUCT_NAME} — project intelligence and runtime observer`)
-  .version("0.1.0");
+  .version(CLI_VERSION);
 
 function getRoot(options: { cwd?: string }): string {
   return resolveProjectRoot(options.cwd);
@@ -1092,6 +1103,8 @@ program
       checkOnly: options.checkOnly,
       runIvf: options.ivf,
       quote: options.quote,
+      currentCliVersion: CLI_VERSION,
+      cliEntryPath: CLI_ENTRY_PATH,
       onStatus: (msg) => console.log(msg),
     });
     console.log(formatDoctorOrchestratorResult(result));
@@ -1156,18 +1169,37 @@ ivfCmd
 
 program
   .command("update")
-  .description("Check for DNA knowledge pack updates and download latest prompt stem packs")
+  .description("Upgrade DNA CLI and refresh knowledge packs / workbench prompts")
   .option("--cwd <path>", "Project root directory")
   .option("--channel <channel>", "stable|beta|nightly", "stable")
   .option("--skip-workbench", "Do not refresh Cursor/Claude workbench prompts")
+  .option("--skip-cli", "Do not check or install a newer DNA CLI package")
+  .option("--check-only", "Report available updates without installing")
   .action(async (options: {
     cwd?: string;
     channel?: "stable" | "beta" | "nightly";
     skipWorkbench?: boolean;
+    skipCli?: boolean;
+    checkOnly?: boolean;
   }) => {
     const root = getRoot(options);
     const config = await loadDnaConfig(root);
     const channel = options.channel ?? config?.channel ?? "stable";
+
+    if (!options.skipCli) {
+      const cliResult = await checkAndUpgradeCli({
+        root,
+        currentVersion: CLI_VERSION,
+        cliEntryPath: CLI_ENTRY_PATH,
+        channel,
+        force: true,
+        install: !options.checkOnly,
+        checkOnly: options.checkOnly,
+      });
+      console.log(formatCliUpgradeResult(cliResult));
+      console.log("");
+    }
+
     const result = await checkMarketplaceUpdates(root, channel);
     console.log(formatUpdateResult(result));
 
@@ -1694,4 +1726,28 @@ program
     }
   });
 
+async function runStartupCliUpgrade(): Promise<void> {
+  if (process.argv.includes("--version") || process.argv.includes("-V")) return;
+  if (process.argv.includes("update")) return;
+
+  try {
+    const root = resolveProjectRoot(process.cwd());
+    const result = await maybeAutoUpgradeCli({
+      root,
+      currentVersion: CLI_VERSION,
+      cliEntryPath: CLI_ENTRY_PATH,
+      install: true,
+    });
+    if (result?.installed && result.latestVersion) {
+      console.log(
+        `✓ DNA CLI upgraded to ${result.latestVersion}. Re-run your command to use the new version.\n`,
+      );
+      process.exit(0);
+    }
+  } catch {
+    // Non-fatal — offline or no .DNA yet
+  }
+}
+
+await runStartupCliUpgrade();
 program.parse();

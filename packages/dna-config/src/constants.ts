@@ -15,6 +15,8 @@ export const NEURAL_NETWORK_ALT = ".DNA/neuralNetwork";
 
 export const PRODUCT_NAME = "DNA by Humaan";
 export const COMPANY_NAME = "Humaan by Superlite";
+/** Published npm package for the DNA CLI (`dna` / `npx dna`). */
+export const DNA_CLI_PACKAGE = "@superhumaan/dna-by-humaan";
 
 export const BEHAVIOUR_FILES = [
   "ai.behaviour.md",

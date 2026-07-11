@@ -32,6 +32,7 @@ export * from "./marketplace/aliases.js";
 export * from "./marketplace/ensure.js";
 export * from "./marketplace/foundation.js";
 export * from "./marketplace/bundled-catalog.js";
+export * from "./cli-upgrade.js";
 export * from "./rbac/plan.js";
 export * from "./rbac/inventory.js";
 export * from "./platform/catalog.js";
