@@ -37,7 +37,7 @@ describe("CellularMemory sync", () => {
     expect(exported.fileCount).toBeGreaterThan(0);
 
     const imported = await importCellularMemory({ root: rootB, inPath: exportPath, merge: true });
-    expect(imported.imported).toBeGreaterThan(0);
+    expect(imported.imported + imported.merged).toBeGreaterThan(0);
 
     const summary = await readFile(join(rootB, ".DNA", "CellularMemory", "hippocampus", "project-summary.md"), "utf-8");
     expect(summary).toContain("Project Summary");

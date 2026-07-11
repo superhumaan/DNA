@@ -20,9 +20,9 @@ export interface ImpressionsDriftReport {
   stackMismatches: string[];
 }
 
-function levelFromScore(score: number): ImpressionsDriftLevel {
-  if (score >= 50) return "critical";
-  if (score >= 25) return "warning";
+function levelFromScore(score: number, warning = 25, critical = 50): ImpressionsDriftLevel {
+  if (score >= critical) return "critical";
+  if (score >= warning) return "warning";
   return "ok";
 }
 
@@ -134,9 +134,11 @@ export async function detectImpressionsDrift(
   }
 
   score = Math.min(score, 100);
+  const warningThreshold = config?.impressions?.driftWarningThreshold ?? 25;
+  const criticalThreshold = config?.impressions?.driftCriticalThreshold ?? 50;
   return {
     score,
-    level: levelFromScore(score),
+    level: levelFromScore(score, warningThreshold, criticalThreshold),
     findings,
     missingDocs,
     stackMismatches: mismatches,

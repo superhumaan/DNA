@@ -5,6 +5,7 @@ import type { ScanResult } from "@superhumaan/dna-config";
 import { DNA_CONFIG_FILE, IMPRESSIONS_PATHS } from "@superhumaan/dna-config";
 import { fileExists } from "./fs.js";
 import { detectImpressionsDrift } from "./impressions/drift.js";
+import { detectHosting } from "./stack/hosting.js";
 
 const FRONTEND_INDICATORS: Record<string, string[]> = {
   react: ["react", "@vitejs/plugin-react"],
@@ -147,6 +148,13 @@ export async function scanProject(root: string): Promise<ScanResult> {
   if (files.includes(".circleci/config.yml")) ciCd.push("circleci");
 
   const docker = files.includes("Dockerfile") || files.includes("docker-compose.yml");
+  const hosting = detectHosting(
+    {
+      dependencies: Object.keys(deps),
+      docker,
+    } as ScanResult,
+    files,
+  );
   const envFiles = files.filter((f) => f.startsWith(".env") && !f.includes("example"));
   const docs = files.filter(
     (f) =>
@@ -203,6 +211,7 @@ export async function scanProject(root: string): Promise<ScanResult> {
     testFramework,
     ciCd,
     docker,
+    hosting,
     envFiles: envFiles.map((f) => f.replace(/^\.\//, "")),
     docs,
     aiRules,
@@ -232,6 +241,7 @@ export function formatScanSummary(scan: ScanResult): string {
     `Frontend:        ${scan.frontend ?? "not detected"}`,
     `Backend:         ${scan.backend ?? "not detected"}`,
     `Database:        ${scan.database ?? "not detected"}`,
+    `Hosting:         ${scan.hosting ?? "not detected"}`,
     `Test framework:  ${scan.testFramework ?? "not detected"}`,
     `CI/CD:           ${scan.ciCd.length ? scan.ciCd.join(", ") : "none detected"}`,
     `Docker:          ${scan.docker ? "yes" : "no"}`,

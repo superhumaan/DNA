@@ -99,7 +99,7 @@ export async function createBranch(
 
 export async function createPullRequest(
   config: GitHubConfig,
-  options: { title: string; body: string; head: string; base?: string },
+  options: { title: string; body: string; head: string; base?: string; draft?: boolean },
 ): Promise<{ number: number; url: string }> {
   if (!config.token) throw new Error("GitHub token required. Run `dna github login` or set GITHUB_TOKEN.");
   const pr = await createGitHubPullRequest(config.token, config.owner, config.repo, options);

@@ -57,9 +57,12 @@ export * from "./generators/wire-runtime.js";
 export * from "./storage/runtime-db.js";
 export * from "./impressions/drift.js";
 export * from "./impressions/sync-plan.js";
+export * from "./impressions/open-pr.js";
 export * from "./memory/sync.js";
 export * from "./dashboard/server.js";
 export * from "./platform/codegen/audit-logging.js";
+export * from "./platform/codegen/platform-features.js";
+export * from "./stack/hosting.js";
 export {
   analyzeSharedLibrary,
   ensureSharedLibrary,
@@ -67,4 +70,5 @@ export {
   planSharedLibraryExecution,
   formatSharedLibraryDryRun,
   scaffoldSharedLibraryPackage,
+  executeSharedLibraryExtraction,
 } from "./ivf/shared-library.js";

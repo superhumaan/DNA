@@ -238,6 +238,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | `npx @superhumaan/dna-by-humaan` on npm (v0.4.0) | Mar 2026 | Jul 2026 | Shipped |
 | [Supply-chain hardening + Socket transparency](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) (v0.4.4) | Jul 2026 | Jul 2026 | Shipped |
 | [Zero npm dependencies](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) (v0.4.5) | Jul 2026 | Jul 2026 | Shipped |
+| npm `dna doctor` workbench asset path fix (v0.4.6) | Jul 2026 | Jul 2026 | Shipped |
 | [Prompt stem packs + intelligence library](https://dna.humaan.app/intelligence) | Jul 2026 | Jul 2026 | Shipped |
 | [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped |
 | [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped |

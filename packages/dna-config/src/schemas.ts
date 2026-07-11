@@ -562,6 +562,14 @@ export interface DnaConfig {
     previewProvider: "vercel" | "netlify";
     previewBranch?: string;
   };
+  impressions?: {
+    driftWarningThreshold?: number;
+    driftCriticalThreshold?: number;
+  };
+  memory?: {
+    teamRegistry?: string;
+    syncOnPush?: boolean;
+  };
   featureFactory?: { enabled: boolean };
   aiWorkbench?: {
     enabled: boolean;
@@ -617,6 +625,7 @@ export interface ScanResult {
   frontend?: string;
   backend?: string;
   database?: string;
+  hosting?: string;
   testFramework?: string;
   ciCd: string[];
   docker: boolean;

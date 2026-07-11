@@ -78,13 +78,14 @@ export async function createGitHubPullRequest(
   token: string,
   owner: string,
   repo: string,
-  options: { title: string; body: string; head: string; base?: string },
+  options: { title: string; body: string; head: string; base?: string; draft?: boolean },
 ): Promise<{ number: number; html_url: string }> {
   return githubRequest(token, "POST", `/repos/${owner}/${repo}/pulls`, {
     title: options.title,
     body: options.body,
     head: options.head,
     base: options.base ?? "main",
+    draft: options.draft ?? false,
   });
 }
 

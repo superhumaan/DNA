@@ -17,3 +17,8 @@ coverage/
 # Next.js build output (web app lives in DNA-Web repo)
 apps/web/.next/
 .local-wiki/
+# DNA local data (not committed)
+.DNA/data/
+.DNA/runtime/*.jsonl
+.DNA/reports/
+.DNA/credentials/

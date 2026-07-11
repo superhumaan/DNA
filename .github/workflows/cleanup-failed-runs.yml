@@ -1,10 +1,14 @@
+# DNA cleanup — delete failed workflow runs after completion
+# Inline delete jobs cannot remove the current run (GitHub returns 403 while in progress).
+
 name: Cleanup failed runs
 
 on:
   workflow_run:
     workflows:
-      - CI
-      - Publish npm
+      - DNA CI
+      - DNA Preview
+      - DNA Security
     types: [completed]
   workflow_dispatch:
   schedule:

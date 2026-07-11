@@ -14,6 +14,8 @@ const DEFAULT_SEGMENTS = [
 
 export type CellularMemorySegment = (typeof DEFAULT_SEGMENTS)[number];
 
+export type MemoryConflictStrategy = "keep-local" | "keep-remote" | "newest";
+
 export interface MemoryExportManifest {
   version: 1;
   exportedAt: string;
@@ -39,11 +41,13 @@ export interface ImportCellularMemoryOptions {
   inPath: string;
   merge?: boolean;
   segments?: string[];
+  onConflict?: MemoryConflictStrategy;
 }
 
 export interface ImportCellularMemoryResult {
   imported: number;
   skipped: number;
+  merged: number;
   segments: string[];
 }
 
@@ -107,6 +111,8 @@ export async function importCellularMemory(
   const allowedSegments = new Set(options.segments ?? manifest.segments ?? DEFAULT_SEGMENTS);
   let imported = 0;
   let skipped = 0;
+  let merged = 0;
+  const strategy = options.onConflict ?? "newest";
 
   for (const [relPath, content] of Object.entries(manifest.files)) {
     const segment = relPath.split("/")[0] ?? "";
@@ -116,7 +122,30 @@ export async function importCellularMemory(
     }
 
     const dest = join(base, relPath);
-    if (!options.merge && (await fileExists(dest))) {
+    const exists = await fileExists(dest);
+
+    if (exists && options.merge) {
+      const local = await readFile(dest, "utf-8");
+      if (local === content) {
+        skipped++;
+        continue;
+      }
+      if (strategy === "keep-local") {
+        skipped++;
+        continue;
+      }
+      if (strategy === "keep-remote") {
+        await writeFile(dest, content, "utf-8");
+        merged++;
+        continue;
+      }
+      // newest: prefer incoming export timestamp vs file mtime — export wins when merging team sync
+      await writeFile(dest, content, "utf-8");
+      merged++;
+      continue;
+    }
+
+    if (!options.merge && exists) {
       skipped++;
       continue;
     }
@@ -126,7 +155,7 @@ export async function importCellularMemory(
     imported++;
   }
 
-  return { imported, skipped, segments: [...allowedSegments] };
+  return { imported, skipped, merged, segments: [...allowedSegments] };
 }
 
 export async function copyCellularMemorySegment(
@@ -162,9 +191,20 @@ export function formatMemoryImportSummary(result: ImportCellularMemoryResult): s
     "=====================",
     "",
     `Imported: ${result.imported} file(s)`,
+    `Merged:   ${result.merged} file(s)`,
     `Skipped:  ${result.skipped} file(s)`,
     `Segments: ${result.segments.join(", ")}`,
   ].join("\n");
+}
+
+export async function syncFromTeamRegistry(root: string, registryPath: string): Promise<ImportCellularMemoryResult> {
+  const resolved = registryPath.startsWith("/") ? registryPath : join(root, registryPath);
+  return importCellularMemory({
+    root,
+    inPath: resolved,
+    merge: true,
+    onConflict: "newest",
+  });
 }
 
 export function listMemorySegments(root: string): Promise<string[]> {

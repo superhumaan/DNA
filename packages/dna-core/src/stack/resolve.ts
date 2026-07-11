@@ -1,6 +1,7 @@
 import type { ScanResult } from "@superhumaan/dna-config";
 import { STACK_ARCHETYPES, type StackArchetype } from "./catalog.js";
 import { detectTechnologies } from "./detect.js";
+import { supportsPreviewDeploy } from "./hosting.js";
 
 function descIncludesPwa(description: string): boolean {
   const d = description.toLowerCase();
@@ -306,7 +307,11 @@ export function stackFromArchetype(
     description.toLowerCase().includes("b2b") ||
     description.toLowerCase().includes("platform");
 
-  const pick = (layer: keyof StackArchetype["layers"], fallback?: string) => {
+  const pick = (
+    layer: keyof StackArchetype["layers"],
+    fallback?: string,
+    useArchetypeDefault = true,
+  ) => {
     const allowed = archetype.layers[layer];
     if (!allowed?.length) return fallback;
     const fromScan =
@@ -315,25 +320,32 @@ export function stackFromArchetype(
         : layer === "backend"
           ? detected.backend
           : layer === "database"
-            ? detected.database
+            ? detected.database ?? scan.database
             : layer === "testing"
               ? detected.testing
               : layer === "bundler"
                 ? detected.bundler
-                : undefined;
+                : layer === "hosting"
+                  ? scan.hosting
+                  : undefined;
     if (fromScan && allowed.includes(fromScan)) return fromScan;
     if (layer === "frontend" && fromScan === "next") return "next";
+    if (!useArchetypeDefault) return fallback;
     return allowed[0];
   };
+
+  const database =
+    scan.database ??
+    pick("database", detected.technologies.has("supabase") ? "supabase" : undefined, false);
+
+  const hosting = scan.hosting ?? pick("hosting", undefined, false);
 
   return {
     archetype: archetype.id,
     frontend: pick("frontend", scan.frontend),
     bundler: pick("bundler", archetype.id === "next-fullstack" ? "next" : scan.frontend ? "vite" : undefined),
     backend: pick("backend", scan.backend),
-    database:
-      pick("database", isSaas ? "postgresql" : scan.database) ??
-      (detected.technologies.has("supabase") ? "supabase" : scan.database),
+    database,
     platform:
       archetype.platform === "cms"
         ? "CMS"
@@ -346,7 +358,13 @@ export function stackFromArchetype(
               : descIncludesPwa(description)
                 ? "pwa"
                 : "web app",
-    hosting: archetype.layers.hosting?.[0] ?? "vercel-or-railway",
+    hosting,
     testing: pick("testing", scan.testFramework ?? "vitest"),
   };
+}
+
+/** Whether CI should scaffold a Vercel/Netlify preview workflow for this project. */
+export function shouldScaffoldPreviewWorkflow(scan: ScanResult, hosting?: string): boolean {
+  const resolved = hosting ?? scan.hosting;
+  return supportsPreviewDeploy(resolved);
 }

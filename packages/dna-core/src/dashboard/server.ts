@@ -1,6 +1,7 @@
 import { glob } from "../glob.js";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { join } from "node:path";
+import { readFile, stat } from "node:fs/promises";
 import { runDoctor, type DoctorReport } from "../doctor.js";
 import { readRuntimeRecords } from "../storage/runtime-db.js";
 import { fileExists } from "../fs.js";
@@ -15,7 +16,7 @@ export interface DashboardData {
   doctor: DoctorReport;
   runtimeIssues: unknown[];
   runtimeEvents: unknown[];
-  qualityReports: { name: string; mtime: string }[];
+  qualityReports: { name: string; mtime: string; score?: number }[];
   impressions: string[];
   cellularMemory: string[];
 }
@@ -26,11 +27,21 @@ async function listMarkdownFiles(dir: string, prefix: string): Promise<string[]>
   return files.map((f) => `${prefix}/${f}`);
 }
 
-async function listQualityReports(root: string): Promise<{ name: string; mtime: string }[]> {
+async function listQualityReports(root: string): Promise<{ name: string; mtime: string; score?: number }[]> {
   const dir = join(root, ".DNA", "reports", "quality");
   if (!(await fileExists(dir))) return [];
   const files = await glob("*.md", { cwd: dir, onlyFiles: true });
-  return files.map((name) => ({ name, mtime: "" }));
+  const reports = await Promise.all(
+    files.map(async (name) => {
+      const full = join(dir, name);
+      const st = await stat(full);
+      const raw = await readFile(full, "utf-8").catch(() => "");
+      const scoreMatch = raw.match(/Overall coverage:\s*([\d.]+)%/i) ?? raw.match(/Gate:\s*(\w+)/i);
+      const score = scoreMatch?.[1] && !Number.isNaN(Number(scoreMatch[1])) ? Number(scoreMatch[1]) : undefined;
+      return { name, mtime: st.mtime.toISOString(), score };
+    }),
+  );
+  return reports.sort((a, b) => a.mtime.localeCompare(b.mtime));
 }
 
 export async function collectDashboardData(root: string): Promise<DashboardData> {
@@ -55,11 +66,7 @@ function sendJson(res: ServerResponse, status: number, body: unknown): void {
   res.end(JSON.stringify(body));
 }
 
-function renderHtml(data: DashboardData): string {
-  const issueCount = data.runtimeIssues.length;
-  const eventCount = data.runtimeEvents.length;
-  const valid = data.doctor.validation.valid;
-
+function renderHtml(): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,61 +88,80 @@ function renderHtml(data: DashboardData): string {
     ul { margin: 0; padding-left: 18px; max-height: 200px; overflow: auto; font-size: 0.875rem; }
     pre { background: #f0f0f0; padding: 12px; border-radius: 6px; overflow: auto; font-size: 0.75rem; max-height: 240px; }
     .refresh { margin-top: 24px; font-size: 0.875rem; color: #666; }
+    canvas { width: 100%; height: 120px; }
   </style>
 </head>
 <body>
   <h1>DNA Dashboard</h1>
-  <p class="sub">Local read-only view — runtime, quality, doctor, and memory</p>
-  <div class="grid">
-    <div class="card">
-      <h2>Doctor</h2>
-      <div class="stat ${valid ? "ok" : "bad"}">${valid ? "Healthy" : "Issues"}</div>
-      <ul>
-        <li>DNA: ${data.doctor.dna.installed ? "installed" : "missing"}</li>
-        <li>GitHub: ${data.doctor.github.signedIn ? "signed in" : "not signed in"}</li>
-        <li>Runtime: ${data.doctor.runtime.configured ? "configured" : "not configured"}</li>
-        <li>Missing docs: ${data.doctor.documentation.missing}</li>
-        <li>Validation issues: ${data.doctor.validation.issueCount}</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h2>Runtime issues</h2>
-      <div class="stat ${issueCount ? "warn" : "ok"}">${issueCount}</div>
-      <pre>${escapeHtml(JSON.stringify(data.runtimeIssues.slice(-5), null, 2))}</pre>
-    </div>
-    <div class="card">
-      <h2>Runtime events</h2>
-      <div class="stat">${eventCount}</div>
-      <pre>${escapeHtml(JSON.stringify(data.runtimeEvents.slice(-5), null, 2))}</pre>
-    </div>
-    <div class="card">
-      <h2>Quality reports</h2>
-      <div class="stat">${data.qualityReports.length}</div>
-      <ul>${data.qualityReports.map((r) => `<li>${escapeHtml(r.name)}</li>`).join("") || "<li>None yet</li>"}</ul>
-    </div>
-    <div class="card">
-      <h2>Impressions</h2>
-      <div class="stat">${data.impressions.length}</div>
-      <ul>${data.impressions.slice(0, 12).map((f) => `<li>${escapeHtml(f)}</li>`).join("")}${data.impressions.length > 12 ? "<li>…</li>" : ""}</ul>
-    </div>
-    <div class="card">
-      <h2>CellularMemory</h2>
-      <div class="stat">${data.cellularMemory.length}</div>
-      <ul>${data.cellularMemory.slice(0, 12).map((f) => `<li>${escapeHtml(f)}</li>`).join("")}${data.cellularMemory.length > 12 ? "<li>…</li>" : ""}</ul>
-    </div>
-  </div>
-  <p class="refresh">Auto-refresh: reload page · API: <code>/api/data</code></p>
-  <script>setTimeout(() => location.reload(), 30000);</script>
+  <p class="sub">Live local view — auto-refreshes every 5s</p>
+  <div id="root" class="grid"></div>
+  <p class="refresh" id="status">Loading…</p>
+  <script>
+    function esc(t) {
+      return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+    function drawTrend(canvas, reports) {
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width = canvas.offsetWidth * 2;
+      const h = canvas.height = 240;
+      ctx.clearRect(0, 0, w, h);
+      const scores = reports.map((r) => r.score ?? 0);
+      if (!scores.length) {
+        ctx.fillStyle = "#888";
+        ctx.fillText("No quality history", 12, 24);
+        return;
+      }
+      const max = 100;
+      ctx.strokeStyle = "#0a7";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      scores.forEach((s, i) => {
+        const x = 12 + (i * (w - 24)) / Math.max(scores.length - 1, 1);
+        const y = h - 12 - (s / max) * (h - 24);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+    function render(data) {
+      const issueCount = data.runtimeIssues.length;
+      const eventCount = data.runtimeEvents.length;
+      const valid = data.doctor.validation.valid;
+      const reports = data.qualityReports || [];
+      document.getElementById("root").innerHTML = \`
+        <div class="card"><h2>Doctor</h2><div class="stat \${valid ? "ok" : "bad"}">\${valid ? "Healthy" : "Issues"}</div>
+          <ul>
+            <li>DNA: \${data.doctor.dna.installed ? "installed" : "missing"}</li>
+            <li>GitHub: \${data.doctor.github.signedIn ? "signed in" : "not signed in"}</li>
+            <li>Runtime: \${data.doctor.runtime.configured ? "configured" : "not configured"}</li>
+          </ul></div>
+        <div class="card"><h2>Runtime issues</h2><div class="stat \${issueCount ? "warn" : "ok"}">\${issueCount}</div>
+          <pre>\${esc(JSON.stringify(data.runtimeIssues.slice(-5), null, 2))}</pre></div>
+        <div class="card"><h2>Runtime events</h2><div class="stat">\${eventCount}</div>
+          <pre>\${esc(JSON.stringify(data.runtimeEvents.slice(-5), null, 2))}</pre></div>
+        <div class="card"><h2>Quality trend</h2><canvas id="trend"></canvas>
+          <ul>\${reports.slice(-8).map(r => "<li>" + esc(r.name) + (r.score != null ? " — " + r.score + "%" : "") + "</li>").join("") || "<li>None yet</li>"}</ul></div>
+        <div class="card"><h2>Impressions</h2><div class="stat">\${data.impressions.length}</div>
+          <ul>\${data.impressions.slice(0, 12).map(f => "<li>" + esc(f) + "</li>").join("")}</ul></div>
+        <div class="card"><h2>CellularMemory</h2><div class="stat">\${data.cellularMemory.length}</div>
+          <ul>\${data.cellularMemory.slice(0, 12).map(f => "<li>" + esc(f) + "</li>").join("")}</ul></div>\`;
+      const canvas = document.getElementById("trend");
+      if (canvas) drawTrend(canvas, reports);
+    }
+    async function refresh() {
+      try {
+        const res = await fetch("/api/data");
+        const data = await res.json();
+        render(data);
+        document.getElementById("status").textContent = "Updated " + new Date().toLocaleTimeString();
+      } catch (e) {
+        document.getElementById("status").textContent = "Refresh failed";
+      }
+    }
+    refresh();
+    setInterval(refresh, 5000);
+  </script>
 </body>
 </html>`;
-}
-
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 }
 
 export async function startDashboard(options: DashboardOptions): Promise<{ url: string; close: () => void }> {
@@ -152,9 +178,8 @@ export async function startDashboard(options: DashboardOptions): Promise<{ url: 
     }
 
     if (url.pathname === "/" || url.pathname === "/index.html") {
-      const data = await collectDashboardData(options.root);
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-      res.end(renderHtml(data));
+      res.end(renderHtml());
       return;
     }
 

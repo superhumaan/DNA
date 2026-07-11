@@ -36,7 +36,7 @@
     "devtools"
   ],
   "scripts": {
-    "dev": "pnpm -r --parallel run dev",
+    "dev": "NODE_OPTIONS='--import @superhumaan/dna-by-humaan/runtime/preload' pnpm -r --parallel run dev",
     "build": "pnpm -r run build",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -59,7 +59,10 @@
     "wiki:dev": "pnpm run wiki:refresh",
     "wiki:build": "pnpm run wiki:sync && npm run build --prefix .local-wiki",
     "sponsors:sync": "node scripts/sync-sponsors.mjs",
-    "intelligence:sync": "pnpm --filter @superhumaan/dna-core build && node scripts/sync-intelligence-commands.mjs"
+    "intelligence:sync": "pnpm --filter @superhumaan/dna-core build && node scripts/sync-intelligence-commands.mjs",
+    "test:coverage": "vitest run --coverage",
+    "docker:build": "docker build -t dna-app:local .",
+    "docker:verify": "docker build -t dna-app:local . && docker run --rm dna-app:local node -e \"console.log('ok')\""
   },
   "engines": {
     "node": ">=20"
@@ -71,5 +74,8 @@
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0",
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@superhumaan/dna-by-humaan": "workspace:*"
   }
 }

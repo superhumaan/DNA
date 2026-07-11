@@ -1,8 +1,8 @@
 import { glob } from "../glob.js";
-import { readdir, readFile } from "node:fs/promises";
-import { join, basename } from "node:path";
+import { readdir, readFile, copyFile, rm } from "node:fs/promises";
+import { join, basename, relative } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
-import { writeFileEnsured, fileExists } from "../fs.js";
+import { writeFileEnsured, fileExists, ensureDir } from "../fs.js";
 import { loadDnaConfig } from "../validator.js";
 
 const SOURCE_GLOB = ["**/*.{ts,tsx,js,jsx,vue}"];
@@ -524,7 +524,7 @@ export function formatSharedLibraryDryRun(plan: SharedLibraryExecutionPlan): str
     "",
     "Next steps:",
     "  dna ivf shared-library --scaffold   # create package skeleton",
-    "  dna ivf shared-library --execute    # full extraction (coming soon)",
+    "  dna ivf shared-library --execute    # copy components + rewire imports",
   );
 
   return lines.join("\n");
@@ -579,4 +579,118 @@ export async function scaffoldSharedLibraryPackage(root: string): Promise<{ crea
   created.push(join(analysis.recommendedPackagePath, "src/components/.gitkeep"));
 
   return { created, packagePath: analysis.recommendedPackagePath };
+}
+
+export interface ExecuteSharedLibraryOptions {
+  root: string;
+  runTests?: boolean;
+}
+
+export interface ExecuteSharedLibraryResult {
+  copied: string[];
+  rewired: string[];
+  packagePath: string;
+  validationPassed: boolean;
+  rolledBack: boolean;
+}
+
+async function rewireImports(root: string, packageName: string, componentName: string): Promise<string[]> {
+  const rewired: string[] = [];
+  const files = await glob(SOURCE_GLOB, { cwd: root, ignore: IGNORE, onlyFiles: true });
+  const importPattern = new RegExp(
+    `from ['"]([^'"]*/${componentName}|\\.\\.?/[^'"]*${componentName})['"]`,
+    "g",
+  );
+
+  for (const file of files) {
+    const full = join(root, file);
+    const content = await readFile(full, "utf-8");
+    if (!importPattern.test(content)) continue;
+    const updated = content.replace(
+      importPattern,
+      `from "${packageName}/components/${componentName}"`,
+    );
+    if (updated !== content) {
+      await writeFileEnsured(full, updated);
+      rewired.push(file);
+    }
+  }
+  return rewired;
+}
+
+export async function executeSharedLibraryExtraction(
+  options: ExecuteSharedLibraryOptions,
+): Promise<ExecuteSharedLibraryResult> {
+  const { root } = options;
+  const analysis = await analyzeSharedLibrary(root);
+  const plan = planSharedLibraryExecution(analysis);
+  const copied: string[] = [];
+  const rewired: string[] = [];
+  const backup: { dest: string; hadFile: boolean }[] = [];
+
+  try {
+    if (!(await fileExists(join(root, plan.packagePath, "package.json")))) {
+      await scaffoldSharedLibraryPackage(root);
+    }
+
+    for (const item of plan.items) {
+      if (item.action !== "move" || item.sourcePath === "(new)") continue;
+      const source = join(root, item.sourcePath);
+      const dest = join(root, item.targetPath);
+      if (!(await fileExists(source))) continue;
+
+      backup.push({ dest, hadFile: await fileExists(dest) });
+      await ensureDir(join(dest, ".."));
+      await copyFile(source, dest);
+      copied.push(relative(root, dest));
+
+      const component = basename(item.sourcePath, ".tsx").replace(/\.(ts|jsx|js)$/, "");
+      rewired.push(...(await rewireImports(root, plan.packageName, component)));
+    }
+
+    const indexPath = join(root, plan.packagePath, "src", "index.ts");
+    const exports = plan.items
+      .filter((i) => i.action === "move")
+      .map((i) => {
+        const name = basename(i.targetPath).replace(/\.(tsx|ts|jsx|js)$/, "");
+        return `export { default as ${name} } from "./components/${basename(i.targetPath)}";`;
+      })
+      .join("\n");
+    await writeFileEnsured(indexPath, `/** Shared UI library */\n${exports}\n`);
+
+    let validationPassed = true;
+    if (options.runTests !== false) {
+      const pkg = await readFile(join(root, "package.json"), "utf-8").catch(() => "");
+      if (pkg.includes('"test"')) {
+        const { exec } = await import("node:child_process");
+        const { promisify } = await import("node:util");
+        const execAsync = promisify(exec);
+        try {
+          await execAsync("npm test", { cwd: root, timeout: 120_000 });
+        } catch {
+          validationPassed = false;
+        }
+      }
+    }
+
+    if (!validationPassed) {
+      throw new Error("Validation failed — tests did not pass");
+    }
+
+    return {
+      copied,
+      rewired: [...new Set(rewired)],
+      packagePath: plan.packagePath,
+      validationPassed,
+      rolledBack: false,
+    };
+  } catch (err) {
+    for (const item of backup) {
+      if (!item.hadFile) {
+        await rm(item.dest, { force: true });
+      }
+    }
+    const message = err instanceof Error ? err.message : String(err);
+    throw new Error(`Shared library extraction rolled back: ${message}`);
+  }
 }

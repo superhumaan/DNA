@@ -20,6 +20,7 @@ export interface FetchIntelligenceCatalogOptions {
 function resolveIntelligenceCatalogPath(): string {
   const here = dirname(fileURLToPath(import.meta.url));
   const candidates = [
+    join(here, "..", "assets", "intelligence-catalog.json"),
     join(here, "..", "..", "assets", "intelligence-catalog.json"),
     join(here, "..", "..", "..", "assets", "intelligence-catalog.json"),
   ];

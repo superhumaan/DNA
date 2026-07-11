@@ -3,6 +3,7 @@ import { join } from "node:path";
 import type { DnaConfig, ScanResult } from "@superhumaan/dna-config";
 import { ensureDir, fileExists, writeFileEnsured } from "../fs.js";
 import { scanProject } from "../scanner.js";
+import { shouldScaffoldPreviewWorkflow } from "../stack/resolve.js";
 
 export interface InstallCiOptions {
   root: string;
@@ -469,11 +470,13 @@ export async function installCiPipeline(options: InstallCiOptions): Promise<Inst
   }
 
   const previewExists = await fileExists(previewPath);
-  if (config.ci?.pushToPreview !== false && (!skipIfExists || !previewExists)) {
+  if (shouldScaffoldPreviewWorkflow(scan, config.stack.hosting) && (!skipIfExists || !previewExists)) {
     await writeFileEnsured(previewPath, generatePreviewWorkflow(config, scan));
     created.push(
       previewExists ? ".github/workflows/dna-preview.yml (updated)" : ".github/workflows/dna-preview.yml",
     );
+  } else if (!shouldScaffoldPreviewWorkflow(scan, config.stack.hosting)) {
+    skipped.push("dna-preview.yml (hosting not Vercel/Netlify — skipped)");
   }
 
   const testFw = config.stack.testing ?? scan.testFramework ?? "vitest";

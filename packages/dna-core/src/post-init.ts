@@ -11,6 +11,8 @@ import { installDockerScaffold } from "./generators/docker.js";
 import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { wireRuntimeMiddleware } from "./generators/wire-runtime.js";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
+import { scanProject } from "./scanner.js";
+import { defaultPreviewProvider, supportsPreviewDeploy } from "./stack/hosting.js";
 
 export async function runPostInit(
   root: string,
@@ -66,14 +68,16 @@ export async function runPostInit(
     repair: { enabled: true, autoPr: true, requireReview: true },
   };
   config.github = { enabled: answers.configureGithub };
+  const scan = await scanProject(root);
+  const pushToPreview = supportsPreviewDeploy(scan.hosting ?? config.stack.hosting);
   config.ci = {
     enabled: answers.installCi,
     strict: false,
     coverageThreshold: 80,
     perFileCoverage: true,
     owasp: true,
-    pushToPreview: true,
-    previewProvider: "vercel",
+    pushToPreview,
+    previewProvider: defaultPreviewProvider(scan.hosting ?? config.stack.hosting),
   };
   config.updatedAt = new Date().toISOString();
   await writeJsonFile(join(root, ".DNA", "config.dna.json"), config);

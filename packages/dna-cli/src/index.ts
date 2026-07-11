@@ -78,15 +78,24 @@ import {
   wireRuntimeMiddleware,
   formatImpressionsDriftReport,
   generateImpressionsSyncPlan,
+  openImpressionsSyncDraftPr,
   exportCellularMemory,
   importCellularMemory,
+  syncFromTeamRegistry,
   formatMemoryExportSummary,
   formatMemoryImportSummary,
   analyzeSharedLibrary,
   planSharedLibraryExecution,
   formatSharedLibraryDryRun,
   scaffoldSharedLibraryPackage,
+  executeSharedLibraryExtraction,
   generateAuditLoggingScaffold,
+  generateSsoScaffold,
+  generateMultiTenantScaffold,
+  generateFeatureFlagsScaffold,
+  generateGradualRolloutScaffold,
+  isPlatformCodegenFeature,
+  PLATFORM_CODEGEN_FEATURES,
   startDashboard,
   formatDashboardStart,
   formatInitCompleteMessage,
@@ -237,10 +246,14 @@ program
     console.log(formatScanSummary(scan));
 
     if (options.openPr && scan.impressionsDrift && scan.impressionsDrift.level === "critical") {
-      const result = await generateImpressionsSyncPlan({ root, openPr: true });
+      const result = await openImpressionsSyncDraftPr({ root, draft: true });
       console.log("\n" + formatImpressionsDriftReport(scan.impressionsDrift));
       console.log(`\nSync plan written: ${result.planPath}`);
-      console.log("Open a PR manually with the plan, or use: dna document --from-code");
+      if (result.prUrl) {
+        console.log(`Draft PR: ${result.prUrl}`);
+      } else {
+        console.log("Configure GitHub (`dna github login`) to open draft PRs automatically.");
+      }
     }
   });
 
@@ -1075,7 +1088,7 @@ program
   .option("--quote <text>", "IVF integration quote")
   .action(async (options: { cwd?: string; checkOnly?: boolean; ivf?: boolean; quote?: string }) => {
     const result = await runDoctorOrchestrator({
-      root: getRoot(options),
+      root: resolveTargetDirectory(options.cwd),
       checkOnly: options.checkOnly,
       runIvf: options.ivf,
       quote: options.quote,
@@ -1098,7 +1111,7 @@ ivfCmd
   .option("--cwd <path>", "Project root directory")
   .action(async (options: { quote?: string; cwd?: string }) => {
     const result = await runDoctorOrchestrator({
-      root: getRoot(options),
+      root: resolveTargetDirectory(options.cwd),
       runIvf: true,
       quote: options.quote ?? "Integrate DNA without a rewrite",
       onStatus: (msg) => console.log(msg),
@@ -1111,15 +1124,21 @@ ivfCmd
   .description("Shared library extraction — analyze, dry-run, scaffold")
   .option("--dry-run", "List files that would be moved")
   .option("--scaffold", "Create shared package skeleton")
-  .option("--execute", "Execute extraction (not yet implemented)")
+  .option("--execute", "Execute extraction (copy components + rewire imports)")
   .option("--cwd <path>", "Project root directory")
   .action(async (options: { dryRun?: boolean; scaffold?: boolean; execute?: boolean; cwd?: string }) => {
     const root = getRoot(options);
 
     if (options.execute) {
-      console.error("Full --execute extraction is planned for IVF Phase 4b (#16).");
-      console.error("Use --dry-run and --scaffold for now.");
-      process.exit(1);
+      const result = await executeSharedLibraryExtraction({ root, runTests: true });
+      console.log("✓ Shared library extraction complete\n");
+      console.log(`  Package: ${result.packagePath}`);
+      console.log(`  Copied:  ${result.copied.length} file(s)`);
+      console.log(`  Rewired: ${result.rewired.length} import(s)`);
+      if (result.rewired.length) {
+        result.rewired.forEach((f) => console.log(`    ${f}`));
+      }
+      return;
     }
 
     if (options.scaffold) {
@@ -1487,16 +1506,36 @@ memory
   .argument("<file>", "Export JSON file")
   .option("--cwd <path>", "Project root directory")
   .option("--merge", "Merge with existing files (skip conflicts)")
+  .option("--on-conflict <strategy>", "Conflict strategy: newest|keep-local|keep-remote", "newest")
   .option("--segments <list>", "Only import listed segments")
-  .action(async (file: string, options: { cwd?: string; merge?: boolean; segments?: string }) => {
+  .action(async (file: string, options: { cwd?: string; merge?: boolean; segments?: string; onConflict?: string }) => {
     const root = getRoot(options);
     const inPath = file.startsWith("/") ? file : join(root, file);
+    const strategy = options.onConflict as "newest" | "keep-local" | "keep-remote";
     const result = await importCellularMemory({
       root,
       inPath,
       merge: options.merge,
       segments: options.segments?.split(",").map((s) => s.trim()).filter(Boolean),
+      onConflict: strategy,
     });
+    console.log(formatMemoryImportSummary(result));
+  });
+
+memory
+  .command("sync")
+  .description("Import from team registry path configured in config.dna.json")
+  .option("--cwd <path>", "Project root directory")
+  .option("--registry <path>", "Override team registry JSON path")
+  .action(async (options: { cwd?: string; registry?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const registry = options.registry ?? config?.memory?.teamRegistry;
+    if (!registry) {
+      console.error("No team registry configured. Set memory.teamRegistry in .DNA/config.dna.json");
+      process.exit(1);
+    }
+    const result = await syncFromTeamRegistry(root, registry);
     console.log(formatMemoryImportSummary(result));
   });
 
@@ -1521,13 +1560,24 @@ generate
   .option("--cwd <path>", "Project root directory")
   .action(async (featureId: string, options: { cwd?: string }) => {
     const root = getRoot(options);
-    if (featureId !== "audit-logging") {
-      console.error(`Codegen not yet available for: ${featureId}`);
-      console.error("Available: audit-logging");
+    if (!isPlatformCodegenFeature(featureId)) {
+      console.error(`Codegen not available for: ${featureId}`);
+      console.error(`Available: ${PLATFORM_CODEGEN_FEATURES.join(", ")}`);
       process.exit(1);
     }
-    const result = await generateAuditLoggingScaffold({ root, feature: featureId });
-    console.log("✓ Audit logging scaffold generated\n");
+
+    const result =
+      featureId === "audit-logging"
+        ? await generateAuditLoggingScaffold({ root, feature: featureId })
+        : featureId === "sso"
+          ? await generateSsoScaffold({ root, feature: featureId })
+          : featureId === "multi-tenant"
+            ? await generateMultiTenantScaffold({ root, feature: featureId })
+            : featureId === "feature-flags"
+              ? await generateFeatureFlagsScaffold({ root, feature: featureId })
+              : await generateGradualRolloutScaffold({ root, feature: featureId });
+
+    console.log(`✓ ${featureId} scaffold generated\n`);
     console.log(`  Plan: ${result.planPath}`);
     if (result.created.length) {
       console.log("  Created:");

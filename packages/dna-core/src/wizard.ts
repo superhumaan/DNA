@@ -13,6 +13,7 @@ import { loadDnaConfig } from "./validator.js";
 import { createLogger } from "./logger.js";
 import { detectProjectContext, type ProjectContextResult } from "./onboarding.js";
 import { runFullInitAnalysis, type FullInitAnalysisResult } from "./ivf/init-analysis.js";
+import { defaultPreviewProvider, supportsPreviewDeploy } from "./stack/hosting.js";
 
 const log = createLogger("wizard");
 
@@ -75,6 +76,8 @@ export async function runWizard(options: WizardOptions): Promise<WizardResult> {
     "my-project";
 
   const now = new Date().toISOString();
+  const previewHosting = scan.hosting;
+  const pushToPreview = supportsPreviewDeploy(previewHosting);
   const config: DnaConfig = {
     version: "0.1.0",
     projectId: pkgName.replace(/[^a-z0-9-]/gi, "-").toLowerCase(),
@@ -114,8 +117,8 @@ export async function runWizard(options: WizardOptions): Promise<WizardResult> {
       coverageThreshold: 80,
       perFileCoverage: true,
       owasp: true,
-      pushToPreview: true,
-      previewProvider: "vercel",
+      pushToPreview,
+      previewProvider: defaultPreviewProvider(previewHosting),
     },
   };
 

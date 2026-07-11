@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@superhumaan/dna-by-humaan':
+        specifier: workspace:*
+        version: link:packages/dna-cli
     devDependencies:
       '@types/node':
         specifier: ^22.10.0

@@ -27,8 +27,24 @@ const CREDENTIALS_FILE = join(CREDENTIALS_DIR, "github-credentials.json");
 
 import { DNA_OAUTH_CLIENT_ID, isPlaceholderClientId } from "./oauth-config.js";
 
-function resolveClientId(): string {
-  return process.env.DNA_GITHUB_CLIENT_ID ?? DNA_OAUTH_CLIENT_ID;
+async function readConfigOAuthClientId(): Promise<string | undefined> {
+  try {
+    const { readFile } = await import("node:fs/promises");
+    const { join } = await import("node:path");
+    const raw = await readFile(join(process.cwd(), ".DNA", "config.dna.json"), "utf-8");
+    const config = JSON.parse(raw) as { github?: { oauthClientId?: string } };
+    return config.github?.oauthClientId;
+  } catch {
+    return undefined;
+  }
+}
+
+async function resolveClientId(): Promise<string> {
+  return (
+    process.env.DNA_GITHUB_CLIENT_ID ??
+    (await readConfigOAuthClientId()) ??
+    DNA_OAUTH_CLIENT_ID
+  );
 }
 
 export function getTokenFromEnv(): string | undefined {
@@ -245,7 +261,7 @@ export async function loginWithWebFlow(options?: {
     }
   }
 
-  const clientId = resolveClientId();
+  const clientId = await resolveClientId();
   if (isPlaceholderClientId(clientId) && !process.env.DNA_GITHUB_CLIENT_ID) {
     throw new Error(
       "GitHub login requires GitHub CLI (`brew install gh`) or DNA_GITHUB_CLIENT_ID for device flow.\n" +

@@ -4,6 +4,23 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.4.6] - 2026-07-11
+
+### Fixed
+
+- **`dna doctor` / workbench install on npm** — bundled CLI resolves `assets/intelligence-catalog.json` from `dist/../assets` (published package layout). v0.4.5 failed with “Missing assets/intelligence-catalog.json” on `npx @superhumaan/dna-by-humaan doctor`.
+- **`dna doctor` bootstrap** — doctor and `dna ivf run` no longer require a pre-existing `.DNA/` directory; they scaffold on first run like `dna init`.
+- **Stack auto-detect** — `database` and `hosting` are no longer guessed as `postgresql` / `vercel` when scan finds no signals; `dna-preview.yml` is only scaffolded for Vercel/Netlify hosting.
+
+### Added
+
+- **Platform codegen** — `dna generate feature` supports `sso`, `multi-tenant`, `feature-flags`, and `gradual-rollout` scaffolds.
+- **IVF shared library `--execute`** — copies duplicate components, rewires imports, validates tests, rolls back on failure.
+- **Impressions drift automation** — configurable thresholds in `config.dna.json`; `dna scan --open-pr` opens a draft GitHub PR with sync plan.
+- **CellularMemory team sync** — `dna memory import --on-conflict`, `dna memory sync` from team registry path.
+- **Dashboard live feed** — 5s auto-refresh via `/api/data` and quality trend chart.
+- **GitHub OAuth** — device flow reads `github.oauthClientId` from project config; maintainer script `scripts/setup-github-oauth-app.sh` patches the shipped client ID.
+
 ## [0.4.5] - 2026-07-11
 
 ### Changed

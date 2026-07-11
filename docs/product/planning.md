@@ -6,7 +6,7 @@ DNA development priorities and public roadmap.
 
 ## Current release focus (v0.4.x)
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` bundle (v0.4.5+)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` bundle (v0.4.6+)
 - **Zero npm dependencies** — published package has no production `dependencies`; internal git, glob, GitHub API, CLI parser, and config validators
 - **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
 - **43 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow
@@ -41,13 +41,14 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Prompt stem packs + intelligence library (v0.4.0) | ✅ Shipped |
 | Supply-chain hardening + Socket transparency (v0.4.4) | ✅ Shipped |
 | Zero npm dependencies — internal replacements for CLI/git/GitHub/glob (v0.4.5) | ✅ Shipped |
+| npm `dna doctor` workbench asset path fix (v0.4.6) | ✅ Shipped |
 | First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress — setup script shipped |
-| Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | 🚧 In progress — `dna dashboard` MVP |
-| Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | 🚧 In progress — export/import CLI |
-| Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | 🚧 In progress — drift score + sync plan |
-| Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | 🚧 In progress — knowledge pack |
-| IVF Phase 4b — shared library extraction ([#16](https://github.com/superhumaan/DNA/issues/16)) | 🚧 In progress — dry-run + scaffold |
-| Platform feature codegen ([#17](https://github.com/superhumaan/DNA/issues/17)) | 🚧 In progress — audit-logging scaffold |
+| Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | 🚧 In progress — live feed + trend chart |
+| Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | ✅ Shipped — import merge + team registry sync |
+| Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | ✅ Shipped — `dna scan --open-pr` |
+| Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | ✅ Shipped — platform codegen scaffolds |
+| IVF Phase 4b — shared library extraction ([#16](https://github.com/superhumaan/DNA/issues/16)) | ✅ Shipped — `--execute` with rollback |
+| Platform feature codegen ([#17](https://github.com/superhumaan/DNA/issues/17)) | ✅ Shipped — SSO, flags, multi-tenant, rollout |
 | Hosted DNA Cloud (optional) | Exploring |
 
 Track on the [DNA Roadmap project board](https://github.com/users/superhumaan/projects/3/views/1). Defect and gap fixes are tracked on [DNA - Defects](https://github.com/users/superhumaan/projects/4/views/1).

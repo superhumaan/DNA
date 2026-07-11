@@ -30,6 +30,9 @@ function mockScan(deps: string[], overrides: Partial<ScanResult> = {}): ScanResu
     dependencies: deps,
     scripts: { test: "vitest", build: "vite build", lint: "eslint ." },
     hasDna: false,
+    fileCount: 0,
+    hasPackageJson: true,
+    hasSourceCode: false,
     ...overrides,
   };
 }
@@ -46,6 +49,19 @@ describe("stack archetypes", () => {
     const stack = stackFromArchetype(resolution, scan, "B2B dashboard");
     expect(stack.bundler).toBe("vite");
     expect(stack.archetype).toBe("react-vite-api");
+  });
+
+  it("does not guess postgresql or vercel without detected DB/hosting", () => {
+    const scanResult = mockScan(["react", "vite", "express"], {
+      frontend: "react",
+      backend: "express",
+      testFramework: "vitest",
+      docker: true,
+    });
+    const resolution = resolveArchetype(scanResult, "B2B SaaS platform");
+    const stack = stackFromArchetype(resolution, scanResult, "B2B SaaS platform");
+    expect(stack.database).toBeUndefined();
+    expect(stack.hosting).toBeUndefined();
   });
 
   it("resolves next-fullstack when next is present", () => {
