@@ -10,6 +10,10 @@ All notable changes to DNA are documented here.
 - **Stem pack refresh** — existing stems updated for v0.4.6–0.4.8 features: `scan --open-pr`, drift thresholds, `ivf shared-library --execute`, `memory sync` / `--on-conflict`, live dashboard feed, hosting-aware preview CI.
 - **Install activation** — `dna init`, `dna doctor`, and `dna update` now install **workbench + stems + `/dna-*` CLI slash commands** (not stems-only). Intelligence catalog scenarios bumped to 10.
 
+### Fixed
+
+- **Workflow cleanup** — `cleanup-failed-runs.yml` now watches `CI`, path-style workflow names, and all DNA workflows so failed runs delete immediately instead of waiting for the six-hourly sweep. Fixed invalid `dna-ci.yml` (`hashFiles` at job level) and `dna-preview.yml` (`secrets` in job `if`) that prevented workflows from registering as `DNA CI` / `DNA Preview`.
+
 ## [0.4.8] - 2026-07-11
 
 ### Added

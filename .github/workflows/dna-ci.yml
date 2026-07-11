@@ -82,10 +82,10 @@ jobs:
   docker:
     name: Docker build gate
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('Dockerfile') != '' }}
     steps:
       - uses: actions/checkout@v4
       - name: Build container image
+        if: ${{ hashFiles('Dockerfile') != '' }}
         run: docker build -t dna-app:ci .
         continue-on-error: true
 

@@ -6,9 +6,13 @@ name: Cleanup failed runs
 on:
   workflow_run:
     workflows:
+      - CI
       - DNA CI
       - DNA Preview
       - DNA Security
+      - Publish npm
+      - .github/workflows/dna-ci.yml
+      - .github/workflows/dna-preview.yml
     types: [completed]
   workflow_dispatch:
   schedule:

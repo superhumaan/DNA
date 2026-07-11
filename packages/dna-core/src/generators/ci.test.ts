@@ -93,6 +93,9 @@ describe("CI generator", () => {
     const yaml = generateCleanupFailedRunsWorkflow();
     expect(yaml).toContain("name: Cleanup failed runs");
     expect(yaml).toContain("workflow_run:");
+    expect(yaml).toContain("types: [completed]");
+    expect(yaml).toContain("- DNA CI");
+    expect(yaml).toContain("- CI");
     expect(yaml).toContain("deleteWorkflowRun");
     expect(yaml).toContain("actions: write");
   });
@@ -151,7 +154,7 @@ describe("CI generator", () => {
     expect(yaml).toContain('branches: ["main"]');
     expect(yaml).toContain("netlify-cli deploy");
     expect(yaml).toContain("NETLIFY_AUTH_TOKEN");
-    expect(yaml).not.toContain("cleanup-on-failure");
+    expect(yaml).toContain("vars.NETLIFY_PREVIEW_ENABLED");
   });
 
   it("generates vitest coverage config with thresholds", () => {

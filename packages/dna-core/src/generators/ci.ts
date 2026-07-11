@@ -73,9 +73,13 @@ name: Cleanup failed runs
 on:
   workflow_run:
     workflows:
+      - CI
       - DNA CI
       - DNA Preview
       - DNA Security
+      - Publish npm
+      - .github/workflows/dna-ci.yml
+      - .github/workflows/dna-preview.yml
     types: [completed]
   workflow_dispatch:
   schedule:
@@ -231,10 +235,10 @@ ${qualitySteps.length > 0 ? qualitySteps.join("\n\n") : `      - name: No test s
   docker:
     name: Docker build gate
     runs-on: ubuntu-latest
-    if: \${{ hashFiles('Dockerfile') != '' }}
     steps:
       - uses: actions/checkout@v4
       - name: Build container image
+        if: \${{ hashFiles('Dockerfile') != '' }}
         run: docker build -t dna-app:ci .
         continue-on-error: ${continueOnError}
 
@@ -284,8 +288,8 @@ export function generatePreviewWorkflow(config: DnaConfig, scan: ScanResult): st
 
   const deployIf =
     provider === "netlify"
-      ? "secrets.NETLIFY_AUTH_TOKEN != '' && secrets.NETLIFY_SITE_ID != ''"
-      : "secrets.VERCEL_TOKEN != ''";
+      ? "vars.NETLIFY_PREVIEW_ENABLED == 'true'"
+      : "vars.VERCEL_PREVIEW_ENABLED == 'true'";
 
   return `# DNA Preview — deploy preview after quality gates pass
 # Provider: ${provider}${previewBranch ? ` | branch: ${previewBranch}` : " | all branches"}

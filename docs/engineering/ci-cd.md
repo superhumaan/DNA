@@ -17,7 +17,7 @@ pnpm typecheck
 
 Workflow: `.github/workflows/` in this repository.
 
-Failed workflow runs are cleaned up by `.github/workflows/cleanup-failed-runs.yml`, which listens for completed `workflow_run` events and deletes failures after they finish (inline delete jobs cannot remove the current run while it is still in progress). A six-hourly schedule and manual `workflow_dispatch` sweep any backlog. DNA `ci install` scaffolds the same cleanup workflow for consumer projects.
+Failed workflow runs are cleaned up by `.github/workflows/cleanup-failed-runs.yml`, which listens for completed `workflow_run` events from CI, DNA CI/Preview/Security, Publish npm, and path-style workflow names (used when a workflow file fails validation) and deletes failures immediately after they finish. A six-hourly schedule and manual `workflow_dispatch` sweep any backlog. DNA `ci install` scaffolds the same cleanup workflow for consumer projects.
 
 ---
 

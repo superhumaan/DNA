@@ -30,7 +30,7 @@ jobs:
   deploy-preview:
     name: Deploy preview
     needs: gate-before-preview
-    if: ${{ secrets.VERCEL_TOKEN != '' }}
+    if: ${{ vars.VERCEL_PREVIEW_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
