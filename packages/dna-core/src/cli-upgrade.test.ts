@@ -1,10 +1,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { join } from "node:path";
+import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { randomUUID } from "node:crypto";
 import {
   compareSemver,
   fetchLatestCliVersion,
   isMonorepoDevInstall,
   checkAndUpgradeCli,
+  syncAutoUpdateForCliVersion,
 } from "./cli-upgrade.js";
+import { runWizard } from "./wizard.js";
 
 describe("cli-upgrade", () => {
   describe("compareSemver", () => {
@@ -56,6 +62,46 @@ describe("cli-upgrade", () => {
       });
       expect(result.skipped).toBe(true);
       expect(result.skipReason).toBe("monorepo development build");
+    });
+  });
+
+  describe("syncAutoUpdateForCliVersion", () => {
+    it("enables autoUpdate when a newer CLI version is detected", async () => {
+      const root = join(tmpdir(), `dna-cli-sync-${randomUUID()}`);
+      await mkdir(root, { recursive: true });
+      await writeFile(join(root, "package.json"), JSON.stringify({ name: "sync-test" }));
+
+      await runWizard({
+        root,
+        answers: {
+          projectDescription: "test",
+          acceptRecommendation: true,
+          aiTools: [],
+          compliance: "none",
+          stage: "new",
+          installRuntime: false,
+          configureGithub: false,
+          configureAi: false,
+        },
+      });
+
+      const configPath = join(root, ".DNA", "config.dna.json");
+      const before = JSON.parse(await readFile(configPath, "utf-8")) as { autoUpdate: boolean };
+      before.autoUpdate = false;
+      await writeFile(configPath, `${JSON.stringify(before, null, 2)}\n`, "utf-8");
+
+      await writeFile(
+        join(root, ".DNA", "data", "cli-upgrade.json"),
+        JSON.stringify({ lastCheckedAt: new Date().toISOString(), currentVersion: "0.4.4" }),
+      );
+
+      const enabled = await syncAutoUpdateForCliVersion(root, "0.4.6");
+      expect(enabled).toBe(true);
+
+      const after = JSON.parse(await readFile(configPath, "utf-8")) as { autoUpdate: boolean };
+      expect(after.autoUpdate).toBe(true);
+
+      await rm(root, { recursive: true, force: true });
     });
   });
 });

@@ -85,6 +85,55 @@ async function writeUpgradeState(root: string, state: CliUpgradeState): Promise<
   await writeJsonFile(join(root, DNA_DATA_DIR, CLI_UPGRADE_STATE_FILE), state);
 }
 
+/**
+ * When the running CLI is newer than the last recorded install, turn auto-update back on.
+ * Covers manual `npm install @superhumaan/dna-by-humaan@latest` as well as DNA-driven upgrades.
+ */
+export async function syncAutoUpdateForCliVersion(
+  root: string,
+  installedCliVersion: string,
+): Promise<boolean> {
+  const config = await loadDnaConfig(root);
+  if (!config) return false;
+
+  const state = await readUpgradeState(root);
+  const recordedVersion = state?.currentVersion ?? "0.0.0";
+  if (compareSemver(installedCliVersion, recordedVersion) <= 0) {
+    return false;
+  }
+
+  config.autoUpdate = true;
+  config.updatedAt = new Date().toISOString();
+  await writeJsonFile(join(root, DNA_CONFIG_FILE), config);
+  await writeUpgradeState(root, {
+    lastCheckedAt: state?.lastCheckedAt ?? new Date().toISOString(),
+    lastUpgradeAt: new Date().toISOString(),
+    currentVersion: installedCliVersion,
+    latestVersion: state?.latestVersion,
+  });
+  return true;
+}
+
+async function persistAutoUpdateAfterInstall(
+  root: string,
+  installedVersion: string,
+  config: DnaConfig | null,
+): Promise<void> {
+  if (config) {
+    config.autoUpdate = true;
+    config.updatedAt = new Date().toISOString();
+    await writeJsonFile(join(root, DNA_CONFIG_FILE), config);
+  }
+
+  const state = await readUpgradeState(root);
+  await writeUpgradeState(root, {
+    lastCheckedAt: state?.lastCheckedAt ?? new Date().toISOString(),
+    lastUpgradeAt: new Date().toISOString(),
+    currentVersion: installedVersion,
+    latestVersion: installedVersion,
+  });
+}
+
 export async function fetchLatestCliVersion(
   channel: DnaConfig["channel"] = "stable",
 ): Promise<string | null> {
@@ -221,6 +270,8 @@ export async function checkAndUpgradeCli(
     return { ...base, skipped: true, skipReason: "monorepo development build" };
   }
 
+  await syncAutoUpdateForCliVersion(root, currentVersion);
+
   const config = await loadDnaConfig(root);
   if (config && config.autoUpdate === false && !force) {
     return { ...base, skipped: true, skipReason: "autoUpdate disabled in config.dna.json" };
@@ -282,18 +333,7 @@ export async function checkAndUpgradeCli(
 
   try {
     await installCliPackage(root, latestVersion, installMode);
-    await writeUpgradeState(root, {
-      lastCheckedAt: new Date().toISOString(),
-      lastUpgradeAt: new Date().toISOString(),
-      currentVersion: latestVersion,
-      latestVersion,
-    });
-
-    if (config) {
-      config.version = latestVersion;
-      config.updatedAt = new Date().toISOString();
-      await writeJsonFile(join(root, DNA_CONFIG_FILE), config);
-    }
+    await persistAutoUpdateAfterInstall(root, latestVersion, config);
 
     return {
       currentVersion,
@@ -321,7 +361,11 @@ export async function checkAndUpgradeCli(
 export async function maybeAutoUpgradeCli(options: CliUpgradeOptions): Promise<CliUpgradeCheckResult | null> {
   const config = await loadDnaConfig(options.root);
   if (!config) return null;
-  if (config.autoUpdate === false && !options.force) return null;
+
+  await syncAutoUpdateForCliVersion(options.root, options.currentVersion);
+
+  const refreshed = await loadDnaConfig(options.root);
+  if (refreshed?.autoUpdate === false && !options.force) return null;
 
   return checkAndUpgradeCli({
     ...options,
@@ -347,6 +391,7 @@ export function formatCliUpgradeResult(result: CliUpgradeCheckResult): string {
 
   if (result.installed) {
     lines.push(`✓ Installed ${result.latestVersion} (${result.installMode ?? "project"})`);
+    lines.push("✓ autoUpdate enabled in .DNA/config.dna.json");
     lines.push("");
     lines.push(result.message ?? "Re-run your command to use the new version.");
     return lines.join("\n");

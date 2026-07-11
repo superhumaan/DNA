@@ -106,6 +106,7 @@ import {
   checkAndUpgradeCli,
   formatCliUpgradeResult,
   maybeAutoUpgradeCli,
+  syncAutoUpdateForCliVersion,
 } from "@superhumaan/dna-core";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
@@ -1732,6 +1733,7 @@ async function runStartupCliUpgrade(): Promise<void> {
 
   try {
     const root = resolveProjectRoot(process.cwd());
+    await syncAutoUpdateForCliVersion(root, CLI_VERSION);
     const result = await maybeAutoUpgradeCli({
       root,
       currentVersion: CLI_VERSION,
