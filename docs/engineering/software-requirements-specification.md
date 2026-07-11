@@ -10,7 +10,7 @@ DNA provides TypeScript teams with:
 
 - Structured project intelligence for AI tools
 - Runtime error observation and classification
-- Knowledge marketplace (768 packs)
+- Knowledge marketplace (897 packs)
 - Tiered compliance coordination
 - GitHub automation and AI-assisted repair
 

@@ -1,7 +1,7 @@
 {
   "name": "@superhumaan/dna-by-humaan",
   "version": "0.4.9",
-  "description": "DNA by Humaan — open-source project brain, 768-pack knowledge marketplace, tiered compliance (GDPR/HIPAA/ISO/SOC2), runtime observer, and AI-assisted repair for TypeScript teams",
+  "description": "DNA by Humaan — one doctor install: 59 stem packs, rules, detection, portfolio memory, 897-pack marketplace, runtime observer, feature factory, and AI repair for TypeScript squads",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/superhumaan/DNA.git",
@@ -106,7 +106,9 @@
     "nestjs",
     "github-automation",
     "ai-repair",
-    "devtools"
+    "portfolio-install",
+    "feature-factory",
+    "prompt-stems"
   ],
   "publishConfig": {
     "access": "public"

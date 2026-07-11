@@ -61,6 +61,7 @@ apps/
   marketplace/    Standalone marketplace API (local dev)
 
 # Web UI: github.com/superhumaan/DNA-Web (deployed to dna.humaan.app)
+# Landing highlights portfolio install — sync copy from docs/product/portfolio-install.md
 ```
 
 ---

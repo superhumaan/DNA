@@ -2,7 +2,7 @@
   "name": "dna-by-humaan",
   "version": "0.1.0",
   "private": true,
-  "description": "DNA by Humaan — open-source project brain, 768-pack knowledge marketplace, tiered compliance (GDPR/HIPAA/ISO/SOC2), runtime observer, and AI-assisted repair for TypeScript teams",
+  "description": "DNA by Humaan — one doctor install: 59 stem packs, rules, detection, portfolio memory, 897-pack marketplace, runtime observer, feature factory, and AI repair for TypeScript squads",
   "author": "Humaan by Superlite",
   "license": "MIT",
   "homepage": "https://dna.humaan.app",
@@ -32,8 +32,8 @@
     "healthcare",
     "fhir",
     "github-automation",
-    "cli",
-    "devtools"
+    "portfolio-install",
+    "feature-factory"
   ],
   "scripts": {
     "dev": "NODE_OPTIONS='--import @superhumaan/dna-by-humaan/runtime/preload' pnpm -r --parallel run dev",

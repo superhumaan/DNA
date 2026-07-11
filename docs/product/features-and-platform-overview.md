@@ -8,10 +8,14 @@ DNA ships as a single npm package with a broad feature surface. This page is the
 
 | Feature | Command / path | Purpose |
 |---------|----------------|---------|
+| Portfolio install | `dna doctor` at squad folder | One brain for every related product — [guide](./portfolio-install.md) |
 | Behaviour rules | `.DNA/behaviour/` | Govern how AI writes code, tests, docs, security |
 | neuralNetwork routing | `.DNA/neuralNetwork.json` | Intent → knowledge + Behaviour + memory |
-| AI tool files | `.cursorrules`, etc. | Generated on `dna init` |
+| **59 prompt stem packs** | `.DNA/stems/` | Guidelines, expectations, workflows + `/` slash commands |
+| **DNA Workbench** | `AGENTS.md`, `.cursor/`, `.claude/` | Always-on co-pilot — rules, skills, `/dna-*` commands |
+| AI tool files | `dna doctor` | Cursor, Claude, Copilot, Windsurf, Gemini |
 | Context export | `dna context <target>` | Feed Cursor, Claude, Copilot |
+| Auto detection | `dna doctor`, `dna scan`, `dna analyze` | Stack, monorepo, AI tools, GitHub, domain, drift |
 
 ---
 
@@ -19,7 +23,7 @@ DNA ships as a single npm package with a broad feature surface. This page is the
 
 | Feature | Command | Purpose |
 |---------|---------|---------|
-| 768 knowledge packs | `dna marketplace list` | Frameworks, compliance, cloud, healthcare |
+| 897 knowledge packs | `dna marketplace list` | Frameworks, compliance, cloud, healthcare |
 | Offline fallback | Bundled in npm package | Works without remote marketplace |
 | Stack stems | `stem` tagged packs | Delivery surfaces (MUI, mobile UI, quality) |
 | Language stems | `languages/*` | i18n AI coordination |
@@ -83,9 +87,11 @@ See [Runtime observer](../engineering/runtime-observer.md).
 
 | Feature | Purpose |
 |---------|---------|
-| `dna doctor` | Full project health check |
+| `dna doctor` | Full platform bootstrap — stems, rules, detection, runtime, CI, feature factory |
 | `dna validate` | Behaviour rule compliance |
 | Quality reports | SonarQube-style SAST per feature |
 | Docker + push gates | Feature factory close-out |
 
-See [Doctor and validation](../quality-assurance/doctor-and-validation.md).
+See [Doctor and validation](../quality-assurance/doctor-and-validation.md) and [Portfolio install](./portfolio-install.md).
+
+---

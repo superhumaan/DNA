@@ -22,7 +22,7 @@ See [LOCAL_WIKI.md](./LOCAL_WIKI.md) for wiki commands.
 | Section | Start here |
 |---------|------------|
 | **Business** | [Business strategy](./business/business-strategy.md) |
-| **Product** | [Product concept](./product/product-concept.md) |
+| **Product** | [Product concept](./product/product-concept.md) · [Portfolio install](./product/portfolio-install.md) · [Features overview](./product/features-and-platform-overview.md) |
 | **Design** | [Naming conventions](./design/naming-conventions.md) |
 | **Delivery** | [Current version scope](./delivery/current-version-scope.md) |
 | **Engineering** | [Quick start](./engineering/quick-start.md) · [CLI reference](./engineering/cli-reference.md) |

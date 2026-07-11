@@ -1,6 +1,6 @@
 # Knowledge Pack Marketplace
 
-Curated guidance packs install into `.DNA/knowledge/`. DNA ships **768 packs** in the stable channel — frameworks, compliance, cloud, healthcare, and production platform patterns.
+Curated guidance packs install into `.DNA/knowledge/`. DNA ships **897 packs** in the stable channel — frameworks, compliance, cloud, healthcare, and production platform patterns.
 
 | | |
 |---|---|
@@ -29,7 +29,7 @@ dna update
 
 ## Catalog size
 
-**768 packs** in the stable channel:
+**897 packs** in the stable channel:
 
 | Layer | Count | Tag / prefix |
 |-------|------:|--------------|
@@ -41,7 +41,7 @@ dna update
 | **Catalog wave 3** | **187** | enterprise, gaming/XR, compliance depth |
 | **Catalog wave 4** | **142** | regional cloud, ORMs, verticals, security depth |
 | **Catalog wave 5 (final)** | **27** | store distribution, FinOps, data mesh, final long-tail |
-| **Total** | **768** | |
+| **Total** | **897** | |
 
 ### Catalog expansion v1
 

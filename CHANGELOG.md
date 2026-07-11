@@ -4,6 +4,10 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **Portfolio install** — full manifest across docs, npm metadata, GitHub README, and [DNA-Web](https://github.com/superhumaan/DNA-Web) landing (hero, portfolio section, doctor-first quick start); 768→897 pack count sync in docs. See [docs/product/portfolio-install.md](./docs/product/portfolio-install.md).
+
 ## [0.4.9] - 2026-07-11
 
 ### Added

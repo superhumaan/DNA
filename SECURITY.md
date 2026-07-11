@@ -68,7 +68,7 @@ DNA spans local developer tooling, optional cloud-adjacent services, and generat
 | **Immune system** | `packages/dna-immune` | Classifies runtime issues; may trigger GitHub issues or AI repair |
 | **GitHub integration** | `packages/dna-github` | OAuth device flow, token storage, push automation, issue/PR workflows |
 | **AI repair** | `packages/dna-ai` | Orchestrates automated repair workflows using project context |
-| **Marketplace** | Bundled + [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) | 768+ knowledge packs installed into `.DNA/knowledge/` |
+| **Marketplace** | Bundled + [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) | 897+ knowledge packs installed into `.DNA/knowledge/` |
 | **Web UI** | [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web) | Landing page, marketplace UI, hosted catalog API |
 | **Generated artifacts** | Consumer repos | CI workflows, Dockerfiles, git hooks, behaviour rules, compliance templates |
 

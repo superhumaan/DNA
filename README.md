@@ -10,7 +10,11 @@
 
 > **Sentry tells you what broke. DNA tells you why, remembers it, and opens the PR.**
 
+> Run `npx @superhumaan/dna-by-humaan doctor` — *“No amount of money ever bought a second of time.”*
+
 **DNA by Humaan** is an open-source delivery platform for TypeScript teams — describe features in plain language, run quality gates, push to GitHub, and ship with a **897-pack** knowledge marketplace, tiered compliance, runtime observer, and AI-assisted repair.
+
+**One squad, many products?** Install DNA on the **parent folder** — not every repo. One brain remembers every app and how they connect. [Portfolio install →](./docs/product/portfolio-install.md)
 
 | | |
 |---|---|
@@ -42,17 +46,15 @@ DNA is not a documentation generator. It is:
 ## Quick start
 
 ```bash
-git clone https://github.com/superhumaan/DNA.git dna && cd dna
-chmod +x scripts/*.sh && ./scripts/team-setup.sh
-
-cd /path/to/your-project
+cd /path/to/your-project    # or portfolio parent for multi-app squads
 npx @superhumaan/dna-by-humaan doctor
 
-# In Cursor: copy a prompt from dna.humaan.app/intelligence
-# or type /analyze-project, /ship-feature, /agent-loop
+# In Cursor: type / for 59 stems and /dna-* commands — already installed
+# Portfolio squads: run doctor on the parent folder, not each repo
 ```
 
 **Team rollout guide:** [TEAM-TESTING.md](./TEAM-TESTING.md)  
+**Portfolio install:** [docs/product/portfolio-install.md](./docs/product/portfolio-install.md)  
 **Full documentation:** [docs/](./docs/README.md) · **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
 
 ---
@@ -61,11 +63,40 @@ npx @superhumaan/dna-by-humaan doctor
 
 | Method | Command |
 |--------|---------|
-| **npm** (recommended) | `npx @superhumaan/dna-by-humaan init -y` |
+| **npm** (recommended) | `npx @superhumaan/dna-by-humaan doctor` |
+| **Interactive wizard** | `npx @superhumaan/dna-by-humaan init -y` then `doctor` |
 | **Team setup** (monorepo dev) | `git clone https://github.com/superhumaan/DNA.git && ./scripts/team-setup.sh` |
 | **Manual** | `pnpm install && pnpm build && pnpm dna:link` |
 
 Requirements: **Node.js 20+**, **pnpm 9+**
+
+---
+
+## Portfolio install (one squad, many products)
+
+Most squads cannot afford Sentry on every service, premium AI memory on every seat, and GitHub Teams on top of rent. **Install DNA once** on the folder that holds all related products — enterprise health apps, monorepo `apps/*`, agency client suites — not inside each repo.
+
+```bash
+cd ~/work/your-squad-folder     # parent of every related product
+npx @superhumaan/dna-by-humaan doctor
+```
+
+**One command installs everything** — no bolt-ons, no “upgrade for memory”:
+
+| Layer | Included |
+|-------|----------|
+| **Intelligence** | `.DNA/` — config, neuralNetwork, 8 behaviour files, 7 CellularMemory regions, immune system |
+| **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills, always-on co-pilot (no “use DNA”) |
+| **Stems & commands** | **59** prompt stem packs (guidelines, expectations, workflows) + **`/dna-*`** slash commands |
+| **Feature factory** | 9-role agent loop, `ai/agent-loop.md`, product-process rules, quality gates |
+| **Detection** | Stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, Impressions drift, auth patterns |
+| **Runtime** | Observer auto-wired into Express/Fastify/Next.js → classified issues + repair plans |
+| **Delivery** | CI workflows, pre-push hook, Docker scaffold, GitHub browser login |
+| **Knowledge** | Foundation packs from scan + **897** marketplace packs (offline fallback) |
+
+One `.DNA/` at the parent remembers **every product and how they interconnect** — feature #5 uses the same template as feature #1; runtime errors explain *why* across the suite.
+
+[Full manifest — why no one regrets this install →](./docs/product/portfolio-install.md)
 
 ---
 
@@ -223,7 +254,7 @@ Full wiki: **[docs/README.md](./docs/README.md)** · Browse locally: `pnpm run w
 | Section | Start here |
 |---------|------------|
 | **Business** | [Business strategy](./docs/business/business-strategy.md) |
-| **Product** | [Product concept](./docs/product/product-concept.md) · [Marketplace](./docs/product/marketplace.md) |
+| **Product** | [Product concept](./docs/product/product-concept.md) · [Portfolio install](./docs/product/portfolio-install.md) · [Marketplace](./docs/product/marketplace.md) |
 | **Design** | [Naming conventions](./docs/design/naming-conventions.md) |
 | **Delivery** | [Brownfield / IVF](./docs/delivery/features/brownfield-ivf.md) |
 | **Engineering** | [Quick start](./docs/engineering/quick-start.md) · [CLI reference](./docs/engineering/cli-reference.md) |

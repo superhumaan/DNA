@@ -1,6 +1,8 @@
 # Daily workflow
 
-The standard DNA workflow after `dna init`.
+The standard DNA workflow after `dna doctor` (or `dna init` + `dna doctor`).
+
+**Portfolio squads:** run all commands from the parent folder — or from any child app; DNA resolves `.DNA/` from the portfolio root.
 
 ---
 

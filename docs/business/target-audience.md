@@ -8,6 +8,7 @@ DNA serves TypeScript teams building web APIs, full-stack apps, and regulated pr
 
 | Persona | What they need from DNA |
 |---------|-------------------------|
+| **Squad / platform lead** | [Portfolio install](../product/portfolio-install.md) — one brain for every related product |
 | **Individual contributor** | `dna context cursor` — AI that knows the project's rules and stack |
 | **Tech lead** | Brownfield IVF plans, architecture Impressions, Behaviour governance |
 | **Platform / DevOps** | Runtime observer, CI hooks, Docker build gates, GitHub automation |
@@ -33,7 +34,8 @@ See [Compliance tiers](../product/compliance-tiers.md).
 
 ## Ideal project profiles
 
-- **Greenfield** — `dna init` scaffolds `.DNA/` + `DNA/Impressions/`
+- **Portfolio / multi-product squad** — one `dna doctor` on the parent folder ([guide](../product/portfolio-install.md))
+- **Greenfield** — `dna doctor` scaffolds `.DNA/` + `DNA/Impressions/` + workbench
 - **Brownfield** — `dna analyze` + `dna plan ivf` for legacy modernisation
 - **API servers** — runtime observer for Express, Fastify, NestJS, Next.js
 - **Healthcare / fintech** — HIPAA, FHIR, PCI packs in marketplace
@@ -51,5 +53,6 @@ See [Compliance tiers](../product/compliance-tiers.md).
 
 ## Related
 
+- [Portfolio install](../product/portfolio-install.md)
 - [Business strategy](./business-strategy.md)
 - [Quick start](../engineering/quick-start.md)

@@ -2,14 +2,20 @@
 
 > **Git remembers your code. DNA remembers your system.**
 
+> Run `npx @superhumaan/dna-by-humaan doctor` — *“No amount of money ever bought a second of time.”*
+
+**One squad, many products?** Install on the **parent folder** — one brain for every related app. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
+
 [![npm](https://img.shields.io/npm/v/@superhumaan/dna-by-humaan)](https://www.npmjs.com/package/@superhumaan/dna-by-humaan)
 [![Socket](https://socket.dev/api/badge/npm/package/@superhumaan/dna-by-humaan)](https://socket.dev/npm/package/@superhumaan/dna-by-humaan)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/superhumaan/DNA/blob/main/LICENSE)
 
-**One npm package. Two superpowers.**
+**One npm package. One install. Everything included.**
 
-DNA by Humaan is an open-source **project brain**, **runtime observer**, **897-pack knowledge marketplace**, and **AI-assisted repair** system for modern TypeScript teams.
+DNA by Humaan is an open-source **project brain**, **runtime observer**, **59 prompt stem packs**, **897-pack knowledge marketplace**, and **AI-assisted repair** system for TypeScript squads.
+
+**Recommended:** `npx @superhumaan/dna-by-humaan doctor` — one command for stems, rules, detection, memory, runtime, CI, and feature factory. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
 
 Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 
@@ -51,6 +57,29 @@ Doctor is the recommended entry point — it scaffolds `.DNA/`, CI, runtime, Doc
 # Production runtime (same package)
 pnpm add @superhumaan/dna-by-humaan
 ```
+
+### Portfolio install (squads & multi-product folders)
+
+Install **once** on the parent folder — one command, **everything** included:
+
+```bash
+cd ~/work/your-squad-folder
+npx @superhumaan/dna-by-humaan doctor
+```
+
+| Included in one `doctor` | |
+|--------------------------|---|
+| `.DNA/` intelligence | behaviour, CellularMemory, immune system, neuralNetwork |
+| **59 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` |
+| **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills — always on |
+| **Detection** | stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift |
+| **Feature factory** | 9-role loop, quality gates, same template every feature |
+| **Runtime + CI** | auto-wired observer, GitHub Actions, pre-push hook, Docker |
+| **897 knowledge packs** | foundation from scan + marketplace |
+
+One brain for every related app — how they connect, what broke, what to fix. The install teams keep like `tsconfig.json`.
+
+[Full manifest →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
 
 ---
 

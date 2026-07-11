@@ -64,6 +64,30 @@ dna validate
 
 `dna doctor` replaces the older multi-step flow (`init`, `ci install`, `runtime install`, `github connect`). It auto-detects your GitHub remote, opens browser sign-in when needed, and **auto-wires the runtime observer** into Express/Fastify entry files or Next.js `middleware.ts`.
 
+### Portfolio install (one squad, many products)
+
+If your squad owns **multiple related apps** under one folder (enterprise health suite, monorepo, client portfolio), install DNA on the **parent** — not each repo:
+
+```bash
+cd ~/work/your-squad-folder
+npx @superhumaan/dna-by-humaan doctor
+```
+
+**One `doctor` installs the full platform** for every product underneath:
+
+- **59 stem packs** + **`/dna-*` slash commands** (guidelines, expectations, workflows)
+- **Cursor + Claude rules, skills, `AGENTS.md`** — DNA always on, no “use DNA”
+- **Detection** — stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift, auth
+- **CellularMemory + system maps** — cross-product memory in git
+- **Feature factory** — 9-role loop, same template for every feature
+- **Runtime observer** — auto-wired, classified issues, repair plans
+- **CI, hooks, Docker, GitHub login** — delivery pipeline ready
+- **897 knowledge packs** — foundation from scan + marketplace
+
+Commit `.DNA/`, `DNA/`, `AGENTS.md`, `ai/`, `.cursor/`, `.claude/` at the parent so the squad shares one install forever.
+
+[Full manifest →](./docs/product/portfolio-install.md)
+
 ### What to commit
 
 Commit these to your repo so the team shares the same brain:

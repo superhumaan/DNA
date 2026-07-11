@@ -21,7 +21,7 @@ pnpm test
 1. Branch from `main`
 2. Keep changes focused — one feature or fix per PR
 3. Run `pnpm build && pnpm test && pnpm typecheck` before opening
-4. Update docs if you change CLI behaviour or public APIs
+4. Update docs if you change CLI behaviour or public APIs — include [portfolio install](./docs/product/portfolio-install.md) when doctor scaffolding changes
 5. Follow existing code style (TypeScript, ESM, minimal scope)
 
 ## Reporting issues
