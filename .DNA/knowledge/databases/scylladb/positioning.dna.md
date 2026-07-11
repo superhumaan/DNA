@@ -1,0 +1,3 @@
+# ScyllaDB
+
+High throughput NoSQL.

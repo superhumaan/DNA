@@ -1,0 +1,3 @@
+# SonarQube
+
+CI quality gates.

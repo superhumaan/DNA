@@ -1,0 +1,3 @@
+# Renovate
+
+Monorepo dependency freshness.

@@ -1,0 +1,3 @@
+# Puppet
+
+Large fleet consistency.

@@ -1,0 +1,3 @@
+# Affirm
+
+US installment checkout.

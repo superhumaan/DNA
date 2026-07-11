@@ -1,0 +1,19 @@
+# MEDITECH — Architecture
+
+## When to use
+# MEDITECH
+
+Common in community hospitals. Integration mix of FHIR and legacy interfaces.
+
+## Approach
+- Confirm Expanse FHIR availability per customer
+- Often partner with integration engine for v2
+
+## System boundaries
+- Document integration points in Impressions: `architecture/system-boundaries.md`
+- List data categories processed (PII, payments, PHI) and subprocessors
+- Define failure modes: vendor outage, rate limits, webhook delays
+
+## DNA alignment
+- Pair with `disciplines/security` and `compliance/tiered-standards`
+- Run `dna plan compliance` when regulated data is involved

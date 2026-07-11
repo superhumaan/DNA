@@ -1,0 +1,3 @@
+# LGPD
+
+Brazilian users.

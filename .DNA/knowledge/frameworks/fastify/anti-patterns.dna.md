@@ -1,5 +1,3 @@
-# fastify — Anti-patterns
+# Fastify — Anti-patterns
 
-- Do not bypass framework conventions
-- Do not mix incompatible state management patterns
-- Do not ignore framework security recommendations
+Do not bypass schema validation on public routes.

@@ -2,8 +2,8 @@
   "version": 1,
   "catalogVersion": 5,
   "source": "bundled",
-  "syncedAt": "2026-07-11T11:30:14.771Z",
-  "count": 59,
+  "syncedAt": "2026-07-11T13:23:46.598Z",
+  "count": 65,
   "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
   "packs": [
     {
@@ -935,6 +935,102 @@
         "expectations.md",
         "context.md",
         "examples.md"
+      ]
+    },
+    {
+      "id": "discovery-setup",
+      "name": "Discovery setup",
+      "category": "discovery",
+      "slash": "discovery-setup",
+      "path": ".DNA/stems/discovery-setup",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "plan-research",
+      "name": "Plan research",
+      "category": "discovery",
+      "slash": "plan-research",
+      "path": ".DNA/stems/plan-research",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "synthesize-research",
+      "name": "Synthesize research",
+      "category": "discovery",
+      "slash": "synthesize-research",
+      "path": ".DNA/stems/synthesize-research",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "prioritize-opportunities",
+      "name": "Prioritize opportunities",
+      "category": "discovery",
+      "slash": "prioritize-opportunities",
+      "path": ".DNA/stems/prioritize-opportunities",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "pmf-check",
+      "name": "PMF check",
+      "category": "discovery",
+      "slash": "pmf-check",
+      "path": ".DNA/stems/pmf-check",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "handoff-to-engineering",
+      "name": "Handoff to engineering",
+      "category": "discovery",
+      "slash": "handoff-to-engineering",
+      "path": ".DNA/stems/handoff-to-engineering",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
       ]
     }
   ]

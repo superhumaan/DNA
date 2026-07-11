@@ -1,3 +1,3 @@
-# fastify — Positioning
+# Fastify — Positioning
 
-Framework knowledge pack for fastify. Use official patterns and avoid anti-patterns.
+Schema-first APIs, plugins, and performance-focused handlers.

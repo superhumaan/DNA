@@ -1,0 +1,3 @@
+# RedwoodJS
+
+Opinionated startup stack.

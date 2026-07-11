@@ -1,0 +1,3 @@
+# TaxJar — Integration
+
+SmartCalcs API.

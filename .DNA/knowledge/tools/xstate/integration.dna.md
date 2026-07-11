@@ -1,0 +1,3 @@
+# XState — Integration
+
+Visualizer. Typegen.

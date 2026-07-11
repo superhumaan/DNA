@@ -123,7 +123,7 @@ See `.cursor/rules/product-process.mdc`, `AGENTS.md`, and `.cursor/skills/dna-wo
 
 ## Slash commands & stem packs
 
-Type `/` in chat for **59** prompt stems (e.g. `work-with-dna`, `analyze-project`, `what-next`, `ship-feature`).
+Type `/` in chat for **65** prompt stems (e.g. `work-with-dna`, `analyze-project`, `what-next`, `ship-feature`).
 
 Each stem has full guidelines in `.DNA/stems/<id>/` — read **all files** before executing.
 

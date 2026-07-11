@@ -1,0 +1,3 @@
+# Perplexity API
+
+Research assistants.

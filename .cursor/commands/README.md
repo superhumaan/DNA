@@ -1,6 +1,6 @@
 # DNA intelligence — Cursor commands
 
-**dna-by-humaan** — 59 prompt stem packs (bundled catalog v5) + 47 `/dna-*` CLI commands.
+**dna-by-humaan** — 65 prompt stem packs (bundled catalog v5) + 47 `/dna-*` CLI commands.
 
 ## Prompt stems (`.DNA/stems/<id>/`)
 
@@ -67,6 +67,12 @@ Each stem: **prompt + guidelines + expectations + context + examples**.
 | `/write-spec` | Write spec |
 | `/break-down-work` | Break down work |
 | `/align-delivery` | Align delivery |
+| `/discovery-setup` | Discovery setup |
+| `/plan-research` | Plan research |
+| `/synthesize-research` | Synthesize research |
+| `/prioritize-opportunities` | Prioritize opportunities |
+| `/pmf-check` | PMF check |
+| `/handoff-to-engineering` | Handoff to engineering |
 
 Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 

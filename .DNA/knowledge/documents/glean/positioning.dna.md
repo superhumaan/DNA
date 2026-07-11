@@ -1,0 +1,3 @@
+# Glean
+
+Internal knowledge discovery.

@@ -115,7 +115,7 @@ Each command maps to `.DNA/stems/<id>/` — read **prompt.md, guidelines.md, exp
 | `/debug-issue` | debug-issue | Debug + fix loop |
 | `/ivf-shared-library` | ivf-shared-library | Extract shared UI library |
 
-Full library (59 stems): https://dna.humaan.app/intelligence#stem-library
+Full library (65 stems): https://dna.humaan.app/intelligence#stem-library
 
 Commands live in `.cursor/commands/`. Stem data: `.DNA/stems/`.
 

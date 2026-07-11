@@ -1,0 +1,3 @@
+# Memcached
+
+Pure cache layer.

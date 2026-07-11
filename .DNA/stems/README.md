@@ -1,6 +1,6 @@
 # DNA Prompt Stem Packs
 
-**dna-by-humaan** — 59 prompt stem packs (bundled catalog v5).
+**dna-by-humaan** — 65 prompt stem packs (bundled catalog v5).
 
 Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, context, and examples**.
 
@@ -96,3 +96,11 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `write-spec` — Write spec
 - `break-down-work` — Break down work
 - `align-delivery` — Align delivery
+
+### discovery
+- `discovery-setup` — Discovery setup
+- `plan-research` — Plan research
+- `synthesize-research` — Synthesize research
+- `prioritize-opportunities` — Prioritize opportunities
+- `pmf-check` — PMF check
+- `handoff-to-engineering` — Handoff to engineering

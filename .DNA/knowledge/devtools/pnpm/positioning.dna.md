@@ -1,0 +1,3 @@
+# pnpm
+
+DNA monorepo default.

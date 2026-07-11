@@ -1,0 +1,3 @@
+# Sidekiq
+
+Rails async processing.

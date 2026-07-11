@@ -1,0 +1,3 @@
+# InstantDB
+
+Collaborative apps quickly.

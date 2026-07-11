@@ -1,0 +1,3 @@
+# Atlas
+
+Declarative schema diff.

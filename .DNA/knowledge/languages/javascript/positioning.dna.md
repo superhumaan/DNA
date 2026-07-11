@@ -1,7 +1,9 @@
-# Javascript — Positioning
+# JavaScript — Positioning
 
-Primary language for this project. Follow idiomatic javascript conventions.
+Primary or secondary language for this project. Follow idiomatic JavaScript conventions.
 
 ## Extensions
+`.js`
 
-.js
+## Ecosystem
+Node, browsers, serverless. Use only when TS migration is not yet feasible.

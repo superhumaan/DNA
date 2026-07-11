@@ -1,0 +1,3 @@
+# Plaid
+
+Fintech, personal finance.
