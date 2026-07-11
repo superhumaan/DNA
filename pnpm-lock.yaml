@@ -133,6 +133,9 @@ importers:
       '@superhumaan/dna-core':
         specifier: workspace:*
         version: link:../dna-core
+      '@superhumaan/dna-feedback':
+        specifier: workspace:*
+        version: link:../dna-feedback
       '@superhumaan/dna-github':
         specifier: workspace:*
         version: link:../dna-github
@@ -193,6 +196,25 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  packages/dna-feedback:
+    dependencies:
+      '@superhumaan/dna-config':
+        specifier: workspace:*
+        version: link:../dna-config
+      '@superhumaan/dna-github':
+        specifier: workspace:*
+        version: link:../dna-github
+      '@superhumaan/dna-immune':
+        specifier: workspace:*
+        version: link:../dna-immune
+    devDependencies:
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(jiti@1.21.7)(postcss@8.5.16)(tsx@4.22.5)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   packages/dna-github:
     dependencies:
       '@superhumaan/dna-config':
@@ -231,6 +253,9 @@ importers:
       '@superhumaan/dna-config':
         specifier: workspace:*
         version: link:../dna-config
+      '@superhumaan/dna-feedback':
+        specifier: workspace:*
+        version: link:../dna-feedback
       '@superhumaan/dna-github':
         specifier: workspace:*
         version: link:../dna-github

@@ -71,7 +71,13 @@ export async function createIssue(
   issue: ClassifiedIssue,
 ): Promise<CreateIssueResult | { dryRun: true; payload: GitHubIssuePayload }> {
   const payload = buildIssuePayload(issue);
+  return createIssueFromPayload(config, payload);
+}
 
+export async function createIssueFromPayload(
+  config: GitHubConfig,
+  payload: GitHubIssuePayload,
+): Promise<CreateIssueResult | { dryRun: true; payload: GitHubIssuePayload }> {
   if (!config.token) {
     return { dryRun: true, payload };
   }

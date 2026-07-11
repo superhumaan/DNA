@@ -111,6 +111,13 @@ import {
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
+import {
+  buildUpstreamIssuePayload,
+  ingestFeedback,
+  readFeedbackQueue,
+  reportUpstream,
+  syncFeedbackQueue,
+} from "@superhumaan/dna-feedback";
 import { runInitWizard } from "./prompts.js";
 import { connectGitHubDuringOnboarding } from "./github-onboarding.js";
 import { resolveProjectRoot, resolveTargetDirectory } from "./project-root.js";
@@ -991,6 +998,148 @@ github
       console.log("\nRun `dna github login` to create issues for real.");
     } else {
       console.log(`✓ Issue created: ${result.url}`);
+    }
+  });
+
+const feedback = program.command("feedback").description("Upstream DNA platform feedback");
+
+feedback
+  .command("report")
+  .description("Report a DNA platform issue to the upstream feedback API")
+  .option("--message <text>", "Error message to report")
+  .option("--file <path>", "JSON file with error details")
+  .option("--command <cmd>", "Command that failed (e.g. dna doctor)")
+  .option("--dry-run", "Print payload without sending")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: {
+      message?: string;
+      file?: string;
+      command?: string;
+      dryRun?: boolean;
+      cwd?: string;
+    }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      let message = options.message;
+      let stack: string | undefined;
+      let command = options.command;
+
+      if (options.file) {
+        const raw = JSON.parse(await readFile(options.file, "utf-8")) as {
+          message?: string;
+          stack?: string;
+          command?: string;
+        };
+        message = message ?? raw.message;
+        stack = raw.stack;
+        command = command ?? raw.command;
+      }
+
+      if (!message) {
+        console.error("Provide --message or --file with a message field.");
+        process.exit(1);
+      }
+
+      const result = await reportUpstream({
+        projectRoot: root,
+        config,
+        source: "manual",
+        message,
+        stack,
+        command,
+        dnaVersion: CLI_VERSION,
+        dryRun: options.dryRun,
+      });
+
+      if (result.status === "skipped") {
+        console.log("Skipped — not a DNA platform issue or feedback disabled.");
+        return;
+      }
+
+      if (result.status === "dry-run") {
+        console.log(JSON.stringify(result.payload, null, 2));
+        console.log("\nUpstream issue preview:");
+        console.log(JSON.stringify(buildUpstreamIssuePayload(result.payload), null, 2));
+        return;
+      }
+
+      if (result.status === "sent") {
+        console.log(`✓ Feedback sent to ${result.endpoint}`);
+      } else if (result.status === "queued") {
+        console.log(`✓ Feedback queued (offline): ${result.queuePath}`);
+        console.log("  Run `dna feedback sync` when online.");
+      }
+    },
+  );
+
+feedback
+  .command("sync")
+  .description("Flush queued feedback to the upstream API")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    const { sent, remaining } = await syncFeedbackQueue(root, config);
+    console.log(`✓ Sent ${sent} report(s); ${remaining} remaining in queue`);
+  });
+
+feedback
+  .command("status")
+  .description("Show feedback config and queue status")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    const queue = await readFeedbackQueue(root);
+    const fb = config.feedback ?? {
+      enabled: true,
+      upstream: true,
+      autoReport: "dna-only" as const,
+      includeSuggestedFix: true,
+    };
+
+    console.log("Feedback configuration:");
+    console.log(`  enabled: ${fb.enabled}`);
+    console.log(`  upstream: ${fb.upstream}`);
+    console.log(`  autoReport: ${fb.autoReport}`);
+    console.log(`  queued: ${queue.length}`);
+  });
+
+feedback
+  .command("ingest")
+  .description("Maintainer: ingest feedback JSON into superhumaan/DNA issues (requires DNA_FEEDBACK_TOKEN)")
+  .requiredOption("--file <path>", "Feedback payload JSON file")
+  .option("--dry-run", "Preview without creating GitHub issue")
+  .action(async (options: { file: string; dryRun?: boolean }) => {
+    const payload = JSON.parse(await readFile(options.file, "utf-8"));
+    const result = await ingestFeedback(payload, { dryRun: options.dryRun });
+
+    if (result.action === "dry-run") {
+      console.log("Dry run — issue payload:");
+      console.log(JSON.stringify(buildUpstreamIssuePayload(payload), null, 2));
+      return;
+    }
+
+    if (result.action === "deduped") {
+      console.log(`✓ Deduped — commented on existing issue #${result.issueNumber}: ${result.issueUrl}`);
+    } else {
+      console.log(`✓ Created issue #${result.issueNumber}: ${result.issueUrl}`);
     }
   });
 

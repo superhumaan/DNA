@@ -10,6 +10,7 @@ import {
 } from "@superhumaan/dna-immune";
 import { createIssue, resolveGitHubToken, commentOnIssue } from "@superhumaan/dna-github";
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
+import { reportUpstream } from "@superhumaan/dna-feedback";
 import { appendJsonl } from "./persistence.js";
 import { appendRuntimeRecord } from "./storage.js";
 import { readFile } from "node:fs/promises";
@@ -26,6 +27,7 @@ export interface PipelineOptions {
   dnaRoot?: string;
   config?: DnaConfig;
   tracker?: EventTracker;
+  dnaVersion?: string;
 }
 
 async function loadConfig(projectRoot: string): Promise<DnaConfig | null> {
@@ -129,6 +131,19 @@ export async function processRuntimeEvent(
     } else {
       result.githubIssue = { dryRun: true };
     }
+  }
+
+  if (config != null && config.feedback?.enabled !== false && config.feedback?.upstream !== false) {
+    const feedbackConfig = config;
+    await reportUpstream({
+      projectRoot,
+      config: feedbackConfig,
+      source: "runtime",
+      message: issue.summary || event.message,
+      stack: event.stack ?? issue.stackTraceSummary,
+      dnaVersion: options.dnaVersion ?? "unknown",
+      issue,
+    }).catch(() => undefined);
   }
 
   return result;

@@ -4,9 +4,19 @@ export const IMPRESSIONS_DIR = "DNA/Impressions";
 export const DNA_CONFIG_FILE = ".DNA/config.dna.json";
 export const DNA_DATA_DIR = ".DNA/data";
 export const DNA_RUNTIME_DB = ".DNA/data/runtime.db";
+export const DNA_FEEDBACK_QUEUE = ".DNA/data/feedback-queue.jsonl";
+
+/** Upstream DNA monorepo for community feedback issues */
+export const DNA_UPSTREAM_REPO = { owner: "superhumaan", repo: "DNA" } as const;
+
+export const FEEDBACK_BASE_URL =
+  process.env.DNA_FEEDBACK_URL ?? "https://dna.humaan.app/api/v1/feedback";
+
+export const FEEDBACK_AUTO_MODES = ["off", "dna-only", "all"] as const;
 export const DNA_GITIGNORE_ENTRIES = [
   ".DNA/data/",
   ".DNA/runtime/*.jsonl",
+  ".DNA/data/feedback-queue.jsonl",
   ".DNA/reports/",
   ".DNA/credentials/",
 ] as const;

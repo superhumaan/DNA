@@ -21,6 +21,7 @@
   "devDependencies": {
     "@superhumaan/dna-ai": "workspace:*",
     "@superhumaan/dna-config": "workspace:*",
+    "@superhumaan/dna-feedback": "workspace:*",
     "@superhumaan/dna-github": "workspace:*",
     "@superhumaan/dna-immune": "workspace:*",
     "@types/express": "^5.0.0",

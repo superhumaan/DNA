@@ -2,6 +2,7 @@ import {
   AI_PROVIDERS,
   AI_TOOLS,
   COMPLIANCE_OPTIONS,
+  FEEDBACK_AUTO_MODES,
   ISSUE_CATEGORIES,
   PROJECT_STAGES,
   SEVERITY_LEVELS,
@@ -200,6 +201,23 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     };
   }
 
+  let feedback: DnaConfig["feedback"];
+  if (d.feedback !== undefined) {
+    const fb = expectObject(d.feedback, "feedback");
+    if (!fb.success) return fb;
+    const autoReport = fb.data.autoReport === undefined
+      ? ok("dna-only" as const)
+      : expectEnum(fb.data.autoReport, FEEDBACK_AUTO_MODES, "feedback.autoReport");
+    if (!autoReport.success) return autoReport;
+    feedback = {
+      enabled: withDefault(optionalBoolean(fb.data.enabled), true),
+      upstream: withDefault(optionalBoolean(fb.data.upstream), true),
+      autoReport: autoReport.data,
+      includeSuggestedFix: withDefault(optionalBoolean(fb.data.includeSuggestedFix), true),
+      endpoint: optionalString(fb.data.endpoint),
+    };
+  }
+
   return ok({
     version: withDefault(optionalString(d.version), "0.1.0"),
     projectId: projectId.data,
@@ -224,6 +242,7 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     ci,
     featureFactory,
     aiWorkbench,
+    feedback,
     platformFeatures: platformFeatures.data,
   });
 }
@@ -577,7 +596,35 @@ export interface DnaConfig {
     catalogVersion?: number;
     stemSource?: "remote" | "bundled";
   };
+  feedback?: {
+    enabled: boolean;
+    upstream: boolean;
+    autoReport: (typeof FEEDBACK_AUTO_MODES)[number];
+    includeSuggestedFix: boolean;
+    endpoint?: string;
+  };
   platformFeatures: string[];
+}
+
+export type FeedbackSource = "cli" | "doctor" | "runtime" | "manual";
+
+export interface FeedbackPayload {
+  id: string;
+  fingerprint: string;
+  timestamp: string;
+  source: FeedbackSource;
+  dnaVersion: string;
+  nodeVersion: string;
+  platform: string;
+  installId: string;
+  projectId: string;
+  command?: string;
+  message: string;
+  stack?: string;
+  severity: (typeof SEVERITY_LEVELS)[number];
+  category: string;
+  suggestedFix?: string;
+  reproductionNotes?: string;
 }
 
 export type DnaConfigInput = Partial<DnaConfig> & Pick<DnaConfig, "projectId" | "projectName" | "createdAt" | "updatedAt">;

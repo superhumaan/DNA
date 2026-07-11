@@ -4,6 +4,12 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.4.8] - 2026-07-11
+
+### Added
+
+- **Upstream feedback** — `dna feedback report|sync|status` queues sanitized platform issues; runtime auto-reports DNA-only failures; maintainer `dna feedback ingest` and `scripts/feedback-ingest.mjs` for GitHub dedupe.
+
 ## [0.4.7] - 2026-07-11
 
 ### Added

@@ -1,0 +1,31 @@
+{
+  "name": "@superhumaan/dna-feedback",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DNA upstream feedback — sanitize, queue, and ingest platform issues",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@superhumaan/dna-config": "workspace:*",
+    "@superhumaan/dna-github": "workspace:*",
+    "@superhumaan/dna-immune": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  },
+  "license": "MIT"
+}

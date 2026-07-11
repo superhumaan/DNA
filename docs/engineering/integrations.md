@@ -142,6 +142,56 @@ Runtime event → classify → GitHub issue (optional)
 
 ---
 
+## Upstream feedback
+
+DNA can report **DNA-platform failures** (CLI, doctor, bundled packages) back to the upstream monorepo — opt-in by default with `dna-only` filtering.
+
+Enable in `.DNA/config.dna.json`:
+
+```json
+{
+  "feedback": {
+    "enabled": true,
+    "upstream": true,
+    "autoReport": "dna-only",
+    "includeSuggestedFix": true
+  }
+}
+```
+
+| `autoReport` | Behaviour |
+|--------------|-----------|
+| `off` | Never send upstream |
+| `dna-only` | Only DNA stack / CLI / `.DNA/` failures (default) |
+| `all` | Send all classified runtime issues upstream |
+
+### Commands
+
+```bash
+dna feedback report --message "doctor failed" --command "dna doctor"
+dna feedback report --file error.json --dry-run
+dna feedback sync          # flush offline queue
+dna feedback status
+```
+
+Offline reports queue to `.DNA/data/feedback-queue.jsonl` (gitignored).
+
+### Maintainer ingest
+
+When the feedback API receives payloads (or from a manual export), maintainers create deduped GitHub issues:
+
+```bash
+DNA_FEEDBACK_TOKEN=ghp_... dna feedback ingest --file payload.json
+# or
+DNA_FEEDBACK_TOKEN=ghp_... node scripts/feedback-ingest.mjs payload.json
+```
+
+Uses fingerprint labels (`fp:…`) to dedupe — repeat reports comment `+1 occurrence` on the existing issue.
+
+**Privacy:** payloads are redacted (no secrets, home paths, or file contents). Install ID is an anonymous UUID in `~/.config/dna/install-id`.
+
+---
+
 ## Environment variables
 
 | Variable | Required for | Notes |

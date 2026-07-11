@@ -120,6 +120,12 @@ export async function runWizard(options: WizardOptions): Promise<WizardResult> {
       pushToPreview,
       previewProvider: defaultPreviewProvider(previewHosting),
     },
+    feedback: {
+      enabled: true,
+      upstream: true,
+      autoReport: "dna-only",
+      includeSuggestedFix: true,
+    },
   };
 
   log.info({ projectId: config.projectId }, "Generating DNA structure");

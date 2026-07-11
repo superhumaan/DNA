@@ -150,6 +150,17 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
     actions.push("feature factory enabled");
   }
 
+  if (!config.feedback?.enabled) {
+    config.feedback = {
+      enabled: true,
+      upstream: true,
+      autoReport: "dna-only",
+      includeSuggestedFix: true,
+    };
+    changed = true;
+    actions.push("upstream feedback enabled (DNA-only auto-report)");
+  }
+
   if (changed) {
     config.updatedAt = new Date().toISOString();
     await writeJsonFile(join(root, DNA_CONFIG_FILE), config);
