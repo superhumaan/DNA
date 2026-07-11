@@ -43,7 +43,14 @@ export async function submitFeedback(
 ): Promise<SubmitFeedbackResult> {
   const { payload, projectRoot, config, dryRun } = options;
 
-  if (!config.feedback?.enabled || !config.feedback.upstream) {
+  const feedback = config.feedback ?? {
+    enabled: true,
+    upstream: true,
+    autoReport: "dna-only" as const,
+    includeSuggestedFix: true,
+  };
+
+  if (!feedback.enabled || !feedback.upstream) {
     return { status: "skipped", payload };
   }
 
@@ -51,7 +58,7 @@ export async function submitFeedback(
     return { status: "dry-run", payload };
   }
 
-  const endpoint = config.feedback.endpoint ?? FEEDBACK_BASE_URL;
+  const endpoint = feedback.endpoint ?? FEEDBACK_BASE_URL;
   const sent = await postFeedback(endpoint, payload);
 
   if (sent) {
