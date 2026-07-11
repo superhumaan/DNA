@@ -8,7 +8,16 @@ All notable changes to DNA are documented here.
 
 ### Added
 
-- **Upstream feedback** — `dna feedback report|sync|status` queues sanitized platform issues; runtime auto-reports DNA-only failures; maintainer `dna feedback ingest` and `scripts/feedback-ingest.mjs` for GitHub dedupe.
+- **`@superhumaan/dna-feedback`** — upstream reporting package: sanitize secrets/paths, fingerprint dedup, offline queue (`.DNA/data/feedback-queue.jsonl`), POST to `https://dna.humaan.app/api/v1/feedback`.
+- **`dna feedback`** — `report`, `sync`, `status`, and maintainer `ingest` commands.
+- **`feedback` config block** — enabled by default on init/doctor; `autoReport: "dna-only"` filters to DNA-platform failures (CLI, doctor, `@superhumaan/*` stack frames).
+- **Runtime auto-report** — DNA-platform runtime errors are reported upstream after local classification.
+- **Maintainer ingest** — `dna feedback ingest` and `scripts/feedback-ingest.mjs` create deduped issues on `superhumaan/DNA` via `DNA_FEEDBACK_TOKEN` (fingerprint labels + `+1 occurrence` comments).
+- **DNA platform classifier** (`dna-immune`) — `isDnaPlatformIssue()` separates DNA bugs from user app bugs.
+
+### Fixed
+
+- **Upstream defaults** — projects without a `feedback` block in `config.dna.json` still get DNA-only upstream reporting (defaults applied in submit path).
 
 ## [0.4.7] - 2026-07-11
 

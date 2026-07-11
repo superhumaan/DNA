@@ -117,6 +117,8 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna marketplace install <id>` | Install packs into `.DNA/knowledge/` |
 | `dna validate` | Check against Behaviour rules |
 | `dna doctor` | Full health check |
+| `dna feedback report` | Report DNA-platform issue upstream (sanitized) |
+| `dna feedback sync` | Flush offline feedback queue |
 | `dna runtime install` | Framework snippets for production observer |
 | `dna github connect` | Wire GitHub issues + repair workflow |
 | `dna ai repair` | AI-assisted fix suggestions (dry-run safe) |
@@ -201,17 +203,20 @@ Bundled **GDPR reference library** (85+ documents): policies, DPIA templates, AI
 
 ---
 
-## GitHub & AI repair
+## GitHub, upstream feedback & AI repair
 
 ```bash
 dna github login
 dna github connect --owner ORG --repo REPO
 
+dna feedback report --message "DNA error" --dry-run
+dna feedback sync
+
 dna ai connect --provider mock
 dna ai repair --file issue.json --dry-run
 ```
 
-**Safety:** never auto-merges, never deploys, never touches secrets.
+**Local:** high/critical runtime → your repo. **Upstream:** DNA-platform failures → sanitized reports to `superhumaan/DNA` (`dna-only` default). **Safety:** never auto-merges, never deploys, never touches secrets.
 
 [Integrations guide →](https://github.com/superhumaan/DNA/blob/main/docs/integrations.md)
 

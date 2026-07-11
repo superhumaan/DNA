@@ -1,50 +1,42 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-11T10:38:30.099Z. The user does not fill this in manually._
+_Auto-maintained by DNA. Updated 2026-07-11._
 
 ## Latest request
 
-> _Waiting for your first feature request — describe what you want to build in Cursor or Claude._
+> Auto-report DNA platform issues from all installs back to superhumaan/DNA with deduplication and potential code fixes.
+
+## Status
+
+**Shipped** in v0.4.8 — `@superhumaan/dna-feedback`, `dna feedback` CLI, runtime auto-report, maintainer ingest.
 
 ## Problem
 
-_To be refined by Product Analyst from the latest request._
+DNA users encounter DNA CLI, doctor, and runtime failures locally. Issues only landed in each user's own GitHub repo. Maintainers had no consolidated view of DNA-platform bugs across installs.
 
-## Current Pain
+## Solution delivered
 
-_To be refined by Product Analyst._
+- `feedback` config block (enabled by default, `dna-only` auto-report)
+- `dna feedback report|sync|status|ingest` commands
+- Runtime pipeline upstream hook for DNA-platform errors
+- Fingerprint dedup via GitHub labels on `superhumaan/DNA`
+- Offline queue at `.DNA/data/feedback-queue.jsonl`
+- Maintainer script `scripts/feedback-ingest.mjs`
 
-## Proposed Solution
+## Remaining (future)
 
-_To be refined by Product Analyst and Solution Architect._
-
-## Users
-
-_To be identified by Product Analyst._
-
-## Desired Behaviour
-
-_To be defined by Product Analyst._
-
-## Edge Cases
-
-_To be identified by Product Analyst and QA._
+- Hosted ingest API at `dna.humaan.app/api/v1/feedback` (client ready)
+- Upstream AI repair PRs against DNA monorepo (maintainer workflow)
 
 ## Success Criteria
 
-The feature is only complete when:
-
-- [ ] Backend works
-- [ ] Frontend works
-- [ ] UX is clean
-- [ ] Permissions/security are correct
-- [ ] Tests pass
-- [ ] Local quality gate passes (`dna quality report --feature`)
-- [ ] Docker image builds (`dna docker build`)
-- [ ] Changes pushed to GitHub (`dna github push`)
-- [ ] No unrelated files are modified
-- [ ] Existing behaviour is not broken
-- [ ] QA checklist is completed
+- [x] Backend works (`dna-feedback` package + config schema)
+- [x] CLI commands (`dna feedback`)
+- [x] Permissions/security (opt-in, redaction, `dna-only` filter)
+- [x] Tests pass (185 tests)
+- [x] Documentation updated
+- [ ] Hosted feedback API (out of scope v0.4.8)
+- [ ] npm publish v0.4.8 (separate release step)
 
 ---
 

@@ -30,6 +30,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Impressions drift (MVP)** | Drift score in `dna scan`, `dna plan impressions-sync` ([#14](https://github.com/superhumaan/DNA/issues/14)) |
 | **Platform codegen (MVP)** | `dna generate feature audit-logging` ([#17](https://github.com/superhumaan/DNA/issues/17)) |
 | **IVF shared library (MVP)** | `dna ivf shared-library --dry-run` / `--scaffold` ([#16](https://github.com/superhumaan/DNA/issues/16)) |
+| **Upstream feedback (v0.4.8)** | `dna feedback report|sync|status` — DNA-only auto-report, sanitized queue, maintainer ingest to `superhumaan/DNA` |
 
 ---
 
@@ -38,6 +39,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | Item | Notes |
 |------|-------|
 | Hosted DNA SaaS | Self-hosted CLI + runtime only |
+| Hosted feedback ingest API | Client POSTs to `dna.humaan.app/api/v1/feedback`; server endpoint planned — maintainer `ingest` works today via `DNA_FEEDBACK_TOKEN` |
 | Non-TypeScript primary stacks | Limited pack coverage |
 | Auto-merge PRs | Safety boundary — never auto-merge |
 | Real-time dashboard (live feed, charts) | MVP shipped (`dna dashboard`); live feed + trends in [#12](https://github.com/superhumaan/DNA/issues/12) |

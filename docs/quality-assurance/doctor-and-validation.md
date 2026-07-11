@@ -26,6 +26,7 @@ Checks include:
 - AI tool file sync
 - GitHub connection (browser login + remote auto-detect)
 - Preview deploy workflow when `ci.pushToPreview` is enabled
+- Upstream feedback config (`feedback` block — enabled by default, `dna-only` auto-report)
 
 ---
 

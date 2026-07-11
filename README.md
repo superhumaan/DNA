@@ -87,6 +87,8 @@ Requirements: **Node.js 20+**, **pnpm 9+**
 | `dna context compliance` | Load tiered compliance knowledge for AI |
 | `dna validate` | Check against Behaviour rules |
 | `dna doctor` | Full health check |
+| `dna feedback report` | Report a DNA-platform issue upstream (sanitized, opt-in) |
+| `dna feedback sync` | Flush offline feedback queue |
 | `dna marketplace install <id>` | Install knowledge packs |
 | `dna runtime install` | Runtime integration snippets |
 
@@ -162,17 +164,25 @@ Remote: [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · Offl
 
 ---
 
-## GitHub & AI repair
+## GitHub, upstream feedback & AI repair
 
 ```bash
 dna github login
 dna github connect --owner ORG --repo REPO
 
+# Upstream DNA platform feedback (opt-in, dna-only by default)
+dna feedback report --message "doctor failed" --command "dna doctor" --dry-run
+dna feedback sync
+dna feedback status
+
 dna ai connect --provider mock
 dna ai repair --file issue.json --dry-run
 ```
 
-**Safety:** never auto-merges, never deploys, never touches secrets.
+**Local issues:** high/critical runtime errors → your project's GitHub repo.  
+**Upstream feedback:** DNA CLI/doctor/runtime failures → sanitized reports to [superhumaan/DNA](https://github.com/superhumaan/DNA/issues) (deduped by fingerprint). App bugs stay in your repo.
+
+**Safety:** never auto-merges, never deploys, never touches secrets. Feedback payloads are redacted before send.
 
 [Integrations guide →](./docs/integrations.md)
 
@@ -185,7 +195,8 @@ packages/
   dna-cli/        CLI
   dna-core/       Scanner, wizard, marketplace
   dna-runtime/    Runtime + adapters
-  dna-immune/     Classifier
+  dna-immune/     Classifier + DNA platform detection
+  dna-feedback/   Upstream feedback (sanitize, queue, ingest)
   dna-github/     GitHub API
   dna-ai/         AI repair
   dna-config/     Schemas
@@ -239,6 +250,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | [Supply-chain hardening + Socket transparency](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) (v0.4.4) | Jul 2026 | Jul 2026 | Shipped |
 | [Zero npm dependencies](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) (v0.4.5) | Jul 2026 | Jul 2026 | Shipped |
 | npm `dna doctor` workbench asset path fix (v0.4.6) | Jul 2026 | Jul 2026 | Shipped |
+| [Upstream feedback](https://github.com/superhumaan/DNA/issues) — DNA platform auto-report (v0.4.8) | Jul 2026 | Jul 2026 | Shipped |
 | [Prompt stem packs + intelligence library](https://dna.humaan.app/intelligence) | Jul 2026 | Jul 2026 | Shipped |
 | [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped |
 | [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped |

@@ -341,6 +341,63 @@ Create an issue from classified JSON.
 dna github issue --file .DNA/runtime/issues.jsonl
 ```
 
+## feedback
+
+Report **DNA-platform failures** upstream to [superhumaan/DNA](https://github.com/superhumaan/DNA/issues). User app bugs stay in your project's repo. Enabled by default with `autoReport: "dna-only"`.
+
+Configure in `.DNA/config.dna.json`:
+
+```json
+{
+  "feedback": {
+    "enabled": true,
+    "upstream": true,
+    "autoReport": "dna-only",
+    "includeSuggestedFix": true
+  }
+}
+```
+
+| `autoReport` | Behaviour |
+|--------------|-----------|
+| `off` | Never send upstream |
+| `dna-only` | DNA stack / CLI / `.DNA/` failures only (default) |
+| `all` | All classified runtime issues upstream |
+
+### feedback report
+
+```bash
+dna feedback report --message "doctor failed" --command "dna doctor"
+dna feedback report --file error.json --dry-run
+```
+
+### feedback sync
+
+Flush the offline queue when the feedback API was unreachable.
+
+```bash
+dna feedback sync
+```
+
+### feedback status
+
+```bash
+dna feedback status
+```
+
+### feedback ingest
+
+Maintainer only — create a deduped GitHub issue from a payload JSON file.
+
+```bash
+DNA_FEEDBACK_TOKEN=ghp_... dna feedback ingest --file payload.json
+DNA_FEEDBACK_TOKEN=ghp_... node scripts/feedback-ingest.mjs payload.json
+```
+
+Offline queue: `.DNA/data/feedback-queue.jsonl` (gitignored). Install fingerprint: anonymous UUID in `~/.config/dna/install-id`.
+
+See [Integrations — Upstream feedback](./integrations.md#upstream-feedback).
+
 ## ai
 
 ### ai connect

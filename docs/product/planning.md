@@ -17,6 +17,7 @@ DNA development priorities and public roadmap.
 - Feature factory with quality gates + per-role agent-loop stems
 - GitHub onboarding (browser auth during `dna doctor`)
 - One-command onboarding: `npx @superhumaan/dna-by-humaan doctor` scaffolds CI, runtime, Docker, hooks, and auto-wires middleware
+- **Upstream feedback (v0.4.8)** — `dna feedback` commands, DNA-only auto-report, maintainer ingest with fingerprint dedup
 
 See [Current version scope](../delivery/current-version-scope.md).
 
@@ -42,6 +43,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Supply-chain hardening + Socket transparency (v0.4.4) | ✅ Shipped |
 | Zero npm dependencies — internal replacements for CLI/git/GitHub/glob (v0.4.5) | ✅ Shipped |
 | npm `dna doctor` workbench asset path fix (v0.4.6) | ✅ Shipped |
+| Upstream feedback — DNA platform auto-report (v0.4.8) | ✅ Shipped |
 | First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress — setup script shipped |
 | Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | 🚧 In progress — live feed + trend chart |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | ✅ Shipped — import merge + team registry sync |

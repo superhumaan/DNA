@@ -17,6 +17,7 @@ Share this with colleagues who want to try DNA on their own projects.
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |
 | Runtime observer | `@superhumaan/dna-by-humaan/runtime` | Errors/slow requests → `.DNA/data/runtime.db` |
+| Upstream feedback | `dna feedback report` / auto | DNA-platform failures → sanitized upstream report (opt-in, `dna-only` default) |
 | GitHub (optional) | `dna doctor` (auto) | Browser login + remote detect; auto-issues for high/critical events |
 | AI repair (optional) | `dna ai repair --dry-run` | Branch + patch plan, never auto-merged |
 
@@ -75,9 +76,23 @@ DNA/
 Add to `.gitignore` if you prefer not to share local runtime logs:
 
 ```
+.DNA/data/
 .DNA/runtime/events.jsonl
 .DNA/runtime/issues.jsonl
 ```
+
+`.DNA/data/` includes `runtime.db` and `feedback-queue.jsonl` (upstream reports when offline).
+
+### Upstream feedback (optional)
+
+DNA can report **its own** failures (CLI, doctor, bundled packages) back to the maintainers — not your app bugs.
+
+```bash
+dna feedback status
+dna feedback report --message "describe DNA error" --command "dna doctor" --dry-run
+```
+
+Opt out in `.DNA/config.dna.json`: `"feedback": { "enabled": false }`.
 
 ---
 

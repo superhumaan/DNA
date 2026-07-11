@@ -144,7 +144,16 @@ Runtime event → classify → GitHub issue (optional)
 
 ## Upstream feedback
 
-DNA can report **DNA-platform failures** (CLI, doctor, bundled packages) back to the upstream monorepo — opt-in by default with `dna-only` filtering.
+DNA can report **DNA-platform failures** (CLI, doctor, bundled packages) back to the upstream monorepo — opt-in by default with `dna-only` filtering. User application bugs remain in the project's own GitHub repo.
+
+```
+Runtime / CLI error
+  → classify (dna-immune)
+  → is DNA platform issue? (dna-only filter)
+  → sanitize + fingerprint (dna-feedback)
+  → POST api/v1/feedback OR queue locally
+  → maintainer ingest → superhumaan/DNA issue (deduped)
+```
 
 Enable in `.DNA/config.dna.json`:
 

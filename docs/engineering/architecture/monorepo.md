@@ -11,7 +11,8 @@ Guide to the DNA monorepo package graph and build order.
 | `dna-config` | Typed config schemas + validators — shared types |
 | `dna-templates` | Runtime install snippets |
 | `dna-core` | Scanner, wizard, marketplace, generators, IVF, quality |
-| `dna-immune` | Issue classifier rules |
+| `dna-immune` | Issue classifier rules + DNA platform detection |
+| `dna-feedback` | Upstream feedback — sanitize, fingerprint, queue, ingest |
 | `dna-runtime` | Runtime observer + Express/Fastify/NestJS/Next adapters |
 | `dna-github` | GitHub API, auth, push |
 | `dna-ai` | AI repair orchestrator |

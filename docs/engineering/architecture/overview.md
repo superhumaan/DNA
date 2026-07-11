@@ -55,7 +55,8 @@ packages/
   dna-core/       Scanner, wizard, generators, marketplace
   dna-config/     Typed config schemas, validators, constants
   dna-runtime/    Runtime observer + adapters
-  dna-immune/     Issue classifier
+  dna-immune/     Issue classifier + DNA platform detection
+  dna-feedback/   Upstream feedback (sanitize, queue, ingest)
   dna-github/     GitHub API
   dna-ai/         AI repair orchestrator
   dna-templates/  Install snippets

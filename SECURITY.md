@@ -364,6 +364,7 @@ In scope: tampered npm tarballs, compromised publish credentials, malicious bund
 | -------- | ---------- | --------- |
 | `https://dna.humaan.app/marketplace/api/v1/catalog` | `dna marketplace list/search/install` | Channel preference only |
 | `https://dna.humaan.app/intelligence/api/v1/catalog` | `dna update`, `dna doctor` (stem sync) | None (GET) |
+| `https://dna.humaan.app/api/v1/feedback` | `dna feedback report`, runtime auto-report, `dna feedback sync` | Sanitized DNA-platform error metadata only (no secrets, no file contents) — **opt-in, `dna-only` default** |
 | `https://api.github.com/user` | `dna github login` | OAuth bearer token |
 | `https://github.com/login/device/code` | `dna github login` | OAuth client id + scopes |
 | `https://github.com/login/oauth/access_token` | `dna github login` | Device code (polling) |
@@ -397,7 +398,9 @@ DNA interacts with credentials in several places. Researchers and users should u
 | Location | Purpose | Expected protections |
 | -------- | ------- | -------------------- |
 | `GITHUB_TOKEN` / `GH_TOKEN` env vars | CI and local GitHub API access | Never logged by DNA; user-managed rotation |
+| `DNA_FEEDBACK_TOKEN` env var | Maintainer ingest to `superhumaan/DNA` issues | Never in config files; maintainer-only |
 | `~/.config/dna/github-credentials.json` | Persisted OAuth / device-flow token | Directory `0700`, file `0600` |
+| `~/.config/dna/install-id` | Anonymous upstream feedback fingerprint | UUID only — no email or hostname |
 | `.DNA/config.dna.json` | Project configuration | Must not contain secrets; use env vars |
 | `.DNA/runtime/events.jsonl` | Runtime event log | Sensitive patterns redacted before write |
 | Generated `.github/workflows/` | CI/CD | Secrets referenced via `${{ secrets.* }}`, not inline values |

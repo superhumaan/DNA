@@ -54,6 +54,23 @@ dnaRuntime.start({
 
 Sensitive data (tokens, passwords, API keys) is **redacted** before persistence.
 
+## Upstream feedback (v0.4.8)
+
+When `feedback.upstream` is enabled (default on init/doctor), DNA-platform failures are reported upstream after local classification. User application errors are **not** sent unless `autoReport` is set to `all`.
+
+| Source | Upstream when |
+|--------|----------------|
+| Runtime | Stack trace in `@superhumaan/*` or DNA middleware |
+| CLI / doctor | Always (manual `dna feedback report` or auto on DNA errors) |
+| Your app code | Never (default `dna-only`) |
+
+```bash
+dna feedback status
+dna feedback sync   # after offline queue
+```
+
+Queue file: `.DNA/data/feedback-queue.jsonl` (gitignored).
+
 ## Express
 
 ```typescript
@@ -91,8 +108,10 @@ export const GET = dnaRuntime.withNextHandler(async (request) => {
 
 | File | Contents |
 |------|----------|
-| `.DNA/runtime/events.jsonl` | Raw runtime events |
-| `.DNA/runtime/issues.jsonl` | Classified issues |
+| `.DNA/data/runtime.db` | SQLite runtime events and issues (default) |
+| `.DNA/runtime/events.jsonl` | Legacy JSONL events |
+| `.DNA/runtime/issues.jsonl` | Legacy classified issues |
+| `.DNA/data/feedback-queue.jsonl` | Queued upstream feedback (offline) |
 
 ## Production guidance
 

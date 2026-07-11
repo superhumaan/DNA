@@ -49,7 +49,8 @@ packages/
   dna-core/       Scanner, wizard, generators, marketplace
   dna-config/     Typed config schemas, validators, constants
   dna-runtime/    Runtime observer + adapters
-  dna-immune/     Issue classifier
+  dna-immune/     Issue classifier + DNA platform detection
+  dna-feedback/   Upstream feedback (sanitize, queue, ingest)
   dna-github/     GitHub API
   dna-ai/         AI repair orchestrator
   dna-templates/  Install snippets
@@ -71,6 +72,8 @@ apps/
 | `DNA_REFERENCE_ROOT` | Parent dir of reference repos for `dna platform projects` |
 | `DNA_GDPR_SOURCE_DOCS` | Source .docx folder for `pnpm gdpr:ingest` |
 | `DNA_MARKETPLACE_URL` | Override remote marketplace URL |
+| `DNA_FEEDBACK_URL` | Override upstream feedback API (`dna feedback report`, runtime auto-report) |
+| `DNA_FEEDBACK_TOKEN` | Maintainer token for `dna feedback ingest` (never commit) |
 | `NPM_TOKEN` | Required for `pnpm publish:npm` |
 
 Full list for end users: [Integrations](./integrations.md#environment-variables).
