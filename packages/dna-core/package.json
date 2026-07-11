@@ -14,7 +14,7 @@
   },
   "files": ["dist", "assets"],
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts",
+    "build": "tsup && node ../../scripts/generate-catalog-assets.mjs",
     "dev": "tsup src/index.ts --format esm --dts --watch",
     "typecheck": "tsc --noEmit"
   },

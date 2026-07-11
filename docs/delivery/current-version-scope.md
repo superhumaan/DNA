@@ -4,12 +4,13 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.3.x)
+## In scope (v0.4.x)
 
 | Area | Delivered |
 |------|-----------|
 | **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace |
-| **Runtime** | Express, Fastify, NestJS, Next.js adapters |
+| **Runtime** | Express, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`) |
+| **Supply chain** | No install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
 | **Marketplace** | 768 packs, remote + bundled offline |
 | **Platform catalog** | Admin, SSO, RBAC, cloud deploy, CRM, CMS patterns |
 | **Compliance** | Tiered GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS |
@@ -24,6 +25,11 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Doctor orchestrator** | `dna doctor` — scaffold, CI, runtime auto-wire, GitHub browser login |
 | **Runtime auto-wire** | Express, Fastify, Next.js middleware; preload fallback for other stacks |
 | **Sponsors & credits** | `dna credits`, public sponsor ledger, npm `funding` |
+| **Dashboard (MVP)** | `dna dashboard` — local read-only runtime, quality, doctor, memory browser ([#12](https://github.com/superhumaan/DNA/issues/12)) |
+| **CellularMemory sync (MVP)** | `dna memory export` / `import` ([#13](https://github.com/superhumaan/DNA/issues/13)) |
+| **Impressions drift (MVP)** | Drift score in `dna scan`, `dna plan impressions-sync` ([#14](https://github.com/superhumaan/DNA/issues/14)) |
+| **Platform codegen (MVP)** | `dna generate feature audit-logging` ([#17](https://github.com/superhumaan/DNA/issues/17)) |
+| **IVF shared library (MVP)** | `dna ivf shared-library --dry-run` / `--scaffold` ([#16](https://github.com/superhumaan/DNA/issues/16)) |
 
 ---
 
@@ -34,7 +40,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | Hosted DNA SaaS | Self-hosted CLI + runtime only |
 | Non-TypeScript primary stacks | Limited pack coverage |
 | Auto-merge PRs | Safety boundary — never auto-merge |
-| Real-time web dashboard | Roadmap item |
+| Real-time dashboard (live feed, charts) | MVP shipped (`dna dashboard`); live feed + trends in [#12](https://github.com/superhumaan/DNA/issues/12) |
 
 ---
 

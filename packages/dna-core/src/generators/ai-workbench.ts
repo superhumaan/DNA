@@ -366,8 +366,8 @@ export async function persistAiWorkbenchEnabled(
   await writeJsonFile(join(root, ".DNA", "config.dna.json"), config);
 }
 
-/** Public catalog for dna.humaan.app/intelligence */
-export function intelligenceWorkbenchCatalogJson(): string {
+/** Public catalog object for dna.humaan.app/intelligence */
+export function buildIntelligenceWorkbenchCatalog() {
   const stems = intelligenceStemPackEntries();
   const prompts = stems
     .filter((s) => s.slash)
@@ -382,8 +382,7 @@ export function intelligenceWorkbenchCatalogJson(): string {
       stemPath: `.DNA/stems/${s.id}/`,
     }));
 
-  return JSON.stringify(
-    {
+  return {
       version: 4,
       type: "workbench",
       catalogUrl: "https://dna.humaan.app/intelligence",
@@ -532,10 +531,12 @@ export function intelligenceWorkbenchCatalogJson(): string {
         scenarios: 6,
         agentRoles: 9,
       },
-    },
-    null,
-    2,
-  );
+    };
+}
+
+/** Public catalog JSON for dna.humaan.app/intelligence */
+export function intelligenceWorkbenchCatalogJson(): string {
+  return JSON.stringify(buildIntelligenceWorkbenchCatalog(), null, 2);
 }
 
 /** @deprecated Use intelligenceWorkbenchCatalogJson for DNA-Web */

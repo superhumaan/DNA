@@ -160,6 +160,19 @@ Set in shell, `.env` (not committed), or CI secrets — never in `.DNA/config.dn
 
 ---
 
+## Supply chain (npm)
+
+`@superhumaan/dna-by-humaan` is published from this repository with **npm provenance**. Network, shell, and filesystem access are limited to documented CLI operations — see [SECURITY.md](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) and the [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan).
+
+Verify your install:
+
+```bash
+npm view @superhumaan/dna-by-humaan repository.url
+npm view @superhumaan/dna-by-humaan version
+```
+
+---
+
 ## Recommended pilot stack
 
 | Layer | Tool | DNA role |

@@ -4,6 +4,20 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-07-11
+
+### Fixed
+
+- **Supply chain (Socket.dev)** — removed erroneous self-dependency on `@superhumaan/dna-by-humaan` that nested an older package copy at install time.
+- **False-positive security alerts** — SAST `eval` detection pattern no longer embeds `eval(` literals; CI coverage template uses `readFileSync` instead of dynamic `require`.
+- **Next.js peer dependency** — removed optional `next` peer dep; obfuscated-code alerts on Socket were from Vercel's precompiled RSC bundles, not DNA. Next adapter uses duck-typed interfaces; consumer apps provide `next`.
+- **Published tarball hygiene** — clean `dist/` before each build; marketplace and intelligence catalogs ship as JSON assets instead of inlined bundle strings (smaller, auditable `dist/index.js`).
+
+### Added
+
+- **Supply-chain transparency** — `SECURITY.md` documents network endpoints, scanner expectations, and npm provenance verification.
+- **npm provenance** — publish script enables `--provenance` for install attestation.
+
 ## [0.4.3] - 2026-07-10
 
 ### Fixed

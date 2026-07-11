@@ -34,7 +34,7 @@ Security fixes are applied to the **latest release** on npm. Development builds 
 
 | Package | Registry | Supported |
 | ------- | -------- | --------- |
-| `@superhumaan/dna-by-humaan` (CLI + runtime) | [npm](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) | `0.1.x` (latest) |
+| `@superhumaan/dna-by-humaan` (CLI + runtime) | [npm](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) | `0.4.x` (latest) |
 | `@superhumaan/dna-core` | npm | Same release train as CLI |
 | `@superhumaan/dna-github` | npm | Same release train as CLI |
 | `@superhumaan/dna-runtime` | npm | Same release train as CLI |
@@ -344,6 +344,49 @@ Review pack contents after install, especially in regulated environments. Report
 ### Reporting supply-chain concerns
 
 In scope: tampered npm tarballs, compromised publish credentials, malicious bundled catalog entries, or MITM attacks against the marketplace API that alter pack content.
+
+### Supply-chain transparency (Socket.dev / security scanners)
+
+`@superhumaan/dna-by-humaan` is a **developer CLI and runtime observer**, not a passive config library. Security scanners (including [Socket.dev](https://socket.dev/npm/package/@superhumaan/dna-by-humaan)) may flag the following behaviours — all are **documented and intentional**:
+
+| Scanner alert | Why it exists | When it runs |
+| ------------- | ------------- | -------------- |
+| **Network access** | Marketplace catalog, intelligence stems, GitHub OAuth, optional AI repair | `dna marketplace *`, `dna github login`, `dna ai repair` (with API keys) |
+| **Shell access** | GitHub CLI integration, Docker builds, quality gates | `dna github login`, `dna docker build`, `dna quality report` |
+| **Filesystem access** | Scaffolds `.DNA/`, writes runtime events, installs knowledge packs | `dna init`, `dna doctor`, runtime observer |
+| **Environment variables** | Reads `GITHUB_TOKEN`, `DNA_*` overrides, AI provider keys | GitHub auth, marketplace URL overrides, AI repair |
+
+**Not shipped:** install scripts (`preinstall` / `postinstall`), telemetry packages, or recursive self-dependencies.
+
+#### Network endpoints (first-party)
+
+| Endpoint | Command(s) | Data sent |
+| -------- | ---------- | --------- |
+| `https://dna.humaan.app/marketplace/api/v1/catalog` | `dna marketplace list/search/install` | Channel preference only |
+| `https://dna.humaan.app/intelligence/api/v1/catalog` | `dna update`, `dna doctor` (stem sync) | None (GET) |
+| `https://api.github.com/user` | `dna github login` | OAuth bearer token |
+| `https://github.com/login/device/code` | `dna github login` | OAuth client id + scopes |
+| `https://github.com/login/oauth/access_token` | `dna github login` | Device code (polling) |
+| `https://api.openai.com/v1/chat/completions` | `dna ai repair` | Issue context (redacted) — **only when configured** |
+| `https://api.anthropic.com/v1/messages` | `dna ai repair` | Issue context (redacted) — **only when configured** |
+
+Offline fallbacks: bundled `assets/marketplace-catalog.json` and `assets/intelligence-catalog.json` when remote catalogs are unreachable.
+
+Published releases use [npm provenance](https://docs.npmjs.com/generating-provenance-statements) from GitHub Actions. Verify integrity:
+
+```bash
+npm view @superhumaan/dna-by-humaan --json | jq '.dist.integrity'
+```
+
+Report unexpected network destinations or install-time behaviour through the [reporting channels](#reporting-a-vulnerability) above.
+
+#### Third-party framework alerts (e.g. Next.js)
+
+Socket may flag **optional framework dependencies** in DNA's dependency graph. These alerts apply to the **framework vendor's published code**, not DNA.
+
+A common example is **obfuscated code in `next`** — Vercel ships pre-compiled, minified React Server Components bundles (e.g. `react-server-dom-webpack-server.node.unbundled.production.js`). Static analyzers classify this as obfuscated; it is normal production build output, not a DNA supply-chain compromise.
+
+DNA's Next.js runtime adapter uses duck-typed request interfaces and does **not** import `next` at install time. Next.js projects already declare `next` in their own `package.json`; DNA generates middleware snippets that run in the consumer app.
 
 ---
 

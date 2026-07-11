@@ -36,7 +36,7 @@ fi
 
 echo "→ Publishing @superhumaan/dna-by-humaan..."
 cd "$ROOT/packages/dna-cli"
-pnpm publish --access public --no-git-checks
+pnpm publish --access public --no-git-checks --provenance
 
 echo ""
 echo "✓ Published. Install:"

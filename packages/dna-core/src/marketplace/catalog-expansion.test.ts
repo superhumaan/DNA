@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { getBundledCatalog, BUNDLED_CATALOG_PACK_COUNT } from "./bundled-catalog.js";
+import { BUNDLED_CATALOG_PACK_COUNT } from "./bundled-catalog-packs.js";
+import { getBundledCatalog } from "./bundled-catalog.js";
 import {
   CATALOG_EXPANSION_PACKS,
   CATALOG_EXPANSION_PACK_IDS,

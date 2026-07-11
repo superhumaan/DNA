@@ -11,8 +11,8 @@ PROJECT_NUMBER="${1:-3}"
 REPO="superhumaan/DNA"
 
 SHIPPED=(1 2 3 4 5 6 7 8 9 10)
-IN_PROGRESS=(11)
-PLANNED=(12 13 14 15 16 17)
+IN_PROGRESS=(11 12 13 14 15 16 17)
+PLANNED=()
 
 if ! gh project view "$PROJECT_NUMBER" --owner "$OWNER" &>/dev/null; then
   echo "Missing project scopes. Run:"
@@ -72,6 +72,8 @@ echo "Syncing project #$PROJECT_NUMBER ($PROJECT_ID)..."
 
 for num in "${SHIPPED[@]}"; do set_status_for_issue "$num" "$SHIPPED_OPT"; done
 for num in "${IN_PROGRESS[@]}"; do set_status_for_issue "$num" "$IN_PROGRESS_OPT"; done
-for num in "${PLANNED[@]}"; do set_status_for_issue "$num" "$PLANNED_OPT"; done
+if ((${#PLANNED[@]})); then
+  for num in "${PLANNED[@]}"; do set_status_for_issue "$num" "$PLANNED_OPT"; done
+fi
 
 echo "Done."

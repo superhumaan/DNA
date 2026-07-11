@@ -3,6 +3,7 @@
 > **Git remembers your code. DNA remembers your system.**
 
 [![npm](https://img.shields.io/npm/v/@superhumaan/dna-by-humaan)](https://www.npmjs.com/package/@superhumaan/dna-by-humaan)
+[![Socket](https://socket.dev/api/badge/npm/package/@superhumaan/dna-by-humaan)](https://socket.dev/npm/package/@superhumaan/dna-by-humaan)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/superhumaan/DNA/blob/main/LICENSE)
 
@@ -19,6 +20,22 @@ Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 | **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 43 prompt stem packs (copy-paste + guidelines) |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
+| **Supply chain** | [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) · [SECURITY.md](https://github.com/superhumaan/DNA/blob/main/SECURITY.md) |
+
+---
+
+## Supply chain & trust
+
+DNA is published from [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) under the `@superhumaan` npm scope with **MIT license** and **npm provenance**.
+
+Security scanners may flag network, shell, or filesystem access — expected for a CLI that scaffolds projects, talks to GitHub, and syncs knowledge packs. See [SECURITY.md — Supply-chain transparency](https://github.com/superhumaan/DNA/blob/main/SECURITY.md#supply-chain-transparency-socketdev--security-scanners) for the full endpoint list and when each runs.
+
+**Verify your install:**
+
+```bash
+npm view @superhumaan/dna-by-humaan repository.url
+dna --version
+```
 
 ---
 

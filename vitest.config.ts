@@ -6,5 +6,6 @@ export default defineConfig({
     environment: "node",
     include: ["packages/**/*.test.ts", "packages/**/*.spec.ts"],
     pool: "forks",
+    globalSetup: ["./scripts/vitest-global-setup.mjs"],
   },
 });

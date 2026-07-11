@@ -6,7 +6,8 @@ DNA development priorities and public roadmap.
 
 ## Current release focus (v0.4.x)
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` bundle (v0.4.0+)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` bundle (v0.4.4+)
+- **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
 - **43 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow
 - **DNA Workbench** — default on init/doctor/update; [intelligence library](https://dna.humaan.app/intelligence)
 - 768 knowledge packs in stable channel
@@ -37,6 +38,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Runtime SQLite storage ([#9](https://github.com/superhumaan/DNA/issues/9)) | ✅ Shipped |
 | Preview deployment workflow ([#10](https://github.com/superhumaan/DNA/issues/10)) | ✅ Shipped |
 | Prompt stem packs + intelligence library (v0.4.0) | ✅ Shipped |
+| Supply-chain hardening + Socket transparency (v0.4.4) | ✅ Shipped |
 | First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress — setup script shipped |
 | Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | 🚧 In progress — `dna dashboard` MVP |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | 🚧 In progress — export/import CLI |

@@ -1,6 +1,6 @@
 {
   "name": "@superhumaan/dna-by-humaan",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "DNA by Humaan — open-source project brain, 768-pack knowledge marketplace, tiered compliance (GDPR/HIPAA/ISO/SOC2), runtime observer, and AI-assisted repair for TypeScript teams",
   "repository": {
     "type": "git",
@@ -38,7 +38,7 @@
     "CREDITS.md"
   ],
   "scripts": {
-    "build": "tsup && node scripts/copy-assets.mjs",
+    "build": "rm -rf dist && tsup && node scripts/copy-assets.mjs",
     "dev": "NODE_OPTIONS='--import @superhumaan/dna-by-humaan/runtime/preload' tsup src/index.ts --format esm --dts --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
@@ -65,14 +65,12 @@
     "fast-glob": "^3.3.2",
     "pino": "^9.6.0",
     "simple-git": "^3.27.0",
-    "zod": "^3.24.1",
-    "@superhumaan/dna-by-humaan": "^0.3.3"
+    "zod": "^3.24.1"
   },
   "peerDependencies": {
     "express": "^4.18.0",
     "fastify": "^4.0.0 || ^5.0.0",
-    "@nestjs/common": "^10.0.0 || ^11.0.0",
-    "next": "^14.0.0 || ^15.0.0"
+    "@nestjs/common": "^10.0.0 || ^11.0.0"
   },
   "peerDependenciesMeta": {
     "express": {
@@ -82,9 +80,6 @@
       "optional": true
     },
     "@nestjs/common": {
-      "optional": true
-    },
-    "next": {
       "optional": true
     }
   },

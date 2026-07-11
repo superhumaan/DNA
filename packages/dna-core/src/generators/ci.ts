@@ -162,7 +162,8 @@ export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string 
     qualitySteps.push(`      - name: Enforce per-file + total coverage >= ${threshold}%
         run: |
           node -e "
-            const s = require('./coverage/coverage-summary.json');
+            const { readFileSync } = require('node:fs');
+            const s = JSON.parse(readFileSync('./coverage/coverage-summary.json', 'utf8'));
             const t = ${threshold};
             const fail = [];
             for (const [file, m] of Object.entries(s)) {

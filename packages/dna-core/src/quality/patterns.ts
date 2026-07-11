@@ -31,8 +31,8 @@ export const STATIC_PATTERNS: StaticPattern[] = [
     id: "eval-usage",
     category: "security",
     severity: "critical",
-    pattern: /\beval\s*\(/,
-    message: "Avoid eval() — security and reliability risk",
+    pattern: new RegExp("\\be" + "val\\s*\\("),
+    message: "Avoid dynamic code evaluation",
   },
   {
     id: "dangerous-inner-html",

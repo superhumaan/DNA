@@ -7,6 +7,7 @@
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
+| **Security** | [SECURITY.md](../SECURITY.md) · [Socket.dev](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 | **Changelog** | [CHANGELOG.md](../CHANGELOG.md) |
 

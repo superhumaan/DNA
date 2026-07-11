@@ -1,5 +1,7 @@
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { INTELLIGENCE_BASE_URL } from "@superhumaan/dna-config";
-import { intelligenceWorkbenchCatalogJson } from "../ai-workbench.js";
 import type { IntelligenceStemPackEntry } from "./types.js";
 
 export interface IntelligenceWorkbenchCatalog {
@@ -15,8 +17,23 @@ export interface FetchIntelligenceCatalogOptions {
   timeoutMs?: number;
 }
 
+function resolveIntelligenceCatalogPath(): string {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const candidates = [
+    join(here, "..", "..", "assets", "intelligence-catalog.json"),
+    join(here, "..", "..", "..", "assets", "intelligence-catalog.json"),
+  ];
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) return candidate;
+  }
+  throw new Error(
+    "Missing assets/intelligence-catalog.json. Run `pnpm --filter @superhumaan/dna-core build` first.",
+  );
+}
+
 export function getBundledIntelligenceCatalog(): IntelligenceWorkbenchCatalog {
-  return JSON.parse(intelligenceWorkbenchCatalogJson()) as IntelligenceWorkbenchCatalog;
+  const raw = readFileSync(resolveIntelligenceCatalogPath(), "utf-8");
+  return JSON.parse(raw) as IntelligenceWorkbenchCatalog;
 }
 
 export async function fetchIntelligenceCatalog(

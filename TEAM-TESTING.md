@@ -37,7 +37,10 @@ Verify:
 
 ```bash
 dna --help
+npm view @superhumaan/dna-by-humaan version
 ```
+
+**Supply chain:** Published from [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) with npm provenance. See [SECURITY.md](./SECURITY.md) and the [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) for documented network endpoints and scanner expectations.
 
 > **After npm publish:** skip the clone — use `npx @superhumaan/dna-by-humaan init -y` instead.
 

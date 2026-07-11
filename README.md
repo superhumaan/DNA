@@ -1,6 +1,7 @@
 # DNA by Humaan
 
 [![npm](https://img.shields.io/npm/v/@superhumaan/dna-by-humaan)](https://www.npmjs.com/package/@superhumaan/dna-by-humaan)
+[![Socket](https://socket.dev/api/badge/npm/package/@superhumaan/dna-by-humaan)](https://socket.dev/npm/package/@superhumaan/dna-by-humaan)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
@@ -17,6 +18,7 @@
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
 | **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
+| **Supply chain** | [Socket.dev](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) · [SECURITY.md](./SECURITY.md) |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 
 Built by **[Humaan](https://dna.humaan.app)** · **[Superlite](https://superlite.ai)**
@@ -234,6 +236,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Knowledge pack marketplace (768 packs) | Jan 2026 | Mar 2026 | Shipped |
 | Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |
 | `npx @superhumaan/dna-by-humaan` on npm (v0.4.0) | Mar 2026 | Jul 2026 | Shipped |
+| [Supply-chain hardening + Socket transparency](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) (v0.4.4) | Jul 2026 | Jul 2026 | Shipped |
 | [Prompt stem packs + intelligence library](https://dna.humaan.app/intelligence) | Jul 2026 | Jul 2026 | Shipped |
 | [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped |
 | [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped |
