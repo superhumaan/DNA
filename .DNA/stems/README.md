@@ -1,6 +1,6 @@
 # DNA Prompt Stem Packs
 
-**dna-by-humaan** — 43 prompt stem packs (remote catalog v4).
+**dna-by-humaan** — 43 prompt stem packs (bundled catalog v4).
 
 Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, context, and examples**.
 

@@ -1,6 +1,6 @@
 # DNA Workbench — Cursor prompts
 
-**dna-by-humaan** — 43 prompt stem packs (remote catalog v4).
+**dna-by-humaan** — 43 prompt stem packs (bundled catalog v4).
 
 Each stem includes **prompt + guidelines + expectations + context + examples** in `.DNA/stems/<id>/`.
 

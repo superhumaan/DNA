@@ -1,8 +1,8 @@
 {
   "version": 1,
   "catalogVersion": 4,
-  "source": "remote",
-  "syncedAt": "2026-07-11T10:34:58.386Z",
+  "source": "bundled",
+  "syncedAt": "2026-07-11T10:38:30.259Z",
   "count": 43,
   "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
   "packs": [
