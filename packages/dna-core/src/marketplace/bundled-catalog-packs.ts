@@ -11,6 +11,8 @@ import { MUI_REPORT_PATTERN_PACK } from "./bundled-stem-mui.js";
 import { MOBILE_UI_PACK } from "./bundled-stem-mobile-ui.js";
 import { QUALITY_STEM_PACKS } from "./bundled-stem-quality.js";
 import { METHODOLOGY_PACKS } from "./bundled-catalog-methodologies.js";
+import { DISCOVERY_PACKS } from "./bundled-catalog-discovery.js";
+import { INDUSTRY_PACKS } from "./bundled-catalog-industries.js";
 
 export const PACKS: KnowledgePack[] = [
   pack("frameworks/vite", "Vite", "frameworks", "Vite framework knowledge for DNA projects", [
@@ -205,6 +207,8 @@ Test with fresh session per role. Refresh after login. Try direct URLs.
   MOBILE_UI_PACK,
   ...QUALITY_STEM_PACKS,
   ...METHODOLOGY_PACKS,
+  ...DISCOVERY_PACKS,
+  ...INDUSTRY_PACKS,
 ];
 
 /** Deduped pack count (matches `buildBundledCatalog().packs.length`). */

@@ -16,6 +16,8 @@ export type ContextTarget =
   | "legal"
   | "multilingual"
   | "methodology"
+  | "discovery"
+  | "industry"
   | "ivf"
   | "all";
 
@@ -83,6 +85,22 @@ export const TARGET_INTENTS: Record<ContextTarget, string[]> = {
     "break_down_work",
     "update_documentation",
     "implement_feature",
+  ],
+  discovery: [
+    "run_product_discovery",
+    "validate_assumption",
+    "prioritize_opportunities",
+    "write_delivery_document",
+    "update_documentation",
+    "implement_feature",
+  ],
+  industry: [
+    "implement_feature",
+    "build_frontend_component",
+    "build_list_report_page",
+    "create_api_endpoint",
+    "consider_legal_requirements",
+    "implement_compliance_controls",
   ],
   ivf: [
     "review_architecture",

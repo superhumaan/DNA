@@ -245,8 +245,12 @@ If you installed the platform pack before this rename:
 
 ### Added
 
-- _Nothing yet._
+- **Product Discovery system** — 55 marketplace packs under `discovery/*` (lifecycle, team models, research methods, processes, events); 6 foundation packs install on `dna init` / `dna doctor`
+- **Industry packs** — 13 marketplace packs under `industries/*` (overview + 12 sectors) for agency and vertical teams; `dna plan industry`, `dna context industry`, `dna industry list`; `industry.active` config; agency archetype adaptive design-system rules
+- **Discovery CLI** — `dna discovery show|set|list|sync`, `dna plan discovery`, `dna plan research <method>`, `dna context discovery`
+- **Discovery Impressions** — scaffolds `discovery-log`, `opportunity-tree`, `assumptions-risks`, `research-insights`, `pmf-signals`
+- **6 stem packs** — `/discovery-setup`, `/plan-research`, `/synthesize-research`, `/prioritize-opportunities`, `/pmf-check`, `/handoff-to-engineering`
 
 ### Changed
 
-- _Nothing yet._
+- Marketplace catalog grows to **965 packs** (includes discovery + industry expansion)

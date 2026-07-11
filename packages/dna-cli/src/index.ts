@@ -41,6 +41,20 @@ import {
   showDeliveryProfile,
   setDeliveryProfile,
   formatDeliveryProfileSummary,
+  generateDiscoveryPlan,
+  generateResearchPlan,
+  showDiscoveryProfile,
+  setDiscoveryProfile,
+  formatDiscoveryProfileSummary,
+  syncDiscoveryFindings,
+  LIFECYCLE_CATALOG,
+  TEAM_CATALOG,
+  PROCESS_CATALOG,
+  METHOD_CATALOG,
+  EVENT_CATALOG,
+  generateIndustryPlan,
+  generateIndustryContext,
+  formatIndustryCatalog,
   METHODOLOGY_CATALOG,
   ARCHETYPE_CATALOG,
   generateLegalPlan,
@@ -358,7 +372,7 @@ stack
 program
   .command("context")
   .description("Generate AI-ready context")
-  .argument("<target>", "cursor|claude|chatgpt|copilot|windsurf|gemini|backend|frontend|security|qa|devops|rbac|platform|compliance|legal|multilingual|methodology|ivf|all")
+  .argument("<target>", "cursor|claude|chatgpt|copilot|windsurf|gemini|backend|frontend|security|qa|devops|rbac|platform|compliance|legal|multilingual|methodology|discovery|industry|ivf|all")
   .option("--cwd <path>", "Project root directory")
   .option("--feature <id>", "Focus platform context on a feature id (with platform target)")
   .option("--tier <tier>", "Org tier for compliance context: startup|sme|corporate|enterprise")
@@ -386,6 +400,8 @@ program
       "legal",
       "multilingual",
       "methodology",
+      "discovery",
+      "industry",
       "ivf",
       "all",
     ] as const;
@@ -429,9 +445,21 @@ program
       return;
     }
 
+    if (target === "discovery") {
+      const context = await generateContext(root, "discovery");
+      console.log(context);
+      return;
+    }
+
+    if (target === "industry") {
+      const context = await generateIndustryContext(root);
+      console.log(context);
+      return;
+    }
+
     const context = await generateContext(
       root,
-      target as Exclude<(typeof validTargets)[number], "platform" | "compliance" | "legal" | "ivf" | "methodology">,
+      target as Exclude<(typeof validTargets)[number], "platform" | "compliance" | "legal" | "ivf" | "methodology" | "discovery" | "industry">,
     );
     console.log(context);
   });
@@ -1682,6 +1710,125 @@ plan
   );
 
 plan
+  .command("industry")
+  .description("Plan industry context — domain knowledge for agencies and vertical teams")
+  .argument("[sector]", "healthcare|fintech|ecommerce-retail|edtech|gov-public-sector|travel-hospitality|saas-b2b|logistics-supply-chain|media-entertainment|real-estate-proptech|energy-utilities|legal-tech")
+  .option("--client <name>", "Client or engagement name")
+  .option("--secondary <list>", "Comma-separated secondary sectors")
+  .option("--quote <text>", "Plain-language requirement")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (
+      sector: string | undefined,
+      options: { client?: string; secondary?: string; quote?: string; cwd?: string },
+    ) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      try {
+        const result = await generateIndustryPlan({
+          root,
+          sector,
+          clientName: options.client,
+          secondary: options.secondary,
+          quote: options.quote,
+        });
+
+        console.log(`✓ Industry plan generated (${result.sector})\n`);
+        console.log(`  Plan:    ${result.planPath}`);
+        console.log(`  Summary: ${result.summaryPath}`);
+        console.log(`  Linked:  ${result.linkedPacks.join(", ")}`);
+        console.log("");
+        console.log("Paste the plan into your AI tool, or run:");
+        console.log("  dna context industry");
+        console.log("");
+        console.log("─".repeat(60));
+        console.log(result.context);
+      } catch (error) {
+        console.error(error instanceof Error ? error.message : String(error));
+        console.error("");
+        console.error("Run `dna industry list` to see available sectors.");
+        process.exit(1);
+      }
+    },
+  );
+
+plan
+  .command("discovery")
+  .description("Plan product discovery — lifecycle, research, and Impressions scaffold")
+  .option("--lifecycle <stage>", "ideation|problem-validation|solution-validation|pmf|growth|scale")
+  .option("--team <model>", "innovation-lab|discovery-squad|embedded-triad|dual-track|design-ops|none")
+  .option("--quote <text>", "Plain-language requirement")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: { lifecycle?: string; team?: string; quote?: string; cwd?: string }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      const result = await generateDiscoveryPlan({
+        root,
+        lifecycleStage: options.lifecycle,
+        teamModel: options.team,
+        quote: options.quote,
+      });
+
+      console.log("✓ Discovery plan generated\n");
+      console.log(`  Plan: ${result.planPath}`);
+      console.log("");
+      console.log("Paste the plan into your AI tool, or run:");
+      console.log("  dna context discovery");
+      console.log("");
+      console.log("─".repeat(60));
+      console.log(result.context);
+    },
+  );
+
+plan
+  .command("research")
+  .description("Plan a user research study for a specific method")
+  .argument("<method>", "user-interviews|usability-testing|surveys|...")
+  .option("--quote <text>", "Research question")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (method: string, options: { quote?: string; cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    try {
+      const result = await generateResearchPlan({
+        root,
+        method,
+        quote: options.quote,
+      });
+
+      console.log("✓ Research plan generated\n");
+      console.log(`  Plan: ${result.planPath}`);
+      console.log("");
+      console.log("Paste the plan into your AI tool, or run:");
+      console.log("  dna context discovery");
+      console.log("");
+      console.log("─".repeat(60));
+      console.log(result.context);
+    } catch (error) {
+      console.error(error instanceof Error ? error.message : String(error));
+      console.error("");
+      console.error("Run `dna discovery list` to see methods and events.");
+      process.exit(1);
+    }
+  });
+
+plan
   .command("methodology")
   .description("Plan delivery methodology — how the team tickets, documents, and plans work")
   .option("--methodology <id>", "scrum|kanban|less|safe|spotify-model|shape-up|dna-default")
@@ -1872,6 +2019,122 @@ methodology
     },
   );
 
+const discovery = program
+  .command("discovery")
+  .description("Configure product discovery — research, UX, PMF, and lifecycle");
+
+discovery
+  .command("show")
+  .description("Show current discovery profile")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+    const result = await showDiscoveryProfile(root);
+    console.log(formatDiscoveryProfileSummary(result));
+  });
+
+discovery
+  .command("list")
+  .description("List lifecycle stages, team models, processes, methods, and events")
+  .action(() => {
+    console.log("Lifecycle stages:\n");
+    for (const l of LIFECYCLE_CATALOG) {
+      console.log(`  ${l.id.padEnd(22)} ${l.name}`);
+      console.log(`  ${"".padEnd(22)} ${l.description}\n`);
+    }
+    console.log("Team models:\n");
+    for (const t of TEAM_CATALOG) {
+      console.log(`  ${t.id.padEnd(22)} ${t.name} — ${t.description}`);
+    }
+    console.log("\nProcesses:\n");
+    for (const p of PROCESS_CATALOG) {
+      console.log(`  ${p.id.padEnd(22)} ${p.name}`);
+    }
+    console.log("\nMethods:\n");
+    for (const m of METHOD_CATALOG) {
+      console.log(`  ${m.id.padEnd(22)} ${m.name} (${m.researchType})`);
+    }
+    console.log("\nEvents:\n");
+    for (const e of EVENT_CATALOG) {
+      console.log(`  ${e.id.padEnd(22)} ${e.name}`);
+    }
+    console.log("\nConfigure: dna discovery set --lifecycle <id> --team <id>");
+    console.log("Context:   dna context discovery");
+  });
+
+discovery
+  .command("set")
+  .description("Set discovery profile (lifecycle, team, processes, methods, events)")
+  .option("--lifecycle <stage>", "Product lifecycle stage")
+  .option("--team <model>", "Discovery team model")
+  .option("--processes <list>", "Comma-separated processes")
+  .option("--methods <list>", "Comma-separated research methods")
+  .option("--events <list>", "Comma-separated discovery events")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: {
+      lifecycle?: string;
+      team?: string;
+      processes?: string;
+      methods?: string;
+      events?: string;
+      cwd?: string;
+    }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+      if (
+        !options.lifecycle &&
+        !options.team &&
+        !options.processes &&
+        !options.methods &&
+        !options.events
+      ) {
+        console.error(
+          "Provide at least one of: --lifecycle, --team, --processes, --methods, --events",
+        );
+        process.exit(1);
+      }
+      const result = await setDiscoveryProfile({
+        root,
+        lifecycleStage: options.lifecycle,
+        teamModel: options.team,
+        processes: options.processes,
+        methods: options.methods,
+        events: options.events,
+      });
+      console.log("✓ Discovery profile updated\n");
+      console.log(formatDiscoveryProfileSummary(result));
+    },
+  );
+
+discovery
+  .command("sync")
+  .description("Sync research findings into Impressions and CellularMemory")
+  .option("--quote <text>", "Summary of findings to append")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { quote?: string; cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+    const result = await syncDiscoveryFindings({ root, quote: options.quote });
+    console.log(`✓ ${result.message}\n`);
+    for (const path of result.updated) {
+      console.log(`  ${path}`);
+    }
+  });
+
 const memory = program.command("memory").description("CellularMemory export and import across projects");
 
 memory
@@ -1978,6 +2241,15 @@ generate
       console.log("  Skipped (already exist):");
       result.skipped.forEach((f) => console.log(`    ${f}`));
     }
+  });
+
+const industry = program.command("industry").description("Industry packs for agencies and vertical product teams");
+
+industry
+  .command("list")
+  .description("List available industry sectors")
+  .action(() => {
+    console.log(formatIndustryCatalog());
   });
 
 const compliance = program.command("compliance").description("Tiered compliance standards catalog");

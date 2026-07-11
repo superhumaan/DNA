@@ -1,6 +1,7 @@
 import type { DnaConfig } from "@superhumaan/dna-config";
 import { getArchetype } from "../stack/catalog.js";
 import { deliveryBehaviourMarkdown } from "../delivery/behaviour.js";
+import { discoveryBehaviourMarkdown } from "../discovery/behaviour.js";
 
 const SHARED_PREAMBLE = `<!-- DNA Behaviour — DNA by Humaan -->
 <!-- Do not edit unless explicitly requested. Managed by DNA. -->
@@ -183,6 +184,7 @@ export function generateBehaviourFiles(config: DnaConfig): Record<string, string
     "testing.behaviour.md": testingBehaviour(config),
     "documentation.behaviour.md": documentationBehaviour(config),
     "delivery.behaviour.md": deliveryBehaviourMarkdown(config),
+    "discovery.behaviour.md": discoveryBehaviourMarkdown(config),
     "security.behaviour.md": securityBehaviour(config),
     "runtime.behaviour.md": runtimeBehaviour(config),
   };

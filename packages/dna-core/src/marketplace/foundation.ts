@@ -4,6 +4,7 @@ import { getArchetype } from "../stack/catalog.js";
 import { HEALTHCARE_ALL_OVERVIEW_PACK_IDS } from "./healthcare-country-bundles.js";
 import { resolveLegalJurisdictionPackIds } from "../legal/regions.js";
 import { resolveHealthcareCountryBundlePackIds } from "./healthcare-country-bundles.js";
+import { DISCOVERY_FOUNDATION_PACK_IDS } from "@superhumaan/dna-config";
 
 export type AppPlatform = "web" | "mobile" | "desktop" | "cms";
 
@@ -112,6 +113,7 @@ export function resolveFoundationPackIds(config: DnaConfig, scan?: ScanResult): 
     "cloud/github-actions",
     "tools/eslint-prettier",
     "testing/owasp-zap",
+    ...DISCOVERY_FOUNDATION_PACK_IDS,
   ]);
 
   const archetype = getArchetype(config.stack.archetype ?? "react-vite-api");

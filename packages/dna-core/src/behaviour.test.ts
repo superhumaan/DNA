@@ -24,11 +24,12 @@ describe("behaviour generator", () => {
 
     expect(files["ai.behaviour.md"]).toContain("neuralNetwork");
     expect(files["delivery.behaviour.md"]).toContain("Delivery Behaviour");
+    expect(files["discovery.behaviour.md"]).toContain("Discovery Behaviour");
     expect(files["ai.behaviour.md"]).toContain("CellularMemory");
     expect(files["coding.behaviour.md"]).toContain("react");
     expect(files["security.behaviour.md"]).toContain("gdpr");
     expect(files["testing.behaviour.md"]).toContain("vitest");
     expect(files["testing.behaviour.md"]).toContain("80%");
-    expect(Object.keys(files)).toHaveLength(7);
+    expect(Object.keys(files)).toHaveLength(8);
   });
 });

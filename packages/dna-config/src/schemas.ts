@@ -4,8 +4,14 @@ import {
   COMPANY_ARCHETYPES,
   COMPLIANCE_OPTIONS,
   DELIVERY_METHODOLOGIES,
+  DISCOVERY_EVENTS,
+  DISCOVERY_LIFECYCLE_STAGES,
+  DISCOVERY_METHODS,
+  DISCOVERY_PROCESSES,
+  DISCOVERY_TEAM_MODELS,
   DOC_SYSTEMS,
   FEEDBACK_AUTO_MODES,
+  INDUSTRY_SECTORS,
   ISSUE_CATEGORIES,
   PROJECT_STAGES,
   SEVERITY_LEVELS,
@@ -245,6 +251,66 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     };
   }
 
+  let discovery: DnaConfig["discovery"];
+  if (d.discovery !== undefined) {
+    const disc = expectObject(d.discovery, "discovery");
+    if (!disc.success) return disc;
+    const lifecycleStage =
+      disc.data.lifecycleStage === undefined
+        ? ok("ideation" as const)
+        : expectEnum(disc.data.lifecycleStage, DISCOVERY_LIFECYCLE_STAGES, "discovery.lifecycleStage");
+    if (!lifecycleStage.success) return lifecycleStage;
+    const teamModel =
+      disc.data.teamModel === undefined
+        ? ok("none" as const)
+        : expectEnum(disc.data.teamModel, DISCOVERY_TEAM_MODELS, "discovery.teamModel");
+    if (!teamModel.success) return teamModel;
+    const activeProcesses =
+      disc.data.activeProcesses === undefined
+        ? ok(["continuous-discovery"] as (typeof DISCOVERY_PROCESSES)[number][])
+        : parseEnumArray(disc.data.activeProcesses, DISCOVERY_PROCESSES, "discovery.activeProcesses");
+    if (!activeProcesses.success) return activeProcesses;
+    const activeMethods =
+      disc.data.activeMethods === undefined
+        ? ok([] as (typeof DISCOVERY_METHODS)[number][])
+        : parseEnumArray(disc.data.activeMethods, DISCOVERY_METHODS, "discovery.activeMethods");
+    if (!activeMethods.success) return activeMethods;
+    const activeEvents =
+      disc.data.activeEvents === undefined
+        ? ok([] as (typeof DISCOVERY_EVENTS)[number][])
+        : parseEnumArray(disc.data.activeEvents, DISCOVERY_EVENTS, "discovery.activeEvents");
+    if (!activeEvents.success) return activeEvents;
+    discovery = {
+      lifecycleStage: lifecycleStage.data,
+      teamModel: teamModel.data,
+      activeProcesses: activeProcesses.data,
+      activeMethods: activeMethods.data,
+      activeEvents: activeEvents.data,
+      customProfile: optionalString(disc.data.customProfile) ?? ".DNA/discovery/profile.md",
+    };
+  }
+
+  let industry: DnaConfig["industry"];
+  if (d.industry !== undefined) {
+    const ind = expectObject(d.industry, "industry");
+    if (!ind.success) return ind;
+    const active =
+      ind.data.active === undefined || ind.data.active === null
+        ? ok(undefined)
+        : expectEnum(ind.data.active, INDUSTRY_SECTORS, "industry.active");
+    if (!active.success) return active;
+    const secondary =
+      ind.data.secondary === undefined
+        ? ok([] as (typeof INDUSTRY_SECTORS)[number][])
+        : parseEnumArray(ind.data.secondary, INDUSTRY_SECTORS, "industry.secondary");
+    if (!secondary.success) return secondary;
+    industry = {
+      active: active.data,
+      secondary: secondary.data,
+      clientName: optionalString(ind.data.clientName),
+    };
+  }
+
   let feedback: DnaConfig["feedback"];
   if (d.feedback !== undefined) {
     const fb = expectObject(d.feedback, "feedback");
@@ -287,6 +353,8 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     featureFactory,
     aiWorkbench,
     delivery,
+    discovery,
+    industry,
     feedback,
     platformFeatures: platformFeatures.data,
   });
@@ -496,7 +564,7 @@ function parseKnowledgePack(input: unknown): ParseResult<KnowledgePack> {
   if (!description.success) return description;
   const category = expectEnum(
     d.category,
-    ["languages", "frameworks", "platforms", "disciplines", "methodologies", "compliance", "legal"] as const,
+    ["languages", "frameworks", "platforms", "disciplines", "methodologies", "compliance", "legal", "industries"] as const,
     "category",
   );
   if (!category.success) return category;
@@ -642,6 +710,19 @@ export interface DnaConfig {
     docSystem: (typeof DOC_SYSTEMS)[number];
     hierarchy: (typeof WORK_HIERARCHY_LEVELS)[number][];
     ceremonies: string[];
+    customProfile?: string;
+  };
+  industry?: {
+    active?: (typeof INDUSTRY_SECTORS)[number];
+    secondary?: (typeof INDUSTRY_SECTORS)[number][];
+    clientName?: string;
+  };
+  discovery?: {
+    lifecycleStage: (typeof DISCOVERY_LIFECYCLE_STAGES)[number];
+    teamModel: (typeof DISCOVERY_TEAM_MODELS)[number];
+    activeProcesses: (typeof DISCOVERY_PROCESSES)[number][];
+    activeMethods: (typeof DISCOVERY_METHODS)[number][];
+    activeEvents: (typeof DISCOVERY_EVENTS)[number][];
     customProfile?: string;
   };
   aiWorkbench?: {
@@ -852,8 +933,10 @@ export interface KnowledgePack {
     | "platforms"
     | "disciplines"
     | "methodologies"
+    | "discovery"
     | "compliance"
-    | "legal";
+    | "legal"
+    | "industries";
   channel: "stable" | "beta" | "nightly";
   tags: string[];
   files: Array<{ path: string; url?: string; content?: string }>;

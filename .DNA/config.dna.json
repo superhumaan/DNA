@@ -4,7 +4,7 @@
   "projectName": "dna-by-humaan",
   "description": "Software project",
   "createdAt": "2026-07-11T10:27:53.301Z",
-  "updatedAt": "2026-07-11T11:25:14.303Z",
+  "updatedAt": "2026-07-11T11:41:57.753Z",
   "stack": {
     "archetype": "react-vite-api",
     "frontend": "react",
@@ -39,7 +39,14 @@
     "disciplines/coding-trends-2025@1.0.0",
     "platforms/dna-stack@1.0.0",
     "disciplines/monorepo@1.0.0",
-    "legal/tiered-standards@1.0.0"
+    "legal/tiered-standards@1.0.0",
+    "discovery/overview@1.0.0",
+    "discovery/continuous-discovery@1.0.0",
+    "discovery/opportunity-solution-tree@1.0.0",
+    "discovery/product-market-fit@1.0.0",
+    "discovery/ux-research-foundations@1.0.0",
+    "discovery/handoff-to-delivery@1.0.0",
+    "discovery/lifecycle/ideation@1.0.0"
   ],
   "github": {
     "enabled": true,
@@ -77,7 +84,7 @@
   },
   "aiWorkbench": {
     "enabled": true,
-    "lastSyncAt": "2026-07-11T11:25:14.303Z",
+    "lastSyncAt": "2026-07-11T11:30:14.819Z",
     "catalogVersion": 5,
     "stemSource": "bundled"
   },

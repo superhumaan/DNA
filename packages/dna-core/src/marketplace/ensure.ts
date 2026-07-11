@@ -7,6 +7,7 @@ import { normalizePackId } from "./aliases.js";
 import { resolvePackIdsForIntents, resolvePackIdsForKnowledgePaths } from "./resolve.js";
 import type { ContextTarget } from "../context-intents.js";
 import { TARGET_INTENTS } from "../context-intents.js";
+import { knowledgePackIdsForIndustry, resolveIndustryProfile } from "../industry/catalog.js";
 
 export interface EnsureKnowledgeResult {
   installed: string[];
@@ -77,11 +78,31 @@ export async function ensureKnowledgeForContext(
   }
 
   const intentNames = TARGET_INTENTS[target] ?? [];
-  if (!intentNames.length) {
+  const config = (await loadDnaConfig(root)) ?? null;
+  const packIdGroups: string[][] = [];
+
+  if (intentNames.length) {
+    packIdGroups.push(resolvePackIdsForIntents(intentNames, neuralNetwork));
+  }
+
+  if (target === "industry") {
+    const profile = resolveIndustryProfile(config);
+    if (profile.active) {
+      packIdGroups.push(knowledgePackIdsForIndustry(profile.active));
+    } else {
+      packIdGroups.push(["industries/overview"]);
+    }
+  }
+
+  if (!packIdGroups.length) {
     return { installed: [], refreshed: [], failed: [] };
   }
 
-  return ensureKnowledgeForIntents(root, intentNames, neuralNetwork);
+  return ensureKnowledgeInstalled(
+    root,
+    [...new Set(packIdGroups.flat())],
+    config?.channel ?? "stable",
+  );
 }
 
 export function formatEnsureResult(result: EnsureKnowledgeResult): string {

@@ -183,6 +183,7 @@ export const STEM_CATEGORY_LABELS: Record<StemCategory, { label: string; descrip
   ivf: { label: "IVF", description: "Brownfield integration and shared library" },
   delivery: { label: "Delivery", description: "Docker, GitHub, CI" },
   methodology: { label: "Methodology", description: "Tickets, specs, and org delivery models" },
+  discovery: { label: "Discovery", description: "Product research, UX, PMF, and opportunity shaping" },
   marketplace: { label: "Marketplace", description: "Search and install knowledge packs" },
   memory: { label: "Memory", description: "CellularMemory export and import" },
 };

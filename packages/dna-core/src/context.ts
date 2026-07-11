@@ -8,6 +8,8 @@ import { ensureKnowledgeForContext } from "./marketplace/ensure.js";
 import { ensureProjectUiStandards } from "./ivf/ui-standards.js";
 import { TARGET_INTENTS, type ContextTarget } from "./context-intents.js";
 import { generateMethodologyContext } from "./delivery/context.js";
+import { generateDiscoveryContext } from "./discovery/context.js";
+import { generateIndustryContext, appendIndustryKnowledgeToContext } from "./industry/context.js";
 
 export type { ContextTarget };
 
@@ -29,6 +31,8 @@ const TARGET_BEHAVIOUR: Record<ContextTarget, string[]> = {
   legal: ["security.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md", "coding.behaviour.md"],
   multilingual: ["ai.behaviour.md", "documentation.behaviour.md"],
   methodology: ["delivery.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md"],
+  discovery: ["discovery.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md"],
+  industry: ["ai.behaviour.md", "coding.behaviour.md", "documentation.behaviour.md", "security.behaviour.md"],
   ivf: ["ai.behaviour.md", "documentation.behaviour.md", "security.behaviour.md", "coding.behaviour.md"],
   all: [],
 };
@@ -44,6 +48,14 @@ export async function generateContext(root: string, target: ContextTarget): Prom
 
   if (target === "methodology") {
     return generateMethodologyContext(root);
+  }
+
+  if (target === "discovery") {
+    return generateDiscoveryContext(root);
+  }
+
+  if (target === "industry") {
+    return generateIndustryContext(root);
   }
 
   if (target === "cursor" || target === "frontend" || target === "ivf" || target === "copilot" || target === "windsurf") {
@@ -123,6 +135,8 @@ export async function generateContext(root: string, target: ContextTarget): Prom
       }
     }
   }
+
+  await appendIndustryKnowledgeToContext(root, sections);
 
   const memoryFiles = [
     "hippocampus/project-summary.md",

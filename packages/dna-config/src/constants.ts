@@ -34,6 +34,7 @@ export const BEHAVIOUR_FILES = [
   "testing.behaviour.md",
   "documentation.behaviour.md",
   "delivery.behaviour.md",
+  "discovery.behaviour.md",
   "security.behaviour.md",
   "runtime.behaviour.md",
 ] as const;
@@ -92,6 +93,110 @@ export const DEFAULT_DELIVERY_PROFILE = {
   hierarchy: ["feature", "story", "task"],
   ceremonies: [],
   customProfile: ".DNA/delivery/profile.md",
+} as const;
+
+/** Product lifecycle stage — upstream of engineering delivery */
+export const DISCOVERY_LIFECYCLE_STAGES = [
+  "ideation",
+  "problem-validation",
+  "solution-validation",
+  "pmf",
+  "growth",
+  "scale",
+] as const;
+
+/** How product discovery is organised */
+export const DISCOVERY_TEAM_MODELS = [
+  "none",
+  "innovation-lab",
+  "discovery-squad",
+  "embedded-triad",
+  "dual-track",
+  "design-ops",
+] as const;
+
+export const DISCOVERY_PROCESSES = [
+  "continuous-discovery",
+  "double-diamond",
+  "lean-startup",
+  "design-thinking",
+  "jtbd-framework",
+  "value-proposition-canvas",
+  "lean-ux",
+  "outcome-driven-innovation",
+] as const;
+
+export const DISCOVERY_METHODS = [
+  "user-interviews",
+  "contextual-inquiry",
+  "usability-testing",
+  "surveys",
+  "card-sorting",
+  "tree-testing",
+  "diary-studies",
+  "prototype-testing",
+  "concept-testing",
+  "jobs-to-be-done",
+  "ethnography",
+  "analytics-review",
+  "competitive-analysis",
+  "pricing-research",
+  "a-b-testing",
+  "heatmap-session-replay",
+] as const;
+
+export const DISCOVERY_EVENTS = [
+  "design-sprint",
+  "discovery-sprint",
+  "kickoff-workshop",
+  "story-mapping",
+  "assumption-mapping",
+  "opportunity-mapping",
+  "synthesis-session",
+  "prioritization-workshop",
+  "pivot-review",
+  "research-readout",
+] as const;
+
+/** Installed on every dna init / doctor */
+export const DISCOVERY_FOUNDATION_PACK_IDS = [
+  "discovery/overview",
+  "discovery/continuous-discovery",
+  "discovery/opportunity-solution-tree",
+  "discovery/product-market-fit",
+  "discovery/ux-research-foundations",
+  "discovery/handoff-to-delivery",
+] as const;
+
+export const DEFAULT_DISCOVERY_PROFILE = {
+  lifecycleStage: "ideation",
+  teamModel: "none",
+  activeProcesses: ["continuous-discovery"],
+  activeMethods: [] as string[],
+  activeEvents: [] as string[],
+  customProfile: ".DNA/discovery/profile.md",
+} as const;
+
+/** Industry sectors for agency and vertical product teams */
+export const INDUSTRY_SECTORS = [
+  "healthcare",
+  "fintech",
+  "ecommerce-retail",
+  "edtech",
+  "gov-public-sector",
+  "travel-hospitality",
+  "saas-b2b",
+  "logistics-supply-chain",
+  "media-entertainment",
+  "real-estate-proptech",
+  "energy-utilities",
+  "legal-tech",
+] as const;
+
+export const DEFAULT_INDUSTRY_PROFILE = {
+  active: undefined,
+  secondary: [] as string[],
+  clientName: undefined,
 } as const;
 
 export const CELLULAR_MEMORY_REGIONS = [
