@@ -60,9 +60,10 @@ export const DNA_AI_COMMAND_CATALOG: readonly DnaAiCommandDef[] = [
     id: "update",
     category: "core",
     title: "DNA Update",
-    description: "Check for DNA knowledge pack updates.",
+    description: "Upgrade DNA CLI and refresh knowledge packs / workbench prompts.",
     cli: "npx dna update",
-    followUp: "List available updates and recommend `dna marketplace install` for any the user needs.",
+    followUp:
+      "Report CLI version change, stem pack refresh count, and marketplace updates. Suggest `dna marketplace install` for relevant packs.",
   },
   {
     id: "validate",
@@ -843,12 +844,20 @@ export function formatAiCommandsCatalog(): string {
   return lines.join("\n");
 }
 
-export async function installAiCommands(root: string, config: DnaConfig): Promise<string[]> {
+export async function installAiCommands(
+  root: string,
+  config: DnaConfig,
+  opts?: { skipReadme?: boolean },
+): Promise<string[]> {
   const created: string[] = [];
 
   for (const [relPath, content] of Object.entries(generateAiCommandFiles(config))) {
     await writeFileEnsured(join(root, relPath), content);
     created.push(relPath);
+  }
+
+  if (opts?.skipReadme) {
+    return created;
   }
 
   await writeFileEnsured(

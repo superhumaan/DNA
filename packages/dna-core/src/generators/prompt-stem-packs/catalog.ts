@@ -57,7 +57,7 @@ User context: $ARGUMENTS
       "Single recommended next action",
     ],
     contextLoads: [".DNA/neuralNetwork.json", ".DNA/behaviour/*.behaviour.md", "DNA/Impressions/product/product-overview.md"],
-    cliCommands: ["npx dna doctor", "npx dna analyze", "npx dna context <target>"],
+    cliCommands: ["npx dna doctor", "npx dna analyze", "npx dna context <target>", "npx dna update --check-only"],
     examples: [
       {
         userSays: "I just initialized DNA — now what?",
@@ -135,7 +135,10 @@ Scope: $ARGUMENTS
 \`\`\`bash
 npx dna doctor
 npx dna validate
+npx dna update --check-only
 \`\`\`
+
+Doctor repairs scaffolding; \`dna update\` upgrades the CLI and refreshes prompt stems from dna.humaan.app.
 
 ## Report
 
@@ -151,7 +154,7 @@ For each check: ✓ or ✗ in plain English. Fix gaps (hooks, workflows, rules) 
       "Remaining manual steps if any",
     ],
     contextLoads: [".DNA/config.dna.json", ".DNA/behaviour/*.behaviour.md"],
-    cliCommands: ["npx dna doctor", "npx dna validate"],
+    cliCommands: ["npx dna doctor", "npx dna validate", "npx dna update --check-only"],
     examples: [
       {
         userSays: "Is DNA healthy?",
@@ -159,7 +162,46 @@ For each check: ✓ or ✗ in plain English. Fix gaps (hooks, workflows, rules) 
           "DNA is healthy except git pre-push hook — doctor fixed it. Validation: 2 minor Impressions drift warnings. Want a full analyze next?",
       },
     ],
-    workflow: ["analyze-project"],
+    workflow: ["keep-dna-current", "analyze-project"],
+  },
+  {
+    id: "keep-dna-current",
+    name: "Keep DNA current",
+    category: "session",
+    slash: "dna-update",
+    summary: "Upgrade DNA CLI and refresh workbench stems + knowledge packs.",
+    tags: ["session", "update", "upgrade"],
+    copyVariants: [
+      "Update DNA to the latest version",
+      "Refresh prompt stems and knowledge packs",
+      "Is there a newer DNA CLI?",
+    ],
+    prompt: `# Keep DNA current
+
+\`\`\`bash
+npx dna update
+npx dna update --check-only
+\`\`\`
+
+Scope: $ARGUMENTS
+
+Report: CLI version before/after, marketplace pack updates available, workbench stem count refreshed.`,
+    guidelines: GROUND,
+    expectations: [
+      "CLI upgrade status (installed / already current / check-only)",
+      "Knowledge pack updates listed",
+      "Workbench stem refresh confirmed",
+      "Suggest marketplace install for relevant packs",
+    ],
+    contextLoads: [".DNA/config.dna.json", ".DNA/stems/index.json"],
+    cliCommands: ["npx dna update", "npx dna update --check-only", "npx dna marketplace list"],
+    examples: [
+      {
+        userSays: "Update DNA",
+        goodResponse: "Upgraded CLI 0.4.7 → 0.4.8. Refreshed 50 prompt stems. 2 knowledge packs have updates — install react positioning?",
+      },
+    ],
+    workflow: ["health-check", "marketplace-install"],
   },
 
   // ─── Analysis ────────────────────────────────────────────────────────────
@@ -249,7 +291,9 @@ User context / analyze output: $ARGUMENTS
    - Shared library → \`npx dna ivf shared-library --dry-run\`, scaffold \`packages/humaan-ui\`
    - Build rules → capture MUI/patterns into \`.DNA/knowledge/\`
    - Behaviour restructure → \`npx dna validate\`, update behaviour files
-   - Impressions drift → \`npx dna plan impressions-sync\`
+   - Impressions drift → \`npx dna plan impressions-sync\` or \`npx dna scan --open-pr\`
+   - Platform features → \`npx dna generate feature <id>\` (sso, multi-tenant, feature-flags, gradual-rollout, audit-logging)
+   - Team memory → \`npx dna memory sync\`
 3. Optional: \`npx dna plan ivf\` for phased migration.
 
 ## Ask
@@ -295,19 +339,70 @@ Present 2–3 paths. User picks one. Then execute or hand off to the right stem 
     copyVariants: ["Quick scan of this project", "Check for Impressions drift", "What's the drift score?"],
     prompt: `# Scan project
 
-Quick DNA scan — stack detection and doc drift.
+Quick DNA scan — stack detection, hosting signals, and doc drift.
 
 \`\`\`bash
 npx dna scan
+npx dna scan --open-pr
 \`\`\`
 
-Summarize: stack, test/CI presence, drift score, top 3 drift items.`,
+Drift thresholds live in \`.DNA/config.dna.json\` (\`impressions.driftThreshold\`, \`impressions.autoPrThreshold\`). Use \`--open-pr\` when drift exceeds auto-PR threshold.
+
+Summarize: stack, hosting, test/CI presence, drift score, top 3 drift items.`,
     guidelines: GROUND,
-    expectations: ["Drift score", "Top drift items", "Quick stack summary", "Suggest impressions-sync if drift high"],
-    contextLoads: ["DNA/Impressions/"],
-    cliCommands: ["npx dna scan"],
-    examples: [{ userSays: "Scan the repo", goodResponse: "Drift 34%. Missing test-plan update, stale API doc. Run impressions-sync?" }],
-    workflow: ["sync-impressions"],
+    expectations: [
+      "Drift score vs configured thresholds",
+      "Hosting detection (preview CI only for Vercel/Netlify)",
+      "Top drift items",
+      "Quick stack summary",
+      "Suggest impressions-sync or scan --open-pr if drift high",
+    ],
+    contextLoads: ["DNA/Impressions/", ".DNA/config.dna.json"],
+    cliCommands: ["npx dna scan", "npx dna scan --open-pr"],
+    examples: [
+      {
+        userSays: "Scan the repo",
+        goodResponse: "Drift 34%. Hosting: none detected — preview CI skipped. Missing test-plan update. Run impressions-sync?",
+      },
+    ],
+    workflow: ["sync-impressions", "impressions-drift-pr"],
+  },
+  {
+    id: "stack-hosting",
+    name: "Stack & hosting",
+    category: "analysis",
+    slash: "stack-hosting",
+    summary: "Show detected stack, hosting, and which CI workflows DNA scaffolds.",
+    tags: ["analysis", "stack", "hosting", "ci"],
+    copyVariants: [
+      "What stack did DNA detect?",
+      "Are we on Vercel — will preview CI install?",
+      "Show hosting and database detection",
+    ],
+    prompt: `# Stack & hosting
+
+\`\`\`bash
+npx dna stack show
+npx dna scan
+\`\`\`
+
+Explain detected stack, hosting provider, database signals, and whether \`dna-preview.yml\` applies (Vercel/Netlify only — not guessed).`,
+    guidelines: GROUND,
+    expectations: [
+      "Stack archetype and key dependencies",
+      "Hosting provider or 'not detected'",
+      "Preview CI gating explained",
+      "Config overrides in config.dna.json if any",
+    ],
+    contextLoads: [".DNA/config.dna.json", ".DNA/neuralNetwork.json"],
+    cliCommands: ["npx dna stack show", "npx dna scan"],
+    examples: [
+      {
+        userSays: "What hosting?",
+        goodResponse: "No hosting signals — DNA did not guess Vercel. Preview workflow not scaffolded. Set stack.hosting in config if you deploy to Vercel.",
+      },
+    ],
+    workflow: ["ci-install", "recommend-architecture"],
   },
   {
     id: "recommend-architecture",
@@ -470,6 +565,8 @@ Deliver: roles, permissions matrix, route guards, API checks, migration plan.`,
 npx dna generate feature <featureId>
 \`\`\`
 
+Feature IDs: \`audit-logging\`, \`sso\`, \`multi-tenant\`, \`feature-flags\`, \`gradual-rollout\`.
+
 Feature: $ARGUMENTS
 
 Review generated files. Integrate — do not leave orphan scaffolds.`,
@@ -478,6 +575,55 @@ Review generated files. Integrate — do not leave orphan scaffolds.`,
     contextLoads: ["DNA/Impressions/product/feature-map.md"],
     cliCommands: ["npx dna generate feature <featureId>"],
     examples: [{ userSays: "Generate audit-logging", goodResponse: "Scaffolded middleware + model + routes. Next: wire into app and add tests." }],
+    workflow: ["platform-codegen", "ship-feature", "quality-gate"],
+  },
+  {
+    id: "platform-codegen",
+    name: "Platform codegen",
+    category: "features",
+    slash: "platform-codegen",
+    summary: "Scaffold SSO, multi-tenant, feature flags, gradual rollout, or audit logging.",
+    tags: ["features", "scaffold", "platform"],
+    copyVariants: [
+      "Scaffold SSO for this app",
+      "Add multi-tenant middleware",
+      "Generate feature flags scaffold",
+      "Set up gradual rollout per tenant",
+    ],
+    prompt: `# Platform codegen
+
+\`\`\`bash
+npx dna generate feature audit-logging
+npx dna generate feature sso
+npx dna generate feature multi-tenant
+npx dna generate feature feature-flags
+npx dna generate feature gradual-rollout
+\`\`\`
+
+Target: $ARGUMENTS
+
+Pick the matching feature ID. Review \`.DNA/plans/\` output. Wire scaffolds into the app — pair gradual-rollout with feature-flags when needed.`,
+    guidelines: GROUND,
+    expectations: [
+      "Correct feature ID chosen",
+      "Generated paths listed",
+      "Integration checklist",
+      "Impressions/security docs to update",
+    ],
+    contextLoads: ["DNA/Impressions/product/feature-map.md", ".DNA/plans/"],
+    cliCommands: [
+      "npx dna generate feature audit-logging",
+      "npx dna generate feature sso",
+      "npx dna generate feature multi-tenant",
+      "npx dna generate feature feature-flags",
+      "npx dna generate feature gradual-rollout",
+    ],
+    examples: [
+      {
+        userSays: "Add SSO with Okta",
+        goodResponse: "Scaffolded src/auth/sso + middleware stub. Plan at .DNA/plans/sso-<feature>.md. Next: register Okta adapter and protect admin routes.",
+      },
+    ],
     workflow: ["ship-feature", "quality-gate"],
   },
 
@@ -690,13 +836,59 @@ Human review required before merge. Never auto-merge repair PRs.`,
 npx dna dashboard --port 3200
 \`\`\`
 
+Open http://localhost:3200 — live feed refreshes every 5s. Quality trend chart shows recent gate history.
+
 Summarize recent incidents, classifications, patterns. Link to Behaviour fixes.`,
     guidelines: GROUND,
-    expectations: ["Incident summary", "Classification breakdown", "Top recurring issues", "Recommended fixes"],
+    expectations: [
+      "Dashboard URL shared",
+      "Incident summary from live feed",
+      "Classification breakdown",
+      "Top recurring issues",
+      "Recommended fixes",
+    ],
     contextLoads: [".DNA/immuneSystem/issue-classifier.json", ".DNA/behaviour/runtime.behaviour.md"],
-    cliCommands: ["npx dna dashboard"],
-    examples: [{ userSays: "Recent errors?", goodResponse: "12 incidents this week. 60% auth-related. See debug-issue stem for top fix." }],
-    workflow: ["debug-issue"],
+    cliCommands: ["npx dna dashboard --port 3200"],
+    examples: [
+      {
+        userSays: "Recent errors?",
+        goodResponse: "12 incidents this week (live feed). 60% auth-related. Quality trend: 2 FAILs last sprint. See debug-issue stem for top fix.",
+      },
+    ],
+    workflow: ["dashboard-monitor", "debug-issue"],
+  },
+  {
+    id: "dashboard-monitor",
+    name: "Dashboard monitor",
+    category: "debug",
+    slash: "dashboard-monitor",
+    summary: "Open DNA dashboard — live runtime feed and quality trends.",
+    tags: ["debug", "dashboard", "monitoring"],
+    copyVariants: [
+      "Open the DNA dashboard",
+      "Show quality trends and runtime feed",
+      "Monitor DNA observer data live",
+    ],
+    prompt: `# Dashboard monitor
+
+\`\`\`bash
+npx dna dashboard --port 3200
+\`\`\`
+
+Panels: runtime incidents, doctor health, Impressions drift, CellularMemory, quality reports. Data API refreshes every 5 seconds.
+
+Summarize what the user should watch and any anomalies.`,
+    guidelines: GROUND,
+    expectations: ["URL and port", "Live feed explained", "Quality trend interpretation", "Action items if anomalies"],
+    contextLoads: [".DNA/immuneSystem/", ".DNA/CellularMemory/"],
+    cliCommands: ["npx dna dashboard --port 3200"],
+    examples: [
+      {
+        userSays: "Open dashboard",
+        goodResponse: "http://localhost:3200 — live feed shows 3 new runtime errors in the last hour. Quality trend improving since Tuesday.",
+      },
+    ],
+    workflow: ["runtime-investigate", "debug-issue"],
   },
 
   // ─── Docs ────────────────────────────────────────────────────────────────
@@ -720,12 +912,58 @@ npx dna plan impressions-sync
 
 Scope: $ARGUMENTS
 
-Update or generate Impressions from code. Open PR if --open-pr.`,
+Update or generate Impressions from code. Use \`npx dna scan --open-pr\` for draft PR when drift exceeds \`impressions.autoPrThreshold\` in config.`,
     guidelines: GROUND,
-    expectations: ["Drift items listed", "Files to update", "Changes made or PR opened"],
-    contextLoads: ["DNA/Impressions/"],
-    cliCommands: ["npx dna scan", "npx dna plan impressions-sync"],
-    examples: [{ userSays: "Docs outdated", goodResponse: "Drift 41%. Updated architecture + API docs from code analysis." }],
+    expectations: ["Drift items listed", "Threshold vs score", "Files to update", "Changes made or PR opened"],
+    contextLoads: ["DNA/Impressions/", ".DNA/config.dna.json"],
+    cliCommands: ["npx dna scan", "npx dna scan --open-pr", "npx dna plan impressions-sync"],
+    examples: [
+      {
+        userSays: "Docs outdated",
+        goodResponse: "Drift 41%. Updated architecture + API docs from code analysis. autoPrThreshold 50% — no PR yet.",
+      },
+    ],
+    workflow: ["impressions-drift-pr"],
+  },
+  {
+    id: "impressions-drift-pr",
+    name: "Impressions drift PR",
+    category: "docs",
+    slash: "drift-pr",
+    summary: "Open a draft GitHub PR when Impressions drift exceeds threshold.",
+    tags: ["docs", "impressions", "drift", "github"],
+    copyVariants: [
+      "Open a PR to fix doc drift",
+      "Impressions are stale — automate a sync PR",
+      "Scan and open PR if drift is critical",
+    ],
+    prompt: `# Impressions drift PR
+
+\`\`\`bash
+npx dna scan
+npx dna scan --open-pr
+npx dna plan impressions-sync --open-pr
+\`\`\`
+
+Check \`.DNA/config.dna.json\` → \`impressions.driftThreshold\`, \`impressions.autoPrThreshold\`.
+
+If drift exceeds threshold: run \`scan --open-pr\` to open a draft PR with sync plan. Summarize PR URL and files touched.`,
+    guidelines: GROUND,
+    expectations: [
+      "Drift score vs thresholds",
+      "PR opened or reason skipped",
+      "Sync plan summary",
+      "Manual follow-up if PR not opened",
+    ],
+    contextLoads: ["DNA/Impressions/", ".DNA/config.dna.json"],
+    cliCommands: ["npx dna scan --open-pr", "npx dna plan impressions-sync --open-pr"],
+    examples: [
+      {
+        userSays: "Open drift PR",
+        goodResponse: "Drift 62% > autoPrThreshold 50%. Draft PR #42 opened with impressions-sync plan.",
+      },
+    ],
+    workflow: ["sync-impressions", "github-push"],
   },
   {
     id: "document-from-code",
@@ -824,22 +1062,67 @@ Execute current IVF phase only. Update CellularMemory as you go.`,
 \`\`\`bash
 npx dna ivf shared-library --dry-run
 npx dna ivf shared-library --scaffold
+npx dna ivf shared-library --execute
 \`\`\`
 
 Scope: $ARGUMENTS
 
-Dry-run first. Report duplicates and migration order. Scaffold only after approval.`,
-    guidelines: { ...GROUND, must: [...GROUND.must, "Dry-run before scaffold"] },
-    expectations: ["Dry-run report", "Duplicate components identified", "Migration order", "Scaffold path if approved"],
+Dry-run first. \`--execute\` copies components, rewires imports, runs tests, rolls back on failure — only after approval.`,
+    guidelines: { ...GROUND, must: [...GROUND.must, "Dry-run before scaffold or execute"] },
+    expectations: ["Dry-run report", "Duplicate components identified", "Migration order", "Execute rollback plan if tests fail"],
     contextLoads: ["DNA/Impressions/architecture/solution-architecture.md"],
-    cliCommands: ["npx dna ivf shared-library --dry-run", "npx dna ivf shared-library --scaffold"],
+    cliCommands: [
+      "npx dna ivf shared-library --dry-run",
+      "npx dna ivf shared-library --scaffold",
+      "npx dna ivf shared-library --execute",
+    ],
     examples: [
       {
         userSays: "No shared library — P1 gap",
         goodResponse: "Dry-run: 23 duplicate UI patterns. Recommend packages/humaan-ui. Migrate Button, Modal first. Scaffold?",
       },
     ],
-    workflow: ["ship-feature", "quality-gate"],
+    workflow: ["ivf-shared-library-execute", "ship-feature", "quality-gate"],
+  },
+  {
+    id: "ivf-shared-library-execute",
+    name: "IVF shared library execute",
+    category: "ivf",
+    slash: "ivf-execute",
+    summary: "Execute shared library extraction — copy, rewire imports, test, rollback on failure.",
+    tags: ["ivf", "shared-library", "execute"],
+    copyVariants: [
+      "Execute the shared library migration",
+      "Run ivf shared-library --execute",
+      "Migrate duplicate UI components into packages/humaan-ui",
+    ],
+    prompt: `# IVF shared library execute
+
+Requires prior \`--dry-run\` approval.
+
+\`\`\`bash
+npx dna ivf shared-library --execute
+\`\`\`
+
+Scope: $ARGUMENTS
+
+Report: files copied, imports rewired, test result. If tests fail, confirm rollback completed.`,
+    guidelines: { ...GROUND, must: [...GROUND.must, "Confirm dry-run was reviewed before execute"] },
+    expectations: [
+      "Execute summary",
+      "Test pass/fail",
+      "Rollback status if failed",
+      "Next migration batch if partial",
+    ],
+    contextLoads: ["DNA/Impressions/architecture/solution-architecture.md"],
+    cliCommands: ["npx dna ivf shared-library --execute"],
+    examples: [
+      {
+        userSays: "Execute migration",
+        goodResponse: "Migrated 8 components to packages/humaan-ui. Tests PASS. 15 components remain for phase 2.",
+      },
+    ],
+    workflow: ["quality-gate", "github-push"],
   },
 
   // ─── Delivery ────────────────────────────────────────────────────────────
@@ -902,9 +1185,11 @@ Message context: $ARGUMENTS`,
 npx dna ci install
 \`\`\`
 
+Workflows: lint/test/coverage (\`dna-ci.yml\`), security (\`dna-security.yml\`), preview (\`dna-preview.yml\` only when hosting is Vercel or Netlify — not guessed).
+
 Summarize workflows created. Verify with doctor.`,
     guidelines: GROUND,
-    expectations: ["Workflows listed", "What each gate checks", "Doctor CI check status"],
+    expectations: ["Workflows listed", "Preview CI gating explained", "What each gate checks", "Doctor CI check status"],
     contextLoads: [".github/workflows/"],
     cliCommands: ["npx dna ci install", "npx dna doctor"],
     examples: [{ userSays: "Add CI", goodResponse: "Installed dna-ci.yml, dna-security.yml, dna-preview.yml." }],
@@ -994,16 +1279,63 @@ Confirm export path and segment count.`,
 
 \`\`\`bash
 npx dna memory import <file> --merge
+npx dna memory import <file> --on-conflict newest
 \`\`\`
+
+Conflict strategies: \`newest\` (default), \`keep-local\`, \`keep-remote\`.
 
 File: $ARGUMENTS
 
 Confirm merge result. Never overwrite without user consent.`,
     guidelines: { ...GROUND, never: [...GROUND.never, "Overwrite memory without explicit user consent"] },
-    expectations: ["Import file validated", "Merge summary", "Conflicts if any"],
+    expectations: ["Import file validated", "Merge summary", "Conflicts resolved per strategy"],
     contextLoads: [".DNA/CellularMemory/"],
-    cliCommands: ["npx dna memory import <file> --merge"],
-    examples: [{ userSays: "Import memory backup", goodResponse: "Merged 3 segments. 0 conflicts." }],
+    cliCommands: [
+      "npx dna memory import <file> --merge",
+      "npx dna memory import <file> --on-conflict newest",
+    ],
+    examples: [{ userSays: "Import memory backup", goodResponse: "Merged 3 segments. 1 conflict resolved (newest)." }],
+    workflow: ["memory-sync"],
+  },
+  {
+    id: "memory-sync",
+    name: "Memory sync",
+    category: "memory",
+    slash: "memory-sync",
+    summary: "Sync CellularMemory from team registry — export, import, conflict resolution.",
+    tags: ["memory", "sync", "team"],
+    copyVariants: [
+      "Sync DNA memory with the team registry",
+      "Pull latest CellularMemory from shared path",
+      "Merge team memory into this project",
+    ],
+    prompt: `# Memory sync
+
+\`\`\`bash
+npx dna memory sync
+npx dna memory sync --registry <path>
+npx dna memory import <file> --on-conflict keep-remote
+\`\`\`
+
+Registry path: from \`memory.teamRegistry\` in config or $ARGUMENTS.
+
+Summarize segments synced, conflicts, and resolution strategy.`,
+    guidelines: GROUND,
+    expectations: [
+      "Registry path used",
+      "Segments imported/merged count",
+      "Conflict strategy applied",
+      "Remaining manual steps",
+    ],
+    contextLoads: [".DNA/CellularMemory/", ".DNA/config.dna.json"],
+    cliCommands: ["npx dna memory sync", "npx dna memory export --out .DNA/exports/memory.json"],
+    examples: [
+      {
+        userSays: "Sync team memory",
+        goodResponse: "Synced from //team/.DNA/registry/memory.json. Merged 5 segments, 0 conflicts.",
+      },
+    ],
+    workflow: ["memory-export", "memory-import"],
   },
 
   ...AGENT_LOOP_STEM_DEFS,

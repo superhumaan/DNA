@@ -17,7 +17,7 @@ Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
-| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 43 prompt stem packs (copy-paste + guidelines) |
+| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 50 prompt stem packs + `/dna-*` CLI commands |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Supply chain** | [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) · [SECURITY.md](https://github.com/superhumaan/DNA/blob/main/SECURITY.md) |
@@ -103,7 +103,7 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna plan ivf` | Integrating Vertical Functions — phased migration plan |
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for Cursor / Copilot / Claude |
-| `dna workbench install` | Refresh DNA Workbench + 43 prompt stem packs |
+| `dna workbench install` | Refresh DNA Workbench + 50 prompt stem packs + `/dna-*` commands |
 | `dna stems list` | List prompt stem packs (analyze, ship, agent-loop roles, …) |
 | `dna stems show <id>` | Copy variants and file paths for one stem |
 | `dna commands install` | Optional — install `/dna-*` CLI slash commands for power users |

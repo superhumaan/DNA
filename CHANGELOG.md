@@ -4,6 +4,12 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **7 new prompt stem packs** (50 total) — `keep-dna-current` (`/dna-update`), `platform-codegen`, `ivf-shared-library-execute` (`/ivf-execute`), `impressions-drift-pr` (`/drift-pr`), `memory-sync`, `dashboard-monitor`, `stack-hosting`.
+- **Stem pack refresh** — existing stems updated for v0.4.6–0.4.8 features: `scan --open-pr`, drift thresholds, `ivf shared-library --execute`, `memory sync` / `--on-conflict`, live dashboard feed, hosting-aware preview CI.
+- **Install activation** — `dna init`, `dna doctor`, and `dna update` now install **workbench + stems + `/dna-*` CLI slash commands** (not stems-only). Intelligence catalog scenarios bumped to 10.
+
 ## [0.4.8] - 2026-07-11
 
 ### Added

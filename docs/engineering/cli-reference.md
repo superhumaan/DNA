@@ -46,12 +46,17 @@ dna dashboard --port 3200
 
 ## memory
 
-Export and import CellularMemory segments across projects.
+Export, import, and sync CellularMemory segments across projects and team registries.
 
 ```bash
 dna memory export --out .DNA/exports/memory.json
 dna memory import .DNA/exports/memory.json --merge
+dna memory import .DNA/exports/memory.json --on-conflict newest
+dna memory sync
+dna memory sync --registry <path>
 ```
+
+Conflict strategies: `newest` (default), `keep-local`, `keep-remote`.
 
 ## generate
 
@@ -59,6 +64,10 @@ Platform feature code scaffolds.
 
 ```bash
 dna generate feature audit-logging
+dna generate feature sso
+dna generate feature multi-tenant
+dna generate feature feature-flags
+dna generate feature gradual-rollout
 ```
 
 ## plan impressions-sync
@@ -77,6 +86,7 @@ Shared library extraction for monorepos.
 ```bash
 dna ivf shared-library --dry-run
 dna ivf shared-library --scaffold
+dna ivf shared-library --execute
 ```
 
 ## recommend
@@ -245,20 +255,20 @@ Re-enable with `dna feature-factory install`.
 
 ## commands
 
-Install **DNA Workbench** and **43 prompt stem packs** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rule) by default on init, doctor, and update. Optional CLI catalog: `dna commands install`.
+Install **DNA Workbench**, **50 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update.
 
 ```bash
 dna workbench install
 dna stems list
 dna stems show analyze-project
 dna stems install
-dna commands install    # optional /dna-* CLI wrappers
+dna commands install    # refresh /dna-* CLI wrappers only
 dna commands list
 dna commands export-catalog --out .DNA/intelligence-catalog.json
 dna commands uninstall
 ```
 
-**Installed automatically** with `dna init`, `dna doctor`, and `dna update` (workbench + stems).
+**Installed automatically** with `dna init`, `dna doctor`, and `dna update` (workbench + stems + `/dna-*` commands).
 
 Copy-paste library: [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence)
 
@@ -281,11 +291,15 @@ Each stem includes: `prompt.md`, `guidelines.md`, `expectations.md`, `context.md
 
 | Category | Examples |
 |----------|----------|
-| Analysis | `/analyze-project`, `/what-next`, `/scan-project` |
-| Features | `/ship-feature`, `/plan-rbac`, `/generate-feature` |
+| Session | `/health-check`, `/dna-update`, `/work-with-dna` |
+| Analysis | `/analyze-project`, `/what-next`, `/scan-project`, `/stack-hosting` |
+| Features | `/ship-feature`, `/plan-rbac`, `/generate-feature`, `/platform-codegen` |
 | Agent loop | `/agent-loop`, `/product-analyst`, `/solution-architect`, `/backend-engineer`, … |
 | Quality | `/quality-gate`, `/pre-push-review` |
-| IVF | `/ivf-shared-library`, `/plan-ivf` |
+| IVF | `/ivf-shared-library`, `/ivf-execute`, `/plan-ivf` |
+| Docs | `/sync-impressions`, `/drift-pr` |
+| Memory | `/memory-sync`, `/memory-import`, `/memory-export` |
+| Debug | `/dashboard-monitor`, `/runtime-investigate` |
 
 Refresh: `npx dna update` downloads the latest catalog from `https://dna.humaan.app/intelligence/api/v1/catalog` (offline: bundled fallback).
 
@@ -298,9 +312,9 @@ dna stems show what-next-after-analyze
 
 Workbench installs slash commands for every stem that has one — e.g. `/work-with-dna`, `/ship-feature`, `/analyze-project`, `/agent-loop`, `/solution-architect`.
 
-Files: `.cursor/rules/dna-workbench.mdc`, `.cursor/skills/dna-workbench/`, `.cursor/commands/*.md`, `.DNA/stems/` (and `.claude/` mirror).
+Files: `.cursor/rules/dna-workbench.mdc`, `.cursor/skills/dna-workbench/`, `.cursor/skills/dna-cli/`, `.cursor/commands/*.md`, `.DNA/stems/` (and `.claude/` mirror).
 
-Optional: `dna commands install` adds per-CLI `/dna-*` slash commands for power users.
+`/dna-*` commands install alongside stem slashes — both refresh on `dna workbench install`, `dna init`, `dna doctor`, and `dna update`.
 
 ## github
 

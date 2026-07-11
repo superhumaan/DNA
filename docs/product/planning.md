@@ -9,7 +9,7 @@ DNA development priorities and public roadmap.
 - `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` bundle (v0.4.6+)
 - **Zero npm dependencies** — published package has no production `dependencies`; internal git, glob, GitHub API, CLI parser, and config validators
 - **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
-- **43 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow
+- **50 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow
 - **DNA Workbench** — default on init/doctor/update; [intelligence library](https://dna.humaan.app/intelligence)
 - 768 knowledge packs in stable channel
 - Platform catalog from four reference production apps

@@ -4,7 +4,7 @@ import { finalizeStemPack } from "./builder.js";
 
 describe("prompt stem packs", () => {
   it("defines a large stem library", () => {
-    expect(PROMPT_STEM_DEFS.length).toBeGreaterThanOrEqual(40);
+    expect(PROMPT_STEM_DEFS.length).toBeGreaterThanOrEqual(50);
   });
 
   it("each stem has required files", () => {

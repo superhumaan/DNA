@@ -11,6 +11,7 @@ import {
   syncPromptStemPacks,
   uninstallPromptStemPacks,
 } from "./prompt-stem-packs/index.js";
+import { DNA_AI_COMMAND_CATALOG, installAiCommands } from "./ai-commands.js";
 
 /** Core workbench paths (stem packs add `.DNA/stems/` and slash commands separately). */
 export const AI_WORKBENCH_CORE_PATHS = [
@@ -245,6 +246,11 @@ Each command maps to \`.DNA/stems/<id>/\` — read **prompt.md, guidelines.md, e
 | \`/agent-loop\` | agent-loop-full | All 9 roles in sequence |
 | \`/product-analyst\` … \`/final-release\` | role-* | One agent-loop role at a time |
 | \`/health-check\` | health-check | Doctor + validate |
+| \`/dna-update\` | keep-dna-current | Upgrade CLI + refresh stems |
+| \`/platform-codegen\` | platform-codegen | SSO, multi-tenant, flags, rollout |
+| \`/drift-pr\` | impressions-drift-pr | Draft PR when drift exceeds threshold |
+| \`/memory-sync\` | memory-sync | Team CellularMemory sync |
+| \`/dashboard-monitor\` | dashboard-monitor | Live dashboard + quality trends |
 | \`/quality-gate\` | quality-gate | Pre-push gate |
 | \`/plan-compliance\` | plan-compliance | Compliance rollout |
 | \`/debug-issue\` | debug-issue | Debug + fix loop |
@@ -288,6 +294,50 @@ export function isAiWorkbenchEnabled(config: DnaConfig): boolean {
   return config.aiWorkbench?.enabled !== false;
 }
 
+function buildCommandsReadme(
+  config: DnaConfig,
+  stemCount: number,
+  stemSync: { source: string; catalogVersion: number },
+  slashTable: string,
+): { cursor: string; claude: string } {
+  const cmdCount = DNA_AI_COMMAND_CATALOG.length;
+  const cursor = `# DNA intelligence — Cursor commands
+
+**${config.projectName}** — ${stemCount} prompt stem packs (${stemSync.source} catalog v${stemSync.catalogVersion}) + ${cmdCount} \`/dna-*\` CLI commands.
+
+## Prompt stems (\`.DNA/stems/<id>/\`)
+
+Each stem: **prompt + guidelines + expectations + context + examples**.
+
+| Slash | Stem |
+|-------|------|
+${slashTable}
+
+Copy-paste library: https://dna.humaan.app/intelligence#stem-library
+
+Skill: \`.cursor/skills/dna-workbench/\` · Rule: \`.cursor/rules/dna-workbench.mdc\`
+
+## CLI slash commands (\`/dna-*\`)
+
+Power-user wrappers for every \`dna\` subcommand — skill: \`.cursor/skills/dna-cli/\`, rule: \`.cursor/rules/dna-cli-commands.mdc\`.
+
+Regenerate: \`npx dna workbench install\` or \`npx dna commands install\`
+
+Remove workbench: \`npx dna workbench uninstall\` · Remove CLI commands: \`npx dna commands uninstall\`
+`;
+
+  const claude = `# DNA intelligence — Claude Code commands
+
+**${config.projectName}** — ${stemCount} stems + ${cmdCount} \`/dna-*\` commands.
+
+Workbench skill: \`.claude/skills/dna-workbench/\` · CLI skill: \`.claude/skills/dna-cli/\`
+
+Regenerate: \`npx dna workbench install\`
+`;
+
+  return { cursor, claude };
+}
+
 export async function installAiWorkbench(root: string, config: DnaConfig): Promise<string[]> {
   if (!isAiWorkbenchEnabled(config)) return [];
 
@@ -308,36 +358,14 @@ export async function installAiWorkbench(root: string, config: DnaConfig): Promi
     .map((p) => `| \`/${p.slash}\` | ${p.name} |`)
     .join("\n");
 
-  await writeFileEnsured(
-    join(root, ".cursor", "commands", "README.md"),
-    `# DNA Workbench — Cursor prompts
+  const commandFiles = await installAiCommands(root, config, { skipReadme: true });
+  created.push(...commandFiles);
 
-**${config.projectName}** — ${stemCount} prompt stem packs (${stemSync.source} catalog v${stemSync.catalogVersion}).
-
-Each stem includes **prompt + guidelines + expectations + context + examples** in \`.DNA/stems/<id>/\`.
-
-| Slash | Stem |
-|-------|------|
-${slashTable}
-
-Copy-paste library: https://dna.humaan.app/intelligence#stem-library
-
-Skill: \`.cursor/skills/dna-workbench/\` · Rule: \`.cursor/rules/dna-workbench.mdc\`
-
-Remove: \`npx dna workbench uninstall\`
-`,
-  );
+  const readmes = buildCommandsReadme(config, stemCount, stemSync, slashTable);
+  await writeFileEnsured(join(root, ".cursor", "commands", "README.md"), readmes.cursor);
   created.push(".cursor/commands/README.md");
 
-  await writeFileEnsured(
-    join(root, ".claude", "commands", "README.md"),
-    `# DNA Workbench — Claude Code prompts
-
-Same commands as Cursor. Skill: \`.claude/skills/dna-workbench/\`
-
-Remove: \`npx dna workbench uninstall\`
-`,
-  );
+  await writeFileEnsured(join(root, ".claude", "commands", "README.md"), readmes.claude);
   created.push(".claude/commands/README.md");
 
   return created;
@@ -383,7 +411,7 @@ export function buildIntelligenceWorkbenchCatalog() {
     }));
 
   return {
-      version: 4,
+      version: 5,
       type: "workbench",
       catalogUrl: "https://dna.humaan.app/intelligence",
       generatedBy: "dna workbench install",
@@ -403,6 +431,7 @@ export function buildIntelligenceWorkbenchCatalog() {
         },
       },
       defaultInstall: ["dna init", "dna doctor", "dna update"],
+      commandsInstall: "Included with workbench install — `/dna-*` slash commands + dna-cli skill",
       optOut: "dna workbench uninstall",
       stemCategories: STEM_CATEGORY_LABELS,
       stemPacks: stems,
@@ -524,11 +553,51 @@ export function buildIntelligenceWorkbenchCatalog() {
           ],
           stems: ["work-with-dna", "analyze-project", "what-next-after-analyze"],
         },
+        {
+          id: "keep-dna-current",
+          title: "Upgrade DNA CLI and refresh stems",
+          userSays: "Update DNA — is there a newer CLI and fresh prompt stems?",
+          flow: [
+            "Stem: keep-dna-current → npx dna update",
+            "Report CLI version change and stem catalog refresh",
+            "List marketplace pack updates",
+          ],
+          stems: ["keep-dna-current", "health-check"],
+        },
+        {
+          id: "platform-feature-scaffold",
+          title: "Scaffold platform feature (SSO, flags, multi-tenant)",
+          userSays: "Add SSO with Okta and feature flags for gradual rollout",
+          flow: [
+            "Stem: platform-codegen → generate feature sso + feature-flags",
+            "Review .DNA/plans/ and wire scaffolds",
+            "quality-gate before ship",
+          ],
+          stems: ["platform-codegen", "generate-feature", "quality-gate"],
+        },
+        {
+          id: "drift-automation",
+          title: "Docs drift — scan and open PR",
+          userSays: "Our Impressions are stale — open a PR if drift is bad",
+          flow: [
+            "npx dna scan — compare drift to config thresholds",
+            "npx dna scan --open-pr if above autoPrThreshold",
+            "Summarize PR or manual sync plan",
+          ],
+          stems: ["scan-project", "impressions-drift-pr", "sync-impressions"],
+        },
+        {
+          id: "team-memory-sync",
+          title: "Sync CellularMemory with team registry",
+          userSays: "Pull the latest team DNA memory into this repo",
+          flow: ["npx dna memory sync", "Report merged segments and conflicts"],
+          stems: ["memory-sync", "memory-import"],
+        },
       ],
       counts: {
         stemPacks: stems.length,
         prompts: prompts.length,
-        scenarios: 6,
+        scenarios: 10,
         agentRoles: 9,
       },
     };
