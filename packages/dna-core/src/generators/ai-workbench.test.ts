@@ -6,7 +6,6 @@ import { randomUUID } from "node:crypto";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import { fileExists } from "../fs.js";
 import {
-  AI_WORKBENCH_CORE_PATHS,
   generateAiWorkbenchFiles,
   installAiWorkbench,
   uninstallAiWorkbench,

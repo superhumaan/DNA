@@ -4,9 +4,33 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-11
+
 ### Added
 
-- **Portfolio install** — full manifest across docs, npm metadata, GitHub README, and [DNA-Web](https://github.com/superhumaan/DNA-Web) landing (hero, portfolio section, doctor-first quick start); 768→897 pack count sync in docs. See [docs/product/portfolio-install.md](./docs/product/portfolio-install.md).
+- **Full audit report** — `.DNA/reports/audit/full-audit-2026-07-11.md` (security, gaps, systems inventory).
+- **`.env.example`** — documented DNA/GitHub/AI/maintainer environment variables.
+- **`DNA/Impressions/architecture/overview.md`** — closes impressions drift gap.
+- **`@vitest/coverage-v8`** — coverage tooling for monorepo test gate.
+- **`packages/dna-core/src/test-helpers.ts`** — `mockScan()` / `mockWizardAnswers()` for type-safe tests.
+- **`package.json` `pnpm.onlyBuiltDependencies`** — Docker-compatible esbuild install policy.
+
+### Changed
+
+- **Quality scanner** — nested `node_modules` ignore fixed; feature scope defaults to `packages/**` (294 files vs 29k false positives).
+- **ESLint** — scoped to `packages/**`; excludes `.next`, apps build output, scripts.
+- **Dockerfile** — pnpm 9 monorepo layout; copies workspace + scripts; builds packages only.
+- **SAST patterns** — dashboard server and pattern definitions excluded from innerHTML false positives.
+
+### Fixed
+
+- **Typecheck** — all `ScanResult` test fixtures use `mockScan()`; wizard answer readonly tuple errors resolved.
+- **Glob** — `**/node_modules/**` ignore works at any depth (new test).
+- **Lint** — useless escapes in catalog/build-rules strings; 1,310 `.next` false positives eliminated.
+
+### Removed
+
+- **Cleanup failed runs workflow** — removed `cleanup-failed-runs.yml` from the monorepo and `dna ci install` scaffold; deleted historical GitHub Actions runs.
 
 ## [0.4.9] - 2026-07-11
 

@@ -1,10 +1,12 @@
 node_modules
 dist
 build
+.next
 .git
 .DNA/data
 .DNA/reports
 .DNA/credentials
 coverage
+.local-wiki
 *.md
 !README.md

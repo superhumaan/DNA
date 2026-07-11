@@ -38,7 +38,7 @@ describe("cli-upgrade", () => {
       globalThis.fetch = vi.fn(async () => ({
         ok: true,
         json: async () => ({ "dist-tags": { latest: "9.9.9", beta: "9.9.9-beta.1" } }),
-      })) as typeof fetch;
+      })) as unknown as typeof fetch;
     });
 
     afterEach(() => {

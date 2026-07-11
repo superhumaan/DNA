@@ -67,8 +67,31 @@ function shouldIgnore(relativePath: string, ignore: string[]): boolean {
   const normalized = relativePath.replace(/\\/g, "/");
   for (const rule of ignore) {
     const r = normalizePattern(rule);
+    const nestedSegment = r.match(/^\*\*\/([^/*]+)\/\*\*$/);
+    if (nestedSegment) {
+      const segment = nestedSegment[1]!;
+      if (
+        normalized === segment ||
+        normalized.startsWith(`${segment}/`) ||
+        normalized.includes(`/${segment}/`)
+      ) {
+        return true;
+      }
+      continue;
+    }
     if (r.endsWith("/**")) {
       const base = r.slice(0, -3);
+      if (base.startsWith("**/")) {
+        const segment = base.slice(3);
+        if (
+          normalized === segment ||
+          normalized.startsWith(`${segment}/`) ||
+          normalized.includes(`/${segment}/`)
+        ) {
+          return true;
+        }
+        continue;
+      }
       if (normalized === base || normalized.startsWith(`${base}/`)) return true;
       continue;
     }

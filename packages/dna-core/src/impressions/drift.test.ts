@@ -6,19 +6,11 @@ import { randomUUID } from "node:crypto";
 import { detectImpressionsDrift } from "./drift.js";
 import type { ScanResult } from "@superhumaan/dna-config";
 import { runWizard } from "../wizard.js";
+import { mockScan, mockWizardAnswers } from "../test-helpers.js";
 
-const WIZARD_ANSWERS = {
+const WIZARD_ANSWERS = mockWizardAnswers({
   projectDescription: "Drift test project",
-  acceptRecommendation: true,
-  aiTools: ["cursor"] as const,
-  compliance: "none" as const,
-  stage: "mvp" as const,
-  installRuntime: false,
-  installFeatureFactory: false,
-  installCi: false,
-  configureGithub: false,
-  configureAi: false,
-};
+});
 
 describe("impressions drift", () => {
   it("detects missing docs and stack mismatch", async () => {
@@ -31,21 +23,16 @@ describe("impressions drift", () => {
 
     await runWizard({ root, answers: WIZARD_ANSWERS, nonInteractive: true });
 
-    const scan: ScanResult = {
+    const scan: ScanResult = mockScan({
       frontend: "next",
       backend: "express",
-      ciCd: [],
-      docker: false,
-      envFiles: [],
-      docs: [],
-      aiRules: [],
-      securityRisks: [],
       missingDocs: ["architecture/overview.md"],
-      missingTests: false,
       dependencies: ["next"],
       scripts: {},
       hasDna: true,
-    };
+      hasSourceCode: true,
+      fileCount: 1,
+    });
 
     const report = await detectImpressionsDrift(root, scan);
     expect(report.score).toBeGreaterThan(0);

@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { generateImpressions } from "../src/generators/impressions.js";
 import { generateRecommendation } from "../src/recommend.js";
+import { mockScan } from "../src/test-helpers.js";
 
 describe("impressions generator", () => {
   it("generates product and architecture docs", () => {
@@ -20,10 +21,7 @@ describe("impressions generator", () => {
       platformFeatures: [],
     };
 
-    const rec = generateRecommendation(
-      { ciCd: [], docker: false, envFiles: [], docs: [], aiRules: [], securityRisks: [], missingDocs: [], missingTests: false, dependencies: [], scripts: {}, hasDna: false },
-      "B2B SaaS productivity platform",
-    );
+    const rec = generateRecommendation(mockScan(), "B2B SaaS productivity platform");
 
     const impressions = generateImpressions(
       config,

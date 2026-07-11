@@ -670,7 +670,7 @@ ${webUiRulesSection(analysis)}
 
 ## Feature folder
 
-${analysis.featureFolders[0] ? `Use template: \`${analysis.featureFolders[0].template}\`` : refModule ? `Use module folder: \`${refModule.path}/\`` : "Use \`src/features/{feature-name}/\`"}
+${analysis.featureFolders[0] ? `Use template: ${"`"}${analysis.featureFolders[0].template}${"`"}` : refModule ? `Use module folder: ${"`"}${refModule.path}/${"`"}` : "Use `src/features/{feature-name}/`"}
 
 ## Checklist (definition of done)
 

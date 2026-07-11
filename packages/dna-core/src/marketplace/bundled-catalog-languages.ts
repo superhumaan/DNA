@@ -6,7 +6,7 @@ export const LANGUAGE_PACKS: KnowledgePack[] = [
     "typescript",
     "TypeScript",
     "ts",
-    "Node, Deno, Bun, browsers. Prefer strict mode, \`noUncheckedIndexedAccess\` for new repos.",
+    "Node, Deno, Bun, browsers. Prefer strict mode, `noUncheckedIndexedAccess` for new repos.",
     `- Strict \`tsconfig\` — no implicit any\n- Zod at API boundaries\n- Prefer \`type\` for unions; \`interface\` for extendable objects\n- Avoid \`enum\` — use const objects or unions`,
   ),
   languagePack(

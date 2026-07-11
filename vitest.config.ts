@@ -7,5 +7,10 @@ export default defineConfig({
     include: ["packages/**/*.test.ts", "packages/**/*.spec.ts"],
     pool: "forks",
     globalSetup: ["./scripts/vitest-global-setup.mjs"],
+    coverage: {
+      provider: "v8",
+      include: ["packages/**/src/**/*.ts"],
+      exclude: ["**/*.test.ts", "**/dist/**", "**/node_modules/**"],
+    },
   },
 });

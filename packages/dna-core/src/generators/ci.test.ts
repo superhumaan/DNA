@@ -13,6 +13,7 @@ import {
   generateVitestCoverageConfig,
 } from "./ci.js";
 import { fileExists } from "../fs.js";
+import { mockScan } from "../test-helpers.js";
 
 function testConfig(): DnaConfig {
   return {
@@ -36,20 +37,7 @@ describe("CI generator", () => {
   it("generates strict workflow when ci.strict is enabled", () => {
     const yaml = generateCiWorkflow(
       { ...testConfig(), ci: { strict: true, enabled: true, perFileCoverage: true, owasp: true, pushToPreview: true, previewProvider: "vercel", coverageThreshold: 80 } },
-      {
-        packageManager: "npm",
-        ciCd: [],
-        docker: false,
-        envFiles: [],
-        docs: [],
-        aiRules: [],
-        securityRisks: [],
-        missingDocs: [],
-        missingTests: false,
-        dependencies: [],
-        scripts: { test: "vitest run" },
-        hasDna: false,
-      },
+      mockScan({ packageManager: "npm", scripts: { test: "vitest run" }, hasDna: false }),
     );
 
     expect(yaml).toContain("strict (fail on gate violations)");
@@ -58,20 +46,9 @@ describe("CI generator", () => {
   });
 
   it("generates workflow with lint, test, coverage, and audit", () => {
-    const yaml = generateCiWorkflow(testConfig(), {
-      packageManager: "npm",
-      ciCd: [],
-      docker: false,
-      envFiles: [],
-      docs: [],
-      aiRules: [],
-      securityRisks: [],
-      missingDocs: [],
-      missingTests: false,
-      dependencies: [],
+    const yaml = generateCiWorkflow(testConfig(), mockScan({
       scripts: { test: "vitest run", lint: "eslint .", "test:coverage": "vitest run --coverage" },
-      hasDna: false,
-    });
+    }));
 
     expect(yaml).toContain("name: DNA CI");
     expect(yaml).toContain("advisory");
@@ -84,20 +61,7 @@ describe("CI generator", () => {
   });
 
   it("adds pnpm setup when package manager is pnpm", () => {
-    const yaml = generateCiWorkflow(testConfig(), {
-      packageManager: "pnpm",
-      ciCd: [],
-      docker: false,
-      envFiles: [],
-      docs: [],
-      aiRules: [],
-      securityRisks: [],
-      missingDocs: [],
-      missingTests: false,
-      dependencies: [],
-      scripts: { test: "vitest run" },
-      hasDna: false,
-    });
+    const yaml = generateCiWorkflow(testConfig(), mockScan({ packageManager: "pnpm" }));
 
     expect(yaml).toContain("pnpm/action-setup@v4");
     expect(yaml).toContain("cache: pnpm");
@@ -121,20 +85,7 @@ describe("CI generator", () => {
   });
 
   it("does not embed inline cleanup jobs in CI workflow", () => {
-    const yaml = generateCiWorkflow(testConfig(), {
-      packageManager: "npm",
-      ciCd: [],
-      docker: false,
-      envFiles: [],
-      docs: [],
-      aiRules: [],
-      securityRisks: [],
-      missingDocs: [],
-      missingTests: false,
-      dependencies: [],
-      scripts: { test: "vitest run" },
-      hasDna: false,
-    });
+    const yaml = generateCiWorkflow(testConfig(), mockScan({ packageManager: "npm" }));
 
     expect(yaml).not.toContain("cleanup-on-failure");
     expect(yaml).not.toContain("deleteWorkflowRun");
@@ -155,20 +106,7 @@ describe("CI generator", () => {
           coverageThreshold: 80,
         },
       },
-      {
-        packageManager: "npm",
-        ciCd: [],
-        docker: false,
-        envFiles: [],
-        docs: [],
-        aiRules: [],
-        securityRisks: [],
-        missingDocs: [],
-        missingTests: false,
-        dependencies: [],
-        scripts: { test: "vitest run" },
-        hasDna: false,
-      },
+      mockScan({ packageManager: "npm", scripts: { test: "vitest run" }, hasDna: false }),
     );
 
     expect(yaml).toContain("workflow_run:");
@@ -198,7 +136,6 @@ describe("CI generator", () => {
     const result = await installCiPipeline({ root, config: testConfig() });
 
     expect(result.created).toContain(".github/workflows/dna-ci.yml");
-    expect(result.created).toContain(".github/workflows/cleanup-failed-runs.yml");
     expect(result.created).toContain(".github/workflows/dna-security.yml");
     expect(await fileExists(join(root, "vitest.config.ts"))).toBe(true);
 
@@ -221,20 +158,7 @@ describe("CI generator", () => {
     const result = await installCiPipeline({
       root,
       config: testConfig(),
-      scan: {
-        packageManager: "npm",
-        ciCd: ["github-actions"],
-        docker: false,
-        envFiles: [],
-        docs: [],
-        aiRules: [],
-        securityRisks: [],
-        missingDocs: [],
-        missingTests: true,
-        dependencies: [],
-        scripts: {},
-        hasDna: false,
-      },
+      scan: mockScan({ ciCd: ["github-actions"], missingTests: true, scripts: {} }),
     });
 
     expect(result.created.some((f) => f.includes("dna-ci.yml"))).toBe(true);

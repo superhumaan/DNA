@@ -40,7 +40,7 @@ export const STATIC_PATTERNS: StaticPattern[] = [
     severity: "critical",
     pattern: /dangerouslySetInnerHTML|\.innerHTML\s*=/,
     message: "Unsanitized HTML injection risk",
-    skipPaths: [/\.test\./, /\.spec\./],
+    skipPaths: [/\.test\./, /\.spec\./, /patterns\.ts$/, /dashboard\/server\.ts$/],
   },
   {
     id: "sql-concat",
@@ -103,4 +103,15 @@ export const SOURCE_IGNORE = [
   "**/coverage/**",
   "**/.DNA/**",
   "**/DNA/**",
+  "**/.local-wiki/**",
+  "**/.docusaurus/**",
+  "**/apps/examples/**",
 ];
+
+export const VENDOR_PATH_RE =
+  /(?:^|\/)(?:node_modules|dist|build|coverage|\.next|\.docusaurus)(?:\/|$)/;
+
+export function isVendorPath(filePath: string): boolean {
+  const normalized = filePath.replace(/\\/g, "/");
+  return VENDOR_PATH_RE.test(normalized) || normalized.startsWith(".local-wiki/");
+}

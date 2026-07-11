@@ -7,6 +7,7 @@ import { git } from "@superhumaan/dna-github";
 import { scanProject } from "../scanner.js";
 import { writeFileEnsured } from "../fs.js";
 import {
+  isVendorPath,
   LARGE_FILE_LINE_THRESHOLD,
   SOURCE_GLOBS,
   SOURCE_IGNORE,
@@ -82,11 +83,16 @@ async function resolveFeaturePaths(root: string): Promise<string[]> {
     return diff
       .split("\n")
       .map((line) => line.trim())
-      .filter((line) => line.length > 0 && /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(line));
+      .filter(
+        (line) =>
+          line.length > 0 &&
+          /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(line) &&
+          !isVendorPath(line),
+      );
   } catch {
     const status = await g.status();
-    return [...status.modified, ...status.created, ...status.staged].filter((f) =>
-      /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(f),
+    return [...status.modified, ...status.created, ...status.staged].filter(
+      (f) => /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(f) && !isVendorPath(f),
     );
   }
 }
@@ -102,11 +108,15 @@ async function listSourceFiles(root: string, paths?: string[]): Promise<string[]
         matches.forEach((m) => expanded.add(m));
       }
     }
-    return [...expanded].filter((f) => /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(f));
+    return [...expanded].filter(
+      (f) => /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(f) && !isVendorPath(f),
+    );
   }
 
   return glob(SOURCE_GLOBS, { cwd: root, ignore: SOURCE_IGNORE, onlyFiles: true });
 }
+
+const DEFAULT_FEATURE_SCOPE_GLOBS = ["packages/**/*.{ts,tsx,js,jsx,mjs,cjs}"];
 
 function scanLinePatterns(content: string, filePath: string): QualityIssue[] {
   const issues: QualityIssue[] = [];
@@ -232,9 +242,12 @@ export async function runQualityAnalysis(
   if (featureScope && !paths?.length) {
     targetPaths = await resolveFeaturePaths(root);
     scope = "feature";
+    if (targetPaths.length === 0) {
+      targetPaths = DEFAULT_FEATURE_SCOPE_GLOBS;
+    }
   }
 
-  const files = await listSourceFiles(root, targetPaths);
+  const files = (await listSourceFiles(root, targetPaths)).filter((f) => !isVendorPath(f));
   const fileSet = new Set(files);
   const issues: QualityIssue[] = [];
 

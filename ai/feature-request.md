@@ -1,51 +1,56 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-11T13:23:45.853Z. The user does not fill this in manually._
+_Auto-maintained by DNA. Updated 2026-07-11._
 
 ## Latest request
 
-> _Waiting for your first feature request — describe what you want to build in Cursor or Claude._
+> Perform a full security, optimisation, and gap audit of every pack, system, and feature in the DNA monorepo. Deliver a final report, apply auto-updates and fixes, run full end-to-end testing, update all related documentation, publish to npm, and push to GitHub main.
 
 ## Problem
 
-_To be refined by Product Analyst from the latest request._
+DNA needs a comprehensive health pass across CLI packages, knowledge packs, quality gates, CI, and documentation — with fixes shipped and published.
 
 ## Current Pain
 
-_To be refined by Product Analyst._
+- Quality scanner was scanning `node_modules` (29k+ false positives)
+- Typecheck failures in test fixtures
+- Missing `@vitest/coverage-v8`, `.env.example`, and `architecture/overview.md`
+- ESLint linting generated `.local-wiki` artifacts
 
 ## Proposed Solution
 
-_To be refined by Product Analyst and Solution Architect._
+1. Run `dna doctor`, `dna analyze`, `dna scan`, `dna validate`, `dna update`
+2. Fix glob ignore, quality scope, typecheck, lint scope, coverage tooling
+3. Regenerate audit report; update CHANGELOG and Impressions
+4. Bump `@superhumaan/dna-by-humaan` to 0.5.0; publish via GitHub Actions; push main
 
 ## Users
 
-_To be identified by Product Analyst._
+- DNA maintainers and OSS consumers installing `@superhumaan/dna-by-humaan`
+- Teams using DNA workbench, marketplace packs, and feature factory
 
 ## Desired Behaviour
 
-_To be defined by Product Analyst._
+- Quality gate scopes to `packages/` when no feature diff exists
+- Nested `node_modules` excluded from scans
+- All 232+ unit tests pass; typecheck clean
+- Audit report at `.DNA/reports/audit/full-audit-2026-07-11.md`
+- npm 0.5.0 published; main branch updated
 
 ## Edge Cases
 
-_To be identified by Product Analyst and QA._
+- Monorepo dev install skips CLI auto-upgrade
+- Advisory CI by default (`ci.strict: false`)
+- Example apps excluded from quality file scan
 
 ## Success Criteria
 
-The feature is only complete when:
-
-- [ ] Backend works
-- [ ] Frontend works
-- [ ] UX is clean
-- [ ] Permissions/security are correct
-- [ ] Tests pass
-- [ ] Local quality gate passes (`dna quality report --feature`)
-- [ ] Docker image builds (`dna docker build`)
-- [ ] Changes pushed to GitHub (`dna github push`)
-- [ ] No unrelated files are modified
-- [ ] Existing behaviour is not broken
-- [ ] QA checklist is completed
-
----
-
-**Project:** dna-by-humaan
+- [x] DNA doctor passes
+- [x] Glob/quality fixes applied
+- [ ] Typecheck passes
+- [ ] Tests + coverage pass
+- [ ] Quality report scoped correctly
+- [ ] Audit report written
+- [ ] Docs updated (CHANGELOG, Impressions, .env.example)
+- [ ] Version 0.5.0 published to npm
+- [ ] Pushed to GitHub main

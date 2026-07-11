@@ -43,7 +43,7 @@ function minimalAnalysis(overrides: Partial<DeepAnalysis> = {}): DeepAnalysis {
     sharedLibrary: {
       isMonorepo: false,
       monorepoTool: null,
-      health: "ok",
+      health: "needs-work",
       hasSharedPackage: false,
       sharedPackagePaths: [],
       duplicateCount: 0,

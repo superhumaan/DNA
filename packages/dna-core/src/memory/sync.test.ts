@@ -5,19 +5,9 @@ import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 import { runWizard } from "../wizard.js";
 import { exportCellularMemory, importCellularMemory } from "./sync.js";
+import { mockWizardAnswers } from "../test-helpers.js";
 
-const WIZARD_ANSWERS = {
-  projectDescription: "Memory sync test",
-  acceptRecommendation: true,
-  aiTools: ["cursor"] as const,
-  compliance: "none" as const,
-  stage: "mvp" as const,
-  installRuntime: false,
-  installFeatureFactory: false,
-  installCi: false,
-  configureGithub: false,
-  configureAi: false,
-};
+const WIZARD_ANSWERS = mockWizardAnswers({ projectDescription: "Memory sync test" });
 
 describe("CellularMemory sync", () => {
   it("exports and imports memory segments", async () => {
