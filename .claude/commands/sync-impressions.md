@@ -11,4 +11,4 @@ npx dna plan impressions-sync
 
 Scope: $ARGUMENTS
 
-Update or generate Impressions from code. Open PR if --open-pr.
+Update or generate Impressions from code. Use `npx dna scan --open-pr` for draft PR when drift exceeds `impressions.autoPrThreshold` in config.

@@ -6,6 +6,8 @@
 npx dna generate feature <featureId>
 ```
 
+Feature IDs: `audit-logging`, `sso`, `multi-tenant`, `feature-flags`, `gradual-rollout`.
+
 Feature: $ARGUMENTS
 
 Review generated files. Integrate — do not leave orphan scaffolds.

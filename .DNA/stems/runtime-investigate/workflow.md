@@ -1,3 +1,4 @@
 # Workflow chain
 
-1. debug-issue
+1. dashboard-monitor
+2. debug-issue

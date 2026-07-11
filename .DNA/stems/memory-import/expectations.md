@@ -2,4 +2,4 @@
 
 - Import file validated
 - Merge summary
-- Conflicts if any
+- Conflicts resolved per strategy

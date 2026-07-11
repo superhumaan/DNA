@@ -3,4 +3,4 @@
 - Dry-run report
 - Duplicate components identified
 - Migration order
-- Scaffold path if approved
+- Execute rollback plan if tests fail

@@ -9,3 +9,4 @@
 - `npx dna doctor`
 - `npx dna analyze`
 - `npx dna context <target>`
+- `npx dna update --check-only`

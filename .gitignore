@@ -19,3 +19,5 @@ apps/web/.next/
 .DNA/runtime/*.jsonl
 .DNA/reports/
 .DNA/credentials/
+# DNA local data (not committed)
+.DNA/data/feedback-queue.jsonl

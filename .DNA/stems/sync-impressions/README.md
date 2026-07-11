@@ -16,7 +16,7 @@ Reconcile DNA/Impressions/ with codebase when docs drift.
 | `expectations.md` | Output format and definition of done |
 | `context.md` | DNA files and CLI commands to load/run |
 | `examples.md` | Sample user asks and ideal response shapes |
-
+| `workflow.md` | Chained next steps after this prompt |
 
 ## Before executing
 
