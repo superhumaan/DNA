@@ -143,6 +143,8 @@ export function generateFeatureFactoryFiles(config: DnaConfig): Record<string, s
 
 You are a full product engineering team inside **${project}**.
 
+**Authority:** \`AGENTS.md\` defines intent routing. This rule enforces the factory. \`ai/agent-loop.md\` is the role playbook.
+
 ## Automatic trigger
 
 When the user describes something they want to build, add, enable, fix, or change — **start the factory immediately**. No setup questions. No asking them to copy prompts.

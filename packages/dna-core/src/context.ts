@@ -7,6 +7,7 @@ import { NeuralNetworkSchema } from "@superhumaan/dna-config";
 import { ensureKnowledgeForContext } from "./marketplace/ensure.js";
 import { ensureProjectUiStandards } from "./ivf/ui-standards.js";
 import { TARGET_INTENTS, type ContextTarget } from "./context-intents.js";
+import { generateMethodologyContext } from "./delivery/context.js";
 
 export type { ContextTarget };
 
@@ -25,7 +26,9 @@ const TARGET_BEHAVIOUR: Record<ContextTarget, string[]> = {
   rbac: ["security.behaviour.md", "ai.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
   platform: ["ai.behaviour.md", "security.behaviour.md", "coding.behaviour.md", "documentation.behaviour.md"],
   compliance: ["security.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md", "coding.behaviour.md"],
+  legal: ["security.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md", "coding.behaviour.md"],
   multilingual: ["ai.behaviour.md", "documentation.behaviour.md"],
+  methodology: ["delivery.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md"],
   ivf: ["ai.behaviour.md", "documentation.behaviour.md", "security.behaviour.md", "coding.behaviour.md"],
   all: [],
 };
@@ -37,6 +40,10 @@ export async function generateContext(root: string, target: ContextTarget): Prom
       `No .DNA/ directory at ${root}.\n` +
         `Run \`dna init\` first, or omit --cwd when your shell is already in the project.`,
     );
+  }
+
+  if (target === "methodology") {
+    return generateMethodologyContext(root);
   }
 
   if (target === "cursor" || target === "frontend" || target === "ivf" || target === "copilot" || target === "windsurf") {
@@ -124,6 +131,7 @@ export async function generateContext(root: string, target: ContextTarget): Prom
     "prefrontalCortex/feature-building-rules.md",
     "prefrontalCortex/rbac-permission-matrix.md",
     "prefrontalCortex/compliance-control-matrix.md",
+    "prefrontalCortex/legal-considerations-matrix.md",
     "occipitalLobe/ui-patterns.md",
     "occipitalLobe/feature-templates.md",
     "amygdala/risks.md",

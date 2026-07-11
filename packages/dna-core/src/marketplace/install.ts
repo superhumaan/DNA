@@ -5,6 +5,14 @@ import { loadDnaConfig } from "../validator.js";
 import { fetchMarketplaceCatalog, fetchKnowledgePack } from "./client.js";
 import { getBundledCatalog, getBundledPack } from "./bundled-catalog.js";
 import { normalizePackId } from "./aliases.js";
+import { resolveHealthcareCountryBundlePackIds } from "./healthcare-country-bundles.js";
+
+export interface InstallKnowledgePackResult {
+  pack: KnowledgePack;
+  files: string[];
+  /** Additional packs installed as part of a country healthcare bundle. */
+  bundleInstalled?: Array<{ pack: KnowledgePack; files: string[] }>;
+}
 
 export async function installKnowledgePack(
   root: string,
@@ -43,14 +51,37 @@ export async function installKnowledgePackById(
   root: string,
   packId: string,
   channel?: DnaConfig["channel"],
-): Promise<{ pack: KnowledgePack; files: string[] }> {
+): Promise<InstallKnowledgePackResult> {
   const resolvedId = normalizePackId(packId);
-  const pack = getBundledPack(resolvedId) ?? (await fetchKnowledgePack(resolvedId, { channel }));
-  if (!pack) {
+  const bundleIds = resolveHealthcareCountryBundlePackIds(resolvedId);
+  const targetIds = bundleIds ?? [resolvedId];
+
+  let primary: InstallKnowledgePackResult | null = null;
+  const bundleInstalled: Array<{ pack: KnowledgePack; files: string[] }> = [];
+
+  for (const id of targetIds) {
+    const pack = getBundledPack(id) ?? (await fetchKnowledgePack(id, { channel }));
+    if (!pack) {
+      throw new Error(`Knowledge pack not found: ${id}`);
+    }
+    const files = await installKnowledgePack(root, pack);
+    const entry = { pack, files };
+    if (id === resolvedId) {
+      primary = { ...entry, bundleInstalled: undefined };
+    } else {
+      bundleInstalled.push(entry);
+    }
+  }
+
+  if (!primary) {
     throw new Error(`Knowledge pack not found: ${packId}`);
   }
-  const files = await installKnowledgePack(root, pack);
-  return { pack, files };
+
+  if (bundleInstalled.length) {
+    primary.bundleInstalled = bundleInstalled;
+  }
+
+  return primary;
 }
 
 export async function checkMarketplaceUpdates(

@@ -177,10 +177,12 @@ export const STEM_CATEGORY_LABELS: Record<StemCategory, { label: string; descrip
   "agent-loop": { label: "Agent loop", description: "Per-role feature factory prompts — PA, SA, BE, FE, UX, QA, ship" },
   quality: { label: "Quality", description: "Gates, scans, pre-push review" },
   compliance: { label: "Compliance", description: "GDPR, HIPAA, documents, engineering" },
+  legal: { label: "Legal", description: "Jurisdiction law, banking, healthcare, IP, legal advisor" },
   debug: { label: "Debug", description: "Runtime issues, AI repair" },
   docs: { label: "Documentation", description: "Impressions sync and generation" },
   ivf: { label: "IVF", description: "Brownfield integration and shared library" },
   delivery: { label: "Delivery", description: "Docker, GitHub, CI" },
+  methodology: { label: "Methodology", description: "Tickets, specs, and org delivery models" },
   marketplace: { label: "Marketplace", description: "Search and install knowledge packs" },
   memory: { label: "Memory", description: "CellularMemory export and import" },
 };

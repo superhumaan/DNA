@@ -1,7 +1,9 @@
 import type { DnaConfig, ScanResult } from "@superhumaan/dna-config";
 import { ensureKnowledgeInstalled, type EnsureKnowledgeResult } from "./ensure.js";
 import { getArchetype } from "../stack/catalog.js";
-import { HEALTHCARE_OVERVIEW_COUNTRY_IDS } from "./catalog-wave-healthcare-overview-countries.js";
+import { HEALTHCARE_ALL_OVERVIEW_PACK_IDS } from "./healthcare-country-bundles.js";
+import { resolveLegalJurisdictionPackIds } from "../legal/regions.js";
+import { resolveHealthcareCountryBundlePackIds } from "./healthcare-country-bundles.js";
 
 export type AppPlatform = "web" | "mobile" | "desktop" | "cms";
 
@@ -50,15 +52,32 @@ export function resolveHealthcareCountryOverviewPackIds(description: string): st
     { pack: "healthcare/overview-id", patterns: [/\b(indonesia|indonesian)\b/, /\bsatusehat\b/] },
     { pack: "healthcare/overview-vn", patterns: [/\b(vietnam|vietnamese)\b/] },
     { pack: "healthcare/overview-cn", patterns: [/\b(china|chinese)\b/, /\bpipl\b/] },
+    { pack: "healthcare/overview-apac", patterns: [/\b(asia.?pacific|apac|asean)\b.*\bhealth\b/, /\bapac\b.*\b(fhir|clinical|healthcare)\b/] },
+    { pack: "healthcare/overview-bd", patterns: [/\b(bangladesh|bangladeshi)\b/] },
+    { pack: "healthcare/overview-pk", patterns: [/\b(pakistan|pakistani)\b/] },
+    { pack: "healthcare/overview-lk", patterns: [/\b(sri lanka|srilanka)\b/] },
+    { pack: "healthcare/overview-np", patterns: [/\b(nepal|nepalese)\b/] },
+    { pack: "healthcare/overview-kh", patterns: [/\b(cambodia|cambodian)\b/] },
+    { pack: "healthcare/overview-mm", patterns: [/\b(myanmar|burma)\b/] },
   ];
 
   for (const { pack, patterns } of rules) {
-    if (patterns.some((p) => p.test(d)) && HEALTHCARE_OVERVIEW_COUNTRY_IDS.includes(pack)) {
+    if (patterns.some((p) => p.test(d)) && HEALTHCARE_ALL_OVERVIEW_PACK_IDS.includes(pack)) {
       matches.add(pack);
     }
   }
 
-  return [...matches];
+  const bundleIds = new Set<string>();
+  for (const overviewPack of matches) {
+    const bundle = resolveHealthcareCountryBundlePackIds(overviewPack);
+    if (bundle) {
+      for (const id of bundle) bundleIds.add(id);
+    } else {
+      bundleIds.add(overviewPack);
+    }
+  }
+
+  return [...bundleIds];
 }
 
 export function detectAppPlatform(config: DnaConfig, scan?: ScanResult): AppPlatform {
@@ -87,6 +106,7 @@ export function resolveFoundationPackIds(config: DnaConfig, scan?: ScanResult): 
   const packs = new Set<string>([
     "disciplines/security",
     "compliance/tiered-standards",
+    "legal/tiered-standards",
     "disciplines/qa",
     "testing/code-coverage",
     "cloud/github-actions",
@@ -151,12 +171,14 @@ export function resolveFoundationPackIds(config: DnaConfig, scan?: ScanResult): 
     desc.includes("telehealth") ||
     config.compliance === "hipaa";
   if (isHealthcare) {
-    packs.add("healthcare/overview");
     packs.add("healthcare/fhir-r4");
     packs.add("healthcare/phi-engineering");
     packs.add("healthcare/redox");
     for (const countryPack of resolveHealthcareCountryOverviewPackIds(desc)) {
       packs.add(countryPack);
+    }
+    if (!resolveHealthcareCountryOverviewPackIds(desc).length) {
+      packs.add("healthcare/overview");
     }
   }
 
@@ -270,6 +292,10 @@ export function resolveFoundationPackIds(config: DnaConfig, scan?: ScanResult): 
 
   if (isMultilingual) {
     packs.add("languages/stem-bridge");
+  }
+
+  for (const legalPack of resolveLegalJurisdictionPackIds(desc)) {
+    packs.add(legalPack);
   }
 
   return [...packs];

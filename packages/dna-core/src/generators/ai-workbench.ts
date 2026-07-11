@@ -12,6 +12,11 @@ import {
   uninstallPromptStemPacks,
 } from "./prompt-stem-packs/index.js";
 import { DNA_AI_COMMAND_CATALOG, installAiCommands } from "./ai-commands.js";
+import {
+  DNA_AGENT_FLOW_SECTION,
+  DNA_ALWAYS_ON_SECTION,
+  DNA_INTENT_ROUTING_SECTION,
+} from "./dna-default-on.js";
 
 /** Core workbench paths (stem packs add `.DNA/stems/` and slash commands separately). */
 export const AI_WORKBENCH_CORE_PATHS = [
@@ -43,6 +48,8 @@ function buildWorkbenchRule(config: DnaConfig): string {
 
 You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The user speaks in plain language; you handle DNA context, CLI, planning, and implementation.
 
+${DNA_ALWAYS_ON_SECTION}
+
 ## How the user works (never break this)
 
 - They **do not** run \`dna\` commands manually unless they choose to.
@@ -52,13 +59,17 @@ You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The
 
 ## Session bootstrap (every new task)
 
-1. **Intent** — What does the user want? (health, feature, analysis, compliance, debug, docs)
+1. **Classify intent** — Use the intent routing table (engineering vs analysis vs Q&A vs ship vs debug)
 2. **Context** — Read \`.DNA/neuralNetwork.json\`; load matching \`.DNA/knowledge/\`, \`.DNA/behaviour/\`, \`DNA/Impressions/\`
 3. **DNA CLI** — Run the matching command(s) in shell; read real output
-4. **Plan** — Short plan before code (mandatory for features)
-5. **Execute** — Implement, test, quality gate, ship
+4. **Route** — Engineering work → full agent loop; other intents → matching path (no loop for pure Q&A)
+5. **Execute** — Implement with role discipline, test, quality gate, ship
 
-## Intent → DNA action (run in shell)
+${DNA_INTENT_ROUTING_SECTION}
+
+${DNA_AGENT_FLOW_SECTION}
+
+## Intent → DNA CLI (run in shell)
 
 | User intent | Run first | Then |
 |-------------|-----------|------|
@@ -70,6 +81,7 @@ You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The
 | Pre-push / done? | \`npx dna quality report --feature\` | PASS required before push |
 | Ship feature | quality PASS → \`npx dna docker build\` → \`npx dna github push\` | Report URLs |
 | Compliance | \`npx dna plan compliance\` | Install packs; implement controls |
+| Legal / banking / healthcare / PDPA | \`npx dna legal advise\` → \`npx dna plan legal\` | Regional packs; counsel gates; pair with compliance |
 | Docs out of sync | \`npx dna plan impressions-sync\` | Reconcile Impressions |
 | Knowledge gap | \`npx dna marketplace search\` / \`install\` | Load new packs |
 
@@ -84,16 +96,7 @@ Prefer \`npx dna\` when \`dna\` is not on PATH.
 - **Verify loops** — lint → test → \`dna quality report --feature\` → docker → push.
 - **One voice** — Plain language summaries for the user; technical depth in code and plans.
 
-## Feature factory (automatic)
-
-When the user describes something to build, add, enable, or fix:
-
-1. Write \`ai/feature-request.md\` from their words
-2. Execute \`ai/agent-loop.md\` role by role
-3. **Stop after Solution Architect plan — wait for approval**
-4. After approval: implement → QA → quality gate → docker → github push
-
-See \`.cursor/rules/product-process.mdc\` and \`.cursor/skills/dna-workbench/dna-session-flow.md\`.
+See \`.cursor/rules/product-process.mdc\`, \`AGENTS.md\`, and \`.cursor/skills/dna-workbench/dna-session-flow.md\`.
 
 ## Slash commands & stem packs
 
@@ -161,6 +164,21 @@ When switching roles (agent-loop), emit:
 - Lead with outcome, not command names
 - Show DNA output only when it helps decision-making
 - Offer one clear next step
+
+## 7. Legal / regulated features
+
+When banking, healthcare, payments, PDPA, GDPR, or cross-border data appears:
+
+\`\`\`
+dna legal advise --quote "..."  →  domains + jurisdictions + counsel checklist
+dna plan legal                →  matrix in CellularMemory
+dna plan compliance           →  control frameworks (pair with legal)
+dna context legal             →  load packs for AI session
+\`\`\`
+
+Slash stems: \`/legal-advise\`, \`/plan-legal\`, \`/legal-engineering\`
+
+**Never** present DNA legal output as legal advice.
 `;
 }
 
@@ -169,10 +187,13 @@ function buildSessionFlow(): string {
 
 ## A. First message in a DNA project
 
-1. Acknowledge DNA is active (no lecture).
-2. If task is unclear, ask one focused question.
-3. Load neuralNetwork + relevant behaviour.
-4. Proceed.
+DNA is already active — the user does **not** need to say "use DNA".
+
+1. **Classify intent** — engineering work vs analysis vs Q&A vs ship vs debug (see \`AGENTS.md\`)
+2. Load neuralNetwork + relevant behaviour immediately
+3. If task is unclear, ask one focused question
+4. **Engineering work** → write \`ai/feature-request.md\`, start agent loop at Product Analyst
+5. **Other intents** → matching DNA CLI path; no 9-role loop for pure Q&A
 
 ## B. "Analyze / understand / audit"
 
@@ -180,13 +201,13 @@ function buildSessionFlow(): string {
 2. Summarize: stack, surfaces, auth, integrations, P1–P3 gaps
 3. Recommend ordered next steps (IVF, packs, features)
 
-## C. "Build / add / fix" (feature)
+## C. "Build / add / fix" (feature) — mandatory agent loop
 
 1. Capture quote in \`ai/feature-request.md\`
-2. Run agent-loop through Solution Architect
-3. Present plan; **wait**
-4. Implement with role discipline
-5. Close: quality → docker → github push
+2. Execute **all 9 roles** in \`ai/agent-loop.md\` — Product Analyst through Solution Architect
+3. Present architect plan; **wait for approval** — no code before approval
+4. After approval: Backend → Frontend → UX → QA → Code Quality → Refactor → Final Release
+5. Close: quality PASS → docker → github push
 
 ## D. "Ship / push / done"
 
@@ -199,38 +220,61 @@ function buildSessionFlow(): string {
 
 1. Check \`.DNA/data/runtime.db\` / dashboard: \`npx dna dashboard\`
 2. Classify against Behaviour + Immune System
-3. Fix → test → quality → push
-4. Optional: \`npx dna ai repair\` (human review only)
+3. If fix requires code changes → **agent loop** (capture in \`ai/feature-request.md\`)
+4. Fix → test → quality → push
+5. Optional: \`npx dna ai repair\` (human review only)
 
 ## F. "Compliance / GDPR / HIPAA"
 
 1. \`npx dna compliance list\`
 2. \`npx dna plan compliance\` with tier + frameworks
 3. Install packs; implement; document in Impressions
+
+## G. "Legal / banking / healthcare / PDPA / jurisdiction"
+
+1. \`npx dna legal advise --quote "..."\`
+2. \`npx dna plan legal\` with domains + jurisdictions
+3. Install \`legal/regions/*\` packs; read \`.DNA/workflows/legal.workflow.md\`
+4. Pair with \`npx dna plan compliance\` for control frameworks
+5. Load \`npx dna context legal\` before implementing regulated features
 `;
 }
 
 function buildSkill(config: DnaConfig, tool: "cursor" | "claude"): string {
   const cmdPath = tool === "cursor" ? ".cursor/commands" : ".claude/commands";
   const skillPath = tool === "cursor" ? ".cursor/skills/dna-workbench" : ".claude/skills/dna-workbench";
+  const obedienceLayer =
+    tool === "cursor"
+      ? "- `.cursor/rules/dna-workbench.mdc` — always-on obedience (Cursor)"
+      : "- `CLAUDE.md` — always-on obedience (Claude Code)";
+  const cliSkillPath =
+    tool === "cursor" ? ".cursor/skills/dna-cli/SKILL.md" : ".claude/skills/dna-cli/SKILL.md";
 
   return `---
 name: dna-workbench
 description: >-
-  DNA Workbench for ${config.projectName} — prompt-first engineering in ${tool === "cursor" ? "Cursor" : "Claude Code"}.
-  Use when the user works on features, analysis, compliance, debugging, or mentions DNA, project health,
-  quality gates, or shipping. Run npx dna CLI on their behalf; never make them copy prompts.
+  DNA Workbench for ${config.projectName} — always-on default co-pilot in ${tool === "cursor" ? "Cursor" : "Claude Code"}.
+  Active on every session when .DNA/ exists. Run npx dna CLI, load .DNA/ intelligence, and ship with quality gates.
+  Never wait for the user to say "use DNA". Never make them copy prompts.
 ---
 
 # DNA Workbench
 
 The user works in **plain language**. You run **DNA CLI in shell**, load **\`.DNA/\` intelligence**, and ship with **quality gates**.
 
+${DNA_ALWAYS_ON_SECTION}
+
+${DNA_INTENT_ROUTING_SECTION}
+
+${DNA_AGENT_FLOW_SECTION}
+
 ## Read first
 
+- \`AGENTS.md\` — intent routing + agent flow gates
 - \`${skillPath}/dna-session-flow.md\` — session types A–F
 - \`${skillPath}/prompt-patterns.md\` — how to prompt and verify
-- \`.cursor/rules/dna-workbench.mdc\` — always-on obedience (Cursor)
+- ${obedienceLayer}
+- \`${cliSkillPath}\` — CLI routing and /dna-* commands
 - \`ai/agent-loop.md\` — feature factory roles
 
 ## Slash prompts & stem packs
@@ -253,6 +297,9 @@ Each command maps to \`.DNA/stems/<id>/\` — read **prompt.md, guidelines.md, e
 | \`/dashboard-monitor\` | dashboard-monitor | Live dashboard + quality trends |
 | \`/quality-gate\` | quality-gate | Pre-push gate |
 | \`/plan-compliance\` | plan-compliance | Compliance rollout |
+| \`/plan-legal\` | plan-legal | Legal plan + jurisdiction packs |
+| \`/legal-advise\` | legal-advise | Quick legal advisor (not legal advice) |
+| \`/legal-engineering\` | legal-engineering | Sector checklist on a feature |
 | \`/debug-issue\` | debug-issue | Debug + fix loop |
 | \`/ivf-shared-library\` | ivf-shared-library | Extract shared UI library |
 
@@ -338,7 +385,11 @@ Regenerate: \`npx dna workbench install\`
   return { cursor, claude };
 }
 
-export async function installAiWorkbench(root: string, config: DnaConfig): Promise<string[]> {
+export async function installAiWorkbench(
+  root: string,
+  config: DnaConfig,
+  options: { preferRemoteStems?: boolean } = {},
+): Promise<string[]> {
   if (!isAiWorkbenchEnabled(config)) return [];
 
   config.aiWorkbench = { enabled: true, ...config.aiWorkbench };
@@ -349,7 +400,9 @@ export async function installAiWorkbench(root: string, config: DnaConfig): Promi
     created.push(relPath);
   }
 
-  const stemSync = await syncPromptStemPacks(root, config);
+  const stemSync = await syncPromptStemPacks(root, config, {
+    preferRemote: options.preferRemoteStems,
+  });
   created.push(...stemSync.paths);
 
   const stemCount = stemSync.stemCount;

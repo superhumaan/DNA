@@ -18,7 +18,7 @@ describe("catalog expansion", () => {
     expect(CATALOG_EXPANSION_COUNTS.disciplines).toBe(15);
     expect(CATALOG_EXPANSION_COUNTS.payments).toBe(12);
     expect(CATALOG_EXPANSION_COUNTS.data).toBe(3);
-    expect(CATALOG_WAVE_COUNTS.healthcare).toBe(84);
+    expect(CATALOG_WAVE_COUNTS.healthcare).toBe(137);
     expect(CATALOG_WAVE_COUNTS.wave3.healthcareExtended).toBe(10);
     expect(CATALOG_WAVE_COUNTS.wave3.total).toBeGreaterThan(150);
     expect(CATALOG_WAVE_COUNTS.wave4.total).toBeGreaterThan(120);

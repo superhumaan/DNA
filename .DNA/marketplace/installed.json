@@ -1,51 +1,51 @@
 {
   "disciplines/security": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.013Z"
+    "installedAt": "2026-07-11T11:16:56.299Z"
   },
   "compliance/tiered-standards": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.025Z"
+    "installedAt": "2026-07-11T11:16:56.301Z"
   },
   "disciplines/qa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.027Z"
+    "installedAt": "2026-07-11T11:16:56.303Z"
   },
   "testing/code-coverage": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.030Z"
+    "installedAt": "2026-07-11T11:16:56.303Z"
   },
   "cloud/github-actions": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.033Z"
+    "installedAt": "2026-07-11T11:16:56.304Z"
   },
   "tools/eslint-prettier": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.036Z"
+    "installedAt": "2026-07-11T11:16:56.305Z"
   },
   "testing/owasp-zap": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.039Z"
+    "installedAt": "2026-07-11T11:16:56.308Z"
   },
   "frameworks/vite": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.042Z"
+    "installedAt": "2026-07-11T11:16:56.309Z"
   },
   "frameworks/react": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.044Z"
+    "installedAt": "2026-07-11T11:16:56.310Z"
   },
   "frameworks/express": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.049Z"
+    "installedAt": "2026-07-11T11:16:56.312Z"
   },
   "browsers/cross-browser": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.058Z"
+    "installedAt": "2026-07-11T11:16:56.312Z"
   },
   "disciplines/coding-trends-2025": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T10:46:59.060Z"
+    "installedAt": "2026-07-11T11:16:56.313Z"
   },
   "platforms/dna-stack": {
     "version": "1.0.0",
@@ -54,5 +54,9 @@
   "disciplines/monorepo": {
     "version": "1.0.0",
     "installedAt": "2026-07-11T10:35:17.008Z"
+  },
+  "legal/tiered-standards": {
+    "version": "1.0.0",
+    "installedAt": "2026-07-11T11:16:56.302Z"
   }
 }

@@ -1,11 +1,16 @@
 import {
   AI_PROVIDERS,
   AI_TOOLS,
+  COMPANY_ARCHETYPES,
   COMPLIANCE_OPTIONS,
+  DELIVERY_METHODOLOGIES,
+  DOC_SYSTEMS,
   FEEDBACK_AUTO_MODES,
   ISSUE_CATEGORIES,
   PROJECT_STAGES,
   SEVERITY_LEVELS,
+  TICKET_SYSTEMS,
+  WORK_HIERARCHY_LEVELS,
 } from "./constants.js";
 import {
   expectArray,
@@ -201,6 +206,45 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     };
   }
 
+  let delivery: DnaConfig["delivery"];
+  if (d.delivery !== undefined) {
+    const del = expectObject(d.delivery, "delivery");
+    if (!del.success) return del;
+    const methodology = del.data.methodology === undefined
+      ? ok("dna-default" as const)
+      : expectEnum(del.data.methodology, DELIVERY_METHODOLOGIES, "delivery.methodology");
+    if (!methodology.success) return methodology;
+    const companyArchetype = del.data.companyArchetype === undefined
+      ? ok("none" as const)
+      : expectEnum(del.data.companyArchetype, COMPANY_ARCHETYPES, "delivery.companyArchetype");
+    if (!companyArchetype.success) return companyArchetype;
+    const ticketSystem = del.data.ticketSystem === undefined
+      ? ok("github" as const)
+      : expectEnum(del.data.ticketSystem, TICKET_SYSTEMS, "delivery.ticketSystem");
+    if (!ticketSystem.success) return ticketSystem;
+    const docSystem = del.data.docSystem === undefined
+      ? ok("impressions" as const)
+      : expectEnum(del.data.docSystem, DOC_SYSTEMS, "delivery.docSystem");
+    if (!docSystem.success) return docSystem;
+    const hierarchy = del.data.hierarchy === undefined
+      ? ok(["feature", "story", "task"] as (typeof WORK_HIERARCHY_LEVELS)[number][])
+      : parseEnumArray(del.data.hierarchy, WORK_HIERARCHY_LEVELS, "delivery.hierarchy");
+    if (!hierarchy.success) return hierarchy;
+    const ceremonies = del.data.ceremonies === undefined
+      ? ok([] as string[])
+      : parseStringArray(del.data.ceremonies, "delivery.ceremonies");
+    if (!ceremonies.success) return ceremonies;
+    delivery = {
+      methodology: methodology.data,
+      companyArchetype: companyArchetype.data,
+      ticketSystem: ticketSystem.data,
+      docSystem: docSystem.data,
+      hierarchy: hierarchy.data,
+      ceremonies: ceremonies.data,
+      customProfile: optionalString(del.data.customProfile) ?? ".DNA/delivery/profile.md",
+    };
+  }
+
   let feedback: DnaConfig["feedback"];
   if (d.feedback !== undefined) {
     const fb = expectObject(d.feedback, "feedback");
@@ -242,6 +286,7 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     ci,
     featureFactory,
     aiWorkbench,
+    delivery,
     feedback,
     platformFeatures: platformFeatures.data,
   });
@@ -451,7 +496,7 @@ function parseKnowledgePack(input: unknown): ParseResult<KnowledgePack> {
   if (!description.success) return description;
   const category = expectEnum(
     d.category,
-    ["languages", "frameworks", "platforms", "disciplines", "compliance"] as const,
+    ["languages", "frameworks", "platforms", "disciplines", "methodologies", "compliance", "legal"] as const,
     "category",
   );
   if (!category.success) return category;
@@ -590,6 +635,15 @@ export interface DnaConfig {
     syncOnPush?: boolean;
   };
   featureFactory?: { enabled: boolean };
+  delivery?: {
+    methodology: (typeof DELIVERY_METHODOLOGIES)[number];
+    companyArchetype: (typeof COMPANY_ARCHETYPES)[number];
+    ticketSystem: (typeof TICKET_SYSTEMS)[number];
+    docSystem: (typeof DOC_SYSTEMS)[number];
+    hierarchy: (typeof WORK_HIERARCHY_LEVELS)[number][];
+    ceremonies: string[];
+    customProfile?: string;
+  };
   aiWorkbench?: {
     enabled: boolean;
     lastSyncAt?: string;
@@ -792,7 +846,14 @@ export interface KnowledgePack {
   name: string;
   version: string;
   description: string;
-  category: "languages" | "frameworks" | "platforms" | "disciplines" | "compliance";
+  category:
+    | "languages"
+    | "frameworks"
+    | "platforms"
+    | "disciplines"
+    | "methodologies"
+    | "compliance"
+    | "legal";
   channel: "stable" | "beta" | "nightly";
   tags: string[];
   files: Array<{ path: string; url?: string; content?: string }>;

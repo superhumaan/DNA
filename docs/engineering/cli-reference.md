@@ -255,7 +255,7 @@ Re-enable with `dna feature-factory install`.
 
 ## commands
 
-Install **DNA Workbench**, **50 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update.
+Install **DNA Workbench**, **`AGENTS.md`**, **59 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update. Engineering work routes through the mandatory 9-role agent loop (`ai/agent-loop.md`).
 
 ```bash
 dna workbench install
@@ -274,9 +274,7 @@ Copy-paste library: [dna.humaan.app/intelligence](https://dna.humaan.app/intelli
 
 ## workbench
 
-**DNA Workbench** — prompt-first Cursor and Claude packages. Installed **by default** on `dna init`, `dna doctor`, and `dna update`.
-
-The user works in plain language inside Cursor; the agent runs `npx dna` on their behalf, reads `.DNA/stems/` guidelines, and loads `.DNA/` context.
+**DNA Workbench** — prompt-first Cursor and Claude packages. Installed **by default** on `dna init`, `dna doctor`, and `dna update`. DNA is **always on** — users do not need to say “use DNA”. `AGENTS.md` classifies intent and enforces the agent loop for build/add/fix/change requests.
 
 ```bash
 dna workbench install      # refresh prompts + stem packs (also runs automatically)

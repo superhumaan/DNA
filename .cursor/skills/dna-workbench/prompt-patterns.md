@@ -46,3 +46,18 @@ When switching roles (agent-loop), emit:
 - Lead with outcome, not command names
 - Show DNA output only when it helps decision-making
 - Offer one clear next step
+
+## 7. Legal / regulated features
+
+When banking, healthcare, payments, PDPA, GDPR, or cross-border data appears:
+
+```
+dna legal advise --quote "..."  →  domains + jurisdictions + counsel checklist
+dna plan legal                →  matrix in CellularMemory
+dna plan compliance           →  control frameworks (pair with legal)
+dna context legal             →  load packs for AI session
+```
+
+Slash stems: `/legal-advise`, `/plan-legal`, `/legal-engineering`
+
+**Never** present DNA legal output as legal advice.

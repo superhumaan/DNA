@@ -10,7 +10,7 @@
 
 > **Sentry tells you what broke. DNA tells you why, remembers it, and opens the PR.**
 
-**DNA by Humaan** is an open-source delivery platform for TypeScript teams — describe features in plain language, run quality gates, push to GitHub, and ship with a **768-pack** knowledge marketplace, tiered compliance, runtime observer, and AI-assisted repair.
+**DNA by Humaan** is an open-source delivery platform for TypeScript teams — describe features in plain language, run quality gates, push to GitHub, and ship with a **897-pack** knowledge marketplace, tiered compliance, runtime observer, and AI-assisted repair.
 
 | | |
 |---|---|
@@ -33,7 +33,7 @@ DNA is not a documentation generator. It is:
 - An **AI behaviour layer** — rules that govern how Cursor, Copilot, and Claude work on *your* project
 - A **runtime issue detector** — classifies errors with project-specific context
 - A **GitHub automation engine** — contextual issues and repair PRs
-- A **knowledge marketplace** — **768** stack, compliance, and industry packs for `.DNA/knowledge/`
+- A **knowledge marketplace** — **897** stack, compliance, and industry packs for `.DNA/knowledge/`
 - A **software immune system** — severity, category, and discipline classification
 - A **memory layer** — CellularMemory that learns from your project's history
 
@@ -244,7 +244,9 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 
 | Item | Start | End | Status |
 |------|-------|-----|--------|
-| Knowledge pack marketplace (768 packs) | Jan 2026 | Mar 2026 | Shipped |
+| Knowledge pack marketplace (897 packs) | Jan 2026 | Jul 2026 | Shipped |
+| DNA always-on + `AGENTS.md` agent flow (v0.4.9) | Jul 2026 | Jul 2026 | Shipped |
+| Legal advisor + delivery methodology (v0.4.9) | Jul 2026 | Jul 2026 | Shipped |
 | Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |
 | `npx @superhumaan/dna-by-humaan` on npm (v0.4.0) | Mar 2026 | Jul 2026 | Shipped |
 | [Supply-chain hardening + Socket transparency](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) (v0.4.4) | Jul 2026 | Jul 2026 | Shipped |

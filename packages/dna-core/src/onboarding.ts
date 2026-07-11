@@ -137,7 +137,12 @@ export function formatInitCompleteMessage(options: {
   planPath?: string;
 }): string {
   const { projectName, context, archetype, aiTools, topGaps, detectedFeatures, planPath } = options;
-  const lines: string[] = [`\n✓ ${projectName} is ready.\n`];
+  const lines: string[] = [
+    `\n✓ ${projectName} is ready.`,
+    "",
+    "DNA is active in Cursor and Claude Code — just describe what you want. No need to say \"use DNA\".",
+    "",
+  ];
 
   switch (context.context) {
     case "empty":

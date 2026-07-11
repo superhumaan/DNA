@@ -3,6 +3,32 @@
 Project: **dna-by-humaan**
 Software project
 
+## DNA is always on (never opt-in)
+
+This project has DNA installed. **Every session, every message** — DNA is your default co-pilot.
+
+- **Never** wait for the user to say "use DNA", "utilise DNA", or `/work-with-dna` before running DNA
+- **Always** load `.DNA/` context and run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
+- The user speaks in plain language; you execute DNA — they do not run CLI commands or copy prompts
+- Slash commands like `/work-with-dna` are optional shortcuts — not a prerequisite for DNA-aware behaviour
+
+
+## Intent routing (every message)
+
+**First step on every message:** classify intent, then follow the matching path. Do not skip classification.
+
+| Intent | User signals | Path |
+|--------|--------------|------|
+| **Engineering work** | build, add, fix, change, enable, refactor, implement, wire up, scaffold | **Full 9-role agent loop** (below) — mandatory |
+| **Analysis** | analyze, audit, gaps, understand repo, doctor, health, scan | `npx dna analyze` / `doctor` / `scan` — summarize; propose next steps |
+| **Compliance / legal** | GDPR, HIPAA, PDPA, SOC2, legal advise, regulated data | `npx dna plan compliance` or `legal advise` — plan before code |
+| **Ship / done** | push, ship, release, merge, deploy | Quality PASS → `npx dna docker build` → `npx dna github push` |
+| **Q&A / explain** | what does X do, how does Y work, explain this file | Load DNA context; answer directly — **no** 9-role loop |
+| **Debug** | error, bug, crash, production issue, failing test | Runtime DB / `npx dna dashboard` → fix → test → quality → push |
+
+If intent is ambiguous between Q&A and engineering work, ask **one** clarifying question. If they want a change, use the agent loop.
+
+
 ## Default behaviour
 
 The user describes goals in plain language. You are their co-pilot: **run `npx dna` commands in shell**, load DNA context, plan, and implement. **Do not** ask them to copy prompts, manage `.DNA/` files, or memorize CLI syntax.
@@ -30,40 +56,64 @@ DNA scaffolds `.github/workflows/dna-ci.yml`, `dna-preview.yml`, and `.DNA/hooks
 
 Before marking work complete: `npm run lint && npm run test:coverage && dna quality report --feature`
 
-## Feature factory (automatic)
+## Agent flow (mandatory for engineering work)
 
-When the user describes what they want to build, add, enable, or change — in plain language — **start the feature factory immediately**. Examples:
-- "I want providers to record phone calls and transcribe notes"
-- "Add an admin dashboard" / "backoffice for support"
+Every **build, add, enable, fix, or change** request MUST go through the DNA feature factory. **No shortcuts. No jumping straight to code.**
 
-**Admin / backoffice:** scaffold `/admin` in a **new tab**, RBAC-wrapped link (hidden without access), route guards, and `requireAdmin` APIs — see `.cursor/rules/admin-portal.mdc`.
+### Authority chain (read before acting)
 
-**Never** ask the user to copy prompts, fill templates, or run setup commands.
+1. `AGENTS.md` — intent routing and gates
+2. `.cursor/rules/product-process.mdc` — factory triggers and role rules
+3. `ai/agent-loop.md` — full 9-role playbook
+4. `ai/feature-request.md` — capture the user's ask **before** planning
 
-### On every feature request, automatically:
+### On every engineering request — automatically
 
-1. Write or update `ai/feature-request.md` from their message (use `buildFeatureRequestFromQuote` sections)
-2. Read `ai/agent-loop.md` and work role by role: Product Analyst → Solution Architect → … → Final Reviewer
-3. Produce an implementation plan **before** editing code
-4. **Stop after the Solution Architect plan and wait for approval**
-5. After approval, implement through Backend → Frontend → UX → QA → Code Quality → Refactor → Final Review
+1. **Write** `ai/feature-request.md` from their message (all sections — infer from context)
+2. **Read** `ai/agent-loop.md` and execute each role **in order** — do not skip roles
+3. **Product Analyst** → refine problem, users, acceptance criteria
+4. **Solution Architect** → implementation plan (scope, files, API, risks)
+5. **STOP — wait for user approval** before any code edits
+6. After approval: **Backend** → **Frontend** → **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
+7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push`
 
-Load DNA context from `.DNA/knowledge/`, `.DNA/behaviour/`, and `DNA/Impressions/` throughout.
-Run `dna quality report --feature` before marking a feature complete — local SonarQube-style gate, no SonarQube server required.
-Close every feature with `dna docker build` then `dna github push`. GitHub auth is browser-based from `dna init` — no manual tokens.
+### The 9 roles (sequential — never skip)
+
+1. Product Analyst
+2. Solution Architect — **approval gate here**
+3. Backend Engineer
+4. Frontend Engineer
+5. UX Reviewer
+6. QA Engineer
+7. Code Quality Analyst
+8. Refactor Reviewer
+9. Final Release Reviewer
+
+### Hard gates
+
+- **No code** until the Solution Architect plan is approved by the user
+- **No role skipping** — every role reviews before ship
+- **No complete** until `npx dna quality report --feature` PASS
+- **No ship** until docker build succeeds and GitHub push completes
+- **Never** ask the user to copy prompts or fill templates
+
+**Admin / backoffice:** when user says admin, backoffice, or control panel — read `.cursor/rules/admin-portal.mdc`; scaffold `/admin` in a new tab with RBAC (see agent loop).
+
 
 
 Run `dna context <target>` when you need focused domain knowledge.
 
-## DNA Workbench (default)
+## DNA Workbench (default — Claude Code)
 
-DNA installs **prompt-first** Cursor/Claude packages on init and update:
+DNA installs **prompt-first** packages on init and update:
 
-- `.cursor/rules/dna-workbench.mdc` — always-on co-pilot rules
-- `.cursor/skills/dna-workbench/` — session flows and prompt patterns
-- Slash prompts: `/work-with-dna`, `/ship-feature`, `/analyze-project`, `/health-check`, `/quality-gate`, etc.
+- `CLAUDE.md` — always-on co-pilot instructions (this file)
+- `AGENTS.md` — intent routing + agent flow gates
+- `.claude/skills/dna-workbench/` — session flows and prompt patterns
+- `.claude/skills/dna-cli/` — CLI routing and obedience
+- Slash prompts: `/work-with-dna`, `/ship-feature`, `/analyze-project`, `/agent-loop`, `/dna-doctor`, etc.
 
-The user works in plain language inside Cursor. You run DNA CLI and load `.DNA/` context on their behalf.
+The user works in plain language inside Claude Code. You run DNA CLI and load `.DNA/` context on their behalf.
 
-Optional CLI slash catalog: `npx dna commands install` · https://dna.humaan.app/intelligence
+Optional catalog: https://dna.humaan.app/intelligence · Regenerate: `npx dna workbench install`
 Remove workbench: `npx dna workbench uninstall`

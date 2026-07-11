@@ -5,8 +5,9 @@
 ```bash
 npx dna ivf shared-library --dry-run
 npx dna ivf shared-library --scaffold
+npx dna ivf shared-library --execute
 ```
 
 Scope: $ARGUMENTS
 
-Dry-run first. Report duplicates and migration order. Scaffold only after approval.
+Dry-run first. `--execute` copies components, rewires imports, runs tests, rolls back on failure — only after approval.

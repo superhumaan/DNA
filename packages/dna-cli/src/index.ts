@@ -37,6 +37,18 @@ import {
   generateComplianceContext,
   parseFrameworksInput,
   parseOrgTier,
+  generateMethodologyPlan,
+  showDeliveryProfile,
+  setDeliveryProfile,
+  formatDeliveryProfileSummary,
+  METHODOLOGY_CATALOG,
+  ARCHETYPE_CATALOG,
+  generateLegalPlan,
+  formatLegalCatalog,
+  generateLegalContext,
+  parseDomainsInput,
+  parseJurisdictionsInput,
+  adviseLegal,
   formatGdprDocumentCatalog,
   installGdprExamples,
   installFeatureFactory,
@@ -346,12 +358,15 @@ stack
 program
   .command("context")
   .description("Generate AI-ready context")
-  .argument("<target>", "cursor|claude|chatgpt|copilot|windsurf|gemini|backend|frontend|security|qa|devops|rbac|platform|compliance|multilingual|ivf|all")
+  .argument("<target>", "cursor|claude|chatgpt|copilot|windsurf|gemini|backend|frontend|security|qa|devops|rbac|platform|compliance|legal|multilingual|methodology|ivf|all")
   .option("--cwd <path>", "Project root directory")
   .option("--feature <id>", "Focus platform context on a feature id (with platform target)")
   .option("--tier <tier>", "Org tier for compliance context: startup|sme|corporate|enterprise")
   .option("--frameworks <list>", "Frameworks for compliance context: gdpr,hipaa,iso27001")
-  .action(async (target: string, options: { cwd?: string; feature?: string; tier?: string; frameworks?: string }) => {
+  .option("--domains <list>", "Legal domains for legal context: privacy,banking,healthcare")
+  .option("--jurisdictions <list>", "Legal jurisdictions: sg,th,eu,us,uk")
+  .option("--quote <text>", "Plain-language question for legal context or advisor")
+  .action(async (target: string, options: { cwd?: string; feature?: string; tier?: string; frameworks?: string; domains?: string; jurisdictions?: string; quote?: string }) => {
     const root = getRoot(options);
     const validTargets = [
       "cursor",
@@ -368,7 +383,9 @@ program
       "rbac",
       "platform",
       "compliance",
+      "legal",
       "multilingual",
+      "methodology",
       "ivf",
       "all",
     ] as const;
@@ -392,15 +409,29 @@ program
       return;
     }
 
+    if (target === "legal") {
+      const domains = options.domains ? parseDomainsInput(options.domains) : undefined;
+      const jurisdictions = options.jurisdictions ? parseJurisdictionsInput(options.jurisdictions) : undefined;
+      const context = await generateLegalContext(root, { domains, jurisdictions, quote: options.quote });
+      console.log(context);
+      return;
+    }
+
     if (target === "ivf") {
       const context = await generateIvfContext(root);
       console.log(context);
       return;
     }
 
+    if (target === "methodology") {
+      const context = await generateContext(root, "methodology");
+      console.log(context);
+      return;
+    }
+
     const context = await generateContext(
       root,
-      target as Exclude<(typeof validTargets)[number], "platform" | "compliance" | "ivf">,
+      target as Exclude<(typeof validTargets)[number], "platform" | "compliance" | "legal" | "ivf" | "methodology">,
     );
     console.log(context);
   });
@@ -740,8 +771,9 @@ const workbenchCmd = program
 workbenchCmd
   .command("install")
   .description("Install or refresh DNA Workbench prompts and skills")
+  .option("--bundled", "Use bundled stem catalog (skip remote fetch)")
   .option("--cwd <path>", "Project root directory")
-  .action(async (options: { cwd?: string }) => {
+  .action(async (options: { bundled?: boolean; cwd?: string }) => {
     const root = getRoot(options);
     const config = await loadDnaConfig(root);
     if (!config) {
@@ -749,7 +781,9 @@ workbenchCmd
       process.exit(1);
     }
     await persistAiWorkbenchEnabled(root, config, true);
-    const created = await installAiWorkbench(root, config);
+    const created = await installAiWorkbench(root, config, {
+      preferRemoteStems: options.bundled ? false : undefined,
+    });
     console.log(`✓ DNA Workbench installed (${created.length} files, ${getPromptStemPacks().length} stem packs)`);
     console.log("\nIn Cursor, type `/` → analyze-project, what-next, ship-feature, …");
     console.log("Copy-paste library: https://dna.humaan.app/intelligence#stem-library");
@@ -1385,12 +1419,12 @@ marketplace
   .command("search")
   .description("Search knowledge packs")
   .option("--query <text>", "Search query")
-  .option("--category <category>", "languages|frameworks|platforms|disciplines|compliance")
+  .option("--category <category>", "languages|frameworks|platforms|disciplines|compliance|legal")
   .option("--channel <channel>", "stable|beta|nightly", "stable")
   .action(
     async (options: {
       query?: string;
-      category?: "languages" | "frameworks" | "platforms" | "disciplines" | "compliance";
+      category?: "languages" | "frameworks" | "platforms" | "disciplines" | "compliance" | "legal";
       channel?: "stable" | "beta" | "nightly";
     }) => {
       const catalog = await fetchMarketplaceCatalog({ channel: options.channel ?? "stable" });
@@ -1421,10 +1455,16 @@ marketplace
       process.exit(1);
     }
 
-    const { pack, files } = await installKnowledgePackById(root, packId, options.channel ?? "stable");
+    const { pack, files, bundleInstalled } = await installKnowledgePackById(root, packId, options.channel ?? "stable");
     console.log(`✓ Installed ${pack.name} (${pack.id}@${pack.version})`);
     console.log(`  Files: ${files.length}`);
     files.forEach((f) => console.log(`    ${f}`));
+    if (bundleInstalled?.length) {
+      console.log(`\n  Country bundle (+${bundleInstalled.length} supporting packs):`);
+      for (const entry of bundleInstalled) {
+        console.log(`    • ${entry.pack.id} — ${entry.pack.name} (${entry.files.length} files)`);
+      }
+    }
     console.log("\nBrowse: https://dna.humaan.app/marketplace");
   });
 
@@ -1588,6 +1628,94 @@ plan
   );
 
 plan
+  .command("legal")
+  .description("Plan legal considerations — privacy, banking, healthcare, IP, regional law")
+  .option("--domains <list>", "Comma-separated: privacy,banking,healthcare,ip,consumer,employment,ai_governance")
+  .option("--jurisdictions <list>", "Comma-separated: eu,uk,us,sg,th,my,au,ca,in,br,jp,kr,id,ph,vn,hk,tw,cn")
+  .option("--tier <tier>", "Org tier: startup|sme|corporate|enterprise")
+  .option("--quote <text>", "Plain-language requirement or question")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: {
+      domains?: string;
+      jurisdictions?: string;
+      tier?: string;
+      quote?: string;
+      cwd?: string;
+    }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      const domains = options.domains ? parseDomainsInput(options.domains) : undefined;
+      const jurisdictions = options.jurisdictions ? parseJurisdictionsInput(options.jurisdictions) : undefined;
+      const tier = options.tier ? parseOrgTier(options.tier) : undefined;
+      if (options.tier && !tier) {
+        console.error("Unknown tier. Use: startup, sme, corporate, enterprise");
+        process.exit(1);
+      }
+
+      const result = await generateLegalPlan({
+        root,
+        domains,
+        jurisdictions,
+        tier,
+        quote: options.quote,
+      });
+
+      console.log(`✓ Legal plan generated (${result.tier} tier)\n`);
+      console.log(`  Plan:   ${result.planPath}`);
+      console.log(`  Matrix: ${result.matrixPath}`);
+      console.log(`  Domains: ${result.domains.join(", ")}`);
+      console.log(`  Jurisdictions: ${result.jurisdictions.join(", ") || "none detected"}`);
+      console.log("");
+      console.log("Paste the plan into your AI tool, or run:");
+      console.log("  dna context legal");
+      console.log("  dna legal advise --quote \"...\"");
+      console.log("");
+      console.log("─".repeat(60));
+      console.log(result.context);
+    },
+  );
+
+plan
+  .command("methodology")
+  .description("Plan delivery methodology — how the team tickets, documents, and plans work")
+  .option("--methodology <id>", "scrum|kanban|less|safe|spotify-model|shape-up|dna-default")
+  .option("--archetype <id>", "travel-scale-up|big-tech|research-lab|agency|startup|none")
+  .option("--quote <text>", "Plain-language requirement")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: { methodology?: string; archetype?: string; quote?: string; cwd?: string }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+
+      const result = await generateMethodologyPlan({
+        root,
+        methodology: options.methodology,
+        companyArchetype: options.archetype,
+        quote: options.quote,
+      });
+
+      console.log("✓ Methodology plan generated\n");
+      console.log(`  Plan: ${result.planPath}`);
+      console.log("");
+      console.log("Paste the plan into your AI tool, or run:");
+      console.log("  dna context methodology");
+      console.log("");
+      console.log("─".repeat(60));
+      console.log(result.context);
+    },
+  );
+
+plan
   .command("ivf")
   .description("Generate an Integrating Vertical Functions plan for brownfield projects")
   .option("--quote <text>", "Plain-language integration requirement")
@@ -1662,6 +1790,87 @@ plan
     console.log("─".repeat(60));
     console.log(result.context);
   });
+
+const methodology = program
+  .command("methodology")
+  .description("Configure how your team plans, documents, and tickets work");
+
+methodology
+  .command("show")
+  .description("Show current delivery profile")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+    const result = await showDeliveryProfile(root);
+    console.log(formatDeliveryProfileSummary(result));
+  });
+
+methodology
+  .command("list")
+  .description("List available methodologies and company archetypes")
+  .action(() => {
+    console.log("Methodologies:\n");
+    for (const m of METHODOLOGY_CATALOG) {
+      console.log(`  ${m.id.padEnd(16)} ${m.name}`);
+      console.log(`  ${"".padEnd(16)} ${m.description}`);
+      console.log(`  ${"".padEnd(16)} Hierarchy: ${m.defaultHierarchy.join(" → ")}\n`);
+    }
+    console.log("Company archetypes:\n");
+    for (const a of ARCHETYPE_CATALOG) {
+      console.log(`  ${a.id.padEnd(16)} ${a.name} — ${a.description}`);
+    }
+    console.log("\nConfigure: dna methodology set --methodology <id> --archetype <id>");
+    console.log("Context:   dna context methodology");
+  });
+
+methodology
+  .command("set")
+  .description("Set delivery profile (methodology, archetype, ticket/doc systems)")
+  .option("--methodology <id>", "Delivery methodology")
+  .option("--archetype <id>", "Company archetype")
+  .option("--ticket-system <system>", "jira|linear|github|azure-devops|none")
+  .option("--doc-system <system>", "confluence|notion|impressions|google-docs|github-wiki")
+  .option("--hierarchy <list>", "Comma-separated hierarchy levels")
+  .option("--ceremonies <list>", "Comma-separated ceremonies")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: {
+      methodology?: string;
+      archetype?: string;
+      ticketSystem?: string;
+      docSystem?: string;
+      hierarchy?: string;
+      ceremonies?: string;
+      cwd?: string;
+    }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      if (!config) {
+        console.error("DNA not installed. Run `dna init` first.");
+        process.exit(1);
+      }
+      if (!options.methodology && !options.archetype && !options.ticketSystem && !options.docSystem) {
+        console.error("Provide at least one of: --methodology, --archetype, --ticket-system, --doc-system");
+        process.exit(1);
+      }
+      const result = await setDeliveryProfile({
+        root,
+        methodology: options.methodology,
+        companyArchetype: options.archetype,
+        ticketSystem: options.ticketSystem,
+        docSystem: options.docSystem,
+        hierarchy: options.hierarchy,
+        ceremonies: options.ceremonies,
+      });
+      console.log("✓ Delivery profile updated\n");
+      console.log(formatDeliveryProfileSummary(result));
+    },
+  );
 
 const memory = program.command("memory").description("CellularMemory export and import across projects");
 
@@ -1818,6 +2027,44 @@ compliance
     if (installed.length > 5) console.log(`  ... and ${installed.length - 5} more`);
     console.log("\nBrowse: .DNA/knowledge/compliance/gdpr/examples/INDEX.md");
   });
+
+const legal = program.command("legal").description("Legal advisor — jurisdictions, sectors, and engineering legal gates");
+
+legal
+  .command("list")
+  .description("List legal domains and supported jurisdictions")
+  .action(() => {
+    console.log(formatLegalCatalog());
+  });
+
+legal
+  .command("advise")
+  .description("Get legal considerations for a product question (not legal advice)")
+  .requiredOption("--quote <text>", "Plain-language question, e.g. \"Store patient data in Thailand\"")
+  .option("--domains <list>", "Override detected domains: privacy,banking,healthcare")
+  .option("--jurisdictions <list>", "Override detected jurisdictions: sg,th,eu")
+  .option("--cwd <path>", "Project root directory")
+  .action(
+    async (options: { quote: string; domains?: string; jurisdictions?: string; cwd?: string }) => {
+      const root = getRoot(options);
+      const config = await loadDnaConfig(root);
+      const domains = options.domains ? parseDomainsInput(options.domains) : undefined;
+      const jurisdictions = options.jurisdictions ? parseJurisdictionsInput(options.jurisdictions) : undefined;
+
+      if (config) {
+        await generateLegalContext(root, { domains, jurisdictions, quote: options.quote });
+      }
+
+      const result = adviseLegal({
+        quote: options.quote,
+        projectDescription: config?.description,
+        domains,
+        jurisdictions,
+      });
+
+      console.log(result.brief);
+    },
+  );
 
 const platform = program.command("platform").description("DNA production platform catalog");
 

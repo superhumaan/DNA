@@ -2,14 +2,7 @@
 
 ## Example 1
 
-**User:** Sync DNA memory with the team registry
+**User:** Sync team memory
 
 **Good response shape:**
-Follow Memory sync guidelines and expectations in .DNA/stems/memory-sync/
-
-## Example 2
-
-**User:** Pull latest CellularMemory from shared path
-
-**Good response shape:**
-Follow Memory sync guidelines and expectations in .DNA/stems/memory-sync/
+Synced from //team/.DNA/registry/memory.json. Merged 5 segments, 0 conflicts.

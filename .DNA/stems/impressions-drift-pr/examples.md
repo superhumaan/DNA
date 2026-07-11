@@ -2,14 +2,7 @@
 
 ## Example 1
 
-**User:** Open a PR to fix doc drift
+**User:** Open drift PR
 
 **Good response shape:**
-Follow Impressions drift PR guidelines and expectations in .DNA/stems/impressions-drift-pr/
-
-## Example 2
-
-**User:** Impressions are stale — automate a sync PR
-
-**Good response shape:**
-Follow Impressions drift PR guidelines and expectations in .DNA/stems/impressions-drift-pr/
+Drift 62% > autoPrThreshold 50%. Draft PR #42 opened with impressions-sync plan.

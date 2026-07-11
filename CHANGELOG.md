@@ -4,15 +4,27 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.4.9] - 2026-07-11
+
 ### Added
 
-- **7 new prompt stem packs** (50 total) — `keep-dna-current` (`/dna-update`), `platform-codegen`, `ivf-shared-library-execute` (`/ivf-execute`), `impressions-drift-pr` (`/drift-pr`), `memory-sync`, `dashboard-monitor`, `stack-hosting`.
-- **Stem pack refresh** — existing stems updated for v0.4.6–0.4.8 features: `scan --open-pr`, drift thresholds, `ivf shared-library --execute`, `memory sync` / `--on-conflict`, live dashboard feed, hosting-aware preview CI.
-- **Install activation** — `dna init`, `dna doctor`, and `dna update` now install **workbench + stems + `/dna-*` CLI slash commands** (not stems-only). Intelligence catalog scenarios bumped to 10.
+- **`AGENTS.md`** — root agent instructions with **intent routing** (engineering vs analysis vs Q&A vs ship vs debug) and **mandatory 9-role agent loop** for all build/add/fix/change work.
+- **DNA always-on** — Cursor (`dna-workbench.mdc`, `dna.mdc`) and Claude Code (`CLAUDE.md`, workbench skill) no longer wait for “use DNA”; skills and CLI obedience layers updated.
+- **`/dna-*` CLI slash commands** — full catalog installed with workbench (`dna commands install`); `dna-cli` skill + `dna-cli-commands.mdc` always-on obedience layer.
+- **Legal advisor** — `dna legal list`, `dna legal advise`, `dna plan legal`, `dna context legal`; regional legal packs; stems `/legal-advise`, `/plan-legal`, `/legal-engineering`, `/legal-list`.
+- **Delivery methodology** — `dna methodology show|set`, `dna plan methodology`, `dna context methodology`; stems `/methodology-setup`, `/align-delivery`, `/write-spec`, `/break-down-work`, `/create-ticket`.
+- **16 new prompt stem packs** (59 total) — includes v0.4.8 stem additions plus legal, delivery, and methodology workflows.
+- **129 new marketplace packs** (897 total) — healthcare country/system overviews, legal regional tiers, delivery methodology packs.
+- **Install activation** — `dna init`, `dna doctor`, and `dna update` install workbench + stems + `/dna-*` commands together.
+
+### Changed
+
+- **Init messaging** — “DNA is active in Cursor and Claude Code by default — no need to say use DNA.”
+- **Intelligence catalog** — synced to [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) with agent-flow scenarios and expanded stem library.
 
 ### Fixed
 
-- **Workflow cleanup** — `cleanup-failed-runs.yml` sweeps all failed/cancelled runs (not just the triggering run) so backlog does not linger. Removed duplicate legacy `ci.yml` (DNA CI is canonical). DNA Preview now runs after DNA CI completes instead of in parallel on every push. Fixed invalid workflow YAML, added `pnpm/action-setup`, and expanded cleanup triggers.
+- **Workflow cleanup** — `cleanup-failed-runs.yml` sweeps all failed/cancelled runs; removed duplicate legacy `ci.yml`; DNA Preview runs after DNA CI; `pnpm/action-setup` on CI workflows.
 
 ## [0.4.8] - 2026-07-11
 

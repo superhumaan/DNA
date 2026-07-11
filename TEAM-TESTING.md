@@ -12,7 +12,7 @@ Share this with colleagues who want to try DNA on their own projects.
 |-------|-------------------|----------------|
 | Project brain | `dna init` | `.DNA/` + `DNA/Impressions/` scaffolded |
 | AI context | `dna context cursor` | Paste-ready context for your AI tool |
-| **Cursor workbench** | `dna init` / `dna doctor` | 50 prompt stem packs + `/dna-*` commands in `.DNA/stems/` — `/analyze-project`, `/ship-feature`, `/dna-update`, `/platform-codegen` |
+| **Cursor workbench** | `dna init` / `dna doctor` | 59 prompt stem packs + `/dna-*` commands — DNA always on; `AGENTS.md` routes engineering work through the 9-role agent loop |
 | **Stem library** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) | Copy prompts + guidelines; each stem has MUST/NEVER rules and expectations |
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |

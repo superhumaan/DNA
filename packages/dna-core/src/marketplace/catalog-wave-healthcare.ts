@@ -1,5 +1,11 @@
 import { def, packsFromDefs } from "./bundled-catalog-pack-factory.js";
 import { HEALTHCARE_OVERVIEW_COUNTRY_DEFS } from "./catalog-wave-healthcare-overview-countries.js";
+import { ALL_HEALTHCARE_COUNTRY_SUPPORT_PACKS } from "./catalog-wave-healthcare-country-support.js";
+import {
+  HEALTHCARE_APAC_OVERVIEW_DEFS,
+  HEALTHCARE_APAC_SUPPORT_PACK,
+  HEALTHCARE_APAC_DEEP_SUPPORT_PACKS,
+} from "./catalog-wave-healthcare-apac.js";
 
 const HIPAA_BASE = `## HIPAA baseline (all healthcare packs)
 - BAA with every vendor touching PHI
@@ -748,6 +754,12 @@ Rules pushing FHIR APIs for Medicare Advantage, ACA plans, hospitals.
     "disciplines",
   ),
   ...HEALTHCARE_OVERVIEW_COUNTRY_DEFS,
+  ...HEALTHCARE_APAC_OVERVIEW_DEFS,
 ];
 
-export const HEALTHCARE_PACKS = packsFromDefs(HEALTHCARE_PACK_DEFS);
+export const HEALTHCARE_PACKS = [
+  ...packsFromDefs(HEALTHCARE_PACK_DEFS),
+  ...ALL_HEALTHCARE_COUNTRY_SUPPORT_PACKS,
+  HEALTHCARE_APAC_SUPPORT_PACK,
+  ...HEALTHCARE_APAC_DEEP_SUPPORT_PACKS,
+];

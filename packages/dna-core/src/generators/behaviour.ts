@@ -1,5 +1,6 @@
 import type { DnaConfig } from "@superhumaan/dna-config";
 import { getArchetype } from "../stack/catalog.js";
+import { deliveryBehaviourMarkdown } from "../delivery/behaviour.js";
 
 const SHARED_PREAMBLE = `<!-- DNA Behaviour — DNA by Humaan -->
 <!-- Do not edit unless explicitly requested. Managed by DNA. -->
@@ -114,6 +115,7 @@ function documentationBehaviour(config: DnaConfig): string {
 - Use clear, accessible language for human-facing docs
 - Do not overwrite Impressions without reviewing existing content
 - Suggest updates rather than silently rewriting protected docs
+- Before writing tickets or specs, read \`delivery.behaviour.md\` and run \`dna context methodology\`
 
 ## Project
 
@@ -140,6 +142,7 @@ Compliance level: ${config.compliance}
 - **Zero trust:** never trust UI hiding alone; verify every request server-side
 - Before RBAC work: run \`dna plan rbac\` and follow \`.DNA/workflows/rbac.workflow.md\`
 - Before processing personal, health, or payment data: run \`dna plan compliance\` and follow tier + framework knowledge
+- Before banking, healthcare, cross-border, or jurisdiction-specific features: run \`dna legal advise\` and follow \`.DNA/workflows/legal.workflow.md\`
 - Compliance tier: infer from project stage or set via \`dna plan compliance --tier startup|sme|corporate|enterprise\`
 - Complete Phase 6 verification checklist before marking RBAC done
 - Redact sensitive data in logs and error reports
@@ -179,6 +182,7 @@ export function generateBehaviourFiles(config: DnaConfig): Record<string, string
     "coding.behaviour.md": codingBehaviour(config),
     "testing.behaviour.md": testingBehaviour(config),
     "documentation.behaviour.md": documentationBehaviour(config),
+    "delivery.behaviour.md": deliveryBehaviourMarkdown(config),
     "security.behaviour.md": securityBehaviour(config),
     "runtime.behaviour.md": runtimeBehaviour(config),
   };

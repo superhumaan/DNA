@@ -1,0 +1,35 @@
+---
+description: DNA CLI obedience — run real dna commands, respect quality gates, use /dna-* slash commands
+alwaysApply: true
+---
+
+# DNA CLI commands — obedience layer
+
+Project: **dna-by-humaan**
+
+## You MUST
+
+- Execute **real** `npx dna` commands when DNA health, analysis, planning, or delivery is involved
+- Use **/`dna-*` slash commands** from `.cursor/commands/` for structured DNA operations
+- Load the **dna-cli skill** at `.cursor/skills/dna-cli/SKILL.md` when routing DNA work
+- Run `/dna-quality-report` before marking features complete or pushing
+- Stop feature factory after **Solution Architect plan** — wait for user approval
+
+## You MUST NOT
+
+- Simulate DNA CLI output or skip running commands
+- Push to GitHub with a failing quality gate (unless user explicitly overrides)
+- Auto-merge AI repair PRs
+- Force-push main/master
+
+## Quick reference
+
+| Intent | Slash command |
+|--------|---------------|
+| Health / repair | `/dna-doctor` |
+| Deep analysis | `/dna-analyze` |
+| New feature | `/dna-feature` |
+| Quality gate | `/dna-quality-report` |
+| Ship | `/dna-docker-build` then `/dna-github-push` |
+
+Full catalog: https://dna.humaan.app/intelligence

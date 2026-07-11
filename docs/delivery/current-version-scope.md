@@ -11,13 +11,13 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace |
 | **Runtime** | Express, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`) |
 | **Supply chain** | **Zero production npm dependencies** (v0.4.6+), no install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
-| **Marketplace** | 768 packs, remote + bundled offline |
+| **Marketplace** | 897 packs, remote + bundled offline |
 | **Platform catalog** | Admin, SSO, RBAC, cloud deploy, CRM, CMS patterns |
 | **Compliance** | Tiered GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS |
 | **Brownfield** | IVF plans, `document --from-code`, deep analyze |
-| **Feature factory** | Plain-language features + quality gates |
-| **AI Workbench** | Prompt-first Cursor/Claude packages — default on init, doctor, update |
-| **Prompt stem packs** | 50 copy-paste workflows in `.DNA/stems/` — guidelines, expectations, agent-loop roles |
+| **Feature factory** | Plain-language features + mandatory 9-role agent loop (`AGENTS.md`) |
+| **AI Workbench** | Always-on Cursor/Claude co-pilot — no “use DNA” required |
+| **Prompt stem packs** | 59 copy-paste workflows in `.DNA/stems/` — guidelines, expectations, agent-loop roles |
 | **`dna stems`** | List, show, and refresh prompt stem packs |
 | **GitHub** | Connect, auto-issues, push gates, browser login (`dna github login`) |
 | **Preview deploy** | `dna-preview.yml` scaffold with Vercel/Netlify + branch filter |
@@ -31,6 +31,9 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Platform codegen (MVP)** | `dna generate feature audit-logging` ([#17](https://github.com/superhumaan/DNA/issues/17)) |
 | **IVF shared library (MVP)** | `dna ivf shared-library --dry-run` / `--scaffold` ([#16](https://github.com/superhumaan/DNA/issues/16)) |
 | **Upstream feedback (v0.4.8)** | `dna feedback report|sync|status` — DNA-only auto-report, sanitized queue, maintainer ingest to `superhumaan/DNA` |
+| **Always-on co-pilot (v0.4.9)** | `AGENTS.md`, intent routing, mandatory 9-role loop; DNA active in Cursor + Claude without “use DNA” |
+| **Legal advisor (v0.4.9)** | `dna legal advise`, `dna plan legal`, regional legal packs, engineering legal gates |
+| **Delivery methodology (v0.4.9)** | `dna methodology`, `dna plan methodology`, ticket/doc system alignment stems |
 
 ---
 

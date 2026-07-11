@@ -9,9 +9,9 @@ DNA development priorities and public roadmap.
 - `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` bundle (v0.4.6+)
 - **Zero npm dependencies** — published package has no production `dependencies`; internal git, glob, GitHub API, CLI parser, and config validators
 - **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
-- **50 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow
-- **DNA Workbench** — default on init/doctor/update; [intelligence library](https://dna.humaan.app/intelligence)
-- 768 knowledge packs in stable channel
+- **59 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow
+- **DNA Workbench** — default on init/doctor/update; `AGENTS.md` intent routing + mandatory 9-role agent loop for engineering work
+- 897 knowledge packs in stable channel
 - Platform catalog from four reference production apps
 - Tiered compliance (GDPR, HIPAA, ISO, SOC 2)
 - Feature factory with quality gates + per-role agent-loop stems
@@ -43,6 +43,8 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Supply-chain hardening + Socket transparency (v0.4.4) | ✅ Shipped |
 | Zero npm dependencies — internal replacements for CLI/git/GitHub/glob (v0.4.5) | ✅ Shipped |
 | npm `dna doctor` workbench asset path fix (v0.4.6) | ✅ Shipped |
+| DNA always-on + `AGENTS.md` agent flow (v0.4.9) | ✅ Shipped |
+| Legal advisor + delivery methodology (v0.4.9) | ✅ Shipped |
 | Upstream feedback — DNA platform auto-report (v0.4.8) | ✅ Shipped |
 | First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress — setup script shipped |
 | Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | 🚧 In progress — live feed + trend chart |

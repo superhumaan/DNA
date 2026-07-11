@@ -1,4 +1,6 @@
 import { HEALTHCARE_OVERVIEW_COUNTRY_IDS } from "./catalog-wave-healthcare-overview-countries.js";
+import { HEALTHCARE_APAC_ISO_CODES } from "./catalog-wave-healthcare-apac.js";
+import { enrichCountryBundlePacks } from "./healthcare-systems-by-country.js";
 
 /** Installed with every country healthcare bundle. */
 export const HEALTHCARE_UNIVERSAL_BUNDLE_PACKS = [
@@ -7,6 +9,25 @@ export const HEALTHCARE_UNIVERSAL_BUNDLE_PACKS = [
   "healthcare/phi-engineering",
   "healthcare/terminology",
 ] as const;
+
+/** Regional APAC packs added to every APAC/Oceania country bundle. */
+export const HEALTHCARE_APAC_REGIONAL_BUNDLE_PACKS = [
+  "healthcare/overview-apac",
+  "healthcare/apac-support",
+] as const;
+
+const APAC_BASE = [
+  "healthcare/patient-portal",
+  "healthcare/telehealth",
+  ...HEALTHCARE_APAC_REGIONAL_BUNDLE_PACKS,
+] as const;
+
+function apacBundle(
+  iso: string,
+  extra: readonly string[] = [],
+): readonly string[] {
+  return [`healthcare/overview-${iso}`, `healthcare/${iso}-support`, ...APAC_BASE, ...extra];
+}
 
 /** Country-specific packs beyond universal — includes overview, support, and regional depth. */
 export const HEALTHCARE_COUNTRY_BUNDLE_PACKS: Record<string, readonly string[]> = {
@@ -39,13 +60,10 @@ export const HEALTHCARE_COUNTRY_BUNDLE_PACKS: Record<string, readonly string[]> 
     "healthcare/patient-portal",
     "healthcare/telehealth",
     "healthcare/redox",
+    "healthcare/smart-on-fhir",
   ],
-  au: [
-    "healthcare/overview-au",
-    "healthcare/au-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
+  au: apacBundle("au"),
+  nz: apacBundle("nz"),
   eu: [
     "healthcare/overview-eu",
     "healthcare/eu-support",
@@ -94,36 +112,10 @@ export const HEALTHCARE_COUNTRY_BUNDLE_PACKS: Record<string, readonly string[]> 
     "healthcare/patient-portal",
     "healthcare/telehealth",
   ],
-  jp: [
-    "healthcare/overview-jp",
-    "healthcare/jp-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  kr: [
-    "healthcare/overview-kr",
-    "healthcare/kr-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  sg: [
-    "healthcare/overview-sg",
-    "healthcare/sg-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  nz: [
-    "healthcare/overview-nz",
-    "healthcare/nz-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  in: [
-    "healthcare/overview-in",
-    "healthcare/in-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
+  jp: apacBundle("jp"),
+  kr: apacBundle("kr"),
+  sg: apacBundle("sg"),
+  in: apacBundle("in"),
   br: [
     "healthcare/overview-br",
     "healthcare/br-support",
@@ -240,55 +232,27 @@ export const HEALTHCARE_COUNTRY_BUNDLE_PACKS: Record<string, readonly string[]> 
     "healthcare/patient-portal",
     "compliance/gdpr",
   ],
-  tw: [
-    "healthcare/overview-tw",
-    "healthcare/tw-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  hk: [
-    "healthcare/overview-hk",
-    "healthcare/hk-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  my: [
-    "healthcare/overview-my",
-    "healthcare/my-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  th: [
-    "healthcare/overview-th",
-    "healthcare/th-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  ph: [
-    "healthcare/overview-ph",
-    "healthcare/ph-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  id: [
-    "healthcare/overview-id",
-    "healthcare/id-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  vn: [
-    "healthcare/overview-vn",
-    "healthcare/vn-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
-  cn: [
-    "healthcare/overview-cn",
-    "healthcare/cn-support",
-    "healthcare/patient-portal",
-    "healthcare/telehealth",
-  ],
+  tw: apacBundle("tw"),
+  hk: apacBundle("hk"),
+  my: apacBundle("my"),
+  th: apacBundle("th"),
+  ph: apacBundle("ph"),
+  id: apacBundle("id"),
+  vn: apacBundle("vn"),
+  cn: apacBundle("cn"),
+  bd: apacBundle("bd"),
+  pk: apacBundle("pk"),
+  lk: apacBundle("lk"),
+  np: apacBundle("np"),
+  kh: apacBundle("kh"),
+  mm: apacBundle("mm"),
 };
+
+export const HEALTHCARE_ALL_OVERVIEW_PACK_IDS = [
+  ...HEALTHCARE_OVERVIEW_COUNTRY_IDS,
+  "healthcare/overview-apac",
+  ...HEALTHCARE_APAC_ISO_CODES.map((iso) => `healthcare/overview-${iso}`),
+].filter((id, i, arr) => arr.indexOf(id) === i);
 
 export const HEALTHCARE_COUNTRY_SUPPORT_PACK_IDS = Object.keys(HEALTHCARE_COUNTRY_BUNDLE_PACKS).map(
   (iso) => `healthcare/${iso}-support`,
@@ -307,15 +271,23 @@ export function healthcareOverviewIso(packId: string): string | undefined {
  * Returns null when the pack is not a country overview entry point.
  */
 export function resolveHealthcareCountryBundlePackIds(packId: string): string[] | null {
+  if (packId === "healthcare/overview-apac") {
+    return [
+      "healthcare/overview-apac",
+      ...HEALTHCARE_UNIVERSAL_BUNDLE_PACKS,
+      ...HEALTHCARE_APAC_REGIONAL_BUNDLE_PACKS.filter((p) => p !== "healthcare/overview-apac"),
+    ];
+  }
+
   const iso = healthcareOverviewIso(packId);
   if (!iso || !HEALTHCARE_COUNTRY_BUNDLE_PACKS[iso]) return null;
 
-  const countryPacks = HEALTHCARE_COUNTRY_BUNDLE_PACKS[iso];
+  const countryPacks = enrichCountryBundlePacks(iso, HEALTHCARE_COUNTRY_BUNDLE_PACKS[iso]);
   const ordered = [packId, ...HEALTHCARE_UNIVERSAL_BUNDLE_PACKS, ...countryPacks.filter((p) => p !== packId)];
   return [...new Set(ordered)];
 }
 
 /** True when pack id is a registered country healthcare overview. */
 export function isHealthcareCountryOverviewPack(packId: string): boolean {
-  return HEALTHCARE_OVERVIEW_COUNTRY_IDS.includes(packId);
+  return HEALTHCARE_ALL_OVERVIEW_PACK_IDS.includes(packId);
 }

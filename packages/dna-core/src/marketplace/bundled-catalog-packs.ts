@@ -2,12 +2,15 @@ import type { KnowledgePack } from "@superhumaan/dna-config";
 import { pack } from "./bundled-catalog-helpers.js";
 import { DNA_STACK_PACK } from "./bundled-dna-stack.js";
 import { TIERED_STANDARDS_PACK } from "./bundled-compliance-tiered.js";
+import { TIERED_LEGAL_PACK } from "./bundled-legal-tiered.js";
+import { REGIONAL_LEGAL_PACKS } from "./bundled-legal-regional.js";
 import { STEM_PACKS } from "./bundled-stem-packs.js";
 import { CATALOG_EXPANSION_PACKS } from "./bundled-catalog-expansion.js";
 import { LANGUAGE_STEM_PACKS } from "./bundled-language-stem-packs.js";
 import { MUI_REPORT_PATTERN_PACK } from "./bundled-stem-mui.js";
 import { MOBILE_UI_PACK } from "./bundled-stem-mobile-ui.js";
 import { QUALITY_STEM_PACKS } from "./bundled-stem-quality.js";
+import { METHODOLOGY_PACKS } from "./bundled-catalog-methodologies.js";
 
 export const PACKS: KnowledgePack[] = [
   pack("frameworks/vite", "Vite", "frameworks", "Vite framework knowledge for DNA projects", [
@@ -193,12 +196,15 @@ Test with fresh session per role. Refresh after login. Try direct URLs.
   ),
   DNA_STACK_PACK,
   TIERED_STANDARDS_PACK,
+  TIERED_LEGAL_PACK,
+  ...REGIONAL_LEGAL_PACKS,
   ...STEM_PACKS,
   ...LANGUAGE_STEM_PACKS,
   ...CATALOG_EXPANSION_PACKS,
   MUI_REPORT_PATTERN_PACK,
   MOBILE_UI_PACK,
   ...QUALITY_STEM_PACKS,
+  ...METHODOLOGY_PACKS,
 ];
 
 /** Deduped pack count (matches `buildBundledCatalog().packs.length`). */

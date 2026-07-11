@@ -13,7 +13,9 @@ export type ContextTarget =
   | "rbac"
   | "platform"
   | "compliance"
+  | "legal"
   | "multilingual"
+  | "methodology"
   | "ivf"
   | "all";
 
@@ -63,11 +65,24 @@ export const TARGET_INTENTS: Record<ContextTarget, string[]> = {
     "improve_security",
     "add_authentication",
   ],
+  legal: [
+    "consider_legal_requirements",
+    "implement_compliance_controls",
+    "implement_feature",
+    "improve_security",
+  ],
   multilingual: [
     "communicate_in_user_language",
     "implement_multilingual",
     "translate_documentation",
     "update_documentation",
+  ],
+  methodology: [
+    "create_ticket",
+    "write_delivery_document",
+    "break_down_work",
+    "update_documentation",
+    "implement_feature",
   ],
   ivf: [
     "review_architecture",

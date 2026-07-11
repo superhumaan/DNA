@@ -1,14 +1,98 @@
 ---
-description: Upgrade DNA CLI and refresh workbench stems + knowledge packs.
-argument-hint: [context or scope]
-allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Keep DNA current
+description: Upgrade DNA CLI and refresh knowledge packs / workbench prompts.
+allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob
+disable-model-invocation: true
+---
+
+# DNA Command: DNA Update
+
+> Slash: `/dna-update` · Category: **Core**
+
+## Purpose
+
+Upgrade DNA CLI and refresh knowledge packs / workbench prompts.
+
+## When to use
+
+- Project health is unknown
+- After cloning a DNA-enabled repo
+- Before major feature work
+
+## When NOT to use
+
+- When `--check-only` was requested and fixes are explicitly forbidden
+
+## Prerequisites
+
+- Project root with `package.json` or DNA already partially installed
+
+## Mandatory behaviour — OBEY
+
+- **MUST** Run the real CLI command in the shell — never invent or simulate DNA output.
+- **MUST** Execute from the **project root** unless `--cwd` is explicitly required.
+- **MUST** Read the **full terminal output** (stdout and stderr) before summarizing or acting.
+- **MUST** Prefer `npx dna` when `dna` is not on PATH; use global `dna` when available.
+- **MUST** Load `.DNA/neuralNetwork.json`, relevant `.DNA/behaviour/`, and `DNA/Impressions/` before follow-up implementation.
+- **MUST** Report every ✓ and ✗ line from doctor-style output literally
+
+## Forbidden — NEVER
+
+- **NEVER** Never skip running the command when the user invoked this slash command.
+- **NEVER** Never tell the user to copy prompts or manually edit DNA scaffold files when DNA can do it.
+- **NEVER** Never commit `.env`, tokens, or credentials surfaced by CLI output.
+- **NEVER** Never force-push to `main` or `master`.
+- **NEVER** Never disable DNA hooks or CI to 'fix' a failing gate without user approval
+
+## Execute (required)
+
+Run this command from the **project root** in the shell. Do not skip execution.
 
 ```bash
 npx dna update
-npx dna update --check-only
 ```
 
-Scope: $ARGUMENTS
+## Output interpretation
 
-Report: CLI version before/after, marketplace pack updates available, workbench stem count refreshed.
+| Section | Meaning |
+|---------|---------|
+| Checks | Each line is pass/fail for a DNA subsystem |
+
+## Exit codes
+
+- **0** — Success or acceptable validation warnings
+- **1** — Validation failed — fix before proceeding
+
+## Files touched
+
+- .DNA/
+- DNA/Impressions/
+- .cursor/
+- .claude/
+- .github/workflows/
+
+## After running
+
+Report CLI version change, stem pack refresh count, and marketplace updates. Suggest `dna marketplace install` for relevant packs.
+
+## Examples
+
+### Default invocation
+
+```bash
+npx dna update
+```
+
+**Then:** Report CLI version change, stem pack refresh count, and marketplace updates. Suggest `dna marketplace install` for relevant packs.
+
+## Session context
+
+Before follow-up implementation, load:
+
+- `.DNA/neuralNetwork.json` — intent routing
+- `.DNA/behaviour/*.behaviour.md` — project rules
+- `.DNA/knowledge/` — stack-matched packs
+- `DNA/Impressions/` — human-facing system docs
+
+**User context (if any):**
+
+$ARGUMENTS

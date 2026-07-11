@@ -2,14 +2,7 @@
 
 ## Example 1
 
-**User:** Scaffold SSO for this app
+**User:** Add SSO with Okta
 
 **Good response shape:**
-Follow Platform codegen guidelines and expectations in .DNA/stems/platform-codegen/
-
-## Example 2
-
-**User:** Add multi-tenant middleware
-
-**Good response shape:**
-Follow Platform codegen guidelines and expectations in .DNA/stems/platform-codegen/
+Scaffolded src/auth/sso + middleware stub. Plan at .DNA/plans/sso-<feature>.md. Next: register Okta adapter and protect admin routes.

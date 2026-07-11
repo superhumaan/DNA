@@ -120,7 +120,8 @@ export async function runInitWizard(
 
   const description = projectDescription || "Software project";
 
-  console.log("\n✓ Setting up DNA, Cursor rules, Claude context, and knowledge packs...");
+  console.log("\n✓ Setting up DNA — active in Cursor and Claude Code by default (no need to say \"use DNA\")");
+  console.log("  Cursor rules, Claude skills, and knowledge packs installing...");
   console.log("  Next: GitHub browser login (one time — no tokens to copy)\n");
 
   return {

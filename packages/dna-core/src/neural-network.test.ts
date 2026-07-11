@@ -25,6 +25,9 @@ describe("neuralNetwork generator", () => {
       "runtime.behaviour.md",
     );
     expect(network.intents.create_pr.validationChecks).toContain("validate_behaviour");
+    expect(network.intents.create_ticket).toBeDefined();
+    expect(network.intents.write_delivery_document).toBeDefined();
+    expect(network.intents.break_down_work).toBeDefined();
     expect(Object.keys(network.intents).length).toBeGreaterThanOrEqual(10);
   });
 });

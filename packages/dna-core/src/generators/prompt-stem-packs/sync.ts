@@ -155,9 +155,13 @@ export async function syncPromptStemPacks(
   const remote = preferRemote ? await fetchIntelligenceCatalog() : null;
   const bundled = getBundledIntelligenceCatalog();
 
-  const entries = remote?.stemPacks?.length ? remote.stemPacks : bundled.stemPacks;
-  const source: "remote" | "bundled" = remote ? "remote" : "bundled";
-  const catalogVersion = remote?.version ?? bundled.version ?? 4;
+  const bundledCount = bundled.stemPacks?.length ?? 0;
+  const remoteCount = remote?.stemPacks?.length ?? 0;
+  const useRemote = Boolean(remote?.stemPacks?.length) && remoteCount >= bundledCount;
+
+  const entries = useRemote ? remote!.stemPacks : bundled.stemPacks;
+  const source: "remote" | "bundled" = useRemote ? "remote" : "bundled";
+  const catalogVersion = useRemote ? (remote!.version ?? bundled.version ?? 4) : (bundled.version ?? 4);
 
   const files = buildStemInstallFiles(entries, config, { source, catalogVersion });
   const paths: string[] = [];

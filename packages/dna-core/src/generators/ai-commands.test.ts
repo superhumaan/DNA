@@ -53,6 +53,8 @@ describe("ai commands", () => {
     expect(doctorClaude).toContain("allowed-tools:");
 
     expect(files[".cursor/skills/dna-cli/SKILL.md"]).toContain("Absolute rules");
+    expect(files[".cursor/skills/dna-cli/SKILL.md"]).toContain("DNA is always on");
+    expect(files[".claude/skills/dna-cli/SKILL.md"]).toContain("Never wait for the user");
     expect(files[".cursor/rules/dna-cli-commands.mdc"]).toContain("alwaysApply: true");
     expect(files[".claude/skills/dna-cli/workflows.md"]).toContain("Hard gates");
   });

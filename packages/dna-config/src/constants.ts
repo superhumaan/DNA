@@ -33,9 +33,66 @@ export const BEHAVIOUR_FILES = [
   "coding.behaviour.md",
   "testing.behaviour.md",
   "documentation.behaviour.md",
+  "delivery.behaviour.md",
   "security.behaviour.md",
   "runtime.behaviour.md",
 ] as const;
+
+/** Delivery methodology — how the org plans, documents, and tickets work */
+export const DELIVERY_METHODOLOGIES = [
+  "dna-default",
+  "scrum",
+  "kanban",
+  "less",
+  "safe",
+  "spotify-model",
+  "shape-up",
+] as const;
+
+/** Company operating patterns — shapes doc and ticket conventions */
+export const COMPANY_ARCHETYPES = [
+  "none",
+  "travel-scale-up",
+  "big-tech",
+  "research-lab",
+  "agency",
+  "startup",
+] as const;
+
+export const TICKET_SYSTEMS = ["none", "github", "jira", "linear", "azure-devops"] as const;
+
+export const DOC_SYSTEMS = [
+  "impressions",
+  "confluence",
+  "notion",
+  "google-docs",
+  "github-wiki",
+] as const;
+
+export const WORK_HIERARCHY_LEVELS = [
+  "initiative",
+  "theme",
+  "bet",
+  "pitch",
+  "epic",
+  "feature",
+  "scope",
+  "story",
+  "task",
+  "subtask",
+  "bug",
+  "spike",
+] as const;
+
+export const DEFAULT_DELIVERY_PROFILE = {
+  methodology: "dna-default",
+  companyArchetype: "none",
+  ticketSystem: "github",
+  docSystem: "impressions",
+  hierarchy: ["feature", "story", "task"],
+  ceremonies: [],
+  customProfile: ".DNA/delivery/profile.md",
+} as const;
 
 export const CELLULAR_MEMORY_REGIONS = [
   "hippocampus",

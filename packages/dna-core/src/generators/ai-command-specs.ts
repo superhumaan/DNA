@@ -142,6 +142,35 @@ const CATEGORY_DEFAULTS: Record<
     exitCodes: [{ code: 0, meaning: "Catalog listed" }],
     filesTouched: [".DNA/knowledge/compliance/", ".DNA/plans/"],
   },
+  legal: {
+    whenToUse: [
+      "Banking, fintech, healthcare, or cross-border data",
+      "PDPA, GDPR, CCPA, or jurisdiction-specific launch",
+      "Before features collecting payment or health data",
+    ],
+    whenNotToUse: ["Purely internal tools with no PII in any jurisdiction"],
+    prerequisites: ["Target markets known or inferrable from project description"],
+    mustDo: [
+      "Run legal advise before regulated feature design",
+      "Install regional packs for launch jurisdictions",
+      "Separate engineering controls from counsel sign-off items",
+    ],
+    mustNotDo: [
+      "NEVER present DNA output as legal advice",
+      "NEVER ship banking/healthcare without sector checklist",
+      "NEVER skip legal matrix for multi-jurisdiction launches",
+    ],
+    outputGuide: [
+      { section: "Domains", meaning: "privacy, banking, healthcare, ip, consumer, employment, ai_governance" },
+      { section: "Jurisdictions", meaning: "eu, uk, us, sg, th, my, au, ca, in, br, jp, kr, id, ph, vn, hk, tw, cn" },
+    ],
+    exitCodes: [{ code: 0, meaning: "Legal catalog or advice generated" }],
+    filesTouched: [
+      ".DNA/knowledge/legal/",
+      ".DNA/plans/legal-*.md",
+      ".DNA/CellularMemory/prefrontalCortex/legal-considerations-matrix.md",
+    ],
+  },
   platform: {
     whenToUse: ["Implementing Humaan production patterns", "Scoping admin portal, SSO, audit logging"],
     whenNotToUse: ["Greenfield with no platform feature overlap"],
@@ -255,7 +284,7 @@ export const COMMAND_SPEC_OVERRIDES: Record<string, Partial<DnaAiCommandSpec>> =
     purpose: "Emit focused domain context for AI tools — loads neuralNetwork routes to knowledge, behaviour, and memory.",
     flags: [],
     outputGuide: [
-      { section: "Targets", meaning: "cursor, claude, backend, frontend, security, qa, compliance, ivf, all, etc." },
+      { section: "Targets", meaning: "cursor, claude, backend, frontend, security, qa, compliance, legal, ivf, all, etc." },
     ],
     relatedCommands: ["dna-analyze", "dna-validate"],
     examples: [
@@ -280,6 +309,31 @@ export const COMMAND_SPEC_OVERRIDES: Record<string, Partial<DnaAiCommandSpec>> =
       { flag: "--quote", description: "Project context" },
     ],
     relatedCommands: ["dna-compliance-list", "dna-context", "dna-marketplace-install"],
+  },
+  "plan-legal": {
+    purpose: "Legal plan — domains, jurisdictions, counsel gates, regional packs (not legal advice).",
+    flags: [
+      { flag: "--domains", description: "privacy, banking, healthcare, ip, consumer, employment, ai_governance" },
+      { flag: "--jurisdictions", description: "eu, uk, us, sg, th, my, au, ca, in, br, jp, kr, id, ph, vn, hk, tw, cn" },
+      { flag: "--tier", description: "startup | sme | corporate | enterprise" },
+      { flag: "--quote", description: "Product or launch context" },
+    ],
+    relatedCommands: ["dna-legal-advise", "dna-legal-list", "dna-context", "dna-plan-compliance"],
+    workflowChains: ["dna legal list → dna legal advise → dna plan legal → dna context legal"],
+  },
+  "legal-advise": {
+    purpose: "Quick legal advisor for engineering decisions — surfaces domains, jurisdictions, counsel checklist.",
+    flags: [
+      { flag: "--quote", description: "Plain-language question (required)" },
+      { flag: "--domains", description: "Override auto-detected domains" },
+      { flag: "--jurisdictions", description: "Override auto-detected jurisdictions" },
+    ],
+    mustNotDo: ["NEVER present output as legal advice — always include disclaimer"],
+    relatedCommands: ["dna-plan-legal", "dna-legal-list", "dna-context"],
+  },
+  "legal-list": {
+    purpose: "Catalog of legal domains and supported jurisdictions with pack IDs.",
+    relatedCommands: ["dna-marketplace-search", "dna-plan-legal"],
   },
   ivf: {
     purpose: "Brownfield IVF run: analyze → document from code → generate integration plan → wire DNA without rewrite.",

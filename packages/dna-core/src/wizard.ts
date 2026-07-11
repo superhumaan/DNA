@@ -14,6 +14,7 @@ import { createLogger } from "./logger.js";
 import { detectProjectContext, type ProjectContextResult } from "./onboarding.js";
 import { runFullInitAnalysis, type FullInitAnalysisResult } from "./ivf/init-analysis.js";
 import { defaultPreviewProvider, supportsPreviewDeploy } from "./stack/hosting.js";
+import { defaultDeliveryBlock } from "./delivery/profile.js";
 
 const log = createLogger("wizard");
 
@@ -98,6 +99,7 @@ export async function runWizard(options: WizardOptions): Promise<WizardResult> {
     knowledgePacks: [],
     platformFeatures: answers.platformFeatures,
     featureFactory: { enabled: answers.installFeatureFactory },
+    delivery: defaultDeliveryBlock(),
     github: { enabled: answers.configureGithub },
     ai: {
       enabled: answers.configureAi,

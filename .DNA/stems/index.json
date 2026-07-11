@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "catalogVersion": 4,
+  "catalogVersion": 5,
   "source": "bundled",
-  "syncedAt": "2026-07-11T10:55:33.583Z",
-  "count": 43,
+  "syncedAt": "2026-07-11T11:18:23.270Z",
+  "count": 59,
   "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
   "packs": [
     {
@@ -54,6 +54,22 @@
       ]
     },
     {
+      "id": "keep-dna-current",
+      "name": "Keep DNA current",
+      "category": "session",
+      "slash": "dna-update",
+      "path": ".DNA/stems/keep-dna-current",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
       "id": "analyze-project",
       "name": "Analyze project",
       "category": "analysis",
@@ -91,6 +107,22 @@
       "category": "analysis",
       "slash": "scan-project",
       "path": ".DNA/stems/scan-project",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "stack-hosting",
+      "name": "Stack & hosting",
+      "category": "analysis",
+      "slash": "stack-hosting",
+      "path": ".DNA/stems/stack-hosting",
       "files": [
         "README.md",
         "prompt.md",
@@ -196,6 +228,22 @@
       ]
     },
     {
+      "id": "platform-codegen",
+      "name": "Platform codegen",
+      "category": "features",
+      "slash": "platform-codegen",
+      "path": ".DNA/stems/platform-codegen",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
       "id": "quality-gate",
       "name": "Quality gate",
       "category": "quality",
@@ -290,6 +338,70 @@
       ]
     },
     {
+      "id": "plan-legal",
+      "name": "Plan legal",
+      "category": "legal",
+      "slash": "plan-legal",
+      "path": ".DNA/stems/plan-legal",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "legal-advise",
+      "name": "Legal advise",
+      "category": "legal",
+      "slash": "legal-advise",
+      "path": ".DNA/stems/legal-advise",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "legal-list",
+      "name": "Legal catalog",
+      "category": "legal",
+      "slash": "legal-list",
+      "path": ".DNA/stems/legal-list",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "legal-engineering",
+      "name": "Legal engineering checklist",
+      "category": "legal",
+      "slash": "legal-engineering",
+      "path": ".DNA/stems/legal-engineering",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
       "id": "debug-issue",
       "name": "Debug issue",
       "category": "debug",
@@ -337,6 +449,22 @@
       ]
     },
     {
+      "id": "dashboard-monitor",
+      "name": "Dashboard monitor",
+      "category": "debug",
+      "slash": "dashboard-monitor",
+      "path": ".DNA/stems/dashboard-monitor",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
       "id": "sync-impressions",
       "name": "Sync Impressions",
       "category": "docs",
@@ -348,7 +476,24 @@
         "guidelines.md",
         "expectations.md",
         "context.md",
-        "examples.md"
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "impressions-drift-pr",
+      "name": "Impressions drift PR",
+      "category": "docs",
+      "slash": "drift-pr",
+      "path": ".DNA/stems/impressions-drift-pr",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
       ]
     },
     {
@@ -405,6 +550,22 @@
       "category": "ivf",
       "slash": "ivf-shared-library",
       "path": ".DNA/stems/ivf-shared-library",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "ivf-shared-library-execute",
+      "name": "IVF shared library execute",
+      "category": "ivf",
+      "slash": "ivf-execute",
+      "path": ".DNA/stems/ivf-shared-library-execute",
       "files": [
         "README.md",
         "prompt.md",
@@ -520,7 +681,24 @@
         "guidelines.md",
         "expectations.md",
         "context.md",
-        "examples.md"
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "memory-sync",
+      "name": "Memory sync",
+      "category": "memory",
+      "slash": "memory-sync",
+      "path": ".DNA/stems/memory-sync",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
       ]
     },
     {
@@ -680,6 +858,83 @@
         "context.md",
         "examples.md",
         "workflow.md"
+      ]
+    },
+    {
+      "id": "methodology-setup",
+      "name": "Methodology setup",
+      "category": "methodology",
+      "slash": "methodology-setup",
+      "path": ".DNA/stems/methodology-setup",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "create-ticket",
+      "name": "Create ticket",
+      "category": "methodology",
+      "slash": "create-ticket",
+      "path": ".DNA/stems/create-ticket",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "write-spec",
+      "name": "Write spec",
+      "category": "methodology",
+      "slash": "write-spec",
+      "path": ".DNA/stems/write-spec",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "break-down-work",
+      "name": "Break down work",
+      "category": "methodology",
+      "slash": "break-down-work",
+      "path": ".DNA/stems/break-down-work",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "align-delivery",
+      "name": "Align delivery",
+      "category": "methodology",
+      "slash": "align-delivery",
+      "path": ".DNA/stems/align-delivery",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
       ]
     }
   ]

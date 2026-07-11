@@ -1,4 +1,5 @@
 # Workflow chain
 
-1. ship-feature
-2. quality-gate
+1. platform-codegen
+2. ship-feature
+3. quality-gate

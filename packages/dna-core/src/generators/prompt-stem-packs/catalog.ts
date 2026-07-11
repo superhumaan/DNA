@@ -1,5 +1,6 @@
 import type { PromptStemPackDef } from "./types.js";
 import { AGENT_LOOP_STEM_DEFS } from "./catalog-agent-loop.js";
+import { METHODOLOGY_STEM_DEFS } from "./catalog-methodology.js";
 
 const GROUND = {
   must: [
@@ -20,6 +21,19 @@ const FEATURE_GATES = {
     "Run `npx dna quality report --feature` until PASS before marking complete",
   ],
   never: ["Implement before plan approval", "Skip docker build or github push on feature close-out"],
+};
+
+const LEGAL_GROUND = {
+  must: [
+    "Run `npx dna legal advise` or `npx dna plan legal` before regulated features",
+    "Load `.DNA/knowledge/legal/` and regional packs for target jurisdictions",
+    "Flag counsel sign-off items — never present output as legal advice",
+  ],
+  never: [
+    "Invent legal conclusions or guarantee compliance",
+    "Ship banking, healthcare, or cross-border data features without jurisdiction packs",
+    "Skip legal matrix updates in CellularMemory",
+  ],
 };
 
 /** All prompt stem pack definitions — single source of truth */
@@ -770,6 +784,177 @@ Check: lawful basis, consent UI, retention, DSAR, logging, subprocessors.`,
     cliCommands: ["npx dna context compliance"],
     examples: [{ userSays: "GDPR on signup", goodResponse: "Missing: consent granularity, privacy link. Retention OK." }],
   },
+  {
+    id: "plan-legal",
+    name: "Plan legal",
+    category: "legal",
+    slash: "plan-legal",
+    summary: "Jurisdiction + sector legal plan — privacy, banking, healthcare, IP, regional law.",
+    tags: ["legal", "privacy", "pdpa", "jurisdiction"],
+    copyVariants: [
+      "What legal gates do we need for Singapore payments?",
+      "Plan legal considerations before we launch in EU",
+      "We're building healthcare in Thailand — what law applies?",
+      "Banking app with PDPA — plan legal before we ship",
+    ],
+    prompt: `# Plan legal
+
+\`\`\`bash
+npx dna legal list
+npx dna plan legal
+\`\`\`
+
+Context: $ARGUMENTS
+
+Map domains → jurisdictions → counsel gates → regional packs → engineering checklist.
+
+Pair with \`npx dna plan compliance\` for ISO/SOC2/HIPAA controls.`,
+    guidelines: LEGAL_GROUND,
+    expectations: [
+      "Domains identified (privacy, banking, healthcare, IP, etc.)",
+      "Jurisdictions mapped with regional packs",
+      "Counsel sign-off checklist",
+      "Legal matrix written to CellularMemory",
+      "Engineering rules per sector",
+    ],
+    contextLoads: [
+      ".DNA/knowledge/legal/",
+      ".DNA/CellularMemory/prefrontalCortex/legal-considerations-matrix.md",
+      ".DNA/workflows/legal.workflow.md",
+    ],
+    cliCommands: ["npx dna legal list", "npx dna plan legal", "npx dna context legal"],
+    examples: [
+      {
+        userSays: "Launch fintech with health data in Singapore",
+        goodResponse:
+          "Domains: banking, healthcare, privacy. Jurisdiction: sg. Install legal/regions/sg-pdpa. 8 counsel gates. Engineering: PCI tokenisation, no PHI in logs, PDPA consent records.",
+      },
+      {
+        userSays: "EU B2B SaaS storing employee data",
+        goodResponse:
+          "Domains: privacy, employment. Jurisdictions: eu. Packs: legal/regions/eu-gdpr. Counsel: DPA, SCCs, works council if monitoring. Then dna plan compliance --frameworks gdpr.",
+      },
+    ],
+    workflow: ["legal-advise", "plan-compliance", "ship-feature"],
+  },
+  {
+    id: "legal-advise",
+    name: "Legal advise",
+    category: "legal",
+    slash: "legal-advise",
+    summary: "Engineering legal considerations for a product question (not legal advice).",
+    tags: ["legal", "advisor", "privacy", "banking"],
+    copyVariants: [
+      "Should we store health records in Thailand?",
+      "What legal risks if we add open banking in Singapore?",
+      "Can we use user data to train our AI model in the EU?",
+      "Legal check before we launch payments in Malaysia",
+    ],
+    prompt: `# Legal advise
+
+\`\`\`bash
+npx dna legal advise --quote "$ARGUMENTS"
+\`\`\`
+
+Question: $ARGUMENTS
+
+Summarize: detected domains, jurisdictions, priority recommendations, engineering rules, counsel checklist.
+
+**Not legal advice** — flag items needing qualified counsel.`,
+    guidelines: LEGAL_GROUND,
+    expectations: [
+      "Real CLI output from legal advise",
+      "Domains and jurisdictions named",
+      "Recommendations in priority order",
+      "Counsel sign-off items listed",
+      "Disclaimer included",
+    ],
+    contextLoads: [".DNA/knowledge/legal/advisor-process.dna.md", ".DNA/knowledge/legal/disclaimers.dna.md"],
+    cliCommands: ['npx dna legal advise --quote "$ARGUMENTS"'],
+    examples: [
+      {
+        userSays: "Store patient payment data in Singapore and Thailand",
+        goodResponse:
+          "CRITICAL: sg + th PDPA packs. Banking + healthcare domains. Engineering: segregate financial/health data, BAA/KYC vendors, consent records. Counsel: MAS TRM, cross-border transfer. Not legal advice.",
+      },
+    ],
+    workflow: ["plan-legal"],
+  },
+  {
+    id: "legal-list",
+    name: "Legal catalog",
+    category: "legal",
+    slash: "legal-list",
+    summary: "List legal domains and supported jurisdictions (PDPA, GDPR, CCPA, etc.).",
+    tags: ["legal", "catalog", "jurisdiction"],
+    copyVariants: ["What legal domains does DNA cover?", "List supported countries for privacy law"],
+    prompt: `# Legal catalog
+
+\`\`\`bash
+npx dna legal list
+npx dna marketplace search --query pdpa --category legal
+\`\`\`
+
+Context: $ARGUMENTS
+
+Show domains table and jurisdictions. Suggest packs to install for user's markets.`,
+    guidelines: GROUND,
+    expectations: ["Domain catalog", "Jurisdiction catalog", "Relevant pack IDs for user's markets"],
+    contextLoads: [".DNA/knowledge/legal/regions/overview.dna.md"],
+    cliCommands: ["npx dna legal list", "npx dna marketplace search --query legal --category legal"],
+    examples: [
+      {
+        userSays: "What APAC privacy laws are covered?",
+        goodResponse: "SG PDPA, TH PDPA, MY PDPA, AU Privacy Act, JP APPI, KR PIPA, ID PDP, PH DPA, VN PDPD, HK PDPO, TW PDPA. Install via legal/regions/* packs.",
+      },
+    ],
+    workflow: ["plan-legal"],
+  },
+  {
+    id: "legal-engineering",
+    name: "Legal engineering checklist",
+    category: "legal",
+    slash: "legal-engineering",
+    summary: "Sector legal engineering checklist — privacy, banking, healthcare before shipping a feature.",
+    tags: ["legal", "engineering", "banking", "healthcare"],
+    copyVariants: [
+      "Legal engineering checklist for this payment flow",
+      "Check banking and privacy law on this feature",
+      "Healthcare legal gates before we ship telehealth",
+    ],
+    prompt: `# Legal engineering
+
+\`\`\`bash
+npx dna context legal --quote "$ARGUMENTS"
+\`\`\`
+
+Feature / flow: $ARGUMENTS
+
+Load domain packs under \`.DNA/knowledge/legal/domains/\` and regional checklists.
+
+Check: lawful basis, consent, sector rules (PCI, PHI, AML), IP, counsel gates.`,
+    guidelines: LEGAL_GROUND,
+    expectations: [
+      "Checklist per domain in scope",
+      "Regional pack items for launch markets",
+      "Engineering blockers vs counsel items separated",
+      "Gaps flagged before implementation",
+    ],
+    contextLoads: [
+      ".DNA/knowledge/legal/domains/privacy.dna.md",
+      ".DNA/knowledge/legal/domains/banking-finance.dna.md",
+      ".DNA/knowledge/legal/domains/healthcare.dna.md",
+      ".DNA/knowledge/legal/matrices/domain-by-sector.dna.md",
+    ],
+    cliCommands: ["npx dna context legal", "npx dna legal advise --quote"],
+    examples: [
+      {
+        userSays: "Add Stripe checkout for EU customers",
+        goodResponse: "Privacy: lawful basis, cookie consent. Banking: PCI SAQ A via Stripe. Consumer: refund terms. EU pack: SCCs if US subprocessors. Counsel: ToS update.",
+      },
+    ],
+    workflow: ["legal-advise", "plan-legal"],
+  },
 
   // ─── Debug ───────────────────────────────────────────────────────────────
   {
@@ -1339,4 +1524,5 @@ Summarize segments synced, conflicts, and resolution strategy.`,
   },
 
   ...AGENT_LOOP_STEM_DEFS,
+  ...METHODOLOGY_STEM_DEFS,
 ];

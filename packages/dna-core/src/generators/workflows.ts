@@ -80,5 +80,62 @@ RBAC is NOT complete if a user without permission can still SEE a menu item, not
 - Run \`dna validate\`
 `,
     "delivery.workflow.md": generateDeliveryWorkflow(threshold),
+    "legal.workflow.md": `# Legal Advisor Workflow
+
+Use when a user requests features touching personal data, payments, health records, cross-border operations, or regulated sectors (banking, healthcare, fintech).
+
+**Not legal advice** — DNA provides engineering legal considerations. Engage qualified counsel before production in regulated markets.
+
+## Before writing any code
+
+1. Run \`dna legal advise --quote "<user requirement>"\`
+2. Run \`dna plan legal\` with \`--domains\` and \`--jurisdictions\` when launching or entering new markets
+3. Read \`.DNA/plans/legal-*.md\` and \`.DNA/CellularMemory/prefrontalCortex/legal-considerations-matrix.md\`
+4. Install regional packs: \`dna marketplace install legal/regions/sg-pdpa\` (etc.)
+5. Load \`.DNA/knowledge/legal/\` domain and regional checklists
+6. Pair with \`dna plan compliance\` for ISO 27001, SOC 2, HIPAA **controls** (legal ≠ compliance alone)
+
+## Intelligence prompts (Cursor / Claude)
+
+| Slash | When |
+| --- | --- |
+| \`/legal-advise\` | Quick question before a feature decision |
+| \`/plan-legal\` | Full legal plan + matrix for launch markets |
+| \`/legal-list\` | Browse domains and jurisdictions |
+| \`/legal-engineering\` | Sector checklist on a specific flow |
+
+CLI equivalents: \`/dna-legal-advise\`, \`/dna-plan-legal\`, \`/dna-legal-list\`, \`dna context legal\`
+
+## Implementation order (mandatory)
+
+1. **Jurisdictions** — identify launch markets; install regional packs
+2. **Domains** — privacy, banking, healthcare, IP, consumer, AI governance
+3. **Counsel gates** — block production until matrix rows are counsel-approved
+4. **Engineering controls** — consent, retention, PCI scope, PHI isolation, AML/KYC
+5. **Compliance plan** — \`dna plan compliance\` for control frameworks
+6. **Verification** — legal matrix + compliance matrix both updated
+
+## Automation (Cursor Automations / CI)
+
+Recommended triggers for regulated repos:
+
+- **Feature factory** — Solution Architect step runs \`dna legal advise\` when quote mentions banking, healthcare, payment, PDPA, GDPR, HIPAA
+- **Pre-push hook** — advisory; strict mode can require legal matrix exists for \`legal/tiered-standards\` installs
+- **Scheduled** — weekly \`dna doctor\` refreshes legal regional packs from project description
+
+## Definition of done
+
+Legal is NOT complete if:
+- Regional packs missing for launch jurisdictions
+- Legal matrix unchecked for in-scope domains
+- Banking/healthcare features ship without sector checklist review
+- Output presented as legal advice without counsel disclaimer
+
+## After completion
+
+- Update \`.DNA/CellularMemory/prefrontalCortex/legal-considerations-matrix.md\`
+- Update \`.DNA/CellularMemory/prefrontalCortex/decisions.md\` with jurisdiction choices
+- Run \`dna context legal\` in AI session before related features
+`,
   };
 }

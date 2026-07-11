@@ -5,10 +5,12 @@ export const STEM_CATEGORIES = [
   "agent-loop",
   "quality",
   "compliance",
+  "legal",
   "debug",
   "docs",
   "ivf",
   "delivery",
+  "methodology",
   "marketplace",
   "memory",
 ] as const;

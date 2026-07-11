@@ -11,7 +11,10 @@ Scope: $ARGUMENTS
 ```bash
 npx dna doctor
 npx dna validate
+npx dna update --check-only
 ```
+
+Doctor repairs scaffolding; `dna update` upgrades the CLI and refreshes prompt stems from dna.humaan.app.
 
 ## Report
 

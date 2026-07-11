@@ -1,6 +1,7 @@
 import { unlink } from "node:fs/promises";
 import { join } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
+import { DNA_CLI_SKILL_DESCRIPTION } from "./dna-default-on.js";
 import { fileExists, writeFileEnsured } from "../fs.js";
 import {
   buildAllCommandSpecs,
@@ -19,6 +20,7 @@ export type DnaCommandCategory =
   | "marketplace"
   | "memory"
   | "compliance"
+  | "legal"
   | "platform"
   | "stack"
   | "ai"
@@ -248,6 +250,30 @@ export const DNA_AI_COMMAND_CATALOG: readonly DnaAiCommandDef[] = [
     followUp: "Match org tier to controls and list knowledge packs to install.",
   },
   {
+    id: "plan-legal",
+    category: "legal",
+    title: "Plan Legal",
+    description: "Plan legal considerations — privacy, banking, healthcare, IP, regional law.",
+    cli: "npx dna plan legal",
+    followUp: "Map domains and jurisdictions to packs; update legal matrix; flag counsel gates.",
+  },
+  {
+    id: "legal-advise",
+    category: "legal",
+    title: "Legal Advise",
+    description: "Engineering legal considerations for a product question (not legal advice).",
+    cli: 'npx dna legal advise --quote "$ARGUMENTS"',
+    argumentHint: "<question>",
+    followUp: "Summarize domains, jurisdictions, recommendations, and counsel checklist.",
+  },
+  {
+    id: "legal-list",
+    category: "legal",
+    title: "Legal List",
+    description: "List legal domains and supported jurisdictions.",
+    cli: "npx dna legal list",
+  },
+  {
     id: "plan-ivf",
     category: "plan",
     title: "Plan IVF",
@@ -409,6 +435,7 @@ export const DNA_COMMAND_CATEGORIES: Record<
   marketplace: { label: "Marketplace", description: "Knowledge pack catalog and installs" },
   memory: { label: "Memory", description: "CellularMemory export and import" },
   compliance: { label: "Compliance", description: "Tiered compliance catalogs and documents" },
+  legal: { label: "Legal", description: "Legal advisor, jurisdictions, and sector law" },
   platform: { label: "Platform", description: "Production platform feature catalog" },
   stack: { label: "Stack", description: "Stack archetypes and recommendations" },
   ai: { label: "AI", description: "AI provider configuration and repair" },
@@ -630,6 +657,17 @@ Agents must follow these sequences unless the user explicitly overrides.
 3. \`/dna-marketplace-install\` for compliance packs
 4. \`/dna-context compliance\`
 
+## Regulated / legal work (banking, healthcare, APAC/EU/US)
+
+1. \`/dna-legal-list\` or \`/legal-list\`
+2. \`/dna-legal-advise --quote "..."\` or \`/legal-advise\`
+3. \`/dna-plan-legal\` with domains + jurisdictions
+4. \`/dna-marketplace-install\` for \`legal/regions/*\` packs
+5. \`/dna-context legal\` or \`/legal-engineering\`
+6. \`/dna-plan-compliance\` for control frameworks (pair with legal)
+
+Follow \`.DNA/workflows/legal.workflow.md\`.
+
 ## Health check / drift
 
 1. \`/dna-scan\` — drift score
@@ -655,15 +693,17 @@ function buildCursorSkillMarkdown(projectName: string, specs: DnaAiCommandSpec[]
   return `---
 name: dna-cli
 description: >-
-  DNA by Humaan CLI — run, interpret, and obey all dna commands. Use when the user
-  mentions DNA, project intelligence, doctor, analyze, feature factory, quality gates,
-  marketplace packs, compliance, IVF, or any /dna-* slash command.
+  ${DNA_CLI_SKILL_DESCRIPTION}
 disable-model-invocation: false
 ---
 
 # DNA CLI skill — ${projectName}
 
 You operate inside a **DNA by Humaan** project. DNA is the source of truth for stack, behaviour, memory, and delivery gates.
+
+**DNA is always on** — never wait for the user to say "use DNA" before running commands or loading \`.DNA/\` context.
+
+Engineering work (build, add, fix, change) **must** follow \`ai/agent-loop.md\` — all 9 roles, architect approval before code.
 
 ## Absolute rules (obey always)
 
@@ -691,6 +731,7 @@ Full detail: read \`.cursor/skills/dna-cli/commands-reference.md\` or invoke any
 | lint / quality / gate | \`/dna-quality-report\` |
 | push / ship / PR | \`/dna-github-push\` (after quality PASS) |
 | GDPR / HIPAA / compliance | \`/dna-plan-compliance\` |
+| Banking / healthcare / PDPA / legal | \`/dna-legal-advise\` → \`/dna-plan-legal\` |
 | install knowledge pack | \`/dna-marketplace-install\` |
 | brownfield / legacy | \`/dna-ivf\` |
 

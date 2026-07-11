@@ -7,6 +7,16 @@ alwaysApply: true
 
 You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The user speaks in plain language; you handle DNA context, CLI, planning, and implementation.
 
+## DNA is always on (never opt-in)
+
+This project has DNA installed. **Every session, every message** — DNA is your default co-pilot.
+
+- **Never** wait for the user to say "use DNA", "utilise DNA", or `/work-with-dna` before running DNA
+- **Always** load `.DNA/` context and run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
+- The user speaks in plain language; you execute DNA — they do not run CLI commands or copy prompts
+- Slash commands like `/work-with-dna` are optional shortcuts — not a prerequisite for DNA-aware behaviour
+
+
 ## How the user works (never break this)
 
 - They **do not** run `dna` commands manually unless they choose to.
@@ -16,13 +26,73 @@ You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The
 
 ## Session bootstrap (every new task)
 
-1. **Intent** — What does the user want? (health, feature, analysis, compliance, debug, docs)
+1. **Classify intent** — Use the intent routing table (engineering vs analysis vs Q&A vs ship vs debug)
 2. **Context** — Read `.DNA/neuralNetwork.json`; load matching `.DNA/knowledge/`, `.DNA/behaviour/`, `DNA/Impressions/`
 3. **DNA CLI** — Run the matching command(s) in shell; read real output
-4. **Plan** — Short plan before code (mandatory for features)
-5. **Execute** — Implement, test, quality gate, ship
+4. **Route** — Engineering work → full agent loop; other intents → matching path (no loop for pure Q&A)
+5. **Execute** — Implement with role discipline, test, quality gate, ship
 
-## Intent → DNA action (run in shell)
+## Intent routing (every message)
+
+**First step on every message:** classify intent, then follow the matching path. Do not skip classification.
+
+| Intent | User signals | Path |
+|--------|--------------|------|
+| **Engineering work** | build, add, fix, change, enable, refactor, implement, wire up, scaffold | **Full 9-role agent loop** (below) — mandatory |
+| **Analysis** | analyze, audit, gaps, understand repo, doctor, health, scan | `npx dna analyze` / `doctor` / `scan` — summarize; propose next steps |
+| **Compliance / legal** | GDPR, HIPAA, PDPA, SOC2, legal advise, regulated data | `npx dna plan compliance` or `legal advise` — plan before code |
+| **Ship / done** | push, ship, release, merge, deploy | Quality PASS → `npx dna docker build` → `npx dna github push` |
+| **Q&A / explain** | what does X do, how does Y work, explain this file | Load DNA context; answer directly — **no** 9-role loop |
+| **Debug** | error, bug, crash, production issue, failing test | Runtime DB / `npx dna dashboard` → fix → test → quality → push |
+
+If intent is ambiguous between Q&A and engineering work, ask **one** clarifying question. If they want a change, use the agent loop.
+
+
+## Agent flow (mandatory for engineering work)
+
+Every **build, add, enable, fix, or change** request MUST go through the DNA feature factory. **No shortcuts. No jumping straight to code.**
+
+### Authority chain (read before acting)
+
+1. `AGENTS.md` — intent routing and gates
+2. `.cursor/rules/product-process.mdc` — factory triggers and role rules
+3. `ai/agent-loop.md` — full 9-role playbook
+4. `ai/feature-request.md` — capture the user's ask **before** planning
+
+### On every engineering request — automatically
+
+1. **Write** `ai/feature-request.md` from their message (all sections — infer from context)
+2. **Read** `ai/agent-loop.md` and execute each role **in order** — do not skip roles
+3. **Product Analyst** → refine problem, users, acceptance criteria
+4. **Solution Architect** → implementation plan (scope, files, API, risks)
+5. **STOP — wait for user approval** before any code edits
+6. After approval: **Backend** → **Frontend** → **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
+7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push`
+
+### The 9 roles (sequential — never skip)
+
+1. Product Analyst
+2. Solution Architect — **approval gate here**
+3. Backend Engineer
+4. Frontend Engineer
+5. UX Reviewer
+6. QA Engineer
+7. Code Quality Analyst
+8. Refactor Reviewer
+9. Final Release Reviewer
+
+### Hard gates
+
+- **No code** until the Solution Architect plan is approved by the user
+- **No role skipping** — every role reviews before ship
+- **No complete** until `npx dna quality report --feature` PASS
+- **No ship** until docker build succeeds and GitHub push completes
+- **Never** ask the user to copy prompts or fill templates
+
+**Admin / backoffice:** when user says admin, backoffice, or control panel — read `.cursor/rules/admin-portal.mdc`; scaffold `/admin` in a new tab with RBAC (see agent loop).
+
+
+## Intent → DNA CLI (run in shell)
 
 | User intent | Run first | Then |
 |-------------|-----------|------|
@@ -34,6 +104,7 @@ You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The
 | Pre-push / done? | `npx dna quality report --feature` | PASS required before push |
 | Ship feature | quality PASS → `npx dna docker build` → `npx dna github push` | Report URLs |
 | Compliance | `npx dna plan compliance` | Install packs; implement controls |
+| Legal / banking / healthcare / PDPA | `npx dna legal advise` → `npx dna plan legal` | Regional packs; counsel gates; pair with compliance |
 | Docs out of sync | `npx dna plan impressions-sync` | Reconcile Impressions |
 | Knowledge gap | `npx dna marketplace search` / `install` | Load new packs |
 
@@ -48,20 +119,11 @@ Prefer `npx dna` when `dna` is not on PATH.
 - **Verify loops** — lint → test → `dna quality report --feature` → docker → push.
 - **One voice** — Plain language summaries for the user; technical depth in code and plans.
 
-## Feature factory (automatic)
-
-When the user describes something to build, add, enable, or fix:
-
-1. Write `ai/feature-request.md` from their words
-2. Execute `ai/agent-loop.md` role by role
-3. **Stop after Solution Architect plan — wait for approval**
-4. After approval: implement → QA → quality gate → docker → github push
-
-See `.cursor/rules/product-process.mdc` and `.cursor/skills/dna-workbench/dna-session-flow.md`.
+See `.cursor/rules/product-process.mdc`, `AGENTS.md`, and `.cursor/skills/dna-workbench/dna-session-flow.md`.
 
 ## Slash commands & stem packs
 
-Type `/` in chat for **43** prompt stems (e.g. `work-with-dna`, `analyze-project`, `what-next`, `ship-feature`).
+Type `/` in chat for **59** prompt stems (e.g. `work-with-dna`, `analyze-project`, `what-next`, `ship-feature`).
 
 Each stem has full guidelines in `.DNA/stems/<id>/` — read **all files** before executing.
 

@@ -231,6 +231,32 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
     ],
   },
   {
+    intent: "consider_legal_requirements",
+    description:
+      "Consider legal requirements for privacy, banking, healthcare, IP, and jurisdiction-specific law before implementing features",
+    requiredKnowledge: [
+      "legal/overview.dna.md",
+      "legal/advisor-process.dna.md",
+      "legal/domains/privacy.dna.md",
+      "legal/matrices/domain-by-sector.dna.md",
+      "compliance/tiers/overview.dna.md",
+    ],
+    requiredBehaviour: ["security.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md", "coding.behaviour.md"],
+    cellularMemory: [
+      "prefrontalCortex/legal-considerations-matrix.md",
+      "prefrontalCortex/decisions.md",
+      "amygdala/risks.md",
+    ],
+    impressions: [
+      "compliance/compliance-overview.md",
+      "security/data-protection.md",
+    ],
+    validationChecks: [
+      "no_secrets_in_code",
+      "has_env_example",
+    ],
+  },
+  {
     intent: "add_authentication",
     description: "Add or modify authentication",
     requiredKnowledge: ["disciplines/security/positioning.dna.md"],
@@ -617,6 +643,44 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
     cellularMemory: ["hippocampus/project-summary.md"],
     impressions: ["product/product-overview.md"],
     validationChecks: ["glossary_consistent", "technical_terms_preserved", "impressions_current"],
+  },
+  {
+    intent: "create_ticket",
+    description:
+      "Create work items (Jira, Linear, GitHub, Azure DevOps) matching org methodology and hierarchy",
+    requiredKnowledge: [
+      "methodologies/ticket-writing/ticket-templates.dna.md",
+      "methodologies/ticket-writing/positioning.dna.md",
+    ],
+    requiredBehaviour: ["delivery.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md"],
+    cellularMemory: ["prefrontalCortex/current-plan.md", "prefrontalCortex/next-actions.md"],
+    impressions: ["product/feature-map.md"],
+    validationChecks: ["ticket_system_matched", "hierarchy_matched", "acceptance_criteria_present"],
+  },
+  {
+    intent: "write_delivery_document",
+    description:
+      "Write PRD, design doc, RFC, pitch, or epic brief per methodology and doc system",
+    requiredKnowledge: [
+      "methodologies/document-writing/document-templates.dna.md",
+      "methodologies/document-writing/positioning.dna.md",
+    ],
+    requiredBehaviour: ["delivery.behaviour.md", "documentation.behaviour.md", "ai.behaviour.md"],
+    cellularMemory: ["hippocampus/project-summary.md", "prefrontalCortex/decisions.md"],
+    impressions: ["architecture/solution-architecture.md", "product/product-overview.md"],
+    validationChecks: ["doc_template_matched", "goals_and_non_goals_present"],
+  },
+  {
+    intent: "break_down_work",
+    description:
+      "Decompose initiative or epic into stories, scopes, or tasks per delivery hierarchy",
+    requiredKnowledge: [
+      "methodologies/ticket-writing/positioning.dna.md",
+    ],
+    requiredBehaviour: ["delivery.behaviour.md", "ai.behaviour.md"],
+    cellularMemory: ["prefrontalCortex/current-plan.md", "prefrontalCortex/feature-building-rules.md"],
+    impressions: ["product/feature-map.md"],
+    validationChecks: ["hierarchy_matched", "leaf_items_deliverable"],
   },
 ];
 

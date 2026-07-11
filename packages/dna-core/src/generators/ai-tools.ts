@@ -1,5 +1,13 @@
 import type { DnaConfig, WizardAnswers } from "@superhumaan/dna-config";
 import { generateDeliveryPipelineRule } from "./delivery-pipeline.js";
+import {
+  buildAgentsMd,
+  buildClaudeWorkbenchSection,
+  buildCursorWorkbenchSection,
+  DNA_AGENT_FLOW_SECTION,
+  DNA_ALWAYS_ON_SECTION,
+  DNA_INTENT_ROUTING_SECTION,
+} from "./dna-default-on.js";
 
 function mdcRule(description: string, alwaysApply = false): string {
   const lines = [`description: ${description}`];
@@ -17,36 +25,16 @@ export function generateAiToolFiles(
   featureFactory = false,
 ): Record<string, string> {
   const files: Record<string, string> = {};
-  const factoryBlock = featureFactory
-    ? `
-## Feature factory (automatic)
-
-When the user describes what they want to build, add, enable, or change — in plain language — **start the feature factory immediately**. Examples:
-- "I want providers to record phone calls and transcribe notes"
-- "Add an admin dashboard" / "backoffice for support"
-
-**Admin / backoffice:** scaffold \`/admin\` in a **new tab**, RBAC-wrapped link (hidden without access), route guards, and \`requireAdmin\` APIs — see \`.cursor/rules/admin-portal.mdc\`.
-
-**Never** ask the user to copy prompts, fill templates, or run setup commands.
-
-### On every feature request, automatically:
-
-1. Write or update \`ai/feature-request.md\` from their message (use \`buildFeatureRequestFromQuote\` sections)
-2. Read \`ai/agent-loop.md\` and work role by role: Product Analyst → Solution Architect → … → Final Reviewer
-3. Produce an implementation plan **before** editing code
-4. **Stop after the Solution Architect plan and wait for approval**
-5. After approval, implement through Backend → Frontend → UX → QA → Code Quality → Refactor → Final Review
-
-Load DNA context from \`.DNA/knowledge/\`, \`.DNA/behaviour/\`, and \`DNA/Impressions/\` throughout.
-Run \`dna quality report --feature\` before marking a feature complete — local SonarQube-style gate, no SonarQube server required.
-Close every feature with \`dna docker build\` then \`dna github push\`. GitHub auth is browser-based from \`dna init\` — no manual tokens.
-`
-    : "";
+  const factoryBlock = featureFactory ? `\n${DNA_AGENT_FLOW_SECTION}\n` : "";
 
   const preamble = `# DNA by Humaan — AI Instructions
 
 Project: **${config.projectName}**
 ${config.description ?? ""}
+
+${DNA_ALWAYS_ON_SECTION}
+
+${DNA_INTENT_ROUTING_SECTION}
 
 ## Default behaviour
 
@@ -80,25 +68,18 @@ ${factoryBlock}`;
 
 Run \`dna context <target>\` when you need focused domain knowledge.
 
-## DNA Workbench (default)
-
-DNA installs **prompt-first** Cursor/Claude packages on init and update:
-
-- \`.cursor/rules/dna-workbench.mdc\` — always-on co-pilot rules
-- \`.cursor/skills/dna-workbench/\` — session flows and prompt patterns
-- Slash prompts: \`/work-with-dna\`, \`/ship-feature\`, \`/analyze-project\`, \`/health-check\`, \`/quality-gate\`, etc.
-
-The user works in plain language inside Cursor. You run DNA CLI and load \`.DNA/\` context on their behalf.
-
-Optional CLI slash catalog: \`npx dna commands install\` · https://dna.humaan.app/intelligence
-Remove workbench: \`npx dna workbench uninstall\``;
+${buildClaudeWorkbenchSection()}`;
 
   for (const tool of answers.aiTools) {
     switch (tool) {
-      case "cursor":
-        files[".cursor/rules/dna.mdc"] = `${mdcRule("DNA by Humaan — auto feature factory and project intelligence", true)}${preamble}`;
+      case "cursor": {
+        const cursorPreamble = `${preamble}
+
+${buildCursorWorkbenchSection()}`;
+        files[".cursor/rules/dna.mdc"] = `${mdcRule("DNA by Humaan — auto feature factory and project intelligence", true)}${cursorPreamble}`;
         files[".cursor/rules/delivery-pipeline.mdc"] = generateDeliveryPipelineRule(config);
         break;
+      }
       case "claude_code":
         files["CLAUDE.md"] = claudePreamble;
         break;
@@ -127,6 +108,8 @@ Remove workbench: \`npx dna workbench uninstall\``;
     files[".cursor/rules/delivery-pipeline.mdc"] ??= generateDeliveryPipelineRule(config);
     files["CLAUDE.md"] ??= claudePreamble;
   }
+
+  files["AGENTS.md"] ??= buildAgentsMd(config.projectName);
 
   return files;
 }

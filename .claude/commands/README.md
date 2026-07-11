@@ -1,5 +1,7 @@
-# DNA Workbench — Claude Code prompts
+# DNA intelligence — Claude Code commands
 
-Same commands as Cursor. Skill: `.claude/skills/dna-workbench/`
+**dna-by-humaan** — 59 stems + 47 `/dna-*` commands.
 
-Remove: `npx dna workbench uninstall`
+Workbench skill: `.claude/skills/dna-workbench/` · CLI skill: `.claude/skills/dna-cli/`
+
+Regenerate: `npx dna workbench install`

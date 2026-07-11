@@ -2,14 +2,7 @@
 
 ## Example 1
 
-**User:** Open the DNA dashboard
+**User:** Open dashboard
 
 **Good response shape:**
-Follow Dashboard monitor guidelines and expectations in .DNA/stems/dashboard-monitor/
-
-## Example 2
-
-**User:** Show quality trends and runtime feed
-
-**Good response shape:**
-Follow Dashboard monitor guidelines and expectations in .DNA/stems/dashboard-monitor/
+http://localhost:3200 — live feed shows 3 new runtime errors in the last hour. Quality trend improving since Tuesday.

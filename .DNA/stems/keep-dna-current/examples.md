@@ -2,14 +2,7 @@
 
 ## Example 1
 
-**User:** Update DNA to the latest version
+**User:** Update DNA
 
 **Good response shape:**
-Follow Keep DNA current guidelines and expectations in .DNA/stems/keep-dna-current/
-
-## Example 2
-
-**User:** Refresh prompt stems and knowledge packs
-
-**Good response shape:**
-Follow Keep DNA current guidelines and expectations in .DNA/stems/keep-dna-current/
+Upgraded CLI 0.4.7 → 0.4.8. Refreshed 50 prompt stems. 2 knowledge packs have updates — install react positioning?

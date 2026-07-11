@@ -70,6 +70,7 @@ describe("language stem packs", () => {
     const packs = resolveFoundationPackIds(config);
     expect(packs).toContain("healthcare/overview");
     expect(packs).toContain("healthcare/overview-us");
+    expect(packs).toContain("healthcare/us-support");
     expect(packs).toContain("healthcare/fhir-r4");
     expect(packs).toContain("healthcare/redox");
   });
@@ -84,5 +85,22 @@ describe("language stem packs", () => {
 
     const packs = resolveFoundationPackIds(config);
     expect(packs).toContain("healthcare/overview-uk");
+    expect(packs).toContain("healthcare/uk-support");
+    expect(packs).toContain("healthcare/nhs-fhir");
+  });
+
+  it("auto-installs Australia healthcare bundle with APAC regional packs", () => {
+    const config = {
+      description: "Australian My Health Record FHIR integration",
+      stack: { frontend: "next", backend: "fastify" },
+      autoUpdate: true,
+      channel: "stable",
+    } as DnaConfig;
+
+    const packs = resolveFoundationPackIds(config);
+    expect(packs).toContain("healthcare/overview-au");
+    expect(packs).toContain("healthcare/au-support");
+    expect(packs).toContain("healthcare/overview-apac");
+    expect(packs).toContain("healthcare/apac-support");
   });
 });
