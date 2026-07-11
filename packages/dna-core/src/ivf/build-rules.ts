@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import { glob } from "../glob.js";
 import { readFile } from "node:fs/promises";
 import { join, basename, dirname, resolve } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
@@ -301,7 +301,7 @@ function detectDomainModules(files: string[]): DomainModuleCandidate[] {
 
 async function detectMuiPackages(root: string): Promise<string[]> {
   const found = new Set<string>();
-  for (const pkgFile of ["package.json", ...await fg(["apps/*/package.json", "packages/*/package.json"], { cwd: root, ignore: IGNORE })]) {
+  for (const pkgFile of ["package.json", ...await glob(["apps/*/package.json", "packages/*/package.json"], { cwd: root, ignore: IGNORE })]) {
     try {
       const raw = await readFile(join(root, pkgFile), "utf-8");
       const pkg = JSON.parse(raw) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };
@@ -395,7 +395,7 @@ export async function analyzeFeaturePatterns(root: string): Promise<FeaturePatte
   const filesByRoot = await Promise.all(
     scanRoots.map(async (scanRoot) => ({
       scanRoot,
-      files: await fg(SOURCE_GLOB, { cwd: scanRoot, ignore: IGNORE }),
+      files: await glob(SOURCE_GLOB, { cwd: scanRoot, ignore: IGNORE }),
     })),
   );
 

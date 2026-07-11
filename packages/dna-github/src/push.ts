@@ -1,4 +1,4 @@
-import { simpleGit } from "simple-git";
+import { git } from "./git.js";
 import { requireGitHubToken } from "./auth.js";
 import { detectGitHubRemote } from "./git-remote.js";
 
@@ -45,9 +45,9 @@ export async function pushFeatureToGitHub(
   options: PushFeatureOptions,
 ): Promise<PushFeatureResult> {
   const { root, message = "feat: DNA feature factory delivery" } = options;
-  const git = simpleGit(root);
+  const g = git(root);
 
-  if (!(await git.checkIsRepo())) {
+  if (!(await g.checkIsRepo())) {
     throw new Error("Not a git repository — run `git init` first");
   }
 
@@ -59,23 +59,23 @@ export async function pushFeatureToGitHub(
   }
 
   const token = await requireGitHubToken();
-  const status = await git.status();
+  const status = await g.status();
   let branch = options.branch ?? status.current ?? "main";
 
   if (options.createBranch && (branch === "main" || branch === "master")) {
     branch = slugifyBranch(message);
-    await git.checkoutLocalBranch(branch);
+    await g.checkoutLocalBranch(branch);
   }
 
   let committed = false;
   if (status.files.length > 0) {
-    await git.add(status.files.map((f) => f.path));
-    await git.commit(message);
+    await g.add(status.files.map((f) => f.path));
+    await g.commit(message);
     committed = true;
   }
 
   const pushUrl = tokenRemoteUrl(remote.remoteUrl, token);
-  await git.push(pushUrl, branch, ["--set-upstream"]);
+  await g.push(pushUrl, branch, ["--set-upstream"]);
 
   return {
     branch,

@@ -356,7 +356,7 @@ In scope: tampered npm tarballs, compromised publish credentials, malicious bund
 | **Filesystem access** | Scaffolds `.DNA/`, writes runtime events, installs knowledge packs | `dna init`, `dna doctor`, runtime observer |
 | **Environment variables** | Reads `GITHUB_TOKEN`, `DNA_*` overrides, AI provider keys | GitHub auth, marketplace URL overrides, AI repair |
 
-**Not shipped:** install scripts (`preinstall` / `postinstall`), telemetry packages, or recursive self-dependencies.
+**Not shipped:** install scripts (`preinstall` / `postinstall`), telemetry packages, recursive self-dependencies, or third-party **production** npm dependencies on `@superhumaan/dna-by-humaan` (v0.4.5+). The published tarball bundles internal implementations for CLI parsing, config validation, file globbing, git, GitHub REST, logging, and file watching. Optional **peer** dependencies (`express`, `fastify`, `@nestjs/common`) are declared for runtime middleware adapters only — your app already installs the framework you use.
 
 #### Network endpoints (first-party)
 
@@ -382,9 +382,9 @@ Report unexpected network destinations or install-time behaviour through the [re
 
 #### Third-party framework alerts (e.g. Next.js)
 
-Socket may flag **optional framework dependencies** in DNA's dependency graph. These alerts apply to the **framework vendor's published code**, not DNA.
+Socket may flag **optional framework peer dependencies** (`express`, `fastify`, `@nestjs/common`) when reviewing DNA's package metadata. These peers apply only when you wire runtime middleware; DNA does not install them automatically.
 
-A common example is **obfuscated code in `next`** — Vercel ships pre-compiled, minified React Server Components bundles (e.g. `react-server-dom-webpack-server.node.unbundled.production.js`). Static analyzers classify this as obfuscated; it is normal production build output, not a DNA supply-chain compromise.
+A common example is **obfuscated code in `next`** — Vercel ships pre-compiled, minified React Server Components bundles. Static analyzers classify this as obfuscated; it is normal production build output, not a DNA supply-chain compromise.
 
 DNA's Next.js runtime adapter uses duck-typed request interfaces and does **not** import `next` at install time. Next.js projects already declare `next` in their own `package.json`; DNA generates middleware snippets that run in the consumer app.
 

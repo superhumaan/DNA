@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import { glob } from "../glob.js";
 import { readdir, readFile } from "node:fs/promises";
 import { join, basename } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
@@ -139,7 +139,7 @@ async function detectSharedPackages(root: string): Promise<string[]> {
     }
   }
 
-  const files = await fg(["packages/*/package.json", "libs/*/package.json"], {
+  const files = await glob(["packages/*/package.json", "libs/*/package.json"], {
     cwd: root,
     ignore: IGNORE,
   });
@@ -187,7 +187,7 @@ export async function analyzeSharedLibrary(root: string): Promise<SharedLibraryA
   const { isMonorepo, tool: monorepoTool } = await detectMonorepo(root);
   const sharedPackagePaths = await detectSharedPackages(root);
 
-  const files = await fg(SOURCE_GLOB, { cwd: root, ignore: IGNORE });
+  const files = await glob(SOURCE_GLOB, { cwd: root, ignore: IGNORE });
   const componentFiles = files.filter(isComponentFile);
 
   const dirCounts = new Map<string, { count: number; scope: string }>();

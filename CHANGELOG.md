@@ -4,6 +4,17 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.4.5] - 2026-07-11
+
+### Changed
+
+- **Zero npm dependencies** — `@superhumaan/dna-by-humaan` ships with **no production `dependencies`**. Former third-party libraries (`commander`, `zod`, `fast-glob`, `simple-git`, `@octokit/rest`, `pino`, `chokidar`) are replaced by internal modules bundled into `dist/`. Optional framework **peer** deps (`express`, `fastify`, `@nestjs/common`) remain for runtime adapters only.
+- **Supply chain** — smaller install graph for security scanners; npm package page shows zero dependency count. See [SECURITY.md](./SECURITY.md#supply-chain-transparency-socketdev--security-scanners).
+
+### Added
+
+- Internal utilities: `dna-config/validate`, `dna-github/git` + `github-api`, `dna-core/glob`, `dna-cli/cli` (argument parser).
+
 ## [0.4.4] - 2026-07-11
 
 ### Fixed

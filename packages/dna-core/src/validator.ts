@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
-import fg from "fast-glob";
+import { glob } from "./glob.js";
 import type { DnaConfig, NeuralNetwork, ScanResult, ValidationResult } from "@superhumaan/dna-config";
 import {
   BEHAVIOUR_FILES,
@@ -127,7 +127,7 @@ async function runNeuralValidationChecks(
     intent.validationChecks.forEach((c) => checks.add(c));
   }
 
-  const files = await fg(["**/*.{ts,tsx,js,jsx}"], {
+  const files = await glob(["**/*.{ts,tsx,js,jsx}"], {
     cwd: root,
     ignore: ["node_modules/**", "dist/**", ".DNA/**"],
   });

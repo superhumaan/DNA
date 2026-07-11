@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import { glob } from "../glob.js";
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { DnaConfig, ScanResult } from "@superhumaan/dna-config";
@@ -109,7 +109,7 @@ async function detectStructure(root: string): Promise<ProjectStructure> {
   }
   if (!sourceRoots.length) sourceRoots.push(".");
 
-  const files = await fg(SOURCE_GLOB, { cwd: root, ignore: IGNORE });
+  const files = await glob(SOURCE_GLOB, { cwd: root, ignore: IGNORE });
 
   const hasFeaturesFolder = files.some((f) => f.includes("/features/") || f.startsWith("features/"));
   const hasUtilsGodModule = files.some(
@@ -144,7 +144,7 @@ async function detectStructure(root: string): Promise<ProjectStructure> {
 }
 
 async function detectAuthPatterns(root: string): Promise<AuthPattern[]> {
-  const files = await fg(SOURCE_GLOB, { cwd: root, ignore: IGNORE, absolute: true });
+  const files = await glob(SOURCE_GLOB, { cwd: root, ignore: IGNORE, absolute: true });
   const found: AuthPattern[] = [];
   const seen = new Set<string>();
 
@@ -172,7 +172,7 @@ async function detectAuthPatterns(root: string): Promise<AuthPattern[]> {
 }
 
 async function detectIntegrations(root: string): Promise<DetectedIntegration[]> {
-  const files = await fg(SOURCE_GLOB, { cwd: root, ignore: IGNORE, absolute: true });
+  const files = await glob(SOURCE_GLOB, { cwd: root, ignore: IGNORE, absolute: true });
   const map = new Map<string, Set<string>>();
 
   for (const file of files.slice(0, 300)) {

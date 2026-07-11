@@ -8,7 +8,7 @@ Guide to the DNA monorepo package graph and build order.
 
 | Package | Role |
 |---------|------|
-| `dna-config` | Zod schemas, constants — shared types |
+| `dna-config` | Typed config schemas + validators — shared types |
 | `dna-templates` | Runtime install snippets |
 | `dna-core` | Scanner, wizard, marketplace, generators, IVF, quality |
 | `dna-immune` | Issue classifier rules |

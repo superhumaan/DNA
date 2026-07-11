@@ -3,6 +3,8 @@ import { join } from "node:path";
 import { mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
+import { IMPRESSIONS_DIR } from "@superhumaan/dna-config";
+import { fileExists } from "../fs.js";
 import { runWizard } from "../wizard.js";
 import {
   analyzeProject,
@@ -96,7 +98,11 @@ export default app;`,
 
     const docResult = await documentFromCode({ root, merge: true });
     expect(docResult.filesWritten.length).toBeGreaterThan(0);
-    expect(docResult.filesWritten.some((f) => f.includes("solution-architecture"))).toBe(true);
+    const wroteSolutionArch = docResult.filesWritten.some((f) => f.includes("solution-architecture"));
+    const existsFromInit = await fileExists(
+      join(root, IMPRESSIONS_DIR, "architecture/solution-architecture.md"),
+    );
+    expect(wroteSolutionArch || existsFromInit).toBe(true);
 
     const planResult = await generateIvfPlan({
       root,

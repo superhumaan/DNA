@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import { glob } from "../glob.js";
 import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileExists, ensureDir } from "../fs.js";
@@ -66,7 +66,7 @@ export async function exportCellularMemory(
     const segmentPath = join(base, segment);
     if (!(await fileExists(segmentPath))) continue;
 
-    const mdFiles = await fg("**/*.md", { cwd: segmentPath, onlyFiles: true });
+    const mdFiles = await glob("**/*.md", { cwd: segmentPath, onlyFiles: true });
     for (const rel of mdFiles) {
       const key = join(segment, rel);
       files[key] = await readFile(join(segmentPath, rel), "utf-8");
@@ -138,7 +138,7 @@ export async function copyCellularMemorySegment(
   if (!(await fileExists(src))) return 0;
   await mkdir(destDir, { recursive: true });
   await cp(src, destDir, { recursive: true });
-  const files = await fg("**/*", { cwd: destDir, onlyFiles: true });
+  const files = await glob("**/*", { cwd: destDir, onlyFiles: true });
   return files.length;
 }
 
@@ -168,5 +168,5 @@ export function formatMemoryImportSummary(result: ImportCellularMemoryResult): s
 }
 
 export function listMemorySegments(root: string): Promise<string[]> {
-  return fg("*", { cwd: memoryRoot(root), onlyDirectories: true }).catch(() => []);
+  return glob("*", { cwd: memoryRoot(root), onlyDirectories: true }).catch(() => []);
 }

@@ -1,4 +1,4 @@
-import { Command } from "commander";
+import { Command } from "./cli.js";
 import { join } from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 import { PRODUCT_NAME } from "@superhumaan/dna-config";

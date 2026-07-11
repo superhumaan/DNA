@@ -10,7 +10,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 |------|-----------|
 | **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace |
 | **Runtime** | Express, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`) |
-| **Supply chain** | No install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
+| **Supply chain** | **Zero production npm dependencies** (v0.4.5+), no install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
 | **Marketplace** | 768 packs, remote + bundled offline |
 | **Platform catalog** | Admin, SSO, RBAC, cloud deploy, CRM, CMS patterns |
 | **Compliance** | Tiered GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS |

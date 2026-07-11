@@ -1,6 +1,6 @@
 import { chmod } from "node:fs/promises";
 import { join } from "node:path";
-import { simpleGit } from "simple-git";
+import { git } from "@superhumaan/dna-github";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import { ensureDir, writeFileEnsured } from "../fs.js";
 
@@ -32,11 +32,11 @@ export async function installGitHooks(root: string, config?: DnaConfig): Promise
   created.push(".DNA/hooks/pre-push");
 
   try {
-    const git = simpleGit(root);
-    if (await git.checkIsRepo()) {
-      const current = await git.getConfig("core.hooksPath");
+    const g = git(root);
+    if (await g.checkIsRepo()) {
+      const current = await g.getConfig("core.hooksPath");
       if (current.value !== ".DNA/hooks") {
-        await git.addConfig("core.hooksPath", ".DNA/hooks", false, "local");
+        await g.addConfig("core.hooksPath", ".DNA/hooks", false, "local");
         created.push("git config core.hooksPath=.DNA/hooks");
       }
     }

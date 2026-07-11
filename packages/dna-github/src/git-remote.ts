@@ -1,4 +1,4 @@
-import { simpleGit } from "simple-git";
+import { git } from "./git.js";
 
 export interface ParsedGitHubRemote {
   owner: string;
@@ -23,11 +23,11 @@ export function parseGitHubRemoteUrl(url: string): ParsedGitHubRemote | null {
 export async function detectGitHubRemote(
   root: string,
 ): Promise<ParsedGitHubRemote | null> {
-  const git = simpleGit(root);
-  if (!(await git.checkIsRepo())) return null;
+  const g = git(root);
+  if (!(await g.checkIsRepo())) return null;
 
   try {
-    const remotes = await git.getRemotes(true);
+    const remotes = await g.getRemotes(true);
     const origin = remotes.find((r) => r.name === "origin") ?? remotes[0];
     if (!origin?.refs?.fetch) return null;
     return parseGitHubRemoteUrl(origin.refs.fetch);

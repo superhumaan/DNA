@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import { glob } from "./glob.js";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { ScanResult } from "@superhumaan/dna-config";
@@ -111,7 +111,7 @@ function detectPackageManager(files: string[]): string | undefined {
 }
 
 export async function scanProject(root: string): Promise<ScanResult> {
-  const files = await fg(["**/*"], {
+  const files = await glob(["**/*"], {
     cwd: root,
     ignore: [
       "node_modules/**",

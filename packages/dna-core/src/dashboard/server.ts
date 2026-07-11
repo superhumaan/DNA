@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import { glob } from "../glob.js";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { join } from "node:path";
 import { runDoctor, type DoctorReport } from "../doctor.js";
@@ -22,14 +22,14 @@ export interface DashboardData {
 
 async function listMarkdownFiles(dir: string, prefix: string): Promise<string[]> {
   if (!(await fileExists(dir))) return [];
-  const files = await fg("**/*.md", { cwd: dir, onlyFiles: true });
+  const files = await glob("**/*.md", { cwd: dir, onlyFiles: true });
   return files.map((f) => `${prefix}/${f}`);
 }
 
 async function listQualityReports(root: string): Promise<{ name: string; mtime: string }[]> {
   const dir = join(root, ".DNA", "reports", "quality");
   if (!(await fileExists(dir))) return [];
-  const files = await fg("*.md", { cwd: dir, onlyFiles: true });
+  const files = await glob("*.md", { cwd: dir, onlyFiles: true });
   return files.map((name) => ({ name, mtime: "" }));
 }
 

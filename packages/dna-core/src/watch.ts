@@ -1,4 +1,4 @@
-import chokidar from "chokidar";
+import { watch } from "node:fs";
 import { join } from "node:path";
 import { createLogger } from "./logger.js";
 import { fileExists, writeJsonFile } from "./fs.js";
@@ -70,46 +70,63 @@ async function detectDocumentationDrift(root: string, changedFile: string): Prom
   return warnings;
 }
 
-const SOURCE_PATTERNS = ["src/**/*", "app/**/*", "lib/**/*", "packages/**/*"];
-const DOC_PATTERNS = ["DNA/Impressions/**/*"];
+const WATCH_DIRS = ["src", "app", "lib", "packages", "DNA/Impressions"];
+
+function shouldIgnorePath(filePath: string): boolean {
+  return /(node_modules|\.git|\/dist\/|\/build\/|\/coverage\/)/.test(filePath);
+}
 
 export async function startWatch(options: WatchOptions): Promise<() => void> {
   const { root, onDrift } = options;
+  const watchers: ReturnType<typeof watch>[] = [];
+  const pending = new Map<string, ReturnType<typeof setTimeout>>();
 
   const notify = (msg: string) => {
     log.info(msg);
     onDrift?.(msg);
   };
 
-  const watcher = chokidar.watch(
-    [...SOURCE_PATTERNS, ...DOC_PATTERNS].map((p) => join(root, p)),
-    {
-      ignored: /(node_modules|\.git|dist)/,
-      persistent: true,
-      ignoreInitial: true,
-    },
-  );
+  const handleEvent = (eventType: "change" | "add", filePath: string) => {
+    if (shouldIgnorePath(filePath)) return;
+    const rel = filePath.replace(root + "/", "").replace(root + "\\", "");
+    const key = `${eventType}:${rel}`;
+    const existing = pending.get(key);
+    if (existing) clearTimeout(existing);
+    pending.set(
+      key,
+      setTimeout(async () => {
+        pending.delete(key);
+        notify(eventType === "add" ? `File added: ${rel}` : `File changed: ${rel}`);
+        await updateRecentChanges(root, rel);
+        const drift = await detectDocumentationDrift(root, rel);
+        for (const w of drift) notify(`⚠ ${w}`);
+        if (rel === "package.json") {
+          const refreshed = await refreshNeuralNetworkIfNeeded(root);
+          if (refreshed) notify("✓ neuralNetwork refreshed after stack change");
+        }
+      }, 150),
+    );
+  };
 
-  watcher.on("change", async (filePath) => {
-    const rel = filePath.replace(root + "/", "");
-    notify(`File changed: ${rel}`);
-    await updateRecentChanges(root, rel);
-
-    const drift = await detectDocumentationDrift(root, rel);
-    for (const w of drift) notify(`⚠ ${w}`);
-
-    if (rel === "package.json") {
-      const refreshed = await refreshNeuralNetworkIfNeeded(root);
-      if (refreshed) notify("✓ neuralNetwork refreshed after stack change");
+  for (const dir of WATCH_DIRS) {
+    const target = join(root, dir);
+    if (!(await fileExists(target))) continue;
+    try {
+      const watcher = watch(target, { recursive: true }, (event, filename) => {
+        if (!filename) return;
+        const full = join(target, filename.toString());
+        handleEvent(event === "rename" ? "add" : "change", full);
+      });
+      watchers.push(watcher);
+    } catch {
+      // fs.watch recursive may be unavailable on some platforms
     }
-  });
-
-  watcher.on("add", async (filePath) => {
-    const rel = filePath.replace(root + "/", "");
-    notify(`File added: ${rel}`);
-    await updateRecentChanges(root, rel);
-  });
+  }
 
   notify("DNA watch mode started. Press Ctrl+C to stop.");
-  return () => watcher.close();
+  return () => {
+    for (const w of watchers) w.close();
+    for (const timer of pending.values()) clearTimeout(timer);
+    pending.clear();
+  };
 }

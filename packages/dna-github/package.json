@@ -19,9 +19,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@superhumaan/dna-config": "workspace:*",
-    "@octokit/rest": "^21.0.2",
-    "simple-git": "^3.27.0"
+    "@superhumaan/dna-config": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8.3.5",

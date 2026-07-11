@@ -5,6 +5,5 @@ export default defineConfig({
   format: ["esm"],
   dts: true,
   noExternal: [/^@superhumaan\//],
-  skipNodeModulesBundle: true,
-  external: ["fsevents", "express", "fastify", "@nestjs/common", "next"],
+  external: ["express", "fastify", "@nestjs/common", "next"],
 });

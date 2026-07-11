@@ -1,9 +1,9 @@
-import fg from "fast-glob";
+import { glob } from "../glob.js";
 import { exec } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { join, relative, basename, extname } from "node:path";
 import { promisify } from "node:util";
-import { simpleGit } from "simple-git";
+import { git } from "@superhumaan/dna-github";
 import { scanProject } from "../scanner.js";
 import { writeFileEnsured } from "../fs.js";
 import {
@@ -66,10 +66,10 @@ function shouldSkipFile(filePath: string, skipPaths?: RegExp[]): boolean {
 }
 
 async function resolveFeaturePaths(root: string): Promise<string[]> {
-  const git = simpleGit(root);
-  if (!(await git.checkIsRepo())) return [];
+  const g = git(root);
+  if (!(await g.checkIsRepo())) return [];
 
-  const branches = await git.branchLocal();
+  const branches = await g.branchLocal();
   const defaultBranch = ["main", "master", "develop"].find((b) =>
     branches.all.includes(b),
   );
@@ -78,13 +78,13 @@ async function resolveFeaturePaths(root: string): Promise<string[]> {
     const diffArgs = defaultBranch
       ? ["--name-only", `${defaultBranch}...HEAD`]
       : ["--name-only", "--cached"];
-    const diff = await git.diff(diffArgs);
+    const diff = await g.diff(diffArgs);
     return diff
       .split("\n")
       .map((line) => line.trim())
       .filter((line) => line.length > 0 && /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(line));
   } catch {
-    const status = await git.status();
+    const status = await g.status();
     return [...status.modified, ...status.created, ...status.staged].filter((f) =>
       /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(f),
     );
@@ -95,7 +95,7 @@ async function listSourceFiles(root: string, paths?: string[]): Promise<string[]
   if (paths?.length) {
     const expanded = new Set<string>();
     for (const p of paths) {
-      const matches = await fg([p], { cwd: root, onlyFiles: true, dot: false });
+      const matches = await glob([p], { cwd: root, onlyFiles: true, dot: false });
       if (matches.length === 0 && !p.includes("*")) {
         expanded.add(p);
       } else {
@@ -105,7 +105,7 @@ async function listSourceFiles(root: string, paths?: string[]): Promise<string[]
     return [...expanded].filter((f) => /\.(ts|tsx|js|jsx|mjs|cjs)$/.test(f));
   }
 
-  return fg(SOURCE_GLOBS, { cwd: root, ignore: SOURCE_IGNORE, onlyFiles: true });
+  return glob(SOURCE_GLOBS, { cwd: root, ignore: SOURCE_IGNORE, onlyFiles: true });
 }
 
 function scanLinePatterns(content: string, filePath: string): QualityIssue[] {

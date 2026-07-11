@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import { glob } from "../glob.js";
 import { readFile } from "node:fs/promises";
 import { join, basename } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
@@ -58,7 +58,7 @@ function scoreListScreen(content: string, filePath: string): MobileListScreenCan
 
 export async function analyzeMobileBuildRules(root: string): Promise<MobileBuildRulesAnalysis> {
   const theming = await analyzeMobileTheming(root);
-  const files = await fg(SOURCE_GLOB, { cwd: root, ignore: IGNORE });
+  const files = await glob(SOURCE_GLOB, { cwd: root, ignore: IGNORE });
 
   const screenFiles = files.filter(
     (f) =>

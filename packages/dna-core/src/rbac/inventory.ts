@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import { glob } from "../glob.js";
 import { readFile } from "node:fs/promises";
 import { relative } from "node:path";
 
@@ -57,7 +57,7 @@ export async function scanSurfaceInventory(root: string): Promise<SurfaceInvento
     pages: [],
   };
 
-  const files = await fg(SOURCE_GLOB, { cwd: root, ignore: IGNORE, absolute: true });
+  const files = await glob(SOURCE_GLOB, { cwd: root, ignore: IGNORE, absolute: true });
 
   for (const file of files) {
     const rel = relative(root, file);

@@ -47,7 +47,7 @@ pnpm dna:link
 packages/
   dna-cli/        CLI entry (`dna` command)
   dna-core/       Scanner, wizard, generators, marketplace
-  dna-config/     Zod schemas, constants
+  dna-config/     Typed config schemas, validators, constants
   dna-runtime/    Runtime observer + adapters
   dna-immune/     Issue classifier
   dna-github/     GitHub API

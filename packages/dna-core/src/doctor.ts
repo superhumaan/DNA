@@ -52,10 +52,10 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
   const prePushHook = await fileExists(join(root, ".DNA", "hooks", "pre-push"));
   let hooksPathConfigured = false;
   try {
-    const { simpleGit } = await import("simple-git");
-    const git = simpleGit(root);
-    if (await git.checkIsRepo()) {
-      const hooksPath = await git.getConfig("core.hooksPath");
+    const { git } = await import("@superhumaan/dna-github");
+    const g = git(root);
+    if (await g.checkIsRepo()) {
+      const hooksPath = await g.getConfig("core.hooksPath");
       hooksPathConfigured = hooksPath.value === ".DNA/hooks";
     }
   } catch {

@@ -6,7 +6,8 @@ DNA development priorities and public roadmap.
 
 ## Current release focus (v0.4.x)
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` bundle (v0.4.4+)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` bundle (v0.4.5+)
+- **Zero npm dependencies** — published package has no production `dependencies`; internal git, glob, GitHub API, CLI parser, and config validators
 - **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
 - **43 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow
 - **DNA Workbench** — default on init/doctor/update; [intelligence library](https://dna.humaan.app/intelligence)
@@ -39,6 +40,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Preview deployment workflow ([#10](https://github.com/superhumaan/DNA/issues/10)) | ✅ Shipped |
 | Prompt stem packs + intelligence library (v0.4.0) | ✅ Shipped |
 | Supply-chain hardening + Socket transparency (v0.4.4) | ✅ Shipped |
+| Zero npm dependencies — internal replacements for CLI/git/GitHub/glob (v0.4.5) | ✅ Shipped |
 | First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress — setup script shipped |
 | Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | 🚧 In progress — `dna dashboard` MVP |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | 🚧 In progress — export/import CLI |

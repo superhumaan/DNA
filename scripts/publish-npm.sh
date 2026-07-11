@@ -29,8 +29,8 @@ pnpm --filter './packages/*' build
 echo "→ Verifying runtime preload (ESM --import)..."
 cd "$ROOT/packages/dna-cli"
 NODE_OPTIONS='--import ./dist/runtime-preload.js' node -e "console.log('runtime preload ok')"
-if rg -q 'Dynamic require of|@kwsites/file-exists' dist/runtime-preload.js dist/runtime.js; then
-  echo "ERROR: runtime bundles still inline CJS npm deps (check skipNodeModulesBundle)."
+if rg -q 'Dynamic require of|@kwsites/file-exists|from "commander"|from "simple-git"|from "zod"' dist/runtime-preload.js dist/runtime.js dist/index.js; then
+  echo "ERROR: published bundle still imports external npm deps that should be inlined."
   exit 1
 fi
 

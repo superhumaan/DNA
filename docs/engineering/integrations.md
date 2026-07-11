@@ -162,7 +162,9 @@ Set in shell, `.env` (not committed), or CI secrets — never in `.DNA/config.dn
 
 ## Supply chain (npm)
 
-`@superhumaan/dna-by-humaan` is published from this repository with **npm provenance**. Network, shell, and filesystem access are limited to documented CLI operations — see [SECURITY.md](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) and the [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan).
+`@superhumaan/dna-by-humaan` is published from this repository with **npm provenance** and **zero production npm dependencies** (v0.4.5+). The CLI bundles internal git, glob, GitHub REST, argument parsing, and config validation — no `commander`, `zod`, `simple-git`, or `@octokit/rest` at install time. Optional framework peers (`express`, `fastify`, `@nestjs/common`) apply only when you use runtime adapters.
+
+Network, shell, and filesystem access are limited to documented CLI operations — see [SECURITY.md](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) and the [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan).
 
 Verify your install:
 

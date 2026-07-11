@@ -26,9 +26,9 @@ Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 
 ## Supply chain & trust
 
-DNA is published from [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) under the `@superhumaan` npm scope with **MIT license** and **npm provenance**.
+DNA is published from [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) under the `@superhumaan` npm scope with **MIT license**, **npm provenance**, and **zero production npm dependencies** (v0.4.5+).
 
-Security scanners may flag network, shell, or filesystem access — expected for a CLI that scaffolds projects, talks to GitHub, and syncs knowledge packs. See [SECURITY.md — Supply-chain transparency](https://github.com/superhumaan/DNA/blob/main/SECURITY.md#supply-chain-transparency-socketdev--security-scanners) for the full endpoint list and when each runs.
+Security scanners may flag network, shell, or filesystem access — expected for a CLI that scaffolds projects, talks to GitHub, and syncs knowledge packs. The npm package no longer pulls third-party runtime libraries (`commander`, `zod`, `simple-git`, etc.); those capabilities are implemented in-tree and bundled into `dist/`. See [SECURITY.md — Supply-chain transparency](https://github.com/superhumaan/DNA/blob/main/SECURITY.md#supply-chain-transparency-socketdev--security-scanners) for the full endpoint list and when each runs.
 
 **Verify your install:**
 

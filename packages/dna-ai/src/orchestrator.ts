@@ -2,7 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
-import { simpleGit } from "simple-git";
+import { git } from "@superhumaan/dna-github";
 import type { AiRepairPlan, ClassifiedIssue, DnaConfig } from "@superhumaan/dna-config";
 import {
   createAiProvider,
@@ -152,32 +152,32 @@ export async function executeRepairWorkflow(
 
   const creds = await resolveGitHubToken();
   const token = creds?.token;
-  const git = simpleGit(projectRoot);
+  const g = git(projectRoot);
 
   if (token) {
     try {
-      await git.checkoutLocalBranch(plan.branchName);
+      await g.checkoutLocalBranch(plan.branchName);
     } catch {
       await createBranch(
         { owner: config.github.owner, repo: config.github.repo, token },
         plan.branchName,
       );
-      await git.fetch("origin", plan.branchName).catch(() => undefined);
-      await git.checkout(plan.branchName).catch(async () => {
-        await git.checkoutLocalBranch(plan.branchName);
+      await g.fetch("origin", plan.branchName).catch(() => undefined);
+      await g.checkout(plan.branchName).catch(async () => {
+        await g.checkoutLocalBranch(plan.branchName);
       });
     }
   } else {
-    await git.checkoutLocalBranch(plan.branchName).catch(async () => {
-      await git.checkout(["-b", plan.branchName]);
+    await g.checkoutLocalBranch(plan.branchName).catch(async () => {
+      await g.checkout(["-b", plan.branchName]);
     });
   }
 
   const modified = await applyPatches(projectRoot, plan.proposedChanges);
 
   if (modified.length > 0) {
-    await git.add(modified);
-    await git.commit(`fix(dna): ${issue.title}\n\nDNA AI repair — not auto-merged`);
+    await g.add(modified);
+    await g.commit(`fix(dna): ${issue.title}\n\nDNA AI repair — not auto-merged`);
   }
 
   const testsPassed = await runTests(projectRoot);
@@ -187,7 +187,7 @@ export async function executeRepairWorkflow(
 
   if (token && config.github.owner && config.github.repo) {
     if (modified.length > 0) {
-      await git.push("origin", plan.branchName).catch(() => undefined);
+      await g.push("origin", plan.branchName).catch(() => undefined);
     }
 
     const pr = await createPullRequest(
@@ -220,7 +220,7 @@ export async function executeRepairWorkflow(
     }
   }
 
-  await git.checkout("main").catch(() => git.checkout("master")).catch(() => undefined);
+  await g.checkout("main").catch(() => g.checkout("master")).catch(() => undefined);
 
   return {
     plan,

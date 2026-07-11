@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import { glob } from "../glob.js";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
@@ -45,7 +45,7 @@ async function detectMuiPackages(root: string): Promise<string[]> {
   const found = new Set<string>();
   const pkgFiles = [
     "package.json",
-    ...(await fg(["apps/*/package.json", "packages/*/package.json"], { cwd: root, ignore: IGNORE })),
+    ...(await glob(["apps/*/package.json", "packages/*/package.json"], { cwd: root, ignore: IGNORE })),
   ];
   for (const pkgFile of pkgFiles) {
     try {
@@ -63,7 +63,7 @@ async function detectMuiPackages(root: string): Promise<string[]> {
 }
 
 async function detectThemeSetup(root: string): Promise<{ hasThemeProvider: boolean; themeFile: string | null }> {
-  const files = await fg(["**/*.{ts,tsx,js,jsx}"], { cwd: root, ignore: IGNORE });
+  const files = await glob(["**/*.{ts,tsx,js,jsx}"], { cwd: root, ignore: IGNORE });
   let hasThemeProvider = false;
   let themeFile: string | null = null;
 

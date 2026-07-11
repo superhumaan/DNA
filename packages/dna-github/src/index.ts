@@ -1,4 +1,11 @@
 import type { ClassifiedIssue, GitHubIssuePayload } from "@superhumaan/dna-config";
+import {
+  createGitHubBranch,
+  createGitHubIssue,
+  createGitHubIssueComment,
+  createGitHubLabel,
+  createGitHubPullRequest,
+} from "./github-api.js";
 
 export function buildIssuePayload(issue: ClassifiedIssue): GitHubIssuePayload {
   const labels = [
@@ -69,38 +76,16 @@ export async function createIssue(
     return { dryRun: true, payload };
   }
 
-  const { Octokit } = await import("@octokit/rest");
-  const octokit = new Octokit({ auth: config.token });
+  for (const name of payload.labels) {
+    await createGitHubLabel(config.token, config.owner, config.repo, name);
+  }
 
-  await ensureLabels(octokit, config.owner, config.repo, payload.labels);
-
-  const response = await octokit.issues.create({
-    owner: config.owner,
-    repo: config.repo,
-    title: payload.title,
-    body: payload.body,
-    labels: payload.labels,
-  });
+  const response = await createGitHubIssue(config.token, config.owner, config.repo, payload);
 
   return {
-    number: response.data.number,
-    url: response.data.html_url,
+    number: response.number,
+    url: response.html_url,
   };
-}
-
-async function ensureLabels(
-  octokit: InstanceType<typeof import("@octokit/rest").Octokit>,
-  owner: string,
-  repo: string,
-  labels: string[],
-): Promise<void> {
-  for (const name of labels) {
-    try {
-      await octokit.issues.createLabel({ owner, repo, name, color: "0E8A16" });
-    } catch {
-      // Label likely exists
-    }
-  }
 }
 
 export async function createBranch(
@@ -109,22 +94,7 @@ export async function createBranch(
   fromRef = "main",
 ): Promise<void> {
   if (!config.token) throw new Error("GitHub token required. Run `dna github login` or set GITHUB_TOKEN.");
-
-  const { Octokit } = await import("@octokit/rest");
-  const octokit = new Octokit({ auth: config.token });
-
-  const { data: ref } = await octokit.git.getRef({
-    owner: config.owner,
-    repo: config.repo,
-    ref: `heads/${fromRef}`,
-  });
-
-  await octokit.git.createRef({
-    owner: config.owner,
-    repo: config.repo,
-    ref: `refs/heads/${branchName}`,
-    sha: ref.object.sha,
-  });
+  await createGitHubBranch(config.token, config.owner, config.repo, branchName, fromRef);
 }
 
 export async function createPullRequest(
@@ -132,20 +102,8 @@ export async function createPullRequest(
   options: { title: string; body: string; head: string; base?: string },
 ): Promise<{ number: number; url: string }> {
   if (!config.token) throw new Error("GitHub token required. Run `dna github login` or set GITHUB_TOKEN.");
-
-  const { Octokit } = await import("@octokit/rest");
-  const octokit = new Octokit({ auth: config.token });
-
-  const response = await octokit.pulls.create({
-    owner: config.owner,
-    repo: config.repo,
-    title: options.title,
-    body: options.body,
-    head: options.head,
-    base: options.base ?? "main",
-  });
-
-  return { number: response.data.number, url: response.data.html_url };
+  const pr = await createGitHubPullRequest(config.token, config.owner, config.repo, options);
+  return { number: pr.number, url: pr.html_url };
 }
 
 export async function commentOnIssue(
@@ -154,16 +112,7 @@ export async function commentOnIssue(
   body: string,
 ): Promise<void> {
   if (!config.token) throw new Error("GitHub token required. Run `dna github login` or set GITHUB_TOKEN.");
-
-  const { Octokit } = await import("@octokit/rest");
-  const octokit = new Octokit({ auth: config.token });
-
-  await octokit.issues.createComment({
-    owner: config.owner,
-    repo: config.repo,
-    issue_number: issueNumber,
-    body,
-  });
+  await createGitHubIssueComment(config.token, config.owner, config.repo, issueNumber, body);
 }
 
 export function getTokenFromEnv(): string | undefined {
@@ -182,6 +131,7 @@ export {
 export { detectGitHubRemote, parseGitHubRemoteUrl, type ParsedGitHubRemote } from "./git-remote.js";
 export { pushFeatureToGitHub, type PushFeatureOptions, type PushFeatureResult } from "./push.js";
 export { DNA_OAUTH_CLIENT_ID, isPlaceholderClientId } from "./oauth-config.js";
+export { git, type Git, type GitStatus } from "./git.js";
 
 export async function linkIssueToPr(
   config: GitHubConfig,
@@ -189,14 +139,11 @@ export async function linkIssueToPr(
   prNumber: number,
 ): Promise<void> {
   if (!config.token) return;
-
-  const { Octokit } = await import("@octokit/rest");
-  const octokit = new Octokit({ auth: config.token });
-
-  await octokit.issues.createComment({
-    owner: config.owner,
-    repo: config.repo,
-    issue_number: issueNumber,
-    body: `Linked PR #${prNumber}`,
-  });
+  await createGitHubIssueComment(
+    config.token,
+    config.owner,
+    config.repo,
+    issueNumber,
+    `Linked PR #${prNumber}`,
+  );
 }
