@@ -115,7 +115,7 @@ describe("CI generator", () => {
     expect(yaml).toContain("workflow_run:");
     expect(yaml).toContain("types: [completed]");
     expect(yaml).toContain("- DNA CI");
-    expect(yaml).toContain("- CI");
+    expect(yaml).not.toContain("- CI");
     expect(yaml).toContain("deleteWorkflowRun");
     expect(yaml).toContain("actions: write");
   });
@@ -171,7 +171,8 @@ describe("CI generator", () => {
       },
     );
 
-    expect(yaml).toContain('branches: ["main"]');
+    expect(yaml).toContain("workflow_run:");
+    expect(yaml).toContain("workflows: [DNA CI]");
     expect(yaml).toContain("netlify-cli deploy");
     expect(yaml).toContain("NETLIFY_AUTH_TOKEN");
     expect(yaml).toContain("vars.NETLIFY_PREVIEW_ENABLED");

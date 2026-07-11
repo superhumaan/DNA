@@ -307,7 +307,7 @@ We follow security practices appropriate for open-source developer tooling and H
 | Practice | Implementation |
 | -------- | -------------- |
 | **Dependency management** | npm lockfiles, automated advisory monitoring, timely dependency updates |
-| **CI/CD** | GitHub Actions on every PR to `main`: build, test, typecheck (`.github/workflows/ci.yml`) |
+| **CI/CD** | GitHub Actions on every push: DNA CI (advisory quality gates) and DNA Preview (after CI passes) — `.github/workflows/dna-ci.yml` |
 | **Publish pipeline** | Controlled npm publish workflow (`.github/workflows/publish-npm.yml`) |
 | **Static analysis** | ESLint, TypeScript strict mode, quality patterns in feature factory |
 | **Secret scanning** | Behaviour rules and validators flag hardcoded secrets; generated projects include `no_secrets_in_code` checks |

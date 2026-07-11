@@ -12,7 +12,7 @@ All notable changes to DNA are documented here.
 
 ### Fixed
 
-- **Workflow cleanup** — `cleanup-failed-runs.yml` now watches `CI`, path-style workflow names, and all DNA workflows so failed runs delete immediately instead of waiting for the six-hourly sweep. Fixed invalid `dna-ci.yml` (`hashFiles` at job level) and `dna-preview.yml` (`secrets` in job `if`) that prevented workflows from registering as `DNA CI` / `DNA Preview`. Added `pnpm/action-setup` before `setup-node` so DNA CI/Preview installs succeed on GitHub runners.
+- **Workflow cleanup** — `cleanup-failed-runs.yml` sweeps all failed/cancelled runs (not just the triggering run) so backlog does not linger. Removed duplicate legacy `ci.yml` (DNA CI is canonical). DNA Preview now runs after DNA CI completes instead of in parallel on every push. Fixed invalid workflow YAML, added `pnpm/action-setup`, and expanded cleanup triggers.
 
 ## [0.4.8] - 2026-07-11
 

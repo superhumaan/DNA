@@ -1,43 +1,29 @@
-# DNA Preview — deploy preview after quality gates pass
+# DNA Preview — deploy preview after DNA CI passes
 # Provider: vercel | all branches
-# Cursor: always push to preview; CI runs gates on every push.
-# Coverage threshold: 80% per file and overall
+# Runs once per push (after DNA CI), not in parallel with it.
 
 name: DNA Preview
 
 on:
-  push:
-    branches: ["**"]
+  workflow_run:
+    workflows: [DNA CI]
+    types: [completed]
 
 permissions:
   contents: read
 
 jobs:
-  gate-before-preview:
-    name: Pre-preview quality gate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: pnpm
-      - name: Install
-        run: pnpm install --frozen-lockfile
-      - name: DNA quality report (80% gate)
-        run: npx --yes @superhumaan/dna-by-humaan quality report
-        continue-on-error: true
-
   deploy-preview:
     name: Deploy preview
-    needs: gate-before-preview
-    if: ${{ vars.VERCEL_PREVIEW_ENABLED == 'true' }}
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      vars.VERCEL_PREVIEW_ENABLED == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       - name: Deploy to Vercel preview
         run: npx --yes vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --yes
         env:

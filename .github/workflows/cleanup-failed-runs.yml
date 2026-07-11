@@ -6,7 +6,6 @@ name: Cleanup failed runs
 on:
   workflow_run:
     workflows:
-      - CI
       - DNA CI
       - DNA Preview
       - DNA Security
@@ -53,29 +52,28 @@ jobs:
               }
             }
 
-            if (context.eventName === "workflow_run") {
-              await deleteRun(context.payload.workflow_run.id);
-              return;
-            }
+            async function sweepFailedRuns() {
+              const perPage = 100;
+              for (let page = 1; ; page++) {
+                const { data } = await github.rest.actions.listWorkflowRunsForRepo({
+                  owner,
+                  repo,
+                  status: "completed",
+                  per_page: perPage,
+                  page,
+                });
 
-            const perPage = 100;
-            for (let page = 1; ; page++) {
-              const { data } = await github.rest.actions.listWorkflowRunsForRepo({
-                owner,
-                repo,
-                status: "completed",
-                per_page: perPage,
-                page,
-              });
-
-              for (const run of data.workflow_runs) {
-                if (
-                  (run.conclusion === "failure" || run.conclusion === "cancelled") &&
-                  run.name !== cleanupName
-                ) {
-                  await deleteRun(run.id);
+                for (const run of data.workflow_runs) {
+                  if (
+                    (run.conclusion === "failure" || run.conclusion === "cancelled") &&
+                    run.name !== cleanupName
+                  ) {
+                    await deleteRun(run.id);
+                  }
                 }
-              }
 
-              if (data.workflow_runs.length < perPage) break;
+                if (data.workflow_runs.length < perPage) break;
+              }
             }
+
+            await sweepFailedRuns();

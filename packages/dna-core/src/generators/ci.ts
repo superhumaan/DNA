@@ -86,7 +86,6 @@ name: Cleanup failed runs
 on:
   workflow_run:
     workflows:
-      - CI
       - DNA CI
       - DNA Preview
       - DNA Security
@@ -133,32 +132,31 @@ jobs:
               }
             }
 
-            if (context.eventName === "workflow_run") {
-              await deleteRun(context.payload.workflow_run.id);
-              return;
-            }
+            async function sweepFailedRuns() {
+              const perPage = 100;
+              for (let page = 1; ; page++) {
+                const { data } = await github.rest.actions.listWorkflowRunsForRepo({
+                  owner,
+                  repo,
+                  status: "completed",
+                  per_page: perPage,
+                  page,
+                });
 
-            const perPage = 100;
-            for (let page = 1; ; page++) {
-              const { data } = await github.rest.actions.listWorkflowRunsForRepo({
-                owner,
-                repo,
-                status: "completed",
-                per_page: perPage,
-                page,
-              });
-
-              for (const run of data.workflow_runs) {
-                if (
-                  (run.conclusion === "failure" || run.conclusion === "cancelled") &&
-                  run.name !== cleanupName
-                ) {
-                  await deleteRun(run.id);
+                for (const run of data.workflow_runs) {
+                  if (
+                    (run.conclusion === "failure" || run.conclusion === "cancelled") &&
+                    run.name !== cleanupName
+                  ) {
+                    await deleteRun(run.id);
+                  }
                 }
-              }
 
-              if (data.workflow_runs.length < perPage) break;
+                if (data.workflow_runs.length < perPage) break;
+              }
             }
+
+            await sweepFailedRuns();
 `;
 }
 
@@ -277,13 +275,6 @@ ${cacheBlock}
 }
 
 export function generatePreviewWorkflow(config: DnaConfig, scan: ScanResult): string {
-  const pm = scan.packageManager ?? "npm";
-  const threshold = config.ci?.coverageThreshold ?? 80;
-  const strict = config.ci?.strict ?? false;
-  const continueOnError = !strict;
-  const qualityReportFlags = strict ? " --fail" : "";
-  const previewBranch = config.ci?.previewBranch;
-  const branchFilter = previewBranch ? `    branches: ["${previewBranch}"]` : `    branches: ["**"]`;
   const provider = config.ci?.previewProvider ?? "vercel";
 
   const deployStep =
@@ -304,42 +295,32 @@ export function generatePreviewWorkflow(config: DnaConfig, scan: ScanResult): st
       ? "vars.NETLIFY_PREVIEW_ENABLED == 'true'"
       : "vars.VERCEL_PREVIEW_ENABLED == 'true'";
 
-  return `# DNA Preview — deploy preview after quality gates pass
-# Provider: ${provider}${previewBranch ? ` | branch: ${previewBranch}` : " | all branches"}
-# Cursor: always push to preview; CI runs gates on every push.
-# Coverage threshold: ${threshold}% per file and overall
+  return `# DNA Preview — deploy preview after DNA CI passes
+# Provider: ${provider}${config.ci?.previewBranch ? ` | branch: ${config.ci.previewBranch}` : " | all branches"}
+# Runs once per push (after DNA CI), not in parallel with it.
 
 name: DNA Preview
 
 on:
-  push:
-${branchFilter}
+  workflow_run:
+    workflows: [DNA CI]
+    types: [completed]
 
 permissions:
   contents: read
 
 jobs:
-  gate-before-preview:
-    name: Pre-preview quality gate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-${pmSetupStep(pm)}      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - name: Install
-        run: ${pmInstallCommand(pm)}
-      - name: DNA quality report (${threshold}% gate)
-        run: npx --yes @superhumaan/dna-by-humaan quality report${qualityReportFlags}
-        continue-on-error: ${continueOnError}
-
   deploy-preview:
     name: Deploy preview
-    needs: gate-before-preview
-    if: \${{ ${deployIf} }}
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      \${{ ${deployIf} }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: \${{ github.event.workflow_run.head_sha }}
 ${deployStep}
 `;
 }
