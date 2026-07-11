@@ -1,0 +1,30 @@
+{
+  "version": "0.1.0",
+  "classifiers": [
+    {
+      "pattern": "ECONNREFUSED|ETIMEDOUT",
+      "category": "database",
+      "discipline": "backend"
+    },
+    {
+      "pattern": "JWT|token|unauthorized",
+      "category": "auth",
+      "discipline": "security"
+    },
+    {
+      "pattern": "timeout|slow",
+      "category": "performance",
+      "discipline": "backend"
+    },
+    {
+      "pattern": "Cannot find module",
+      "category": "dependency",
+      "discipline": "devops"
+    },
+    {
+      "pattern": "validation|ZodError",
+      "category": "runtime_error",
+      "discipline": "backend"
+    }
+  ]
+}

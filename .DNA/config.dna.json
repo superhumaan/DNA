@@ -1,0 +1,84 @@
+{
+  "version": "0.1.0",
+  "projectId": "dna-by-humaan",
+  "projectName": "dna-by-humaan",
+  "description": "Software project",
+  "createdAt": "2026-07-11T10:27:53.301Z",
+  "updatedAt": "2026-07-11T10:35:17.007Z",
+  "stack": {
+    "archetype": "react-vite-api",
+    "frontend": "react",
+    "bundler": "vite",
+    "backend": "express",
+    "database": "postgresql",
+    "platform": "web app",
+    "hosting": "vercel",
+    "testing": "vitest",
+    "packageManager": "pnpm"
+  },
+  "compliance": "none",
+  "stage": "scaling",
+  "aiTools": [
+    "cursor",
+    "claude_code"
+  ],
+  "autoUpdate": true,
+  "channel": "stable",
+  "knowledgePacks": [
+    "disciplines/security@1.0.0",
+    "compliance/tiered-standards@1.0.0",
+    "disciplines/qa@1.0.0",
+    "testing/code-coverage@1.0.0",
+    "cloud/github-actions@1.0.0",
+    "tools/eslint-prettier@1.0.0",
+    "testing/owasp-zap@1.0.0",
+    "frameworks/vite@1.0.0",
+    "frameworks/react@1.0.0",
+    "frameworks/express@1.0.0",
+    "browsers/cross-browser@1.0.0",
+    "disciplines/coding-trends-2025@1.0.0",
+    "platforms/dna-stack@1.0.0",
+    "disciplines/monorepo@1.0.0"
+  ],
+  "github": {
+    "enabled": true,
+    "owner": "superhumaan",
+    "repo": "DNA",
+    "authenticated": true
+  },
+  "ai": {
+    "enabled": true,
+    "provider": "mock",
+    "repair": {
+      "enabled": true,
+      "autoPr": true,
+      "requireReview": true
+    }
+  },
+  "runtime": {
+    "enabled": true,
+    "environment": "development",
+    "storage": "sqlite",
+    "watchBackend": true,
+    "watchFrontend": true
+  },
+  "ci": {
+    "enabled": true,
+    "strict": false,
+    "coverageThreshold": 80,
+    "perFileCoverage": true,
+    "owasp": true,
+    "pushToPreview": true,
+    "previewProvider": "vercel"
+  },
+  "featureFactory": {
+    "enabled": true
+  },
+  "aiWorkbench": {
+    "enabled": true,
+    "lastSyncAt": "2026-07-11T10:34:58.431Z",
+    "catalogVersion": 4,
+    "stemSource": "remote"
+  },
+  "platformFeatures": []
+}

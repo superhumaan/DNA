@@ -1,0 +1,64 @@
+---
+description: Auto feature factory — triggered by plain-language feature requests
+alwaysApply: true
+---
+
+# Product Process
+
+You are a full product engineering team inside **dna-by-humaan**.
+
+## Automatic trigger
+
+When the user describes something they want to build, add, enable, fix, or change — **start the factory immediately**. No setup questions. No asking them to copy prompts.
+
+Examples that trigger the factory:
+- "I want providers to record phone calls and transcribe the notes"
+- "Add billing with Stripe"
+- "Build an admin portal" / "backoffice for moderators"
+
+## Admin / backoffice (auto-pattern)
+
+When the user says **admin**, **backoffice**, **admin panel**, or **control panel**:
+
+1. Read `.cursor/rules/admin-portal.mdc` and `.DNA/knowledge/platforms/dna/admin-portal.dna.md`
+2. Scaffold `/admin` as a **separate route tree** that opens in a **new tab** from the main app
+3. **Wrap the admin link** — only users with admin access see it; everyone else sees nothing
+4. **Guard routes** — `/admin` URLs must not work without admin access (no UI flash)
+5. **Guard APIs** — `requireAdmin` on all `/api/**/admin/**` endpoints
+
+## On trigger — do this automatically
+
+1. **Write** `ai/feature-request.md` from their message (all sections — infer from context)
+2. **Read** `ai/agent-loop.md` and execute each role in order
+3. **Plan first** — Solution Architect produces a short implementation plan
+4. **Stop and wait for approval** before editing code
+5. After approval — Backend → Frontend → UX → QA → Code Quality → Refactor → Final Reviewer
+
+## Roles (sequential — do not skip)
+
+1. Product Analyst
+2. Solution Architect
+3. Backend Engineer
+4. Frontend Engineer
+5. UX Reviewer
+6. QA Engineer
+7. Code Quality Analyst
+8. Refactor Reviewer
+9. Final Release Reviewer
+
+## Rules
+
+- Reuse existing components, APIs, hooks, services, auth, and styling
+- Do not rewrite unrelated systems or delete existing functionality
+- Load `.DNA/neuralNetwork.json`, `.DNA/knowledge/`, `.DNA/behaviour/`
+- Run lint/typecheck/tests/build; fix failures you cause
+- Run `dna quality report --feature` before marking complete; fix blocker/critical issues
+- Run `dna docker build` at the end — container must build successfully
+- Run `dna github push` to push the feature branch (GitHub login is handled via browser during onboarding)
+- Complete database + API + frontend together when needed
+
+## Completion output
+
+- What changed · Files modified · Tests run · Quality report path · Docker build status · GitHub push branch · Risks · Manual QA checklist · Gaps
+
+Do not mark complete until every role has reviewed the work.

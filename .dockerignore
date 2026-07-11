@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+.git
+.DNA/data
+.DNA/reports
+.DNA/credentials
+coverage
+*.md
+!README.md

@@ -1,0 +1,1133 @@
+{
+  "version": "0.1.0",
+  "intents": {
+    "build_frontend_component": {
+      "intent": "build_frontend_component",
+      "description": "Create or modify a frontend UI component",
+      "requiredKnowledge": [
+        "frameworks/react/positioning.dna.md",
+        "frameworks/vite/positioning.dna.md",
+        "disciplines/frontend/positioning.dna.md",
+        "tools/mui/positioning.dna.md",
+        "project/feature-folder-structure.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "testing.behaviour.md",
+        "ai.behaviour.md"
+      ],
+      "cellularMemory": [
+        "occipitalLobe/ui-patterns.md",
+        "prefrontalCortex/feature-building-rules.md",
+        "hippocampus/recent-changes.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md"
+      ],
+      "validationChecks": [
+        "has_tests",
+        "no_duplicate_components"
+      ]
+    },
+    "consolidate_shared_library": {
+      "intent": "consolidate_shared_library",
+      "description": "Scaffold a shared component library, extract duplicated UI, and replace local copies with standardised imports",
+      "requiredKnowledge": [
+        "tools/mui/positioning.dna.md",
+        "tools/mui/list-report-pages.dna.md",
+        "disciplines/monorepo/positioning.dna.md",
+        "frameworks/react/positioning.dna.md",
+        "project/list-report-pattern.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "ai.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "occipitalLobe/ui-patterns.md",
+        "occipitalLobe/feature-templates.md",
+        "prefrontalCortex/feature-building-rules.md",
+        "parietalLobe/system-map.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md"
+      ],
+      "validationChecks": [
+        "no_duplicate_components",
+        "has_tests"
+      ]
+    },
+    "build_list_report_page": {
+      "intent": "build_list_report_page",
+      "description": "Create a new list or report page (e.g. ABC Report) — same title row, padding, search, filters, table, pagination as existing pages",
+      "requiredKnowledge": [
+        "tools/mui/list-report-pages.dna.md",
+        "tools/mui/positioning.dna.md",
+        "project/list-report-pattern.dna.md",
+        "project/feature-folder-structure.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "ai.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/feature-building-rules.md",
+        "occipitalLobe/ui-patterns.md",
+        "occipitalLobe/feature-templates.md",
+        "hippocampus/recent-changes.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md"
+      ],
+      "validationChecks": [
+        "no_duplicate_components",
+        "has_tests"
+      ]
+    },
+    "create_api_endpoint": {
+      "intent": "create_api_endpoint",
+      "description": "Create or modify a backend API endpoint",
+      "requiredKnowledge": [
+        "frameworks/express/positioning.dna.md",
+        "disciplines/backend/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "security.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "parietalLobe/system-map.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/data-flow.md",
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "has_tests",
+        "has_auth_check",
+        "has_input_validation"
+      ]
+    },
+    "install_dependency": {
+      "intent": "install_dependency",
+      "description": "Add a new package dependency",
+      "requiredKnowledge": [
+        "languages/typescript/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "security.behaviour.md"
+      ],
+      "cellularMemory": [
+        "parietalLobe/dependency-map.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md"
+      ],
+      "validationChecks": [
+        "no_duplicate_deps",
+        "no_dangerous_deps"
+      ]
+    },
+    "build_pwa": {
+      "intent": "build_pwa",
+      "description": "Implement PWA capabilities",
+      "requiredKnowledge": [
+        "platforms/pwa/positioning.dna.md",
+        "frameworks/vite/pwa-patterns.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "documentation.behaviour.md"
+      ],
+      "cellularMemory": [
+        "occipitalLobe/ui-patterns.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md"
+      ],
+      "validationChecks": [
+        "has_manifest",
+        "has_service_worker"
+      ]
+    },
+    "implement_rbac": {
+      "intent": "implement_rbac",
+      "description": "Implement role-based access control with zero trust — permission matrix, API enforcement, route guards, menu/notification hiding",
+      "requiredKnowledge": [
+        "security/rbac-fundamentals.dna.md",
+        "security/zero-trust.dna.md",
+        "security/ui-surface-checklist.dna.md",
+        "disciplines/security/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md",
+        "ai.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/rbac-permission-matrix.md",
+        "prefrontalCortex/decisions.md",
+        "amygdala/risks.md"
+      ],
+      "impressions": [
+        "security/security-baseline.md",
+        "security/threat-model.md",
+        "product/user-types.md"
+      ],
+      "validationChecks": [
+        "rbac_permission_matrix_exists",
+        "api_enforcement",
+        "route_guards",
+        "ui_surfaces_hidden",
+        "role_verification_tests",
+        "no_default_admin_for_all_users"
+      ]
+    },
+    "implement_admin_portal": {
+      "intent": "implement_admin_portal",
+      "description": "Build admin/backoffice portal at /admin — new-tab entry, RBAC-wrapped link, route guards, requireAdmin APIs",
+      "requiredKnowledge": [
+        "platforms/dna/admin-portal.dna.md",
+        "platforms/dna/rbac-patterns.dna.md",
+        "platforms/dna/audit.dna.md",
+        "security/ui-surface-checklist.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "parietalLobe/system-map.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md",
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "has_auth_check",
+        "ui_surfaces_hidden",
+        "api_enforcement",
+        "admin_link_hidden_without_access",
+        "admin_route_guard_blocks_direct_url",
+        "admin_opens_new_tab"
+      ]
+    },
+    "implement_sso_bridge": {
+      "intent": "implement_sso_bridge",
+      "description": "Cross-app SSO between subdomains via shared JWT and OTT handoff",
+      "requiredKnowledge": [
+        "integrations/sso-bridge.dna.md",
+        "disciplines/auth-mfa.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "amygdala/risks.md"
+      ],
+      "impressions": [
+        "security/security-baseline.md",
+        "architecture/data-flow.md"
+      ],
+      "validationChecks": [
+        "has_auth_tests",
+        "no_secrets_in_code"
+      ]
+    },
+    "implement_feature_flags": {
+      "intent": "implement_feature_flags",
+      "description": "Feature flags via env toggles, admin KV, and capability gates",
+      "requiredKnowledge": [
+        "disciplines/feature-flags.dna.md",
+        "disciplines/feature-management.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "security.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md"
+      ],
+      "validationChecks": [
+        "has_env_example"
+      ]
+    },
+    "deploy_azure": {
+      "intent": "deploy_azure",
+      "description": "Deploy to Azure Container Apps with Key Vault, B2C, and persistent storage",
+      "requiredKnowledge": [
+        "cloud/azure.dna.md",
+        "integrations/azure-ad-b2c.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "security.behaviour.md",
+        "runtime.behaviour.md"
+      ],
+      "cellularMemory": [
+        "parietalLobe/system-map.md",
+        "cerebellum/automation-learnings.md"
+      ],
+      "impressions": [
+        "devops/deployment-model.md",
+        "devops/environments.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "ci_runs_tests"
+      ]
+    },
+    "deploy_aws": {
+      "intent": "deploy_aws",
+      "description": "Deploy to AWS ECS/Fargate with ALB, RDS, Cognito, and observability",
+      "requiredKnowledge": [
+        "cloud/aws.dna.md",
+        "integrations/nginx.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "security.behaviour.md",
+        "runtime.behaviour.md"
+      ],
+      "cellularMemory": [
+        "parietalLobe/system-map.md"
+      ],
+      "impressions": [
+        "devops/deployment-model.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code"
+      ]
+    },
+    "implement_google_directory": {
+      "intent": "implement_google_directory",
+      "description": "Google OAuth sign-in and Workspace Directory sync with domain lock",
+      "requiredKnowledge": [
+        "integrations/google-directory.dna.md",
+        "platforms/dna/rbac-patterns.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/data-flow.md",
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "has_auth_tests",
+        "has_auth_check"
+      ]
+    },
+    "implement_ai_governance": {
+      "intent": "implement_ai_governance",
+      "description": "AI chat with content policy, quotas, server-proxy models, and admin governance",
+      "requiredKnowledge": [
+        "platforms/aistudio/ai-governance.dna.md",
+        "platforms/dna/audit.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "ai.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "amygdala/risks.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "security/threat-model.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_auth_check"
+      ]
+    },
+    "implement_multi_tenant": {
+      "intent": "implement_multi_tenant",
+      "description": "Multi-tenant isolation with tenant-scoped APIs and admin provisioning",
+      "requiredKnowledge": [
+        "platforms/dna/multi-tenant.dna.md",
+        "platforms/dna/rbac-patterns.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "parietalLobe/system-map.md"
+      ],
+      "impressions": [
+        "architecture/system-boundaries.md"
+      ],
+      "validationChecks": [
+        "api_enforcement",
+        "has_tests"
+      ]
+    },
+    "implement_compliance_controls": {
+      "intent": "implement_compliance_controls",
+      "description": "Implement tiered compliance controls for GDPR, HIPAA, ISO 27001, or SOC 2 — data inventory, encryption, rights, audit, policies",
+      "requiredKnowledge": [
+        "compliance/tiers/overview.dna.md",
+        "compliance/matrices/control-by-tier.dna.md",
+        "compliance/frameworks/gdpr.dna.md",
+        "disciplines/security/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "documentation.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/compliance-control-matrix.md",
+        "prefrontalCortex/decisions.md",
+        "amygdala/risks.md"
+      ],
+      "impressions": [
+        "security/data-protection.md",
+        "compliance/compliance-overview.md",
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_env_example",
+        "compliance_matrix_exists",
+        "data_inventory_documented"
+      ]
+    },
+    "add_authentication": {
+      "intent": "add_authentication",
+      "description": "Add or modify authentication",
+      "requiredKnowledge": [
+        "disciplines/security/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "amygdala/risks.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "security/security-baseline.md",
+        "security/threat-model.md"
+      ],
+      "validationChecks": [
+        "has_auth_tests",
+        "no_secrets_in_code"
+      ]
+    },
+    "write_tests": {
+      "intent": "write_tests",
+      "description": "Write or update tests",
+      "requiredKnowledge": [
+        "disciplines/qa/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "cerebellum/repeated-patterns.md"
+      ],
+      "impressions": [
+        "qa/qa-strategy.md",
+        "qa/test-plan.md"
+      ],
+      "validationChecks": [
+        "tests_pass"
+      ]
+    },
+    "fix_runtime_error": {
+      "intent": "fix_runtime_error",
+      "description": "Investigate and fix a production runtime error",
+      "requiredKnowledge": [
+        "disciplines/backend/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "runtime.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "amygdala/repeated-failures.md",
+        "temporalLobe/previous-solutions.md",
+        "hippocampus/recent-changes.md"
+      ],
+      "impressions": [
+        "devops/rollback-plan.md"
+      ],
+      "validationChecks": [
+        "has_regression_test",
+        "immune_system_review"
+      ]
+    },
+    "update_documentation": {
+      "intent": "update_documentation",
+      "description": "Update project documentation or Impressions",
+      "requiredKnowledge": [
+        "disciplines/solution-engineering/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "documentation.behaviour.md"
+      ],
+      "cellularMemory": [
+        "hippocampus/project-summary.md"
+      ],
+      "impressions": [
+        "product/product-overview.md"
+      ],
+      "validationChecks": [
+        "impressions_current"
+      ]
+    },
+    "improve_security": {
+      "intent": "improve_security",
+      "description": "Improve security posture",
+      "requiredKnowledge": [
+        "disciplines/security/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md"
+      ],
+      "cellularMemory": [
+        "amygdala/risks.md"
+      ],
+      "impressions": [
+        "security/security-baseline.md",
+        "security/threat-model.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_env_example"
+      ]
+    },
+    "configure_ci_cd": {
+      "intent": "configure_ci_cd",
+      "description": "Configure CI/CD pipelines",
+      "requiredKnowledge": [
+        "disciplines/devops/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "cerebellum/automation-learnings.md"
+      ],
+      "impressions": [
+        "devops/deployment-model.md",
+        "devops/environments.md"
+      ],
+      "validationChecks": [
+        "ci_runs_tests"
+      ]
+    },
+    "create_mobile_feature": {
+      "intent": "create_mobile_feature",
+      "description": "Build mobile-specific features",
+      "requiredKnowledge": [
+        "frameworks/react-native/positioning.dna.md",
+        "disciplines/mobile-development/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "occipitalLobe/ui-patterns.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md"
+      ],
+      "validationChecks": [
+        "has_mobile_tests"
+      ]
+    },
+    "build_desktop_app": {
+      "intent": "build_desktop_app",
+      "description": "Build or package a cross-platform desktop app (Electron or Tauri)",
+      "requiredKnowledge": [
+        "platforms/desktop-cross-platform/positioning.dna.md",
+        "platforms/desktop-cross-platform/security.dna.md",
+        "frameworks/react/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "parietalLobe/system-map.md"
+      ],
+      "impressions": [
+        "devops/deployment-model.md",
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_env_example"
+      ]
+    },
+    "build_browser_extension": {
+      "intent": "build_browser_extension",
+      "description": "Build a Chrome or Safari browser extension (Manifest V3 / Web Extension)",
+      "requiredKnowledge": [
+        "platforms/browser-extension-chrome/positioning.dna.md",
+        "platforms/browser-extension-chrome/security.dna.md",
+        "disciplines/security/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "amygdala/risks.md"
+      ],
+      "impressions": [
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_manifest"
+      ]
+    },
+    "build_gpt_app": {
+      "intent": "build_gpt_app",
+      "description": "Build Custom GPT, GPT Actions, or OpenAI Apps integration",
+      "requiredKnowledge": [
+        "platforms/gpt-apps/positioning.dna.md",
+        "platforms/gpt-apps/actions.dna.md",
+        "platforms/aistudio/ai-governance.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "ai.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "amygdala/risks.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "security/threat-model.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_auth_check"
+      ]
+    },
+    "build_mcp_server": {
+      "intent": "build_mcp_server",
+      "description": "Build a Model Context Protocol server for AI clients",
+      "requiredKnowledge": [
+        "platforms/mcp-server/positioning.dna.md",
+        "platforms/mcp-server/security.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "parietalLobe/system-map.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code"
+      ]
+    },
+    "build_marketing_site": {
+      "intent": "build_marketing_site",
+      "description": "Build a public marketing or content website (SEO, landing pages)",
+      "requiredKnowledge": [
+        "platforms/marketing-website/positioning.dna.md",
+        "platforms/marketing-website/seo-analytics.dna.md",
+        "frameworks/astro/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "documentation.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "occipitalLobe/ui-patterns.md"
+      ],
+      "impressions": [
+        "product/product-overview.md"
+      ],
+      "validationChecks": [
+        "impressions_current"
+      ]
+    },
+    "implement_payments": {
+      "intent": "implement_payments",
+      "description": "Integrate payment processor — subscriptions, checkout, webhooks, PCI scope reduction",
+      "requiredKnowledge": [
+        "payments/overview/positioning.dna.md",
+        "payments/overview/pci-scope.dna.md",
+        "payments/stripe/integration.dna.md",
+        "data/data-hq/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "amygdala/risks.md"
+      ],
+      "impressions": [
+        "architecture/data-flow.md",
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_auth_check",
+        "webhook_signature_verified"
+      ]
+    },
+    "design_data_hq": {
+      "intent": "design_data_hq",
+      "description": "Define Data HQ — primary region, residency, and subprocessors alignment",
+      "requiredKnowledge": [
+        "data/data-hq/positioning.dna.md",
+        "data/data-hq/decision-matrix.dna.md",
+        "compliance/tiers/overview.dna.md"
+      ],
+      "requiredBehaviour": [
+        "documentation.behaviour.md",
+        "security.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "parietalLobe/system-map.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md",
+        "compliance/compliance-overview.md"
+      ],
+      "validationChecks": [
+        "architecture_documented",
+        "data_inventory_documented"
+      ]
+    },
+    "design_disaster_recovery": {
+      "intent": "design_disaster_recovery",
+      "description": "Design DR topology — active-active, active-passive, geo-replication, RTO/RPO",
+      "requiredKnowledge": [
+        "data/disaster-recovery/positioning.dna.md",
+        "data/disaster-recovery/active-active.dna.md",
+        "data/disaster-recovery/active-passive.dna.md",
+        "data/geo-replication/how.dna.md",
+        "data/data-hq/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "documentation.behaviour.md",
+        "coding.behaviour.md",
+        "runtime.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "cerebellum/automation-learnings.md"
+      ],
+      "impressions": [
+        "devops/deployment-model.md",
+        "devops/rollback-plan.md"
+      ],
+      "validationChecks": [
+        "architecture_documented"
+      ]
+    },
+    "implement_healthcare_fhir": {
+      "intent": "implement_healthcare_fhir",
+      "description": "Build HIPAA-aligned FHIR clinical features — Patient, Observation, SMART launch, EHR integration",
+      "requiredKnowledge": [
+        "healthcare/overview/positioning.dna.md",
+        "healthcare/fhir-r4/positioning.dna.md",
+        "healthcare/smart-on-fhir/positioning.dna.md",
+        "healthcare/phi-engineering/positioning.dna.md",
+        "healthcare/redox/integration.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "documentation.behaviour.md",
+        "ai.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "amygdala/risks.md",
+        "prefrontalCortex/compliance-control-matrix.md"
+      ],
+      "impressions": [
+        "security/data-protection.md",
+        "compliance/compliance-overview.md",
+        "architecture/data-flow.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_auth_check",
+        "compliance_matrix_exists",
+        "data_inventory_documented"
+      ]
+    },
+    "integrate_ehr": {
+      "intent": "integrate_ehr",
+      "description": "Integrate with Epic, Cerner, or via Redox/Health Gorilla/Particle",
+      "requiredKnowledge": [
+        "healthcare/redox/positioning.dna.md",
+        "healthcare/epic/positioning.dna.md",
+        "healthcare/cerner-oracle-health/positioning.dna.md",
+        "healthcare/hl7-v2/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "parietalLobe/system-map.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/system-boundaries.md",
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "api_enforcement"
+      ]
+    },
+    "integrate_sap": {
+      "intent": "integrate_sap",
+      "description": "Integrate with SAP S/4HANA or enterprise ERP via OData or iPaaS",
+      "requiredKnowledge": [
+        "erp/sap/positioning.dna.md",
+        "erp/sap/integration.dna.md",
+        "integrations/workato/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "documentation.behaviour.md"
+      ],
+      "cellularMemory": [
+        "parietalLobe/system-map.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/system-boundaries.md",
+        "architecture/data-flow.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "api_enforcement"
+      ]
+    },
+    "build_ecommerce": {
+      "intent": "build_ecommerce",
+      "description": "Headless or Hydrogen commerce — Shopify, payments, fulfilment",
+      "requiredKnowledge": [
+        "ecommerce/shopify/positioning.dna.md",
+        "ecommerce/shopify-hydrogen/positioning.dna.md",
+        "payments/stripe/integration.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_auth_check"
+      ]
+    },
+    "implement_fintech": {
+      "intent": "implement_fintech",
+      "description": "Fintech onboarding — Plaid, KYC, PCI scope reduction",
+      "requiredKnowledge": [
+        "payments/plaid/positioning.dna.md",
+        "payments/onfido/positioning.dna.md",
+        "payments/overview/pci-scope.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md",
+        "documentation.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/compliance-control-matrix.md",
+        "amygdala/risks.md"
+      ],
+      "impressions": [
+        "security/data-protection.md",
+        "compliance/compliance-overview.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "compliance_matrix_exists"
+      ]
+    },
+    "build_ai_product": {
+      "intent": "build_ai_product",
+      "description": "LLM product — RAG, streaming UI, evals, guardrails",
+      "requiredKnowledge": [
+        "ai/vercel-ai-sdk/positioning.dna.md",
+        "ai/rag-patterns/positioning.dna.md",
+        "ai/prompt-injection-defense/positioning.dna.md",
+        "ai/ai-evals/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "ai.behaviour.md",
+        "security.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "amygdala/risks.md"
+      ],
+      "impressions": [
+        "architecture/data-flow.md",
+        "security/security-baseline.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_auth_check"
+      ]
+    },
+    "build_iot_platform": {
+      "intent": "build_iot_platform",
+      "description": "IoT telemetry — MQTT, AWS IoT Core, device provisioning",
+      "requiredKnowledge": [
+        "iot/mqtt/positioning.dna.md",
+        "iot/aws-iot-core/positioning.dna.md",
+        "iot/ota-firmware/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "security.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "parietalLobe/system-map.md"
+      ],
+      "impressions": [
+        "architecture/system-boundaries.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "api_enforcement"
+      ]
+    },
+    "implement_feature": {
+      "intent": "implement_feature",
+      "description": "Build a new product feature using the feature factory — intake, role-by-role agent loop, and completion gates",
+      "requiredKnowledge": [
+        "disciplines/solution-architecture/positioning.dna.md",
+        "disciplines/backend/positioning.dna.md",
+        "disciplines/frontend/positioning.dna.md",
+        "disciplines/qa/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "testing.behaviour.md",
+        "security.behaviour.md",
+        "ai.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/decisions.md",
+        "hippocampus/recent-changes.md",
+        "parietalLobe/system-map.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md",
+        "product/product-overview.md",
+        "qa/regression-risks.md"
+      ],
+      "validationChecks": [
+        "feature_request_exists",
+        "tests_pass",
+        "quality_gate_pass",
+        "no_unrelated_files_modified",
+        "permissions_correct",
+        "qa_checklist_completed"
+      ]
+    },
+    "review_architecture": {
+      "intent": "review_architecture",
+      "description": "Review or update solution architecture",
+      "requiredKnowledge": [
+        "disciplines/solution-architecture/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "documentation.behaviour.md"
+      ],
+      "cellularMemory": [
+        "parietalLobe/system-map.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md",
+        "architecture/system-boundaries.md",
+        "architecture/data-flow.md"
+      ],
+      "validationChecks": [
+        "architecture_documented"
+      ]
+    },
+    "investigate_bug": {
+      "intent": "investigate_bug",
+      "description": "Investigate a reported bug",
+      "requiredKnowledge": [
+        "disciplines/qa/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "temporalLobe/previous-solutions.md",
+        "amygdala/repeated-failures.md"
+      ],
+      "impressions": [
+        "qa/regression-risks.md"
+      ],
+      "validationChecks": [
+        "has_reproduction_steps"
+      ]
+    },
+    "create_pr": {
+      "intent": "create_pr",
+      "description": "Create a pull request for completed work",
+      "requiredKnowledge": [
+        "disciplines/solution-engineering/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "ai.behaviour.md",
+        "coding.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "hippocampus/recent-changes.md",
+        "prefrontalCortex/next-actions.md"
+      ],
+      "impressions": [
+        "release-notes/initial-release-notes.md"
+      ],
+      "validationChecks": [
+        "validate_behaviour",
+        "tests_pass",
+        "no_secrets_in_diff"
+      ]
+    },
+    "communicate_in_user_language": {
+      "intent": "communicate_in_user_language",
+      "description": "Understand user messages in their language with full sentiment and context; respond so the user clearly understands",
+      "requiredKnowledge": [
+        "languages/stem-bridge/positioning.dna.md",
+        "languages/stem-bridge/inbound.dna.md",
+        "languages/stem-bridge/outbound.dna.md",
+        "languages/stem-bridge/sentiment.dna.md"
+      ],
+      "requiredBehaviour": [
+        "ai.behaviour.md",
+        "documentation.behaviour.md"
+      ],
+      "cellularMemory": [
+        "hippocampus/project-summary.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "product/product-overview.md"
+      ],
+      "validationChecks": [
+        "user_language_matched",
+        "technical_terms_preserved"
+      ]
+    },
+    "implement_multilingual": {
+      "intent": "implement_multilingual",
+      "description": "Add i18n/l10n — locale routing, translation files, RTL support, and multilingual UI copy",
+      "requiredKnowledge": [
+        "languages/stem-bridge/positioning.dna.md",
+        "languages/stem-bridge/documentation.dna.md",
+        "frameworks/nextjs/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "coding.behaviour.md",
+        "documentation.behaviour.md",
+        "testing.behaviour.md"
+      ],
+      "cellularMemory": [
+        "occipitalLobe/ui-patterns.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md",
+        "product/product-overview.md"
+      ],
+      "validationChecks": [
+        "locale_files_exist",
+        "fallback_locale_defined",
+        "has_tests"
+      ]
+    },
+    "translate_documentation": {
+      "intent": "translate_documentation",
+      "description": "Translate or localise project documentation, shortcuts, guidelines, and knowledge for another language",
+      "requiredKnowledge": [
+        "languages/stem-bridge/documentation.dna.md",
+        "languages/stem-bridge/outbound.dna.md",
+        "disciplines/solution-engineering/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "documentation.behaviour.md",
+        "ai.behaviour.md"
+      ],
+      "cellularMemory": [
+        "hippocampus/project-summary.md"
+      ],
+      "impressions": [
+        "product/product-overview.md"
+      ],
+      "validationChecks": [
+        "glossary_consistent",
+        "technical_terms_preserved",
+        "impressions_current"
+      ]
+    }
+  }
+}

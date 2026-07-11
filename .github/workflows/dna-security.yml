@@ -1,0 +1,26 @@
+# DNA Security — OWASP ZAP baseline (optional)
+# Set repository variable STAGING_URL (e.g. https://staging.example.com) to enable DAST.
+
+name: DNA Security
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  zap-baseline:
+    name: OWASP ZAP baseline
+    if: ${{ vars.STAGING_URL != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ZAP baseline scan
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: ${{ vars.STAGING_URL }}
+          allow_issue_writing: false

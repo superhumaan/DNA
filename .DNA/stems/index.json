@@ -1,0 +1,686 @@
+{
+  "version": 1,
+  "catalogVersion": 4,
+  "source": "remote",
+  "syncedAt": "2026-07-11T10:34:58.386Z",
+  "count": 43,
+  "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
+  "packs": [
+    {
+      "id": "work-with-dna",
+      "name": "Work with DNA",
+      "category": "session",
+      "slash": "work-with-dna",
+      "path": ".DNA/stems/work-with-dna",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "load-context",
+      "name": "Load context",
+      "category": "session",
+      "slash": "load-context",
+      "path": ".DNA/stems/load-context",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "health-check",
+      "name": "Health check",
+      "category": "session",
+      "slash": "health-check",
+      "path": ".DNA/stems/health-check",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "analyze-project",
+      "name": "Analyze project",
+      "category": "analysis",
+      "slash": "analyze-project",
+      "path": ".DNA/stems/analyze-project",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "what-next-after-analyze",
+      "name": "What next after analyze?",
+      "category": "analysis",
+      "slash": "what-next",
+      "path": ".DNA/stems/what-next-after-analyze",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "scan-project",
+      "name": "Scan project",
+      "category": "analysis",
+      "slash": "scan-project",
+      "path": ".DNA/stems/scan-project",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "recommend-architecture",
+      "name": "Recommend architecture",
+      "category": "analysis",
+      "slash": "recommend-stack",
+      "path": ".DNA/stems/recommend-architecture",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "security-audit",
+      "name": "Security audit",
+      "category": "analysis",
+      "slash": "security-audit",
+      "path": ".DNA/stems/security-audit",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "ship-feature",
+      "name": "Ship a feature",
+      "category": "features",
+      "slash": "ship-feature",
+      "path": ".DNA/stems/ship-feature",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "plan-feature",
+      "name": "Plan feature",
+      "category": "features",
+      "slash": "plan-feature",
+      "path": ".DNA/stems/plan-feature",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "plan-rbac",
+      "name": "Plan RBAC",
+      "category": "features",
+      "slash": "plan-rbac",
+      "path": ".DNA/stems/plan-rbac",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "generate-feature",
+      "name": "Generate feature scaffold",
+      "category": "features",
+      "slash": "generate-feature",
+      "path": ".DNA/stems/generate-feature",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "quality-gate",
+      "name": "Quality gate",
+      "category": "quality",
+      "slash": "quality-gate",
+      "path": ".DNA/stems/quality-gate",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "quality-scan",
+      "name": "Quality scan",
+      "category": "quality",
+      "slash": "quality-scan",
+      "path": ".DNA/stems/quality-scan",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "pre-push-review",
+      "name": "Pre-push review",
+      "category": "quality",
+      "slash": "pre-push-review",
+      "path": ".DNA/stems/pre-push-review",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "plan-compliance",
+      "name": "Plan compliance",
+      "category": "compliance",
+      "slash": "plan-compliance",
+      "path": ".DNA/stems/plan-compliance",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "compliance-documents",
+      "name": "Compliance documents",
+      "category": "compliance",
+      "slash": "compliance-documents",
+      "path": ".DNA/stems/compliance-documents",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "gdpr-engineering",
+      "name": "GDPR engineering checklist",
+      "category": "compliance",
+      "slash": "gdpr-engineering",
+      "path": ".DNA/stems/gdpr-engineering",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "debug-issue",
+      "name": "Debug issue",
+      "category": "debug",
+      "slash": "debug-issue",
+      "path": ".DNA/stems/debug-issue",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "ai-repair",
+      "name": "AI repair",
+      "category": "debug",
+      "slash": "ai-repair",
+      "path": ".DNA/stems/ai-repair",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "runtime-investigate",
+      "name": "Runtime investigate",
+      "category": "debug",
+      "slash": "runtime-investigate",
+      "path": ".DNA/stems/runtime-investigate",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "sync-impressions",
+      "name": "Sync Impressions",
+      "category": "docs",
+      "slash": "sync-impressions",
+      "path": ".DNA/stems/sync-impressions",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "document-from-code",
+      "name": "Document from code",
+      "category": "docs",
+      "slash": "document-code",
+      "path": ".DNA/stems/document-from-code",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "plan-ivf",
+      "name": "Plan IVF",
+      "category": "ivf",
+      "slash": "plan-ivf",
+      "path": ".DNA/stems/plan-ivf",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "ivf-run",
+      "name": "Run IVF",
+      "category": "ivf",
+      "slash": "ivf-run",
+      "path": ".DNA/stems/ivf-run",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "ivf-shared-library",
+      "name": "IVF shared library",
+      "category": "ivf",
+      "slash": "ivf-shared-library",
+      "path": ".DNA/stems/ivf-shared-library",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "docker-build",
+      "name": "Docker build",
+      "category": "delivery",
+      "slash": "docker-build",
+      "path": ".DNA/stems/docker-build",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "github-push",
+      "name": "GitHub push",
+      "category": "delivery",
+      "slash": "github-push",
+      "path": ".DNA/stems/github-push",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "ci-install",
+      "name": "CI install",
+      "category": "delivery",
+      "slash": "ci-install",
+      "path": ".DNA/stems/ci-install",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "marketplace-search",
+      "name": "Marketplace search",
+      "category": "marketplace",
+      "slash": "marketplace-search",
+      "path": ".DNA/stems/marketplace-search",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "marketplace-install",
+      "name": "Marketplace install",
+      "category": "marketplace",
+      "slash": "marketplace-install",
+      "path": ".DNA/stems/marketplace-install",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "memory-export",
+      "name": "Memory export",
+      "category": "memory",
+      "slash": "memory-export",
+      "path": ".DNA/stems/memory-export",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "memory-import",
+      "name": "Memory import",
+      "category": "memory",
+      "slash": "memory-import",
+      "path": ".DNA/stems/memory-import",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "role-product-analyst",
+      "name": "Product Analyst",
+      "category": "agent-loop",
+      "slash": "product-analyst",
+      "path": ".DNA/stems/role-product-analyst",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "role-solution-architect",
+      "name": "Solution Architect",
+      "category": "agent-loop",
+      "slash": "solution-architect",
+      "path": ".DNA/stems/role-solution-architect",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "role-backend-engineer",
+      "name": "Backend Engineer",
+      "category": "agent-loop",
+      "slash": "backend-engineer",
+      "path": ".DNA/stems/role-backend-engineer",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "role-frontend-engineer",
+      "name": "Frontend Engineer",
+      "category": "agent-loop",
+      "slash": "frontend-engineer",
+      "path": ".DNA/stems/role-frontend-engineer",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "role-ux-reviewer",
+      "name": "UX Reviewer",
+      "category": "agent-loop",
+      "slash": "ux-reviewer",
+      "path": ".DNA/stems/role-ux-reviewer",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "role-qa-engineer",
+      "name": "QA Engineer",
+      "category": "agent-loop",
+      "slash": "qa-engineer",
+      "path": ".DNA/stems/role-qa-engineer",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "role-code-quality",
+      "name": "Code Quality Analyst",
+      "category": "agent-loop",
+      "slash": "code-quality",
+      "path": ".DNA/stems/role-code-quality",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "role-refactor-reviewer",
+      "name": "Refactor Reviewer",
+      "category": "agent-loop",
+      "slash": "refactor-reviewer",
+      "path": ".DNA/stems/role-refactor-reviewer",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "role-final-release",
+      "name": "Final Release Reviewer",
+      "category": "agent-loop",
+      "slash": "final-release",
+      "path": ".DNA/stems/role-final-release",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md"
+      ]
+    },
+    {
+      "id": "agent-loop-full",
+      "name": "Run full agent loop",
+      "category": "agent-loop",
+      "slash": "agent-loop",
+      "path": ".DNA/stems/agent-loop-full",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+#!/bin/sh
+# DNA pre-push hook — runs quality report on every git push (installed by dna init)
+# Mode: advisory (never blocks push)
+
+echo "🧬 DNA pre-push: running quality report..."
+
+npx --yes @superhumaan/dna-by-humaan quality report || true
+
+echo "✓ DNA pre-push complete — pushing"

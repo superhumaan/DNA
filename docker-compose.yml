@@ -1,0 +1,13 @@
+# DNA-generated — local smoke test after every feature
+services:
+  app:
+    build: .
+    image: dna-app:local
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    # Override with .env for secrets — never commit real values
+    env_file:
+      - path: .env
+        required: false

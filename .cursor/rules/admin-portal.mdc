@@ -1,0 +1,43 @@
+---
+description: Admin / backoffice portal — new tab, RBAC-wrapped link and routes
+alwaysApply: true
+---
+
+# Admin / Backoffice Portal
+
+_Auto-applies when the user mentions admin, backoffice, admin panel, or control panel._
+
+Project: **dna-by-humaan**
+
+## Trigger
+
+User says admin, backoffice, back office, admin portal, admin dashboard, or similar → **implement or extend the admin portal using this pattern**. Do not embed admin screens in the main app nav tree.
+
+## Default shape
+
+| Layer | Rule |
+|-------|------|
+| **Path** | `/admin` (dedicated prefix, not mixed with user routes) |
+| **Entry** | Link from main app opens admin in a **new tab** (`target="_blank"` + `rel="noopener noreferrer"`) |
+| **Link visibility** | Wrap in permission check — **no link** if user lacks admin access |
+| **Route guard** | Client blocks `/admin` for unauthorized users (redirect or 403) |
+| **API** | All admin endpoints behind `requireAdmin` middleware — never UI-only security |
+
+## Implementation checklist
+
+1. `AdminPortalLink` (or equivalent) — returns `null` without `admin` capability
+2. Admin shell at `/admin` with its own layout and lazy routes
+3. `AdminRouteGuard` / `ProtectedAdminRoute` on every admin page
+4. Server: `requireAdmin` on `/api/**/admin/**`
+5. Tests: user without admin cannot see link, cannot load route, API returns 403
+
+## Do not
+
+- Show a disabled admin link to non-admins
+- Rely on hiding buttons while leaving routes public
+- Open admin in the same tab unless the user explicitly asks otherwise
+- Skip API enforcement because the UI is "hidden"
+
+## Reference
+
+`.DNA/knowledge/platforms/dna/admin-portal.dna.md`, `.DNA/knowledge/platforms/dna/rbac-patterns.dna.md`
