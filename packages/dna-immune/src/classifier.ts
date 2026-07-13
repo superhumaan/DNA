@@ -49,9 +49,10 @@ function determineSeverity(
   event: RuntimeEvent,
   category: (typeof ISSUE_CATEGORIES)[number],
   immuneConfig: ImmuneConfig,
+  repeatCount?: number,
 ): (typeof SEVERITY_LEVELS)[number] {
   for (const rule of immuneConfig.rules) {
-    if (ruleMatches(event, rule)) {
+    if (ruleMatches(event, rule, repeatCount)) {
       return rule.severity;
     }
   }
@@ -60,6 +61,7 @@ function determineSeverity(
     return "critical";
   }
   if (event.type === "repeated_error") return "high";
+  if (event.statusCode && event.statusCode >= 502) return "high";
   if (event.statusCode && event.statusCode >= 500) return "high";
   if (event.type === "slow_request" && (event.durationMs ?? 0) > 5000) return "high";
   if (event.type === "slow_request") return "medium";
@@ -70,7 +72,11 @@ function determineSeverity(
   return "low";
 }
 
-function ruleMatches(event: RuntimeEvent, rule: ImmuneConfig["rules"][number]): boolean {
+function ruleMatches(
+  event: RuntimeEvent,
+  rule: ImmuneConfig["rules"][number],
+  repeatCount = 0,
+): boolean {
   const cond = rule.condition;
   if (cond.includes("uncaught_exception") && event.type === "uncaught_exception") return true;
   if (cond.includes("memory_spike") && event.type === "memory_spike") return true;
@@ -78,7 +84,24 @@ function ruleMatches(event: RuntimeEvent, rule: ImmuneConfig["rules"][number]): 
     const threshold = parseInt(cond.match(/>\s*(\d+)/)?.[1] ?? "3000", 10);
     return (event.durationMs ?? 0) > threshold;
   }
+  if (cond.includes("count >=")) {
+    const threshold = parseInt(cond.match(/count\s*>=\s*(\d+)/)?.[1] ?? "3", 10);
+    if (repeatCount < threshold) return false;
+    if (cond.includes("status_code == 500") && event.statusCode && event.statusCode >= 500) {
+      return true;
+    }
+    if (
+      cond.includes("[401, 403]") &&
+      event.statusCode &&
+      [401, 403].includes(event.statusCode)
+    ) {
+      return true;
+    }
+  }
   if (cond.includes("status_code == 500") && event.statusCode === 500) return true;
+  if (cond.includes("status_code >= 502") && event.statusCode && event.statusCode >= 502) {
+    return true;
+  }
   if (cond.includes("[401, 403]") && event.statusCode && [401, 403].includes(event.statusCode)) {
     return true;
   }
@@ -103,7 +126,7 @@ export async function classifyIssue(
 ): Promise<ClassifiedIssue> {
   const immuneConfig = await getImmuneConfig(options.dnaRoot);
   const { category, discipline } = matchCategory(event.message, event.type, immuneConfig.classifiers);
-  const severity = determineSeverity(event, category, immuneConfig);
+  const severity = determineSeverity(event, category, immuneConfig, options.repeatCount);
   const confidence = category === "unknown" ? 0.4 : 0.75;
 
   const behaviourViolation =
@@ -187,6 +210,12 @@ function inferSuspectedCause(
   event: RuntimeEvent,
   category: (typeof ISSUE_CATEGORIES)[number],
 ): string {
+  if (category === "deployment") {
+    if (event.statusCode && event.statusCode >= 502) {
+      return "Origin server unreachable, crashed, or misconfigured — gateway/proxy returned bad response";
+    }
+    return "Deployment, hosting, or infrastructure misconfiguration";
+  }
   if (category === "database") return "Database connection or query failure";
   if (category === "auth") return "Authentication or authorization misconfiguration";
   if (category === "performance") return `Slow response (${event.durationMs ?? "?"}ms)`;
@@ -201,19 +230,29 @@ function inferBehaviour(category: (typeof ISSUE_CATEGORIES)[number]): string[] {
     performance: ["runtime.behaviour.md"],
     auth: ["security.behaviour.md", "runtime.behaviour.md"],
     database: ["coding.behaviour.md", "runtime.behaviour.md"],
+    deployment: ["runtime.behaviour.md", "reasoning.behaviour.md"],
   };
-  return map[category] ?? ["runtime.behaviour.md"];
+  return map[category] ?? ["runtime.behaviour.md", "reasoning.behaviour.md"];
 }
 
 function inferMemory(category: (typeof ISSUE_CATEGORIES)[number], repeated?: boolean): string[] {
   const memory = ["hippocampus/recent-changes.md"];
   if (repeated) memory.push("amygdala/repeated-failures.md");
+  if (category === "deployment") memory.push("temporalLobe/previous-solutions.md");
   if (category === "auth") memory.push("amygdala/risks.md");
   if (category === "database") memory.push("parietalLobe/system-map.md");
   return memory;
 }
 
 function inferSuggestedFix(category: (typeof ISSUE_CATEGORIES)[number]): string {
+  if (category === "deployment") {
+    return [
+      "Verify origin process is running and listening on the correct port",
+      "Add or fix /health endpoint and container health checks",
+      "Check deploy logs, env vars, upstream URL, and timeout settings",
+      "Confirm Cloudflare/proxy points to a live origin — 502 means gateway cannot reach host",
+    ].join("; ");
+  }
   if (category === "database") return "Check database connection string and network access";
   if (category === "auth") return "Review authentication middleware and token validation";
   if (category === "performance") return "Profile endpoint and add caching or query optimisation";

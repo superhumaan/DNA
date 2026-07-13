@@ -25,6 +25,17 @@ import {
 export type { DnaRuntimeConfig } from "./core/engine.js";
 export { redactSensitive } from "./core/redact.js";
 export { processRuntimeEvent } from "./pipeline.js";
+export { issueFingerprint, fingerprintLabel } from "./fingerprint.js";
+export { runForceRepair, type ForceRepairResult } from "./force-repair.js";
+export {
+  readFingerprintRecords,
+  getBlockerFingerprints,
+  upsertFingerprintRecord,
+} from "./storage.js";
+export {
+  readOpenBlockers,
+  updatePreviousSolutionsMemory,
+} from "./memory-updates.js";
 export { appendJsonl, readJsonl } from "./persistence.js";
 export {
   createNestInterceptor,

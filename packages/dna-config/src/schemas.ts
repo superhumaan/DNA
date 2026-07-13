@@ -131,10 +131,24 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     if (aiObj.data.repair !== undefined) {
       const repairObj = expectObject(aiObj.data.repair, "ai.repair");
       if (!repairObj.success) return repairObj;
+      const minRepeatForRepair = repairObj.data.minRepeatForRepair === undefined
+        ? ok(3)
+        : expectNumber(repairObj.data.minRepeatForRepair, "ai.repair.minRepeatForRepair");
+      if (!minRepeatForRepair.success) return minRepeatForRepair;
+      const minRepeatForBlocker = repairObj.data.minRepeatForBlocker === undefined
+        ? ok(5)
+        : expectNumber(repairObj.data.minRepeatForBlocker, "ai.repair.minRepeatForBlocker");
+      if (!minRepeatForBlocker.success) return minRepeatForBlocker;
       repair = {
         enabled: withDefault(optionalBoolean(repairObj.data.enabled), true),
         autoPr: withDefault(optionalBoolean(repairObj.data.autoPr), true),
         requireReview: withDefault(optionalBoolean(repairObj.data.requireReview), true),
+        aggressive: withDefault(optionalBoolean(repairObj.data.aggressive), true),
+        minRepeatForRepair: minRepeatForRepair.data,
+        minRepeatForBlocker: minRepeatForBlocker.data,
+        forceAgentLoop: withDefault(optionalBoolean(repairObj.data.forceAgentLoop), true),
+        dedupeIssues: withDefault(optionalBoolean(repairObj.data.dedupeIssues), true),
+        retryOpenRepairs: withDefault(optionalBoolean(repairObj.data.retryOpenRepairs), true),
       };
     }
     ai = {
@@ -684,11 +698,7 @@ export interface DnaConfig {
     provider: (typeof AI_PROVIDERS)[number];
     model?: string;
     endpoint?: string;
-    repair?: {
-      enabled: boolean;
-      autoPr: boolean;
-      requireReview: boolean;
-    };
+    repair?: AiRepairConfig;
   };
   runtime?: {
     enabled: boolean;
@@ -888,6 +898,37 @@ export interface RuntimeEvent {
   durationMs?: number;
   environment?: string;
   release?: string;
+  requestId?: string;
+  responseBody?: string;
+  upstream?: string;
+  fingerprint?: string;
+}
+
+export interface AiRepairConfig {
+  enabled: boolean;
+  autoPr: boolean;
+  requireReview: boolean;
+  aggressive?: boolean;
+  minRepeatForRepair?: number;
+  minRepeatForBlocker?: number;
+  forceAgentLoop?: boolean;
+  dedupeIssues?: boolean;
+  retryOpenRepairs?: boolean;
+}
+
+export interface FingerprintRecord {
+  fingerprint: string;
+  repeatCount: number;
+  firstSeen: string;
+  lastSeen: string;
+  repairAttempts: number;
+  repairStatus: "pending" | "attempted" | "failed" | "resolved";
+  githubIssueNumber?: number;
+  endpoint?: string;
+  statusCode?: number;
+  message: string;
+  category: string;
+  isBlocker: boolean;
 }
 
 export interface ClassifiedIssue {
@@ -910,6 +951,30 @@ export interface ClassifiedIssue {
   reproductionNotes?: string;
   endpoint?: string;
   stackTraceSummary?: string;
+  fingerprint?: string;
+  repeatCount?: number;
+  firstSeen?: string;
+  lastSeen?: string;
+  repairAttempts?: number;
+  repairStatus?: FingerprintRecord["repairStatus"];
+  isBlocker?: boolean;
+  githubIssueNumber?: number;
+}
+
+/** Resolved repair config with all aggressive-loop defaults applied. */
+export function resolveRepairConfig(ai?: DnaConfig["ai"]): Required<AiRepairConfig> {
+  const repair = ai?.repair;
+  return {
+    enabled: ai?.enabled !== false && repair?.enabled !== false,
+    autoPr: repair?.autoPr !== false,
+    requireReview: repair?.requireReview !== false,
+    aggressive: repair?.aggressive !== false,
+    minRepeatForRepair: repair?.minRepeatForRepair ?? 3,
+    minRepeatForBlocker: repair?.minRepeatForBlocker ?? 5,
+    forceAgentLoop: repair?.forceAgentLoop !== false,
+    dedupeIssues: repair?.dedupeIssues !== false,
+    retryOpenRepairs: repair?.retryOpenRepairs !== false,
+  };
 }
 
 export interface GitHubIssuePayload {
@@ -925,6 +990,8 @@ export interface AiRepairPlan {
     file: string;
     description: string;
     patch?: string;
+    search?: string;
+    replace?: string;
   }>;
   branchName: string;
   prTitle: string;

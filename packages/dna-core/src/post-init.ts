@@ -73,7 +73,17 @@ export async function runPostInit(
   config.ai = {
     enabled: answers.configureAi,
     provider: "mock",
-    repair: { enabled: true, autoPr: true, requireReview: true },
+    repair: {
+      enabled: true,
+      autoPr: true,
+      requireReview: true,
+      aggressive: true,
+      minRepeatForRepair: 3,
+      minRepeatForBlocker: 5,
+      forceAgentLoop: true,
+      dedupeIssues: true,
+      retryOpenRepairs: true,
+    },
   };
   config.github = { enabled: answers.configureGithub };
   const scan = await scanProject(root);

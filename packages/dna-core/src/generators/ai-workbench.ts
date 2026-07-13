@@ -17,7 +17,7 @@ import {
   DNA_ALWAYS_ON_SECTION,
   DNA_INTENT_ROUTING_SECTION,
 } from "./dna-default-on.js";
-import { DNA_CRITICAL_THINKING_SECTION } from "./dna-reasoning.js";
+import { DNA_CRITICAL_THINKING_SECTION, DNA_AGGRESSIVE_REPAIR_SECTION } from "./dna-reasoning.js";
 
 /** Core workbench paths (stem packs add `.DNA/stems/` and slash commands separately). */
 export const AI_WORKBENCH_CORE_PATHS = [
@@ -52,6 +52,8 @@ You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The
 ${DNA_ALWAYS_ON_SECTION}
 
 ${DNA_CRITICAL_THINKING_SECTION}
+
+${DNA_AGGRESSIVE_REPAIR_SECTION}
 
 ## How the user works (never break this)
 

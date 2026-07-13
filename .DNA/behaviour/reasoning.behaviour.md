@@ -149,6 +149,11 @@ Apply the technique that matches the problem shape:
 
 ## When to escalate
 
+**Automatic escalation (no user prompt needed):**
+- Open entry in `amygdala/blockers.md` → run aggressive repair loop immediately
+- Same fingerprint repeatCount ≥ 5 → treat as production blocker
+- Previous repair produced zero file changes → retry with `npx dna ai force-repair`
+
 Ask the user **one focused question** when:
 - Reproduction blocked (access, data, env)
 - Competing hypotheses remain after 2–3 experiments

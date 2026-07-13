@@ -28,6 +28,8 @@ export const DEFAULT_CLASSIFIERS: ImmuneClassifier[] = [
   { pattern: "Cannot find module|MODULE_NOT_FOUND", category: "dependency", discipline: "devops" },
   { pattern: "validation|ZodError|invalid", category: "runtime_error", discipline: "backend" },
   { pattern: "tenant|multi-tenant", category: "multi_tenancy", discipline: "backend" },
+  { pattern: "HTTP 502|HTTP 503|HTTP 504|Bad gateway|bad gateway|502|503|504", category: "deployment", discipline: "devops" },
+  { pattern: "ECONNRESET|upstream|gateway", category: "deployment", discipline: "devops" },
 ];
 
 export async function loadImmuneConfig(dnaRoot: string): Promise<ImmuneConfig> {

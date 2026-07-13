@@ -5,6 +5,12 @@ export function generateImmuneSystem(): Record<string, string> {
         version: "0.1.0",
         rules: [
           {
+            id: "gateway_error",
+            condition: "status_code >= 502 && count >= 3 in 5m",
+            category: "deployment",
+            severity: "high",
+          },
+          {
             id: "repeated_500",
             condition: "status_code == 500 && count >= 3 in 5m",
             category: "runtime_error",
@@ -61,6 +67,12 @@ export function generateImmuneSystem(): Record<string, string> {
           { pattern: "timeout|slow", category: "performance", discipline: "backend" },
           { pattern: "Cannot find module", category: "dependency", discipline: "devops" },
           { pattern: "validation|ZodError", category: "runtime_error", discipline: "backend" },
+          {
+            pattern: "HTTP 502|HTTP 503|HTTP 504|Bad gateway|bad gateway",
+            category: "deployment",
+            discipline: "devops",
+          },
+          { pattern: "ECONNRESET|upstream|gateway", category: "deployment", discipline: "devops" },
         ],
       },
       null,

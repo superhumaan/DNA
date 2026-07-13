@@ -7,11 +7,14 @@ export function createExpressMiddleware(engine: RuntimeEngine) {
     const start = Date.now();
 
     res.on("finish", () => {
+      const requestId = (req.headers["x-request-id"] as string | undefined) ?? undefined;
       observeRequest(engine, {
         endpoint: req.path,
         method: req.method,
         statusCode: res.statusCode,
         durationMs: Date.now() - start,
+        requestId,
+        upstream: req.headers["x-upstream"] as string | undefined,
       });
     });
 

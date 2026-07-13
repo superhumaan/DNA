@@ -4,6 +4,26 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **Aggressive Repair Loop (ARL)** — fingerprinted runtime errors, structured CellularMemory updates (`repeated-failures`, `blockers`, `previous-solutions`), GitHub issue dedup by fingerprint, structured AI patch parsing, gateway 502/503/504 classifiers, count-based immune escalation, and `dna ai force-repair` for open blockers.
+- **`ai.repair.aggressive`** config (default on) — `minRepeatForRepair`, `minRepeatForBlocker`, `forceAgentLoop`, `dedupeIssues`, `retryOpenRepairs`.
+
+### Changed
+
+- Workbench rules and `reasoning.behaviour.md` — mandatory repair loop when blockers exist; agents must load memory before fixing recurring errors.
+
+## [0.6.3] - 2026-07-13
+
+### Changed
+
+- **Lab UI v2** — Sentry-inspired observability portal: dark sidebar navigation, 24h error volume chart, grouped issues with detail pages and stack traces, slow endpoint performance table, release history, and quality trend chart.
+- **Lab UI v3** — Soli admin shell (248px white sidebar, violet active states, `settings-shell` layout) and DNA-Web logo (`fa-duotone fa-dna` + “by Humaan”). Removed production observability hero banner.
+
+### Fixed
+
+- **Lab CSP** — explicit document CSP on `/labs` HTML; auto-wire mounts after `configureExpress` / helmet.
+
 ## [0.6.2] - 2026-07-13
 
 ### Added
@@ -18,6 +38,8 @@ All notable changes to DNA are documented here.
 - **Lab on init** — scaffolding runs even when runtime is disabled; no longer gated behind `installRuntime`.
 - **CJS Express** — `backend/server.js` with `require('express')` gets `require()`-style Lab import.
 - **react-vite-app example** — Vite proxies `/labs` to the Express example on port 3456.
+- **Lab CSP** — `/labs` HTML now sets an explicit document CSP (`connect-src 'self'`) so host helmet API `default-src 'none'` no longer blocks `/api/dna/labs/bootstrap` fetches. Auto-wire mounts Lab after `configureExpress` / helmet when present.
+- **Lab UI v2** — Sentry-inspired observability portal: dark sidebar, error volume chart, grouped issues with detail view + stack traces, performance table, release tracking, quality trend chart.
 
 ## [0.6.1] - 2026-07-13
 

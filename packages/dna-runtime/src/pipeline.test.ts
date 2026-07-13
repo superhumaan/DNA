@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { mkdir, writeFile, rm } from "node:fs/promises";
+import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 import { processRuntimeEvent } from "../src/pipeline.js";
-import { readRuntimeRecords } from "../src/storage.js";
+import { readFingerprintRecords } from "../src/storage.js";
 import type { RuntimeEvent } from "@superhumaan/dna-config";
 
 async function setupProject(): Promise<string> {
@@ -14,6 +14,7 @@ async function setupProject(): Promise<string> {
   await mkdir(join(root, ".DNA", "immuneSystem"), { recursive: true });
   await mkdir(join(root, ".DNA", "behaviour"), { recursive: true });
   await mkdir(join(root, ".DNA", "CellularMemory", "amygdala"), { recursive: true });
+  await mkdir(join(root, ".DNA", "CellularMemory", "temporalLobe"), { recursive: true });
 
   await writeFile(
     join(root, ".DNA", "config.dna.json"),
@@ -33,23 +34,33 @@ async function setupProject(): Promise<string> {
       platformFeatures: [],
       github: { enabled: false },
       runtime: { enabled: true, storage: "sqlite" },
+      ai: {
+        enabled: true,
+        provider: "mock",
+        repair: { enabled: true, aggressive: true, minRepeatForBlocker: 3 },
+      },
     }),
   );
 
   await writeFile(join(root, ".DNA", "immuneSystem", "rules.json"), '{"rules":[]}');
   await writeFile(
     join(root, ".DNA", "immuneSystem", "issue-classifier.json"),
-    '{"classifiers":[{"pattern":"JWT","category":"auth","discipline":"security"}]}',
+    '{"classifiers":[{"pattern":"HTTP 502","category":"deployment","discipline":"devops"}]}',
   );
   await writeFile(
     join(root, ".DNA", "immuneSystem", "severity-model.json"),
-    '{"levels":{"critical":{"autoIssue":true}}}',
+    '{"levels":{"critical":{"autoIssue":true},"high":{"autoIssue":true}}}',
   );
   await writeFile(
     join(root, ".DNA", "behaviour", "runtime.behaviour.md"),
     "# Runtime\nAll production errors must be captured.",
   );
   await writeFile(join(root, ".DNA", "CellularMemory", "amygdala", "repeated-failures.md"), "# Failures\n");
+  await writeFile(join(root, ".DNA", "CellularMemory", "amygdala", "blockers.md"), "# Blockers\n");
+  await writeFile(
+    join(root, ".DNA", "CellularMemory", "temporalLobe", "previous-solutions.md"),
+    "# Solutions\n",
+  );
 
   return root;
 }
@@ -79,4 +90,50 @@ describe("runtime pipeline", () => {
 
     await rm(root, { recursive: true, force: true });
   });
+
+  it("escalates repeated 502 errors to blocker with fingerprint", async () => {
+    const root = await setupProject();
+    const tracker = new (await import("@superhumaan/dna-immune")).EventTracker();
+
+    for (let i = 0; i < 3; i++) {
+      const event: RuntimeEvent = {
+        id: `e${i}`,
+        timestamp: new Date().toISOString(),
+        type: "request_error",
+        message: "HTTP 502",
+        endpoint: "/",
+        statusCode: 502,
+      };
+
+      const result = await processRuntimeEvent(event, {
+        projectRoot: root,
+        dnaRoot: join(root, ".DNA"),
+        tracker,
+      });
+
+      if (i === 2) {
+        expect(result.fingerprint).toBeTruthy();
+        expect(result.issue.category).toBe("deployment");
+        expect(result.isBlocker).toBe(true);
+      }
+    }
+
+    const fingerprints = await readFingerprintRecords(root);
+    expect(fingerprints.length).toBe(1);
+    expect(fingerprints[0]?.repeatCount).toBe(3);
+    expect(fingerprints[0]?.isBlocker).toBe(true);
+
+    const blockers = await readFile(
+      join(root, ".DNA", "CellularMemory", "amygdala", "blockers.md"),
+      "utf-8",
+    );
+    expect(blockers).toContain("BLOCKER");
+
+    await rm(root, { recursive: true, force: true });
+  });
 });
+
+async function readRuntimeRecords<T>(root: string, table: "events" | "issues"): Promise<T[]> {
+  const { readRuntimeRecords: read } = await import("../src/storage.js");
+  return read<T>(root, table);
+}

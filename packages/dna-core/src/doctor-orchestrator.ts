@@ -118,7 +118,17 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
       ...config.ai,
       enabled: config.ai?.enabled ?? true,
       provider: config.ai?.provider ?? "mock",
-      repair: { enabled: true, autoPr: true, requireReview: true },
+      repair: {
+        enabled: true,
+        autoPr: true,
+        requireReview: true,
+        aggressive: true,
+        minRepeatForRepair: 3,
+        minRepeatForBlocker: 5,
+        forceAgentLoop: true,
+        dedupeIssues: true,
+        retryOpenRepairs: true,
+      },
     };
     changed = true;
     actions.push("AI repair workflow enabled");
