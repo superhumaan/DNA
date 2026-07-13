@@ -20,7 +20,7 @@ import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { writeFileEnsured, writeJsonFile, fileExists, ensureDir } from "./fs.js";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
 import { ensureLabAssets as ensureLabStore } from "./lab/server.js";
-import { wireLabMiddleware } from "./generators/wire-lab.js";
+import { wireLabStack } from "./generators/wire-lab-stack.js";
 import { detectGitHubRemote, resolveGitHubToken, loginWithWebFlow } from "@superhumaan/dna-github";
 import { analyzeProject } from "./ivf/analyze.js";
 import { documentFromCode } from "./ivf/document.js";
@@ -334,7 +334,7 @@ async function ensureLabScaffold(root: string, config: DnaConfig): Promise<strin
     actions.push(".DNA/config.dna.json (lab enabled)");
   }
 
-  const wire = await wireLabMiddleware({ root, config });
+  const wire = await wireLabStack({ root, config });
   for (const file of wire.wired) {
     actions.push(`lab auto-wired: ${file}`);
   }

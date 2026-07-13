@@ -16,8 +16,17 @@ export interface WireLabResult {
   skipped: string[];
 }
 
-const LAB_IMPORT = `import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";
-import { createLabFastifyPlugin } from "@superhumaan/dna-by-humaan/lab";`;
+const LAB_IMPORT_EXPRESS = `import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";`;
+const LAB_IMPORT_FASTIFY = `import { createLabFastifyPlugin } from "@superhumaan/dna-by-humaan/lab";`;
+const LAB_REQUIRE_EXPRESS = `const { createLabMiddleware } = require("@superhumaan/dna-by-humaan/lab");`;
+
+function labExpressImport(content: string): string {
+  const usesEsmImport = /^import\s+/m.test(content);
+  if (!usesEsmImport && /require\s*\(\s*['"]express['"]\s*\)/.test(content)) {
+    return LAB_REQUIRE_EXPRESS;
+  }
+  return LAB_IMPORT_EXPRESS;
+}
 
 function hasLabWired(content: string): boolean {
   return (
@@ -45,11 +54,11 @@ export function wireExpressLabContent(content: string, projectId: string): strin
   if (!appMatch) return null;
 
   const appVar = appMatch[2];
-  let result = insertAfterImports(content, LAB_IMPORT);
+  let result = insertAfterImports(content, labExpressImport(content));
 
   if (!result.includes("createLabMiddleware")) return null;
 
-  const mount = `${appVar}.use(createLabMiddleware({ root: process.cwd(), config: { projectId: "${projectId}", lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true } } }));\n`;
+  const mount = `${appVar}.use(createLabMiddleware({ root: process.cwd(), config: { projectId: "${projectId}" } }));\n`;
 
   const expressLine = result.match(new RegExp(`(const|let|var)\\s+${appVar}\\s*=\\s*express\\s*\\(\\s*\\)`));
   if (!expressLine?.index) return null;
@@ -72,15 +81,15 @@ export function wireFastifyLabContent(content: string, projectId: string): strin
   if (!instanceMatch) return null;
 
   const instanceVar = instanceMatch[2];
-  let result = insertAfterImports(content, LAB_IMPORT);
+  let result = insertAfterImports(content, LAB_IMPORT_FASTIFY);
   const line = result.match(
     new RegExp(`(const|let|var)\\s+${instanceVar}\\s*=\\s*(Fastify|fastify)\\s*\\(`),
   );
   if (!line?.index) return null;
 
   const lineEnd = result.indexOf("\n", line.index) + 1;
-  const mount = `void ${instanceVar}.register(createLabFastifyPlugin({ root: process.cwd(), config: { projectId: "${projectId}", lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true } } }));\n`;
-  if (!result.includes("createLabMiddleware({")) {
+  const mount = `void ${instanceVar}.register(createLabFastifyPlugin({ root: process.cwd(), config: { projectId: "${projectId}" } }));\n`;
+  if (!result.includes("createLabFastifyPlugin({")) {
     result = result.slice(0, lineEnd) + mount + result.slice(lineEnd);
   }
 

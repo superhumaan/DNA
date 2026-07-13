@@ -130,7 +130,7 @@ import {
   ensureLabAssets,
   runRegisterLab,
   runRegisterLabWithCallback,
-  wireLabMiddleware,
+  wireLabStack,
   formatInitCompleteMessage,
   formatInitContextBanner,
   detectProjectContext,
@@ -1428,6 +1428,15 @@ program
       const stems = injection.written.filter((p: string) => p.startsWith(".DNA/stems/"));
       console.log(`\n✓ AI injection refreshed (${injection.written.length} files${stems.length ? ", stems synced" : ""})`);
       console.log(formatAiInjectionReport(injection.report));
+
+      if (config.lab?.enabled !== false) {
+        await ensureLabAssets(root);
+        const labWire = await wireLabStack({ root, config });
+        if (labWire.wired.length > 0) {
+          console.log("\n✓ DNA Lab wiring refreshed");
+          for (const item of labWire.wired) console.log(`  · ${item}`);
+        }
+      }
       const indexPath = join(root, ".DNA", "stems", "index.json");
       try {
         const raw = await readFile(indexPath, "utf-8");
@@ -2233,7 +2242,7 @@ lab
       lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true },
     };
     const created = await ensureLabAssets(root);
-    const wire = await wireLabMiddleware({ root, config: config as Awaited<ReturnType<typeof loadDnaConfig>> & object });
+    const wire = await wireLabStack({ root, config: config as Awaited<ReturnType<typeof loadDnaConfig>> & object });
     console.log("DNA Lab install");
     console.log("================");
     for (const item of created) console.log(`  ✓ ${item}`);

@@ -97,6 +97,7 @@ export * from "./lab/pairing.js";
 export * from "./lab/types.js";
 export * from "./lab/fastify.js";
 export * from "./generators/wire-lab.js";
+export * from "./generators/wire-lab-stack.js";
 export * from "./platform/codegen/audit-logging.js";
 export * from "./platform/codegen/platform-features.js";
 export * from "./stack/hosting.js";

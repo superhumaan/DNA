@@ -84,11 +84,16 @@ GIT_SHA=               # Release tracking for Lab (v2 source maps)
 `;
 
 export const LAB_INSTALL_SNIPPET = `// DNA Lab — production observability at /labs
+// Auto-wired by dna init, dna doctor, dna update, and dna lab install:
+//   • Express/Fastify: createLabMiddleware on your API server
+//   • Vite dev: proxy /labs + /api/dna/labs to the same target as /api
+//   • Vercel: rewrites /labs → API origin before SPA fallback
 import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";
 
-// Express (mount after body parser, before routes):
+// Express (mount early, before SPA fallback):
 // app.use(createLabMiddleware({ root: process.cwd() }));
 
-// Local: http://localhost:PORT/labs — no login
-// Production: https://your-app.com/labs — sign in after npx dna register lab
+// Local dev: http://localhost:<vite-port>/labs — proxied to API (no login)
+// Standalone: npx dna lab serve --port 3200
+// Production: https://your-app.com/labs — pair with npx dna register lab
 `;

@@ -4,6 +4,21 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-07-13
+
+### Added
+
+- **Lab dev + production wiring** — `dna doctor`, `dna update`, and `dna lab install` now auto-wire:
+  - Express/Fastify `createLabMiddleware` on the API server
+  - Vite dev proxy for `/labs` and `/api/dna/labs` (same backend as `/api`)
+  - Vercel rewrites for split frontend/API deploys
+
+### Fixed
+
+- **Lab on init** — scaffolding runs even when runtime is disabled; no longer gated behind `installRuntime`.
+- **CJS Express** — `backend/server.js` with `require('express')` gets `require()`-style Lab import.
+- **react-vite-app example** — Vite proxies `/labs` to the Express example on port 3456.
+
 ## [0.6.1] - 2026-07-13
 
 ### Fixed
