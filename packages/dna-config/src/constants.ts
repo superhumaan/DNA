@@ -37,6 +37,7 @@ export const COMPANY_NAME = "Humaan by Superlite";
 export const DNA_CLI_PACKAGE = "@superhumaan/dna-by-humaan";
 
 export const BEHAVIOUR_FILES = [
+  "reasoning.behaviour.md",
   "ai.behaviour.md",
   "coding.behaviour.md",
   "testing.behaviour.md",

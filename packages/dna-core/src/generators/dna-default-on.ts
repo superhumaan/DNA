@@ -1,4 +1,7 @@
 /** Shared copy: DNA is the default co-pilot — never wait for user opt-in. */
+import { DNA_CRITICAL_THINKING_SECTION } from "./dna-reasoning.js";
+
+export { DNA_CRITICAL_THINKING_SECTION };
 export const DNA_ALWAYS_ON_SECTION = `## DNA is always on (never opt-in)
 
 This project has DNA installed. **Every session, every message** — DNA is your default co-pilot.
@@ -21,7 +24,7 @@ export const DNA_INTENT_ROUTING_SECTION = `## Intent routing (every message)
 | **Compliance / legal** | GDPR, HIPAA, PDPA, SOC2, legal advise, regulated data | \`npx dna plan compliance\` or \`legal advise\` — plan before code |
 | **Ship / done** | push, ship, release, merge, deploy | Quality PASS → \`npx dna docker build\` → \`npx dna github push\` |
 | **Q&A / explain** | what does X do, how does Y work, explain this file | Load DNA context; answer directly — **no** 9-role loop |
-| **Debug** | error, bug, crash, production issue, failing test | Runtime DB / \`npx dna lab serve\` → fix → test → quality → push |
+| **Debug** | error, bug, crash, production issue, failing test | Read \`reasoning.behaviour.md\` → OODA + scientific debug → runtime DB / \`npx dna lab serve\` → fix → test → quality → push |
 
 If intent is ambiguous between Q&A and engineering work, ask **one** clarifying question. If they want a change, use the agent loop.
 `;
@@ -34,9 +37,10 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 ### Authority chain (read before acting)
 
 1. \`AGENTS.md\` — intent routing and gates
-2. \`.cursor/rules/product-process.mdc\` — factory triggers and role rules
-3. \`ai/agent-loop.md\` — full 9-role playbook
-4. \`ai/feature-request.md\` — capture the user's ask **before** planning
+2. \`.DNA/behaviour/reasoning.behaviour.md\` — system-wide critical thinking (mandatory)
+3. \`.cursor/rules/product-process.mdc\` — factory triggers and role rules
+4. \`ai/agent-loop.md\` — full 9-role playbook
+5. \`ai/feature-request.md\` — capture the user's ask **before** planning
 
 ### On every engineering request — automatically
 
@@ -119,10 +123,12 @@ You are the engineering co-pilot:
 
 The user works in plain language. Never ask them to copy prompts or manage \`.DNA/\` files.
 
+${DNA_CRITICAL_THINKING_SECTION}
+
 ${DNA_INTENT_ROUTING_SECTION}
 
 ${DNA_AGENT_FLOW_SECTION}
 `;
 }
 
-export const DNA_CLI_SKILL_DESCRIPTION = `DNA by Humaan CLI — always-on default co-pilot. Active on every session when .DNA/ exists. Route engineering work through ai/agent-loop.md (9 roles). Run and obey all dna commands and /dna-* slash commands. Never wait for the user to say "use DNA".`;
+export const DNA_CLI_SKILL_DESCRIPTION = `DNA by Humaan CLI — always-on default co-pilot. System-wide critical thinking on every message. Active when .DNA/ exists. Route engineering work through ai/agent-loop.md (9 roles). Obey reasoning.behaviour.md, dna commands, and /dna-* slash commands. Never wait for the user to say "use DNA".`;

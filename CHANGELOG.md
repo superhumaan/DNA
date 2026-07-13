@@ -4,6 +4,14 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-07-13
+
+### Fixed
+
+- **Lab scaffold on doctor/init** — `ensureLabAssets` now creates `.DNA/lab/install-snippet.ts` and `.DNA/data/lab-store.json` together.
+- **Lab auto-wire in monorepos** — discovers Express/Fastify entries under `apps/**` and `packages/**` (excludes `node_modules`); no longer false-positive on template strings.
+- **Express example** — `apps/examples/node-express-app` auto-wires `/labs` middleware on `dna lab install`.
+
 ## [0.6.0] - 2026-07-13
 
 ### Added
@@ -31,6 +39,8 @@ All notable changes to DNA are documented here.
 ### Fixed
 
 - **AI injection sync on update** — `dna update`, `dna workbench install`, and `dna doctor` now refresh all always-on layers (`AGENTS.md`, `dna.mdc`, `dna-workbench.mdc`, skills, stems, commands) and verify injection with missing/stale detection.
+- **System-wide critical thinking** — new `.DNA/behaviour/reasoning.behaviour.md` (30+ problem-solving techniques, OODA, debugging, pattern recognition, solution adaptation) injected into always-on rules, `AGENTS.md`, and every neural-network intent by default.
+- **Reasoning on by default** — `syncAiInjection` always refreshes behaviour + neural network on `init`, `update`, and `doctor`; verified automatically (no opt-in).
 
 ## [0.5.0] - 2026-07-11
 

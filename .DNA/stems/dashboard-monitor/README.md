@@ -1,6 +1,6 @@
 # Dashboard monitor
 
-Open DNA dashboard — live runtime feed and quality trends.
+Open DNA Lab — runtime feed, performance, and quality at /labs.
 
 - **Stem ID:** `dashboard-monitor`
 - **Category:** debug

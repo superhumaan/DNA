@@ -19,6 +19,7 @@ Compliance level: none
 - **Zero trust:** never trust UI hiding alone; verify every request server-side
 - Before RBAC work: run `dna plan rbac` and follow `.DNA/workflows/rbac.workflow.md`
 - Before processing personal, health, or payment data: run `dna plan compliance` and follow tier + framework knowledge
+- Before banking, healthcare, cross-border, or jurisdiction-specific features: run `dna legal advise` and follow `.DNA/workflows/legal.workflow.md`
 - Compliance tier: infer from project stage or set via `dna plan compliance --tier startup|sme|corporate|enterprise`
 - Complete Phase 6 verification checklist before marking RBAC done
 - Redact sensitive data in logs and error reports

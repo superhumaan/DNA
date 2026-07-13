@@ -139,7 +139,7 @@ import {
   maybeAutoUpgradeCli,
   syncAutoUpdateForCliVersion,
 } from "@superhumaan/dna-core";
-import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, LAB_INSTALL_SNIPPET } from "@superhumaan/dna-templates";
+import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import {
@@ -1421,8 +1421,10 @@ program
     const result = await checkMarketplaceUpdates(root, channel);
     console.log(formatUpdateResult(result));
 
-    if (!options.skipWorkbench && config && config.aiWorkbench?.enabled !== false) {
-      const injection = await syncAiInjection(root, config);
+    if (config) {
+      const injection = await syncAiInjection(root, config, {
+        workbench: !options.skipWorkbench && config.aiWorkbench?.enabled !== false,
+      });
       const stems = injection.written.filter((p: string) => p.startsWith(".DNA/stems/"));
       console.log(`\n✓ AI injection refreshed (${injection.written.length} files${stems.length ? ", stems synced" : ""})`);
       console.log(formatAiInjectionReport(injection.report));
@@ -2231,7 +2233,6 @@ lab
       lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true },
     };
     const created = await ensureLabAssets(root);
-    await writeFile(join(root, ".DNA", "lab", "install-snippet.ts"), LAB_INSTALL_SNIPPET, "utf-8");
     const wire = await wireLabMiddleware({ root, config: config as Awaited<ReturnType<typeof loadDnaConfig>> & object });
     console.log("DNA Lab install");
     console.log("================");

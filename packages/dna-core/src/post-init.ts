@@ -11,7 +11,7 @@ import { installDockerScaffold } from "./generators/docker.js";
 import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { wireRuntimeMiddleware } from "./generators/wire-runtime.js";
 import { wireLabMiddleware } from "./generators/wire-lab.js";
-import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET, LAB_INSTALL_SNIPPET } from "@superhumaan/dna-templates";
+import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
 import { ensureLabAssets } from "./lab/server.js";
 import { scanProject } from "./scanner.js";
 import { defaultPreviewProvider, supportsPreviewDeploy } from "./stack/hosting.js";
@@ -134,8 +134,6 @@ export async function runPostInit(
     created.push(...wire.wired.map((f) => `runtime auto-wired: ${f}`));
 
     created.push(...(await ensureLabAssets(root)));
-    await writeFileEnsured(join(root, ".DNA", "lab", "install-snippet.ts"), LAB_INSTALL_SNIPPET);
-    created.push(".DNA/lab/install-snippet.ts");
     const labWire = await wireLabMiddleware({ root, config });
     created.push(...labWire.wired.map((f) => `lab auto-wired: ${f}`));
   }

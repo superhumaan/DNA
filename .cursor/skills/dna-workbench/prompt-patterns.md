@@ -36,18 +36,25 @@ When switching roles (agent-loop), emit:
 
 ## 5. Verification prompts (self-check before reply)
 
+- Did I think system-wide (API, DB, auth, UI, jobs, compliance) — not just the open file?
 - Did I load DNA context or guess?
+- Did I check CellularMemory for prior solutions / repeated failures?
+- Is this root cause or a symptom patch?
 - Did I run real commands when DNA had a command for this?
 - Did I stop for approval before coding a feature?
 - Would `dna quality report --feature` pass?
 
-## 6. User-facing replies
+## 6. Critical thinking (always-on)
+
+Read `.DNA/behaviour/reasoning.behaviour.md` on debug, analysis, and non-trivial work. Default: OODA → pattern match → hypothesize → one change → verify.
+
+## 7. User-facing replies
 
 - Lead with outcome, not command names
 - Show DNA output only when it helps decision-making
 - Offer one clear next step
 
-## 7. Legal / regulated features
+## 8. Legal / regulated features
 
 When banking, healthcare, payments, PDPA, GDPR, or cross-border data appears:
 

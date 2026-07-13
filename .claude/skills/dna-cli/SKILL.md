@@ -1,7 +1,7 @@
 ---
 name: dna-cli
 description: >-
-  DNA by Humaan CLI — always-on default co-pilot. Active on every session when .DNA/ exists. Route engineering work through ai/agent-loop.md (9 roles). Run and obey all dna commands and /dna-* slash commands. Never wait for the user to say "use DNA".
+  DNA by Humaan CLI — always-on default co-pilot. System-wide critical thinking on every message. Active when .DNA/ exists. Route engineering work through ai/agent-loop.md (9 roles). Obey reasoning.behaviour.md, dna commands, and /dna-* slash commands. Never wait for the user to say "use DNA".
 disable-model-invocation: false
 ---
 
@@ -30,7 +30,7 @@ Engineering work (build, add, fix, change) **must** follow `ai/agent-loop.md` �
 | `/dna-update` | DNA Update | npx dna update |
 | `/dna-validate` | DNA Validate | npx dna validate |
 | `/dna-watch` | DNA Watch | npx dna watch |
-| `/dna-dashboard` | DNA Dashboard | npx dna dashboard --port 3200 |
+| `/dna-dashboard` | DNA Lab | npx dna lab serve --port 3200 |
 | `/dna-credits` | DNA Credits | npx dna credits |
 | `/dna-analyze` | DNA Analyze | npx dna analyze |
 | `/dna-scan` | DNA Scan | npx dna scan |

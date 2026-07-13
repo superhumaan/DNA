@@ -2,7 +2,7 @@ export const IVF_VERTICALS = [
   {
     id: "behaviour",
     name: "Behaviour Layer",
-    description: "Six AI behaviour files governing how tools work on this project",
+    description: "Nine AI behaviour files — reasoning, delivery, discovery, and stack governance",
   },
   {
     id: "cellularMemory",

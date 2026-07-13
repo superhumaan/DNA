@@ -3,6 +3,7 @@ import { join } from "node:path";
 import type { DnaConfig, ScanResult } from "@superhumaan/dna-config";
 import { fileExists } from "../fs.js";
 import { scanProject } from "../scanner.js";
+import { resolveBackendEntryCandidates } from "./resolve-backend-entries.js";
 
 export interface WireRuntimeOptions {
   root: string;
@@ -14,19 +15,6 @@ export interface WireRuntimeResult {
   wired: string[];
   skipped: string[];
 }
-
-const EXPRESS_ENTRIES = [
-  "src/index.ts",
-  "src/server.ts",
-  "src/main.ts",
-  "src/app.ts",
-  "index.ts",
-  "server.ts",
-  "main.ts",
-  "app.ts",
-];
-
-const FASTIFY_ENTRIES = EXPRESS_ENTRIES;
 
 const RUNTIME_IMPORT = `import { dnaRuntime } from "@superhumaan/dna-by-humaan/runtime";`;
 
@@ -286,8 +274,10 @@ export async function wireRuntimeMiddleware(
     }
   }
 
+  const entryCandidates = await resolveBackendEntryCandidates(root);
+
   if (stackUsesExpress(scan)) {
-    const express = await wireEntryFile(root, EXPRESS_ENTRIES, projectId, wireExpressContent);
+    const express = await wireEntryFile(root, entryCandidates, projectId, wireExpressContent);
     wired.push(...express.wired);
     skipped.push(...express.skipped);
     if (express.wired.length > 0) {
@@ -296,7 +286,7 @@ export async function wireRuntimeMiddleware(
   }
 
   if (stackUsesFastify(scan)) {
-    const fastify = await wireEntryFile(root, FASTIFY_ENTRIES, projectId, wireFastifyContent);
+    const fastify = await wireEntryFile(root, entryCandidates, projectId, wireFastifyContent);
     wired.push(...fastify.wired);
     skipped.push(...fastify.skipped);
     if (fastify.wired.length > 0) {

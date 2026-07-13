@@ -8,6 +8,7 @@ import {
   DNA_ALWAYS_ON_SECTION,
   DNA_INTENT_ROUTING_SECTION,
 } from "./dna-default-on.js";
+import { DNA_CRITICAL_THINKING_SECTION } from "./dna-reasoning.js";
 
 function mdcRule(description: string, alwaysApply = false): string {
   const lines = [`description: ${description}`];
@@ -33,6 +34,8 @@ Project: **${config.projectName}**
 ${config.description ?? ""}
 
 ${DNA_ALWAYS_ON_SECTION}
+
+${DNA_CRITICAL_THINKING_SECTION}
 
 ${DNA_INTENT_ROUTING_SECTION}
 

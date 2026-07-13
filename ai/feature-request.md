@@ -1,30 +1,51 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-13._
+_Auto-maintained by DNA. Updated 2026-07-13T08:14:11.560Z. The user does not fill this in manually._
+
+## Latest request
+
+> _Waiting for your first feature request — describe what you want to build in Cursor or Claude._
 
 ## Problem
 
-Users still had to say "use DNA" because `dna update` only refreshed workbench stems — not `AGENTS.md`, `dna.mdc`, or other always-on rules. Stale injection was not detected or repaired.
+_To be refined by Product Analyst from the latest request._
+
+## Current Pain
+
+_To be refined by Product Analyst._
+
+## Proposed Solution
+
+_To be refined by Product Analyst and Solution Architect._
 
 ## Users
 
-DNA project owners using Cursor and Claude Code.
+_To be identified by Product Analyst._
 
 ## Desired Behaviour
 
-- On `dna update`, `dna doctor`, and `dna workbench install`, refresh **all** AI injection layers (rules, AGENTS.md, skills, stems, commands).
-- After sync, **verify** required files exist with `alwaysApply: true` and always-on markers.
-- `dna doctor` reports injection status (missing / stale).
-
-## Acceptance Criteria
-
-- [x] `syncAiInjection` refreshes AI tool files + feature factory + workbench together
-- [x] `verifyAiInjection` checks required paths and always-on content
-- [x] `dna update` uses full sync + reports verification
-- [x] `dna doctor` shows injection line in report
-- [x] Unit tests for sync and stale detection
+_To be defined by Product Analyst._
 
 ## Edge Cases
 
-- Workbench disabled → injection check skipped
-- Stale rules without always-on text → detected and repaired on sync
+_To be identified by Product Analyst and QA._
+
+## Success Criteria
+
+The feature is only complete when:
+
+- [ ] Backend works
+- [ ] Frontend works
+- [ ] UX is clean
+- [ ] Permissions/security are correct
+- [ ] Tests pass
+- [ ] Local quality gate passes (`dna quality report --feature`)
+- [ ] Docker image builds (`dna docker build`)
+- [ ] Changes pushed to GitHub (`dna github push`)
+- [ ] No unrelated files are modified
+- [ ] Existing behaviour is not broken
+- [ ] QA checklist is completed
+
+---
+
+**Project:** dna-by-humaan

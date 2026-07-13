@@ -6,7 +6,7 @@ allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
 
 Symptom: $ARGUMENTS
 
-1. Check runtime: `npx dna dashboard` or `.DNA/data/runtime.db`
+1. Check runtime: `npx dna lab serve` (http://localhost:3200/labs) or `.DNA/data/runtime.db`
 2. Classify against Immune System + Behaviour
 3. Root-cause fix + tests
 4. `npx dna quality report --feature` PASS

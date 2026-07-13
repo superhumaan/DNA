@@ -11,6 +11,7 @@
 - Use clear, accessible language for human-facing docs
 - Do not overwrite Impressions without reviewing existing content
 - Suggest updates rather than silently rewriting protected docs
+- Before writing tickets or specs, read `delivery.behaviour.md` and run `dna context methodology`
 
 ## Project
 

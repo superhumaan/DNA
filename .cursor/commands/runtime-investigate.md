@@ -3,9 +3,9 @@
 # Runtime investigate
 
 ```bash
-npx dna dashboard --port 3200
+npx dna lab serve --port 3200
 ```
 
-Open http://localhost:3200 — live feed refreshes every 5s. Quality trend chart shows recent gate history.
+Open http://localhost:3200/labs — issues, events, performance, and quality panels. Production: pair with `npx dna register lab --url <deploy-url>`.
 
 Summarize recent incidents, classifications, patterns. Link to Behaviour fixes.

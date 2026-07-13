@@ -33,11 +33,14 @@ DNA is already active — the user does **not** need to say "use DNA".
 
 ## E. "Debug / production error"
 
-1. Check `.DNA/data/runtime.db` / dashboard: `npx dna dashboard`
-2. Classify against Behaviour + Immune System
-3. If fix requires code changes → **agent loop** (capture in `ai/feature-request.md`)
-4. Fix → test → quality → push
-5. Optional: `npx dna ai repair` (human review only)
+1. Read `.DNA/behaviour/reasoning.behaviour.md` — OODA, pattern match, hypothesize
+2. Reproduce → isolate → one change per experiment
+3. Check `.DNA/data/runtime.db` / Lab: `npx dna lab serve`
+4. Search CellularMemory: repeated-failures, previous-solutions, recent-changes
+5. Classify against Behaviour + Immune System
+6. If fix requires code changes → **agent loop** (capture in `ai/feature-request.md`)
+7. Fix → regression test → quality → push
+8. Optional: `npx dna ai repair` (human review only)
 
 ## F. "Compliance / GDPR / HIPAA"
 

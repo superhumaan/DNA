@@ -12,6 +12,7 @@
         "project/feature-folder-structure.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md",
         "ai.behaviour.md"
@@ -40,6 +41,7 @@
         "project/list-report-pattern.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "ai.behaviour.md",
         "testing.behaviour.md"
@@ -69,6 +71,7 @@
         "project/feature-folder-structure.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "ai.behaviour.md",
         "testing.behaviour.md"
@@ -95,6 +98,7 @@
         "disciplines/backend/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "security.behaviour.md",
         "testing.behaviour.md"
@@ -120,6 +124,7 @@
         "languages/typescript/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "security.behaviour.md"
       ],
@@ -142,6 +147,7 @@
         "frameworks/vite/pwa-patterns.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "documentation.behaviour.md"
       ],
@@ -166,6 +172,7 @@
         "disciplines/security/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md",
@@ -200,6 +207,7 @@
         "security/ui-surface-checklist.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -229,6 +237,7 @@
         "disciplines/auth-mfa.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -254,6 +263,7 @@
         "disciplines/feature-management.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "security.behaviour.md"
       ],
@@ -275,6 +285,7 @@
         "integrations/azure-ad-b2c.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "security.behaviour.md",
         "runtime.behaviour.md"
@@ -300,6 +311,7 @@
         "integrations/nginx.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "security.behaviour.md",
         "runtime.behaviour.md"
@@ -322,6 +334,7 @@
         "platforms/dna/rbac-patterns.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -346,6 +359,7 @@
         "platforms/dna/audit.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "ai.behaviour.md",
         "coding.behaviour.md"
@@ -370,6 +384,7 @@
         "platforms/dna/rbac-patterns.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -396,6 +411,7 @@
         "disciplines/security/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "documentation.behaviour.md",
         "coding.behaviour.md"
@@ -417,6 +433,37 @@
         "data_inventory_documented"
       ]
     },
+    "consider_legal_requirements": {
+      "intent": "consider_legal_requirements",
+      "description": "Consider legal requirements for privacy, banking, healthcare, IP, and jurisdiction-specific law before implementing features",
+      "requiredKnowledge": [
+        "legal/overview.dna.md",
+        "legal/advisor-process.dna.md",
+        "legal/domains/privacy.dna.md",
+        "legal/matrices/domain-by-sector.dna.md",
+        "compliance/tiers/overview.dna.md"
+      ],
+      "requiredBehaviour": [
+        "reasoning.behaviour.md",
+        "security.behaviour.md",
+        "documentation.behaviour.md",
+        "ai.behaviour.md",
+        "coding.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/legal-considerations-matrix.md",
+        "prefrontalCortex/decisions.md",
+        "amygdala/risks.md"
+      ],
+      "impressions": [
+        "compliance/compliance-overview.md",
+        "security/data-protection.md"
+      ],
+      "validationChecks": [
+        "no_secrets_in_code",
+        "has_env_example"
+      ]
+    },
     "add_authentication": {
       "intent": "add_authentication",
       "description": "Add or modify authentication",
@@ -424,6 +471,7 @@
         "disciplines/security/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -448,6 +496,7 @@
         "disciplines/qa/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "testing.behaviour.md"
       ],
       "cellularMemory": [
@@ -468,6 +517,7 @@
         "disciplines/backend/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "runtime.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -492,6 +542,7 @@
         "disciplines/solution-engineering/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "documentation.behaviour.md"
       ],
       "cellularMemory": [
@@ -511,6 +562,7 @@
         "disciplines/security/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md"
       ],
       "cellularMemory": [
@@ -532,6 +584,7 @@
         "disciplines/devops/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
       ],
@@ -554,6 +607,7 @@
         "disciplines/mobile-development/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
       ],
@@ -576,6 +630,7 @@
         "frameworks/react/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -602,6 +657,7 @@
         "disciplines/security/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -627,6 +683,7 @@
         "platforms/aistudio/ai-governance.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "ai.behaviour.md",
         "coding.behaviour.md"
@@ -651,6 +708,7 @@
         "platforms/mcp-server/security.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md"
       ],
@@ -674,6 +732,7 @@
         "frameworks/astro/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "documentation.behaviour.md",
         "coding.behaviour.md"
       ],
@@ -697,6 +756,7 @@
         "data/data-hq/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -724,6 +784,7 @@
         "compliance/tiers/overview.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "documentation.behaviour.md",
         "security.behaviour.md"
       ],
@@ -751,6 +812,7 @@
         "data/data-hq/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "documentation.behaviour.md",
         "coding.behaviour.md",
         "runtime.behaviour.md"
@@ -778,6 +840,7 @@
         "healthcare/redox/integration.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "documentation.behaviour.md",
@@ -810,6 +873,7 @@
         "healthcare/hl7-v2/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md"
       ],
@@ -835,6 +899,7 @@
         "integrations/workato/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "documentation.behaviour.md"
@@ -861,6 +926,7 @@
         "payments/stripe/integration.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md"
       ],
@@ -884,6 +950,7 @@
         "payments/overview/pci-scope.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md",
         "documentation.behaviour.md"
@@ -911,6 +978,7 @@
         "ai/ai-evals/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "ai.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md"
@@ -937,6 +1005,7 @@
         "iot/ota-firmware/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "security.behaviour.md",
         "coding.behaviour.md"
       ],
@@ -961,6 +1030,7 @@
         "disciplines/qa/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md",
         "security.behaviour.md",
@@ -992,6 +1062,7 @@
         "disciplines/solution-architecture/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "documentation.behaviour.md"
       ],
@@ -1015,6 +1086,7 @@
         "disciplines/qa/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
       ],
@@ -1036,6 +1108,7 @@
         "disciplines/solution-engineering/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "ai.behaviour.md",
         "coding.behaviour.md",
         "testing.behaviour.md"
@@ -1063,6 +1136,7 @@
         "languages/stem-bridge/sentiment.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "ai.behaviour.md",
         "documentation.behaviour.md"
       ],
@@ -1087,6 +1161,7 @@
         "frameworks/nextjs/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "coding.behaviour.md",
         "documentation.behaviour.md",
         "testing.behaviour.md"
@@ -1114,6 +1189,7 @@
         "disciplines/solution-engineering/positioning.dna.md"
       ],
       "requiredBehaviour": [
+        "reasoning.behaviour.md",
         "documentation.behaviour.md",
         "ai.behaviour.md"
       ],
@@ -1127,6 +1203,81 @@
         "glossary_consistent",
         "technical_terms_preserved",
         "impressions_current"
+      ]
+    },
+    "create_ticket": {
+      "intent": "create_ticket",
+      "description": "Create work items (Jira, Linear, GitHub, Azure DevOps) matching org methodology and hierarchy",
+      "requiredKnowledge": [
+        "methodologies/ticket-writing/ticket-templates.dna.md",
+        "methodologies/ticket-writing/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "reasoning.behaviour.md",
+        "delivery.behaviour.md",
+        "documentation.behaviour.md",
+        "ai.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/current-plan.md",
+        "prefrontalCortex/next-actions.md"
+      ],
+      "impressions": [
+        "product/feature-map.md"
+      ],
+      "validationChecks": [
+        "ticket_system_matched",
+        "hierarchy_matched",
+        "acceptance_criteria_present"
+      ]
+    },
+    "write_delivery_document": {
+      "intent": "write_delivery_document",
+      "description": "Write PRD, design doc, RFC, pitch, or epic brief per methodology and doc system",
+      "requiredKnowledge": [
+        "methodologies/document-writing/document-templates.dna.md",
+        "methodologies/document-writing/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "reasoning.behaviour.md",
+        "delivery.behaviour.md",
+        "documentation.behaviour.md",
+        "ai.behaviour.md"
+      ],
+      "cellularMemory": [
+        "hippocampus/project-summary.md",
+        "prefrontalCortex/decisions.md"
+      ],
+      "impressions": [
+        "architecture/solution-architecture.md",
+        "product/product-overview.md"
+      ],
+      "validationChecks": [
+        "doc_template_matched",
+        "goals_and_non_goals_present"
+      ]
+    },
+    "break_down_work": {
+      "intent": "break_down_work",
+      "description": "Decompose initiative or epic into stories, scopes, or tasks per delivery hierarchy",
+      "requiredKnowledge": [
+        "methodologies/ticket-writing/positioning.dna.md"
+      ],
+      "requiredBehaviour": [
+        "reasoning.behaviour.md",
+        "delivery.behaviour.md",
+        "ai.behaviour.md"
+      ],
+      "cellularMemory": [
+        "prefrontalCortex/current-plan.md",
+        "prefrontalCortex/feature-building-rules.md"
+      ],
+      "impressions": [
+        "product/feature-map.md"
+      ],
+      "validationChecks": [
+        "hierarchy_matched",
+        "leaf_items_deliverable"
       ]
     }
   }

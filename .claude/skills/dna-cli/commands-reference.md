@@ -64,11 +64,11 @@ Watch file changes and update CellularMemory.
 - Read the **full terminal output** (stdout and stderr) before summarizing or acting.
 - Prefer `npx dna` when `dna` is not on PATH; use global `dna` when available.
 
-### /dna-dashboard — DNA Dashboard
+### /dna-dashboard — DNA Lab
 
-Start the local read-only DNA dashboard.
+Start DNA Lab — local observability at /labs (alias: dna dashboard).
 
-**CLI:** `npx dna dashboard --port 3200`
+**CLI:** `npx dna lab serve --port 3200`
 
 **Must:**
 - Run the real CLI command in the shell — never invent or simulate DNA output.

@@ -278,7 +278,7 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
     intent: "fix_runtime_error",
     description: "Investigate and fix a production runtime error",
     requiredKnowledge: ["disciplines/backend/positioning.dna.md"],
-    requiredBehaviour: ["runtime.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
+    requiredBehaviour: ["runtime.behaviour.md", "reasoning.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
     cellularMemory: [
       "amygdala/repeated-failures.md",
       "temporalLobe/previous-solutions.md",
@@ -687,7 +687,11 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
 export function generateNeuralNetwork(_config: DnaConfigInput): NeuralNetwork {
   const intents: NeuralNetwork["intents"] = {};
   for (const intent of INTENTS) {
-    intents[intent.intent] = intent;
+    const behaviour = [
+      "reasoning.behaviour.md",
+      ...intent.requiredBehaviour.filter((f) => f !== "reasoning.behaviour.md"),
+    ];
+    intents[intent.intent] = { ...intent, requiredBehaviour: behaviour };
   }
   return {
     version: "0.1.0",

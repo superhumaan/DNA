@@ -21,3 +21,6 @@ apps/web/.next/
 .DNA/credentials/
 # DNA local data (not committed)
 .DNA/data/feedback-queue.jsonl
+# DNA local data (not committed)
+.DNA/data/lab-store.json
+.DNA/lab/pairing.json

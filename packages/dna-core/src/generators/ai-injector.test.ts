@@ -49,6 +49,7 @@ describe("ai-injector", () => {
 
   it("lists required injection paths for cursor + claude", () => {
     const paths = getRequiredInjectionPaths(testConfig());
+    expect(paths).toContain(".DNA/behaviour/reasoning.behaviour.md");
     expect(paths).toContain("AGENTS.md");
     expect(paths).toContain(".cursor/rules/dna-workbench.mdc");
     expect(paths).toContain(".cursor/rules/product-process.mdc");
@@ -65,6 +66,7 @@ describe("ai-injector", () => {
 
     const result = await syncAiInjection(root, config, { preferRemoteStems: false });
     expect(result.written.length).toBeGreaterThan(10);
+    expect(result.written).toContain(".DNA/behaviour/reasoning.behaviour.md");
     expect(result.report.complete).toBe(true);
     expect(formatAiInjectionReport(result.report)).toContain("always-on");
   });

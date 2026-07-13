@@ -17,6 +17,7 @@ import {
   DNA_ALWAYS_ON_SECTION,
   DNA_INTENT_ROUTING_SECTION,
 } from "./dna-default-on.js";
+import { DNA_CRITICAL_THINKING_SECTION } from "./dna-reasoning.js";
 
 /** Core workbench paths (stem packs add `.DNA/stems/` and slash commands separately). */
 export const AI_WORKBENCH_CORE_PATHS = [
@@ -49,6 +50,8 @@ function buildWorkbenchRule(config: DnaConfig): string {
 You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The user speaks in plain language; you handle DNA context, CLI, planning, and implementation.
 
 ${DNA_ALWAYS_ON_SECTION}
+
+${DNA_CRITICAL_THINKING_SECTION}
 
 ## How the user works (never break this)
 
@@ -154,18 +157,25 @@ When switching roles (agent-loop), emit:
 
 ## 5. Verification prompts (self-check before reply)
 
+- Did I think system-wide (API, DB, auth, UI, jobs, compliance) — not just the open file?
 - Did I load DNA context or guess?
+- Did I check CellularMemory for prior solutions / repeated failures?
+- Is this root cause or a symptom patch?
 - Did I run real commands when DNA had a command for this?
 - Did I stop for approval before coding a feature?
 - Would \`dna quality report --feature\` pass?
 
-## 6. User-facing replies
+## 6. Critical thinking (always-on)
+
+Read \`.DNA/behaviour/reasoning.behaviour.md\` on debug, analysis, and non-trivial work. Default: OODA → pattern match → hypothesize → one change → verify.
+
+## 7. User-facing replies
 
 - Lead with outcome, not command names
 - Show DNA output only when it helps decision-making
 - Offer one clear next step
 
-## 7. Legal / regulated features
+## 8. Legal / regulated features
 
 When banking, healthcare, payments, PDPA, GDPR, or cross-border data appears:
 
@@ -218,11 +228,14 @@ DNA is already active — the user does **not** need to say "use DNA".
 
 ## E. "Debug / production error"
 
-1. Check \`.DNA/data/runtime.db\` / Lab: \`npx dna lab serve\`
-2. Classify against Behaviour + Immune System
-3. If fix requires code changes → **agent loop** (capture in \`ai/feature-request.md\`)
-4. Fix → test → quality → push
-5. Optional: \`npx dna ai repair\` (human review only)
+1. Read \`.DNA/behaviour/reasoning.behaviour.md\` — OODA, pattern match, hypothesize
+2. Reproduce → isolate → one change per experiment
+3. Check \`.DNA/data/runtime.db\` / Lab: \`npx dna lab serve\`
+4. Search CellularMemory: repeated-failures, previous-solutions, recent-changes
+5. Classify against Behaviour + Immune System
+6. If fix requires code changes → **agent loop** (capture in \`ai/feature-request.md\`)
+7. Fix → regression test → quality → push
+8. Optional: \`npx dna ai repair\` (human review only)
 
 ## F. "Compliance / GDPR / HIPAA"
 
@@ -263,6 +276,8 @@ description: >-
 The user works in **plain language**. You run **DNA CLI in shell**, load **\`.DNA/\` intelligence**, and ship with **quality gates**.
 
 ${DNA_ALWAYS_ON_SECTION}
+
+${DNA_CRITICAL_THINKING_SECTION}
 
 ${DNA_INTENT_ROUTING_SECTION}
 

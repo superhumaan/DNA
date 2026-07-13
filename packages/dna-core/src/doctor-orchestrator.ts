@@ -18,7 +18,7 @@ import { syncAiInjection } from "./generators/ai-injector.js";
 import { generateBehaviourFiles } from "./generators/behaviour.js";
 import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { writeFileEnsured, writeJsonFile, fileExists, ensureDir } from "./fs.js";
-import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET, LAB_INSTALL_SNIPPET } from "@superhumaan/dna-templates";
+import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
 import { ensureLabAssets as ensureLabStore } from "./lab/server.js";
 import { wireLabMiddleware } from "./generators/wire-lab.js";
 import { detectGitHubRemote, resolveGitHubToken, loginWithWebFlow } from "@superhumaan/dna-github";
@@ -318,14 +318,7 @@ async function ensureLabScaffold(root: string, config: DnaConfig): Promise<strin
   const actions: string[] = [];
   if (config.lab?.enabled === false) return actions;
 
-  const store = await ensureLabStore(root);
-  if (store.length) actions.push(...store);
-
-  const labSnippetPath = join(root, ".DNA", "lab", "install-snippet.ts");
-  if (!(await fileExists(labSnippetPath))) {
-    await writeFileEnsured(labSnippetPath, LAB_INSTALL_SNIPPET);
-    actions.push(".DNA/lab/install-snippet.ts");
-  }
+  actions.push(...(await ensureLabStore(root)));
 
   if (!config.lab) {
     config.lab = {

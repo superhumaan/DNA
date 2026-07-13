@@ -1,13 +1,15 @@
 ---
-description: Open DNA dashboard — live runtime feed and quality trends.
+description: Open DNA Lab — runtime feed, performance, and quality at /labs.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
 ---# Dashboard monitor
 
 ```bash
-npx dna dashboard --port 3200
+npx dna lab serve --port 3200
 ```
 
-Panels: runtime incidents, doctor health, Impressions drift, CellularMemory, quality reports. Data API refreshes every 5 seconds.
+Open http://localhost:3200/labs — runtime incidents, doctor health, Impressions drift, CellularMemory, quality reports, releases.
+
+Production: `npx dna register lab --url <deploy-url>` then sign in at `/labs`.
 
 Summarize what the user should watch and any anomalies.

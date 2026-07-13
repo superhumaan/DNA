@@ -3,6 +3,7 @@ import { join } from "node:path";
 import type { DnaConfig, ScanResult } from "@superhumaan/dna-config";
 import { fileExists } from "../fs.js";
 import { scanProject } from "../scanner.js";
+import { resolveBackendEntryCandidates } from "./resolve-backend-entries.js";
 
 export interface WireLabOptions {
   root: string;
@@ -15,22 +16,15 @@ export interface WireLabResult {
   skipped: string[];
 }
 
-const EXPRESS_ENTRIES = [
-  "src/index.ts",
-  "src/server.ts",
-  "src/main.ts",
-  "src/app.ts",
-  "index.ts",
-  "server.ts",
-  "main.ts",
-  "app.ts",
-];
-
 const LAB_IMPORT = `import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";
 import { createLabFastifyPlugin } from "@superhumaan/dna-by-humaan/lab";`;
 
 function hasLabWired(content: string): boolean {
-  return content.includes("createLabMiddleware") || content.includes("dnaRuntime.lab");
+  return (
+    /createLabMiddleware\s*\(/.test(content) ||
+    /createLabFastifyPlugin\s*\(/.test(content) ||
+    content.includes("dnaRuntime.lab")
+  );
 }
 
 function insertAfterImports(content: string, insert: string): string {
@@ -146,15 +140,17 @@ export async function wireLabMiddleware(options: WireLabOptions): Promise<WireLa
   const wired: string[] = [];
   const skipped: string[] = [];
 
+  const entryCandidates = await resolveBackendEntryCandidates(root);
+
   if (stackUsesExpress(scan)) {
-    const express = await wireEntryFile(root, EXPRESS_ENTRIES, projectId, wireExpressLabContent);
+    const express = await wireEntryFile(root, entryCandidates, projectId, wireExpressLabContent);
     wired.push(...express.wired);
     skipped.push(...express.skipped);
     if (express.wired.length > 0) return { wired, skipped };
   }
 
   if (stackUsesFastify(scan)) {
-    const fastify = await wireEntryFile(root, EXPRESS_ENTRIES, projectId, wireFastifyLabContent);
+    const fastify = await wireEntryFile(root, entryCandidates, projectId, wireFastifyLabContent);
     wired.push(...fastify.wired);
     skipped.push(...fastify.skipped);
     if (fastify.wired.length > 0) return { wired, skipped };

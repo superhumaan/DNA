@@ -2,6 +2,7 @@ import type { DnaConfig } from "@superhumaan/dna-config";
 import { getArchetype } from "../stack/catalog.js";
 import { deliveryBehaviourMarkdown } from "../delivery/behaviour.js";
 import { discoveryBehaviourMarkdown } from "../discovery/behaviour.js";
+import { reasoningBehaviourMarkdown } from "./dna-reasoning.js";
 
 const SHARED_PREAMBLE = `<!-- DNA Behaviour — DNA by Humaan -->
 <!-- Do not edit unless explicitly requested. Managed by DNA. -->
@@ -13,6 +14,7 @@ function aiBehaviour(config: DnaConfig): string {
 
 Before designing, building, testing, or documenting features:
 
+0. Read \`.DNA/behaviour/reasoning.behaviour.md\` — system-wide critical thinking, debugging, pattern recognition (mandatory)
 1. Read \`.DNA/neuralNetwork.json\`
 2. Load relevant knowledge from \`.DNA/knowledge/\`
 3. Read relevant Behaviour files from \`.DNA/behaviour/\`
@@ -179,6 +181,7 @@ AI repair: ${config.ai?.repair?.enabled !== false ? "yes" : "no"}
 
 export function generateBehaviourFiles(config: DnaConfig): Record<string, string> {
   return {
+    "reasoning.behaviour.md": reasoningBehaviourMarkdown(),
     "ai.behaviour.md": aiBehaviour(config),
     "coding.behaviour.md": codingBehaviour(config),
     "testing.behaviour.md": testingBehaviour(config),

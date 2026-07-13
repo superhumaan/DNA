@@ -20,6 +20,22 @@ This project has DNA installed. **Every session, every message** — DNA is your
 - Slash commands like `/work-with-dna` are optional shortcuts — not a prerequisite for DNA-aware behaviour
 
 
+## Critical thinking (system-wide — every message)
+
+DNA thinks **across the whole system by default**, not just the file in front of you. Before any answer, fix, or feature:
+
+1. **Observe** — What is the actual symptom vs assumed cause? What changed recently? (`.DNA/CellularMemory/hippocampus/recent-changes.md`, runtime DB, CI, git log)
+2. **Orient** — Map the blast radius: API, DB, auth, UI, jobs, infra, compliance. Load `.DNA/neuralNetwork.json` + behaviour + knowledge.
+3. **Pattern match** — Search `CellularMemory/` (cerebellum/repeated-patterns, temporalLobe/previous-solutions, amygdala/repeated-failures) and repo history for prior fixes.
+4. **Hypothesize** — Rank causes by evidence; state falsifiable predictions. **OODA loop:** Observe → Orient → Decide → Act.
+5. **Adapt** — Reuse existing patterns, clients, components, and conventions. Do not invent parallel architectures.
+6. **Verify** — One change at a time; reproduce → fix → regression test → quality gate. Confirm no collateral damage.
+
+**Never:** patch symptoms, guess stack/auth/compliance, fix locally without checking system impact, or ship without evidence the root cause is addressed.
+
+**Full toolkit:** `.DNA/behaviour/reasoning.behaviour.md` — debugging, pattern recognition, solution adaptation, and 30+ techniques. Read it on debug, analysis, and non-trivial engineering work.
+
+
 ## Intent routing (every message)
 
 **First step on every message:** classify intent, then follow the matching path. Do not skip classification.
@@ -31,7 +47,7 @@ This project has DNA installed. **Every session, every message** — DNA is your
 | **Compliance / legal** | GDPR, HIPAA, PDPA, SOC2, legal advise, regulated data | `npx dna plan compliance` or `legal advise` — plan before code |
 | **Ship / done** | push, ship, release, merge, deploy | Quality PASS → `npx dna docker build` → `npx dna github push` |
 | **Q&A / explain** | what does X do, how does Y work, explain this file | Load DNA context; answer directly — **no** 9-role loop |
-| **Debug** | error, bug, crash, production issue, failing test | Runtime DB / `npx dna dashboard` → fix → test → quality → push |
+| **Debug** | error, bug, crash, production issue, failing test | Read `reasoning.behaviour.md` → OODA + scientific debug → runtime DB / `npx dna lab serve` → fix → test → quality → push |
 
 If intent is ambiguous between Q&A and engineering work, ask **one** clarifying question. If they want a change, use the agent loop.
 
@@ -43,9 +59,10 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 ### Authority chain (read before acting)
 
 1. `AGENTS.md` — intent routing and gates
-2. `.cursor/rules/product-process.mdc` — factory triggers and role rules
-3. `ai/agent-loop.md` — full 9-role playbook
-4. `ai/feature-request.md` — capture the user's ask **before** planning
+2. `.DNA/behaviour/reasoning.behaviour.md` — system-wide critical thinking (mandatory)
+3. `.cursor/rules/product-process.mdc` — factory triggers and role rules
+4. `ai/agent-loop.md` — full 9-role playbook
+5. `ai/feature-request.md` — capture the user's ask **before** planning
 
 ### On every engineering request — automatically
 

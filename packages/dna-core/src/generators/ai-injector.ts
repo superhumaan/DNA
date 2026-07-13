@@ -1,15 +1,20 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { NEURAL_NETWORK_ALT, NEURAL_NETWORK_FILE } from "@superhumaan/dna-config";
 import type { DnaConfig, WizardAnswers } from "@superhumaan/dna-config";
 import { detectAiTools } from "../onboarding.js";
 import { scanProject } from "../scanner.js";
-import { fileExists, writeFileEnsured } from "../fs.js";
+import { fileExists, writeFileEnsured, writeJsonFile } from "../fs.js";
 import { generateAiToolFiles } from "./ai-tools.js";
+import { generateBehaviourFiles } from "./behaviour.js";
 import { installFeatureFactory } from "./feature-factory.js";
 import { installAiWorkbench, isAiWorkbenchEnabled } from "./ai-workbench.js";
+import { generateNeuralNetwork } from "./neural-network.js";
+import { REASONING_BEHAVIOUR_FILE, REASONING_MARKER } from "./dna-reasoning.js";
 
 const ALWAYS_ON_MARKER = "DNA is always on";
 const NEVER_WAIT_MARKER = 'wait for the user to say "use DNA"';
+const CRITICAL_THINKING_MARKER = "Critical thinking";
 
 export interface AiInjectionCheck {
   path: string;
@@ -55,15 +60,18 @@ function usesClaude(config: DnaConfig): boolean {
   return tools.includes("claude_code") || tools.includes("multiple");
 }
 
-export function injectionExpected(config: DnaConfig): boolean {
-  return isAiWorkbenchEnabled(config) || config.featureFactory?.enabled !== false;
+export function injectionExpected(_config: DnaConfig): boolean {
+  /** DNA projects always get reasoning + injection — no opt-in. */
+  return true;
 }
 
 /** Paths that must exist for DNA to be fully injected into Cursor / Claude. */
 export function getRequiredInjectionPaths(config: DnaConfig): string[] {
-  if (!injectionExpected(config)) return [];
-
-  const paths = new Set<string>(["AGENTS.md"]);
+  const paths = new Set<string>([
+    "AGENTS.md",
+    `.DNA/behaviour/${REASONING_BEHAVIOUR_FILE}`,
+    ".DNA/neuralNetwork.json",
+  ]);
 
   if (usesCursor(config)) {
     paths.add(".cursor/rules/dna.mdc");
@@ -98,6 +106,15 @@ function requiresAlwaysOnContent(relPath: string): boolean {
   );
 }
 
+function requiresCriticalThinking(relPath: string): boolean {
+  return (
+    relPath === "AGENTS.md" ||
+    relPath === "CLAUDE.md" ||
+    relPath === ".cursor/rules/dna.mdc" ||
+    relPath === ".cursor/rules/dna-workbench.mdc"
+  );
+}
+
 function requiresAlwaysApply(relPath: string): boolean {
   return relPath.endsWith(".mdc");
 }
@@ -123,15 +140,18 @@ async function checkInjectionFile(root: string, relPath: string): Promise<AiInje
     return { path: relPath, ok: false, issue: "stale (missing always-on instructions)" };
   }
 
+  if (relPath === `.DNA/behaviour/${REASONING_BEHAVIOUR_FILE}` && !content.includes(REASONING_MARKER)) {
+    return { path: relPath, ok: false, issue: "stale (missing reasoning engine)" };
+  }
+
+  if (requiresCriticalThinking(relPath) && !content.includes(CRITICAL_THINKING_MARKER)) {
+    return { path: relPath, ok: false, issue: "stale (missing critical thinking)" };
+  }
+
   return { path: relPath, ok: true };
 }
 
 export async function verifyAiInjection(root: string, config: DnaConfig): Promise<AiInjectionReport> {
-  const expected = injectionExpected(config);
-  if (!expected) {
-    return { expected: false, complete: true, checks: [], missing: [], stale: [] };
-  }
-
   const checks: AiInjectionCheck[] = [];
   for (const relPath of getRequiredInjectionPaths(config)) {
     checks.push(await checkInjectionFile(root, relPath));
@@ -170,8 +190,8 @@ function buildWizardAnswers(
 }
 
 /**
- * Refresh all AI injection layers (rules, AGENTS.md, skills, stems, commands)
- * and verify the project is fully injected for Cursor / Claude.
+ * Refresh all DNA co-pilot layers: behaviour (reasoning), neural network, rules,
+ * AGENTS.md, skills, stems, commands — then verify injection.
  */
 export async function syncAiInjection(
   root: string,
@@ -183,10 +203,17 @@ export async function syncAiInjection(
   const featureFactory = options.featureFactory ?? config.featureFactory?.enabled !== false;
   const workbench = options.workbench ?? isAiWorkbenchEnabled(config);
 
-  if (!featureFactory && !workbench) {
-    const report = await verifyAiInjection(root, config);
-    return { written, report };
+  // Reasoning + behaviour — always on by default (no opt-in)
+  for (const [file, content] of Object.entries(generateBehaviourFiles(config))) {
+    const relPath = `.DNA/behaviour/${file}`;
+    await writeFileEnsured(join(root, relPath), content);
+    written.push(relPath);
   }
+
+  const neuralNetwork = generateNeuralNetwork(config);
+  await writeJsonFile(join(root, NEURAL_NETWORK_FILE), neuralNetwork);
+  await writeJsonFile(join(root, NEURAL_NETWORK_ALT), neuralNetwork);
+  written.push(NEURAL_NETWORK_FILE);
 
   const answers = buildWizardAnswers(config, scan, featureFactory);
 
@@ -210,25 +237,24 @@ export async function syncAiInjection(
     );
   }
 
-  const report = options.verify !== false ? await verifyAiInjection(root, config) : {
-    expected: injectionExpected(config),
-    complete: true,
-    checks: [],
-    missing: [],
-    stale: [],
-  };
+  const report =
+    options.verify !== false
+      ? await verifyAiInjection(root, config)
+      : {
+          expected: true,
+          complete: true,
+          checks: [],
+          missing: [],
+          stale: [],
+        };
 
   return { written: [...new Set(written)], report };
 }
 
 export function formatAiInjectionReport(report: AiInjectionReport): string {
-  if (!report.expected) {
-    return "AI injection: disabled (workbench + feature factory off)";
-  }
-
   const status = report.complete ? "✓" : "✗";
   const lines = [
-    `${status} AI injection (Cursor + Claude always-on)`,
+    `${status} DNA co-pilot injection (always-on — reasoning + Cursor + Claude)`,
     `  ${report.checks.filter((c) => c.ok).length}/${report.checks.length} required files OK`,
   ];
 
@@ -239,7 +265,7 @@ export function formatAiInjectionReport(report: AiInjectionReport): string {
     lines.push(`  Stale: ${report.stale.join(", ")}`);
   }
   if (report.complete) {
-    lines.push("  AGENTS.md, alwaysApply rules, and skills are current");
+    lines.push("  reasoning.behaviour.md, AGENTS.md, alwaysApply rules, and skills are current");
   } else {
     lines.push("  Run `npx dna doctor` to repair injection");
   }

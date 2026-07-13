@@ -5,6 +5,7 @@
 
 Before designing, building, testing, or documenting features:
 
+0. Read `.DNA/behaviour/reasoning.behaviour.md` — system-wide critical thinking, debugging, pattern recognition (mandatory)
 1. Read `.DNA/neuralNetwork.json`
 2. Load relevant knowledge from `.DNA/knowledge/`
 3. Read relevant Behaviour files from `.DNA/behaviour/`

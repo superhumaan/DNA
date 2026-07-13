@@ -1,6 +1,9 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { join } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
 import { DNA_LAB_API_PREFIX, DNA_LAB_DEFAULT_PATH } from "@superhumaan/dna-config";
+import { LAB_INSTALL_SNIPPET } from "@superhumaan/dna-templates";
+import { fileExists, writeFileEnsured } from "../fs.js";
 import {
   clearSessionCookie,
   completeLogin,
@@ -320,6 +323,12 @@ export async function ensureLabAssets(root: string): Promise<string[]> {
   const { ensureLabStore } = await import("./storage.js");
   const store = await ensureLabStore(root);
   if (store.created) actions.push(store.path);
+
+  const snippetPath = join(root, ".DNA", "lab", "install-snippet.ts");
+  const snippetExisted = await fileExists(snippetPath);
+  await writeFileEnsured(snippetPath, LAB_INSTALL_SNIPPET);
+  if (!snippetExisted) actions.push(".DNA/lab/install-snippet.ts");
+
   return actions;
 }
 

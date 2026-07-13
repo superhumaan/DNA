@@ -1,10 +1,10 @@
-# DNA Command: DNA Dashboard
+# DNA Command: DNA Lab
 
 > Slash: `/dna-dashboard` · Category: **Core**
 
 ## Purpose
 
-Start the local read-only DNA dashboard.
+Start DNA Lab — local observability at /labs (alias: dna dashboard).
 
 ## When to use
 
@@ -42,7 +42,7 @@ Start the local read-only DNA dashboard.
 Run this command from the **project root** in the shell. Do not skip execution.
 
 ```bash
-npx dna dashboard --port 3200
+npx dna lab serve --port 3200
 ```
 
 ## Output interpretation
@@ -66,17 +66,17 @@ npx dna dashboard --port 3200
 
 ## After running
 
-Tell the user the URL (http://localhost:3200) and what panels are available.
+Tell the user the URL (http://localhost:3200/labs). Localhost has no login; production uses register lab pairing.
 
 ## Examples
 
 ### Default invocation
 
 ```bash
-npx dna dashboard --port 3200
+npx dna lab serve --port 3200
 ```
 
-**Then:** Tell the user the URL (http://localhost:3200) and what panels are available.
+**Then:** Tell the user the URL (http://localhost:3200/labs). Localhost has no login; production uses register lab pairing.
 
 ## Session context
 

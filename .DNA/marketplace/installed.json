@@ -1,51 +1,51 @@
 {
   "disciplines/security": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.435Z"
+    "installedAt": "2026-07-13T08:14:34.300Z"
   },
   "compliance/tiered-standards": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.438Z"
+    "installedAt": "2026-07-13T08:14:34.310Z"
   },
   "disciplines/qa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.444Z"
+    "installedAt": "2026-07-13T08:14:34.323Z"
   },
   "testing/code-coverage": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.445Z"
+    "installedAt": "2026-07-13T08:14:34.327Z"
   },
   "cloud/github-actions": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.446Z"
+    "installedAt": "2026-07-13T08:14:34.332Z"
   },
   "tools/eslint-prettier": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.447Z"
+    "installedAt": "2026-07-13T08:14:34.336Z"
   },
   "testing/owasp-zap": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.449Z"
+    "installedAt": "2026-07-13T08:14:34.341Z"
   },
   "frameworks/vite": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.458Z"
+    "installedAt": "2026-07-13T08:14:34.376Z"
   },
   "frameworks/react": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.459Z"
+    "installedAt": "2026-07-13T08:14:34.382Z"
   },
   "frameworks/express": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.460Z"
+    "installedAt": "2026-07-13T08:14:34.387Z"
   },
   "browsers/cross-browser": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.461Z"
+    "installedAt": "2026-07-13T08:14:34.395Z"
   },
   "disciplines/coding-trends-2025": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.462Z"
+    "installedAt": "2026-07-13T08:14:34.402Z"
   },
   "platforms/dna-stack": {
     "version": "1.0.0",
@@ -57,31 +57,31 @@
   },
   "legal/tiered-standards": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.443Z"
+    "installedAt": "2026-07-13T08:14:34.319Z"
   },
   "discovery/overview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.450Z"
+    "installedAt": "2026-07-13T08:14:34.346Z"
   },
   "discovery/continuous-discovery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.451Z"
+    "installedAt": "2026-07-13T08:14:34.351Z"
   },
   "discovery/opportunity-solution-tree": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.453Z"
+    "installedAt": "2026-07-13T08:14:34.356Z"
   },
   "discovery/product-market-fit": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.454Z"
+    "installedAt": "2026-07-13T08:14:34.360Z"
   },
   "discovery/ux-research-foundations": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.455Z"
+    "installedAt": "2026-07-13T08:14:34.366Z"
   },
   "discovery/handoff-to-delivery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-11T13:23:47.457Z"
+    "installedAt": "2026-07-13T08:14:34.371Z"
   },
   "discovery/lifecycle/ideation": {
     "version": "1.0.0",
