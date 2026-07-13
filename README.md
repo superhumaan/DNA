@@ -295,13 +295,13 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | [GitHub integration package](https://github.com/superhumaan/DNA/issues/8) | Jun 2026 | Jul 2026 | Shipped |
 | [Runtime SQLite storage](https://github.com/superhumaan/DNA/issues/9) | Jun 2026 | Jul 2026 | Shipped |
 | [Preview deployment workflow](https://github.com/superhumaan/DNA/issues/10) | Jul 2026 | Aug 2026 | Shipped |
+| [DNA Lab — production observability at `/labs`](https://github.com/superhumaan/DNA/issues/12) | Jul 2026 | Jul 2026 | Shipped |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | In progress |
-| [Real-time dashboard UI](https://github.com/superhumaan/DNA/issues/12) | Sep 2026 | Dec 2026 | In progress |
-| [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | In progress |
-| [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | In progress |
-| [Impressions drift → auto PR suggestions](https://github.com/superhumaan/DNA/issues/14) | Oct 2026 | Feb 2027 | In progress |
-| [Platform feature codegen (SSO, multi-tenant, flags)](https://github.com/superhumaan/DNA/issues/17) | Nov 2026 | Feb 2027 | In progress |
-| [Multi-tenant gradual rollout patterns](https://github.com/superhumaan/DNA/issues/15) | Jan 2027 | Mar 2027 | In progress |
+| [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
+| [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |
+| [Impressions drift → auto PR suggestions](https://github.com/superhumaan/DNA/issues/14) | Oct 2026 | Feb 2027 | Shipped |
+| [Platform feature codegen (SSO, multi-tenant, flags)](https://github.com/superhumaan/DNA/issues/17) | Nov 2026 | Feb 2027 | Shipped |
+| [Multi-tenant gradual rollout patterns](https://github.com/superhumaan/DNA/issues/15) | Jan 2027 | Mar 2027 | Shipped |
 
 ---
 

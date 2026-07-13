@@ -218,7 +218,7 @@ DNA is already active — the user does **not** need to say "use DNA".
 
 ## E. "Debug / production error"
 
-1. Check \`.DNA/data/runtime.db\` / dashboard: \`npx dna dashboard\`
+1. Check \`.DNA/data/runtime.db\` / Lab: \`npx dna lab serve\`
 2. Classify against Behaviour + Immune System
 3. If fix requires code changes → **agent loop** (capture in \`ai/feature-request.md\`)
 4. Fix → test → quality → push

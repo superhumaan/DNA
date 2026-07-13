@@ -76,4 +76,19 @@ ANTHROPIC_API_KEY=     # Required for live AI repair (mock until set)
 OPENAI_API_KEY=        # Alternative AI provider
 VITE_DNA_PROJECT_ID=my-project
 VITE_DNA_RUNTIME_URL=/api/dna/runtime
+
+# DNA Lab — production observability at /labs (local: no login)
+# Pair production: npx dna register lab --url https://your-app.example.com
+DNA_LAB_PATH=/labs
+GIT_SHA=               # Release tracking for Lab (v2 source maps)
+`;
+
+export const LAB_INSTALL_SNIPPET = `// DNA Lab — production observability at /labs
+import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";
+
+// Express (mount after body parser, before routes):
+// app.use(createLabMiddleware({ root: process.cwd() }));
+
+// Local: http://localhost:PORT/labs — no login
+// Production: https://your-app.com/labs — sign in after npx dna register lab
 `;

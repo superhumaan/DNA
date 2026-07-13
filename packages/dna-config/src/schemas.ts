@@ -311,6 +311,18 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     };
   }
 
+  let lab: DnaConfig["lab"];
+  if (d.lab !== undefined) {
+    const labObj = expectObject(d.lab, "lab");
+    if (!labObj.success) return labObj;
+    lab = {
+      enabled: withDefault(optionalBoolean(labObj.data.enabled), true),
+      path: withDefault(optionalString(labObj.data.path), "/labs"),
+      requireAuthInProduction: withDefault(optionalBoolean(labObj.data.requireAuthInProduction), true),
+      openLocalWithoutAuth: withDefault(optionalBoolean(labObj.data.openLocalWithoutAuth), true),
+    };
+  }
+
   let feedback: DnaConfig["feedback"];
   if (d.feedback !== undefined) {
     const fb = expectObject(d.feedback, "feedback");
@@ -355,6 +367,7 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     delivery,
     discovery,
     industry,
+    lab,
     feedback,
     platformFeatures: platformFeatures.data,
   });
@@ -737,6 +750,12 @@ export interface DnaConfig {
     autoReport: (typeof FEEDBACK_AUTO_MODES)[number];
     includeSuggestedFix: boolean;
     endpoint?: string;
+  };
+  lab?: {
+    enabled: boolean;
+    path: string;
+    requireAuthInProduction: boolean;
+    openLocalWithoutAuth: boolean;
   };
   platformFeatures: string[];
 }

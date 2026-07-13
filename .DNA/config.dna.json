@@ -4,7 +4,7 @@
   "projectName": "dna-by-humaan",
   "description": "Software project",
   "createdAt": "2026-07-11T10:27:53.301Z",
-  "updatedAt": "2026-07-11T13:25:15.559Z",
+  "updatedAt": "2026-07-11T13:35:46.208Z",
   "stack": {
     "archetype": "react-vite-api",
     "frontend": "react",
@@ -1036,6 +1036,12 @@
     "upstream": true,
     "autoReport": "dna-only",
     "includeSuggestedFix": true
+  },
+  "lab": {
+    "enabled": true,
+    "path": "/labs",
+    "requireAuthInProduction": true,
+    "openLocalWithoutAuth": true
   },
   "platformFeatures": []
 }

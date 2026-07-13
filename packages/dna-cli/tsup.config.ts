@@ -22,4 +22,8 @@ export default defineConfig([
     ...bundle,
     entry: ["src/runtime-preload.ts"],
   },
+  {
+    ...bundle,
+    entry: ["src/lab.ts"],
+  },
 ]);

@@ -5,4 +5,4 @@
 - `.DNA/behaviour/runtime.behaviour.md`
 
 ## DNA CLI
-- `npx dna dashboard --port 3200`
+- `npx dna lab serve --port 3200`

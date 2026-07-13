@@ -155,6 +155,10 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna feedback report` | Report DNA-platform issue upstream (sanitized) |
 | `dna feedback sync` | Flush offline feedback queue |
 | `dna runtime install` | Framework snippets for production observer |
+| `dna lab install` | Scaffold DNA Lab at `/labs` + auto-wire middleware |
+| `dna lab serve` | Local Lab at `http://localhost:3200/labs` (no login on localhost) |
+| `dna register lab --url <url>` | Pair local CLI to production Lab (148-digit code) |
+| `dna dashboard` | Legacy alias for `dna lab serve` |
 | `dna github connect` | Wire GitHub issues + repair workflow |
 | `dna ai repair` | AI-assisted fix suggestions (dry-run safe) |
 
@@ -212,7 +216,28 @@ Supports **Express**, **Fastify**, **NestJS**, and **Next.js**.
 
 ```bash
 dna runtime install   # Auto-wire framework snippets
+dna lab install       # Scaffold DNA Lab at /labs
+dna lab serve         # Local Lab — http://localhost:3200/labs
 ```
+
+### DNA Lab (production observability)
+
+DNA Lab at **`/labs`** complements external uptime tools (it does not replace ping monitoring).
+
+| Mode | Access |
+|------|--------|
+| **Local** | `dna lab serve` — open `http://localhost:3200/labs`, no login |
+| **Production** | `dna register lab --url https://your-app.com` → paste 148-digit code at `/labs` → create account |
+
+```typescript
+import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";
+
+app.use(createLabMiddleware({ projectRoot: process.cwd() }));
+```
+
+Release tracking and source maps: `POST /api/dna/labs/releases`, `POST /api/dna/labs/sourcemaps`.
+
+[Runtime observer docs →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/runtime-observer.md)
 
 DNA classifies live errors with your project's Behaviour rules and writes `.DNA/runtime/issues.jsonl`. Use alongside Sentry — DNA adds *why* and project context, not replacement.
 

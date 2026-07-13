@@ -21,7 +21,7 @@ export const DNA_INTENT_ROUTING_SECTION = `## Intent routing (every message)
 | **Compliance / legal** | GDPR, HIPAA, PDPA, SOC2, legal advise, regulated data | \`npx dna plan compliance\` or \`legal advise\` — plan before code |
 | **Ship / done** | push, ship, release, merge, deploy | Quality PASS → \`npx dna docker build\` → \`npx dna github push\` |
 | **Q&A / explain** | what does X do, how does Y work, explain this file | Load DNA context; answer directly — **no** 9-role loop |
-| **Debug** | error, bug, crash, production issue, failing test | Runtime DB / \`npx dna dashboard\` → fix → test → quality → push |
+| **Debug** | error, bug, crash, production issue, failing test | Runtime DB / \`npx dna lab serve\` → fix → test → quality → push |
 
 If intent is ambiguous between Q&A and engineering work, ask **one** clarifying question. If they want a change, use the agent loop.
 `;

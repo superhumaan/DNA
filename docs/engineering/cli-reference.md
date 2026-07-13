@@ -35,14 +35,24 @@ dna scan --open-pr          # when drift is critical, write sync plan
 
 Includes an **Impressions drift** score when DNA is installed (missing docs, stack mismatch, stale CellularMemory).
 
-## dashboard
+## lab
 
-Local read-only dashboard — runtime issues, quality reports, doctor health, Impressions, and CellularMemory.
+Production observability portal at `/labs` — runtime issues, events, performance, quality, release tracking.
 
 ```bash
-dna dashboard
-dna dashboard --port 3200
+dna lab install
+dna lab serve
+dna lab serve --port 3200
+dna register lab --url https://your-app.example.com
 ```
+
+Local: no login. Production: email + password + OTP after `dna register lab` pairing.
+
+See [Runtime Observer](./runtime-observer.md#production-lab-labs).
+
+## dashboard
+
+Legacy alias — starts Lab at `/labs` on port 3200 (same as `dna lab serve`).
 
 ## memory
 

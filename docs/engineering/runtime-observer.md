@@ -19,6 +19,47 @@ It observes your Node.js application while it runs, classifies issues using your
 | Frontend-only (Vite, React SPA) | No — CLI is enough |
 | API server (Express, Fastify, NestJS, Next.js) | Yes — production protection |
 
+## Production Lab (`/labs`)
+
+DNA Lab is the **production** observability UI — not localhost-only.
+
+| Command | Purpose |
+|---------|---------|
+| `dna lab install` | Scaffold `/labs` + auto-wire middleware |
+| `dna lab serve` | Local Lab at `http://localhost:3200/labs` (no login) |
+| `dna register lab --url https://your-app.com` | Pair local project with production |
+
+### Local vs production
+
+- **Local** (`localhost`, `127.0.0.1`, `development`): `/labs` opens with **no login**
+- **Production**: ColorParty-style sign-in (email + password + OTP) after pairing
+
+### Pairing flow
+
+1. Deploy with `dna lab install` / `dna doctor` — `/labs` is live on your domain
+2. On production `/labs` → **Create account** → paste pairing ID + 148-digit code
+3. Locally: `npx dna register lab --url https://your-app.com`
+4. CLI generates the code, hashes it, POSTs to production, listens for callback
+5. Paste code in browser → verified → create name, email, password
+6. Sign in on production anytime thereafter
+
+### Screens
+
+Overview · Issues · Events · Performance · Quality · Releases · Logs
+
+### Release tracking & source maps (v2)
+
+- `POST /api/dna/labs/releases` — register deploy (`GIT_SHA`, version)
+- `POST /api/dna/labs/sourcemaps` — register source map metadata per release
+
+### Uptime monitoring
+
+DNA Lab **complements** dedicated uptime ping services (Better Uptime, Pingdom, etc.) — it classifies runtime errors and performance from your app. It does **not** replace external availability monitoring.
+
+## Local dashboard (legacy)
+
+`dna dashboard` now serves **Lab** at `/labs` on port 3200.
+
 ## Install
 
 ```bash

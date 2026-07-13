@@ -4,9 +4,10 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.4.x)
+## Current release focus (v0.6.0)
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` bundle (v0.4.6+)
+- **DNA Lab** — production observability at `/labs` ([#12](https://github.com/superhumaan/DNA/issues/12)): local open access, production auth with `dna register lab` pairing, issues/events/performance/quality/releases
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.0)
 - **Zero npm dependencies** — published package has no production `dependencies`; internal git, glob, GitHub API, CLI parser, and config validators
 - **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
 - **59 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow
@@ -47,7 +48,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Legal advisor + delivery methodology (v0.4.9) | ✅ Shipped |
 | Upstream feedback — DNA platform auto-report (v0.4.8) | ✅ Shipped |
 | First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress — setup script shipped |
-| Real-time dashboard UI ([#12](https://github.com/superhumaan/DNA/issues/12)) | 🚧 In progress — live feed + trend chart |
+| Real-time dashboard UI / DNA Lab ([#12](https://github.com/superhumaan/DNA/issues/12)) | ✅ Shipped — `/labs`, `dna lab serve`, `dna register lab` |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | ✅ Shipped — import merge + team registry sync |
 | Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | ✅ Shipped — `dna scan --open-pr` |
 | Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | ✅ Shipped — platform codegen scaffolds |

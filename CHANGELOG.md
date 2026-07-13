@@ -4,6 +4,34 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-07-13
+
+### Added
+
+- **DNA Lab** — production observability at `/labs` ([#12](https://github.com/superhumaan/DNA/issues/12)): Soli-styled UI, ColorParty-style production auth, local open access, pairing via `npx dna register lab --url <deploy-url>`, 148-digit verification code, email/password/OTP sign-in.
+- **`dna lab install`** — scaffold Lab assets and auto-wire Express/Fastify middleware.
+- **`dna lab serve`** — local Lab at `http://localhost:3200/labs` (no login on localhost).
+- **`dna register lab`** — generate pairing code, push hash to production, optional `--wait` for callback.
+- **`@superhumaan/dna-by-humaan/lab`** export — `createLabMiddleware`, `createLabFastifyPlugin`, pairing and auth APIs.
+- **Release tracking & source maps (v2)** — `POST /api/dna/labs/releases` and `/sourcemaps` for deploy metadata.
+- **Lab config** — `lab` block in `.DNA/config.dna.json` (`path`, `requireAuthInProduction`, `openLocalWithoutAuth`).
+
+### Changed
+
+- **`dna dashboard`** — legacy alias; now serves DNA Lab at `/labs` (same as `dna lab serve`).
+- **Doctor / init** — auto-scaffolds Lab when runtime is enabled; wires `/labs` on deploy.
+- **Docs** — runtime observer, CLI reference, roadmap, and planning updated for DNA Lab.
+
+### Fixed
+
+- **`dna register lab`** — prints pairing code immediately; use `--wait` to block for production callback (no 15-minute hang by default).
+
+## [Unreleased — prior]
+
+### Fixed
+
+- **AI injection sync on update** — `dna update`, `dna workbench install`, and `dna doctor` now refresh all always-on layers (`AGENTS.md`, `dna.mdc`, `dna-workbench.mdc`, skills, stems, commands) and verify injection with missing/stale detection.
+
 ## [0.5.0] - 2026-07-11
 
 ### Added

@@ -90,6 +90,23 @@ describe("doctor", () => {
     expect(formatted).not.toContain("(mock)");
   });
 
+  it("reports incomplete AI injection when workbench files are missing", async () => {
+    root = await scaffoldProject();
+    const configPath = join(root, ".DNA", "config.dna.json");
+    const config = JSON.parse(await readFile(configPath, "utf-8"));
+    config.aiWorkbench = { enabled: true };
+    config.featureFactory = { enabled: true };
+    await writeFile(configPath, JSON.stringify(config));
+
+    const report = await runDoctor(root);
+    const formatted = formatDoctorReport(report);
+
+    expect(report.injection.expected).toBe(true);
+    expect(report.injection.complete).toBe(false);
+    expect(report.injection.missing.length).toBeGreaterThan(0);
+    expect(formatted).toContain("AI injection");
+  });
+
   it("shows provider name when a real AI provider is configured", async () => {
     root = await scaffoldProject();
     const configPath = join(root, ".DNA", "config.dna.json");

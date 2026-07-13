@@ -5,6 +5,7 @@ import { fileExists } from "./fs.js";
 import { loadDnaConfig, validateProject } from "./validator.js";
 import { scanProject } from "./scanner.js";
 import { isRealAiProvider } from "./ai-connect.js";
+import { verifyAiInjection } from "./generators/ai-injector.js";
 
 export interface DoctorReport {
   dna: { installed: boolean; version?: string };
@@ -19,6 +20,7 @@ export interface DoctorReport {
   docker: { dockerfileInstalled: boolean };
   hooks: { prePushInstalled: boolean; hooksPathConfigured: boolean };
   preview: { enabled: boolean; workflowInstalled: boolean; provider: string };
+  injection: { expected: boolean; complete: boolean; missing: string[]; stale: string[] };
   validation: { valid: boolean; issueCount: number };
 }
 
@@ -62,6 +64,9 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
     // not a git repo
   }
   const githubSignedIn = await isGitHubSignedIn();
+  const injection = config
+    ? await verifyAiInjection(root, config)
+    : { expected: false, complete: true, missing: [], stale: [] };
 
   return {
     dna: {
@@ -103,6 +108,12 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
       workflowInstalled: previewWorkflow,
       provider: config?.ci?.previewProvider ?? "vercel",
     },
+    injection: {
+      expected: injection.expected,
+      complete: injection.complete,
+      missing: injection.missing,
+      stale: injection.stale,
+    },
     validation: {
       valid: validation.valid,
       issueCount: validation.errors.length,
@@ -142,6 +153,13 @@ export function formatDoctorReport(report: DoctorReport): string {
     `${status(report.docker.dockerfileInstalled || !report.ci.enabled)} Docker scaffold`,
     `${status(report.hooks.prePushInstalled && report.hooks.hooksPathConfigured)} Git hooks (pre-push quality gate)`,
     `${status(!report.preview.enabled || report.preview.workflowInstalled)} Preview deploy${report.preview.enabled ? ` (${report.preview.provider})` : " (disabled)"}`,
+    `${status(!report.injection.expected || report.injection.complete)} AI injection (Cursor + Claude always-on)${
+      report.injection.expected && !report.injection.complete
+        ? ` (${report.injection.missing.length} missing, ${report.injection.stale.length} stale — run dna doctor)`
+        : report.injection.expected
+          ? ""
+          : " (disabled)"
+    }`,
     "",
     `${status(report.validation.valid)} Validation (${report.validation.issueCount} issues)`,
   ];

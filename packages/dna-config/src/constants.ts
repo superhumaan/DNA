@@ -4,6 +4,12 @@ export const IMPRESSIONS_DIR = "DNA/Impressions";
 export const DNA_CONFIG_FILE = ".DNA/config.dna.json";
 export const DNA_DATA_DIR = ".DNA/data";
 export const DNA_RUNTIME_DB = ".DNA/data/runtime.db";
+export const DNA_LAB_DIR = ".DNA/lab";
+export const DNA_LAB_STORE = ".DNA/data/lab-store.json";
+export const DNA_LAB_PAIRING_FILE = ".DNA/lab/pairing.json";
+export const DNA_LAB_DEFAULT_PATH = "/labs";
+export const DNA_LAB_API_PREFIX = "/api/dna/labs";
+export const DNA_LAB_PAIRING_CODE_LENGTH = 148;
 export const DNA_FEEDBACK_QUEUE = ".DNA/data/feedback-queue.jsonl";
 
 /** Upstream DNA monorepo for community feedback issues */
@@ -17,6 +23,8 @@ export const DNA_GITIGNORE_ENTRIES = [
   ".DNA/data/",
   ".DNA/runtime/*.jsonl",
   ".DNA/data/feedback-queue.jsonl",
+  ".DNA/data/lab-store.json",
+  ".DNA/lab/pairing.json",
   ".DNA/reports/",
   ".DNA/credentials/",
 ] as const;

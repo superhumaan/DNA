@@ -86,10 +86,10 @@ export const DNA_AI_COMMAND_CATALOG: readonly DnaAiCommandDef[] = [
   {
     id: "dashboard",
     category: "core",
-    title: "DNA Dashboard",
-    description: "Start the local read-only DNA dashboard.",
-    cli: "npx dna dashboard --port 3200",
-    followUp: "Tell the user the URL (http://localhost:3200) and what panels are available.",
+    title: "DNA Lab",
+    description: "Start DNA Lab — local observability at /labs (alias: dna dashboard).",
+    cli: "npx dna lab serve --port 3200",
+    followUp: "Tell the user the URL (http://localhost:3200/labs). Localhost has no login; production uses register lab pairing.",
   },
   {
     id: "credits",

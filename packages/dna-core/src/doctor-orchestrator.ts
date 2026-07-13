@@ -14,13 +14,13 @@ import { installCiPipeline } from "./generators/ci.js";
 import { installGitHooks } from "./generators/git-hooks.js";
 import { installDockerScaffold } from "./generators/docker.js";
 import { wireRuntimeMiddleware } from "./generators/wire-runtime.js";
-import { installFeatureFactory } from "./generators/feature-factory.js";
-import { installAiWorkbench } from "./generators/ai-workbench.js";
-import { generateAiToolFiles } from "./generators/ai-tools.js";
+import { syncAiInjection } from "./generators/ai-injector.js";
 import { generateBehaviourFiles } from "./generators/behaviour.js";
 import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { writeFileEnsured, writeJsonFile, fileExists, ensureDir } from "./fs.js";
-import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
+import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET, LAB_INSTALL_SNIPPET } from "@superhumaan/dna-templates";
+import { ensureLabAssets as ensureLabStore } from "./lab/server.js";
+import { wireLabMiddleware } from "./generators/wire-lab.js";
 import { detectGitHubRemote, resolveGitHubToken, loginWithWebFlow } from "@superhumaan/dna-github";
 import { analyzeProject } from "./ivf/analyze.js";
 import { documentFromCode } from "./ivf/document.js";
@@ -314,39 +314,55 @@ async function ensureRuntimeAssets(root: string, config: DnaConfig): Promise<str
   return actions;
 }
 
+async function ensureLabScaffold(root: string, config: DnaConfig): Promise<string[]> {
+  const actions: string[] = [];
+  if (config.lab?.enabled === false) return actions;
+
+  const store = await ensureLabStore(root);
+  if (store.length) actions.push(...store);
+
+  const labSnippetPath = join(root, ".DNA", "lab", "install-snippet.ts");
+  if (!(await fileExists(labSnippetPath))) {
+    await writeFileEnsured(labSnippetPath, LAB_INSTALL_SNIPPET);
+    actions.push(".DNA/lab/install-snippet.ts");
+  }
+
+  if (!config.lab) {
+    config.lab = {
+      enabled: true,
+      path: "/labs",
+      requireAuthInProduction: true,
+      openLocalWithoutAuth: true,
+    };
+    await writeJsonFile(join(root, DNA_CONFIG_FILE), {
+      ...config,
+      updatedAt: new Date().toISOString(),
+    });
+    actions.push(".DNA/config.dna.json (lab enabled)");
+  }
+
+  const wire = await wireLabMiddleware({ root, config });
+  for (const file of wire.wired) {
+    actions.push(`lab auto-wired: ${file}`);
+  }
+  for (const skip of wire.skipped) {
+    actions.push(`(lab wire: ${skip})`);
+  }
+
+  return actions;
+}
+
 async function ensureAiAndCi(root: string, config: DnaConfig): Promise<string[]> {
   const actions: string[] = [];
   const scan = await scanProject(root);
-  const answers: WizardAnswers = {
-    projectDescription: config.description ?? config.projectName,
-    acceptRecommendation: true,
-    platformFeatures: config.platformFeatures ?? [],
-    aiTools: config.aiTools.length ? config.aiTools : detectAiTools(scan),
-    compliance: config.compliance,
-    stage: config.stage,
-    installRuntime: true,
-    installFeatureFactory: true,
-    installCi: true,
-    configureGithub: true,
-    configureAi: true,
-  };
 
-  for (const [relPath, content] of Object.entries(
-    generateAiToolFiles(config, answers, true),
-  )) {
-    await writeFileEnsured(join(root, relPath), content);
-  }
-  actions.push("AI tool rules refreshed (Cursor + delivery pipeline)");
-
-  if (config.featureFactory?.enabled !== false) {
-    const factoryFiles = await installFeatureFactory(root, config);
-    actions.push(`feature factory refreshed (${factoryFiles.length} files)`);
-  }
-
-  if (config.aiWorkbench?.enabled !== false) {
-    config.aiWorkbench = { enabled: true, ...config.aiWorkbench };
-    await installAiWorkbench(root, config);
-    actions.push("AI workbench + prompt stems synced (dna update refreshes from dna.humaan.app)");
+  const injection = await syncAiInjection(root, config, { scan });
+  actions.push(`AI injection synced (${injection.written.length} files)`);
+  if (injection.report.complete) {
+    actions.push("AI injection verified — Cursor + Claude always-on rules current");
+  } else {
+    const gaps = [...injection.report.missing, ...injection.report.stale];
+    actions.push(`AI injection gaps remain: ${gaps.join(", ")}`);
   }
 
   const ci = await installCiPipeline({ root, config, scan, skipIfExists: false });
@@ -468,6 +484,7 @@ export async function runDoctorOrchestrator(
 
     actions.push(...(await repairMissingStructure(root, config)));
     actions.push(...(await ensureRuntimeAssets(root, config)));
+    actions.push(...(await ensureLabScaffold(root, config)));
     actions.push(...(await ensureAiAndCi(root, config)));
     actions.push(...(await pullEssentials(root, config, currentCliVersion, cliEntryPath)));
 

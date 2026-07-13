@@ -973,7 +973,7 @@ Check: lawful basis, consent, sector rules (PCI, PHI, AML), IP, counsel gates.`,
 
 Symptom: $ARGUMENTS
 
-1. Check runtime: \`npx dna dashboard\` or \`.DNA/data/runtime.db\`
+1. Check runtime: \`npx dna lab serve\` (http://localhost:3200/labs) or \`.DNA/data/runtime.db\`
 2. Classify against Immune System + Behaviour
 3. Root-cause fix + tests
 4. \`npx dna quality report --feature\` PASS
@@ -981,7 +981,7 @@ Symptom: $ARGUMENTS
     guidelines: GROUND,
     expectations: ["Root cause identified", "Fix with tests", "Quality PASS", "Regression notes"],
     contextLoads: [".DNA/immuneSystem/", ".DNA/behaviour/runtime.behaviour.md"],
-    cliCommands: ["npx dna dashboard", "npx dna quality report --feature"],
+    cliCommands: ["npx dna lab serve", "npx dna quality report --feature"],
     examples: [{ userSays: "403 on admin API", goodResponse: "Missing permission check on POST /admin/users. Fixed middleware. Tests added." }],
     workflow: ["quality-gate", "ai-repair"],
   },
@@ -1019,10 +1019,10 @@ Human review required before merge. Never auto-merge repair PRs.`,
     prompt: `# Runtime investigate
 
 \`\`\`bash
-npx dna dashboard --port 3200
+npx dna lab serve --port 3200
 \`\`\`
 
-Open http://localhost:3200 — live feed refreshes every 5s. Quality trend chart shows recent gate history.
+Open http://localhost:3200/labs — issues, events, performance, and quality panels. Production: pair with \`npx dna register lab --url <deploy-url>\`.
 
 Summarize recent incidents, classifications, patterns. Link to Behaviour fixes.`,
     guidelines: GROUND,
@@ -1034,7 +1034,7 @@ Summarize recent incidents, classifications, patterns. Link to Behaviour fixes.`
       "Recommended fixes",
     ],
     contextLoads: [".DNA/immuneSystem/issue-classifier.json", ".DNA/behaviour/runtime.behaviour.md"],
-    cliCommands: ["npx dna dashboard --port 3200"],
+    cliCommands: ["npx dna lab serve --port 3200"],
     examples: [
       {
         userSays: "Recent errors?",
@@ -1048,7 +1048,7 @@ Summarize recent incidents, classifications, patterns. Link to Behaviour fixes.`
     name: "Dashboard monitor",
     category: "debug",
     slash: "dashboard-monitor",
-    summary: "Open DNA dashboard — live runtime feed and quality trends.",
+    summary: "Open DNA Lab — runtime feed, performance, and quality at /labs.",
     tags: ["debug", "dashboard", "monitoring"],
     copyVariants: [
       "Open the DNA dashboard",
@@ -1058,16 +1058,18 @@ Summarize recent incidents, classifications, patterns. Link to Behaviour fixes.`
     prompt: `# Dashboard monitor
 
 \`\`\`bash
-npx dna dashboard --port 3200
+npx dna lab serve --port 3200
 \`\`\`
 
-Panels: runtime incidents, doctor health, Impressions drift, CellularMemory, quality reports. Data API refreshes every 5 seconds.
+Open http://localhost:3200/labs — runtime incidents, doctor health, Impressions drift, CellularMemory, quality reports, releases.
+
+Production: \`npx dna register lab --url <deploy-url>\` then sign in at \`/labs\`.
 
 Summarize what the user should watch and any anomalies.`,
     guidelines: GROUND,
     expectations: ["URL and port", "Live feed explained", "Quality trend interpretation", "Action items if anomalies"],
     contextLoads: [".DNA/immuneSystem/", ".DNA/CellularMemory/"],
-    cliCommands: ["npx dna dashboard --port 3200"],
+    cliCommands: ["npx dna lab serve --port 3200"],
     examples: [
       {
         userSays: "Open dashboard",

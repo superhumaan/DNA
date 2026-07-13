@@ -71,9 +71,10 @@ import {
   installAiCommands,
   uninstallAiCommands,
   formatAiCommandsCatalog,
-  installAiWorkbench,
   uninstallAiWorkbench,
   persistAiWorkbenchEnabled,
+  syncAiInjection,
+  formatAiInjectionReport,
   getPromptStemPacks,
   getPromptStemPack,
   installPromptStemPacks,
@@ -124,8 +125,12 @@ import {
   generateGradualRolloutScaffold,
   isPlatformCodegenFeature,
   PLATFORM_CODEGEN_FEATURES,
-  startDashboard,
-  formatDashboardStart,
+  startLabServer,
+  formatLabStart,
+  ensureLabAssets,
+  runRegisterLab,
+  runRegisterLabWithCallback,
+  wireLabMiddleware,
   formatInitCompleteMessage,
   formatInitContextBanner,
   detectProjectContext,
@@ -134,7 +139,7 @@ import {
   maybeAutoUpgradeCli,
   syncAutoUpdateForCliVersion,
 } from "@superhumaan/dna-core";
-import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
+import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, LAB_INSTALL_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import {
@@ -809,10 +814,11 @@ workbenchCmd
       process.exit(1);
     }
     await persistAiWorkbenchEnabled(root, config, true);
-    const created = await installAiWorkbench(root, config, {
+    const injection = await syncAiInjection(root, config, {
       preferRemoteStems: options.bundled ? false : undefined,
     });
-    console.log(`✓ DNA Workbench installed (${created.length} files, ${getPromptStemPacks().length} stem packs)`);
+    console.log(`✓ DNA Workbench installed (${injection.written.length} files, ${getPromptStemPacks().length} stem packs)`);
+    console.log(formatAiInjectionReport(injection.report));
     console.log("\nIn Cursor, type `/` → analyze-project, what-next, ship-feature, …");
     console.log("Copy-paste library: https://dna.humaan.app/intelligence#stem-library");
   });
@@ -1416,9 +1422,10 @@ program
     console.log(formatUpdateResult(result));
 
     if (!options.skipWorkbench && config && config.aiWorkbench?.enabled !== false) {
-      const refreshed = await installAiWorkbench(root, config);
-      const stems = refreshed.filter((p) => p.startsWith(".DNA/stems/"));
-      console.log(`\n✓ AI Workbench refreshed (${refreshed.length} files, ${stems.length ? "stems synced" : "prompts updated"})`);
+      const injection = await syncAiInjection(root, config);
+      const stems = injection.written.filter((p: string) => p.startsWith(".DNA/stems/"));
+      console.log(`\n✓ AI injection refreshed (${injection.written.length} files${stems.length ? ", stems synced" : ""})`);
+      console.log(formatAiInjectionReport(injection.report));
       const indexPath = join(root, ".DNA", "stems", "index.json");
       try {
         const raw = await readFile(indexPath, "utf-8");
@@ -2195,14 +2202,97 @@ memory
 
 program
   .command("dashboard")
-  .description("Start local read-only dashboard (runtime, quality, doctor, memory)")
+  .description("Start local DNA dashboard (legacy — prefer dna lab serve for /labs)")
   .option("--cwd <path>", "Project root directory")
   .option("--port <number>", "Port", "3200")
   .action(async (options: { cwd?: string; port?: string }) => {
     const root = getRoot(options);
-    const { url } = await startDashboard({ root, port: Number(options.port ?? 3200) });
-    console.log(formatDashboardStart(url));
+    const config = await loadDnaConfig(root);
+    const { url } = await startLabServer({
+      root,
+      port: Number(options.port ?? 3200),
+      config,
+    });
+    console.log(formatLabStart(url));
     await new Promise(() => {});
+  });
+
+const lab = program.command("lab").description("DNA Lab — production observability at /labs");
+
+lab
+  .command("install")
+  .description("Scaffold Lab assets and auto-wire /labs into your server")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = (await loadDnaConfig(root)) ?? {
+      projectId: "app",
+      projectName: "app",
+      lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true },
+    };
+    const created = await ensureLabAssets(root);
+    await writeFile(join(root, ".DNA", "lab", "install-snippet.ts"), LAB_INSTALL_SNIPPET, "utf-8");
+    const wire = await wireLabMiddleware({ root, config: config as Awaited<ReturnType<typeof loadDnaConfig>> & object });
+    console.log("DNA Lab install");
+    console.log("================");
+    for (const item of created) console.log(`  ✓ ${item}`);
+    for (const item of wire.wired) console.log(`  ✓ lab auto-wired: ${item}`);
+    for (const item of wire.skipped) console.log(`  · ${item}`);
+    console.log("");
+    console.log("Local:    http://localhost:<port>/labs (no login)");
+    console.log("Production: https://<your-domain>/labs");
+    console.log("Pair:     npx dna register lab --url https://<your-domain>");
+  });
+
+lab
+  .command("serve")
+  .description("Start local Lab server at /labs (no auth on localhost)")
+  .option("--cwd <path>", "Project root directory")
+  .option("--port <number>", "Port", "3200")
+  .action(async (options: { cwd?: string; port?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const { url } = await startLabServer({
+      root,
+      port: Number(options.port ?? 3200),
+      config,
+    });
+    console.log(formatLabStart(url));
+    await new Promise(() => {});
+  });
+
+const registerCmd = program.command("register").description("Register local project with DNA services");
+
+registerCmd
+  .command("lab")
+  .description("Generate 148-digit pairing code and notify production /labs")
+  .requiredOption("--url <productionUrl>", "Production URL, e.g. https://app.example.com")
+  .option("--cwd <path>", "Project root directory")
+  .option("--callback-port <number>", "Local callback port", "9473")
+  .option("--wait", "Wait for production callback after posting pairing")
+  .action(async (options: { url: string; cwd?: string; callbackPort?: string; wait?: boolean }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const result = options.wait
+      ? await runRegisterLabWithCallback({
+          root,
+          productionUrl: options.url,
+          callbackPort: Number(options.callbackPort ?? 9473),
+          projectId: config?.projectId,
+        })
+      : await runRegisterLab({
+          root,
+          productionUrl: options.url,
+          callbackPort: Number(options.callbackPort ?? 9473),
+          projectId: config?.projectId,
+        });
+    console.log(result.message);
+    if (result.verified) {
+      console.log("\n✓ Verified via production callback. Finish account setup in your browser.");
+    }
+    if (!result.pushedToProduction) {
+      process.exitCode = 1;
+    }
   });
 
 const generate = program.command("generate").description("Generate platform feature scaffolds");

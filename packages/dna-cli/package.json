@@ -1,6 +1,6 @@
 {
   "name": "@superhumaan/dna-by-humaan",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "DNA by Humaan — one doctor install: 59 stem packs, rules, detection, portfolio memory, 897-pack marketplace, runtime observer, feature factory, and AI repair for TypeScript squads",
   "repository": {
     "type": "git",
@@ -28,6 +28,10 @@
     },
     "./runtime/preload": {
       "import": "./dist/runtime-preload.js"
+    },
+    "./lab": {
+      "types": "./dist/lab.d.ts",
+      "import": "./dist/lab.js"
     }
   },
   "files": [
@@ -90,7 +94,8 @@
     "cli",
     "typescript",
     "runtime",
-    "observability",
+    "dna-lab",
+    "sentry-alternative",
     "knowledge-packs",
     "marketplace",
     "compliance",

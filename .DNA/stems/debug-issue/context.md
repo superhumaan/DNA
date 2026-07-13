@@ -5,5 +5,5 @@
 - `.DNA/behaviour/runtime.behaviour.md`
 
 ## DNA CLI
-- `npx dna dashboard`
+- `npx dna lab serve`
 - `npx dna quality report --feature`
