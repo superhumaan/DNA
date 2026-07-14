@@ -296,6 +296,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | [Runtime SQLite storage](https://github.com/superhumaan/DNA/issues/9) | Jun 2026 | Jul 2026 | Shipped |
 | [Preview deployment workflow](https://github.com/superhumaan/DNA/issues/10) | Jul 2026 | Aug 2026 | Shipped |
 | [DNA Lab — production observability at `/labs`](https://github.com/superhumaan/DNA/issues/12) | Jul 2026 | Jul 2026 | Shipped |
+| Lab hardening + Aggressive Repair Loop (v0.6.3) | Jul 2026 | Jul 2026 | Shipped |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | In progress |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |

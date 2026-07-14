@@ -27,10 +27,10 @@ const VERCEL_TS = `export const config = {
 `;
 
 describe("wireViteLabProxyContent", () => {
-  it("adds /labs and /api/dna/labs proxies matching /api target", () => {
+  it("adds /labs proxy matching /api target", () => {
     const wired = wireViteLabProxyContent(VITE_WITH_API_PROXY);
     expect(wired).toContain("'/labs':");
-    expect(wired).toContain("'/api/dna/labs':");
+    expect(wired).not.toContain(",,");
     expect(wired).toContain("http://localhost:${apiPort}");
     expect(wired).toContain("changeOrigin: true");
   });

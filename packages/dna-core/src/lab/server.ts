@@ -35,6 +35,43 @@ export interface LabServerOptions {
 type Req = IncomingMessage & { body?: unknown };
 type Res = ServerResponse;
 
+/** Document CSP for /labs HTML — must override host helmet API CSP (default-src 'none'). */
+export const LAB_DOCUMENT_CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://kit.fontawesome.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://kit.fontawesome.com",
+  "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://kit.fontawesome.com",
+  "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com https://ka-f.fontawesome.com https://ka-p.fontawesome.com",
+  "connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://kit.fontawesome.com https://ka-f.fontawesome.com https://ka-p.fontawesome.com",
+  "img-src 'self' data:",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+].join("; ");
+
+export function applyLabDocumentHeaders(res: ServerResponse): void {
+  res.setHeader("Content-Security-Policy", LAB_DOCUMENT_CSP);
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+}
+
+function fontAwesomeKitTags(): string {
+  const kitId = process.env.VITE_FONTAWESOME_KIT_ID || process.env.FONTAWESOME_KIT_ID || "";
+  if (!kitId.trim()) return "";
+  return [
+    '  <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin />',
+    '  <link rel="preconnect" href="https://ka-p.fontawesome.com" crossorigin />',
+    `  <script src="https://kit.fontawesome.com/${kitId.trim()}.js" defer crossorigin="anonymous"></script>`,
+  ].join("\n");
+}
+
+export function buildLabHtml(apiPrefix: string): string {
+  return LAB_HTML.replace("__LAB_CSS_INLINE__", LAB_CSS)
+    .replace("__LAB_JS_PATH__", `${apiPrefix}/client.js`)
+    .replace("</head>", `${fontAwesomeKitTags()}\n</head>`);
+}
+
 async function readJsonBody(req: IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
   for await (const chunk of req) {
@@ -57,8 +94,18 @@ function sendJson(res: Res, status: number, body: unknown, headers?: Record<stri
   res.end(JSON.stringify(body));
 }
 
-function sendText(res: Res, status: number, body: string, contentType: string): void {
-  res.writeHead(status, { "Content-Type": contentType, "Cache-Control": "no-store" });
+function sendText(
+  res: Res,
+  status: number,
+  body: string,
+  contentType: string,
+  headers?: Record<string, string>,
+): void {
+  res.writeHead(status, {
+    "Content-Type": contentType,
+    "Cache-Control": "no-store",
+    ...headers,
+  });
   res.end(body);
 }
 
@@ -99,6 +146,10 @@ export async function handleLabRequest(
   const isLabApi = pathname.startsWith(apiPrefix);
   if (!isLabPage && !isLabApi) {
     return false;
+  }
+
+  if (isLabPage) {
+    applyLabDocumentHeaders(res);
   }
 
   if (req.method === "GET" && pathname === `${apiPrefix}/client.js`) {
@@ -304,8 +355,10 @@ export async function handleLabRequest(
   }
 
   if (req.method === "GET" && isLabPage) {
-    const html = LAB_HTML.replace("__LAB_JS_PATH__", `${apiPrefix}/client.js`);
-    sendText(res, 200, html, "text/html; charset=utf-8");
+    const html = buildLabHtml(apiPrefix);
+    sendText(res, 200, html, "text/html; charset=utf-8", {
+      "Content-Security-Policy": LAB_DOCUMENT_CSP,
+    });
     return true;
   }
 

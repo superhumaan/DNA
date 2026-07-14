@@ -121,6 +121,74 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
   };
 }
 
+/**
+ * Fast doctor snapshot for Lab `/data` polling.
+ * Skips GitHub auth, full scan, and injection verify — those hang or take seconds under watch.
+ */
+export async function runDoctorLite(root: string): Promise<DoctorReport> {
+  const config = await loadDnaConfig(root);
+  const dnaInstalled = await fileExists(join(root, DNA_CONFIG_FILE));
+
+  const behaviourMissing: string[] = [];
+  for (const file of BEHAVIOUR_FILES) {
+    if (!(await fileExists(join(root, ".DNA", "behaviour", file)))) {
+      behaviourMissing.push(file);
+    }
+  }
+
+  const immuneConfigured = await fileExists(join(root, ".DNA", "immuneSystem", "rules.json"));
+  const memoryConfigured = await fileExists(
+    join(root, ".DNA", "CellularMemory", "hippocampus", "project-summary.md"),
+  );
+  const runtimeDb = await fileExists(join(root, DNA_RUNTIME_DB));
+  const runtimeJsonl = await fileExists(join(root, ".DNA", "runtime", "events.jsonl"));
+  const ciWorkflow = await fileExists(join(root, ".github", "workflows", "dna-ci.yml"));
+  const previewWorkflow = await fileExists(join(root, ".github", "workflows", "dna-preview.yml"));
+  const dockerfile = await fileExists(join(root, "Dockerfile"));
+  const prePushHook = await fileExists(join(root, ".DNA", "hooks", "pre-push"));
+
+  return {
+    dna: { installed: dnaInstalled, version: config?.version },
+    documentation: { impressionsCount: 0, missing: 0 },
+    behaviour: {
+      files: BEHAVIOUR_FILES.length - behaviourMissing.length,
+      missing: behaviourMissing,
+    },
+    immuneSystem: { configured: immuneConfigured },
+    cellularMemory: { configured: memoryConfigured },
+    github: {
+      enabled: config?.github?.enabled ?? false,
+      configured: !!(config?.github?.owner && config?.github?.repo),
+      signedIn: false,
+    },
+    ai: {
+      enabled: config?.ai?.enabled ?? false,
+      provider: config?.ai?.provider,
+      connected: isRealAiProvider(config?.ai?.provider),
+    },
+    runtime: {
+      enabled: config?.runtime?.enabled ?? false,
+      configured: runtimeDb || runtimeJsonl,
+    },
+    ci: {
+      enabled: config?.ci?.enabled ?? false,
+      workflowInstalled: ciWorkflow,
+    },
+    docker: { dockerfileInstalled: dockerfile },
+    hooks: { prePushInstalled: prePushHook, hooksPathConfigured: false },
+    preview: {
+      enabled: config?.ci?.pushToPreview ?? false,
+      workflowInstalled: previewWorkflow,
+      provider: config?.ci?.previewProvider ?? "vercel",
+    },
+    injection: { expected: false, complete: true, missing: [], stale: [] },
+    validation: {
+      valid: dnaInstalled && behaviourMissing.length === 0,
+      issueCount: behaviourMissing.length + (dnaInstalled ? 0 : 1),
+    },
+  };
+}
+
 export function formatDoctorReport(report: DoctorReport): string {
   const status = (ok: boolean) => (ok ? "✓" : "✗");
   const lines = [

@@ -17,10 +17,11 @@ const LAB_PROXY_PATHS = [DNA_LAB_DEFAULT_PATH, DNA_LAB_API_PREFIX] as const;
 const LAB_VERCEL_MARKER = "dna-lab-rewrites";
 
 function hasViteLabProxy(content: string): boolean {
-  return (
-    /['"]\/labs['"]\s*:/.test(content) &&
-    /['"]\/api\/dna\/labs['"]\s*:/.test(content)
-  );
+  return /['"]\/labs['"]\s*:/.test(content);
+}
+
+function stripTrailingComma(line: string): string {
+  return line.replace(/,\s*$/, "");
 }
 
 function extractApiProxyBlock(content: string): {
@@ -51,19 +52,21 @@ export function wireViteLabProxyContent(content: string): string | null {
   if (!api) return null;
 
   const innerIndent = `${api.baseIndent}  `;
-  const optionsBody = api.optionLines.map((line) => `${innerIndent}${line},`).join("\n");
+  const optionsBody = api.optionLines
+    .map((line) => `${innerIndent}${stripTrailingComma(line)},`)
+    .join("\n");
 
   const proxyEntry = (path: string) =>
     [
       `${api.baseIndent}'${path}': {`,
-      `${innerIndent}${api.targetLine},`,
+      `${innerIndent}${stripTrailingComma(api.targetLine)},`,
       optionsBody,
       `${api.baseIndent}},`,
     ]
       .filter(Boolean)
       .join("\n");
 
-  const labBlock = `${proxyEntry("/labs")}\n${proxyEntry("/api/dna/labs")}\n`;
+  const labBlock = `${proxyEntry("/labs")}\n`;
   return content.replace(api.block, `${api.block}\n${labBlock}`);
 }
 
