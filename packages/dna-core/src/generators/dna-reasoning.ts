@@ -21,6 +21,20 @@ DNA thinks **across the whole system by default**, not just the file in front of
 **Full toolkit:** \`.DNA/behaviour/reasoning.behaviour.md\` — debugging, pattern recognition, solution adaptation, and 30+ techniques. Read it on debug, analysis, and non-trivial engineering work.
 `;
 
+export const DNA_AGGRESSIVE_REPAIR_SECTION = `## Aggressive repair loop (mandatory on blockers)
+
+On **every session start** and **debug/engineering intent**:
+
+1. Read \`.DNA/CellularMemory/amygdala/blockers.md\` and \`.DNA/data/runtime.db\` fingerprints
+2. If open blockers exist → run \`npx dna ai force-repair\` (or \`--dry-run\` first)
+3. Load \`amygdala/repeated-failures.md\` + \`temporalLobe/previous-solutions.md\` before any fix attempt
+4. **Mandatory 9-role agent loop** for blockers — do not mark complete without code change + test + quality PASS
+5. Gateway errors (502/503/504): check origin health, deploy config, \`/health\` route — not just app try/catch
+6. Never create duplicate GitHub issues for the same fingerprint — DNA dedupes; comment on existing issues
+
+**Cannot skip repair** when \`ai.repair.forceAgentLoop\` is true (default) and blockers are open.
+`;
+
 export function reasoningBehaviourMarkdown(): string {
   return `<!-- DNA Behaviour — DNA by Humaan -->
 <!-- Do not edit unless explicitly requested. Managed by DNA. -->
@@ -172,6 +186,11 @@ Apply the technique that matches the problem shape:
 ---
 
 ## When to escalate
+
+**Automatic escalation (no user prompt needed):**
+- Open entry in \`amygdala/blockers.md\` → run aggressive repair loop immediately
+- Same fingerprint repeatCount ≥ 5 → treat as production blocker
+- Previous repair produced zero file changes → retry with \`npx dna ai force-repair\`
 
 Ask the user **one focused question** when:
 - Reproduction blocked (access, data, env)

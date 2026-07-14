@@ -4,6 +4,55 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-07-14
+
+### Added
+
+- **Aggressive Repair Loop (ARL)** — fingerprinted runtime errors, structured CellularMemory updates (`repeated-failures`, `blockers`, `previous-solutions`), GitHub issue dedup by fingerprint, structured AI patch parsing, gateway 502/503/504 classifiers, count-based immune escalation, and `dna ai force-repair` for open blockers.
+- **`ai.repair.aggressive`** config (default on) — `minRepeatForRepair`, `minRepeatForBlocker`, `forceAgentLoop`, `dedupeIssues`, `retryOpenRepairs`.
+
+### Changed
+
+- Workbench rules and `reasoning.behaviour.md` — mandatory repair loop when blockers exist; agents must load memory before fixing recurring errors.
+- **Lab UI v2** — Sentry-inspired observability portal: dark sidebar navigation, 24h error volume chart, grouped issues with detail pages and stack traces, slow endpoint performance table, release history, and quality trend chart.
+- **Lab UI v3** — Soli admin shell (248px white sidebar, violet active states, `settings-shell` layout) and DNA-Web logo (`fa-duotone fa-dna` + “by Humaan”). Removed production observability hero banner.
+- **Lab UI modules** — dashboard/shell/styles extracted under `packages/dna-core/src/lab/ui/`; collect aggregates split to `collect-aggregates.ts`.
+
+### Fixed
+
+- **CJS Express Lab wire** — `@superhumaan/dna-by-humaan/lab` is ESM-only. Auto-wire no longer injects `require(.../lab)` (crashes under `node --watch`). CJS apps get `.DNA/lab/express-wire.cjs` (dynamic `import`) + `dnaLabMiddleware()`.
+- **Lab `/data` hang** — dashboard polling used full `runDoctor` (GitHub auth + full scan). Switched to `runDoctorLite` + 60s cache + 2.5s timeout; collect uses `Promise.allSettled`.
+- **runtime.db corruption** — atomic temp+rename writes, per-path mutex, quarantine corrupt JSON to `runtime.db.corrupt.<ts>`, and recreate empty store on Lab collect.
+- **Lab CSP** — explicit document CSP on `/labs` HTML; auto-wire mounts after `configureExpress` / helmet.
+
+### Errors → fixes (v0.6.3 ship notes)
+
+| Error / symptom | Root cause | Fix |
+|-----------------|------------|-----|
+| Express `node --watch` crash: `require() of ES Module …/lab not supported` | Auto-wire injected CJS `require('@superhumaan/dna-by-humaan/lab')` for an ESM-only export | Write `.DNA/lab/express-wire.cjs` that dynamic-`import`s `/lab` and exports `dnaLabMiddleware()` |
+| Lab dashboard stuck / never loads data | `/data` called full `runDoctor` (GitHub auth + scan) on every poll | `runDoctorLite` + 60s cache + 2.5s timeout; `Promise.allSettled` in collect |
+| `runtime.db` parse failures / Lab collect throws | Concurrent writes + non-atomic JSON overwrite | Per-path mutex, temp+rename writes, quarantine corrupt files, recreate empty store |
+| `/labs` bootstrap blocked by host helmet | API CSP `default-src 'none'` inherited by Lab HTML | Explicit document CSP on Lab HTML; mount middleware after helmet |
+
+See also [docs/engineering/lab-and-repair-0.6.3.md](docs/engineering/lab-and-repair-0.6.3.md).
+
+## [0.6.2] - 2026-07-13
+
+### Added
+
+- **Lab dev + production wiring** — `dna doctor`, `dna update`, and `dna lab install` now auto-wire:
+  - Express/Fastify `createLabMiddleware` on the API server
+  - Vite dev proxy for `/labs` and `/api/dna/labs` (same backend as `/api`)
+  - Vercel rewrites for split frontend/API deploys
+
+### Fixed
+
+- **Lab on init** — scaffolding runs even when runtime is disabled; no longer gated behind `installRuntime`.
+- **CJS Express** — `backend/server.js` with `require('express')` gets `require()`-style Lab import.
+- **react-vite-app example** — Vite proxies `/labs` to the Express example on port 3456.
+- **Lab CSP** — `/labs` HTML now sets an explicit document CSP (`connect-src 'self'`) so host helmet API `default-src 'none'` no longer blocks `/api/dna/labs/bootstrap` fetches. Auto-wire mounts Lab after `configureExpress` / helmet when present.
+- **Lab UI v2** — Sentry-inspired observability portal: dark sidebar, error volume chart, grouped issues with detail view + stack traces, performance table, release tracking, quality trend chart.
+
 ## [0.6.1] - 2026-07-13
 
 ### Fixed

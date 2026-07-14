@@ -130,7 +130,7 @@ import {
   ensureLabAssets,
   runRegisterLab,
   runRegisterLabWithCallback,
-  wireLabMiddleware,
+  wireLabStack,
   formatInitCompleteMessage,
   formatInitContextBanner,
   detectProjectContext,
@@ -1303,9 +1303,53 @@ ai
     console.log("=============");
     console.log(`Branch: ${result.branchName}`);
     console.log(`Confidence: ${(result.plan.confidence * 100).toFixed(0)}%`);
+    console.log(`Files modified: ${result.filesModified.join(", ") || "none"}`);
     console.log(`Tests: ${result.testsPassed ? "passed" : "failed/skipped"}`);
     if (result.prUrl) console.log(`PR: ${result.prUrl}`);
     console.log("\n**Never auto-merged** — requires human review.");
+  });
+
+ai
+  .command("force-repair")
+  .description("Force aggressive repair for open runtime blockers")
+  .option("--fingerprint <id>", "Specific fingerprint to repair")
+  .option("--dry-run", "Plan only, do not create branch or PR")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { fingerprint?: string; dryRun?: boolean; cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    if (!config) {
+      console.error("DNA not installed. Run `dna init` first.");
+      process.exit(1);
+    }
+
+    const { runForceRepair } = await import("@superhumaan/dna-runtime");
+    const result = await runForceRepair({
+      projectRoot: root,
+      dnaRoot: join(root, ".DNA"),
+      config,
+      fingerprint: options.fingerprint,
+      dryRun: options.dryRun,
+    });
+
+    if (!result) {
+      console.log("No open blockers in runtime.db or amygdala/blockers.md.");
+      console.log("Blockers appear after repeatCount >= ai.repair.minRepeatForBlocker (default 5).");
+      return;
+    }
+
+    console.log("DNA Force Repair — aggressive loop");
+    console.log("==================================");
+    console.log(`Blockers found: ${result.blockersFound}`);
+    console.log(`Target: ${result.issue.title}`);
+    console.log(`Fingerprint: ${result.issue.fingerprint}`);
+    console.log(`Repeat count: ${result.issue.repeatCount}`);
+    console.log(`Branch: ${result.repair.branchName}`);
+    console.log(`Files modified: ${result.repair.filesModified.join(", ") || "none"}`);
+    if (result.repair.prUrl) console.log(`PR: ${result.repair.prUrl}`);
+    console.log("");
+    console.log("MANDATORY: Run full 9-role agent loop until error stops recurring.");
+    console.log("Load amygdala/blockers.md + temporalLobe/previous-solutions.md before coding.");
   });
 
 program
@@ -1428,6 +1472,15 @@ program
       const stems = injection.written.filter((p: string) => p.startsWith(".DNA/stems/"));
       console.log(`\n✓ AI injection refreshed (${injection.written.length} files${stems.length ? ", stems synced" : ""})`);
       console.log(formatAiInjectionReport(injection.report));
+
+      if (config.lab?.enabled !== false) {
+        await ensureLabAssets(root);
+        const labWire = await wireLabStack({ root, config });
+        if (labWire.wired.length > 0) {
+          console.log("\n✓ DNA Lab wiring refreshed");
+          for (const item of labWire.wired) console.log(`  · ${item}`);
+        }
+      }
       const indexPath = join(root, ".DNA", "stems", "index.json");
       try {
         const raw = await readFile(indexPath, "utf-8");
@@ -2233,7 +2286,7 @@ lab
       lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true },
     };
     const created = await ensureLabAssets(root);
-    const wire = await wireLabMiddleware({ root, config: config as Awaited<ReturnType<typeof loadDnaConfig>> & object });
+    const wire = await wireLabStack({ root, config: config as Awaited<ReturnType<typeof loadDnaConfig>> & object });
     console.log("DNA Lab install");
     console.log("================");
     for (const item of created) console.log(`  ✓ ${item}`);

@@ -1,4 +1,8 @@
 import type { AiRepairPlan, ClassifiedIssue } from "@superhumaan/dna-config";
+import {
+  parseRepairResponse,
+  buildStructuredRepairPromptSuffix,
+} from "./patch-parser.js";
 
 export interface AiProvider {
   name: string;
@@ -35,25 +39,44 @@ class MockAiProvider implements AiProvider {
   name = "mock";
 
   async diagnose(issue: ClassifiedIssue, context: RepairContext): Promise<AiRepairPlan> {
-    const branchName = `dna/fix/${issue.category}-${issue.id.slice(0, 8)}`;
+    const branchName = `dna/fix/${issue.fingerprint ?? issue.category}-${issue.id.slice(0, 8)}`;
+    const isGateway =
+      issue.category === "deployment" || /HTTP 50[234]|bad gateway/i.test(issue.summary);
+
+    const proposedChanges: AiRepairPlan["proposedChanges"] = isGateway
+      ? [
+          {
+            file: "src/health.ts",
+            description: "Health check endpoint for gateway probes",
+            patch: [
+              "// DNA gateway repair",
+              "export function healthHandler() {",
+              "  return { status: 'ok', timestamp: new Date().toISOString() };",
+              "}",
+            ].join("\n"),
+          },
+        ]
+      : [
+          {
+            file: context.codeSnippets[0]?.file ?? "src/index.ts",
+            description: "Add error handling for the failing code path",
+            search: "export",
+            replace: `// DNA suggested fix for: ${issue.title}\nexport`,
+          },
+        ];
 
     return {
       diagnosis: [
         `Mock diagnosis for ${issue.category} issue.`,
         `Summary: ${issue.summary}`,
         issue.suspectedCause ? `Likely cause: ${issue.suspectedCause}` : "",
+        issue.isBlocker ? "BLOCKER — repeat threshold exceeded." : "",
         `Reviewed ${context.behaviour.length} Behaviour files and ${context.memory.length} memory files.`,
       ]
         .filter(Boolean)
         .join("\n"),
       confidence: issue.confidence,
-      proposedChanges: [
-        {
-          file: "src/index.ts",
-          description: "Add error handling for the failing code path",
-          patch: `// DNA suggested fix for: ${issue.title}\ntry {\n  // existing code\n} catch (error) {\n  logger.error({ err: error }, '${issue.category}');\n  throw error;\n}`,
-        },
-      ],
+      proposedChanges,
       branchName,
       prTitle: `[DNA] Fix: ${issue.title}`,
       prBody: [
@@ -69,9 +92,8 @@ class MockAiProvider implements AiProvider {
         issue.testRecommendation ?? "Add regression test",
         "",
         "### Safety",
-        "- This PR was created by DNA AI repair",
+        "- This PR was created by DNA aggressive repair",
         "- **Not auto-merged** — requires human review",
-        "- Secrets were redacted before AI analysis",
         "",
         `Confidence: ${(issue.confidence * 100).toFixed(0)}%`,
       ].join("\n"),
@@ -105,6 +127,7 @@ class OpenAiCompatibleProvider implements AiProvider {
           model,
           messages: [{ role: "user", content: prompt }],
           temperature: 0.2,
+          response_format: { type: "json_object" },
         }),
       });
 
@@ -117,15 +140,7 @@ class OpenAiCompatibleProvider implements AiProvider {
       };
       const content = data.choices?.[0]?.message?.content ?? "";
 
-      return {
-        diagnosis: content || issue.summary,
-        confidence: issue.confidence,
-        proposedChanges: [],
-        branchName: `dna/fix/${issue.id.slice(0, 8)}`,
-        prTitle: `[DNA] Fix: ${issue.title}`,
-        prBody: content,
-        testPlan: issue.testRecommendation ?? "Add regression test",
-      };
+      return parseStructuredPlan(content, issue) ?? new MockAiProvider().diagnose(issue, context);
     } catch {
       return new MockAiProvider().diagnose(issue, context);
     }
@@ -156,7 +171,7 @@ class AnthropicCompatibleProvider implements AiProvider {
         },
         body: JSON.stringify({
           model,
-          max_tokens: 2048,
+          max_tokens: 4096,
           messages: [{ role: "user", content: prompt }],
         }),
       });
@@ -170,37 +185,55 @@ class AnthropicCompatibleProvider implements AiProvider {
       };
       const content = data.content?.[0]?.text ?? "";
 
-      return {
-        diagnosis: content || issue.summary,
-        confidence: issue.confidence,
-        proposedChanges: [],
-        branchName: `dna/fix/${issue.id.slice(0, 8)}`,
-        prTitle: `[DNA] Fix: ${issue.title}`,
-        prBody: content,
-        testPlan: issue.testRecommendation ?? "Add regression test",
-      };
+      return parseStructuredPlan(content, issue) ?? new MockAiProvider().diagnose(issue, context);
     } catch {
       return new MockAiProvider().diagnose(issue, context);
     }
   }
 }
 
+function parseStructuredPlan(content: string, issue: ClassifiedIssue): AiRepairPlan | null {
+  const parsed = parseRepairResponse(content);
+  if (!parsed?.proposedChanges?.length && !parsed?.diagnosis) return null;
+
+  return {
+    diagnosis: parsed.diagnosis ?? issue.summary,
+    confidence: parsed.confidence ?? issue.confidence,
+    proposedChanges: parsed.proposedChanges ?? [],
+    branchName: parsed.branchName ?? `dna/fix/${issue.fingerprint ?? issue.id.slice(0, 8)}`,
+    prTitle: parsed.prTitle ?? `[DNA] Fix: ${issue.title}`,
+    prBody: parsed.prBody ?? parsed.diagnosis ?? issue.summary,
+    testPlan: parsed.testPlan ?? issue.testRecommendation ?? "Add regression test",
+  };
+}
+
 function buildRepairPrompt(issue: ClassifiedIssue, context: RepairContext): string {
   return [
-    "You are DNA by Humaan AI repair. Diagnose this production issue and suggest a fix.",
-    "Never suggest editing secrets. Always recommend tests. Never suggest auto-merge.",
+    "You are DNA by Humaan aggressive repair. Diagnose this production issue and produce applicable code patches.",
+    "Never suggest editing secrets. Always include tests in testPlan. Never suggest auto-merge.",
+    issue.isBlocker ? "This is a BLOCKER — repeat threshold exceeded. You MUST propose concrete code changes." : "",
     "",
     `Issue: ${issue.title}`,
     `Summary: ${issue.summary}`,
     `Category: ${issue.category}`,
     `Severity: ${issue.severity}`,
+    issue.fingerprint ? `Fingerprint: ${issue.fingerprint}` : "",
+    issue.repeatCount != null ? `Repeat count: ${issue.repeatCount}` : "",
+    issue.suspectedCause ? `Suspected cause: ${issue.suspectedCause}` : "",
+    issue.suggestedFix ? `Suggested fix: ${issue.suggestedFix}` : "",
     "",
     "Behaviour context:",
     context.behaviour.join("\n---\n"),
     "",
     "Memory context:",
     context.memory.join("\n---\n"),
-  ].join("\n");
+    "",
+    "Code snippets:",
+    context.codeSnippets.map((s) => `### ${s.file}\n${s.content}`).join("\n\n"),
+    buildStructuredRepairPromptSuffix(),
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 export async function runRepairWorkflow(
@@ -213,3 +246,5 @@ export async function runRepairWorkflow(
 
 export { executeRepairWorkflow } from "./orchestrator.js";
 export type { ExecuteRepairOptions, ExecuteRepairResult } from "./orchestrator.js";
+export { parseRepairResponse, applyPatches, buildStructuredRepairPromptSuffix } from "./patch-parser.js";
+export { gatewayRepairPlaybook } from "./gateway-playbook.js";

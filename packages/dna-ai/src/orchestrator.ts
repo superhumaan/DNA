@@ -1,9 +1,10 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
 import { git } from "@superhumaan/dna-github";
 import type { AiRepairPlan, ClassifiedIssue, DnaConfig } from "@superhumaan/dna-config";
+import { resolveRepairConfig } from "@superhumaan/dna-config";
 import {
   createAiProvider,
   type RepairContext,
@@ -15,6 +16,8 @@ import {
   resolveGitHubToken,
   linkIssueToPr,
 } from "@superhumaan/dna-github";
+import { applyPatches } from "./patch-parser.js";
+import { gatewayRepairPlaybook } from "./gateway-playbook.js";
 
 const execAsync = promisify(exec);
 
@@ -33,6 +36,7 @@ export interface ExecuteRepairResult {
   prUrl?: string;
   prNumber?: number;
   testsPassed: boolean;
+  filesModified: string[];
 }
 
 async function loadRepairContext(
@@ -73,11 +77,22 @@ async function loadRepairContext(
     }
   }
 
+  const probeFiles = ["src/index.ts", "src/server.ts", "src/app.ts", "Dockerfile", "vercel.json"];
+  for (const file of probeFiles) {
+    if (codeSnippets.some((s) => s.file === file)) continue;
+    try {
+      const content = await readFile(join(projectRoot, file), "utf-8");
+      codeSnippets.push({ file, content: content.slice(0, 2000) });
+    } catch {
+      // optional
+    }
+  }
+
   return {
     behaviour,
     memory,
     codeSnippets,
-    neuralNetworkIntent: "fix_runtime_error",
+    neuralNetworkIntent: issue.isBlocker ? "force_fix_blocker" : "fix_runtime_error",
   };
 }
 
@@ -96,31 +111,6 @@ function getAiConfig(config: DnaConfig): AiProviderConfig {
   };
 }
 
-async function applyPatches(
-  projectRoot: string,
-  changes: AiRepairPlan["proposedChanges"],
-): Promise<string[]> {
-  const modified: string[] = [];
-  for (const change of changes) {
-    if (!change.patch) continue;
-    const filePath = join(projectRoot, change.file);
-    try {
-      let content: string;
-      try {
-        content = await readFile(filePath, "utf-8");
-      } catch {
-        content = "";
-      }
-      const updated = content + `\n\n${change.patch}\n`;
-      await writeFile(filePath, updated, "utf-8");
-      modified.push(change.file);
-    } catch {
-      // skip failed patch
-    }
-  }
-  return modified;
-}
-
 async function runTests(projectRoot: string): Promise<boolean> {
   try {
     const { stdout, stderr } = await execAsync("pnpm test 2>&1 || npm test 2>&1", {
@@ -133,20 +123,43 @@ async function runTests(projectRoot: string): Promise<boolean> {
   }
 }
 
+function enrichPlanWithGatewayFixes(issue: ClassifiedIssue, plan: AiRepairPlan): AiRepairPlan {
+  if (plan.proposedChanges.length > 0) return plan;
+  const gatewayChanges = gatewayRepairPlaybook(issue);
+  if (gatewayChanges.length === 0) return plan;
+  return {
+    ...plan,
+    proposedChanges: gatewayChanges,
+    diagnosis: `${plan.diagnosis}\n\nGateway playbook applied: origin health check and container probe.`,
+  };
+}
+
 export async function executeRepairWorkflow(
   options: ExecuteRepairOptions,
 ): Promise<ExecuteRepairResult> {
   const { projectRoot, dnaRoot, issue, config, issueNumber, dryRun } = options;
+  const repairConfig = resolveRepairConfig(config.ai);
 
   const context = await loadRepairContext(dnaRoot, issue, projectRoot);
   const provider = createAiProvider(getAiConfig(config));
-  const plan = await provider.diagnose(issue, context);
+  let plan = await provider.diagnose(issue, context);
+  plan = enrichPlanWithGatewayFixes(issue, plan);
 
   if (dryRun || !config.github?.owner || !config.github?.repo) {
     return {
       plan,
       branchName: plan.branchName,
       testsPassed: false,
+      filesModified: [],
+    };
+  }
+
+  if (!repairConfig.autoPr) {
+    return {
+      plan,
+      branchName: plan.branchName,
+      testsPassed: false,
+      filesModified: [],
     };
   }
 
@@ -177,18 +190,16 @@ export async function executeRepairWorkflow(
 
   if (modified.length > 0) {
     await g.add(modified);
-    await g.commit(`fix(dna): ${issue.title}\n\nDNA AI repair — not auto-merged`);
+    await g.commit(`fix(dna): ${issue.title}\n\nDNA aggressive repair — not auto-merged`);
   }
 
-  const testsPassed = await runTests(projectRoot);
+  const testsPassed = modified.length > 0 ? await runTests(projectRoot) : false;
 
   let prUrl: string | undefined;
   let prNumber: number | undefined;
 
-  if (token && config.github.owner && config.github.repo) {
-    if (modified.length > 0) {
-      await g.push("origin", plan.branchName).catch(() => undefined);
-    }
+  if (token && config.github.owner && config.github.repo && modified.length > 0) {
+    await g.push("origin", plan.branchName).catch(() => undefined);
 
     const pr = await createPullRequest(
       { owner: config.github.owner, repo: config.github.repo, token },
@@ -201,9 +212,12 @@ export async function executeRepairWorkflow(
           plan.testPlan,
           "",
           `Tests: ${testsPassed ? "passed" : "not run or failed"}`,
+          issue.isBlocker ? "\n⚠️ **BLOCKER** — repeat threshold exceeded." : "",
           "",
-          "**DNA Safety:** This PR was created by DNA AI repair. Never auto-merged.",
-        ].join("\n"),
+          "**DNA Safety:** This PR was created by DNA aggressive repair. Never auto-merged.",
+        ]
+          .filter(Boolean)
+          .join("\n"),
         head: plan.branchName,
       },
     );
@@ -228,5 +242,6 @@ export async function executeRepairWorkflow(
     prUrl,
     prNumber,
     testsPassed,
+    filesModified: modified,
   };
 }

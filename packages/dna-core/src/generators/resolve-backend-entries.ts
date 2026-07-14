@@ -11,7 +11,9 @@ export const BACKEND_ENTRY_CANDIDATES = [
   "main.ts",
   "app.ts",
   "backend/server.js",
+  "backend/server.ts",
   "backend/src/index.ts",
+  "backend/src/server.js",
 ];
 
 const MONOREPO_ENTRY_GLOBS = [

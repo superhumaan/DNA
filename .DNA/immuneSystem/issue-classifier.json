@@ -25,6 +25,16 @@
       "pattern": "validation|ZodError",
       "category": "runtime_error",
       "discipline": "backend"
+    },
+    {
+      "pattern": "HTTP 502|HTTP 503|HTTP 504|Bad gateway|bad gateway",
+      "category": "deployment",
+      "discipline": "devops"
+    },
+    {
+      "pattern": "ECONNRESET|upstream|gateway",
+      "category": "deployment",
+      "discipline": "devops"
     }
   ]
 }

@@ -113,33 +113,36 @@ export interface RequestObservation {
   method: string;
   statusCode: number;
   durationMs: number;
+  requestId?: string;
+  responseBody?: string;
+  upstream?: string;
 }
 
 export function observeRequest(engine: RuntimeEngine, observation: RequestObservation): void {
   const slowThreshold = engine.config.slowRequestThresholdMs ?? 3000;
-  const { endpoint, method, statusCode, durationMs } = observation;
+  const { endpoint, method, statusCode, durationMs, requestId, responseBody, upstream } = observation;
+
+  const httpExtra = {
+    endpoint,
+    method,
+    statusCode,
+    durationMs,
+    requestId,
+    responseBody: responseBody?.slice(0, 500),
+    upstream,
+  };
 
   if (durationMs > slowThreshold) {
     void trackAndEmit(
       engine,
-      createEvent(engine, "slow_request", `Slow request: ${durationMs}ms`, {
-        endpoint,
-        method,
-        statusCode,
-        durationMs,
-      }),
+      createEvent(engine, "slow_request", `Slow request: ${durationMs}ms`, httpExtra),
     );
   }
 
   if (statusCode >= 500) {
     void trackAndEmit(
       engine,
-      createEvent(engine, "request_error", `HTTP ${statusCode}`, {
-        endpoint,
-        method,
-        statusCode,
-        durationMs,
-      }),
+      createEvent(engine, "request_error", `HTTP ${statusCode}`, httpExtra),
     );
   }
 

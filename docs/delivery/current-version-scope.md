@@ -4,13 +4,13 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.6.0)
+## In scope (v0.6.3)
 
 | Area | Delivered |
 |------|-----------|
-| **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace |
-| **Runtime** | Express, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`) |
-| **DNA Lab** | Production observability at `/labs` — local open access, production auth via `dna register lab`, issues/events/performance/quality/releases ([#12](https://github.com/superhumaan/DNA/issues/12)) |
+| **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace, `dna ai force-repair` |
+| **Runtime** | Express, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`); Aggressive Repair Loop fingerprints + CellularMemory |
+| **DNA Lab** | Production observability at `/labs` — Soli UI, local open access, production auth via `dna register lab`, CJS Express wire, Lite doctor polling, hardened `runtime.db` ([#12](https://github.com/superhumaan/DNA/issues/12)) |
 | **Supply chain** | **Zero production npm dependencies** (v0.4.6+), no install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
 | **Marketplace** | 897 packs, remote + bundled offline |
 | **Platform catalog** | Admin, SSO, RBAC, cloud deploy, CRM, CMS patterns |
@@ -55,7 +55,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 | Channel | Command |
 |---------|---------|
-| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.0`) |
+| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.3`) |
 | Monorepo dev | `git clone` + `pnpm dna:link` |
 
 ---

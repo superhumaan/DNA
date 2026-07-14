@@ -3,7 +3,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { describe, expect, it, afterEach } from "vitest";
-import { handleLabRequest } from "./server.js";
+import { handleLabRequest, LAB_DOCUMENT_CSP } from "./server.js";
 import { ensureLabStore } from "./storage.js";
 
 describe("lab server", () => {
@@ -45,6 +45,7 @@ describe("lab server", () => {
       headers: { Host: `127.0.0.1:${port}` },
     });
     expect(page.status).toBe(200);
+    expect(page.headers.get("content-security-policy")).toBe(LAB_DOCUMENT_CSP);
     expect(await page.text()).toContain("DNA Lab");
   });
 });

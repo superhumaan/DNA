@@ -10,7 +10,7 @@ import { installGitHooks } from "./generators/git-hooks.js";
 import { installDockerScaffold } from "./generators/docker.js";
 import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { wireRuntimeMiddleware } from "./generators/wire-runtime.js";
-import { wireLabMiddleware } from "./generators/wire-lab.js";
+import { wireLabStack } from "./generators/wire-lab-stack.js";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
 import { ensureLabAssets } from "./lab/server.js";
 import { scanProject } from "./scanner.js";
@@ -73,7 +73,17 @@ export async function runPostInit(
   config.ai = {
     enabled: answers.configureAi,
     provider: "mock",
-    repair: { enabled: true, autoPr: true, requireReview: true },
+    repair: {
+      enabled: true,
+      autoPr: true,
+      requireReview: true,
+      aggressive: true,
+      minRepeatForRepair: 3,
+      minRepeatForBlocker: 5,
+      forceAgentLoop: true,
+      dedupeIssues: true,
+      retryOpenRepairs: true,
+    },
   };
   config.github = { enabled: answers.configureGithub };
   const scan = await scanProject(root);
@@ -92,6 +102,15 @@ export async function runPostInit(
   created.push(
     `.DNA/config.dna.json (featureFactory ${answers.installFeatureFactory ? "enabled" : "disabled"})`,
   );
+
+  if (config.lab?.enabled !== false) {
+    created.push(...(await ensureLabAssets(root)));
+    const labWire = await wireLabStack({ root, config, scan });
+    created.push(...labWire.wired.map((f) => `lab auto-wired: ${f}`));
+    for (const skip of labWire.skipped) {
+      created.push(`(lab wire: ${skip})`);
+    }
+  }
 
   if (answers.installRuntime) {
     const db = await ensureRuntimeDatabase(root);
@@ -132,10 +151,6 @@ export async function runPostInit(
 
     const wire = await wireRuntimeMiddleware({ root, config });
     created.push(...wire.wired.map((f) => `runtime auto-wired: ${f}`));
-
-    created.push(...(await ensureLabAssets(root)));
-    const labWire = await wireLabMiddleware({ root, config });
-    created.push(...labWire.wired.map((f) => `lab auto-wired: ${f}`));
   }
 
   if (answers.configureGithub) {

@@ -441,6 +441,17 @@ dna ai repair --file issue.json --dry-run
 
 **Never auto-merges.** Always requires human review.
 
+### ai force-repair
+
+Re-run repair for open Aggressive Repair Loop blockers (from CellularMemory / runtime fingerprints).
+
+```bash
+dna ai force-repair
+dna ai force-repair --dry-run
+```
+
+Requires `ai.repair.aggressive` (default on). See [Lab and repair v0.6.3](./lab-and-repair-0.6.3.md).
+
 ## stack
 
 Approved system shapes — prevents incoherent technology mixes (e.g. Next.js + Vite, Ghost + React).

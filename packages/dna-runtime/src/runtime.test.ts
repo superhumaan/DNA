@@ -11,7 +11,10 @@ import type { ClassifiedIssue, RuntimeEvent } from "@superhumaan/dna-config";
 async function setupRuntimeProject(): Promise<string> {
   const root = join(tmpdir(), `dna-runtime-${randomUUID()}`);
   await mkdir(join(root, ".DNA", "runtime"), { recursive: true });
+  await mkdir(join(root, ".DNA", "data"), { recursive: true });
   await mkdir(join(root, ".DNA", "immuneSystem"), { recursive: true });
+  await mkdir(join(root, ".DNA", "CellularMemory", "amygdala"), { recursive: true });
+  await mkdir(join(root, ".DNA", "CellularMemory", "temporalLobe"), { recursive: true });
   await writeFile(join(root, ".DNA", "immuneSystem", "rules.json"), '{"rules":[]}');
   await writeFile(
     join(root, ".DNA", "immuneSystem", "issue-classifier.json"),
@@ -20,6 +23,15 @@ async function setupRuntimeProject(): Promise<string> {
   await writeFile(
     join(root, ".DNA", "immuneSystem", "severity-model.json"),
     '{"levels":{}}',
+  );
+  await writeFile(
+    join(root, ".DNA", "CellularMemory", "amygdala", "repeated-failures.md"),
+    "# Failures\n",
+  );
+  await writeFile(join(root, ".DNA", "CellularMemory", "amygdala", "blockers.md"), "# Blockers\n");
+  await writeFile(
+    join(root, ".DNA", "CellularMemory", "temporalLobe", "previous-solutions.md"),
+    "# Solutions\n",
   );
   return root;
 }
@@ -68,6 +80,7 @@ describe("express middleware", () => {
 
   afterEach(async () => {
     server?.close();
+    await new Promise((r) => setTimeout(r, 300));
     await rm(projectRoot, { recursive: true, force: true });
   });
 

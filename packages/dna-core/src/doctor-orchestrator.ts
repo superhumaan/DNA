@@ -20,7 +20,7 @@ import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { writeFileEnsured, writeJsonFile, fileExists, ensureDir } from "./fs.js";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
 import { ensureLabAssets as ensureLabStore } from "./lab/server.js";
-import { wireLabMiddleware } from "./generators/wire-lab.js";
+import { wireLabStack } from "./generators/wire-lab-stack.js";
 import { detectGitHubRemote, resolveGitHubToken, loginWithWebFlow } from "@superhumaan/dna-github";
 import { analyzeProject } from "./ivf/analyze.js";
 import { documentFromCode } from "./ivf/document.js";
@@ -118,7 +118,17 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
       ...config.ai,
       enabled: config.ai?.enabled ?? true,
       provider: config.ai?.provider ?? "mock",
-      repair: { enabled: true, autoPr: true, requireReview: true },
+      repair: {
+        enabled: true,
+        autoPr: true,
+        requireReview: true,
+        aggressive: true,
+        minRepeatForRepair: 3,
+        minRepeatForBlocker: 5,
+        forceAgentLoop: true,
+        dedupeIssues: true,
+        retryOpenRepairs: true,
+      },
     };
     changed = true;
     actions.push("AI repair workflow enabled");
@@ -334,7 +344,7 @@ async function ensureLabScaffold(root: string, config: DnaConfig): Promise<strin
     actions.push(".DNA/config.dna.json (lab enabled)");
   }
 
-  const wire = await wireLabMiddleware({ root, config });
+  const wire = await wireLabStack({ root, config });
   for (const file of wire.wired) {
     actions.push(`lab auto-wired: ${file}`);
   }
