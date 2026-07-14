@@ -2,6 +2,12 @@
 
 _Last updated: 2026-07-14_
 
+## 2026-07-14 — v0.6.8 Lab CI billing blocker
+
+- Lab classifies GitHub Actions billing/spending-limit failures; Overview + Quality banner
+- Cleanup workflow skips billing instant failures; `continue-on-error`
+- Docs: upgrade requires API restart (npx alone does not refresh Lab)
+
 ## 2026-07-14 — v0.6.7 Lab UI Humaan parity
 
 - Lab UI: DNA icon-only brand, Humaan primary pills + large pill tabs, list search → tabs → always-on tables, sidebar accordion, base font 16px

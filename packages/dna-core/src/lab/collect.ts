@@ -17,13 +17,20 @@ import {
   listCiRuns,
   listQualityReports,
   readCoverageSummary,
+  summarizeCiBillingBlocker,
+  type LabCiBillingBlocker,
   type LabCiRun,
   type LabCoverageSummary,
   type LabQualityReportRow,
 } from "./collect-quality.js";
 
 export type { LabIssueSummary, LabEventTimelineBucket, LabSlowEndpoint } from "./collect-aggregates.js";
-export type { LabQualityReportRow, LabCoverageSummary, LabCiRun } from "./collect-quality.js";
+export type {
+  LabQualityReportRow,
+  LabCoverageSummary,
+  LabCiRun,
+  LabCiBillingBlocker,
+} from "./collect-quality.js";
 
 export interface LabDashboardData {
   doctor: DoctorReport;
@@ -32,6 +39,8 @@ export interface LabDashboardData {
   qualityReports: LabQualityReportRow[];
   coverage: LabCoverageSummary | null;
   ciRuns: LabCiRun[];
+  /** Present when recent CI failures are GitHub billing / spending-limit blocks. */
+  ciBillingBlocker: LabCiBillingBlocker | null;
   thirdPartyApis: unknown[];
   impressions: string[];
   cellularMemory: string[];
@@ -192,6 +201,7 @@ export async function collectLabData(root: string): Promise<LabDashboardData> {
     qualityReports,
     coverage,
     ciRuns,
+    ciBillingBlocker: summarizeCiBillingBlocker(ciRuns),
     thirdPartyApis: thirdPartyEvents(runtimeEvents),
     impressions,
     cellularMemory,

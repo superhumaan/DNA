@@ -4,6 +4,19 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.8] - 2026-07-14
+
+### Added
+
+- **Lab CI billing blocker** — `/labs` detects GitHub Actions payment/spending-limit failures (annotation text, empty-step jobs, short duration) and shows a billing banner on Overview + Quality → CI with a link to GitHub Billing. CI rows use a `billing` badge so they are not mistaken for code failures.
+- **Cleanup anti-cascade** — `cleanup-failed-runs` skips billing/infra instant failures and always `continue-on-error`, so a billing lockout cannot multiply failed workflow runs.
+
+### Docs
+
+- Upgrade note: installing a new `@superhumaan/dna-by-humaan` version does **not** refresh Lab until the **API process is restarted** (`npx …@x.y.z` alone only runs the CLI). Prefer `npm i @superhumaan/dna-by-humaan@latest` then restart (`npm run dev:restart` or kill the API port).
+
+See [docs/engineering/lab-ci-billing-blocker.md](docs/engineering/lab-ci-billing-blocker.md).
+
 ## [0.6.7] - 2026-07-14
 
 ### Changed

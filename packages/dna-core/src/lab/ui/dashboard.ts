@@ -341,12 +341,28 @@ function pageHeader(title) {
     '</div></header>';
 }
 
+function ciBillingBanner() {
+  const b = state.data?.ciBillingBlocker;
+  if (!b || !b.active) return "";
+  return '<div class="lab-alert lab-alert--billing" role="alert">' +
+    '<div class="lab-alert__icon" aria-hidden="true"><i class="fa-solid fa-credit-card"></i></div>' +
+    '<div class="lab-alert__body">' +
+    '<strong class="lab-alert__title">GitHub Actions billing blocker</strong>' +
+    '<p class="lab-alert__text">' + esc(b.reason) +
+    (b.sampleMessage ? ' <span class="lab-alert__sample">' + esc(b.sampleMessage) + '</span>' : '') +
+    ' · ' + esc(b.affectedRuns) + ' recent run(s).</p>' +
+    '<p class="lab-alert__actions"><a href="' + esc(b.billingUrl) + '" target="_blank" rel="noopener noreferrer">Open GitHub Billing</a>' +
+    ' · Fix payment or raise the Actions spending limit, then re-run CI.</p>' +
+    '</div></div>';
+}
+
 function overviewPanel() {
   const d = state.data || {};
   const s = d.stats || {};
   const valid = d.doctor?.validation?.valid;
   const issues = (d.issueGroups || []).slice(0, 8);
   return '<div class="admin-page-body admin-page-body--form">' +
+    ciBillingBanner() +
     '<div class="lab-stats settings-grid">' +
     '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Unresolved issues</div><div class="lab-stat-card__value ' + (s.issueCount ? 'is-warn' : 'is-ok') + '">' + esc(s.issueCount) + '</div><div class="lab-stat-card__sub">' + esc(s.unresolvedCritical || 0) + ' critical/high</div></div>' +
     '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Errors (24h)</div><div class="lab-stat-card__value ' + (s.errors24h ? 'is-bad' : 'is-ok') + '">' + esc(s.errors24h) + '</div><div class="lab-stat-card__sub">' + esc(s.events24h) + ' events</div></div>' +
@@ -504,9 +520,12 @@ function qualityPanel() {
   const ciRows = ciRuns.length
     ? ciRuns.map((r) => {
       const conclusion = (r.conclusion || r.status || "").toLowerCase();
-      const cls = conclusion === "success" ? "ok" : conclusion === "failure" || conclusion === "cancelled" ? "critical" : "info";
+      const billing = r.failureKind === "billing";
+      const cls = billing ? "billing" : conclusion === "success" ? "ok" : conclusion === "failure" || conclusion === "cancelled" ? "critical" : "info";
+      const badgeLabel = billing ? "billing" : (r.conclusion || r.status || "—");
       const title = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">' + esc(r.displayTitle || r.workflowName) + '</a>' : esc(r.displayTitle || r.workflowName || "run");
-      return '<tr><td>' + title + '<div class="lab-table__sub">' + esc(r.workflowName || "") + (r.headBranch ? ' · ' + esc(r.headBranch) : '') + '</div></td><td><span class="lab-badge lab-badge--' + cls + '">' + esc(r.conclusion || r.status) + '</span></td><td>' + esc(r.event || "—") + '</td><td>' + timeAgo(r.updatedAt || r.createdAt) + '</td></tr>';
+      const sub = esc(r.workflowName || "") + (r.headBranch ? ' · ' + esc(r.headBranch) : '') + (billing ? ' · not a code failure' : '');
+      return '<tr><td>' + title + '<div class="lab-table__sub">' + sub + '</div></td><td><span class="lab-badge lab-badge--' + cls + '">' + esc(badgeLabel) + '</span></td><td>' + esc(r.event || "—") + '</td><td>' + timeAgo(r.updatedAt || r.createdAt) + '</td></tr>';
     }).join("")
     : tableEmptyRow(4, 'No CI runs match this search.');
 
@@ -527,6 +546,7 @@ function qualityPanel() {
 
   return '<div class="admin-page-body admin-page-body--table">' +
     listToolbar('Search quality…', tabs) +
+    (activeQualityTab === "ci" ? ciBillingBanner() : "") +
     covCards +
     table +
     '</div>';

@@ -4,7 +4,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.6.7)
+## In scope (v0.6.8)
 
 | Area | Delivered |
 |------|-----------|
@@ -22,7 +22,8 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **`dna stems`** | List, show, and refresh prompt stem packs |
 | **GitHub** | Connect, auto-issues, push gates, browser login (`dna github login`) |
 | **Preview deploy** | `dna-preview.yml` scaffold with Vercel/Netlify + branch filter |
-| **CI hygiene** | `cleanup-failed-runs.yml` deletes failed/cancelled runs after completion |
+| **CI hygiene** | `cleanup-failed-runs.yml` deletes failed/cancelled runs after completion; skips billing/infra instant failures and never cascades |
+| **Lab CI billing** | `/labs` banners GitHub Actions payment/spending-limit blocks separately from code CI failures |
 | **Doctor orchestrator** | `dna doctor` — scaffold, CI, runtime auto-wire, Lab scaffold, GitHub browser login |
 | **Runtime auto-wire** | Express, Fastify, Next.js middleware; preload fallback for other stacks |
 | **Sponsors & credits** | `dna credits`, public sponsor ledger, npm `funding` |
@@ -55,7 +56,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 | Channel | Command |
 |---------|---------|
-| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.7`) |
+| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.8`) |
 | Monorepo dev | `git clone` + `pnpm dna:link` |
 
 ---

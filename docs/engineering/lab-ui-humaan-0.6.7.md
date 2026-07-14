@@ -51,8 +51,12 @@ Applies to: Issues, Events, Performance, Releases, Quality (Reports / CI / APIs 
 ## Verify
 
 ```bash
-npx @superhumaan/dna-by-humaan@0.6.7 lab serve
-# open http://localhost:3200/labs
+npm install @superhumaan/dna-by-humaan@0.6.7   # or latest
+# Restart the API that serves /labs, then:
+npx @superhumaan/dna-by-humaan lab serve
+# or open your app's http://localhost:<vite>/labs after API restart
 ```
 
 Check: icon-only logo, no env/updated meta, pill Refresh, Issues search → severity pills → table headers when empty, sidebar accordion.
+
+**Note:** `npx @superhumaan/dna-by-humaan@x.y.z` alone does not upgrade Lab in a running host app — install into `node_modules` and **restart the API**. See [lab-ci-billing-blocker — Upgrade](./lab-ci-billing-blocker.md#upgrade-lab-in-a-host-app).

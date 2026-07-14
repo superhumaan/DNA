@@ -1,5 +1,6 @@
 # DNA cleanup — delete failed workflow runs after completion
 # Inline delete jobs cannot remove the current run (GitHub returns 403 while in progress).
+# Skips instant billing/infra failures so cleanup does not cascade when Actions cannot start runners.
 
 name: Cleanup failed runs
 
@@ -30,14 +31,17 @@ jobs:
         github.event.workflow_run.name != 'Cleanup failed runs'
       )
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: Delete failed workflow runs
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const cleanupName = "Cleanup failed runs";
+            const BILLING_MS = 45_000;
 
             async function deleteRun(runId) {
               try {
@@ -52,22 +56,71 @@ jobs:
               }
             }
 
+            function runDurationMs(run) {
+              const start = new Date(run.run_started_at || run.created_at).getTime();
+              const end = new Date(run.updated_at).getTime();
+              if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return null;
+              return end - start;
+            }
+
+            async function looksLikeBillingBlock(run) {
+              const ms = runDurationMs(run);
+              if (ms != null && ms < BILLING_MS) {
+                try {
+                  const { data: jobs } = await github.rest.actions.listJobsForWorkflowRun({
+                    owner,
+                    repo,
+                    run_id: run.id,
+                    per_page: 20,
+                  });
+                  const emptySteps = (jobs.jobs || []).every((j) => !(j.steps && j.steps.length));
+                  if (emptySteps) return true;
+                } catch (error) {
+                  console.log(`Could not list jobs for ${run.id}: ${error.message}`);
+                  // Instant failure with no job detail — treat as billing/infra.
+                  if (ms < 15_000) return true;
+                }
+              }
+              return false;
+            }
+
+            // Never cascade: if the triggering run itself was a billing block, exit quietly.
+            if (context.eventName === "workflow_run") {
+              const trigger = context.payload.workflow_run;
+              if (trigger && (await looksLikeBillingBlock(trigger))) {
+                console.log(
+                  `Skip cleanup: triggering run ${trigger.id} looks like GitHub billing/infra (jobs never started).`,
+                );
+                return;
+              }
+            }
+
             async function sweepFailedRuns() {
               const perPage = 100;
               for (let page = 1; ; page++) {
-                const { data } = await github.rest.actions.listWorkflowRunsForRepo({
-                  owner,
-                  repo,
-                  status: "completed",
-                  per_page: perPage,
-                  page,
-                });
+                let data;
+                try {
+                  ({ data } = await github.rest.actions.listWorkflowRunsForRepo({
+                    owner,
+                    repo,
+                    status: "completed",
+                    per_page: perPage,
+                    page,
+                  }));
+                } catch (error) {
+                  console.log(`List runs failed (billing or permissions): ${error.message}`);
+                  return;
+                }
 
                 for (const run of data.workflow_runs) {
                   if (
                     (run.conclusion === "failure" || run.conclusion === "cancelled") &&
                     run.name !== cleanupName
                   ) {
+                    if (await looksLikeBillingBlock(run)) {
+                      console.log(`Skip delete ${run.id}: billing/infra failure`);
+                      continue;
+                    }
                     await deleteRun(run.id);
                   }
                 }
@@ -76,4 +129,9 @@ jobs:
               }
             }
 
-            await sweepFailedRuns();
+            try {
+              await sweepFailedRuns();
+            } catch (error) {
+              // Never fail the cleanup workflow — billing lockouts would otherwise cascade.
+              console.log(`Cleanup aborted safely: ${error.message}`);
+            }

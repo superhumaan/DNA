@@ -49,6 +49,8 @@ Overview · Issues · Events · Performance · Quality · Releases
 
 **UI (v0.6.7):** Humaan admin parity — DNA icon-only brand, 48px primary pills, large pill tabs, search above tabs on list pages, tables always shown (empty row when no data), Monitor/Delivery sidebar accordion (one open). See [lab-ui-humaan-0.6.7](./lab-ui-humaan-0.6.7.md).
 
+**CI billing (v0.6.8):** Overview / Quality → CI show a billing blocker banner when Actions cannot start runners. See [lab-ci-billing-blocker](./lab-ci-billing-blocker.md). After upgrading the npm package, **restart the API** that mounts Lab.
+
 ### Release tracking & source maps (v2)
 
 - `POST /api/dna/labs/releases` — register deploy (`GIT_SHA`, version)

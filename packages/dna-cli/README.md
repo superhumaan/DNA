@@ -231,6 +231,8 @@ DNA Lab at **`/labs`** complements external uptime tools (it does not replace pi
 
 **UI (v0.6.7+):** Humaan admin parity — DNA logo only, primary pill buttons, large pill tabs, search → filters → data tables, collapsible Monitor/Delivery nav. [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-ui-humaan-0.6.7.md).
 
+After `npm install @superhumaan/dna-by-humaan@latest`, **restart the API** that mounts Lab — `npx …@x.y.z` alone does not refresh `/labs`.
+
 ```typescript
 import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";
 

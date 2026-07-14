@@ -42,6 +42,84 @@ export interface LabCiRun {
   url?: string;
   createdAt?: string;
   updatedAt?: string;
+  /** Classified failure cause when conclusion is failure/cancelled. */
+  failureKind?: "billing" | "code" | "unknown";
+  failureMessage?: string;
+}
+
+export interface LabCiBillingBlocker {
+  active: boolean;
+  reason: string;
+  billingUrl: string;
+  affectedRuns: number;
+  sampleMessage?: string;
+}
+
+/** GitHub annotation when Actions minutes / payment block job start. */
+export const CI_BILLING_ANNOTATION_RE =
+  /spending limit|account payments have failed|billing\s*&\s*plans|job was not started because/i;
+
+const BILLING_URL = "https://github.com/settings/billing";
+/** Failures that never get a runner typically finish in under 45s. */
+const BILLING_DURATION_MS = 45_000;
+
+export function durationMs(createdAt?: string, updatedAt?: string): number | null {
+  if (!createdAt || !updatedAt) return null;
+  const start = new Date(createdAt).getTime();
+  const end = new Date(updatedAt).getTime();
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return null;
+  return end - start;
+}
+
+export function classifyCiFailure(input: {
+  conclusion?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  annotationText?: string;
+  jobsWithEmptySteps?: boolean;
+}): "billing" | "code" | "unknown" {
+  const conclusion = (input.conclusion || "").toLowerCase();
+  if (conclusion !== "failure" && conclusion !== "cancelled") return "unknown";
+
+  if (input.annotationText && CI_BILLING_ANNOTATION_RE.test(input.annotationText)) {
+    return "billing";
+  }
+
+  const ms = durationMs(input.createdAt, input.updatedAt);
+  if (
+    conclusion === "failure" &&
+    ms != null &&
+    ms < BILLING_DURATION_MS &&
+    (input.jobsWithEmptySteps === true || Boolean(input.annotationText && /was not started/i.test(input.annotationText)))
+  ) {
+    return "billing";
+  }
+
+  // Cluster heuristic: instant failures with no job detail still look like billing/infra.
+  if (conclusion === "failure" && ms != null && ms < 15_000 && input.jobsWithEmptySteps === true) {
+    return "billing";
+  }
+
+  if (conclusion === "failure" || conclusion === "cancelled") return "code";
+  return "unknown";
+}
+
+export function summarizeCiBillingBlocker(runs: LabCiRun[]): LabCiBillingBlocker | null {
+  const billingRuns = runs.filter((r) => r.failureKind === "billing");
+  if (billingRuns.length === 0) return null;
+
+  const sample =
+    billingRuns.find((r) => r.failureMessage)?.failureMessage ||
+    "GitHub Actions could not start jobs — check account payment or Actions spending limit.";
+
+  return {
+    active: true,
+    reason:
+      "CI jobs are blocked by GitHub billing or Actions spending limit — not application test failures.",
+    billingUrl: BILLING_URL,
+    affectedRuns: billingRuns.length,
+    sampleMessage: sample,
+  };
 }
 
 export async function listQualityReports(root: string): Promise<LabQualityReportRow[]> {
@@ -158,6 +236,73 @@ export async function readCoverageSummary(root: string): Promise<LabCoverageSumm
   return null;
 }
 
+async function enrichCiFailure(root: string, run: LabCiRun): Promise<LabCiRun> {
+  if (!run.databaseId) {
+    return {
+      ...run,
+      failureKind: classifyCiFailure({
+        conclusion: run.conclusion,
+        createdAt: run.createdAt,
+        updatedAt: run.updatedAt,
+      }),
+    };
+  }
+
+  let annotationText = "";
+  let jobsWithEmptySteps = false;
+
+  try {
+    const { stdout } = await execFileAsync(
+      "gh",
+      ["run", "view", String(run.databaseId), "--json", "jobs,conclusion"],
+      { cwd: root, timeout: 6000, maxBuffer: 2_000_000 },
+    );
+    const detail = JSON.parse(stdout) as {
+      jobs?: Array<{ steps?: unknown[]; conclusion?: string }>;
+    };
+    const jobs = detail.jobs ?? [];
+    if (jobs.length > 0) {
+      jobsWithEmptySteps = jobs.every(
+        (j) => !Array.isArray(j.steps) || j.steps.length === 0,
+      );
+    }
+  } catch {
+    // fall through — duration heuristic still applies
+  }
+
+  try {
+    const { stdout } = await execFileAsync(
+      "gh",
+      ["run", "view", String(run.databaseId)],
+      { cwd: root, timeout: 6000, maxBuffer: 2_000_000 },
+    );
+    annotationText = stdout;
+  } catch {
+    // ignore
+  }
+
+  const failureKind = classifyCiFailure({
+    conclusion: run.conclusion,
+    createdAt: run.createdAt,
+    updatedAt: run.updatedAt,
+    annotationText,
+    jobsWithEmptySteps,
+  });
+
+  const match = annotationText.match(CI_BILLING_ANNOTATION_RE);
+  const failureMessage =
+    failureKind === "billing"
+      ? match?.[0]
+        ? annotationText
+            .split("\n")
+            .find((line) => CI_BILLING_ANNOTATION_RE.test(line))
+            ?.trim()
+        : "The job was not started because recent account payments have failed or your spending limit needs to be increased."
+      : undefined;
+
+  return { ...run, failureKind, failureMessage };
+}
+
 export async function listCiRuns(root: string): Promise<LabCiRun[]> {
   try {
     const { stdout } = await execFileAsync(
@@ -173,7 +318,42 @@ export async function listCiRuns(root: string): Promise<LabCiRun[]> {
       { cwd: root, timeout: 8000, maxBuffer: 2_000_000 },
     );
     const parsed = JSON.parse(stdout) as LabCiRun[];
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) return [];
+
+    const failures = parsed.filter((r) => {
+      const c = (r.conclusion || "").toLowerCase();
+      return c === "failure" || c === "cancelled";
+    });
+
+    // Enrich at most 4 recent failures to keep Lab /data fast.
+    const enrichIds = new Set(
+      failures
+        .slice(0, 4)
+        .map((r) => r.databaseId)
+        .filter((id): id is number => typeof id === "number"),
+    );
+
+    const enriched = await Promise.all(
+      parsed.map(async (run) => {
+        if (!run.databaseId || !enrichIds.has(run.databaseId)) {
+          const c = (run.conclusion || "").toLowerCase();
+          if (c === "failure" || c === "cancelled") {
+            return {
+              ...run,
+              failureKind: classifyCiFailure({
+                conclusion: run.conclusion,
+                createdAt: run.createdAt,
+                updatedAt: run.updatedAt,
+              }),
+            };
+          }
+          return run;
+        }
+        return enrichCiFailure(root, run);
+      }),
+    );
+
+    return enriched;
   } catch {
     return [];
   }

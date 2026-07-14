@@ -82,6 +82,9 @@ describe("CI generator", () => {
     expect(yaml).not.toContain("- CI");
     expect(yaml).toContain("deleteWorkflowRun");
     expect(yaml).toContain("actions: write");
+    expect(yaml).toContain("looksLikeBillingBlock");
+    expect(yaml).toContain("continue-on-error: true");
+    expect(yaml).toContain("Cleanup aborted safely");
   });
 
   it("does not embed inline cleanup jobs in CI workflow", () => {
