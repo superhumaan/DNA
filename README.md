@@ -302,7 +302,8 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | DNA pairing is DNA-only (v0.6.6) | Jul 2026 | Jul 2026 | Shipped |
 | Lab UI Humaan admin parity (v0.6.7) | Jul 2026 | Jul 2026 | Shipped |
 | Lab CI billing blocker + cleanup anti-cascade (v0.6.8) | Jul 2026 | Jul 2026 | Shipped |
-| Lab pairing paste-first without init (v0.6.9) | Jul 2026 | Jul 2026 | Shipped |
+| Lab pairing paste-first without init (v0.6.9) | Jul 2026 | Jul 2026 | Superseded by store-first (v0.6.11) |
+| Lab pairing store-first + gateway allowlist (v0.6.11) | Jul 2026 | Jul 2026 | Shipped |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | In progress |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |

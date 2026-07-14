@@ -1,4 +1,5 @@
 import { loadDnaConfig } from "../validator.js";
+import { formatGatewayAllowlistFailure } from "./gateway-allowlist.js";
 import {
   initLocalPairing,
   pollPairingStatus,
@@ -49,25 +50,22 @@ export async function runRegisterLab(options: RegisterLabOptions): Promise<Regis
     "",
     `Pairing ID: ${pairing.pairingId}`,
     "",
-    "148-digit code (paste at production /labs → Create account):",
+    "148-digit code (paste at production /labs after Production notified):",
     pairing.code,
     "",
     `Expires: ${pairing.expiresAt}`,
-    `Saved: ${pairing.pairingFile}`,
+    `Saved locally: ${pairing.pairingFile}`,
   ].join("\n");
 
   if (!push.ok) {
+    message += `\n\n${formatGatewayAllowlistFailure(productionUrl, push.error ?? `HTTP ${push.status ?? "?"}`)}`;
+  } else {
     message += [
       "",
       "",
-      "Note — production was not pre-notified (CLI could not reach pairing/init).",
-      push.error ?? `HTTP ${push.status ?? "?"}`,
-      "",
-      "You can still pair: open /labs and paste the Pairing ID + 148-digit code above.",
-      "Verify accepts the paste directly — pre-notify is optional (helps --wait / callback).",
+      "Production notified — pairing saved on the server (lab-store pairings[]).",
+      "Open /labs → paste Pairing ID + 148-digit code → Verify → create account.",
     ].join("\n");
-  } else {
-    message += "\n\nProduction notified. Paste Pairing ID + code at /labs → Pair project.";
   }
 
   return {

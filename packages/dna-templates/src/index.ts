@@ -200,6 +200,8 @@ VITE_DNA_RUNTIME_URL=/api/dna/runtime
 
 # DNA Lab — production observability at /labs (local: no login)
 # Pair production: npx dna register lab --url https://your-app.example.com
+# Behind Connect/oauth2-proxy: allowlist POST /api/dna/labs/pairing/init + GET …/pairing/status/*
+# See .DNA/lab/gateway-public-paths.md after dna doctor
 DNA_LAB_PATH=/labs
 GIT_SHA=               # Release tracking for Lab (v2 source maps)
 `;
@@ -222,4 +224,6 @@ export const LAB_INSTALL_SNIPPET = `// DNA Lab — production observability at /
 // Local dev: http://localhost:<vite-port>/labs — proxied to API (no login)
 // Standalone: npx dna lab serve --port 3200
 // Production: https://your-app.com/labs — pair with npx dna register lab
+// Store-first: CLI must reach POST /api/dna/labs/pairing/init (gateway allowlist).
+// See .DNA/lab/gateway-public-paths.md
 `;

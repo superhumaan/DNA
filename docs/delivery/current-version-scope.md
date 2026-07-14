@@ -28,7 +28,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Runtime auto-wire** | Express, Fastify, Next.js middleware; preload fallback for other stacks |
 | **Sponsors & credits** | `dna credits`, public sponsor ledger, npm `funding` |
 | **`dna lab serve`** | Local Lab at `http://localhost:3200/labs` (no login on localhost) |
-| **`dna register lab`** | Pair local CLI to production Lab with 148-digit verification code (paste-first verify; init push optional) |
+| **`dna register lab`** | Pair local CLI to production Lab — CLI saves via `pairing/init`; `/labs` verifies store only; gateway allowlist for init/status |
 | **CellularMemory sync (MVP)** | `dna memory export` / `import` ([#13](https://github.com/superhumaan/DNA/issues/13)) |
 | **Impressions drift (MVP)** | Drift score in `dna scan`, `dna plan impressions-sync` ([#14](https://github.com/superhumaan/DNA/issues/14)) |
 | **Platform codegen (MVP)** | `dna generate feature audit-logging` ([#17](https://github.com/superhumaan/DNA/issues/17)) |

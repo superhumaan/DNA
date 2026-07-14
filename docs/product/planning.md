@@ -6,7 +6,7 @@ DNA development priorities and public roadmap.
 
 ## Current release focus (v0.6.9)
 
-- **Lab pairing paste-first** — `/labs` verify accepts Pairing ID + code without a successful CLI `pairing/init` (gateway-safe)
+- **Lab pairing store-first** — CLI must `POST /pairing/init` to save `{ pairingId, codeHash }`; `/labs` verify only checks the Lab store (no invent-on-paste)
 - Prior: Lab CI billing blocker (v0.6.8)
 
 ## Shipped highlights
@@ -62,7 +62,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Lab UI v4 + runtime depth + EPIPE/repair harden (v0.6.4) | ✅ Shipped — see [lab-and-runtime-0.6.4](../engineering/lab-and-runtime-0.6.4.md) |
 | Lab UI Humaan admin parity (v0.6.7) | ✅ Shipped — see [lab-ui-humaan-0.6.7](../engineering/lab-ui-humaan-0.6.7.md) |
 | Lab CI billing blocker + cleanup anti-cascade (v0.6.8) | ✅ Shipped — see [lab-ci-billing-blocker](../engineering/lab-ci-billing-blocker.md) |
-| Lab pairing paste-first without init (v0.6.9) | ✅ Shipped — verify accepts paste when CLI cannot reach pairing/init |
+| Lab pairing store-first (v0.6.11) | ✅ Shipped — CLI must save via pairing/init; verify is store-only; gateway allowlist docs |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | ✅ Shipped — import merge + team registry sync |
 | Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | ✅ Shipped — `dna scan --open-pr` |
 | Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | ✅ Shipped — platform codegen scaffolds |

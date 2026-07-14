@@ -46,7 +46,7 @@ dna lab serve --port 3200
 dna register lab --url https://your-app.example.com
 ```
 
-Local: no login. Production: email + password + OTP after `dna register lab` pairing.
+Local: no login. Production: email + password + OTP after `dna register lab` pairing (CLI must print **Production notified**; behind Connect allowlist `POST /api/dna/labs/pairing/init` — see `.DNA/lab/gateway-public-paths.md`).
 
 See [Runtime Observer](./runtime-observer.md#production-lab-labs).
 
@@ -175,12 +175,18 @@ dna credits
 
 ## update
 
-Check for knowledge pack updates.
+Upgrade the DNA CLI, **re-apply every installed knowledge pack**, and **force re-inject** Cursor/Claude always-on rules (AGENTS.md, `.cursor/rules/*`, workbench skills, stems).
 
 ```bash
 dna update
 dna update --channel beta
+dna update --check-only          # report only — no writes
+dna update --skip-cli            # packs + rules only
+dna update --skip-packs          # CLI + rules only
+dna update --skip-workbench      # skip AI rule re-injection (not recommended)
 ```
+
+`dna update` exits non-zero when AI injection verification fails (missing/stale always-on rules) or pack refresh fails — so agents cannot silently skip DNA.
 
 ## runtime install
 

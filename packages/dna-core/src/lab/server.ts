@@ -35,14 +35,17 @@ export interface LabServerOptions {
 type Req = IncomingMessage & { body?: unknown };
 type Res = ServerResponse;
 
-/** Document CSP for /labs HTML — must override host helmet API CSP (default-src 'none'). */
+/**
+ * Document CSP for /labs HTML — must override host helmet API CSP (default-src 'none').
+ * Allows Cloudflare Web Analytics when the zone injects static.cloudflareinsights.com.
+ */
 export const LAB_DOCUMENT_CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://kit.fontawesome.com",
+  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://kit.fontawesome.com https://static.cloudflareinsights.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://kit.fontawesome.com",
   "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://kit.fontawesome.com",
   "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com https://ka-f.fontawesome.com https://ka-p.fontawesome.com",
-  "connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://kit.fontawesome.com https://ka-f.fontawesome.com https://ka-p.fontawesome.com",
+  "connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://kit.fontawesome.com https://ka-f.fontawesome.com https://ka-p.fontawesome.com https://cloudflareinsights.com https://static.cloudflareinsights.com",
   "img-src 'self' data:",
   "base-uri 'self'",
   "form-action 'self'",
@@ -195,6 +198,7 @@ export async function handleLabRequest(
   }
 
   if (isGetOrHead && pathname === `${apiPrefix}/bootstrap`) {
+    const { DNA_LAB_GATEWAY_PUBLIC_PATHS } = await import("@superhumaan/dna-config");
     sendJson(
       res,
       200,
@@ -203,10 +207,22 @@ export async function handleLabRequest(
         authenticated: auth.authenticated,
         user: auth.user ? { name: auth.user.name, email: auth.user.email } : undefined,
         labPath,
+        pairing: {
+          mode: "store-first",
+          gatewayPublicPaths: [...DNA_LAB_GATEWAY_PUBLIC_PATHS],
+        },
       },
       undefined,
       req.method,
     );
+    return true;
+  }
+
+  if (isGetOrHead && pathname.startsWith(`${apiPrefix}/pairing/status/`)) {
+    const pairingId = pathname.slice(`${apiPrefix}/pairing/status/`.length);
+    const { findLabPairing } = await import("./storage.js");
+    const pairing = await findLabPairing(options.root, pairingId);
+    sendJson(res, 200, { verified: Boolean(pairing?.verified) }, undefined, req.method);
     return true;
   }
 
@@ -244,14 +260,6 @@ export async function handleLabRequest(
         await markLocalPairingVerified(options.root);
       }
       sendJson(res, 200, { ok: true, pairingId });
-      return true;
-    }
-
-    if (pathname.startsWith(`${apiPrefix}/pairing/status/`)) {
-      const pairingId = pathname.slice(`${apiPrefix}/pairing/status/`.length);
-      const { findLabPairing } = await import("./storage.js");
-      const pairing = await findLabPairing(options.root, pairingId);
-      sendJson(res, 200, { verified: Boolean(pairing?.verified) });
       return true;
     }
 
@@ -404,6 +412,13 @@ export async function ensureLabAssets(root: string): Promise<string[]> {
   const snippetExisted = await fileExists(snippetPath);
   await writeFileEnsured(snippetPath, LAB_INSTALL_SNIPPET);
   if (!snippetExisted) actions.push(".DNA/lab/install-snippet.ts");
+
+  const { DNA_LAB_GATEWAY_ALLOWLIST_FILE } = await import("@superhumaan/dna-config");
+  const { GATEWAY_PUBLIC_PATHS_MARKDOWN } = await import("./gateway-allowlist.js");
+  const gatewayPath = join(root, DNA_LAB_GATEWAY_ALLOWLIST_FILE);
+  const gatewayExisted = await fileExists(gatewayPath);
+  await writeFileEnsured(gatewayPath, GATEWAY_PUBLIC_PATHS_MARKDOWN);
+  if (!gatewayExisted) actions.push(DNA_LAB_GATEWAY_ALLOWLIST_FILE);
 
   return actions;
 }

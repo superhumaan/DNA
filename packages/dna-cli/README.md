@@ -132,7 +132,7 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna plan ivf` | Integrating Vertical Functions — phased migration plan |
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for Cursor / Copilot / Claude |
-| `dna update` | Upgrade CLI + refresh stems, `/dna-*` commands, and knowledge packs |
+| `dna update` | Upgrade CLI + re-apply all installed knowledge packs + force re-inject always-on AI rules |
 | `dna workbench install` | Refresh DNA Workbench + 59 prompt stem packs + `/dna-*` commands + `AGENTS.md` |
 | `dna stems list` | List prompt stem packs (analyze, ship, agent-loop roles, …) |
 | `dna stems show <id>` | Copy variants and file paths for one stem |
@@ -227,7 +227,7 @@ DNA Lab at **`/labs`** complements external uptime tools (it does not replace pi
 | Mode | Access |
 |------|--------|
 | **Local** | `dna lab serve` — open `http://localhost:3200/labs`, no login |
-| **Production** | `dna register lab --url https://your-app.com` → paste Pairing ID + 148-digit code at `/labs` → create account (works even if CLI could not reach `pairing/init`) |
+| **Production** | `dna register lab --url https://your-app.com` must print **Production notified** → paste Pairing ID + code at `/labs` → create account. Behind Connect: allowlist `POST /api/dna/labs/pairing/init` (see `.DNA/lab/gateway-public-paths.md`) |
 
 **UI (v0.6.7+):** Humaan admin parity — DNA logo only, primary pill buttons, large pill tabs, search → filters → data tables, collapsible Monitor/Delivery nav. [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-ui-humaan-0.6.7.md).
 

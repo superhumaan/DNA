@@ -10,6 +10,12 @@ export const DNA_LAB_PAIRING_FILE = ".DNA/lab/pairing.json";
 export const DNA_LAB_DEFAULT_PATH = "/labs";
 export const DNA_LAB_API_PREFIX = "/api/dna/labs";
 export const DNA_LAB_PAIRING_CODE_LENGTH = 148;
+/** Paths auth gateways (Connect, oauth2-proxy) must allow unauthenticated so CLI can register pairings. */
+export const DNA_LAB_GATEWAY_PUBLIC_PATHS = [
+  "POST /api/dna/labs/pairing/init",
+  "GET /api/dna/labs/pairing/status/*",
+] as const;
+export const DNA_LAB_GATEWAY_ALLOWLIST_FILE = ".DNA/lab/gateway-public-paths.md";
 export const DNA_FEEDBACK_QUEUE = ".DNA/data/feedback-queue.jsonl";
 
 /** Upstream DNA monorepo for community feedback issues */

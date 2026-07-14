@@ -1,21 +1,51 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-14T06:21:00.000Z._
+_Auto-maintained by DNA. Updated 2026-07-14T08:56:41.626Z. The user does not fill this in manually._
 
 ## Latest request
 
-> Fix DNA Lab pairing so paste works when `pairing/init` never reaches production (302 / edge login). User approved: do the fixes.
+> _Waiting for your first feature request — describe what you want to build in Cursor or Claude._
 
 ## Problem
 
-`dna register lab` generates a valid Pairing ID + 148-digit code locally, but `POST /api/dna/labs/pairing/init` never reaches DNA Lab on hosts behind a gateway. Verify then returns "Pairing not found" even though the user correctly pastes the CLI output.
+_To be refined by Product Analyst from the latest request._
+
+## Current Pain
+
+_To be refined by Product Analyst._
+
+## Proposed Solution
+
+_To be refined by Product Analyst and Solution Architect._
+
+## Users
+
+_To be identified by Product Analyst._
 
 ## Desired Behaviour
 
-1. Browser paste of Pairing ID + code verifies without a prior successful `pairing/init`
-2. CLI still attempts init (for callback / `--wait`) but does not require it for Lab account creation
-3. Honest messaging when init fails — paste still works
+_To be defined by Product Analyst._
 
-## Status
+## Edge Cases
 
-Implementing (user approved).
+_To be identified by Product Analyst and QA._
+
+## Success Criteria
+
+The feature is only complete when:
+
+- [ ] Backend works
+- [ ] Frontend works
+- [ ] UX is clean
+- [ ] Permissions/security are correct
+- [ ] Tests pass
+- [ ] Local quality gate passes (`dna quality report --feature`)
+- [ ] Docker image builds (`dna docker build`)
+- [ ] Changes pushed to GitHub (`dna github push`)
+- [ ] No unrelated files are modified
+- [ ] Existing behaviour is not broken
+- [ ] QA checklist is completed
+
+---
+
+**Project:** dna-by-humaan

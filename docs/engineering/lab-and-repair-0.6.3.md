@@ -85,6 +85,14 @@ not supported. Instead change the require of lab.js to a dynamic import()
 
 **Fix:** Explicit document CSP on `/labs` HTML (`connect-src 'self'`, etc.); auto-wire mounts Lab middleware after `configureExpress` / helmet when present.
 
+### 4b. Lab CSP / Cloudflare Insights
+
+**Symptom:** Console: loading `https://static.cloudflareinsights.com/beacon.min.js/…` violates `script-src` on `/labs`.
+
+**Cause:** Cloudflare Web Analytics injects the beacon at the edge; Lab CSP did not allow that host.
+
+**Fix:** `LAB_DOCUMENT_CSP` includes `https://static.cloudflareinsights.com` in `script-src` and Insights origins in `connect-src`. Bootstrap itself was already fine (`connect-src 'self'`).
+
 ---
 
 ## Related packages / paths

@@ -38,7 +38,7 @@ describe("lab pairing", () => {
     expect(good.ok).toBe(true);
   });
 
-  it("verifies paste without prior pairing/init (gateway-safe path)", async () => {
+  it("rejects verify when pairing/init never saved a row (store-first)", async () => {
     root = await mkdtemp(join(tmpdir(), "dna-lab-paste-"));
     const local = await initLocalPairing({
       root,
@@ -46,7 +46,6 @@ describe("lab pairing", () => {
       projectId: "test-app",
     });
 
-    // Simulate production store with no init record — only the browser paste arrives
     const pasteRoot = await mkdtemp(join(tmpdir(), "dna-lab-prod-"));
     try {
       const missing = await verifyPairingCode(pasteRoot, "not-a-real-id", local.code);
@@ -57,23 +56,37 @@ describe("lab pairing", () => {
       expect(short.ok).toBe(false);
       expect(short.error).toMatch(/Invalid pairing code/i);
 
+      const noInit = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
+      expect(noInit.ok).toBe(false);
+      expect(noInit.error).toMatch(/Unknown pairing|Production notified|pairing\/init/i);
+
+      const seeded = await registerPairingOnProduction(pasteRoot, {
+        pairingId: local.pairingId,
+        codeHash: local.codeHash,
+        projectId: "test-app",
+      });
+      expect(seeded.ok).toBe(true);
+
       const withSpaces = await verifyPairingCode(
         pasteRoot,
         ` ${local.pairingId} `,
         local.code.match(/.{1,40}/g)!.join("\n"),
       );
       expect(withSpaces.ok).toBe(true);
-
-      const wrong = await verifyPairingCode(
-        pasteRoot,
-        local.pairingId,
-        "9".repeat(DNA_LAB_PAIRING_CODE_LENGTH),
-      );
-      expect(wrong.ok).toBe(false);
-      expect(wrong.error).toMatch(/Invalid pairing code/i);
     } finally {
       await rm(pasteRoot, { recursive: true, force: true });
     }
+  });
+
+  it("rejects invalid codeHash on init", async () => {
+    root = await mkdtemp(join(tmpdir(), "dna-lab-init-"));
+    const bad = await registerPairingOnProduction(root, {
+      pairingId: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      codeHash: "not-a-hash",
+      projectId: "app",
+    });
+    expect(bad.ok).toBe(false);
+    expect(bad.error).toMatch(/codeHash/i);
   });
 
   it("does not treat auth gateway redirects as successful pairing init", async () => {
@@ -94,6 +107,6 @@ describe("lab pairing", () => {
 
     expect(result.ok).toBe(false);
     expect(result.status).toBe(302);
-    expect(result.error).toMatch(/paste|redirected/i);
+    expect(result.error).toMatch(/redirected|allowlist|gateway/i);
   });
 });

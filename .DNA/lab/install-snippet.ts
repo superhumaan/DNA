@@ -4,7 +4,7 @@
 //   • Express CJS: .DNA/lab/express-wire.cjs (dynamic import — lab is ESM-only)
 //   • Vite dev: proxy /labs + /api/dna/labs to the same target as /api
 //   • Vercel: rewrites /labs → API origin before SPA fallback
-// import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";
+import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";
 
 // Express ESM (mount after helmet / configureExpress, before SPA fallback):
 // app.use(createLabMiddleware({ root: process.cwd() }));

@@ -26,14 +26,16 @@ describe("resolveBackendEntryCandidates", () => {
 });
 
 describe("ensureLabAssets", () => {
-  it("creates lab store and install snippet", async () => {
+  it("creates lab store, install snippet, and gateway allowlist", async () => {
     const root = await mkdtemp(join(tmpdir(), "dna-lab-assets-"));
     try {
       const created = await ensureLabAssets(root);
       expect(created).toContain(".DNA/data/lab-store.json");
       expect(created).toContain(".DNA/lab/install-snippet.ts");
+      expect(created).toContain(".DNA/lab/gateway-public-paths.md");
       expect(await fileExists(join(root, ".DNA", "data", "lab-store.json"))).toBe(true);
       expect(await fileExists(join(root, ".DNA", "lab", "install-snippet.ts"))).toBe(true);
+      expect(await fileExists(join(root, ".DNA", "lab", "gateway-public-paths.md"))).toBe(true);
 
       const again = await ensureLabAssets(root);
       expect(again).toEqual([]);

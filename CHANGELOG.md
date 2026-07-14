@@ -4,6 +4,20 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Fixed
+
+- **`dna update` refreshes everything, not just the CLI** — re-applies all packs in `.DNA/marketplace/installed.json` (content refresh even when versions stay `1.0.0`), ensures foundation packs, and **force re-injects** Cursor/Claude always-on rules (`AGENTS.md`, `.mdc` rules, workbench + dna-cli skills, stems). Incomplete injection now fails the command. After a CLI package install, update re-runs with the new binary so generators match the published version.
+
+## [0.6.11] - 2026-07-14
+
+### Changed
+
+- **Lab pairing store-first** — `dna register lab` must successfully `POST /api/dna/labs/pairing/init` so production saves `{ pairingId, codeHash }` in `.DNA/data/lab-store.json`. `/labs` verify only checks that row (paste-first invent removed). Failed init exits CLI with Connect/nginx allowlist instructions. Doctor writes `.DNA/lab/gateway-public-paths.md`.
+
+### Fixed
+
+- **Lab CSP / Cloudflare Insights** — `/labs` document CSP allows `static.cloudflareinsights.com` (script) and Insights connect hosts so Cloudflare Web Analytics no longer logs CSP violations on proxied production Lab pages.
+
 ## [0.6.10] - 2026-07-14
 
 ### Fixed

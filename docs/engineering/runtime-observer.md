@@ -34,14 +34,18 @@ DNA Lab is the **production** observability UI — not localhost-only.
 - **Local** (`localhost`, `127.0.0.1`, `development`): `/labs` opens with **no login**
 - **Production**: ColorParty-style sign-in (email + password + OTP) after pairing
 
-### Pairing flow
+### Pairing flow (store-first)
 
 1. Deploy with `dna lab install` / `dna doctor` — `/labs` is live on your domain
-2. Locally: `npx dna register lab --url https://your-app.com` (copy Pairing ID + 148-digit code; paste works even if CLI could not reach `pairing/init`)
-3. On production `/labs` → paste pairing ID + 148-digit code → create account
-4. CLI generates the code, hashes it, POSTs to production, listens for callback
-5. Paste code in browser → verified → create name, email, password
-6. Sign in on production anytime thereafter
+2. If an auth gateway sits in front of the app (Invitrace Connect, oauth2-proxy, etc.), **allowlist**:
+   - `POST /api/dna/labs/pairing/init`
+   - `GET /api/dna/labs/pairing/status/*`  
+   See `.DNA/lab/gateway-public-paths.md` (written by doctor / lab install).
+3. Locally: `npx dna register lab --url https://your-app.com` — must print **Production notified** (CLI saves `{ pairingId, codeHash }` into Lab store). Exit code 1 if init was blocked.
+4. On production `/labs` → paste Pairing ID + 148-digit code → verify against the store → create account
+5. Sign in on production anytime thereafter
+
+`/labs` never invents pairings from paste alone. Without a successful CLI `pairing/init`, verify returns **Unknown pairing**.
 
 ### Screens
 

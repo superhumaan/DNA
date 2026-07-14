@@ -8,11 +8,17 @@ import { findLabPairing, saveLabPairing } from "./storage.js";
 
 const PAIRING_TTL_MS = 15 * 60 * 1000;
 const PAIRING_ID_RE = /^[a-f0-9]{32}$/i;
+const PAIRING_CODE_HASH_RE = /^[a-f0-9]{64}$/i;
 const PAIRING_CODE_RE = new RegExp(`^\\d{${DNA_LAB_PAIRING_CODE_LENGTH}}$`);
 
 /** CLI pairing IDs are 32-char hex from newId(). */
 export function isValidPairingId(pairingId: string): boolean {
   return PAIRING_ID_RE.test(pairingId.trim());
+}
+
+/** SHA-256 hex of the 148-digit code — stored on production; plaintext never is. */
+export function isValidPairingCodeHash(codeHash: string): boolean {
+  return PAIRING_CODE_HASH_RE.test(codeHash.trim());
 }
 
 /** Pairing codes are fixed-length digit strings (ignore whitespace from paste). */
@@ -103,16 +109,26 @@ export async function registerPairingOnProduction(
     callbackUrl?: string;
   },
 ): Promise<{ ok: boolean; error?: string }> {
-  const existing = await findLabPairing(root, input.pairingId);
+  const pairingId = input.pairingId.trim();
+  const codeHash = input.codeHash.trim().toLowerCase();
+
+  if (!isValidPairingId(pairingId)) {
+    return { ok: false, error: "Invalid pairing ID — expected 32-char hex from dna register lab" };
+  }
+  if (!isValidPairingCodeHash(codeHash)) {
+    return { ok: false, error: "Invalid codeHash — expected SHA-256 hex (64 chars)" };
+  }
+
+  const existing = await findLabPairing(root, pairingId);
   if (existing?.verified) {
     return { ok: false, error: "Pairing already verified" };
   }
 
   const now = Date.now();
   await saveLabPairing(root, {
-    pairingId: input.pairingId,
-    codeHash: input.codeHash,
-    projectId: input.projectId,
+    pairingId,
+    codeHash,
+    projectId: input.projectId || "app",
     callbackUrl: input.callbackUrl,
     createdAt: new Date(now).toISOString(),
     expiresAt: new Date(now + PAIRING_TTL_MS).toISOString(),
@@ -122,6 +138,10 @@ export async function registerPairingOnProduction(
   return { ok: true };
 }
 
+/**
+ * Store-first verify: the pending row must already exist from POST /pairing/init.
+ * /labs only checks the 148-digit code against the stored hash — it never invents rows.
+ */
 export async function verifyPairingCode(
   root: string,
   pairingId: string,
@@ -140,25 +160,16 @@ export async function verifyPairingCode(
     };
   }
 
-  const codeHash = hashValue(trimmedCode);
-  let pairing = await findLabPairing(root, id);
-
-  // Paste-first path: CLI may not have reached POST /pairing/init (gateway 302).
-  // The 148-digit code is the secret — accept a well-formed paste and persist it.
+  const pairing = await findLabPairing(root, id);
   if (!pairing) {
-    const now = Date.now();
-    pairing = {
-      pairingId: id,
-      codeHash,
-      projectId: "app",
-      createdAt: new Date(now).toISOString(),
-      expiresAt: new Date(now + PAIRING_TTL_MS).toISOString(),
-      verified: true,
-      verifiedAt: new Date(now).toISOString(),
+    return {
+      ok: false,
+      error:
+        "Unknown pairing — run npx dna register lab again and confirm it prints Production notified (CLI must save via pairing/init)",
     };
-    await saveLabPairing(root, pairing);
-    return { ok: true, callbackUrl: pairing.callbackUrl };
   }
+
+  const codeHash = hashValue(trimmedCode);
 
   if (pairing.verified) {
     if (codeHash !== pairing.codeHash) {
@@ -223,9 +234,9 @@ export async function pushPairingToProduction(
         ok: false,
         status: res.status,
         error: [
-          `Pairing init redirected (${res.status}) — CLI could not pre-register the hash.`,
+          `Pairing init redirected (${res.status}) — gateway blocked unauthenticated POST /pairing/init.`,
           location ? `Location: ${location}` : "",
-          "Paste Pairing ID + code at /labs anyway — verify accepts the paste without init.",
+          "Allowlist POST /api/dna/labs/pairing/init (and GET …/pairing/status/*) then re-run register lab.",
         ]
           .filter(Boolean)
           .join(" "),
