@@ -10,6 +10,22 @@ export interface ParsedPatchChange {
   replace?: string;
 }
 
+/** Files the gateway playbook may create when missing. */
+const ALLOW_CREATE = new Set(["src/health.ts"]);
+
+const PLACEHOLDER_PATCH =
+  /\/\/ existing code|DNA suggested fix for:|logger\.error\(\{ err: error \}, 'unknown'\)/;
+
+function isLowQualityPatch(change: ParsedPatchChange): boolean {
+  const text = `${change.patch ?? ""}\n${change.replace ?? ""}\n${change.search ?? ""}`;
+  if (PLACEHOLDER_PATCH.test(text)) return true;
+  // Blind comment-before-export is not a real fix
+  if (change.search === "export" && (change.replace ?? "").includes("DNA suggested fix")) {
+    return true;
+  }
+  return false;
+}
+
 export function parseRepairResponse(content: string): Partial<AiRepairPlan> | null {
   const jsonMatch = content.match(/```json\s*([\s\S]*?)```/);
   const raw = jsonMatch?.[1]?.trim() ?? content.trim();
@@ -39,30 +55,41 @@ export async function applyPatches(
   const modified: string[] = [];
 
   for (const change of changes) {
+    if (isLowQualityPatch(change)) continue;
+
     const filePath = join(projectRoot, change.file);
     try {
       let content: string;
+      let existed = true;
       try {
         content = await readFile(filePath, "utf-8");
       } catch {
         content = "";
+        existed = false;
       }
+
+      // Never invent new files except explicit health playbook targets
+      if (!existed && !ALLOW_CREATE.has(change.file)) continue;
 
       let updated = content;
 
       if (change.search != null && change.replace != null) {
-        if (content.includes(change.search)) {
-          updated = content.replace(change.search, change.replace);
-        } else if (change.patch) {
-          updated = content + `\n\n${change.patch}\n`;
-        } else {
-          continue;
-        }
+        if (!content.includes(change.search)) continue;
+        updated = content.replace(change.search, change.replace);
       } else if (change.patch) {
         if (change.patch.includes("<<<<<<<") || change.patch.startsWith("--- ")) {
           updated = applyUnifiedDiff(content, change.patch);
+        } else if (!existed && ALLOW_CREATE.has(change.file)) {
+          updated = `${change.patch}\n`;
+        } else if (existed && !content.includes(change.patch)) {
+          // append only when the file already exists and we have a named create target
+          if (ALLOW_CREATE.has(change.file)) {
+            updated = content + `\n\n${change.patch}\n`;
+          } else {
+            continue;
+          }
         } else {
-          updated = content + `\n\n${change.patch}\n`;
+          continue;
         }
       } else {
         continue;

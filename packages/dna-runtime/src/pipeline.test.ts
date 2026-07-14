@@ -1,10 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 import { processRuntimeEvent } from "../src/pipeline.js";
-import { readFingerprintRecords } from "../src/storage.js";
+import { readFingerprintRecords, readRuntimeRecords } from "../src/storage.js";
+import { resetSampleStateForTests } from "../src/sample.js";
 import type { RuntimeEvent } from "@superhumaan/dna-config";
 
 async function setupProject(): Promise<string> {
@@ -66,6 +67,8 @@ async function setupProject(): Promise<string> {
 }
 
 describe("runtime pipeline", () => {
+  beforeEach(() => resetSampleStateForTests());
+
   it("persists events and issues to runtime database", async () => {
     const root = await setupProject();
     const event: RuntimeEvent = {
@@ -82,6 +85,7 @@ describe("runtime pipeline", () => {
     });
 
     expect(result.issue.severity).toBe("critical");
+    expect(result.issue.latestEvent?.frames?.length).toBeGreaterThan(0);
 
     const events = await readRuntimeRecords<RuntimeEvent>(root, "events");
     const issues = await readRuntimeRecords(root, "issues");
@@ -91,7 +95,7 @@ describe("runtime pipeline", () => {
     await rm(root, { recursive: true, force: true });
   });
 
-  it("escalates repeated 502 errors to blocker with fingerprint", async () => {
+  it("escalates repeated 502 errors to blocker with fingerprint upsert", async () => {
     const root = await setupProject();
     const tracker = new (await import("@superhumaan/dna-immune")).EventTracker();
 
@@ -115,6 +119,7 @@ describe("runtime pipeline", () => {
         expect(result.fingerprint).toBeTruthy();
         expect(result.issue.category).toBe("deployment");
         expect(result.isBlocker).toBe(true);
+        expect(result.issue.repeatCount).toBe(3);
       }
     }
 
@@ -122,6 +127,11 @@ describe("runtime pipeline", () => {
     expect(fingerprints.length).toBe(1);
     expect(fingerprints[0]?.repeatCount).toBe(3);
     expect(fingerprints[0]?.isBlocker).toBe(true);
+
+    const issues = await readRuntimeRecords(root, "issues");
+    const events = await readRuntimeRecords(root, "events");
+    expect(issues.length).toBe(1);
+    expect(events.length).toBe(1);
 
     const blockers = await readFile(
       join(root, ".DNA", "CellularMemory", "amygdala", "blockers.md"),
@@ -132,8 +142,3 @@ describe("runtime pipeline", () => {
     await rm(root, { recursive: true, force: true });
   });
 });
-
-async function readRuntimeRecords<T>(root: string, table: "events" | "issues"): Promise<T[]> {
-  const { readRuntimeRecords: read } = await import("../src/storage.js");
-  return read<T>(root, table);
-}

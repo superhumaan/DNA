@@ -302,11 +302,14 @@ export async function writeQualityReport(
   const slug = report.featureSlug ?? "latest";
   const reportDir = join(root, ".DNA", "reports", "quality");
   const reportPath = join(reportDir, `${slug}.md`);
+  const jsonPath = join(reportDir, `${slug}.json`);
   const markdown = formatQualityReportMarkdown(report);
 
   await writeFileEnsured(reportPath, markdown);
+  await writeFileEnsured(jsonPath, `${JSON.stringify(report, null, 2)}\n`);
   if (slug !== "latest") {
     await writeFileEnsured(join(reportDir, "latest.md"), markdown);
+    await writeFileEnsured(join(reportDir, "latest.json"), `${JSON.stringify(report, null, 2)}\n`);
   }
 
   return { reportPath: relative(root, reportPath), report };

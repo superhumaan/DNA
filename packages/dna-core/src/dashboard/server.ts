@@ -2,7 +2,7 @@ import { glob } from "../glob.js";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { join } from "node:path";
 import { readFile, stat } from "node:fs/promises";
-import { runDoctor, type DoctorReport } from "../doctor.js";
+import { runDoctorLite, type DoctorReport } from "../doctor.js";
 import { readRuntimeRecords } from "../storage/runtime-db.js";
 import { fileExists } from "../fs.js";
 
@@ -19,6 +19,50 @@ export interface DashboardData {
   qualityReports: { name: string; mtime: string; score?: number }[];
   impressions: string[];
   cellularMemory: string[];
+}
+
+const DOCTOR_TTL_MS = 60_000;
+const doctorCache = new Map<string, { at: number; report: DoctorReport }>();
+
+function emptyDoctor(): DoctorReport {
+  return {
+    dna: { installed: false },
+    documentation: { impressionsCount: 0, missing: 0 },
+    behaviour: { files: 0, missing: [] },
+    immuneSystem: { configured: false },
+    cellularMemory: { configured: false },
+    github: { enabled: false, configured: false, signedIn: false },
+    ai: { enabled: false, connected: false },
+    runtime: { enabled: false, configured: false },
+    ci: { enabled: false, workflowInstalled: false },
+    docker: { dockerfileInstalled: false },
+    hooks: { prePushInstalled: false, hooksPathConfigured: false },
+    preview: { enabled: false, workflowInstalled: false, provider: "vercel" },
+    injection: { expected: false, complete: true, missing: [], stale: [] },
+    validation: { valid: false, issueCount: 1 },
+  };
+}
+
+async function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((resolve) => {
+        timer = setTimeout(() => resolve(fallback), ms);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+async function cachedDoctorLite(root: string): Promise<DoctorReport> {
+  const hit = doctorCache.get(root);
+  if (hit && Date.now() - hit.at < DOCTOR_TTL_MS) return hit.report;
+  const report = await withTimeout(runDoctorLite(root), 2500, hit?.report ?? emptyDoctor());
+  doctorCache.set(root, { at: Date.now(), report });
+  return report;
 }
 
 async function listMarkdownFiles(dir: string, prefix: string): Promise<string[]> {
@@ -47,7 +91,7 @@ async function listQualityReports(root: string): Promise<{ name: string; mtime: 
 export async function collectDashboardData(root: string): Promise<DashboardData> {
   const [doctor, runtimeIssues, runtimeEvents, qualityReports, impressions, cellularMemory] =
     await Promise.all([
-      runDoctor(root),
+      cachedDoctorLite(root),
       readRuntimeRecords(root, "issues"),
       readRuntimeRecords(root, "events"),
       listQualityReports(root),

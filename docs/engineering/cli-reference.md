@@ -450,7 +450,9 @@ dna ai force-repair
 dna ai force-repair --dry-run
 ```
 
-Requires `ai.repair.aggressive` (default on). See [Lab and repair v0.6.3](./lab-and-repair-0.6.3.md).
+Requires `ai.repair.aggressive` (default on). See [Lab and repair v0.6.3](./lab-and-repair-0.6.3.md) and [Lab + runtime v0.6.4](./lab-and-runtime-0.6.4.md).
+
+Benign disconnects (`write EPIPE`, `ECONNRESET`) are not captured or repaired — see v0.6.4 noise filter.
 
 ## stack
 

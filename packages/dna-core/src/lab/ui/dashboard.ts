@@ -16,12 +16,12 @@ const state = {
 };
 
 const NAV = [
-  ["overview", "Overview", "fa-chart-line"],
-  ["issues", "Issues", "fa-bug"],
-  ["events", "Events", "fa-bolt"],
-  ["performance", "Performance", "fa-gauge-high"],
-  ["releases", "Releases", "fa-rocket"],
-  ["quality", "Quality", "fa-shield-halved"],
+  ["overview", "Overview", "fa-chart-line", "Monitor"],
+  ["issues", "Issues", "fa-bug", "Monitor"],
+  ["events", "Events", "fa-bolt", "Monitor"],
+  ["performance", "Performance", "fa-gauge-high", "Monitor"],
+  ["releases", "Releases", "fa-rocket", "Delivery"],
+  ["quality", "Quality", "fa-shield-halved", "Delivery"],
 ];
 
 function esc(t) {
@@ -106,15 +106,67 @@ async function refreshData() {
 
 function findIssue(id) {
   const groups = state.data?.issueGroups || [];
-  return groups.find((i) => i.id === id) || groups.find((i) => i.title === id);
+  return groups.find((i) => i.id === id)
+    || groups.find((i) => i.fingerprint === id)
+    || groups.find((i) => i.title === id);
 }
 
 function eventsForIssue(issue) {
   if (!issue || !state.data) return [];
   return (state.data.runtimeEvents || []).filter((e) => {
+    if (issue.fingerprint && e.fingerprint === issue.fingerprint) return true;
     if (issue.endpoint && e.endpoint === issue.endpoint) return true;
     return (e.message || "").includes(issue.title);
-  }).slice(0, 30);
+  }).slice(0, 50);
+}
+
+function contextTable(contexts) {
+  if (!contexts || !Object.keys(contexts).length) return emptyState('fa-cube', 'No contexts', 'Browser/OS/runtime contexts will appear when the client sends them.');
+  return Object.keys(contexts).map((key) => {
+    const rows = Object.entries(contexts[key] || {}).map(([k, v]) =>
+      '<div class="lab-kv__row"><span class="lab-kv__key">' + esc(k) + '</span><span class="lab-kv__val"><code>' + esc(typeof v === 'object' ? JSON.stringify(v) : v) + '</code></span></div>'
+    ).join("");
+    return '<div class="lab-panel settings-card" style="margin-bottom:12px"><div class="lab-panel__head"><h2 class="lab-panel__title">' + esc(key) + '</h2></div><div class="lab-panel__body" style="padding:14px"><div class="lab-kv">' + rows + '</div></div></div>';
+  }).join("");
+}
+
+function breadcrumbsHtml(crumbs) {
+  if (!crumbs || !crumbs.length) return emptyState('fa-shoe-prints', 'No breadcrumbs', 'Enable the browser runtime client to capture navigation, clicks, and console trail.');
+  const rows = crumbs.slice().reverse().map((b) =>
+    '<tr><td><span class="lab-badge lab-badge--info">' + esc(b.category || "event") + '</span></td><td>' + esc(b.message) + '</td><td>' + timeAgo(b.timestamp) + '</td></tr>'
+  ).join("");
+  return '<table class="lab-table"><thead><tr><th>Category</th><th>Message</th><th>When</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function framesHtml(frames, stack) {
+  if (frames && frames.length) {
+    const rows = frames.map((f) =>
+      '<div class="lab-frame' + (f.inApp ? ' lab-frame--app' : '') + '">' +
+      '<span class="lab-frame__fn">' + esc(f.function || "(anonymous)") + '</span>' +
+      '<span class="lab-frame__file">' + esc(f.filename || "?") + (f.lineno != null ? ':' + esc(f.lineno) + (f.colno != null ? ':' + esc(f.colno) : '') : '') + '</span></div>'
+    ).join("");
+    return '<div class="lab-frames">' + rows + '</div>';
+  }
+  return stackHtml(stack);
+}
+
+function requestHtml(req, event) {
+  if (!req && !event?.endpoint) return emptyState('fa-globe', 'No request', 'HTTP snapshot not attached to this event.');
+  const r = req || { url: event.endpoint, method: event.method, statusCode: event.statusCode };
+  return '<div class="lab-kv">' +
+    '<div class="lab-kv__row"><span class="lab-kv__key">Method</span><span class="lab-kv__val"><code>' + esc(r.method || "—") + '</code></span></div>' +
+    '<div class="lab-kv__row"><span class="lab-kv__key">URL</span><span class="lab-kv__val"><code>' + esc(r.url || event.endpoint || "—") + '</code></span></div>' +
+    '<div class="lab-kv__row"><span class="lab-kv__key">Status</span><span class="lab-kv__val">' + esc(r.statusCode ?? event.statusCode ?? "—") + '</span></div>' +
+    (event.durationMs != null ? '<div class="lab-kv__row"><span class="lab-kv__key">Duration</span><span class="lab-kv__val">' + esc(event.durationMs) + 'ms</span></div>' : '') +
+    (event.responseBody || r.bodySnippet ? '<div class="lab-kv__row"><span class="lab-kv__key">Body</span><span class="lab-kv__val"><pre class="lab-pre">' + esc(event.responseBody || r.bodySnippet) + '</pre></span></div>' : '') +
+    '</div>';
+}
+
+function tagsHtml(tags) {
+  if (!tags || !Object.keys(tags).length) return "";
+  return '<div class="lab-tags">' + Object.entries(tags).map(([k, v]) =>
+    '<span class="lab-tag"><strong>' + esc(k) + '</strong> ' + esc(v) + '</span>'
+  ).join("") + '</div>';
 }
 
 function drawTimeline(canvas, buckets) {
@@ -221,22 +273,37 @@ function registerView() {
 function sidebar(active) {
   const stats = state.data?.stats || {};
   const issueCount = stats.issueCount || 0;
-  const links = NAV.map(([id, label, icon]) => {
-    const badge = id === "issues" && issueCount ? '<span class="nav-badge">' + issueCount + '</span>' : '';
-    return '<button type="button" class="' + (active === id ? 'on' : '') + '" data-tab="' + id + '"><i class="fa-solid ' + icon + '"></i>' + esc(label) + badge + '</button>';
+  const groups = {};
+  NAV.forEach(([id, label, icon, group]) => {
+    if (!groups[group]) groups[group] = [];
+    groups[group].push([id, label, icon]);
+  });
+  const sections = Object.keys(groups).map((group) => {
+    const links = groups[group].map(([id, label, icon]) => {
+      const badge = id === "issues" && issueCount ? '<span class="nav-badge">' + issueCount + '</span>' : '';
+      return '<button type="button" class="soli-settings-nav-link' + (active === id ? ' is-active' : '') + '" data-tab="' + id + '"><i class="fa-solid ' + icon + '" aria-hidden="true"></i><span>' + esc(label) + '</span>' + badge + '</button>';
+    }).join("");
+    return '<div class="settings-nav-group"><div class="sn-title">' + esc(group) + '</div>' + links + '</div>';
   }).join("");
-  return '<aside class="settings-nav"><div class="settings-nav-brand">' + dnaWebBrand('/labs', false, 'Lab') + '</div>' +
-    '<div class="settings-nav-scroll"><div class="sn-title">Monitor</div>' + links +
-    (!state.localMode ? '<div style="margin-top:20px"><button type="button" data-action="logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button></div>' : '') +
-    '</div></aside>';
+  const logout = !state.localMode
+    ? '<div class="settings-nav-group" style="margin-top:20px"><button type="button" class="soli-settings-nav-link" data-action="logout"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Sign out</span></button></div>'
+    : '';
+  return '<aside class="settings-nav">' +
+    '<div class="soli-portal-nav-brand">' + dnaWebBrand('/labs', false, 'Lab') + '</div>' +
+    '<div class="settings-nav-scroll">' + sections + logout + '</div></aside>';
 }
 
 function pageHeader(title) {
   const refreshed = state.lastRefresh ? 'Updated ' + timeAgo(state.lastRefresh.toISOString()) : '';
-  return '<header class="soli-admin-page-header"><h1>' + esc(title) + '</h1>' +
-    '<span class="env-pill"><i class="fa-solid fa-server"></i> ' + esc(state.localMode ? "development" : "production") + '</span>' +
+  return '<header class="soli-administration-page-header">' +
+    '<div class="soli-administration-page-header__title-row">' +
+    '<h1 class="soli-administration-page-header__title">' + esc(title) + '</h1>' +
+    '</div>' +
+    '<div class="soli-administration-page-header__actions">' +
+    '<span class="env-pill"><i class="fa-solid fa-server" aria-hidden="true"></i> ' + esc(state.localMode ? "development" : "production") + '</span>' +
     '<span class="soli-admin-page-header__meta">' + refreshed + '</span>' +
-    '<button type="button" class="btnp btnp--sm" data-action="refresh"><i class="fa-solid fa-rotate"></i> Refresh</button></header>';
+    '<button type="button" class="soli-admin-header-btn" data-action="refresh"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Refresh</button>' +
+    '</div></header>';
 }
 
 function overviewPanel() {
@@ -244,21 +311,22 @@ function overviewPanel() {
   const s = d.stats || {};
   const valid = d.doctor?.validation?.valid;
   const issues = (d.issueGroups || []).slice(0, 8);
-  return '<div class="lab-stats">' +
-    '<div class="lab-stat-card"><div class="lab-stat-card__label">Unresolved issues</div><div class="lab-stat-card__value ' + (s.issueCount ? 'is-warn' : 'is-ok') + '">' + esc(s.issueCount) + '</div><div class="lab-stat-card__sub">' + esc(s.unresolvedCritical || 0) + ' critical/high</div></div>' +
-    '<div class="lab-stat-card"><div class="lab-stat-card__label">Errors (24h)</div><div class="lab-stat-card__value ' + (s.errors24h ? 'is-bad' : 'is-ok') + '">' + esc(s.errors24h) + '</div><div class="lab-stat-card__sub">' + esc(s.events24h) + ' events</div></div>' +
-    '<div class="lab-stat-card"><div class="lab-stat-card__label">Error rate</div><div class="lab-stat-card__value ' + (s.errorRate24h > 5 ? 'is-bad' : 'is-ok') + '">' + esc(s.errorRate24h) + '%</div></div>' +
-    '<div class="lab-stat-card"><div class="lab-stat-card__label">Doctor</div><div class="lab-stat-card__value ' + (valid ? 'is-ok' : 'is-bad') + '">' + (valid ? 'Healthy' : 'Issues') + '</div></div>' +
+  return '<div class="admin-page-body admin-page-body--form">' +
+    '<div class="lab-stats settings-grid">' +
+    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Unresolved issues</div><div class="lab-stat-card__value ' + (s.issueCount ? 'is-warn' : 'is-ok') + '">' + esc(s.issueCount) + '</div><div class="lab-stat-card__sub">' + esc(s.unresolvedCritical || 0) + ' critical/high</div></div>' +
+    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Errors (24h)</div><div class="lab-stat-card__value ' + (s.errors24h ? 'is-bad' : 'is-ok') + '">' + esc(s.errors24h) + '</div><div class="lab-stat-card__sub">' + esc(s.events24h) + ' events</div></div>' +
+    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Error rate</div><div class="lab-stat-card__value ' + (s.errorRate24h > 5 ? 'is-bad' : 'is-ok') + '">' + esc(s.errorRate24h) + '%</div></div>' +
+    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Doctor</div><div class="lab-stat-card__value ' + (valid ? 'is-ok' : 'is-bad') + '">' + (valid ? 'Healthy' : 'Issues') + '</div></div>' +
     '</div>' +
-    '<div class="lab-panel"><div class="lab-panel__head"><h2 class="lab-panel__title">Error volume</h2></div><div class="lab-panel__body"><canvas class="lab-chart" id="error-chart"></canvas></div></div>' +
-    '<div class="lab-panel"><div class="lab-panel__head"><h2 class="lab-panel__title">Top unresolved issues</h2></div><div class="lab-panel__body">' +
-    (issues.length ? issueTable(issues, true) : emptyState('fa-circle-check', 'No issues', 'Runtime observer has not classified any issues yet.')) +
-    '</div></div>';
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Error volume</h2></div><div class="lab-panel__body" style="padding:16px"><canvas class="lab-chart" id="error-chart"></canvas></div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Top unresolved issues</h2></div><div class="lab-panel__body">' +
+    (issues.length ? issueTable(issues, true, false) : emptyState('fa-circle-check', 'No issues', 'Runtime observer has not classified any issues yet.')) +
+    '</div></div></div>';
 }
 
-function issueTable(issues, clickable) {
+function issueTable(issues, clickable, edge) {
   const rows = issues.map((i) => '<tr class="' + (clickable ? 'is-clickable' : '') + '" data-issue="' + esc(i.id) + '"><td>' + severityBadge(i.severity) + '</td><td><div class="lab-table__title">' + esc(i.title) + '</div><div class="lab-table__sub">' + esc(i.category) + (i.endpoint ? ' · ' + esc(i.endpoint) : '') + '</div></td><td>' + esc(i.count) + '</td><td>' + timeAgo(i.lastSeen) + '</td></tr>').join("");
-  return '<table class="lab-table"><thead><tr><th>Level</th><th>Issue</th><th>Events</th><th>Last seen</th></tr></thead><tbody>' + rows + '</tbody></table>';
+  return '<table class="lab-table admin-table' + (edge ? ' admin-table--edge' : '') + '"><thead><tr><th>Level</th><th>Issue</th><th>Events</th><th>Last seen</th></tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
 function issuesPanel() {
@@ -267,72 +335,127 @@ function issuesPanel() {
   const filters = ["all","critical","high","medium","low"].map((f) =>
     '<button type="button" class="lab-filter' + (state.severityFilter === f ? ' is-active' : '') + '" data-filter="' + f + '">' + esc(f) + '</button>'
   ).join("");
-  return '<div class="lab-filters">' + filters + '</div>' +
-    '<div class="lab-panel"><div class="lab-panel__body">' +
-    (filtered.length ? issueTable(filtered, true) : emptyState('fa-bug', 'No issues', 'No issues match this filter.')) +
-    '</div></div>';
+  return '<div class="admin-page-body admin-page-body--table">' +
+    '<div class="lab-filters admin-filter-bar">' + filters + '</div>' +
+    (filtered.length ? issueTable(filtered, true, true) : '<div class="admin-page-body--form">' + emptyState('fa-bug', 'No issues', 'No issues match this filter.') + '</div>') +
+    '</div>';
 }
 
 function issueDetailPanel(issue) {
   const events = eventsForIssue(issue);
-  const latest = events[0] || {};
-  return '<div class="lab-breadcrumb"><a href="#" data-tab="issues">Issues</a><span>/</span><span>' + esc(issue.title) + '</span></div>' +
+  const latest = issue.latestEvent || events[0] || {};
+  return '<div class="admin-page-body admin-page-body--form">' +
+    '<div class="lab-breadcrumb"><a href="#" data-tab="issues">Issues</a><span>/</span><span>' + esc(issue.title) + '</span></div>' +
     '<div class="lab-detail"><div class="lab-detail__main">' +
-    '<div class="lab-panel"><div class="lab-panel__head"><h2 class="lab-panel__title">' + severityBadge(issue.severity) + ' ' + esc(issue.title) + '</h2></div>' +
-    '<div class="lab-panel__body" style="padding:16px"><p style="margin:0 0 14px;color:var(--color-text-tertiary);line-height:1.5">' + esc(issue.summary || "No summary") + '</p>' + stackHtml(latest.stack || issue.stackTraceSummary) + '</div></div>' +
-    '<div class="lab-panel"><div class="lab-panel__head"><h2 class="lab-panel__title">Related events</h2></div><div class="lab-panel__body">' +
-    (events.length ? eventsTable(events) : emptyState('fa-bolt', 'No events', 'No matching runtime events.')) +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">' + severityBadge(issue.severity) + ' ' + esc(issue.title) + '</h2></div>' +
+    '<div class="lab-panel__body" style="padding:16px">' +
+    '<p style="margin:0 0 14px;color:var(--color-text-tertiary);line-height:1.5">' + esc(issue.summary || latest.message || "No summary") + '</p>' +
+    tagsHtml(latest.tags) +
+    '<h3 class="lab-section-title">Exception</h3>' +
+    framesHtml(latest.frames, latest.stack || issue.stackTraceSummary) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Breadcrumbs</h2></div><div class="lab-panel__body">' + breadcrumbsHtml(latest.breadcrumbs) + '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Request</h2></div><div class="lab-panel__body" style="padding:16px">' + requestHtml(latest.request, latest) + '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Contexts</h2></div><div class="lab-panel__body" style="padding:16px">' + contextTable(latest.contexts) + '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Related events</h2></div><div class="lab-panel__body">' +
+    (events.length ? eventsTable(events, false) : emptyState('fa-bolt', 'No events', 'No matching runtime events (may be sampled). Count still increments by fingerprint.')) +
     '</div></div></div>' +
-    '<div class="lab-detail__side"><div class="lab-panel"><div class="lab-panel__head"><h2 class="lab-panel__title">Details</h2></div><div class="lab-panel__body" style="padding:16px"><div class="lab-kv">' +
+    '<div class="lab-detail__side"><div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Details</h2></div><div class="lab-panel__body" style="padding:16px"><div class="lab-kv">' +
     '<div class="lab-kv__row"><span class="lab-kv__key">Events</span><span class="lab-kv__val">' + esc(issue.count) + '</span></div>' +
     '<div class="lab-kv__row"><span class="lab-kv__key">First seen</span><span class="lab-kv__val">' + timeAgo(issue.firstSeen) + '</span></div>' +
     '<div class="lab-kv__row"><span class="lab-kv__key">Last seen</span><span class="lab-kv__val">' + timeAgo(issue.lastSeen) + '</span></div>' +
     '<div class="lab-kv__row"><span class="lab-kv__key">Category</span><span class="lab-kv__val">' + esc(issue.category) + '</span></div>' +
+    (issue.fingerprint ? '<div class="lab-kv__row"><span class="lab-kv__key">Fingerprint</span><span class="lab-kv__val"><code>' + esc(issue.fingerprint) + '</code></span></div>' : '') +
     (issue.endpoint ? '<div class="lab-kv__row"><span class="lab-kv__key">Endpoint</span><span class="lab-kv__val"><code>' + esc(issue.endpoint) + '</code></span></div>' : '') +
+    (latest.environment || issue.environment ? '<div class="lab-kv__row"><span class="lab-kv__key">Environment</span><span class="lab-kv__val">' + esc(latest.environment || issue.environment) + '</span></div>' : '') +
+    (latest.release || issue.release ? '<div class="lab-kv__row"><span class="lab-kv__key">Release</span><span class="lab-kv__val"><code>' + esc(latest.release || issue.release) + '</code></span></div>' : '') +
+    (latest.source ? '<div class="lab-kv__row"><span class="lab-kv__key">Source</span><span class="lab-kv__val">' + esc(latest.source) + '</span></div>' : '') +
+    (latest.provider ? '<div class="lab-kv__row"><span class="lab-kv__key">Provider</span><span class="lab-kv__val">' + esc(latest.provider) + '</span></div>' : '') +
     '</div></div>' +
-    (issue.suggestedFix ? '<div class="lab-panel" style="margin-top:14px"><div class="lab-panel__head"><h2 class="lab-panel__title">Suggested fix</h2></div><div class="lab-panel__body" style="padding:16px;font-size:13px;line-height:1.5">' + esc(issue.suggestedFix) + '</div></div>' : '') +
-    '</div></div>';
+    (issue.suggestedFix ? '<div class="lab-panel settings-card" style="margin-top:14px"><div class="lab-panel__head"><h2 class="lab-panel__title">Suggested fix</h2></div><div class="lab-panel__body" style="padding:16px;font-size:13px;line-height:1.5">' + esc(issue.suggestedFix) + '</div></div>' : '') +
+    '</div></div></div>';
 }
 
-function eventsTable(events) {
+function eventsTable(events, edge) {
   const rows = events.map((e) => '<tr><td>' + eventTypeBadge(e.type) + '</td><td><div class="lab-table__title">' + esc(e.message) + '</div><div class="lab-table__sub">' + esc(e.method || "") + ' ' + esc(e.endpoint || "") + '</div></td><td>' + timeAgo(e.timestamp) + '</td></tr>').join("");
-  return '<table class="lab-table"><thead><tr><th>Type</th><th>Message</th><th>When</th></tr></thead><tbody>' + rows + '</tbody></table>';
+  return '<table class="lab-table admin-table' + (edge ? ' admin-table--edge' : '') + '"><thead><tr><th>Type</th><th>Message</th><th>When</th></tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
 function eventsPanel() {
   const events = (state.data?.runtimeEvents || []).slice().reverse().slice(0, 100);
-  return '<div class="lab-panel"><div class="lab-panel__body">' +
-    (events.length ? eventsTable(events) : emptyState('fa-bolt', 'No events', 'Enable DNA runtime to capture events.')) +
-    '</div></div>';
+  return '<div class="admin-page-body admin-page-body--table">' +
+    (events.length ? eventsTable(events, true) : '<div class="admin-page-body--form">' + emptyState('fa-bolt', 'No events', 'Enable DNA runtime to capture events.') + '</div>') +
+    '</div>';
 }
 
 function performancePanel() {
   const s = state.data?.stats || {};
   const slow = state.data?.slowEndpoints || [];
   const rows = slow.map((r) => '<tr><td><code>' + esc(r.method) + ' ' + esc(r.endpoint) + '</code></td><td>' + esc(r.count) + '</td><td>' + esc(r.avgMs) + 'ms</td><td>' + esc(r.maxMs) + 'ms</td></tr>').join("");
-  return '<div class="lab-stats"><div class="lab-stat-card"><div class="lab-stat-card__label">Slow requests</div><div class="lab-stat-card__value is-warn">' + esc(s.slowRequestCount) + '</div></div>' +
-    '<div class="lab-stat-card"><div class="lab-stat-card__label">Memory spikes</div><div class="lab-stat-card__value is-warn">' + esc(s.memorySpikeCount) + '</div></div></div>' +
-    '<div class="lab-panel"><div class="lab-panel__head"><h2 class="lab-panel__title">Slowest endpoints</h2></div><div class="lab-panel__body">' +
-    (rows ? '<table class="lab-table"><thead><tr><th>Endpoint</th><th>Count</th><th>Avg</th><th>Max</th></tr></thead><tbody>' + rows + '</tbody></table>' : emptyState('fa-gauge-high', 'No slow requests', 'No performance issues in the last 24 hours.')) +
-    '</div></div>';
+  return '<div class="admin-page-body admin-page-body--form">' +
+    '<div class="lab-stats settings-grid">' +
+    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Slow requests</div><div class="lab-stat-card__value is-warn">' + esc(s.slowRequestCount) + '</div></div>' +
+    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Memory spikes</div><div class="lab-stat-card__value is-warn">' + esc(s.memorySpikeCount) + '</div></div>' +
+    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Third-party</div><div class="lab-stat-card__value is-warn">' + esc(s.thirdPartyCount || 0) + '</div></div>' +
+    '</div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Slowest endpoints</h2></div><div class="lab-panel__body">' +
+    (rows ? '<table class="lab-table admin-table"><thead><tr><th>Endpoint</th><th>Count</th><th>Avg</th><th>Max</th></tr></thead><tbody>' + rows + '</tbody></table>' : emptyState('fa-gauge-high', 'No slow requests', 'No performance issues in the last 24 hours.')) +
+    '</div></div></div>';
 }
 
 function releasesPanel() {
   const releases = state.data?.releases || [];
   const maps = state.data?.sourceMaps || [];
   const rows = releases.map((r) => '<tr><td><strong>' + esc(r.version) + '</strong></td><td>' + esc(r.environment) + '</td><td><code>' + esc((r.gitSha || "").slice(0, 8)) + '</code></td><td>' + timeAgo(r.deployedAt) + '</td></tr>').join("");
-  return '<div class="lab-panel"><div class="lab-panel__head"><h2 class="lab-panel__title">Deployments</h2></div><div class="lab-panel__body">' +
-    (rows ? '<table class="lab-table"><thead><tr><th>Version</th><th>Env</th><th>SHA</th><th>Deployed</th></tr></thead><tbody>' + rows + '</tbody></table>' : emptyState('fa-rocket', 'No releases', 'Register deploys via POST /api/dna/labs/releases')) +
-    '</div></div><p class="soli-admin-page-header__meta">' + esc(maps.length) + ' source map(s) registered</p>';
+  return '<div class="admin-page-body admin-page-body--form">' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Deployments</h2></div><div class="lab-panel__body">' +
+    (rows ? '<table class="lab-table admin-table"><thead><tr><th>Version</th><th>Env</th><th>SHA</th><th>Deployed</th></tr></thead><tbody>' + rows + '</tbody></table>' : emptyState('fa-rocket', 'No releases', 'Register deploys via POST /api/dna/labs/releases')) +
+    '</div></div><p class="soli-admin-page-header__meta">' + esc(maps.length) + ' source map(s) registered</p></div>';
 }
 
 function qualityPanel() {
   const reports = state.data?.qualityReports || [];
-  const list = reports.slice(-10).reverse().map((r) => '<tr><td>' + esc(r.name) + '</td><td>' + (r.score != null ? esc(r.score) + '%' : '—') + '</td><td>' + timeAgo(r.mtime) + '</td></tr>').join("");
-  return '<div class="lab-panel"><div class="lab-panel__head"><h2 class="lab-panel__title">Coverage trend</h2></div><div class="lab-panel__body"><canvas class="lab-chart" id="quality-chart"></canvas></div></div>' +
-    '<div class="lab-panel"><div class="lab-panel__body">' +
-    (list ? '<table class="lab-table"><thead><tr><th>Report</th><th>Score</th><th>When</th></tr></thead><tbody>' + list + '</tbody></table>' : emptyState('fa-shield-halved', 'No reports', 'Run dna quality report to populate.')) +
-    '</div></div>';
+  const coverage = state.data?.coverage;
+  const ciRuns = state.data?.ciRuns || [];
+  const thirdParty = state.data?.thirdPartyApis || [];
+
+  const covCards = '<div class="lab-stats">' +
+    '<div class="lab-stat-card"><div class="lab-stat-card__label">Lines</div><div class="lab-stat-card__value ' + ((coverage?.lines ?? 0) >= 80 ? 'is-ok' : 'is-warn') + '">' + (coverage?.lines != null ? esc(Math.round(coverage.lines * 10) / 10) + '%' : '—') + '</div></div>' +
+    '<div class="lab-stat-card"><div class="lab-stat-card__label">Statements</div><div class="lab-stat-card__value">' + (coverage?.statements != null ? esc(Math.round(coverage.statements * 10) / 10) + '%' : '—') + '</div></div>' +
+    '<div class="lab-stat-card"><div class="lab-stat-card__label">Functions</div><div class="lab-stat-card__value">' + (coverage?.functions != null ? esc(Math.round(coverage.functions * 10) / 10) + '%' : '—') + '</div></div>' +
+    '<div class="lab-stat-card"><div class="lab-stat-card__label">Branches</div><div class="lab-stat-card__value">' + (coverage?.branches != null ? esc(Math.round(coverage.branches * 10) / 10) + '%' : '—') + '</div></div>' +
+    '</div>' +
+    (coverage?.path ? '<p class="soli-admin-page-header__meta">From <code>' + esc(coverage.path) + '</code> · ' + timeAgo(coverage.mtime) + '</p>' : '<p class="soli-admin-page-header__meta">Run <code>npm run test:coverage</code> to generate coverage/coverage-summary.json</p>');
+
+  const reportRows = reports.slice().reverse().map((r) => {
+    const gate = r.gate ? '<span class="lab-badge lab-badge--' + (r.gate === 'pass' ? 'ok' : 'critical') + '">' + esc(r.gate) + '</span>' : '—';
+    const score = r.score != null ? esc(r.score) + (r.gate ? '' : '%') : '—';
+    return '<tr><td><div class="lab-table__title">' + esc(r.name) + '</div><div class="lab-table__sub">' + esc(r.summary || r.scope || '') + '</div></td><td>' + gate + '</td><td>' + score + '</td><td>' + esc(r.blockers ?? '—') + ' / ' + esc(r.critical ?? '—') + '</td><td>' + timeAgo(r.mtime) + '</td></tr>';
+  }).join("");
+
+  const ciRows = ciRuns.map((r) => {
+    const conclusion = (r.conclusion || r.status || "").toLowerCase();
+    const cls = conclusion === "success" ? "ok" : conclusion === "failure" || conclusion === "cancelled" ? "critical" : "info";
+    const title = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">' + esc(r.displayTitle || r.workflowName) + '</a>' : esc(r.displayTitle || r.workflowName || "run");
+    return '<tr><td>' + title + '<div class="lab-table__sub">' + esc(r.workflowName || "") + (r.headBranch ? ' · ' + esc(r.headBranch) : '') + '</div></td><td><span class="lab-badge lab-badge--' + cls + '">' + esc(r.conclusion || r.status) + '</span></td><td>' + esc(r.event || "—") + '</td><td>' + timeAgo(r.updatedAt || r.createdAt) + '</td></tr>';
+  }).join("");
+
+  const apiRows = thirdParty.map((e) =>
+    '<tr><td><span class="lab-badge lab-badge--info">' + esc(e.provider || e.source || "api") + '</span></td><td><div class="lab-table__title">' + esc(e.message) + '</div><div class="lab-table__sub">' + esc(e.method || "") + ' ' + esc(e.statusCode ?? "") + (e.durationMs != null ? ' · ' + esc(e.durationMs) + 'ms' : '') + '</div></td><td><pre class="lab-pre lab-pre--sm">' + esc((e.responseBody || "").slice(0, 280) || "—") + '</pre></td><td>' + timeAgo(e.timestamp) + '</td></tr>'
+  ).join("");
+
+  return '<div class="admin-page-body admin-page-body--form">' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Code coverage</h2></div><div class="lab-panel__body" style="padding:16px">' + covCards +
+    '<canvas class="lab-chart" id="quality-chart" style="margin-top:12px"></canvas></div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Quality gate reports</h2></div><div class="lab-panel__body">' +
+    (reportRows ? '<table class="lab-table admin-table"><thead><tr><th>Report</th><th>Gate</th><th>Score</th><th>Blocker / Critical</th><th>When</th></tr></thead><tbody>' + reportRows + '</tbody></table>' : emptyState('fa-shield-halved', 'No reports', 'Run dna quality report --feature to populate.')) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">CI runs</h2></div><div class="lab-panel__body">' +
+    (ciRows ? '<table class="lab-table admin-table"><thead><tr><th>Run</th><th>Status</th><th>Event</th><th>When</th></tr></thead><tbody>' + ciRows + '</tbody></table>' : emptyState('fa-github', 'No CI runs', 'Install gh and authenticate (gh auth login). Lab reads recent workflow runs from this repo.')) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Third-party API responses</h2></div><div class="lab-panel__body">' +
+    (apiRows ? '<table class="lab-table admin-table"><thead><tr><th>Provider</th><th>Call</th><th>Response</th><th>When</th></tr></thead><tbody>' + apiRows + '</tbody></table>' : emptyState('fa-plug', 'No outbound API captures', 'Start dnaRuntime with captureOutbound (default on). Errors/slow always logged; healthy calls sampled at 5%.')) +
+    '</div></div></div>';
 }
 
 function dashboardView() {
@@ -351,9 +474,10 @@ function dashboardView() {
   else body = overviewPanel();
 
   const title = state.selectedIssueId ? "Issue detail" : navItem[1];
-  return '<div class="settings-shell">' + sidebar(active) +
+  return '<div class="soli-portal-root soli-portal-root--settings">' +
+    '<div class="settings-shell">' + sidebar(active) +
     '<section class="settings-main">' + pageHeader(title) +
-    '<div class="soli-admin-page-body">' + body + '</div></section></div>';
+    '<div class="soli-admin-page-body">' + body + '</div></section></div></div>';
 }
 
 function render() {

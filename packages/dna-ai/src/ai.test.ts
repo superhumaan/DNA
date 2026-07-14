@@ -32,8 +32,21 @@ describe("mock AI repair", () => {
     expect(plan.diagnosis).toContain("Mock diagnosis");
     expect(plan.branchName).toMatch(/^dna\/fix\//);
     expect(plan.prTitle).toContain("[DNA] Fix:");
-    expect(plan.proposedChanges.length).toBeGreaterThan(0);
+    // Mock must not invent fragile search/replace patches for arbitrary runtime errors
+    expect(plan.proposedChanges.length).toBe(0);
+    expect(plan.diagnosis).toContain("does not invent");
     expect(plan.confidence).toBe(0.8);
     expect(plan.prBody).toContain("Not auto-merged");
+  });
+
+  it("skips patches for EPIPE noise", async () => {
+    const provider = createAiProvider({ provider: "mock" });
+    const plan = await runRepairWorkflow(
+      provider,
+      { ...sampleIssue, title: "CRITICAL: uncaught_exception — write EPIPE", summary: "write EPIPE" },
+      { behaviour: [], memory: [], codeSnippets: [] },
+    );
+    expect(plan.proposedChanges).toEqual([]);
+    expect(plan.diagnosis).toMatch(/Benign socket disconnect/i);
   });
 });

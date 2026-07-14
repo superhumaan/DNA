@@ -4,6 +4,27 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.4] - 2026-07-14
+
+### Added
+
+- **Lab UI v4** — Full Soli administration shell parity: portal root, 56px nav brand + title bars, `soli-settings-nav-link`, flat page body / edge tables, Soli tokens & design rules (cool-neutral chrome, violet for action/active only, Inter).
+- **Lab Sentry-depth issues** — fingerprint upsert (one row per issue), rich envelopes (stack frames, breadcrumbs, contexts, tags, request), browser ingest on `POST /api/dna/runtime`, outbound `third_party_response` capture (errors/slow always; healthy sampled).
+- **Lab Quality hub** — gate PASS/FAIL + severity counts from quality JSON/MD, coverage from `coverage/coverage-summary.json`, recent GitHub Actions runs via `gh`, third-party API response table.
+- **Anti-spam sampling** — per-fingerprint 60s cooldown on full event persist; client 15s dedupe; secrets redacted.
+
+### Fixed
+
+- **EPIPE noise as critical** — `write EPIPE` / `ECONNRESET` from client disconnects are ignored by the runtime (not stored, not escalated, not repaired).
+- **Mock AI junk patches** — mock provider no longer invents `search: "export"` / try/catch placeholders; `applyPatches` rejects low-quality patches and will not create arbitrary new files.
+- **Dashboard hang** — full `runDoctor` every 5s; now `runDoctorLite` + 60s cache + 2.5s timeout.
+- **lab-store.json** — mutex + atomic write + quarantine corrupt auth store.
+- **Runtime pipeline** — GitHub issue create + AI repair are fire-and-forget (no hot-path network wait).
+- **Lab HEAD** — `HEAD /labs` and lab GET routes return headers without 404.
+- **runtime.db writers** — `dna-runtime` storage hardened (lock/atomic/quarantine/fingerprints); matches core readers.
+
+See also [docs/engineering/lab-and-runtime-0.6.4.md](docs/engineering/lab-and-runtime-0.6.4.md).
+
 ## [0.6.3] - 2026-07-14
 
 ### Added
@@ -21,7 +42,7 @@ All notable changes to DNA are documented here.
 ### Fixed
 
 - **CJS Express Lab wire** — `@superhumaan/dna-by-humaan/lab` is ESM-only. Auto-wire no longer injects `require(.../lab)` (crashes under `node --watch`). CJS apps get `.DNA/lab/express-wire.cjs` (dynamic `import`) + `dnaLabMiddleware()`.
-- **Lab `/data` hang** — dashboard polling used full `runDoctor` (GitHub auth + full scan). Switched to `runDoctorLite` + 60s cache + 2.5s timeout; collect uses `Promise.allSettled`.
+- **Lab `/data` hang** — Lab polling used full `runDoctor` (GitHub auth + full scan). Switched to `runDoctorLite` + 60s cache + 2.5s timeout; collect uses `Promise.allSettled`.
 - **runtime.db corruption** — atomic temp+rename writes, per-path mutex, quarantine corrupt JSON to `runtime.db.corrupt.<ts>`, and recreate empty store on Lab collect.
 - **Lab CSP** — explicit document CSP on `/labs` HTML; auto-wire mounts after `configureExpress` / helmet.
 - **npm publish build** — unused `projectId` in `wireExpressLabCjsContent` failed DTS (`TS6133`); parameter retained for API parity but unused (ID is in `express-wire.cjs`).

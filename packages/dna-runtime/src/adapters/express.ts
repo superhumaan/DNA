@@ -1,9 +1,21 @@
 import type { Request, Response, NextFunction, ErrorRequestHandler } from "express";
 import type { RuntimeEngine } from "../core/engine.js";
 import { observeRequest, captureError } from "../core/engine.js";
+import { createRuntimeIngestHandler } from "./ingest.js";
 
 export function createExpressMiddleware(engine: RuntimeEngine) {
+  const ingest = createRuntimeIngestHandler(engine);
+
   return (req: Request, res: Response, next: NextFunction) => {
+    const path = req.path || req.url?.split("?")[0] || "";
+    if (
+      (req.method === "POST" || req.method === "OPTIONS") &&
+      (path === "/api/dna/runtime" || path.endsWith("/api/dna/runtime"))
+    ) {
+      void ingest(req, res);
+      return;
+    }
+
     const start = Date.now();
 
     res.on("finish", () => {

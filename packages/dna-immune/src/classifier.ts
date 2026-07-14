@@ -41,6 +41,7 @@ function matchCategory(
   if (type === "slow_request") return { category: "performance", discipline: "backend" };
   if (type === "repeated_error") return { category: "runtime_error", discipline: "backend" };
   if (type === "memory_spike") return { category: "performance", discipline: "devops" };
+  if (type === "third_party_response") return { category: "dependency", discipline: "backend" };
 
   return { category: "unknown", discipline: "backend" };
 }

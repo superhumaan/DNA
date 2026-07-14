@@ -6,7 +6,44 @@ import {
 } from "./collect-aggregates.js";
 
 describe("collect-aggregates", () => {
-  it("groups issues by title with counts", () => {
+  it("groups issues by fingerprint with counts", () => {
+    const issues = [
+      {
+        id: "1",
+        title: "CRITICAL: boom",
+        severity: "high",
+        category: "runtime",
+        fingerprint: "fp1",
+        repeatCount: 1,
+        firstSeen: "2026-07-12T10:00:00.000Z",
+        lastSeen: "2026-07-12T10:00:00.000Z",
+        eventId: "e1",
+      },
+      {
+        id: "2",
+        title: "CRITICAL: boom",
+        severity: "critical",
+        category: "runtime",
+        fingerprint: "fp1",
+        repeatCount: 5,
+        firstSeen: "2026-07-12T10:00:00.000Z",
+        lastSeen: "2026-07-13T10:00:00.000Z",
+        eventId: "e2",
+      },
+    ];
+    const events = [
+      { id: "e1", timestamp: "2026-07-12T10:00:00.000Z", message: "boom", fingerprint: "fp1" },
+      { id: "e2", timestamp: "2026-07-13T10:00:00.000Z", message: "boom", fingerprint: "fp1" },
+    ];
+    const grouped = groupIssues(issues, events);
+    expect(grouped).toHaveLength(1);
+    expect(grouped[0]?.count).toBeGreaterThanOrEqual(5);
+    expect(grouped[0]?.severity).toBe("critical");
+    expect(grouped[0]?.firstSeen).toBe("2026-07-12T10:00:00.000Z");
+    expect(grouped[0]?.lastSeen).toBe("2026-07-13T10:00:00.000Z");
+  });
+
+  it("groups issues by title when fingerprint missing", () => {
     const issues = [
       { id: "1", title: "DB timeout", severity: "high", category: "database", eventId: "e1" },
       { id: "2", title: "DB timeout", severity: "critical", category: "database", eventId: "e2" },

@@ -16,7 +16,7 @@ import {
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import { reportUpstream } from "@superhumaan/dna-feedback";
 import { appendJsonl } from "./persistence.js";
-import { appendRuntimeRecord } from "./storage.js";
+import { writeRuntimeOccurrence } from "./storage.js";
 import { readFile } from "node:fs/promises";
 import { escalateFingerprint, markRepairAttempted } from "./escalation.js";
 import {
@@ -24,6 +24,9 @@ import {
   updateBlockersMemory,
   updatePreviousSolutionsMemory,
 } from "./memory-updates.js";
+import { enrichRuntimeEvent } from "./enrich.js";
+import { decideEventSample, markEventSampled } from "./sample.js";
+import { isBenignRuntimeMessage } from "./core/noise.js";
 
 export interface PipelineResult {
   event: RuntimeEvent;
@@ -83,11 +86,36 @@ export async function processRuntimeEvent(
   event: RuntimeEvent,
   options: PipelineOptions,
 ): Promise<PipelineResult> {
+  if (isBenignRuntimeMessage(event.message)) {
+    return {
+      event,
+      issue: {
+        id: event.id,
+        eventId: event.id,
+        severity: "low",
+        category: "unknown",
+        discipline: "backend",
+        behaviourViolation: false,
+        repeated: false,
+        projectRisk: "none",
+        confidence: 1,
+        title: "Benign disconnect (ignored)",
+        summary: event.message,
+        relevantBehaviour: [],
+        relevantMemory: [],
+      },
+      fingerprint: undefined,
+      isBlocker: false,
+    };
+  }
+
   const projectRoot = options.projectRoot;
   const dnaRoot = options.dnaRoot ?? join(projectRoot, ".DNA");
   const config = options.config ?? (await loadConfig(projectRoot));
   const tracker = options.tracker ?? new EventTracker();
   const repairConfig = resolveRepairConfig(config?.ai);
+
+  event = enrichRuntimeEvent(event);
 
   const key = eventKey(event);
   const windowRepeatCount = tracker.record(key, event);
@@ -104,16 +132,33 @@ export async function processRuntimeEvent(
   });
 
   event = escalation.event;
-  issue = escalation.issue;
+  issue = {
+    ...escalation.issue,
+    latestEvent: escalation.event,
+    stackTraceSummary:
+      escalation.issue.stackTraceSummary ??
+      escalation.event.frames?.[0]?.filename ??
+      escalation.event.stack?.split("\n")[0],
+  };
   const fingerprintRecord = escalation.record;
+
+  const sample = decideEventSample(fingerprintRecord.fingerprint, {
+    force: fingerprintRecord.repeatCount === 1,
+  });
+  event = markEventSampled(event, sample.sampled);
+  issue = { ...issue, latestEvent: event };
 
   const storage = config?.runtime?.storage ?? "sqlite";
 
   if (storage === "sqlite") {
-    await appendRuntimeRecord(projectRoot, "events", event);
-    await appendRuntimeRecord(projectRoot, "issues", issue);
+    await writeRuntimeOccurrence(projectRoot, {
+      event: sample.persistEvent ? event : undefined,
+      issue,
+    });
   } else {
-    await appendJsonl(join(dnaRoot, "runtime", "events.jsonl"), event);
+    if (sample.persistEvent) {
+      await appendJsonl(join(dnaRoot, "runtime", "events.jsonl"), event);
+    }
     await appendJsonl(join(dnaRoot, "runtime", "issues.jsonl"), issue);
   }
 
@@ -129,6 +174,50 @@ export async function processRuntimeEvent(
 
   const immuneConfig = await getImmuneConfig(dnaRoot);
   const autoIssue = shouldAutoCreateIssue(issue, immuneConfig);
+
+  // GitHub issue create + AI repair must never block the hot path (HTTP/error ingest).
+  void runGitHubAndRepair({
+    projectRoot,
+    dnaRoot,
+    config,
+    issue,
+    event,
+    fingerprintRecord,
+    repairConfig,
+    autoIssue,
+    dnaVersion: options.dnaVersion,
+  }).catch((err) => {
+    console.error("dna_pipeline_async_failed", {
+      message: err instanceof Error ? err.message : String(err),
+      fingerprint: issue.fingerprint,
+    });
+  });
+
+  return result;
+}
+
+async function runGitHubAndRepair(args: {
+  projectRoot: string;
+  dnaRoot: string;
+  config: DnaConfig | null;
+  issue: ClassifiedIssue;
+  event: RuntimeEvent;
+  fingerprintRecord: Awaited<ReturnType<typeof escalateFingerprint>>["record"];
+  repairConfig: ReturnType<typeof resolveRepairConfig>;
+  autoIssue: boolean;
+  dnaVersion?: string;
+}): Promise<void> {
+  const {
+    projectRoot,
+    dnaRoot,
+    config,
+    issue,
+    event,
+    fingerprintRecord,
+    repairConfig,
+    autoIssue,
+    dnaVersion,
+  } = args;
 
   if (config?.github?.enabled && config.github.owner && config.github.repo && autoIssue) {
     const creds = await resolveGitHubToken();
@@ -147,12 +236,6 @@ export async function processRuntimeEvent(
     );
 
     if (ghResult.number != null && ghResult.url != null) {
-      result.githubIssue = {
-        number: ghResult.number,
-        url: ghResult.url,
-        action: ghResult.action,
-      };
-
       await markRepairAttempted(
         projectRoot,
         fingerprintRecord.fingerprint,
@@ -186,12 +269,6 @@ export async function processRuntimeEvent(
             ghResult.number,
           );
 
-          result.repair = {
-            branchName: repair.branchName,
-            prUrl: repair.prUrl,
-            skipped: hasChanges ? undefined : "AI produced no applicable patches",
-          };
-
           await updatePreviousSolutionsMemory(dnaRoot, issue, {
             branchName: repair.branchName,
             filesModified: repair.filesModified,
@@ -222,43 +299,27 @@ export async function processRuntimeEvent(
                 .join("\n"),
             );
           }
-        } catch (err) {
+        } catch {
           await markRepairAttempted(
             projectRoot,
             fingerprintRecord.fingerprint,
             "failed",
             ghResult.number,
           );
-          result.repair = {
-            branchName: `dna/fix/${issue.fingerprint ?? issue.id.slice(0, 8)}`,
-            skipped: err instanceof Error ? err.message : "Repair workflow failed",
-          };
         }
-      } else if (!triggerRepair) {
-        result.repair = {
-          branchName: "",
-          skipped: repairConfig.autoPr
-            ? "Repair threshold not met"
-            : "ai.repair.autoPr disabled",
-        };
       }
-    } else {
-      result.githubIssue = { number: 0, url: "", action: "dry-run" };
     }
   }
 
   if (config != null && config.feedback?.enabled !== false && config.feedback?.upstream !== false) {
-    const feedbackConfig = config;
     await reportUpstream({
       projectRoot,
-      config: feedbackConfig,
+      config,
       source: "runtime",
       message: issue.summary || event.message,
       stack: event.stack ?? issue.stackTraceSummary,
-      dnaVersion: options.dnaVersion ?? "unknown",
+      dnaVersion: dnaVersion ?? "unknown",
       issue,
     }).catch(() => undefined);
   }
-
-  return result;
 }

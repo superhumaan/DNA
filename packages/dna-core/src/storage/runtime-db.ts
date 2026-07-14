@@ -11,6 +11,8 @@ interface RuntimeStoreData {
   version: number;
   events: unknown[];
   issues: unknown[];
+  /** Preserved for dna-runtime fingerprint escalation — do not strip on save. */
+  fingerprints?: unknown[];
 }
 
 const locks = new Map<string, Promise<unknown>>();
@@ -34,7 +36,7 @@ async function withStoreLock<T>(dbPath: string, fn: () => Promise<T>): Promise<T
 }
 
 function emptyStore(): RuntimeStoreData {
-  return { version: SCHEMA_VERSION, events: [], issues: [] };
+  return { version: SCHEMA_VERSION, events: [], issues: [], fingerprints: [] };
 }
 
 function capStore(store: RuntimeStoreData): RuntimeStoreData {
@@ -43,6 +45,9 @@ function capStore(store: RuntimeStoreData): RuntimeStoreData {
   }
   if (store.issues.length > MAX_ISSUES) {
     store.issues = store.issues.slice(-MAX_ISSUES);
+  }
+  if (Array.isArray(store.fingerprints) && store.fingerprints.length > MAX_EVENTS) {
+    store.fingerprints = store.fingerprints.slice(-MAX_EVENTS);
   }
   return store;
 }
@@ -74,6 +79,7 @@ async function loadStore(dbPath: string): Promise<RuntimeStoreData> {
       version: typeof parsed.version === "number" ? parsed.version : SCHEMA_VERSION,
       events: Array.isArray(parsed.events) ? parsed.events : [],
       issues: Array.isArray(parsed.issues) ? parsed.issues : [],
+      fingerprints: Array.isArray(parsed.fingerprints) ? parsed.fingerprints : [],
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

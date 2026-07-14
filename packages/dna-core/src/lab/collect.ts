@@ -1,6 +1,5 @@
 import { glob } from "../glob.js";
 import { join } from "node:path";
-import { readFile, stat } from "node:fs/promises";
 import { runDoctorLite, type DoctorReport } from "../doctor.js";
 import { readRuntimeRecords, repairRuntimeDatabase } from "../storage/runtime-db.js";
 import { fileExists } from "../fs.js";
@@ -8,19 +7,32 @@ import { listLabReleases, listSourceMapMeta } from "./storage.js";
 import {
   buildEventTimeline,
   groupIssues,
+  thirdPartyEvents,
   topSlowEndpoints,
   type LabEventTimelineBucket,
   type LabIssueSummary,
   type LabSlowEndpoint,
 } from "./collect-aggregates.js";
+import {
+  listCiRuns,
+  listQualityReports,
+  readCoverageSummary,
+  type LabCiRun,
+  type LabCoverageSummary,
+  type LabQualityReportRow,
+} from "./collect-quality.js";
 
 export type { LabIssueSummary, LabEventTimelineBucket, LabSlowEndpoint } from "./collect-aggregates.js";
+export type { LabQualityReportRow, LabCoverageSummary, LabCiRun } from "./collect-quality.js";
 
 export interface LabDashboardData {
   doctor: DoctorReport;
   runtimeIssues: unknown[];
   runtimeEvents: unknown[];
-  qualityReports: { name: string; mtime: string; score?: number }[];
+  qualityReports: LabQualityReportRow[];
+  coverage: LabCoverageSummary | null;
+  ciRuns: LabCiRun[];
+  thirdPartyApis: unknown[];
   impressions: string[];
   cellularMemory: string[];
   releases: Awaited<ReturnType<typeof listLabReleases>>;
@@ -37,6 +49,8 @@ export interface LabDashboardData {
     unresolvedCritical: number;
     events24h: number;
     errors24h: number;
+    thirdPartyCount: number;
+    coverageLines?: number;
   };
 }
 
@@ -49,24 +63,11 @@ async function listMarkdownFiles(dir: string, prefix: string): Promise<string[]>
   return files.map((f) => `${prefix}/${f}`);
 }
 
-async function listQualityReports(root: string): Promise<{ name: string; mtime: string; score?: number }[]> {
-  const dir = join(root, ".DNA", "reports", "quality");
-  if (!(await fileExists(dir))) return [];
-  const files = await glob("*.md", { cwd: dir, onlyFiles: true });
-  const reports = await Promise.all(
-    files.map(async (name) => {
-      const full = join(dir, name);
-      const st = await stat(full);
-      const raw = await readFile(full, "utf-8").catch(() => "");
-      const scoreMatch = raw.match(/Overall coverage:\s*([\d.]+)%/i) ?? raw.match(/Gate:\s*(\w+)/i);
-      const score = scoreMatch?.[1] && !Number.isNaN(Number(scoreMatch[1])) ? Number(scoreMatch[1]) : undefined;
-      return { name, mtime: st.mtime.toISOString(), score };
-    }),
-  );
-  return reports.sort((a, b) => a.mtime.localeCompare(b.mtime));
-}
-
-function computeStats(events: unknown[], issues: unknown[]): LabDashboardData["stats"] {
+function computeStats(
+  events: unknown[],
+  issueGroups: LabIssueSummary[],
+  coverage: LabCoverageSummary | null,
+): LabDashboardData["stats"] {
   const since = Date.now() - 24 * 60 * 60 * 1000;
   const recentEvents = events.filter((e) => {
     const ts = (e as { timestamp?: string }).timestamp;
@@ -75,20 +76,27 @@ function computeStats(events: unknown[], issues: unknown[]): LabDashboardData["s
 
   const errors = recentEvents.filter((e) => {
     const type = (e as { type?: string }).type ?? "";
-    return type.includes("exception") || type.includes("rejection") || type === "request_error";
+    return (
+      type.includes("exception") ||
+      type.includes("rejection") ||
+      type === "request_error" ||
+      type === "third_party_response"
+    );
   });
 
   const slow = recentEvents.filter((e) => (e as { type?: string }).type === "slow_request");
   const memory = recentEvents.filter((e) => (e as { type?: string }).type === "memory_spike");
+  const thirdParty = recentEvents.filter(
+    (e) => (e as { type?: string }).type === "third_party_response",
+  );
 
   const errorRate24h = recentEvents.length ? errors.length / recentEvents.length : 0;
-  const unresolvedCritical = issues.filter((raw) => {
-    const severity = (raw as { severity?: string }).severity;
-    return severity === "critical" || severity === "high";
+  const unresolvedCritical = issueGroups.filter((i) => {
+    return i.severity === "critical" || i.severity === "high";
   }).length;
 
   return {
-    issueCount: issues.length,
+    issueCount: issueGroups.length,
     eventCount: events.length,
     errorRate24h: Math.round(errorRate24h * 1000) / 10,
     slowRequestCount: slow.length,
@@ -96,6 +104,8 @@ function computeStats(events: unknown[], issues: unknown[]): LabDashboardData["s
     unresolvedCritical,
     events24h: recentEvents.length,
     errors24h: errors.length,
+    thirdPartyCount: thirdParty.length,
+    coverageLines: coverage?.lines,
   };
 }
 
@@ -154,6 +164,8 @@ export async function collectLabData(root: string): Promise<LabDashboardData> {
     listMarkdownFiles(join(root, ".DNA", "CellularMemory"), ".DNA/CellularMemory"),
     listLabReleases(root),
     listSourceMapMeta(root),
+    readCoverageSummary(root),
+    listCiRuns(root),
   ]);
 
   const value = <T>(index: number, fallback: T): T => {
@@ -169,20 +181,26 @@ export async function collectLabData(root: string): Promise<LabDashboardData> {
   const cellularMemory = value(5, [] as string[]);
   const releases = value(6, [] as LabDashboardData["releases"]);
   const sourceMaps = value(7, [] as LabDashboardData["sourceMaps"]);
+  const coverage = value(8, null as LabCoverageSummary | null);
+  const ciRuns = value(9, [] as LabCiRun[]);
+  const issueGroups = groupIssues(runtimeIssues, runtimeEvents);
 
   return {
     doctor,
     runtimeIssues,
     runtimeEvents,
     qualityReports,
+    coverage,
+    ciRuns,
+    thirdPartyApis: thirdPartyEvents(runtimeEvents),
     impressions,
     cellularMemory,
     releases,
     sourceMaps,
-    issueGroups: groupIssues(runtimeIssues, runtimeEvents),
+    issueGroups,
     eventTimeline: buildEventTimeline(runtimeEvents),
     slowEndpoints: topSlowEndpoints(runtimeEvents),
-    stats: computeStats(runtimeEvents, runtimeIssues),
+    stats: computeStats(runtimeEvents, issueGroups, coverage),
   };
 }
 

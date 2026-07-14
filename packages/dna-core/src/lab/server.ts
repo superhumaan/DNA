@@ -85,13 +85,21 @@ async function readJsonBody(req: IncomingMessage): Promise<unknown> {
   }
 }
 
-function sendJson(res: Res, status: number, body: unknown, headers?: Record<string, string>): void {
+function sendJson(
+  res: Res,
+  status: number,
+  body: unknown,
+  headers?: Record<string, string>,
+  method?: string,
+): void {
+  const payload = JSON.stringify(body);
   res.writeHead(status, {
     "Content-Type": "application/json",
     "Cache-Control": "no-store",
+    "Content-Length": Buffer.byteLength(payload),
     ...headers,
   });
-  res.end(JSON.stringify(body));
+  res.end(method === "HEAD" ? undefined : payload);
 }
 
 function sendText(
@@ -100,13 +108,15 @@ function sendText(
   body: string,
   contentType: string,
   headers?: Record<string, string>,
+  method?: string,
 ): void {
   res.writeHead(status, {
     "Content-Type": contentType,
     "Cache-Control": "no-store",
+    "Content-Length": Buffer.byteLength(body),
     ...headers,
   });
-  res.end(body);
+  res.end(method === "HEAD" ? undefined : body);
 }
 
 function notFound(res: Res): void {
@@ -152,13 +162,15 @@ export async function handleLabRequest(
     applyLabDocumentHeaders(res);
   }
 
-  if (req.method === "GET" && pathname === `${apiPrefix}/client.js`) {
-    sendText(res, 200, LAB_CLIENT_JS, "application/javascript; charset=utf-8");
+  const isGetOrHead = req.method === "GET" || req.method === "HEAD";
+
+  if (isGetOrHead && pathname === `${apiPrefix}/client.js`) {
+    sendText(res, 200, LAB_CLIENT_JS, "application/javascript; charset=utf-8", undefined, req.method);
     return true;
   }
 
-  if (req.method === "GET" && pathname === `${apiPrefix}/styles.css`) {
-    sendText(res, 200, LAB_CSS, "text/css; charset=utf-8");
+  if (isGetOrHead && pathname === `${apiPrefix}/styles.css`) {
+    sendText(res, 200, LAB_CSS, "text/css; charset=utf-8", undefined, req.method);
     return true;
   }
 
@@ -182,13 +194,19 @@ export async function handleLabRequest(
     // HTML shell still served — client shows login
   }
 
-  if (req.method === "GET" && pathname === `${apiPrefix}/bootstrap`) {
-    sendJson(res, 200, {
-      localMode,
-      authenticated: auth.authenticated,
-      user: auth.user ? { name: auth.user.name, email: auth.user.email } : undefined,
-      labPath,
-    });
+  if (isGetOrHead && pathname === `${apiPrefix}/bootstrap`) {
+    sendJson(
+      res,
+      200,
+      {
+        localMode,
+        authenticated: auth.authenticated,
+        user: auth.user ? { name: auth.user.name, email: auth.user.email } : undefined,
+        labPath,
+      },
+      undefined,
+      req.method,
+    );
     return true;
   }
 
@@ -344,21 +362,26 @@ export async function handleLabRequest(
     }
   }
 
-  if (req.method === "GET" && pathname === `${apiPrefix}/data`) {
+  if (isGetOrHead && pathname === `${apiPrefix}/data`) {
     if (!localMode && !auth.authenticated) {
       unauthorized(res);
       return true;
     }
     const data = await collectLabData(options.root);
-    sendJson(res, 200, data);
+    sendJson(res, 200, data, undefined, req.method);
     return true;
   }
 
-  if (req.method === "GET" && isLabPage) {
+  if (isGetOrHead && isLabPage) {
     const html = buildLabHtml(apiPrefix);
-    sendText(res, 200, html, "text/html; charset=utf-8", {
-      "Content-Security-Policy": LAB_DOCUMENT_CSP,
-    });
+    sendText(
+      res,
+      200,
+      html,
+      "text/html; charset=utf-8",
+      { "Content-Security-Policy": LAB_DOCUMENT_CSP },
+      req.method,
+    );
     return true;
   }
 

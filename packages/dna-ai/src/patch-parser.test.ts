@@ -41,4 +41,34 @@ describe("applyPatches", () => {
 
     await rm(root, { recursive: true, force: true });
   });
+
+  it("rejects placeholder DNA-suggested-fix junk and does not invent files", async () => {
+    const root = join(tmpdir(), `dna-patch-junk-${randomUUID()}`);
+    await mkdir(join(root, "src"), { recursive: true });
+
+    const modified = await applyPatches(root, [
+      {
+        file: "src/index.ts",
+        description: "junk",
+        patch: `// DNA suggested fix for: CRITICAL: write EPIPE
+try {
+  // existing code
+} catch (error) {
+  logger.error({ err: error }, 'unknown');
+  throw error;
+}`,
+      },
+      {
+        file: "src/index.ts",
+        description: "junk2",
+        search: "export",
+        replace: "// DNA suggested fix for: boom\nexport",
+      },
+    ]);
+
+    expect(modified).toEqual([]);
+    await expect(readFile(join(root, "src", "index.ts"), "utf-8")).rejects.toThrow();
+
+    await rm(root, { recursive: true, force: true });
+  });
 });

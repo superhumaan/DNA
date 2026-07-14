@@ -2,6 +2,7 @@ import {
   createEngine,
   startEngine,
   resetEngine,
+  observeOutbound,
   type DnaRuntimeConfig,
   type RuntimeEngine,
 } from "./core/engine.js";
@@ -21,6 +22,10 @@ import {
   type NextApiRequestLike,
   type NextApiResponseLike,
 } from "./adapters/next.js";
+import {
+  createRuntimeIngestHandler,
+  createExpressIngestMiddleware,
+} from "./adapters/ingest.js";
 
 export type { DnaRuntimeConfig } from "./core/engine.js";
 export { redactSensitive } from "./core/redact.js";
@@ -37,6 +42,8 @@ export {
   updatePreviousSolutionsMemory,
 } from "./memory-updates.js";
 export { appendJsonl, readJsonl } from "./persistence.js";
+export { decideEventSample, resetSampleStateForTests } from "./sample.js";
+export { parseStackFrames, enrichRuntimeEvent } from "./enrich.js";
 export {
   createNestInterceptor,
   createNestExceptionFilter,
@@ -53,6 +60,17 @@ export interface DnaRuntimeApi {
   start(config: DnaRuntimeConfig): void;
   express(): (req: unknown, res: unknown, next: () => void) => void;
   errorHandler(): (err: Error, req: unknown, res: unknown, next: (err?: Error) => void) => void;
+  /** Mount POST /api/dna/runtime browser ingest (Express-compatible). */
+  ingest(): (req: unknown, res: unknown, next: () => void) => void;
+  ingestHandler(): (req: unknown, res: unknown) => Promise<void>;
+  observeOutbound(observation: {
+    url: string;
+    method: string;
+    statusCode: number;
+    durationMs: number;
+    responseBody?: string;
+    provider?: string;
+  }): void;
   fastify(): ReturnType<typeof createFastifyPlugin>;
   attachFastify(fastify: Parameters<typeof attachFastifyHooks>[1]): void;
   nestInterceptor(): ReturnType<typeof createNestInterceptor>;
@@ -83,6 +101,22 @@ export const dnaRuntime: DnaRuntimeApi = {
     return createExpressErrorHandler(engine) as DnaRuntimeApi["errorHandler"] extends () => infer R
       ? R
       : never;
+  },
+
+  ingest() {
+    return createExpressIngestMiddleware(engine) as DnaRuntimeApi["ingest"] extends () => infer R
+      ? R
+      : never;
+  },
+
+  ingestHandler() {
+    return createRuntimeIngestHandler(engine) as DnaRuntimeApi["ingestHandler"] extends () => infer R
+      ? R
+      : never;
+  },
+
+  observeOutbound(observation) {
+    observeOutbound(engine, observation);
   },
 
   fastify() {

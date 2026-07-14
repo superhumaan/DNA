@@ -880,6 +880,31 @@ export interface NeuralNetwork {
   intents: Record<string, NeuralNetworkIntent>;
 }
 
+export interface RuntimeStackFrame {
+  filename?: string;
+  function?: string;
+  lineno?: number;
+  colno?: number;
+  inApp?: boolean;
+}
+
+export interface RuntimeBreadcrumb {
+  timestamp: string;
+  category: string;
+  message: string;
+  level?: "info" | "warning" | "error" | "debug";
+  data?: Record<string, unknown>;
+}
+
+export interface RuntimeRequestSnapshot {
+  url?: string;
+  method?: string;
+  statusCode?: number;
+  headers?: Record<string, string>;
+  query?: Record<string, string>;
+  bodySnippet?: string;
+}
+
 export interface RuntimeEvent {
   id: string;
   timestamp: string;
@@ -889,9 +914,17 @@ export interface RuntimeEvent {
     | "request_error"
     | "slow_request"
     | "repeated_error"
-    | "memory_spike";
+    | "memory_spike"
+    | "third_party_response";
   message: string;
   stack?: string;
+  frames?: RuntimeStackFrame[];
+  breadcrumbs?: RuntimeBreadcrumb[];
+  contexts?: Record<string, Record<string, unknown>>;
+  tags?: Record<string, string>;
+  extra?: Record<string, unknown>;
+  request?: RuntimeRequestSnapshot;
+  user?: { id?: string; email?: string; username?: string };
   endpoint?: string;
   method?: string;
   statusCode?: number;
@@ -901,6 +934,9 @@ export interface RuntimeEvent {
   requestId?: string;
   responseBody?: string;
   upstream?: string;
+  provider?: string;
+  source?: "server" | "browser" | "ci" | "outbound";
+  sampled?: boolean;
   fingerprint?: string;
 }
 
@@ -959,6 +995,8 @@ export interface ClassifiedIssue {
   repairStatus?: FingerprintRecord["repairStatus"];
   isBlocker?: boolean;
   githubIssueNumber?: number;
+  /** Latest rich event envelope for Lab detail (Sentry-depth). */
+  latestEvent?: RuntimeEvent;
 }
 
 /** Resolved repair config with all aggressive-loop defaults applied. */

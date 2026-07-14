@@ -43,34 +43,40 @@ class MockAiProvider implements AiProvider {
     const isGateway =
       issue.category === "deployment" || /HTTP 50[234]|bad gateway/i.test(issue.summary);
 
-    const proposedChanges: AiRepairPlan["proposedChanges"] = isGateway
-      ? [
-          {
-            file: "src/health.ts",
-            description: "Health check endpoint for gateway probes",
-            patch: [
-              "// DNA gateway repair",
-              "export function healthHandler() {",
-              "  return { status: 'ok', timestamp: new Date().toISOString() };",
-              "}",
-            ].join("\n"),
-          },
-        ]
-      : [
-          {
-            file: context.codeSnippets[0]?.file ?? "src/index.ts",
-            description: "Add error handling for the failing code path",
-            search: "export",
-            replace: `// DNA suggested fix for: ${issue.title}\nexport`,
-          },
-        ];
+    const benign =
+      /EPIPE|ECONNRESET|ECONNABORTED|ERR_STREAM_DESTROYED|write after end/i.test(issue.summary) ||
+      /EPIPE|ECONNRESET/i.test(issue.title);
+
+    // Never invent file patches for noise, or invent src/index.ts when no file is known.
+    const proposedChanges: AiRepairPlan["proposedChanges"] = benign
+      ? []
+      : isGateway
+        ? [
+            {
+              file: "src/health.ts",
+              description: "Health check endpoint for gateway probes",
+              patch: [
+                "// DNA gateway repair",
+                "export function healthHandler() {",
+                "  return { status: 'ok', timestamp: new Date().toISOString() };",
+                "}",
+              ].join("\n"),
+            },
+          ]
+        : [];
 
     return {
       diagnosis: [
         `Mock diagnosis for ${issue.category} issue.`,
         `Summary: ${issue.summary}`,
+        benign
+          ? "Benign socket disconnect (EPIPE/ECONNRESET) — no code change; filter at runtime."
+          : "",
         issue.suspectedCause ? `Likely cause: ${issue.suspectedCause}` : "",
         issue.isBlocker ? "BLOCKER — repeat threshold exceeded." : "",
+        proposedChanges.length === 0
+          ? "Mock provider does not invent code patches — configure a real AI provider or fix manually."
+          : "",
         `Reviewed ${context.behaviour.length} Behaviour files and ${context.memory.length} memory files.`,
       ]
         .filter(Boolean)

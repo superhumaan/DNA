@@ -47,5 +47,13 @@ describe("lab server", () => {
     expect(page.status).toBe(200);
     expect(page.headers.get("content-security-policy")).toBe(LAB_DOCUMENT_CSP);
     expect(await page.text()).toContain("DNA Lab");
+
+    const head = await fetch(`http://127.0.0.1:${port}/labs`, {
+      method: "HEAD",
+      headers: { Host: `127.0.0.1:${port}` },
+    });
+    expect(head.status).toBe(200);
+    expect(head.headers.get("content-security-policy")).toBe(LAB_DOCUMENT_CSP);
+    expect(await head.text()).toBe("");
   });
 });
