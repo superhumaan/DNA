@@ -15,9 +15,13 @@ export function isValidPairingId(pairingId: string): boolean {
   return PAIRING_ID_RE.test(pairingId.trim());
 }
 
-/** Pairing codes are fixed-length digit strings. */
+/** Pairing codes are fixed-length digit strings (ignore whitespace from paste). */
+export function normalizePairingCode(code: string): string {
+  return code.replace(/\s+/g, "");
+}
+
 export function isValidPairingCode(code: string): boolean {
-  return PAIRING_CODE_RE.test(code.trim());
+  return PAIRING_CODE_RE.test(normalizePairingCode(code));
 }
 
 export interface InitLocalPairingOptions {
@@ -124,7 +128,7 @@ export async function verifyPairingCode(
   code: string,
 ): Promise<{ ok: boolean; error?: string; callbackUrl?: string }> {
   const id = pairingId.trim();
-  const trimmedCode = code.trim();
+  const trimmedCode = normalizePairingCode(code);
 
   if (!isValidPairingId(id)) {
     return { ok: false, error: "Invalid pairing ID — paste the Pairing ID from dna register lab" };

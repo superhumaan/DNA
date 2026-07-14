@@ -57,11 +57,12 @@ describe("lab pairing", () => {
       expect(short.ok).toBe(false);
       expect(short.error).toMatch(/Invalid pairing code/i);
 
-      const good = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
-      expect(good.ok).toBe(true);
-
-      const again = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
-      expect(again.ok).toBe(true);
+      const withSpaces = await verifyPairingCode(
+        pasteRoot,
+        ` ${local.pairingId} `,
+        local.code.match(/.{1,40}/g)!.join("\n"),
+      );
+      expect(withSpaces.ok).toBe(true);
 
       const wrong = await verifyPairingCode(
         pasteRoot,

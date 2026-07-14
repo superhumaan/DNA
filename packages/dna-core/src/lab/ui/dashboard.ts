@@ -103,7 +103,7 @@ async function api(path, opts) {
     ...opts,
   });
   const json = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(json.error || res.statusText);
+  if (!res.ok) throw new Error(json.error || json.message || res.statusText);
   return json;
 }
 

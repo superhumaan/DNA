@@ -4,6 +4,12 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.10] - 2026-07-14
+
+### Fixed
+
+- **Lab pairing paste hygiene** — strip whitespace/newlines from pasted Pairing ID/code before verify (textarea paste no longer fails length checks).
+
 ## [0.6.9] - 2026-07-14
 
 ### Fixed
