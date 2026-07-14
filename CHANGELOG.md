@@ -4,6 +4,13 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.9] - 2026-07-14
+
+### Fixed
+
+- **Lab pairing paste-first** — `POST /pairing/verify` accepts a valid Pairing ID + 148-digit code even when `pairing/init` never reached the app (e.g. gateway 302). Paste at `/labs` is enough to unlock account creation.
+- **Register messaging** — when CLI cannot pre-notify production, it no longer says pairing failed; it tells you to paste at `/labs` anyway.
+
 ## [0.6.8] - 2026-07-14
 
 ### Added

@@ -1,22 +1,21 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-14T05:50:00.000Z._
+_Auto-maintained by DNA. Updated 2026-07-14T06:21:00.000Z._
 
 ## Latest request
 
-> clean everything up, update documents and push to NPM and github
+> Fix DNA Lab pairing so paste works when `pairing/init` never reaches production (302 / edge login). User approved: do the fixes.
 
 ## Problem
 
-Local DNA tree had unreleased Lab CI billing + cleanup work, junk (`actionlint` binary, accidental `packages/dna-cli/` scaffolds), and host apps that ran `npx …@0.6.7` without restarting the API still saw old Lab UI.
+`dna register lab` generates a valid Pairing ID + 148-digit code locally, but `POST /api/dna/labs/pairing/init` never reaches DNA Lab on hosts behind a gateway. Verify then returns "Pairing not found" even though the user correctly pastes the CLI output.
 
 ## Desired Behaviour
 
-1. Ship billing blocker + cleanup as **v0.6.8** with docs
-2. Document install vs API restart clearly
-3. Remove junk; push GitHub + publish npm
-4. Point Humaan at the new package and restart API
+1. Browser paste of Pairing ID + code verifies without a prior successful `pairing/init`
+2. CLI still attempts init (for callback / `--wait`) but does not require it for Lab account creation
+3. Honest messaging when init fails — paste still works
 
 ## Status
 
-Shipping v0.6.8.
+Implementing (user approved).

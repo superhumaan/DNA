@@ -227,7 +227,7 @@ DNA Lab at **`/labs`** complements external uptime tools (it does not replace pi
 | Mode | Access |
 |------|--------|
 | **Local** | `dna lab serve` — open `http://localhost:3200/labs`, no login |
-| **Production** | `dna register lab --url https://your-app.com` → paste 148-digit code at `/labs` → create account |
+| **Production** | `dna register lab --url https://your-app.com` → paste Pairing ID + 148-digit code at `/labs` → create account (works even if CLI could not reach `pairing/init`) |
 
 **UI (v0.6.7+):** Humaan admin parity — DNA logo only, primary pill buttons, large pill tabs, search → filters → data tables, collapsible Monitor/Delivery nav. [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-ui-humaan-0.6.7.md).
 

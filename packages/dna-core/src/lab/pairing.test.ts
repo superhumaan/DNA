@@ -2,7 +2,12 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { describe, expect, it, afterEach } from "vitest";
-import { initLocalPairing, registerPairingOnProduction, verifyPairingCode } from "./pairing.js";
+import { DNA_LAB_PAIRING_CODE_LENGTH } from "@superhumaan/dna-config";
+import {
+  initLocalPairing,
+  registerPairingOnProduction,
+  verifyPairingCode,
+} from "./pairing.js";
 
 describe("lab pairing", () => {
   let root = "";
@@ -26,11 +31,48 @@ describe("lab pairing", () => {
     });
     expect(reg.ok).toBe(true);
 
-    const bad = await verifyPairingCode(root, local.pairingId, "0".repeat(148));
+    const bad = await verifyPairingCode(root, local.pairingId, "0".repeat(DNA_LAB_PAIRING_CODE_LENGTH));
     expect(bad.ok).toBe(false);
 
     const good = await verifyPairingCode(root, local.pairingId, local.code);
     expect(good.ok).toBe(true);
+  });
+
+  it("verifies paste without prior pairing/init (gateway-safe path)", async () => {
+    root = await mkdtemp(join(tmpdir(), "dna-lab-paste-"));
+    const local = await initLocalPairing({
+      root,
+      productionUrl: "https://example.com",
+      projectId: "test-app",
+    });
+
+    // Simulate production store with no init record — only the browser paste arrives
+    const pasteRoot = await mkdtemp(join(tmpdir(), "dna-lab-prod-"));
+    try {
+      const missing = await verifyPairingCode(pasteRoot, "not-a-real-id", local.code);
+      expect(missing.ok).toBe(false);
+      expect(missing.error).toMatch(/Invalid pairing ID/i);
+
+      const short = await verifyPairingCode(pasteRoot, local.pairingId, "123");
+      expect(short.ok).toBe(false);
+      expect(short.error).toMatch(/Invalid pairing code/i);
+
+      const good = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
+      expect(good.ok).toBe(true);
+
+      const again = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
+      expect(again.ok).toBe(true);
+
+      const wrong = await verifyPairingCode(
+        pasteRoot,
+        local.pairingId,
+        "9".repeat(DNA_LAB_PAIRING_CODE_LENGTH),
+      );
+      expect(wrong.ok).toBe(false);
+      expect(wrong.error).toMatch(/Invalid pairing code/i);
+    } finally {
+      await rm(pasteRoot, { recursive: true, force: true });
+    }
   });
 
   it("does not treat auth gateway redirects as successful pairing init", async () => {
@@ -51,6 +93,6 @@ describe("lab pairing", () => {
 
     expect(result.ok).toBe(false);
     expect(result.status).toBe(302);
-    expect(result.error).toMatch(/redirected|never reached/i);
+    expect(result.error).toMatch(/paste|redirected/i);
   });
 });

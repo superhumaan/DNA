@@ -37,8 +37,8 @@ DNA Lab is the **production** observability UI — not localhost-only.
 ### Pairing flow
 
 1. Deploy with `dna lab install` / `dna doctor` — `/labs` is live on your domain
-2. On production `/labs` → **Create account** → paste pairing ID + 148-digit code
-3. Locally: `npx dna register lab --url https://your-app.com`
+2. Locally: `npx dna register lab --url https://your-app.com` (copy Pairing ID + 148-digit code; paste works even if CLI could not reach `pairing/init`)
+3. On production `/labs` → paste pairing ID + 148-digit code → create account
 4. CLI generates the code, hashes it, POSTs to production, listens for callback
 5. Paste code in browser → verified → create name, email, password
 6. Sign in on production anytime thereafter

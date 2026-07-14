@@ -277,7 +277,7 @@ function signinView() {
 
 function registerView() {
   if ((state.registerStep || "pair") === "pair") {
-    const hero = '<h1>Pair your project</h1><h2>Connect local DNA to this deploy.</h2><p>Run <code>npx dna register lab --url ' + esc(location.origin) + '</code> then paste the code below.</p>';
+    const hero = '<h1>Pair your project</h1><h2>Connect local DNA to this deploy.</h2><p>Run <code>npx dna register lab --url ' + esc(location.origin) + '</code> then paste the Pairing ID and 148-digit code below (works even if CLI could not reach pairing/init).</p>';
     const panel = (state.error ? '<div class="lab-error">' + esc(state.error) + '</div>' : '') +
       (state.success ? '<div class="lab-success">' + esc(state.success) + '</div>' : '') +
       '<form id="pair-form"><div class="field"><label>Pairing ID</label><input name="pairingId" required /></div>' +

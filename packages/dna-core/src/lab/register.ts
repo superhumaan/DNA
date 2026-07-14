@@ -60,11 +60,11 @@ export async function runRegisterLab(options: RegisterLabOptions): Promise<Regis
     message += [
       "",
       "",
-      "FAILED — production was NOT notified.",
+      "Note — production was not pre-notified (CLI could not reach pairing/init).",
       push.error ?? `HTTP ${push.status ?? "?"}`,
       "",
-      "DNA pairing requires POST /api/dna/labs/pairing/init to reach the app.",
-      "If an edge proxy redirects that route to login, allowlist it (host integration — not DNA).",
+      "You can still pair: open /labs and paste the Pairing ID + 148-digit code above.",
+      "Verify accepts the paste directly — pre-notify is optional (helps --wait / callback).",
     ].join("\n");
   } else {
     message += "\n\nProduction notified. Paste Pairing ID + code at /labs → Pair project.";
