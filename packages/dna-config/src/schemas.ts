@@ -1088,6 +1088,14 @@ export interface MarketplaceUpdateResult {
     latestVersion: string;
   }>;
   newPacks: string[];
+  /** Packs re-installed / content-refreshed by `dna update` (empty when check-only). */
+  refreshed?: string[];
+  /** Foundation packs newly ensured during update. */
+  foundationInstalled?: string[];
+  /** Packs that failed to refresh. */
+  failed?: Array<{ packId: string; error: string }>;
+  /** When true, updates were applied (not just reported). */
+  applied?: boolean;
 }
 
 export interface CliUpgradeCheckResult {
