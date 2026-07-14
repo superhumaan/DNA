@@ -55,7 +55,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 | Channel | Command |
 |---------|---------|
-| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.4`) |
+| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.5`) |
 | Monorepo dev | `git clone` + `pnpm dna:link` |
 
 ---

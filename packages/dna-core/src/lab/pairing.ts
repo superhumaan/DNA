@@ -160,13 +160,48 @@ export async function pushPairingToProduction(
   try {
     const res = await fetch(`${base}/api/dna/labs/pairing/init`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(body),
+      redirect: "manual",
       signal: AbortSignal.timeout(10000),
     });
+
+    if (res.status >= 300 && res.status < 400) {
+      const location = res.headers.get("location") ?? "";
+      return {
+        ok: false,
+        status: res.status,
+        error: [
+          `Pairing init redirected (${res.status}) — request never reached DNA Lab.`,
+          location ? `Location: ${location}` : "",
+          "If this host is behind an auth gateway, allowlist POST /api/dna/labs/pairing/init",
+          "or set lab.requireAuthInProduction=false when the gateway already gates /labs.",
+        ]
+          .filter(Boolean)
+          .join(" "),
+      };
+    }
+
+    const contentType = res.headers.get("content-type") ?? "";
+    const text = await res.text().catch(() => "");
     if (!res.ok) {
-      const text = await res.text().catch(() => "");
       return { ok: false, status: res.status, error: text || res.statusText };
+    }
+    if (!contentType.includes("application/json")) {
+      return {
+        ok: false,
+        status: res.status,
+        error:
+          "Pairing init returned non-JSON (likely a login HTML page). The API call did not reach DNA Lab.",
+      };
+    }
+    try {
+      const parsed = JSON.parse(text) as { ok?: boolean; error?: string };
+      if (parsed.ok === false) {
+        return { ok: false, status: res.status, error: parsed.error ?? "Pairing init rejected" };
+      }
+    } catch {
+      return { ok: false, status: res.status, error: "Invalid JSON from pairing init" };
     }
     return { ok: true, status: res.status };
   } catch (err) {

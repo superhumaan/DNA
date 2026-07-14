@@ -1,5 +1,6 @@
 export function hostFromRequest(req: { headers?: Record<string, string | string[] | undefined> }): string {
-  const raw = req.headers?.host ?? req.headers?.["x-forwarded-host"];
+  // Prefer proxy host — edge gateways set X-Forwarded-Host while Node still sees the internal Host.
+  const raw = req.headers?.["x-forwarded-host"] ?? req.headers?.host;
   if (Array.isArray(raw)) return raw[0] ?? "";
   return raw ?? "";
 }
