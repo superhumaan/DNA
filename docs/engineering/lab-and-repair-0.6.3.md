@@ -103,7 +103,7 @@ not supported. Instead change the require of lab.js to a dynamic import()
 
 ## Publish note
 
-First `Publish npm` workflow run on this release failed: `TS6133` unused `projectId` in `wireExpressLabCjsContent` during `dna-core` DTS build. Fixed before successful publish (parameter kept for API shape; ID is written into `express-wire.cjs` instead).
+First `Publish npm` workflow run failed: `TS6133` unused `projectId` in `wireExpressLabCjsContent` during `dna-core` DTS build (run was then removed by Cleanup failed runs). Fixed in `dd1b407`; republish succeeded — `@superhumaan/dna-by-humaan@0.6.3` on npm (2026-07-14).
 
 ## Upgrade
 
