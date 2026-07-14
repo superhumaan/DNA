@@ -24,6 +24,7 @@ All notable changes to DNA are documented here.
 - **Lab `/data` hang** — dashboard polling used full `runDoctor` (GitHub auth + full scan). Switched to `runDoctorLite` + 60s cache + 2.5s timeout; collect uses `Promise.allSettled`.
 - **runtime.db corruption** — atomic temp+rename writes, per-path mutex, quarantine corrupt JSON to `runtime.db.corrupt.<ts>`, and recreate empty store on Lab collect.
 - **Lab CSP** — explicit document CSP on `/labs` HTML; auto-wire mounts after `configureExpress` / helmet.
+- **npm publish build** — unused `projectId` in `wireExpressLabCjsContent` failed DTS (`TS6133`); parameter retained for API parity but unused (ID is in `express-wire.cjs`).
 
 ### Errors → fixes (v0.6.3 ship notes)
 
@@ -33,6 +34,7 @@ All notable changes to DNA are documented here.
 | Lab dashboard stuck / never loads data | `/data` called full `runDoctor` (GitHub auth + scan) on every poll | `runDoctorLite` + 60s cache + 2.5s timeout; `Promise.allSettled` in collect |
 | `runtime.db` parse failures / Lab collect throws | Concurrent writes + non-atomic JSON overwrite | Per-path mutex, temp+rename writes, quarantine corrupt files, recreate empty store |
 | `/labs` bootstrap blocked by host helmet | API CSP `default-src 'none'` inherited by Lab HTML | Explicit document CSP on Lab HTML; mount middleware after helmet |
+| npm publish DTS failed (`TS6133` unused `projectId`) | `wireExpressLabCjsContent` took `projectId` unused (ID only in helper wire) | Keep param for API parity (`_projectId` + `void`) so DTS build passes |
 
 See also [docs/engineering/lab-and-repair-0.6.3.md](docs/engineering/lab-and-repair-0.6.3.md).
 

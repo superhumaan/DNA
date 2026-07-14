@@ -165,9 +165,10 @@ export function wireExpressLabEsmContent(content: string, projectId: string): st
  */
 export function wireExpressLabCjsContent(
   content: string,
-  projectId: string,
+  _projectId: string,
   helperRequirePath: string,
 ): string | null {
+  void _projectId; // projectId lives in express-wire.cjs (buildCjsLabWireSource), not the entry file
   if (hasLabWired(content)) return null;
   if (!isCjsExpressEntry(content)) return null;
 
