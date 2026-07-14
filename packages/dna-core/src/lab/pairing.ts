@@ -174,8 +174,8 @@ export async function pushPairingToProduction(
         error: [
           `Pairing init redirected (${res.status}) — request never reached DNA Lab.`,
           location ? `Location: ${location}` : "",
-          "If this host is behind an auth gateway, allowlist POST /api/dna/labs/pairing/init",
-          "or set lab.requireAuthInProduction=false when the gateway already gates /labs.",
+          "If this host sits behind an edge login, allowlist DNA Lab pairing routes so CLI can reach the API:",
+          "POST /api/dna/labs/pairing/init (and GET /api/dna/labs/pairing/status/*).",
         ]
           .filter(Boolean)
           .join(" "),
@@ -192,7 +192,7 @@ export async function pushPairingToProduction(
         ok: false,
         status: res.status,
         error:
-          "Pairing init returned non-JSON (likely a login HTML page). The API call did not reach DNA Lab.",
+          "Pairing init returned non-JSON (likely an edge login page). DNA Lab pairing API was not reached.",
       };
     }
     try {

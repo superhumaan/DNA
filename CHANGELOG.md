@@ -4,12 +4,19 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.6] - 2026-07-14
+
+### Fixed
+
+- **DNA pairing is DNA-only** — removed the mistaken “edge gateway opens Lab” shortcut. Lab production access is DNA pairing + DNA Lab session again.
+- **Pairing init honesty** (kept from 0.6.5) — redirects / non-JSON are hard failures, never “Production notified.”
+
 ## [0.6.5] - 2026-07-14
 
 ### Fixed
 
-- **Lab access behind edge auth** — `lab.requireAuthInProduction: false` is now honored (was ignored). When Connect/gateway already gates `/labs`, Lab opens without DNA pairing theater.
-- **Pairing init false success** — `pushPairingToProduction` uses `redirect: "manual"` and requires JSON; 302-to-login no longer prints “Production notified”.
+- **Pairing init honesty** — `pushPairingToProduction` uses `redirect: "manual"` and requires JSON; 302-to-login no longer prints “Production notified.”
+- Prefer `X-Forwarded-Host` when resolving Lab local vs production host.
 
 ## [0.6.4] - 2026-07-14
 

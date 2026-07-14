@@ -151,9 +151,6 @@ export async function handleLabRequest(
     openLocalWithoutAuth: options.config?.lab?.openLocalWithoutAuth !== false,
     nodeEnv: options.config?.runtime?.environment ?? process.env.NODE_ENV,
   });
-  /** When false, access is enforced by an edge gateway (e.g. Invitrace Connect) — do not show DNA pairing. */
-  const requireLabAuth = options.config?.lab?.requireAuthInProduction !== false;
-  const openAccess = localMode || !requireLabAuth;
 
   const isLabPage = pathname === labPath || pathname.startsWith(`${labPath}/`);
   const isLabApi = pathname.startsWith(apiPrefix);
@@ -188,14 +185,13 @@ export async function handleLabRequest(
     pathname === `${apiPrefix}/auth/register`;
 
   const auth = await resolveLabAuth(options.root, req, localMode);
-  const authenticated = auth.authenticated || openAccess;
 
-  if ((isLabPage || isLabApi) && !authenticated && !publicApi) {
+  if ((isLabPage || isLabApi) && !localMode && !auth.authenticated && !publicApi) {
     if (isLabApi) {
       unauthorized(res);
       return true;
     }
-    // HTML shell still served — client shows login
+    // HTML shell still served — client shows login / pairing
   }
 
   if (isGetOrHead && pathname === `${apiPrefix}/bootstrap`) {
@@ -204,10 +200,9 @@ export async function handleLabRequest(
       200,
       {
         localMode,
-        authenticated,
+        authenticated: auth.authenticated,
         user: auth.user ? { name: auth.user.name, email: auth.user.email } : undefined,
         labPath,
-        gatewayAuth: !requireLabAuth && !localMode,
       },
       undefined,
       req.method,
@@ -332,7 +327,7 @@ export async function handleLabRequest(
       return true;
     }
 
-    if (pathname === `${apiPrefix}/releases` && !authenticated) {
+    if (pathname === `${apiPrefix}/releases` && !localMode && !auth.authenticated) {
       unauthorized(res);
       return true;
     }
@@ -349,7 +344,7 @@ export async function handleLabRequest(
     }
 
     if (pathname === `${apiPrefix}/sourcemaps`) {
-      if (!authenticated) {
+      if (!localMode && !auth.authenticated) {
         unauthorized(res);
         return true;
       }
@@ -368,7 +363,7 @@ export async function handleLabRequest(
   }
 
   if (isGetOrHead && pathname === `${apiPrefix}/data`) {
-    if (!authenticated) {
+    if (!localMode && !auth.authenticated) {
       unauthorized(res);
       return true;
     }

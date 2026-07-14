@@ -63,8 +63,8 @@ export async function runRegisterLab(options: RegisterLabOptions): Promise<Regis
       "FAILED — production was NOT notified.",
       push.error ?? `HTTP ${push.status ?? "?"}`,
       "",
-      "Fix: allowlist POST /api/dna/labs/pairing/init through your edge auth,",
-      "or set lab.requireAuthInProduction=false when the gateway already verifies Lab access.",
+      "DNA pairing requires POST /api/dna/labs/pairing/init to reach the app.",
+      "If an edge proxy redirects that route to login, allowlist it (host integration — not DNA).",
     ].join("\n");
   } else {
     message += "\n\nProduction notified. Paste Pairing ID + code at /labs → Pair project.";
