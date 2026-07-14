@@ -2,6 +2,11 @@
 
 _Last updated: 2026-07-14_
 
+## 2026-07-14 — v0.6.7 Lab UI Humaan parity
+
+- Lab UI: DNA icon-only brand, Humaan primary pills + large pill tabs, list search → tabs → always-on tables, sidebar accordion, base font 16px
+- Docs: `docs/engineering/lab-ui-humaan-0.6.7.md`, CHANGELOG, roadmap, scope
+
 ## 2026-07-14 — v0.6.3 ship
 
 - **Aggressive Repair Loop** — fingerprints, CellularMemory blockers, GitHub dedup, `dna ai force-repair` (PR #20)

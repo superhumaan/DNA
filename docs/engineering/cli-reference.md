@@ -37,7 +37,7 @@ Includes an **Impressions drift** score when DNA is installed (missing docs, sta
 
 ## lab
 
-Production observability portal at `/labs` — runtime issues, events, performance, quality, release tracking.
+Production observability portal at `/labs` — runtime issues, events, performance, quality, release tracking. UI matches Humaan admin list patterns (search → tabs → tables); see [Lab UI Humaan parity v0.6.7](./lab-ui-humaan-0.6.7.md).
 
 ```bash
 dna lab install

@@ -84,7 +84,10 @@ export const LAB_CSS = `
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
+  --radius-pill: 999px;
   --control-height: 36px;
+  --btn-min-height: 48px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
   --admin-page-gutter: 16px;
   --admin-title-bar-height: 56px;
   --dna-accent: #4ade9a;
@@ -92,9 +95,11 @@ export const LAB_CSS = `
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { height: 100%; }
+html { font-size: 16px; }
 body {
   margin: 0;
   font-family: var(--font-sans);
+  font-size: 16px;
   color: var(--color-text);
   background: var(--color-bg-app);
   -webkit-font-smoothing: antialiased;
@@ -107,7 +112,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 ::selection { background: rgba(91, 33, 182, 0.2); color: var(--color-text); }
 
-/* DNA-Web mark (Lab brand in nav) */
+/* DNA mark (icon only) */
 .dna-web-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--color-text); font-weight: 600; letter-spacing: var(--tracking-tight); }
 .dna-web-brand--fixed { position: fixed; top: 12px; left: 12px; z-index: 1000; }
 .dna-web-brand__icon {
@@ -116,8 +121,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   display: grid; place-items: center; font-size: 18px;
   border: 1px solid rgba(74, 222, 154, 0.3); flex-shrink: 0;
 }
-.dna-web-brand__label { font-weight: 600; letter-spacing: var(--tracking-tight); }
-.dna-web-brand__tag { margin-left: 4px; font-size: 0.82rem; font-weight: 700; color: var(--color-text-tertiary); }
 
 /* Auth welcome (Soli auth shell) */
 .soli-auth-root { min-height: 100dvh; position: relative; overflow: hidden; background: var(--color-bg-app); }
@@ -151,29 +154,42 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .field input:focus, .field textarea:focus { border-color: var(--color-brand-primary); outline: none; box-shadow: 0 0 0 3px var(--color-focus-ring); }
 .field textarea { min-height: 88px; font-family: var(--font-mono); font-size: 12px; }
-.btnp, .soli-admin-header-btn {
+/* Humaan admin primary pill buttons */
+.btnp, .soli-admin-header-btn, .humaan-page-primary-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  border: 1px solid var(--color-brand-primary); background: var(--color-brand-primary);
-  color: var(--color-text-on-brand); border-radius: 8px; min-height: var(--control-height);
-  padding: 0 14px; font-size: 0.875rem; font-weight: 600; line-height: 1.2;
+  flex-shrink: 0;
+  min-height: var(--btn-min-height); height: var(--btn-min-height);
+  padding: 0 18px 0 14px; box-sizing: border-box;
+  border: 1px solid color-mix(in srgb, var(--color-brand-primary) 12%, transparent);
+  background: var(--color-brand-primary);
+  color: var(--color-text-on-brand);
+  border-radius: var(--radius-pill);
+  font-size: 0.9375rem; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em;
   cursor: pointer; font-family: inherit; text-decoration: none; white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
-.btnp { width: 100%; padding: 12px 16px; }
-.btnp:hover, .soli-admin-header-btn:hover { opacity: 0.92; background: var(--color-brand-primary-hover); border-color: var(--color-brand-primary-hover); }
+.btnp { width: 100%; padding: 0 18px; }
+.btnp:hover, .soli-admin-header-btn:hover, .humaan-page-primary-btn:hover {
+  background: var(--color-brand-primary-hover);
+  border-color: color-mix(in srgb, var(--color-brand-primary) 22%, transparent);
+  color: var(--color-text-on-brand);
+}
 .btns {
   display: inline-flex; align-items: center; justify-content: center; width: 100%;
-  padding: 11px 16px; border-radius: 8px; border: 1.5px solid var(--color-border);
-  background: var(--color-surface); color: var(--color-text); font-size: 14px; font-weight: 600;
-  cursor: pointer; font-family: inherit; margin-top: 4px; min-height: var(--control-height);
+  padding: 0 16px; border-radius: var(--radius-pill); border: 1.5px solid var(--color-border);
+  background: var(--color-surface); color: var(--color-text); font-size: 0.9375rem; font-weight: 600;
+  cursor: pointer; font-family: inherit; margin-top: 4px; min-height: var(--btn-min-height); height: var(--btn-min-height);
 }
 .btns:hover { background: var(--color-hover-overlay); }
 .btnp--sm, .btns--sm, .soli-admin-header-btn--ghost {
-  width: auto; min-height: var(--control-height); padding: 0 12px; font-size: 0.8125rem;
+  width: auto; min-height: var(--control-height); height: auto; padding: 0 12px; font-size: 0.8125rem;
+  border-radius: 8px; box-shadow: none;
 }
 .soli-admin-header-btn--ghost {
   background: transparent; color: var(--color-brand-primary); border-color: var(--color-border);
 }
-.soli-admin-header-btn--ghost:hover { background: var(--color-brand-primary-soft); border-color: var(--color-control-active-border); opacity: 1; }
+.soli-admin-header-btn--ghost:hover { background: var(--color-brand-primary-soft); border-color: var(--color-control-active-border); }
 .lab-error {
   margin-bottom: 12px; padding: 10px 12px; border-radius: 8px;
   background: var(--color-danger-surface-bg); border: 1px solid var(--color-danger-surface-border);
@@ -257,8 +273,36 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   padding: 4px 4px 8px;
   font-weight: 600;
 }
+.sn-title--toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  border-radius: 8px;
+  padding: 8px 8px;
+}
+.sn-title--toggle:hover {
+  background: var(--color-hover-overlay);
+  color: var(--color-text-secondary);
+}
+.sn-title--toggle i {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+}
+.settings-nav-group__links {
+  display: flex;
+  flex-direction: column;
+}
+.settings-nav-group__links[hidden] { display: none; }
 .sn-title + .sn-title,
-.settings-nav-group + .settings-nav-group { margin-top: 16px; }
+.settings-nav-group + .settings-nav-group { margin-top: 12px; }
 
 .soli-settings-nav-link,
 .settings-nav button.soli-settings-nav-link {
@@ -385,16 +429,91 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .admin-page-body { min-width: 0; box-sizing: border-box; }
 .admin-page-body--form { padding: var(--admin-page-gutter); }
 .admin-page-body--table { padding: 0 0 var(--admin-page-gutter); }
-.admin-page-body--table .lab-filters,
-.admin-page-body--table .admin-filter-bar {
+.admin-page-body--table .lab-list-toolbar {
   padding: 0 var(--admin-page-gutter) 12px;
 }
+.admin-page-body--table .lab-list-stats {
+  padding: 0 var(--admin-page-gutter) 12px;
+}
+.admin-page-body--table .lab-list-meta {
+  padding: 12px var(--admin-page-gutter) 0;
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+}
 
-.env-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
-  background: var(--color-brand-primary-soft); color: var(--color-brand-primary);
-  border: 1px solid var(--color-control-active-border);
+.lab-list-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.lab-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.lab-search > i {
+  position: absolute;
+  left: 14px;
+  color: var(--color-text-tertiary);
+  font-size: 14px;
+  pointer-events: none;
+}
+.lab-search__input {
+  width: 100%;
+  min-height: 44px;
+  height: 44px;
+  padding: 0 14px 0 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.9375rem;
+  box-sizing: border-box;
+}
+.lab-search__input:focus {
+  outline: none;
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+/* Humaan ProductStyleTabBar-style pills */
+.lab-product-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 0 2px;
+}
+.lab-product-tabs__tab {
+  position: relative;
+  margin: 0;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.lab-product-tabs__tab:hover { color: var(--color-text-secondary); }
+.lab-product-tabs__tab.is-active {
+  background: var(--color-brand-primary);
+  color: #fff;
+}
+
+.lab-table__empty td {
+  text-align: center;
+  color: var(--color-text-tertiary);
+  padding: 32px 16px !important;
+  font-size: 0.875rem;
 }
 
 /* Cards — Soli settings-card (no heavy shadow) */
@@ -508,19 +627,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .lab-kv__row { display: grid; grid-template-columns: 110px 1fr; gap: 8px; font-size: 13px; }
 .lab-kv__key { color: var(--color-text-tertiary); font-weight: 600; }
 
-/* Filters — Soli control chips (not filled purple pills) */
+/* Legacy chip filters kept for safety — prefer .lab-product-tabs */
 .lab-filters, .admin-filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 0; }
 .lab-filter {
-  padding: 0 12px; min-height: 32px; border-radius: 8px;
-  border: 1px solid var(--color-border); background: var(--color-surface);
-  font-size: 0.8125rem; font-weight: 600; cursor: pointer; font-family: inherit;
-  color: var(--color-text-secondary);
+  padding: 8px 16px; min-height: 36px; border-radius: var(--radius-pill);
+  border: none; background: transparent;
+  font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit;
+  color: var(--color-neutral-500);
 }
-.lab-filter:hover { background: var(--color-hover-overlay); color: var(--color-text); }
+.lab-filter:hover { color: var(--color-text-secondary); }
 .lab-filter.is-active {
-  background: var(--color-control-active-bg);
-  border-color: var(--color-control-active-border);
-  color: var(--color-control-active-fg);
+  background: var(--color-brand-primary);
+  color: #fff;
 }
 
 .lab-empty { text-align: center; padding: 48px 24px; color: var(--color-text-tertiary); }

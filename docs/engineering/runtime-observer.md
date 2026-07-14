@@ -45,7 +45,9 @@ DNA Lab is the **production** observability UI — not localhost-only.
 
 ### Screens
 
-Overview · Issues · Events · Performance · Quality · Releases · Logs
+Overview · Issues · Events · Performance · Quality · Releases
+
+**UI (v0.6.7):** Humaan admin parity — DNA icon-only brand, 48px primary pills, large pill tabs, search above tabs on list pages, tables always shown (empty row when no data), Monitor/Delivery sidebar accordion (one open). See [lab-ui-humaan-0.6.7](./lab-ui-humaan-0.6.7.md).
 
 ### Release tracking & source maps (v2)
 

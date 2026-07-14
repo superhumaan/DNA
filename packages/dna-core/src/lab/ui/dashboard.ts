@@ -5,6 +5,9 @@ const state = {
   tab: "overview",
   selectedIssueId: null,
   severityFilter: "all",
+  searchQuery: "",
+  navOpenGroup: null,
+  qualityTab: "reports",
   pairingId: null,
   registerStep: "pair",
   localMode: false,
@@ -28,12 +31,35 @@ function esc(t) {
   return String(t ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
 
-function dnaWebBrand(href, fixed, tag) {
-  return '<a class="dna-web-brand' + (fixed ? ' dna-web-brand--fixed' : '') + '" href="' + esc(href || '/labs') + '">' +
+function dnaWebBrand(href, fixed) {
+  return '<a class="dna-web-brand' + (fixed ? ' dna-web-brand--fixed' : '') + '" href="' + esc(href || '/labs') + '" aria-label="DNA Lab">' +
     '<span class="dna-web-brand__icon"><i class="fa-duotone fa-solid fa-dna" aria-hidden="true"></i></span>' +
-    '<span class="dna-web-brand__label">by Humaan</span>' +
-    (tag ? '<span class="dna-web-brand__tag">' + esc(tag) + '</span>' : '') +
     '</a>';
+}
+
+function groupForTab(tab) {
+  const item = NAV.find((n) => n[0] === tab);
+  return item ? item[3] : "Monitor";
+}
+
+function matchesSearch() {
+  const q = String(state.searchQuery || "").trim().toLowerCase();
+  if (!q) return () => true;
+  return (parts) => parts.some((p) => String(p || "").toLowerCase().includes(q));
+}
+
+function listToolbar(placeholder, tabsHtml) {
+  return '<div class="lab-list-toolbar">' +
+    '<div class="lab-search">' +
+    '<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>' +
+    '<input type="search" class="lab-search__input" data-search placeholder="' + esc(placeholder) + '" value="' + esc(state.searchQuery || "") + '" autocomplete="off" />' +
+    '</div>' +
+    (tabsHtml ? '<div class="lab-product-tabs" role="tablist">' + tabsHtml + '</div>' : '') +
+    '</div>';
+}
+
+function tableEmptyRow(colspan, message) {
+  return '<tr class="lab-table__empty"><td colspan="' + colspan + '">' + esc(message) + '</td></tr>';
 }
 
 function authAtmosphere() {
@@ -273,36 +299,45 @@ function registerView() {
 function sidebar(active) {
   const stats = state.data?.stats || {};
   const issueCount = stats.issueCount || 0;
+  const openGroup = openNavGroup(active);
   const groups = {};
   NAV.forEach(([id, label, icon, group]) => {
     if (!groups[group]) groups[group] = [];
     groups[group].push([id, label, icon]);
   });
   const sections = Object.keys(groups).map((group) => {
+    const isOpen = openGroup === group;
     const links = groups[group].map(([id, label, icon]) => {
       const badge = id === "issues" && issueCount ? '<span class="nav-badge">' + issueCount + '</span>' : '';
       return '<button type="button" class="soli-settings-nav-link' + (active === id ? ' is-active' : '') + '" data-tab="' + id + '"><i class="fa-solid ' + icon + '" aria-hidden="true"></i><span>' + esc(label) + '</span>' + badge + '</button>';
     }).join("");
-    return '<div class="settings-nav-group"><div class="sn-title">' + esc(group) + '</div>' + links + '</div>';
+    return '<div class="settings-nav-group' + (isOpen ? ' is-open' : '') + '">' +
+      '<button type="button" class="sn-title sn-title--toggle" data-nav-group="' + esc(group) + '" aria-expanded="' + (isOpen ? 'true' : 'false') + '">' +
+      '<span>' + esc(group) + '</span>' +
+      '<i class="fa-solid fa-chevron-' + (isOpen ? 'down' : 'right') + '" aria-hidden="true"></i>' +
+      '</button>' +
+      '<div class="settings-nav-group__links"' + (isOpen ? '' : ' hidden') + '>' + links + '</div>' +
+      '</div>';
   }).join("");
   const logout = !state.localMode
     ? '<div class="settings-nav-group" style="margin-top:20px"><button type="button" class="soli-settings-nav-link" data-action="logout"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Sign out</span></button></div>'
     : '';
   return '<aside class="settings-nav">' +
-    '<div class="soli-portal-nav-brand">' + dnaWebBrand('/labs', false, 'Lab') + '</div>' +
+    '<div class="soli-portal-nav-brand">' + dnaWebBrand('/labs', false) + '</div>' +
     '<div class="settings-nav-scroll">' + sections + logout + '</div></aside>';
 }
 
+function openNavGroup(active) {
+  return state.navOpenGroup != null ? state.navOpenGroup : groupForTab(active);
+}
+
 function pageHeader(title) {
-  const refreshed = state.lastRefresh ? 'Updated ' + timeAgo(state.lastRefresh.toISOString()) : '';
   return '<header class="soli-administration-page-header">' +
     '<div class="soli-administration-page-header__title-row">' +
     '<h1 class="soli-administration-page-header__title">' + esc(title) + '</h1>' +
     '</div>' +
     '<div class="soli-administration-page-header__actions">' +
-    '<span class="env-pill"><i class="fa-solid fa-server" aria-hidden="true"></i> ' + esc(state.localMode ? "development" : "production") + '</span>' +
-    '<span class="soli-admin-page-header__meta">' + refreshed + '</span>' +
-    '<button type="button" class="soli-admin-header-btn" data-action="refresh"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Refresh</button>' +
+    '<button type="button" class="humaan-page-primary-btn soli-admin-header-btn" data-action="refresh"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Refresh</button>' +
     '</div></header>';
 }
 
@@ -320,24 +355,29 @@ function overviewPanel() {
     '</div>' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Error volume</h2></div><div class="lab-panel__body" style="padding:16px"><canvas class="lab-chart" id="error-chart"></canvas></div></div>' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Top unresolved issues</h2></div><div class="lab-panel__body">' +
-    (issues.length ? issueTable(issues, true, false) : emptyState('fa-circle-check', 'No issues', 'Runtime observer has not classified any issues yet.')) +
+    issueTable(issues, true, false, 'No issues yet.') +
     '</div></div></div>';
 }
 
-function issueTable(issues, clickable, edge) {
-  const rows = issues.map((i) => '<tr class="' + (clickable ? 'is-clickable' : '') + '" data-issue="' + esc(i.id) + '"><td>' + severityBadge(i.severity) + '</td><td><div class="lab-table__title">' + esc(i.title) + '</div><div class="lab-table__sub">' + esc(i.category) + (i.endpoint ? ' · ' + esc(i.endpoint) : '') + '</div></td><td>' + esc(i.count) + '</td><td>' + timeAgo(i.lastSeen) + '</td></tr>').join("");
+function issueTable(issues, clickable, edge, emptyMsg) {
+  const rows = issues.length
+    ? issues.map((i) => '<tr class="' + (clickable ? 'is-clickable' : '') + '" data-issue="' + esc(i.id) + '"><td>' + severityBadge(i.severity) + '</td><td><div class="lab-table__title">' + esc(i.title) + '</div><div class="lab-table__sub">' + esc(i.category) + (i.endpoint ? ' · ' + esc(i.endpoint) : '') + '</div></td><td>' + esc(i.count) + '</td><td>' + timeAgo(i.lastSeen) + '</td></tr>').join("")
+    : tableEmptyRow(4, emptyMsg || 'No issues match this filter.');
   return '<table class="lab-table admin-table' + (edge ? ' admin-table--edge' : '') + '"><thead><tr><th>Level</th><th>Issue</th><th>Events</th><th>Last seen</th></tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
 function issuesPanel() {
-  const all = state.data?.issueGroups || [];
+  const match = matchesSearch();
+  const all = (state.data?.issueGroups || []).filter((i) =>
+    match([i.title, i.category, i.endpoint, i.severity, i.summary])
+  );
   const filtered = state.severityFilter === "all" ? all : all.filter((i) => i.severity === state.severityFilter);
-  const filters = ["all","critical","high","medium","low"].map((f) =>
-    '<button type="button" class="lab-filter' + (state.severityFilter === f ? ' is-active' : '') + '" data-filter="' + f + '">' + esc(f) + '</button>'
+  const tabs = ["all","critical","high","medium","low"].map((f) =>
+    '<button type="button" role="tab" class="lab-product-tabs__tab' + (state.severityFilter === f ? ' is-active' : '') + '" data-filter="' + f + '" aria-selected="' + (state.severityFilter === f ? 'true' : 'false') + '">' + esc(f) + '</button>'
   ).join("");
   return '<div class="admin-page-body admin-page-body--table">' +
-    '<div class="lab-filters admin-filter-bar">' + filters + '</div>' +
-    (filtered.length ? issueTable(filtered, true, true) : '<div class="admin-page-body--form">' + emptyState('fa-bug', 'No issues', 'No issues match this filter.') + '</div>') +
+    listToolbar('Search issues…', tabs) +
+    issueTable(filtered, true, true, 'No issues match this filter.') +
     '</div>';
 }
 
@@ -358,7 +398,7 @@ function issueDetailPanel(issue) {
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Request</h2></div><div class="lab-panel__body" style="padding:16px">' + requestHtml(latest.request, latest) + '</div></div>' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Contexts</h2></div><div class="lab-panel__body" style="padding:16px">' + contextTable(latest.contexts) + '</div></div>' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Related events</h2></div><div class="lab-panel__body">' +
-    (events.length ? eventsTable(events, false) : emptyState('fa-bolt', 'No events', 'No matching runtime events (may be sampled). Count still increments by fingerprint.')) +
+    eventsTable(events, false, 'No matching runtime events (may be sampled).') +
     '</div></div></div>' +
     '<div class="lab-detail__side"><div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Details</h2></div><div class="lab-panel__body" style="padding:16px"><div class="lab-kv">' +
     '<div class="lab-kv__row"><span class="lab-kv__key">Events</span><span class="lab-kv__val">' + esc(issue.count) + '</span></div>' +
@@ -376,86 +416,120 @@ function issueDetailPanel(issue) {
     '</div></div></div>';
 }
 
-function eventsTable(events, edge) {
-  const rows = events.map((e) => '<tr><td>' + eventTypeBadge(e.type) + '</td><td><div class="lab-table__title">' + esc(e.message) + '</div><div class="lab-table__sub">' + esc(e.method || "") + ' ' + esc(e.endpoint || "") + '</div></td><td>' + timeAgo(e.timestamp) + '</td></tr>').join("");
+function eventsTable(events, edge, emptyMsg) {
+  const rows = events.length
+    ? events.map((e) => '<tr><td>' + eventTypeBadge(e.type) + '</td><td><div class="lab-table__title">' + esc(e.message) + '</div><div class="lab-table__sub">' + esc(e.method || "") + ' ' + esc(e.endpoint || "") + '</div></td><td>' + timeAgo(e.timestamp) + '</td></tr>').join("")
+    : tableEmptyRow(3, emptyMsg || 'No events.');
   return '<table class="lab-table admin-table' + (edge ? ' admin-table--edge' : '') + '"><thead><tr><th>Type</th><th>Message</th><th>When</th></tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
 function eventsPanel() {
-  const events = (state.data?.runtimeEvents || []).slice().reverse().slice(0, 100);
+  const match = matchesSearch();
+  const events = (state.data?.runtimeEvents || []).slice().reverse().slice(0, 100).filter((e) =>
+    match([e.type, e.message, e.method, e.endpoint])
+  );
   return '<div class="admin-page-body admin-page-body--table">' +
-    (events.length ? eventsTable(events, true) : '<div class="admin-page-body--form">' + emptyState('fa-bolt', 'No events', 'Enable DNA runtime to capture events.') + '</div>') +
+    listToolbar('Search events…', '') +
+    eventsTable(events, true, 'No events match this search.') +
     '</div>';
 }
 
 function performancePanel() {
   const s = state.data?.stats || {};
-  const slow = state.data?.slowEndpoints || [];
-  const rows = slow.map((r) => '<tr><td><code>' + esc(r.method) + ' ' + esc(r.endpoint) + '</code></td><td>' + esc(r.count) + '</td><td>' + esc(r.avgMs) + 'ms</td><td>' + esc(r.maxMs) + 'ms</td></tr>').join("");
-  return '<div class="admin-page-body admin-page-body--form">' +
+  const match = matchesSearch();
+  const slow = (state.data?.slowEndpoints || []).filter((r) => match([r.method, r.endpoint]));
+  const rows = slow.length
+    ? slow.map((r) => '<tr><td><code>' + esc(r.method) + ' ' + esc(r.endpoint) + '</code></td><td>' + esc(r.count) + '</td><td>' + esc(r.avgMs) + 'ms</td><td>' + esc(r.maxMs) + 'ms</td></tr>').join("")
+    : tableEmptyRow(4, 'No slow requests match this search.');
+  return '<div class="admin-page-body admin-page-body--table">' +
+    listToolbar('Search endpoints…', '') +
+    '<div class="lab-list-stats">' +
     '<div class="lab-stats settings-grid">' +
     '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Slow requests</div><div class="lab-stat-card__value is-warn">' + esc(s.slowRequestCount) + '</div></div>' +
     '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Memory spikes</div><div class="lab-stat-card__value is-warn">' + esc(s.memorySpikeCount) + '</div></div>' +
     '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Third-party</div><div class="lab-stat-card__value is-warn">' + esc(s.thirdPartyCount || 0) + '</div></div>' +
-    '</div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Slowest endpoints</h2></div><div class="lab-panel__body">' +
-    (rows ? '<table class="lab-table admin-table"><thead><tr><th>Endpoint</th><th>Count</th><th>Avg</th><th>Max</th></tr></thead><tbody>' + rows + '</tbody></table>' : emptyState('fa-gauge-high', 'No slow requests', 'No performance issues in the last 24 hours.')) +
-    '</div></div></div>';
+    '</div></div>' +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Endpoint</th><th>Count</th><th>Avg</th><th>Max</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '</div>';
 }
 
 function releasesPanel() {
-  const releases = state.data?.releases || [];
+  const match = matchesSearch();
+  const releases = (state.data?.releases || []).filter((r) => match([r.version, r.environment, r.gitSha]));
   const maps = state.data?.sourceMaps || [];
-  const rows = releases.map((r) => '<tr><td><strong>' + esc(r.version) + '</strong></td><td>' + esc(r.environment) + '</td><td><code>' + esc((r.gitSha || "").slice(0, 8)) + '</code></td><td>' + timeAgo(r.deployedAt) + '</td></tr>').join("");
-  return '<div class="admin-page-body admin-page-body--form">' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Deployments</h2></div><div class="lab-panel__body">' +
-    (rows ? '<table class="lab-table admin-table"><thead><tr><th>Version</th><th>Env</th><th>SHA</th><th>Deployed</th></tr></thead><tbody>' + rows + '</tbody></table>' : emptyState('fa-rocket', 'No releases', 'Register deploys via POST /api/dna/labs/releases')) +
-    '</div></div><p class="soli-admin-page-header__meta">' + esc(maps.length) + ' source map(s) registered</p></div>';
+  const rows = releases.length
+    ? releases.map((r) => '<tr><td><strong>' + esc(r.version) + '</strong></td><td>' + esc(r.environment) + '</td><td><code>' + esc((r.gitSha || "").slice(0, 8)) + '</code></td><td>' + timeAgo(r.deployedAt) + '</td></tr>').join("")
+    : tableEmptyRow(4, 'No releases match this search.');
+  return '<div class="admin-page-body admin-page-body--table">' +
+    listToolbar('Search releases…', '') +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Version</th><th>Env</th><th>SHA</th><th>Deployed</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '<p class="lab-list-meta">' + esc(maps.length) + ' source map(s) registered</p>' +
+    '</div>';
 }
 
 function qualityPanel() {
-  const reports = state.data?.qualityReports || [];
+  const match = matchesSearch();
+  const reports = (state.data?.qualityReports || []).filter((r) => match([r.name, r.summary, r.scope, r.gate]));
   const coverage = state.data?.coverage;
-  const ciRuns = state.data?.ciRuns || [];
-  const thirdParty = state.data?.thirdPartyApis || [];
+  const ciRuns = (state.data?.ciRuns || []).filter((r) => match([r.displayTitle, r.workflowName, r.headBranch, r.conclusion, r.status, r.event]));
+  const thirdParty = (state.data?.thirdPartyApis || []).filter((e) => match([e.provider, e.source, e.message, e.method]));
 
-  const covCards = '<div class="lab-stats">' +
+  const qualityTabs = [
+    ["reports", "Reports"],
+    ["ci", "CI"],
+    ["apis", "APIs"],
+  ];
+  const activeQualityTab = state.qualityTab || "reports";
+  const tabs = qualityTabs.map(([id, label]) =>
+    '<button type="button" role="tab" class="lab-product-tabs__tab' + (activeQualityTab === id ? ' is-active' : '') + '" data-quality-tab="' + id + '" aria-selected="' + (activeQualityTab === id ? 'true' : 'false') + '">' + esc(label) + '</button>'
+  ).join("");
+
+  const covCards = '<div class="lab-list-stats"><div class="lab-stats">' +
     '<div class="lab-stat-card"><div class="lab-stat-card__label">Lines</div><div class="lab-stat-card__value ' + ((coverage?.lines ?? 0) >= 80 ? 'is-ok' : 'is-warn') + '">' + (coverage?.lines != null ? esc(Math.round(coverage.lines * 10) / 10) + '%' : '—') + '</div></div>' +
     '<div class="lab-stat-card"><div class="lab-stat-card__label">Statements</div><div class="lab-stat-card__value">' + (coverage?.statements != null ? esc(Math.round(coverage.statements * 10) / 10) + '%' : '—') + '</div></div>' +
     '<div class="lab-stat-card"><div class="lab-stat-card__label">Functions</div><div class="lab-stat-card__value">' + (coverage?.functions != null ? esc(Math.round(coverage.functions * 10) / 10) + '%' : '—') + '</div></div>' +
     '<div class="lab-stat-card"><div class="lab-stat-card__label">Branches</div><div class="lab-stat-card__value">' + (coverage?.branches != null ? esc(Math.round(coverage.branches * 10) / 10) + '%' : '—') + '</div></div>' +
     '</div>' +
-    (coverage?.path ? '<p class="soli-admin-page-header__meta">From <code>' + esc(coverage.path) + '</code> · ' + timeAgo(coverage.mtime) + '</p>' : '<p class="soli-admin-page-header__meta">Run <code>npm run test:coverage</code> to generate coverage/coverage-summary.json</p>');
+    (coverage?.path ? '<p class="lab-list-meta">From <code>' + esc(coverage.path) + '</code> · ' + timeAgo(coverage.mtime) + '</p>' : '<p class="lab-list-meta">Run <code>npm run test:coverage</code> to generate coverage/coverage-summary.json</p>') +
+    '<canvas class="lab-chart" id="quality-chart" style="margin-top:12px"></canvas></div>';
 
-  const reportRows = reports.slice().reverse().map((r) => {
-    const gate = r.gate ? '<span class="lab-badge lab-badge--' + (r.gate === 'pass' ? 'ok' : 'critical') + '">' + esc(r.gate) + '</span>' : '—';
-    const score = r.score != null ? esc(r.score) + (r.gate ? '' : '%') : '—';
-    return '<tr><td><div class="lab-table__title">' + esc(r.name) + '</div><div class="lab-table__sub">' + esc(r.summary || r.scope || '') + '</div></td><td>' + gate + '</td><td>' + score + '</td><td>' + esc(r.blockers ?? '—') + ' / ' + esc(r.critical ?? '—') + '</td><td>' + timeAgo(r.mtime) + '</td></tr>';
-  }).join("");
+  const reportRows = reports.length
+    ? reports.slice().reverse().map((r) => {
+      const gate = r.gate ? '<span class="lab-badge lab-badge--' + (r.gate === 'pass' ? 'ok' : 'critical') + '">' + esc(r.gate) + '</span>' : '—';
+      const score = r.score != null ? esc(r.score) + (r.gate ? '' : '%') : '—';
+      return '<tr><td><div class="lab-table__title">' + esc(r.name) + '</div><div class="lab-table__sub">' + esc(r.summary || r.scope || '') + '</div></td><td>' + gate + '</td><td>' + score + '</td><td>' + esc(r.blockers ?? '—') + ' / ' + esc(r.critical ?? '—') + '</td><td>' + timeAgo(r.mtime) + '</td></tr>';
+    }).join("")
+    : tableEmptyRow(5, 'No quality reports match this search.');
 
-  const ciRows = ciRuns.map((r) => {
-    const conclusion = (r.conclusion || r.status || "").toLowerCase();
-    const cls = conclusion === "success" ? "ok" : conclusion === "failure" || conclusion === "cancelled" ? "critical" : "info";
-    const title = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">' + esc(r.displayTitle || r.workflowName) + '</a>' : esc(r.displayTitle || r.workflowName || "run");
-    return '<tr><td>' + title + '<div class="lab-table__sub">' + esc(r.workflowName || "") + (r.headBranch ? ' · ' + esc(r.headBranch) : '') + '</div></td><td><span class="lab-badge lab-badge--' + cls + '">' + esc(r.conclusion || r.status) + '</span></td><td>' + esc(r.event || "—") + '</td><td>' + timeAgo(r.updatedAt || r.createdAt) + '</td></tr>';
-  }).join("");
+  const ciRows = ciRuns.length
+    ? ciRuns.map((r) => {
+      const conclusion = (r.conclusion || r.status || "").toLowerCase();
+      const cls = conclusion === "success" ? "ok" : conclusion === "failure" || conclusion === "cancelled" ? "critical" : "info";
+      const title = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">' + esc(r.displayTitle || r.workflowName) + '</a>' : esc(r.displayTitle || r.workflowName || "run");
+      return '<tr><td>' + title + '<div class="lab-table__sub">' + esc(r.workflowName || "") + (r.headBranch ? ' · ' + esc(r.headBranch) : '') + '</div></td><td><span class="lab-badge lab-badge--' + cls + '">' + esc(r.conclusion || r.status) + '</span></td><td>' + esc(r.event || "—") + '</td><td>' + timeAgo(r.updatedAt || r.createdAt) + '</td></tr>';
+    }).join("")
+    : tableEmptyRow(4, 'No CI runs match this search.');
 
-  const apiRows = thirdParty.map((e) =>
-    '<tr><td><span class="lab-badge lab-badge--info">' + esc(e.provider || e.source || "api") + '</span></td><td><div class="lab-table__title">' + esc(e.message) + '</div><div class="lab-table__sub">' + esc(e.method || "") + ' ' + esc(e.statusCode ?? "") + (e.durationMs != null ? ' · ' + esc(e.durationMs) + 'ms' : '') + '</div></td><td><pre class="lab-pre lab-pre--sm">' + esc((e.responseBody || "").slice(0, 280) || "—") + '</pre></td><td>' + timeAgo(e.timestamp) + '</td></tr>'
-  ).join("");
+  const apiRows = thirdParty.length
+    ? thirdParty.map((e) =>
+      '<tr><td><span class="lab-badge lab-badge--info">' + esc(e.provider || e.source || "api") + '</span></td><td><div class="lab-table__title">' + esc(e.message) + '</div><div class="lab-table__sub">' + esc(e.method || "") + ' ' + esc(e.statusCode ?? "") + (e.durationMs != null ? ' · ' + esc(e.durationMs) + 'ms' : '') + '</div></td><td><pre class="lab-pre lab-pre--sm">' + esc((e.responseBody || "").slice(0, 280) || "—") + '</pre></td><td>' + timeAgo(e.timestamp) + '</td></tr>'
+    ).join("")
+    : tableEmptyRow(4, 'No outbound API captures match this search.');
 
-  return '<div class="admin-page-body admin-page-body--form">' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Code coverage</h2></div><div class="lab-panel__body" style="padding:16px">' + covCards +
-    '<canvas class="lab-chart" id="quality-chart" style="margin-top:12px"></canvas></div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Quality gate reports</h2></div><div class="lab-panel__body">' +
-    (reportRows ? '<table class="lab-table admin-table"><thead><tr><th>Report</th><th>Gate</th><th>Score</th><th>Blocker / Critical</th><th>When</th></tr></thead><tbody>' + reportRows + '</tbody></table>' : emptyState('fa-shield-halved', 'No reports', 'Run dna quality report --feature to populate.')) +
-    '</div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">CI runs</h2></div><div class="lab-panel__body">' +
-    (ciRows ? '<table class="lab-table admin-table"><thead><tr><th>Run</th><th>Status</th><th>Event</th><th>When</th></tr></thead><tbody>' + ciRows + '</tbody></table>' : emptyState('fa-github', 'No CI runs', 'Install gh and authenticate (gh auth login). Lab reads recent workflow runs from this repo.')) +
-    '</div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Third-party API responses</h2></div><div class="lab-panel__body">' +
-    (apiRows ? '<table class="lab-table admin-table"><thead><tr><th>Provider</th><th>Call</th><th>Response</th><th>When</th></tr></thead><tbody>' + apiRows + '</tbody></table>' : emptyState('fa-plug', 'No outbound API captures', 'Start dnaRuntime with captureOutbound (default on). Errors/slow always logged; healthy calls sampled at 5%.')) +
-    '</div></div></div>';
+  let table = '';
+  if (activeQualityTab === "ci") {
+    table = '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Run</th><th>Status</th><th>Event</th><th>When</th></tr></thead><tbody>' + ciRows + '</tbody></table>';
+  } else if (activeQualityTab === "apis") {
+    table = '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Provider</th><th>Call</th><th>Response</th><th>When</th></tr></thead><tbody>' + apiRows + '</tbody></table>';
+  } else {
+    table = '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Report</th><th>Gate</th><th>Score</th><th>Blocker / Critical</th><th>When</th></tr></thead><tbody>' + reportRows + '</tbody></table>';
+  }
+
+  return '<div class="admin-page-body admin-page-body--table">' +
+    listToolbar('Search quality…', tabs) +
+    covCards +
+    table +
+    '</div>';
 }
 
 function dashboardView() {
@@ -520,15 +594,53 @@ function bind() {
       } catch (err) { state.error = err.message; render(); }
     };
   });
+  document.querySelectorAll("[data-nav-group]").forEach((el) => {
+    el.onclick = (e) => {
+      e.preventDefault();
+      const group = el.getAttribute("data-nav-group");
+      const current = openNavGroup(state.tab || "overview");
+      state.navOpenGroup = current === group ? "" : group;
+      render();
+    };
+  });
   document.querySelectorAll("[data-tab]").forEach((el) => {
-    el.onclick = (e) => { e.preventDefault(); state.tab = el.getAttribute("data-tab"); state.selectedIssueId = null; render(); };
+    el.onclick = (e) => {
+      e.preventDefault();
+      const tab = el.getAttribute("data-tab");
+      state.tab = tab;
+      state.selectedIssueId = null;
+      state.searchQuery = "";
+      state.navOpenGroup = groupForTab(tab);
+      render();
+    };
   });
   document.querySelectorAll("[data-filter]").forEach((el) => {
     el.onclick = (e) => { e.preventDefault(); state.severityFilter = el.getAttribute("data-filter"); render(); };
   });
+  document.querySelectorAll("[data-quality-tab]").forEach((el) => {
+    el.onclick = (e) => { e.preventDefault(); state.qualityTab = el.getAttribute("data-quality-tab"); render(); };
+  });
   document.querySelectorAll("[data-issue]").forEach((el) => {
     el.onclick = (e) => { e.preventDefault(); state.selectedIssueId = el.getAttribute("data-issue"); render(); };
   });
+  const search = document.querySelector("[data-search]");
+  if (search) {
+    search.oninput = (e) => {
+      state.searchQuery = e.target.value;
+      state._searchCaret = [e.target.selectionStart, e.target.selectionEnd];
+      state._searchFocused = true;
+      render();
+    };
+    search.onfocus = () => { state._searchFocused = true; };
+    search.onblur = () => { state._searchFocused = false; };
+    if (state._searchFocused) {
+      search.focus();
+      const caret = state._searchCaret;
+      if (caret) {
+        try { search.setSelectionRange(caret[0], caret[1]); } catch (_) {}
+      }
+    }
+  }
   const signin = document.getElementById("signin-form");
   if (signin) signin.onsubmit = async (e) => {
     e.preventDefault();

@@ -4,6 +4,14 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.7] - 2026-07-14
+
+### Changed
+
+- **Lab UI — Humaan admin parity** — DNA icon-only brand; Humaan 48px primary pills; large brand pill tabs; list pages use search → tabs → always-on table; sidebar Monitor/Delivery accordion (one open at a time); base font 16px; removed env pill and “Updated just now”.
+
+See [docs/engineering/lab-ui-humaan-0.6.7.md](docs/engineering/lab-ui-humaan-0.6.7.md).
+
 ## [0.6.6] - 2026-07-14
 
 ### Fixed
