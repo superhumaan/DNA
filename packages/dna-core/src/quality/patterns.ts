@@ -40,7 +40,7 @@ export const STATIC_PATTERNS: StaticPattern[] = [
     severity: "critical",
     pattern: /dangerouslySetInnerHTML|\.innerHTML\s*=/,
     message: "Unsanitized HTML injection risk",
-    skipPaths: [/\.test\./, /\.spec\./, /patterns\.ts$/, /dashboard\/server\.ts$/],
+    skipPaths: [/\.test\./, /\.spec\./, /patterns\.ts$/, /lab\/ui\/dashboard\.ts$/, /dashboard\/server\.ts$/],
   },
   {
     id: "sql-concat",

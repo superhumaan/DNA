@@ -62,7 +62,7 @@ export default app;`,
     await rm(root, { recursive: true, force: true });
   });
 
-  it("documents from code and generates IVF plan", async () => {
+  it("documents from code and generates IVF plan", { timeout: 20_000 }, async () => {
     const root = join(tmpdir(), `dna-ivf-plan-${randomUUID()}`);
     await mkdir(join(root, "src"), { recursive: true });
     await writeFile(

@@ -63,6 +63,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Lab UI Humaan admin parity (v0.6.7) | ✅ Shipped — see [lab-ui-humaan-0.6.7](../engineering/lab-ui-humaan-0.6.7.md) |
 | Lab CI billing blocker + cleanup anti-cascade (v0.6.8) | ✅ Shipped — see [lab-ci-billing-blocker](../engineering/lab-ci-billing-blocker.md) |
 | Lab pairing store-first (v0.6.11) | ✅ Shipped — CLI must save via pairing/init; verify is store-only; gateway allowlist docs |
+| Express 5 optional peer (v0.6.12) | ✅ Shipped — peer `express@^4.18.0 \|\| ^5.0.0` so npm installs cleanly with Express 5 |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | ✅ Shipped — import merge + team registry sync |
 | Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | ✅ Shipped — `dna scan --open-pr` |
 | Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | ✅ Shipped — platform codegen scaffolds |

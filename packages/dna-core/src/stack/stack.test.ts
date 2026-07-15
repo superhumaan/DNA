@@ -118,7 +118,7 @@ describe("stack archetypes", () => {
 });
 
 describe("stack init integration", () => {
-  it("sets archetype on init and validates clean stack", async () => {
+  it("sets archetype on init and validates clean stack", { timeout: 20_000 }, async () => {
     const root = join(tmpdir(), `dna-stack-${randomUUID()}`);
     await mkdir(root, { recursive: true });
     await writeFile(

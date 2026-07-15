@@ -4,12 +4,12 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.6.9)
+## In scope (v0.6.12)
 
 | Area | Delivered |
 |------|-----------|
 | **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace, `dna ai force-repair` |
-| **Runtime** | Express, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`); Aggressive Repair Loop fingerprints + CellularMemory; EPIPE/ECONNRESET noise filter; outbound third-party capture + browser ingest |
+| **Runtime** | Express 4/5, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`); Aggressive Repair Loop fingerprints + CellularMemory; EPIPE/ECONNRESET noise filter; outbound third-party capture + browser ingest |
 | **DNA Lab** | Production observability at `/labs` — Humaan admin UI parity (v0.6.7), Soli shell + Quality hub, fingerprint-grouped issues, list search/tabs/tables, accordion nav, local open access, production auth via `dna register lab`, CJS Express wire, Lite doctor polling, hardened `runtime.db` ([#12](https://github.com/superhumaan/DNA/issues/12)) |
 | **Supply chain** | **Zero production npm dependencies** (v0.4.6+), no install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
 | **Marketplace** | 897 packs, remote + bundled offline |

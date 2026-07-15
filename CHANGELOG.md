@@ -8,6 +8,12 @@ All notable changes to DNA are documented here.
 
 - **`dna update` refreshes everything, not just the CLI** — re-applies all packs in `.DNA/marketplace/installed.json` (content refresh even when versions stay `1.0.0`), ensures foundation packs, and **force re-injects** Cursor/Claude always-on rules (`AGENTS.md`, `.mdc` rules, workbench + dna-cli skills, stems). Incomplete injection now fails the command. After a CLI package install, update re-runs with the new binary so generators match the published version.
 
+## [0.6.12] - 2026-07-15
+
+### Fixed
+
+- **Express 5 peer dependency** — optional peer `express` widened to `^4.18.0 || ^5.0.0` (same pattern as Fastify) so `npm i @superhumaan/dna-by-humaan` no longer ERESOLVE against Express 5 apps.
+
 ## [0.6.11] - 2026-07-14
 
 ### Changed

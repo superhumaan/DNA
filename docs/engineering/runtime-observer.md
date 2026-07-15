@@ -17,7 +17,7 @@ It observes your Node.js application while it runs, classifies issues using your
 | Situation | Enable runtime? |
 |-----------|-----------------|
 | Frontend-only (Vite, React SPA) | No — CLI is enough |
-| API server (Express, Fastify, NestJS, Next.js) | Yes — production protection |
+| API server (Express 4/5, Fastify, NestJS, Next.js) | Yes — production protection |
 
 ## Production Lab (`/labs`)
 

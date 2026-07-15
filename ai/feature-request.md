@@ -1,50 +1,42 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-14T08:56:41.626Z. The user does not fill this in manually._
+_Auto-maintained by DNA. Updated 2026-07-15. The user does not fill this in manually._
 
 ## Latest request
 
-> _Waiting for your first feature request — describe what you want to build in Cursor or Claude._
+> Fix npm ERESOLVE when installing `@superhumaan/dna-by-humaan` into Express 5 apps — widen optional peer `express` to `^4.18.0 || ^5.0.0`.
 
 ## Problem
 
-_To be refined by Product Analyst from the latest request._
+Host apps on Express 5 cannot install DNA with default npm peer resolution.
 
 ## Current Pain
 
-_To be refined by Product Analyst._
+AIStudio and Express 5 stacks hit ERESOLVE; must use `--legacy-peer-deps`.
 
 ## Proposed Solution
 
-_To be refined by Product Analyst and Solution Architect._
+Widen Express peerDependencies on dna-cli + dna-runtime (same pattern as Fastify). Publish 0.6.12.
 
 ## Users
 
-_To be identified by Product Analyst._
+Developers installing DNA into Express 5 Node apps.
 
 ## Desired Behaviour
 
-_To be defined by Product Analyst._
+- `npm i @superhumaan/dna-by-humaan` succeeds alongside `express@^5` without flags
+- Express 4 hosts remain valid
 
 ## Edge Cases
 
-_To be identified by Product Analyst and QA._
+- Optional peer when no express installed
+- npm / pnpm / yarn peer resolution
 
 ## Success Criteria
 
-The feature is only complete when:
-
-- [ ] Backend works
-- [ ] Frontend works
-- [ ] UX is clean
-- [ ] Permissions/security are correct
-- [ ] Tests pass
-- [ ] Local quality gate passes (`dna quality report --feature`)
-- [ ] Docker image builds (`dna docker build`)
-- [ ] Changes pushed to GitHub (`dna github push`)
-- [ ] No unrelated files are modified
-- [ ] Existing behaviour is not broken
-- [ ] QA checklist is completed
+- [x] peerDependencies accept Express 4 and 5
+- [ ] Published to npm
+- [ ] Install works with express 5
 
 ---
 
