@@ -16,7 +16,7 @@ Commands from `docs/reviews/ci-command-map.md` executed locally on 2026-07-17.
 
 ```
 pnpm install --frozen-lockfile
-→ lint → typecheck → test → build
+→ build → lint → typecheck → test → coverage
 → node scripts/lab-load-test.mjs (200 users)
 → pnpm audit --audit-level=high
 ```
@@ -50,13 +50,14 @@ N/A for this stage.
 ## 6. Missing Coverage
 
 * Browser E2E remains absent
-* Repository-wide line coverage is 54.54%; advisory CI reports it but does not block until `ci.strict` is enabled
+* Repository-wide line coverage is ~54.6%; advisory CI reports it but does not block until `ci.strict` is enabled
 
 ## 7. Changes Made
 
 * pnpm-native audit generation
 * 200-viewer CI load gate
 * patched test/build toolchain and deterministic Vitest worker cap
+* clean-checkout CI ordering: build before typecheck/tests/coverage (#23)
 
 ## 8. Test Results
 
@@ -64,10 +65,10 @@ N/A for this stage.
 |---------|------|-------|
 | `pnpm run lint` | 0 | PASS |
 | `pnpm run typecheck` | 0 | PASS |
-| `pnpm run test` | 0 | **84 files / 310 tests PASS** |
-| `pnpm run test:coverage` | 0 | 54.55% lines; advisory target remains 80% |
+| `pnpm run test` | 0 | PASS (includes CI generator ordering regression) |
+| `pnpm run test:coverage` | 0 | ~54.6% lines; advisory target remains 80% |
 | `pnpm run build` | 0 | PASS including example Express app |
-| `pnpm run test:load:lab` | 0 | AFTER p95 **168ms**, **4423 req/s**, **800×304**, **0 errors** |
+| `pnpm run test:load:lab` | 0 | AFTER p95 **163ms**, **4684 req/s**, **800×304**, **0 errors** |
 | `pnpm audit` | 0 | No known vulnerabilities |
 | `npx dna quality report --feature` | 0 | **PASS**, blocker=0, critical=0 |
 | `npx dna docker build` | 0 | `dna-app:local` built |
@@ -80,14 +81,14 @@ BEFORE  collectLabData per request (no cache)
   latency  avg=2971ms  p50=2974ms  p95=4133ms  p99=4313ms
 
 AFTER   HTTP /data (micro-cache + ETag/304)
-  requests=1000  throughput=4423 req/s  wall=226ms
-  latency  avg=40ms  p50=11ms  p95=168ms  p99=171ms
+  requests=1000  throughput=4684 req/s  wall=213ms
+  latency  avg=38ms  p50=8ms  p95=163ms  p99=167ms
   200=200  304=800  errors=0
 ```
 
 ## 9. Residual Risks
 
-* Advisory CI mode
+* Advisory CI mode (`continue-on-error` still reports green even when a step fails — enforce locally / `ci.strict` for blocking)
 * Repository coverage remains below the configured 80% target
 * No browser E2E suite
 

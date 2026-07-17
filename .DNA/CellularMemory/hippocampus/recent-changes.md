@@ -21,6 +21,9 @@ Verified with `scripts/lab-load-test.mjs --users 200 --polls 5 --events 2000`:
 - Delivery follow-up: disabled the invalid root Vercel preview (the configured
   `dna` project belongs to DNA-Web), made preview opt-out remove generated
   workflows, and retained failed Action logs for 24 hours before cleanup.
+- CI clean-checkout fix (#23): generated DNA CI builds workspace packages
+  before typecheck/tests/coverage so runners no longer depend on stale local
+  `dist/`. Verified run 29553119408 with all quality steps succeeding.
 - Review artefacts: `docs/reviews/`.
 
 ## 2026-07-14 — v0.6.8 Lab CI billing blocker

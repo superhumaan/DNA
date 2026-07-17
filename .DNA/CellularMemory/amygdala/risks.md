@@ -21,3 +21,4 @@
 | vitest/vite/esbuild advisories | Vitest 4.1.10 + esbuild 0.28.1; `pnpm audit` clean |
 | Vercel preview deployed this non-deployable root with DNA-Web project IDs | Explicit `ci.pushToPreview: false`; generated workflow removed; Docker remains delivery artifact |
 | Failed workflow cleanup erased diagnostics immediately | Cleanup retains failures for 24 hours before scheduled deletion |
+| Clean-checkout CI typecheck/tests before workspace build | Generated DNA CI builds packages first; regression locks ordering (#23) |
