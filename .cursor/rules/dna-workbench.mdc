@@ -12,7 +12,8 @@ You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The
 This project has DNA installed. **Every session, every message** — DNA is your default co-pilot.
 
 - **Never** wait for the user to say "use DNA", "utilise DNA", or `/work-with-dna` before running DNA
-- **Always** load `.DNA/` context and run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
+- **Always** load `.DNA/` context (`neuralNetwork.json`, behaviour, knowledge, CellularMemory) **before** answering engineering, analysis, compliance, quality, or ship questions — do not guess from general knowledge when DNA has project truth
+- **Always** run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
 - The user speaks in plain language; you execute DNA — they do not run CLI commands or copy prompts
 - Slash commands like `/work-with-dna` are optional shortcuts — not a prerequisite for DNA-aware behaviour
 
@@ -32,6 +33,7 @@ DNA thinks **across the whole system by default**, not just the file in front of
 
 **Full toolkit:** `.DNA/behaviour/reasoning.behaviour.md` — debugging, pattern recognition, solution adaptation, and 30+ techniques. Read it on debug, analysis, and non-trivial engineering work.
 
+
 ## Aggressive repair loop (mandatory on blockers)
 
 On **every session start** and **debug/engineering intent**:
@@ -41,7 +43,7 @@ On **every session start** and **debug/engineering intent**:
 3. Load `amygdala/repeated-failures.md` + `temporalLobe/previous-solutions.md` before any fix attempt
 4. **Mandatory 9-role agent loop** for blockers — do not mark complete without code change + test + quality PASS
 5. Gateway errors (502/503/504): check origin health, deploy config, `/health` route — not just app try/catch
-6. Never create duplicate GitHub issues for the same fingerprint — DNA dedupes; you comment on existing issues
+6. Never create duplicate GitHub issues for the same fingerprint — DNA dedupes; comment on existing issues
 
 **Cannot skip repair** when `ai.repair.forceAgentLoop` is true (default) and blockers are open.
 
@@ -153,7 +155,7 @@ See `.cursor/rules/product-process.mdc`, `AGENTS.md`, and `.cursor/skills/dna-wo
 
 ## Slash commands & stem packs
 
-Type `/` in chat for **65** prompt stems (e.g. `work-with-dna`, `analyze-project`, `what-next`, `ship-feature`).
+Type `/` in chat for **77** prompt stems (e.g. `work-with-dna`, `analyze-project`, `what-next`, `ship-feature`).
 
 Each stem has full guidelines in `.DNA/stems/<id>/` — read **all files** before executing.
 

@@ -98,7 +98,7 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
     config.runtime = {
       ...config.runtime,
       enabled: true,
-      storage: "sqlite",
+      storage: "json",
       watchBackend: true,
       watchFrontend: true,
       environment: config.runtime?.environment ?? "development",

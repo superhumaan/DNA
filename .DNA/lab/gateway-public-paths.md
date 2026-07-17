@@ -1,55 +1,23 @@
-# DNA Lab — gateway public paths (pairing)
+# DNA Lab — optional gateway notes
 
-Auth gateways in front of your app (Invitrace Connect, oauth2-proxy, Cloudflare Access,
-nginx auth_request, etc.) **must** allow these routes **without** a login session.
+Lab pairing is **paste-verify**: run `npx dna register lab --url …`, then paste
+Pairing ID + code at `/labs` while signed into the app (cookie / session / JWT).
+The CLI does **not** need to reach production. No public allowlist is required.
 
-The CLI (`npx dna register lab --url …`) has no browser cookie. It POSTs the pairing
-hash here. `/labs` only verifies against that stored row — it does not invent pairings.
+`POST /api/dna/labs/pairing/init` remains available as an **optional** pre-notify.
+If your edge auth blocks unauthenticated CLI calls, ignore init — paste still works.
 
-## Required allowlist
+## Optional allowlist (advanced)
+
+Only if you want CLI pre-notify:
 
 | Method | Path | Purpose |
 |--------|------|---------|
-| `POST` | `/api/dna/labs/pairing/init` | CLI writes `{ pairingId, codeHash }` into Lab store |
+| `POST` | `/api/dna/labs/pairing/init` | Best-effort CLI write of `{ pairingId, codeHash }` |
 | `GET` | `/api/dna/labs/pairing/status/*` | CLI `--wait` / status poll |
 
-All other Lab routes (`/labs`, `/api/dna/labs/*`) may stay behind Connect.
+## Pairing flow
 
-## What is stored
-
-Pending rows live in `.DNA/data/lab-store.json` under `pairings[]`:
-
-- `pairingId` — 32-char hex (public id)
-- `codeHash` — SHA-256 of the 148-digit code (never store plaintext code)
-- `expiresAt` — 15 minutes from init
-- `verified` — set true after `/labs` verifies the code
-
-## nginx / Connect example
-
-```nginx
-# Allow DNA Lab pairing init + status without Connect login
-location = /api/dna/labs/pairing/init {
-  # proxy to your Node API — do NOT redirect to /_connect/login
-  proxy_pass http://api_upstream;
-}
-location /api/dna/labs/pairing/status/ {
-  proxy_pass http://api_upstream;
-}
-```
-
-For Invitrace Connect: add the same paths to the Connect **public / bypass** list for this host,
-then restart the gateway. Confirm with:
-
-```bash
-curl -sS -o /dev/null -w "%{http_code}\n" -X POST https://YOUR_HOST/api/dna/labs/pairing/init \
-  -H "Content-Type: application/json" \
-  -d '{"pairingId":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","codeHash":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","projectId":"app"}'
-```
-
-Expected: **200** (or **400** with DNA JSON error). Not **302** to `/_connect/login`.
-
-## Pairing flow (store-first)
-
-1. `npx dna register lab --url https://YOUR_HOST` → must print **Production notified**
-2. Open `https://YOUR_HOST/labs` → paste Pairing ID + 148-digit code → verify
-3. Create Lab account → sign in
+1. `npx dna register lab --url https://YOUR_HOST` → copy Pairing ID + 148-digit code
+2. Open `https://YOUR_HOST/labs` (use your app login if the host requires a session)
+3. Paste → Verify → create Lab account

@@ -4,14 +4,14 @@
  *
  * Usage:
  *   node scripts/sync-intelligence-commands.mjs
- *   DNA_WEB_ROOT="../DNA - Web" node scripts/sync-intelligence-commands.mjs
+ *   DNA_WEB_ROOT="../DNA-Web" node scripts/sync-intelligence-commands.mjs
  */
 import { writeFile, mkdir } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const DNA_WEB_ROOT = process.env.DNA_WEB_ROOT ?? join(ROOT, "..", "DNA - Web");
+const DNA_WEB_ROOT = process.env.DNA_WEB_ROOT ?? join(ROOT, "..", "DNA-Web");
 const OUT = join(DNA_WEB_ROOT, "apps", "web", "src", "data", "intelligence-workbench.json");
 
 async function main() {

@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { DnaConfig, ScanResult } from "@superhumaan/dna-config";
 import { ensureDir, fileExists, writeFileEnsured } from "../fs.js";
@@ -37,6 +37,17 @@ function pmRun(pm: string | undefined, script: string): string {
       return `yarn ${script}`;
     default:
       return `npm run ${script}`;
+  }
+}
+
+function pmAuditCommand(pm: string | undefined): string {
+  switch (pm) {
+    case "pnpm":
+      return "pnpm audit --audit-level=high";
+    case "yarn":
+      return "yarn audit --level high";
+    default:
+      return "npm audit --audit-level=high";
   }
 }
 
@@ -80,6 +91,7 @@ function scriptStep(
 export function generateCleanupFailedRunsWorkflow(): string {
   return `# DNA cleanup — delete failed workflow runs after completion
 # Inline delete jobs cannot remove the current run (GitHub returns 403 while in progress).
+# Retains failures for 24 hours so logs remain available for diagnosis.
 # Skips instant billing/infra failures so cleanup does not cascade when Actions cannot start runners.
 
 name: Cleanup failed runs
@@ -122,6 +134,7 @@ jobs:
             const repo = context.repo.repo;
             const cleanupName = "Cleanup failed runs";
             const BILLING_MS = 45_000;
+            const RETENTION_MS = 24 * 60 * 60 * 1000;
 
             async function deleteRun(runId) {
               try {
@@ -141,6 +154,11 @@ jobs:
               const end = new Date(run.updated_at).getTime();
               if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return null;
               return end - start;
+            }
+
+            function isOldEnough(run) {
+              const completedAt = new Date(run.updated_at || run.created_at).getTime();
+              return Number.isFinite(completedAt) && Date.now() - completedAt >= RETENTION_MS;
             }
 
             async function looksLikeBillingBlock(run) {
@@ -197,6 +215,10 @@ jobs:
                     (run.conclusion === "failure" || run.conclusion === "cancelled") &&
                     run.name !== cleanupName
                   ) {
+                    if (!isOldEnough(run)) {
+                      console.log(\`Retain run \${run.id}: failure is less than 24 hours old\`);
+                      continue;
+                    }
                     if (await looksLikeBillingBlock(run)) {
                       console.log(\`Skip delete \${run.id}: billing/infra failure\`);
                       continue;
@@ -227,6 +249,9 @@ export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string 
   const continueOnError = !strict;
 
   const qualitySteps: string[] = [];
+  // Build first because monorepo tests and project references may consume
+  // package exports from dist/ on a clean checkout.
+  if (scripts.build) qualitySteps.push(scriptStep("Build", "build", pm, continueOnError));
   if (scripts.lint) qualitySteps.push(scriptStep("Lint", "lint", pm, continueOnError));
   if (scripts.typecheck) qualitySteps.push(scriptStep("Typecheck", "typecheck", pm, continueOnError));
   if (scripts.check) qualitySteps.push(scriptStep("Check", "check", pm, continueOnError));
@@ -248,6 +273,29 @@ export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string 
             if (fail.length) { console.error(fail.join('\\\\n')); process.exit(1); }
           "
         continue-on-error: ${continueOnError}`);
+    qualitySteps.push(`      - name: Coverage summary → GitHub Step Summary
+        if: always()
+        run: |
+          node -e "
+            const { readFileSync } = require('node:fs');
+            const fs = require('node:fs');
+            let s; try { s = JSON.parse(readFileSync('./coverage/coverage-summary.json','utf8')); } catch { process.exit(0); }
+            const t = ${threshold};
+            const total = s.total || {};
+            const below = Object.entries(s).filter(([f,m]) => f!=='total' && m.lines && m.lines.pct < t);
+            const L = [];
+            L.push('## Coverage');
+            L.push('');
+            L.push('| Metric | % |');
+            L.push('|--------|---|');
+            for (const k of ['lines','branches','functions','statements']) L.push('| '+k+' | '+((total[k]||{}).pct ?? '—')+'% |');
+            L.push('');
+            L.push('Per-file threshold: '+t+'% — '+below.length+' file(s) below.');
+            for (const [f,m] of below.slice(0,25)) L.push('- \`'+f.split('/').slice(-3).join('/')+'\` — '+m.lines.pct+'%');
+            const out = process.env.GITHUB_STEP_SUMMARY;
+            if (out) fs.appendFileSync(out, L.join('\\n')+'\\n');
+          "
+        continue-on-error: true`);
     qualitySteps.push(`      - name: Upload coverage
         uses: actions/upload-artifact@v4
         if: always()
@@ -256,7 +304,23 @@ export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string 
           path: coverage/
           retention-days: 14`);
   }
-  if (scripts.build) qualitySteps.push(scriptStep("Build", "build", pm, continueOnError));
+  if (scripts["test:load:lab"]) {
+    qualitySteps.push(
+      scriptStep("DNA Lab load gate (200 concurrent viewers)", "test:load:lab", pm, continueOnError),
+    );
+  }
+  // Durable, downloadable reports (quality + health) — kept even when a gate
+  // fails so reviewers can inspect the evidence from the run.
+  qualitySteps.push(`      - name: Upload DNA reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dna-reports
+          path: |
+            .DNA/reports/
+            .dna-reports/
+          retention-days: 14
+          if-no-files-found: ignore`);
 
   const cacheBlock = cache ? `          cache: ${cache}` : "";
   const qualityReportFlags = strict ? " --fail" : "";
@@ -326,7 +390,7 @@ ${cacheBlock}
         run: ${pmInstallCommand(pm)}
 
       - name: Dependency audit (OWASP-aligned)
-        run: npm audit --audit-level=high
+        run: ${pmAuditCommand(pm)}
         continue-on-error: ${continueOnError}
 
 `;
@@ -526,13 +590,23 @@ export async function installCiPipeline(options: InstallCiOptions): Promise<Inst
   }
 
   const previewExists = await fileExists(previewPath);
-  if (shouldScaffoldPreviewWorkflow(scan, config.stack.hosting) && (!skipIfExists || !previewExists)) {
+  const previewEnabled =
+    config.ci?.pushToPreview !== false &&
+    shouldScaffoldPreviewWorkflow(scan, config.stack.hosting);
+  if (previewEnabled && (!skipIfExists || !previewExists)) {
     await writeFileEnsured(previewPath, generatePreviewWorkflow(config, scan));
     created.push(
       previewExists ? ".github/workflows/dna-preview.yml (updated)" : ".github/workflows/dna-preview.yml",
     );
-  } else if (!shouldScaffoldPreviewWorkflow(scan, config.stack.hosting)) {
-    skipped.push("dna-preview.yml (hosting not Vercel/Netlify — skipped)");
+  } else if (!previewEnabled && previewExists) {
+    await unlink(previewPath);
+    created.push(".github/workflows/dna-preview.yml (removed — preview disabled)");
+  } else if (!previewEnabled) {
+    skipped.push(
+      config.ci?.pushToPreview === false
+        ? "dna-preview.yml (preview disabled in config — skipped)"
+        : "dna-preview.yml (hosting not Vercel/Netlify — skipped)",
+    );
   }
 
   const testFw = config.stack.testing ?? scan.testFramework ?? "vitest";

@@ -15,7 +15,8 @@ The user works in **plain language**. You run **DNA CLI in shell**, load **`.DNA
 This project has DNA installed. **Every session, every message** — DNA is your default co-pilot.
 
 - **Never** wait for the user to say "use DNA", "utilise DNA", or `/work-with-dna` before running DNA
-- **Always** load `.DNA/` context and run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
+- **Always** load `.DNA/` context (`neuralNetwork.json`, behaviour, knowledge, CellularMemory) **before** answering engineering, analysis, compliance, quality, or ship questions — do not guess from general knowledge when DNA has project truth
+- **Always** run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
 - The user speaks in plain language; you execute DNA — they do not run CLI commands or copy prompts
 - Slash commands like `/work-with-dna` are optional shortcuts — not a prerequisite for DNA-aware behaviour
 
@@ -132,7 +133,7 @@ Each command maps to `.DNA/stems/<id>/` — read **prompt.md, guidelines.md, exp
 | `/debug-issue` | debug-issue | Debug + fix loop |
 | `/ivf-shared-library` | ivf-shared-library | Extract shared UI library |
 
-Full library (65 stems): https://dna.humaan.app/intelligence#stem-library
+Full library (77 stems): https://dna.humaan.app/intelligence#stem-library
 
 Commands live in `.claude/commands/`. Stem data: `.DNA/stems/`.
 

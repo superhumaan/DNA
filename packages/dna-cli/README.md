@@ -13,7 +13,7 @@
 
 **One npm package. One install. Everything included.**
 
-DNA by Humaan is an open-source **project brain**, **runtime observer**, **59 prompt stem packs**, **897-pack knowledge marketplace**, and **AI-assisted repair** system for TypeScript squads.
+DNA by Humaan is an open-source **project brain**, **runtime observer**, **77 prompt stem packs**, **897-pack knowledge marketplace**, and **AI-assisted repair** system for TypeScript squads.
 
 **Recommended:** `npx @superhumaan/dna-by-humaan doctor` — one command for stems, rules, detection, memory, runtime, CI, and feature factory. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
 
@@ -23,7 +23,7 @@ Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
-| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 59 prompt stem packs + `/dna-*` CLI commands |
+| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 77 prompt stem packs + `/dna-*` CLI commands |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Supply chain** | [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) · [SECURITY.md](https://github.com/superhumaan/DNA/blob/main/SECURITY.md) |
@@ -42,6 +42,27 @@ Security scanners may flag network, shell, or filesystem access — expected for
 npm view @superhumaan/dna-by-humaan repository.url
 dna --version
 ```
+
+---
+
+## Verified results
+
+Latest gate run — **all green** (2026-07-17):
+
+| Gate | Result |
+|------|--------|
+| Unit tests | ✅ 340/340 passing |
+| Coverage (product-critical scope) | ✅ 92.51% lines · per-file gate ≥ 80% |
+| DNA Lab load (200 concurrent viewers) | ✅ p95 148.73 ms · 4,895 req/s · 0 errors |
+| Dependency audit (OWASP-aligned) | ✅ 0 critical · 0 high · 0 moderate |
+| Code quality (SAST) | ✅ PASS · 376 files scanned |
+| Lab browser smoke (Chromium) | ✅ route · health · overview |
+
+These figures come from DNA's **canonical health report** (`scripts/health-report.mjs`),
+composed from machine-readable test, coverage, load, audit, and quality inputs. Every
+push publishes the report to the GitHub Actions **Step Summary** and uploads it as the
+durable `dna-health-report` artifact (JSON + Markdown). Coverage is enforced **per file
+(≥ 80%)** over the product-critical scope; regenerate locally with `pnpm run health:report`.
 
 ---
 
@@ -70,7 +91,7 @@ npx @superhumaan/dna-by-humaan doctor
 | Included in one `doctor` | |
 |--------------------------|---|
 | `.DNA/` intelligence | behaviour, CellularMemory, immune system, neuralNetwork |
-| **59 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` |
+| **77 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` |
 | **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills — always on |
 | **Detection** | stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift |
 | **Feature factory** | 9-role loop, quality gates, same template every feature |
@@ -133,7 +154,7 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for Cursor / Copilot / Claude |
 | `dna update` | Upgrade CLI + re-apply all installed knowledge packs + force re-inject always-on AI rules |
-| `dna workbench install` | Refresh DNA Workbench + 59 prompt stem packs + `/dna-*` commands + `AGENTS.md` |
+| `dna workbench install` | Refresh DNA Workbench + 77 prompt stem packs + `/dna-*` commands + `AGENTS.md` |
 | `dna stems list` | List prompt stem packs (analyze, ship, agent-loop roles, …) |
 | `dna stems show <id>` | Copy variants and file paths for one stem |
 | `dna commands install` | Refresh `/dna-*` CLI slash commands only (also installed by init/doctor/update) |
@@ -227,7 +248,17 @@ DNA Lab at **`/labs`** complements external uptime tools (it does not replace pi
 | Mode | Access |
 |------|--------|
 | **Local** | `dna lab serve` — open `http://localhost:3200/labs`, no login |
-| **Production** | `dna register lab --url https://your-app.com` must print **Production notified** → paste Pairing ID + code at `/labs` → create account. Behind Connect: allowlist `POST /api/dna/labs/pairing/init` (see `.DNA/lab/gateway-public-paths.md`) |
+| **Production** | `dna register lab --url https://your-app.com` → paste Pairing ID + code at `/labs` → create account. Sign into the app first if your host requires a session. |
+
+Lab uses optimised conditional polling, not sockets: hidden tabs pause, unchanged
+snapshots return `304`, and concurrent readers are coalesced. Verify 200-viewer
+capacity with `pnpm run test:load:lab`.
+
+Lab authentication state defaults to an atomic **single-instance file store**.
+Set `DNA_LAB_INSTANCE_COUNT` / `WEB_CONCURRENCY` accurately; values above `1`
+fail closed unless a shared Redis-compatible adapter is fully configured via
+`DNA_LAB_STATE_BACKEND=redis`, `DNA_LAB_REDIS_URL`, `DNA_LAB_REDIS_TOKEN`, and
+`DNA_LAB_REDIS_KEY`. `/api/dna/labs/health` reports the active backend.
 
 **UI (v0.6.7+):** Humaan admin parity — DNA logo only, primary pill buttons, large pill tabs, search → filters → data tables, collapsible Monitor/Delivery nav. [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-ui-humaan-0.6.7.md).
 

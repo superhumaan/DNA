@@ -2,7 +2,7 @@
   "name": "dna-by-humaan",
   "version": "0.1.0",
   "private": true,
-  "description": "DNA by Humaan — one doctor install: 59 stem packs, rules, detection, portfolio memory, 897-pack marketplace, DNA Lab at /labs, runtime observer, feature factory, and AI repair for TypeScript squads",
+  "description": "DNA by Humaan — one doctor install: 77 stem packs, rules, detection, portfolio memory, 897-pack knowledge marketplace, DNA Lab at /labs, runtime observer, feature factory, and AI repair for TypeScript squads",
   "author": "Humaan by Superlite",
   "license": "MIT",
   "homepage": "https://dna.humaan.app",
@@ -42,6 +42,11 @@
     "build": "pnpm -r run build",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:report": "vitest run --reporter=json --outputFile=.dna-reports/test-results.json",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install --with-deps chromium",
+    "test:load:lab": "node scripts/lab-load-test.mjs --users 200 --polls 5 --events 2000 --after-only --max-p95 1500 --min-throughput 500 --json .dna-reports/load-test.json",
+    "health:report": "node scripts/health-report.mjs",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
     "typecheck": "pnpm -r run typecheck",
@@ -61,6 +66,7 @@
     "wiki:dev": "pnpm run wiki:refresh",
     "wiki:build": "pnpm run wiki:sync && npm run build --prefix .local-wiki",
     "sponsors:sync": "node scripts/sync-sponsors.mjs",
+    "health:sync": "node scripts/sync-health-report.mjs",
     "intelligence:sync": "pnpm --filter @superhumaan/dna-core build && node scripts/sync-intelligence-commands.mjs",
     "test:coverage": "vitest run --coverage",
     "docker:build": "docker build -t dna-app:local .",
@@ -70,16 +76,22 @@
     "node": ">=20"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ],
+    "overrides": {
+      "esbuild": "0.28.1"
+    }
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@types/node": "^22.10.0",
-    "@vitest/coverage-v8": "^2.1.8",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9.16.0",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.0",
-    "vitest": "^2.1.8"
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "@superhumaan/dna-by-humaan": "workspace:*"

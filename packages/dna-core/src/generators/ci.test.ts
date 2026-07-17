@@ -60,11 +60,68 @@ describe("CI generator", () => {
     expect(yaml).toContain("quality report");
   });
 
+  it("publishes a coverage Step Summary and durable report artifacts", () => {
+    const yaml = generateCiWorkflow(
+      testConfig(),
+      mockScan({
+        packageManager: "pnpm",
+        scripts: {
+          test: "vitest run",
+          "test:coverage": "vitest run --coverage",
+          "test:load:lab": "node scripts/lab-load-test.mjs",
+        },
+      }),
+    );
+
+    expect(yaml).toContain("GITHUB_STEP_SUMMARY");
+    expect(yaml).toContain("Coverage summary → GitHub Step Summary");
+    expect(yaml).toContain("name: dna-reports");
+    expect(yaml).toContain(".DNA/reports/");
+    expect(yaml).toContain(".dna-reports/");
+    expect(yaml).toContain("actions/upload-artifact@v4");
+    // Coverage artifact is still uploaded on every run.
+    expect(yaml).toContain("name: coverage-report");
+  });
+
   it("adds pnpm setup when package manager is pnpm", () => {
-    const yaml = generateCiWorkflow(testConfig(), mockScan({ packageManager: "pnpm" }));
+    const yaml = generateCiWorkflow(
+      testConfig(),
+      mockScan({
+        packageManager: "pnpm",
+        scripts: {
+          build: "pnpm -r build",
+          "test:load:lab": "node scripts/lab-load-test.mjs",
+        },
+      }),
+    );
 
     expect(yaml).toContain("pnpm/action-setup@v4");
     expect(yaml).toContain("cache: pnpm");
+    expect(yaml).toContain("pnpm audit --audit-level=high");
+    expect(yaml).not.toMatch(/run: npm audit --audit-level=high/);
+    expect(yaml).toContain("DNA Lab load gate (200 concurrent viewers)");
+    expect(yaml).toContain("pnpm run test:load:lab");
+  });
+
+  it("builds before clean-checkout typecheck and test gates", () => {
+    const yaml = generateCiWorkflow(
+      testConfig(),
+      mockScan({
+        packageManager: "pnpm",
+        scripts: {
+          build: "pnpm -r build",
+          typecheck: "pnpm -r typecheck",
+          test: "vitest run",
+          "test:coverage": "vitest run --coverage",
+        },
+      }),
+    );
+
+    const build = yaml.indexOf("name: Build");
+    expect(build).toBeGreaterThan(-1);
+    expect(build).toBeLessThan(yaml.indexOf("name: Typecheck"));
+    expect(build).toBeLessThan(yaml.indexOf("name: Unit tests"));
+    expect(build).toBeLessThan(yaml.indexOf("name: Coverage"));
   });
 
   it("generates OWASP ZAP security workflow", () => {
@@ -83,6 +140,8 @@ describe("CI generator", () => {
     expect(yaml).toContain("deleteWorkflowRun");
     expect(yaml).toContain("actions: write");
     expect(yaml).toContain("looksLikeBillingBlock");
+    expect(yaml).toContain("RETENTION_MS = 24 * 60 * 60 * 1000");
+    expect(yaml).toContain("Retain run");
     expect(yaml).toContain("continue-on-error: true");
     expect(yaml).toContain("Cleanup aborted safely");
   });
@@ -165,6 +224,39 @@ describe("CI generator", () => {
     });
 
     expect(result.created.some((f) => f.includes("dna-ci.yml"))).toBe(true);
+
+    await rm(root, { recursive: true, force: true });
+  });
+
+  it("removes generated preview workflow when preview is explicitly disabled", async () => {
+    const root = join(tmpdir(), `dna-ci-no-preview-${randomUUID()}`);
+    await mkdir(join(root, ".github", "workflows"), { recursive: true });
+    const { writeFile } = await import("node:fs/promises");
+    await writeFile(join(root, ".github/workflows/dna-preview.yml"), "name: DNA Preview\n");
+    await writeFile(join(root, "package.json"), JSON.stringify({ name: "ci-test", scripts: {} }));
+
+    const result = await installCiPipeline({
+      root,
+      config: {
+        ...testConfig(),
+        stack: { testing: "vitest", hosting: "vercel" },
+        ci: {
+          enabled: true,
+          strict: false,
+          perFileCoverage: true,
+          owasp: true,
+          pushToPreview: false,
+          previewProvider: "vercel",
+          coverageThreshold: 80,
+        },
+      },
+      scan: mockScan({ packageManager: "pnpm", scripts: {} }),
+    });
+
+    expect(result.created).toContain(
+      ".github/workflows/dna-preview.yml (removed — preview disabled)",
+    );
+    expect(await fileExists(join(root, ".github/workflows/dna-preview.yml"))).toBe(false);
 
     await rm(root, { recursive: true, force: true });
   });

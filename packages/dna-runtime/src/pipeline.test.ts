@@ -34,7 +34,7 @@ async function setupProject(): Promise<string> {
       knowledgePacks: [],
       platformFeatures: [],
       github: { enabled: false },
-      runtime: { enabled: true, storage: "sqlite" },
+      runtime: { enabled: true, storage: "json" },
       ai: {
         enabled: true,
         provider: "mock",

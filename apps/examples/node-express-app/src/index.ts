@@ -6,7 +6,6 @@ const PORT = process.env.PORT ?? 3456;
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";
-import { createLabFastifyPlugin } from "@superhumaan/dna-by-humaan/lab";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = join(__dirname, "..");
@@ -24,7 +23,16 @@ dnaRuntime.start({
 });
 
 const app = express();
-app.use(createLabMiddleware({ root: process.cwd(), config: { projectId: "dna-by-humaan", lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true } } }));
+app.use(
+  createLabMiddleware({
+    root: process.cwd(),
+    // Only the lab.* fields are read by the middleware; cast the partial shape.
+    config: {
+      projectId: "dna-by-humaan",
+      lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true },
+    } as Parameters<typeof createLabMiddleware>[0]["config"],
+  }),
+);
 app.use(express.json());
 app.use(dnaRuntime.express());
 

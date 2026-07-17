@@ -164,14 +164,21 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
   if (d.runtime !== undefined) {
     const rt = expectObject(d.runtime, "runtime");
     if (!rt.success) return rt;
-    const storage = rt.data.storage === undefined
-      ? ok("sqlite" as const)
-      : expectEnum(rt.data.storage, ["sqlite", "jsonl"] as const, "runtime.storage");
+    const storage =
+      rt.data.storage === undefined
+        ? ok("json" as const)
+        : expectEnum(
+            rt.data.storage,
+            ["json", "jsonl", "sqlite"] as const,
+            "runtime.storage",
+          );
     if (!storage.success) return storage;
     runtime = {
       enabled: withDefault(optionalBoolean(rt.data.enabled), true),
       environment: optionalString(rt.data.environment),
-      storage: storage.data,
+      // `sqlite` was the historical label for the atomic JSON document stored
+      // at runtime.db. Accept old configs, but expose the truthful canonical name.
+      storage: storage.data === "sqlite" ? "json" : storage.data,
       watchBackend: withDefault(optionalBoolean(rt.data.watchBackend), true),
       watchFrontend: withDefault(optionalBoolean(rt.data.watchFrontend), true),
     };
@@ -703,7 +710,7 @@ export interface DnaConfig {
   runtime?: {
     enabled: boolean;
     environment?: string;
-    storage: "sqlite" | "jsonl";
+    storage: "json" | "jsonl";
     watchBackend: boolean;
     watchFrontend: boolean;
   };

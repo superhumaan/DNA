@@ -62,10 +62,11 @@ export const DNA_AI_COMMAND_CATALOG: readonly DnaAiCommandDef[] = [
     id: "update",
     category: "core",
     title: "DNA Update",
-    description: "Upgrade DNA CLI and refresh knowledge packs / workbench prompts.",
+    description:
+      "Upgrade DNA CLI, re-apply all installed knowledge packs, and force re-inject Cursor/Claude always-on rules.",
     cli: "npx dna update",
     followUp:
-      "Report CLI version change, stem pack refresh count, and marketplace updates. Suggest `dna marketplace install` for relevant packs.",
+      "Confirm CLI upgrade, pack refresh count, and that AI injection reports all required files OK. If injection is incomplete, re-run `dna update` before continuing.",
   },
   {
     id: "validate",

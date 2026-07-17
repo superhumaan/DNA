@@ -6,7 +6,9 @@ import { DNA_LAB_PAIRING_CODE_LENGTH } from "@superhumaan/dna-config";
 import {
   initLocalPairing,
   registerPairingOnProduction,
+  signPairingCallback,
   verifyPairingCode,
+  verifyPairingCallbackSignature,
 } from "./pairing.js";
 
 describe("lab pairing", () => {
@@ -38,7 +40,7 @@ describe("lab pairing", () => {
     expect(good.ok).toBe(true);
   });
 
-  it("rejects verify when pairing/init never saved a row (store-first)", async () => {
+  it("verifies pairing from paste alone (no pairing/init)", async () => {
     root = await mkdtemp(join(tmpdir(), "dna-lab-paste-"));
     const local = await initLocalPairing({
       root,
@@ -56,16 +58,18 @@ describe("lab pairing", () => {
       expect(short.ok).toBe(false);
       expect(short.error).toMatch(/Invalid pairing code/i);
 
-      const noInit = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
-      expect(noInit.ok).toBe(false);
-      expect(noInit.error).toMatch(/Unknown pairing|Production notified|pairing\/init/i);
+      const fromPaste = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
+      expect(fromPaste.ok).toBe(true);
 
-      const seeded = await registerPairingOnProduction(pasteRoot, {
-        pairingId: local.pairingId,
-        codeHash: local.codeHash,
-        projectId: "test-app",
-      });
-      expect(seeded.ok).toBe(true);
+      const again = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
+      expect(again.ok).toBe(true);
+
+      const wrong = await verifyPairingCode(
+        pasteRoot,
+        local.pairingId,
+        "9".repeat(DNA_LAB_PAIRING_CODE_LENGTH),
+      );
+      expect(wrong.ok).toBe(false);
 
       const withSpaces = await verifyPairingCode(
         pasteRoot,
@@ -89,6 +93,22 @@ describe("lab pairing", () => {
     expect(bad.error).toMatch(/codeHash/i);
   });
 
+  it("authenticates pairing callbacks with a timing-safe HMAC", async () => {
+    const codeHash = "a".repeat(64);
+    const body = {
+      pairingId: "b".repeat(32),
+      verified: true,
+    };
+    const signature = signPairingCallback(codeHash, body);
+
+    expect(verifyPairingCallbackSignature(codeHash, body, signature)).toBe(true);
+    expect(verifyPairingCallbackSignature(codeHash, body, "c".repeat(64))).toBe(false);
+    expect(
+      verifyPairingCallbackSignature(codeHash, { ...body, verified: false }, signature),
+    ).toBe(false);
+    expect(verifyPairingCallbackSignature(codeHash, body, undefined)).toBe(false);
+  });
+
   it("does not treat auth gateway redirects as successful pairing init", async () => {
     const prev = globalThis.fetch;
     globalThis.fetch = (async () =>
@@ -107,6 +127,6 @@ describe("lab pairing", () => {
 
     expect(result.ok).toBe(false);
     expect(result.status).toBe(302);
-    expect(result.error).toMatch(/redirected|allowlist|gateway/i);
+    expect(result.error).toMatch(/redirected|pre-notify|Paste/i);
   });
 });

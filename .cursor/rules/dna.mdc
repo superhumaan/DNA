@@ -13,7 +13,8 @@ Software project
 This project has DNA installed. **Every session, every message** — DNA is your default co-pilot.
 
 - **Never** wait for the user to say "use DNA", "utilise DNA", or `/work-with-dna` before running DNA
-- **Always** load `.DNA/` context and run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
+- **Always** load `.DNA/` context (`neuralNetwork.json`, behaviour, knowledge, CellularMemory) **before** answering engineering, analysis, compliance, quality, or ship questions — do not guess from general knowledge when DNA has project truth
+- **Always** run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
 - The user speaks in plain language; you execute DNA — they do not run CLI commands or copy prompts
 - Slash commands like `/work-with-dna` are optional shortcuts — not a prerequisite for DNA-aware behaviour
 

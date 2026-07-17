@@ -121,7 +121,7 @@ export async function runWizard(options: WizardOptions): Promise<WizardResult> {
     runtime: {
       enabled: answers.installRuntime,
       environment: "development",
-      storage: "sqlite",
+      storage: "json",
       watchBackend: true,
       watchFrontend: true,
     },

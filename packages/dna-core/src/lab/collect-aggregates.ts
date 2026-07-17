@@ -196,7 +196,8 @@ export function buildEventTimeline(events: unknown[], hours = 24): LabEventTimel
 
   for (let i = hours - 1; i >= 0; i -= 1) {
     const start = now - (i + 1) * 60 * 60 * 1000;
-    const end = now - i * 60 * 60 * 1000;
+    // Newest bucket is inclusive of `now` so an event timestamped Date.now() counts.
+    const end = i === 0 ? now + 1 : now - i * 60 * 60 * 1000;
     const label = new Date(end - 30 * 60 * 1000).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",

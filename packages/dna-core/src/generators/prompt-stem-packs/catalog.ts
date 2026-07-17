@@ -2,6 +2,7 @@ import type { PromptStemPackDef } from "./types.js";
 import { AGENT_LOOP_STEM_DEFS } from "./catalog-agent-loop.js";
 import { METHODOLOGY_STEM_DEFS } from "./catalog-methodology.js";
 import { DISCOVERY_STEM_DEFS } from "./catalog-discovery.js";
+import { STRATEGY_STEM_DEFS } from "./catalog-strategy.js";
 
 const GROUND = {
   must: [
@@ -1529,4 +1530,5 @@ Summarize segments synced, conflicts, and resolution strategy.`,
   ...AGENT_LOOP_STEM_DEFS,
   ...METHODOLOGY_STEM_DEFS,
   ...DISCOVERY_STEM_DEFS,
+  ...STRATEGY_STEM_DEFS,
 ];

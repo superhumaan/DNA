@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { join } from "node:path";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 import type { DnaConfig } from "@superhumaan/dna-config";
@@ -15,6 +15,8 @@ import {
   uninstallFeatureFactory,
   FEATURE_FACTORY_PATHS,
   buildFeatureRequestFromQuote,
+  beginFeatureFromQuote,
+  refreshAiToolsForFeatureFactory,
 } from "./feature-factory.js";
 
 function testConfig(): DnaConfig {
@@ -87,6 +89,40 @@ describe("feature factory", () => {
     expect(await fileExists(join(root, ".DNA/workflows/feature-quality.workflow.md"))).toBe(
       true,
     );
+  });
+
+  it("preserves an active feature request during refresh", async () => {
+    const root = join(tmpdir(), `dna-ff-preserve-${randomUUID()}`);
+    await mkdir(join(root, "ai"), { recursive: true });
+    await writeFile(join(root, "package.json"), JSON.stringify({ name: "test" }));
+    const active = "# Feature Request\n\n> Keep this active brief.\n";
+    await writeFile(join(root, "ai", "feature-request.md"), active);
+
+    await installFeatureFactory(root, testConfig());
+
+    expect(await readFile(join(root, "ai", "feature-request.md"), "utf-8")).toBe(active);
+  });
+
+  it("begins a feature from a plain-language quote", async () => {
+    const root = join(tmpdir(), `dna-ff-begin-${randomUUID()}`);
+    await mkdir(root, { recursive: true });
+    await writeFile(join(root, "package.json"), JSON.stringify({ name: "test" }));
+
+    const written = await beginFeatureFromQuote(root, testConfig(), "Add CSV export to reports");
+
+    expect(written).toContain("ai/feature-request.md");
+    const brief = await readFile(join(root, "ai/feature-request.md"), "utf-8");
+    expect(brief).toContain("Add CSV export to reports");
+  });
+
+  it("refreshes AI tool files for the feature factory toggle", async () => {
+    const root = join(tmpdir(), `dna-ff-refresh-${randomUUID()}`);
+    await mkdir(root, { recursive: true });
+
+    const updated = await refreshAiToolsForFeatureFactory(root, testConfig(), true);
+
+    expect(updated.length).toBeGreaterThan(0);
+    expect(await fileExists(join(root, "AGENTS.md"))).toBe(true);
   });
 
   it("uninstalls feature factory files", async () => {

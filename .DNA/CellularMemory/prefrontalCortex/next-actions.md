@@ -1,6 +1,6 @@
 # Next Actions
 
-- [ ] Review generated Impressions documentation
-- [ ] Configure CI/CD pipeline
-- [ ] Set up test suite
-- [ ] Install runtime observer if needed
+- [x] Complete shared Lab state and cross-instance contract verification
+- [x] Enforce strict CI after scoped coverage and browser smoke pass
+- [x] Publish the canonical health report to GitHub, npm docs, and DNA-Web
+- [ ] Release v0.6.13 and confirm npm/GitHub/Web delivery

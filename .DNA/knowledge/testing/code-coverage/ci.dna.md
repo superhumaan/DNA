@@ -8,7 +8,7 @@ DNA generates `.github/workflows/dna-ci.yml` on init.
 2. Typecheck (`npm run typecheck`) when configured
 3. Unit tests (`npm test`)
 4. Coverage (`npm run test:coverage`) — fails below thresholds
-5. Dependency audit (`npm audit --audit-level=high`)
+5. Dependency audit (package-manager native: `pnpm audit`, `yarn audit`, or `npm audit`)
 6. DNA static analysis (`dna quality scan`)
 
 ## Coverage artifacts

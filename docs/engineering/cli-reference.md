@@ -46,7 +46,7 @@ dna lab serve --port 3200
 dna register lab --url https://your-app.example.com
 ```
 
-Local: no login. Production: email + password + OTP after `dna register lab` pairing (CLI must print **Production notified**; behind Connect allowlist `POST /api/dna/labs/pairing/init` — see `.DNA/lab/gateway-public-paths.md`).
+Local: no login. Production: email + password + OTP after `dna register lab` pairing (paste Pairing ID + code at `/labs`; sign into the app if the host requires a session).
 
 See [Runtime Observer](./runtime-observer.md#production-lab-labs).
 
@@ -271,7 +271,7 @@ Re-enable with `dna feature-factory install`.
 
 ## commands
 
-Install **DNA Workbench**, **`AGENTS.md`**, **59 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update. Engineering work routes through the mandatory 9-role agent loop (`ai/agent-loop.md`).
+Install **DNA Workbench**, **`AGENTS.md`**, **77 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update. Engineering work routes through the mandatory 9-role agent loop (`ai/agent-loop.md`). Strategy stems (Golden Circle, canvases, initiatives, Now/Next/Later) install with the same workbench path.
 
 ```bash
 dna workbench install

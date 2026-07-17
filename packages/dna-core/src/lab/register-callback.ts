@@ -1,6 +1,9 @@
 import { createServer } from "node:http";
 import type { RegisterLabOptions, RegisterLabResult } from "./register.js";
 import { runRegisterLab } from "./register.js";
+import { readLocalPairing, verifyPairingCallbackSignature } from "./pairing.js";
+
+const MAX_CALLBACK_BODY_BYTES = 64 * 1024;
 
 export async function runRegisterLabWithCallback(
   options: RegisterLabOptions,
@@ -17,14 +20,42 @@ export async function runRegisterLabWithCallback(
     const url = new URL(req.url ?? "/", `http://127.0.0.1:${callbackPort}`);
     if (req.method === "POST" && url.pathname === "/api/dna/labs/pairing/callback") {
       const chunks: Buffer[] = [];
+      let size = 0;
       for await (const chunk of req) {
-        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+        const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+        size += buffer.length;
+        if (size > MAX_CALLBACK_BODY_BYTES) {
+          res.writeHead(413);
+          res.end();
+          resolveCallback?.(false);
+          return;
+        }
+        chunks.push(buffer);
       }
       try {
-        const body = JSON.parse(Buffer.concat(chunks).toString("utf-8")) as { verified?: boolean };
+        const parsed = JSON.parse(Buffer.concat(chunks).toString("utf-8")) as {
+          pairingId?: string;
+          verified?: boolean;
+        };
+        const body = {
+          pairingId: String(parsed.pairingId ?? ""),
+          verified: parsed.verified === true,
+        };
+        const signatureHeader = req.headers["x-dna-lab-signature"];
+        const signature = Array.isArray(signatureHeader) ? signatureHeader[0] : signatureHeader;
+        const localPairing = await readLocalPairing(options.root);
+        const valid =
+          localPairing?.pairingId === body.pairingId &&
+          verifyPairingCallbackSignature(localPairing.codeHash, body, signature);
+        if (!valid) {
+          res.writeHead(401, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Unauthorized" }));
+          resolveCallback?.(false);
+          return;
+        }
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ ok: true }));
-        resolveCallback?.(Boolean(body.verified));
+        resolveCallback?.(body.verified);
       } catch {
         res.writeHead(400);
         res.end();

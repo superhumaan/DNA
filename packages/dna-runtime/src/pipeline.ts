@@ -148,9 +148,9 @@ export async function processRuntimeEvent(
   event = markEventSampled(event, sample.sampled);
   issue = { ...issue, latestEvent: event };
 
-  const storage = config?.runtime?.storage ?? "sqlite";
+  const storage = config?.runtime?.storage ?? "json";
 
-  if (storage === "sqlite") {
+  if (storage === "json") {
     await writeRuntimeOccurrence(projectRoot, {
       event: sample.persistEvent ? event : undefined,
       issue,

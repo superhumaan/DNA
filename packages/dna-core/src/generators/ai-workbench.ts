@@ -409,7 +409,7 @@ export async function installAiWorkbench(
 ): Promise<string[]> {
   if (!isAiWorkbenchEnabled(config)) return [];
 
-  config.aiWorkbench = { enabled: true, ...config.aiWorkbench };
+  config.aiWorkbench = { ...config.aiWorkbench, enabled: true };
 
   const created: string[] = [];
   for (const [relPath, content] of Object.entries(generateAiWorkbenchCoreFiles(config))) {
@@ -481,7 +481,7 @@ export function buildIntelligenceWorkbenchCatalog() {
     }));
 
   return {
-      version: 5,
+      version: 6,
       type: "workbench",
       catalogUrl: "https://dna.humaan.app/intelligence",
       generatedBy: "dna workbench install",

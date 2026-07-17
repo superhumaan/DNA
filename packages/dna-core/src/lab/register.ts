@@ -1,5 +1,4 @@
 import { loadDnaConfig } from "../validator.js";
-import { formatGatewayAllowlistFailure } from "./gateway-allowlist.js";
 import {
   initLocalPairing,
   pollPairingStatus,
@@ -38,6 +37,7 @@ export async function runRegisterLab(options: RegisterLabOptions): Promise<Regis
     callbackPort: options.callbackPort,
   });
 
+  // Best-effort only — paste at /labs invents the store row; never fail the CLI on init.
   const push = await pushPairingToProduction(productionUrl, {
     pairingId: pairing.pairingId,
     codeHash: pairing.codeHash,
@@ -45,28 +45,23 @@ export async function runRegisterLab(options: RegisterLabOptions): Promise<Regis
     callbackUrl: pairing.callbackUrl,
   });
 
-  let message = [
+  const message = [
     "DNA Lab pairing code generated.",
     "",
     `Pairing ID: ${pairing.pairingId}`,
     "",
-    "148-digit code (paste at production /labs after Production notified):",
+    "148-digit code (paste at production /labs):",
     pairing.code,
     "",
     `Expires: ${pairing.expiresAt}`,
     `Saved locally: ${pairing.pairingFile}`,
+    "",
+    `Next: open ${productionUrl}/labs (sign into the app if your host requires it),`,
+    "paste Pairing ID + code → Verify → create your Lab account.",
+    push.ok
+      ? "Production also pre-notified (optional)."
+      : `Note: pre-notify skipped (${push.error ?? `HTTP ${push.status ?? "?"}`}) — paste at /labs still works.`,
   ].join("\n");
-
-  if (!push.ok) {
-    message += `\n\n${formatGatewayAllowlistFailure(productionUrl, push.error ?? `HTTP ${push.status ?? "?"}`)}`;
-  } else {
-    message += [
-      "",
-      "",
-      "Production notified — pairing saved on the server (lab-store pairings[]).",
-      "Open /labs → paste Pairing ID + 148-digit code → Verify → create account.",
-    ].join("\n");
-  }
 
   return {
     pairingId: pairing.pairingId,

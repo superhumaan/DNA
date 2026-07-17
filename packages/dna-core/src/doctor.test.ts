@@ -42,7 +42,7 @@ async function scaffoldProject(): Promise<string> {
       knowledgePacks: [],
       platformFeatures: [],
       github: { enabled: true, owner: "acme", repo: "app" },
-      runtime: { enabled: true, storage: "sqlite" },
+      runtime: { enabled: true, storage: "json" },
       ci: { enabled: true, strict: false, perFileCoverage: true, owasp: true, pushToPreview: true, previewProvider: "vercel", coverageThreshold: 80 },
     }),
   );

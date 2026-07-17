@@ -4,7 +4,7 @@
   "projectName": "dna-by-humaan",
   "description": "Software project",
   "createdAt": "2026-07-11T10:27:53.301Z",
-  "updatedAt": "2026-07-14T05:48:20.525Z",
+  "updatedAt": "2026-07-17T05:42:24.128Z",
   "stack": {
     "archetype": "react-vite-api",
     "frontend": "react",
@@ -1015,17 +1015,17 @@
   "runtime": {
     "enabled": true,
     "environment": "development",
-    "storage": "sqlite",
+    "storage": "json",
     "watchBackend": true,
     "watchFrontend": true
   },
   "ci": {
     "enabled": true,
-    "strict": false,
+    "strict": true,
     "coverageThreshold": 80,
     "perFileCoverage": true,
     "owasp": true,
-    "pushToPreview": true,
+    "pushToPreview": false,
     "previewProvider": "vercel"
   },
   "featureFactory": {
@@ -1033,8 +1033,8 @@
   },
   "aiWorkbench": {
     "enabled": true,
-    "lastSyncAt": "2026-07-13T08:14:14.262Z",
-    "catalogVersion": 5,
+    "lastSyncAt": "2026-07-17T03:34:30.796Z",
+    "catalogVersion": 6,
     "stemSource": "bundled"
   },
   "lab": {

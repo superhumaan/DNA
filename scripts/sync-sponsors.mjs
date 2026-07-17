@@ -4,7 +4,7 @@
  *
  * Usage:
  *   node scripts/sync-sponsors.mjs
- *   DNA_WEB_ROOT="../DNA - Web" node scripts/sync-sponsors.mjs
+ *   DNA_WEB_ROOT="../DNA-Web" node scripts/sync-sponsors.mjs
  */
 import { readFile, writeFile, mkdir, copyFile } from "node:fs/promises";
 import { join, dirname } from "node:path";
@@ -13,7 +13,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SPONSORS_PATH = join(ROOT, "sponsors.json");
 const CLI_PKG = join(ROOT, "packages", "dna-cli");
-const DNA_WEB_ROOT = process.env.DNA_WEB_ROOT ?? join(ROOT, "..", "DNA - Web");
+const DNA_WEB_ROOT = process.env.DNA_WEB_ROOT ?? join(ROOT, "..", "DNA-Web");
 const DNA_WEB_DATA = join(DNA_WEB_ROOT, "apps", "web", "src", "data", "sponsors.json");
 
 const MARKER_START = "<!-- sponsors:ledger:start -->";

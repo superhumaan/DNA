@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Upgrade DNA CLI and refresh knowledge packs / workbench prompts.
+Upgrade DNA CLI, re-apply all installed knowledge packs, and force re-inject Cursor/Claude always-on rules.
 
 ## When to use
 
@@ -66,7 +66,7 @@ npx dna update
 
 ## After running
 
-Report CLI version change, stem pack refresh count, and marketplace updates. Suggest `dna marketplace install` for relevant packs.
+Confirm CLI upgrade, pack refresh count, and that AI injection reports all required files OK. If injection is incomplete, re-run `dna update` before continuing.
 
 ## Examples
 
@@ -76,7 +76,7 @@ Report CLI version change, stem pack refresh count, and marketplace updates. Sug
 npx dna update
 ```
 
-**Then:** Report CLI version change, stem pack refresh count, and marketplace updates. Suggest `dna marketplace install` for relevant packs.
+**Then:** Confirm CLI upgrade, pack refresh count, and that AI injection reports all required files OK. If injection is incomplete, re-run `dna update` before continuing.
 
 ## Session context
 
