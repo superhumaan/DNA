@@ -273,6 +273,29 @@ export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string 
             if (fail.length) { console.error(fail.join('\\\\n')); process.exit(1); }
           "
         continue-on-error: ${continueOnError}`);
+    qualitySteps.push(`      - name: Coverage summary → GitHub Step Summary
+        if: always()
+        run: |
+          node -e "
+            const { readFileSync } = require('node:fs');
+            const fs = require('node:fs');
+            let s; try { s = JSON.parse(readFileSync('./coverage/coverage-summary.json','utf8')); } catch { process.exit(0); }
+            const t = ${threshold};
+            const total = s.total || {};
+            const below = Object.entries(s).filter(([f,m]) => f!=='total' && m.lines && m.lines.pct < t);
+            const L = [];
+            L.push('## Coverage');
+            L.push('');
+            L.push('| Metric | % |');
+            L.push('|--------|---|');
+            for (const k of ['lines','branches','functions','statements']) L.push('| '+k+' | '+((total[k]||{}).pct ?? '—')+'% |');
+            L.push('');
+            L.push('Per-file threshold: '+t+'% — '+below.length+' file(s) below.');
+            for (const [f,m] of below.slice(0,25)) L.push('- \`'+f.split('/').slice(-3).join('/')+'\` — '+m.lines.pct+'%');
+            const out = process.env.GITHUB_STEP_SUMMARY;
+            if (out) fs.appendFileSync(out, L.join('\\n')+'\\n');
+          "
+        continue-on-error: true`);
     qualitySteps.push(`      - name: Upload coverage
         uses: actions/upload-artifact@v4
         if: always()
@@ -286,6 +309,18 @@ export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string 
       scriptStep("DNA Lab load gate (200 concurrent viewers)", "test:load:lab", pm, continueOnError),
     );
   }
+  // Durable, downloadable reports (quality + health) — kept even when a gate
+  // fails so reviewers can inspect the evidence from the run.
+  qualitySteps.push(`      - name: Upload DNA reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dna-reports
+          path: |
+            .DNA/reports/
+            .dna-reports/
+          retention-days: 14
+          if-no-files-found: ignore`);
 
   const cacheBlock = cache ? `          cache: ${cache}` : "";
   const qualityReportFlags = strict ? " --fail" : "";

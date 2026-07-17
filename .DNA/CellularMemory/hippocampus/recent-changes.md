@@ -2,6 +2,14 @@
 
 _Last updated: 2026-07-17_
 
+## 2026-07-17 — Production health & residual closure (v0.6.13)
+
+- Shared Lab Redis-compatible state adapter with fail-closed topology.
+- Strict CI + blocking pre-push; Playwright Lab smoke; scoped ≥80% coverage.
+- Canonical health report feeds GitHub Step Summary, npm README, DNA-Web `/health`.
+- CellularMemory/Impressions reconciled away from stale React/Postgres MVP copy.
+- DNA-Web sync defaults corrected to `../DNA-Web`.
+
 ## 2026-07-17 — Lab poll hardening (200 concurrent viewers)
 
 Verified with `scripts/lab-load-test.mjs --users 200 --polls 5 --events 2000`:

@@ -11,9 +11,12 @@
  * Usage:
  *   node scripts/lab-load-test.mjs [--users 200] [--polls 5] [--events 2000]
  *     [--after-only] [--max-p95 1500] [--min-throughput 500]
+ *     [--json <path>]   Emit a machine-readable result document (default:
+ *                       .dna-reports/load-test.json). Consumed by the canonical
+ *                       health report composer (scripts/health-report.mjs).
  */
 import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import http from "node:http";
 import { performance } from "node:perf_hooks";
@@ -24,6 +27,11 @@ function arg(name, fallback) {
   return i >= 0 && process.argv[i + 1] ? Number(process.argv[i + 1]) : fallback;
 }
 
+function strArg(name, fallback) {
+  const i = process.argv.indexOf(`--${name}`);
+  return i >= 0 && process.argv[i + 1] ? String(process.argv[i + 1]) : fallback;
+}
+
 const USERS = arg("users", 200);
 const POLLS = arg("polls", 5);
 const EVENTS = arg("events", 2000);
@@ -31,6 +39,7 @@ const ISSUES = Math.min(EVENTS, 400);
 const AFTER_ONLY = process.argv.includes("--after-only");
 const MAX_P95_MS = arg("max-p95", Number.POSITIVE_INFINITY);
 const MIN_THROUGHPUT_RPS = arg("min-throughput", 0);
+const JSON_OUT = resolve(process.cwd(), strArg("json", ".dna-reports/load-test.json"));
 
 function pct(sorted, p) {
   if (!sorted.length) return 0;
@@ -184,8 +193,19 @@ function printRow(r) {
   );
 }
 
+async function emitJson(doc) {
+  try {
+    await mkdir(dirname(JSON_OUT), { recursive: true });
+    await writeFile(JSON_OUT, JSON.stringify(doc, null, 2) + "\n");
+    console.log(`\nLoad results written to ${JSON_OUT}`);
+  } catch (err) {
+    console.error(`Could not write load JSON to ${JSON_OUT}: ${err.message}`);
+  }
+}
+
 async function main() {
   const root = await mkdtemp(join(tmpdir(), "dna-lab-load-"));
+  const startedAt = new Date().toISOString();
   try {
     await seed(root);
     console.log(`\nDNA Lab load test — ${USERS} concurrent viewers × ${POLLS} polls`);
@@ -218,6 +238,30 @@ async function main() {
     if (after.throughputRps < MIN_THROUGHPUT_RPS) {
       failures.push(`throughput ${after.throughputRps} req/s is below ${MIN_THROUGHPUT_RPS}`);
     }
+
+    await emitJson({
+      tool: "dna-lab-load-test",
+      generatedAt: new Date().toISOString(),
+      startedAt,
+      scenario: {
+        users: USERS,
+        polls: POLLS,
+        events: EVENTS,
+        issues: ISSUES,
+        afterOnly: AFTER_ONLY,
+      },
+      thresholds: {
+        maxP95Ms: Number.isFinite(MAX_P95_MS) ? MAX_P95_MS : null,
+        minThroughputRps: MIN_THROUGHPUT_RPS || null,
+      },
+      before,
+      after,
+      gate: {
+        passed: failures.length === 0,
+        failures,
+      },
+    });
+
     if (failures.length) {
       throw new Error(`Load gate failed: ${failures.join("; ")}`);
     }

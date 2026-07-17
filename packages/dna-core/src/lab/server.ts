@@ -29,7 +29,14 @@ import {
   registerPairingOnProduction,
   verifyPairingCode,
 } from "./pairing.js";
-import { upsertSourceMapMeta } from "./storage.js";
+import {
+  LabStateConfigError,
+  LabStateUnavailableError,
+  pingLabStore,
+  resolveLabStorageConfig,
+  upsertSourceMapMeta,
+} from "./storage.js";
+import type { LabStateBackend } from "./types.js";
 import { newId } from "./crypto.js";
 
 export interface LabServerOptions {
@@ -42,28 +49,47 @@ export interface LabServerOptions {
 export interface LabStateTopology {
   supported: boolean;
   instanceCount: number;
-  backend: "single-instance-file";
+  backend: LabStateBackend;
   reason?: string;
 }
 
 /**
- * Lab auth, pairing and release state is an atomic local file. It is safe for
- * concurrent requests and one Node process, but not for independent replicas.
- * Fail closed when the deployment declares multiple workers instead of
- * allowing sessions and pairing state to diverge silently.
+ * Lab auth/pairing/release state defaults to an atomic local file (one process).
+ * Multi-instance is supported only when a shared Redis adapter is fully
+ * configured via DNA_LAB_STATE_BACKEND=redis plus URL/token/key. Malformed
+ * shared config fails closed. File + declared replicas still fail closed.
  */
 export function resolveLabStateTopology(
   env: NodeJS.ProcessEnv = process.env,
 ): LabStateTopology {
   const declared = Number(env.DNA_LAB_INSTANCE_COUNT ?? env.WEB_CONCURRENCY ?? "1");
   const instanceCount = Number.isFinite(declared) && declared > 0 ? Math.floor(declared) : 1;
+  const storage = resolveLabStorageConfig(env);
+
+  if (storage.kind === "invalid") {
+    return {
+      supported: false,
+      instanceCount,
+      backend: storage.backend,
+      reason: storage.reason,
+    };
+  }
+
+  if (storage.kind === "redis") {
+    return {
+      supported: true,
+      instanceCount,
+      backend: "shared-redis",
+    };
+  }
+
   if (instanceCount > 1) {
     return {
       supported: false,
       instanceCount,
       backend: "single-instance-file",
       reason:
-        "DNA Lab file state supports one application instance. Use one replica/sticky deployment until a shared Lab state adapter is configured.",
+        "DNA Lab file state supports one application instance. Configure DNA_LAB_STATE_BACKEND=redis with DNA_LAB_REDIS_URL, DNA_LAB_REDIS_TOKEN, and DNA_LAB_REDIS_KEY for multi-instance, or use one replica/sticky deployment.",
     };
   }
   return { supported: true, instanceCount: 1, backend: "single-instance-file" };
@@ -193,6 +219,28 @@ export async function handleLabRequest(
   options: LabServerOptions,
   next?: () => void,
 ): Promise<boolean> {
+  try {
+    return await handleLabRequestInner(req, res, options, next);
+  } catch (err) {
+    if (err instanceof LabStateUnavailableError || err instanceof LabStateConfigError) {
+      const topology = resolveLabStateTopology();
+      sendJson(res, 503, {
+        error: err.message,
+        instanceCount: topology.instanceCount,
+        backend: topology.backend,
+      });
+      return true;
+    }
+    throw err;
+  }
+}
+
+async function handleLabRequestInner(
+  req: Req,
+  res: Res,
+  options: LabServerOptions,
+  next?: () => void,
+): Promise<boolean> {
   const labPath = resolveLabPath(options.config);
   const apiPrefix = labApiPrefix();
   const url = new URL(req.url ?? "/", "http://local");
@@ -237,17 +285,37 @@ export async function handleLabRequest(
   }
 
   if (isGetOrHead && pathname === `${apiPrefix}/health`) {
-    sendJson(
-      res,
-      200,
-      {
-        ok: true,
-        stateBackend: topology.backend,
-        instanceCount: topology.instanceCount,
-      },
-      undefined,
-      req.method,
-    );
+    try {
+      await pingLabStore(options.root);
+      sendJson(
+        res,
+        200,
+        {
+          ok: true,
+          stateBackend: topology.backend,
+          instanceCount: topology.instanceCount,
+        },
+        undefined,
+        req.method,
+      );
+    } catch (err) {
+      const message =
+        err instanceof LabStateUnavailableError || err instanceof LabStateConfigError
+          ? err.message
+          : "DNA Lab state backend is unreachable.";
+      sendJson(
+        res,
+        503,
+        {
+          ok: false,
+          stateBackend: topology.backend,
+          instanceCount: topology.instanceCount,
+          error: message,
+        },
+        undefined,
+        req.method,
+      );
+    }
     return true;
   }
 

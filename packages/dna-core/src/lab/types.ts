@@ -56,6 +56,25 @@ export interface LabStore {
   sourceMaps: LabSourceMapMeta[];
 }
 
+/** Reported by Lab health / topology — never includes secrets. */
+export type LabStateBackend = "single-instance-file" | "shared-redis";
+
+/**
+ * Persistence port for Lab auth/pairing/release state.
+ * File is the zero-config default; Redis is optional shared state.
+ */
+export interface LabStoreAdapter {
+  readonly backend: LabStateBackend;
+  /** Stable public identifier (relative file path or configured Redis key). */
+  readonly location: string;
+  ensure(): Promise<{ path: string; created: boolean }>;
+  read(): Promise<LabStore>;
+  write(store: LabStore): Promise<void>;
+  update(mutator: (store: LabStore) => void): Promise<void>;
+  /** Connectivity / readiness probe (no secrets in thrown messages). */
+  ping(): Promise<void>;
+}
+
 export interface LabRelease {
   id: string;
   version: string;

@@ -15,6 +15,8 @@ import {
   uninstallFeatureFactory,
   FEATURE_FACTORY_PATHS,
   buildFeatureRequestFromQuote,
+  beginFeatureFromQuote,
+  refreshAiToolsForFeatureFactory,
 } from "./feature-factory.js";
 
 function testConfig(): DnaConfig {
@@ -99,6 +101,28 @@ describe("feature factory", () => {
     await installFeatureFactory(root, testConfig());
 
     expect(await readFile(join(root, "ai", "feature-request.md"), "utf-8")).toBe(active);
+  });
+
+  it("begins a feature from a plain-language quote", async () => {
+    const root = join(tmpdir(), `dna-ff-begin-${randomUUID()}`);
+    await mkdir(root, { recursive: true });
+    await writeFile(join(root, "package.json"), JSON.stringify({ name: "test" }));
+
+    const written = await beginFeatureFromQuote(root, testConfig(), "Add CSV export to reports");
+
+    expect(written).toContain("ai/feature-request.md");
+    const brief = await readFile(join(root, "ai/feature-request.md"), "utf-8");
+    expect(brief).toContain("Add CSV export to reports");
+  });
+
+  it("refreshes AI tool files for the feature factory toggle", async () => {
+    const root = join(tmpdir(), `dna-ff-refresh-${randomUUID()}`);
+    await mkdir(root, { recursive: true });
+
+    const updated = await refreshAiToolsForFeatureFactory(root, testConfig(), true);
+
+    expect(updated.length).toBeGreaterThan(0);
+    expect(await fileExists(join(root, "AGENTS.md"))).toBe(true);
   });
 
   it("uninstalls feature factory files", async () => {

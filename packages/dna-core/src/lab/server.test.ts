@@ -45,7 +45,93 @@ describe("lab server", () => {
     const topology = resolveLabStateTopology({ WEB_CONCURRENCY: "3" });
     expect(topology.supported).toBe(false);
     expect(topology.instanceCount).toBe(3);
+    expect(topology.backend).toBe("single-instance-file");
     expect(topology.reason).toMatch(/one application instance/i);
+  });
+
+  it("supports multi-instance only when shared redis is fully configured", () => {
+    const incomplete = resolveLabStateTopology({
+      DNA_LAB_INSTANCE_COUNT: "3",
+      DNA_LAB_STATE_BACKEND: "redis",
+      DNA_LAB_REDIS_URL: "https://example.upstash.io",
+    });
+    expect(incomplete.supported).toBe(false);
+    expect(incomplete.backend).toBe("shared-redis");
+    expect(incomplete.reason).toMatch(/misconfigured/i);
+    expect(incomplete.reason).not.toMatch(/Bearer |password=/i);
+
+    const shared = resolveLabStateTopology({
+      DNA_LAB_INSTANCE_COUNT: "3",
+      DNA_LAB_STATE_BACKEND: "redis",
+      DNA_LAB_REDIS_URL: "https://example.upstash.io",
+      DNA_LAB_REDIS_TOKEN: "tok",
+      DNA_LAB_REDIS_KEY: "dna:lab",
+    });
+    expect(shared).toEqual({
+      supported: true,
+      instanceCount: 3,
+      backend: "shared-redis",
+    });
+  });
+
+  it("returns 503 for multi-instance file topology over HTTP", async () => {
+    root = await mkdtemp(join(tmpdir(), "dna-lab-topo-"));
+    await ensureLabStore(root);
+    const prev = process.env.DNA_LAB_INSTANCE_COUNT;
+    process.env.DNA_LAB_INSTANCE_COUNT = "2";
+
+    server = createServer(async (req, res) => {
+      const handled = await handleLabRequest(req, res, {
+        root,
+        config: {
+          lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true },
+        } as never,
+      });
+      if (!handled) {
+        res.writeHead(404);
+        res.end();
+      }
+    });
+    port = await listenOnEphemeralPort(server);
+
+    try {
+      const health = await fetch(`http://127.0.0.1:${port}/api/dna/labs/health`);
+      expect(health.status).toBe(503);
+      const body = (await health.json()) as { backend: string; instanceCount: number; reason?: string };
+      expect(body.backend).toBe("single-instance-file");
+      expect(body.instanceCount).toBe(2);
+      expect(body.reason).toMatch(/one application instance/i);
+    } finally {
+      if (prev === undefined) delete process.env.DNA_LAB_INSTANCE_COUNT;
+      else process.env.DNA_LAB_INSTANCE_COUNT = prev;
+    }
+  });
+
+  it("health reports the active backend and stays secret-free", async () => {
+    root = await mkdtemp(join(tmpdir(), "dna-lab-health-"));
+    await ensureLabStore(root);
+
+    server = createServer(async (req, res) => {
+      const handled = await handleLabRequest(req, res, {
+        root,
+        config: {
+          lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true },
+        } as never,
+      });
+      if (!handled) {
+        res.writeHead(404);
+        res.end();
+      }
+    });
+    port = await listenOnEphemeralPort(server);
+
+    const health = await fetch(`http://127.0.0.1:${port}/api/dna/labs/health`);
+    expect(health.status).toBe(200);
+    expect(await health.json()).toEqual({
+      ok: true,
+      stateBackend: "single-instance-file",
+      instanceCount: 1,
+    });
   });
 
   it("serves bootstrap in local mode without auth", async () => {

@@ -4,10 +4,8 @@
 
 | Risk | Severity | Mitigation |
 |------|----------|------------|
-| Shared Lab state adapter unavailable | Medium | Single-instance topology is explicit; declared replicas fail closed with 503 |
-| Advisory CI (`continue-on-error`) | Medium | Intentional OSS default; enforce locally before publish |
-| Repository line coverage 54.55% vs 80% target | Medium | Quality report is advisory; add tests before enabling strict CI |
-| Lab browser E2E absent | Low | API/client contracts covered; add Playwright smoke when UI becomes a standalone app |
+| Broader monorepo line inventory below 80% | Low | Product-critical generator coverage is enforced ≥80% per file; CLI/Lab I/O covered by integration + Playwright + load gates |
+| Optional shared Lab state depends on operator-managed Redis | Medium | File default remains zero-config; incomplete/unreachable Redis fails closed with 503 |
 
 ## Closed / mitigated
 
@@ -22,3 +20,9 @@
 | Vercel preview deployed this non-deployable root with DNA-Web project IDs | Explicit `ci.pushToPreview: false`; generated workflow removed; Docker remains delivery artifact |
 | Failed workflow cleanup erased diagnostics immediately | Cleanup retains failures for 24 hours before scheduled deletion |
 | Clean-checkout CI typecheck/tests before workspace build | Generated DNA CI builds packages first; regression locks ordering (#23) |
+| Shared Lab state adapter unavailable | Optional Redis-compatible adapter with distributed lock; multi-instance only when fully configured |
+| Advisory CI (`continue-on-error`) | `ci.strict: true`, blocking workflow, and strict pre-push `--fail` |
+| Repository coverage below enforceable target | Scoped product-critical coverage enforced ≥80% per file (92%+ verified) |
+| Lab browser E2E absent | Playwright Chromium smoke covers Lab route, health, and overview |
+| Fragmented/stale health evidence | Canonical health report feeds GitHub summary, npm README, and DNA-Web `/health` |
+| Stale CellularMemory/Impressions describing MVP React/Postgres | Memory and architecture docs reconciled to the CLI/runtime monorepo |

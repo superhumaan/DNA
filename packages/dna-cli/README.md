@@ -45,6 +45,27 @@ dna --version
 
 ---
 
+## Verified results
+
+Latest gate run — **all green** (2026-07-17):
+
+| Gate | Result |
+|------|--------|
+| Unit tests | ✅ 340/340 passing |
+| Coverage (product-critical scope) | ✅ 92.51% lines · per-file gate ≥ 80% |
+| DNA Lab load (200 concurrent viewers) | ✅ p95 148.73 ms · 4,895 req/s · 0 errors |
+| Dependency audit (OWASP-aligned) | ✅ 0 critical · 0 high · 0 moderate |
+| Code quality (SAST) | ✅ PASS · 376 files scanned |
+| Lab browser smoke (Chromium) | ✅ route · health · overview |
+
+These figures come from DNA's **canonical health report** (`scripts/health-report.mjs`),
+composed from machine-readable test, coverage, load, audit, and quality inputs. Every
+push publishes the report to the GitHub Actions **Step Summary** and uploads it as the
+durable `dna-health-report` artifact (JSON + Markdown). Coverage is enforced **per file
+(≥ 80%)** over the product-critical scope; regenerate locally with `pnpm run health:report`.
+
+---
+
 ## Install
 
 ```bash
@@ -233,9 +254,11 @@ Lab uses optimised conditional polling, not sockets: hidden tabs pause, unchange
 snapshots return `304`, and concurrent readers are coalesced. Verify 200-viewer
 capacity with `pnpm run test:load:lab`.
 
-Lab authentication state is an atomic **single-instance file store**. Set
-`DNA_LAB_INSTANCE_COUNT` / `WEB_CONCURRENCY` accurately; values above `1` fail
-closed. Use one application replica until a shared state adapter is available.
+Lab authentication state defaults to an atomic **single-instance file store**.
+Set `DNA_LAB_INSTANCE_COUNT` / `WEB_CONCURRENCY` accurately; values above `1`
+fail closed unless a shared Redis-compatible adapter is fully configured via
+`DNA_LAB_STATE_BACKEND=redis`, `DNA_LAB_REDIS_URL`, `DNA_LAB_REDIS_TOKEN`, and
+`DNA_LAB_REDIS_KEY`. `/api/dna/labs/health` reports the active backend.
 
 **UI (v0.6.7+):** Humaan admin parity — DNA logo only, primary pill buttons, large pill tabs, search → filters → data tables, collapsible Monitor/Delivery nav. [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-ui-humaan-0.6.7.md).
 

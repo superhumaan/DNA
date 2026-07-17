@@ -15,6 +15,11 @@ export default tseslint.config(
       "actionlint",
       "scripts/**",
       "packages/**/scripts/**",
+      "e2e/**",
+      "playwright.config.ts",
+      "playwright-report/**",
+      "test-results/**",
+      ".dna-reports/**",
     ],
   },
   {

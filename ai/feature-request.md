@@ -4,55 +4,66 @@ _Auto-maintained by DNA. Updated 2026-07-17. The user does not fill this in manu
 
 ## Latest request
 
-> Complete every residual item from the full repository review: security, CI,
-> dependency, multi-instance, legacy dashboard, API load, documentation,
-> verification, commit, and push.
+> Fix every still-documented residual risk and any CellularMemory problems;
+> expand automated test reporting; publish current test results on GitHub and
+> an npm-facing summary; add a complete `/Health` project report page to
+> DNA-Web; then update package versions and all affected documentation.
 
 ## Problem
 
-The review proved 200-viewer polling capacity after hardening but identified
-remaining trust-boundary, CI, dependency, topology, and compatibility risks.
+The hardening release still documented four unresolved risks: no shared Lab
+state adapter, advisory rather than blocking CI, repository coverage below the
+80% target, and no browser E2E suite. Test evidence was fragmented across review
+Markdown and workflow logs instead of being visible to GitHub, npm users, and
+the DNA-Web product site.
 
 ## Current Pain
 
-Unsafe configurations could leak OTPs, accept forged callbacks, silently split
-session state, skip dependency auditing, or regress under concurrent polling.
+Operators could not confidently assess current project health from one canonical
+source. Multi-instance Lab deployments were blocked, CI could hide gate
+failures, coverage was below policy, browser behavior was not exercised, and
+CellularMemory had become stale relative to verified results.
 
 ## Proposed Solution
 
-Close each feasible risk with compatible fail-closed controls, regression
-tests, a deterministic load gate, truthful documentation, and verified release
-gates.
+Close the residuals with a shared Lab state design, strict CI, materially
+increased automated coverage, and browser E2E smoke tests. Produce a
+machine-readable canonical health report, expose it through GitHub reporting
+and npm documentation, render it on DNA-Web at `/Health`, reconcile
+CellularMemory, and version/release all affected packages and docs.
 
 ## Users
 
-DNA operators, developers, and teams monitoring live production events.
+DNA operators, contributors, npm consumers, maintainers reviewing GitHub
+checks, and visitors evaluating project health on DNA-Web.
 
 ## Desired Behaviour
 
-Specific request polling remains responsive for 200 concurrent viewers; full
-event detail loads only when requested; security and topology failures reject
-safely; generated CI performs real package auditing and load verification.
+All enforced quality gates pass on clean runners; test and load results are
+generated rather than hand-copied; npm and GitHub show concise current
+summaries; `/Health` presents the complete project status accessibly and
+responsively; memory and version documentation agree with shipped evidence.
 
 ## Edge Cases
 
-Public previews running development builds, forged callbacks, stale configs
-using the historical `sqlite` label, declared multi-worker deployments,
-unchanged ETag polls, hidden tabs, and heavy filesystem test concurrency.
+Unavailable shared-state infrastructure, stale or missing report artifacts,
+forked PR permissions, partial workflow failures, report schema changes,
+DNA-Web fetch failures, mobile rendering, package version skew, and preserving
+historical test results without presenting them as current.
 
 ## Success Criteria
 
-- [x] Pairing callbacks authenticate and reject forged callbacks
-- [x] Public development hosts require auth and never receive dev OTPs
-- [x] Legacy dashboard exports delegate safely to Lab
-- [x] CI uses pnpm-native auditing and a deterministic 200-viewer load gate
-- [x] Toolchain advisories are remediated (`pnpm audit`: clean)
-- [x] Supported Lab state topology is explicit, observable, and fail-closed
-- [x] Full issue events load through a specific on-demand API
-- [x] Unit, integration, load, quality, Docker, and full build gates pass
-- [x] Clean-checkout CI builds required workspace artifacts before validation
-- [x] Review reports and CellularMemory reflect verified final state
-- [x] Changes committed and pushed to GitHub
+- [x] Shared Lab state supports the intended production instance topology
+- [x] CI is strict and fails when required quality/security gates fail
+- [x] Automated coverage reaches and enforces the agreed target
+- [x] Browser E2E smoke coverage protects the Lab's critical journeys
+- [x] Test/load/security results are emitted as canonical machine-readable data
+- [x] GitHub presents a durable test summary and downloadable reports
+- [x] npm-facing README/package documentation contains the latest verified summary
+- [x] DNA-Web `/Health` renders complete current reports with resilient states
+- [x] CellularMemory and review docs contain no stale or contradictory status
+- [x] Package versions, changelog, lockfile, roadmap, and release docs agree
+- [x] Both repositories pass their full quality/build/release gates and are pushed
 
 ---
 

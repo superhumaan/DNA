@@ -60,6 +60,29 @@ describe("CI generator", () => {
     expect(yaml).toContain("quality report");
   });
 
+  it("publishes a coverage Step Summary and durable report artifacts", () => {
+    const yaml = generateCiWorkflow(
+      testConfig(),
+      mockScan({
+        packageManager: "pnpm",
+        scripts: {
+          test: "vitest run",
+          "test:coverage": "vitest run --coverage",
+          "test:load:lab": "node scripts/lab-load-test.mjs",
+        },
+      }),
+    );
+
+    expect(yaml).toContain("GITHUB_STEP_SUMMARY");
+    expect(yaml).toContain("Coverage summary → GitHub Step Summary");
+    expect(yaml).toContain("name: dna-reports");
+    expect(yaml).toContain(".DNA/reports/");
+    expect(yaml).toContain(".dna-reports/");
+    expect(yaml).toContain("actions/upload-artifact@v4");
+    // Coverage artifact is still uploaded on every run.
+    expect(yaml).toContain("name: coverage-report");
+  });
+
   it("adds pnpm setup when package manager is pnpm", () => {
     const yaml = generateCiWorkflow(
       testConfig(),

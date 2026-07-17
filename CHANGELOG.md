@@ -4,17 +4,25 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.13] - 2026-07-17
+
 ### Added
 
 - **Strategy stem ladder (12 packs, 77 total)** — new `strategy` category installed by default on `init` / `update` / `doctor`: `/strategy-ladder`, `/golden-circle`, `/business-strategy-canvas`, `/product-canvas`, `/north-star-metric`, `/define-okrs`, `/define-kpis`, `/goal-cascade`, `/define-initiative`, `/define-product`, `/shape-feature`, `/roadmap-now-next-later`. Intelligence catalog **v6**. Artifacts land in `DNA/Impressions/product/`; `shape-feature` hands off to feature factory with approval gate.
 - **Lab load harness** — `scripts/lab-load-test.mjs` compares raw per-request `collectLabData` vs the HTTP `/data` path under N concurrent pollers (default 200). Full review reports in `docs/reviews/`.
 - **CI Lab capacity gate** — generated pnpm workflows run the deterministic 200-viewer after-only load gate after build.
+- **Shared Lab state adapter** — optional Redis-compatible store (`DNA_LAB_STATE_BACKEND=redis` + URL/token/key) with distributed locking; file remains the zero-config default.
+- **Canonical health report** — `pnpm run health:report` emits sanitized JSON/Markdown consumed by GitHub Step Summary, npm README, and DNA-Web `/health`.
+- **Lab browser smoke** — Playwright Chromium covers `/labs`, Lab `/health`, and overview rendering.
+- Public DNA-Web `/health` page (capital `/Health` redirects) with sanitized report schema.
 
 ### Changed
 
 - **Lab `/data` poll path (no sockets)** — micro-cache + single-flight (`getLabData`), weak ETag / 304, trimmed wire payload (capped slim events), session auth cache, client visibility-aware jittered polling with `If-None-Match`. Verified ~200 concurrent viewers: p95 ~4s → ~128ms, ~100× throughput, 80% 304s.
 - **Legacy dashboard compatibility** — old dashboard exports now delegate to DNA Lab instead of maintaining a second server and collection implementation.
 - **Toolchain security** — Vitest/coverage upgraded to 4.1.10 and esbuild pinned to patched 0.28.1; `pnpm audit` reports no known vulnerabilities.
+- **Strict CI** — DNA CI and pre-push now fail on gate failures; product-critical generator coverage is enforced ≥80% per file.
+- Reconciled CellularMemory and Impressions away from stale React/Postgres MVP copy.
 
 ### Fixed
 
@@ -27,6 +35,7 @@ All notable changes to DNA are documented here.
 - **Feature brief preservation** — `dna doctor` / feature-factory refresh no longer replaces an active `ai/feature-request.md` with the blank starter template.
 - **Preview opt-out and diagnostics** — CI generation respects `ci.pushToPreview: false`, removes stale generated preview workflows, and retains failed workflow logs for 24 hours before cleanup. This CLI/runtime monorepo is explicitly opted out because its prior Vercel IDs target the separate DNA-Web project.
 - **Clean-checkout CI ordering** — generated workflows build workspace packages before typecheck, unit, and coverage gates so tests that consume package exports do not rely on stale local `dist/` artifacts.
+- **DNA-Web sync path** — sync scripts default to `../DNA-Web` instead of the stale spaced checkout.
 
 ## [0.6.12] - 2026-07-14
 

@@ -28,6 +28,17 @@ jobs:
 
       - run: pnpm install
 
+      # Never publish a red build — run the same gates CI enforces before we
+      # push to npm. Coverage is scoped + enforced per file (see vitest.config).
+      - name: Build
+        run: pnpm run build
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Unit tests + coverage gate
+        run: pnpm run test:coverage
+
       - name: Publish all @superhumaan/dna-* packages
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

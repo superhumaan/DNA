@@ -21,6 +21,7 @@
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
 | **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) |
+| **Health** | [dna.humaan.app/health](https://dna.humaan.app/health) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Supply chain** | [Socket.dev](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) · [SECURITY.md](./SECURITY.md) |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
@@ -306,6 +307,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Lab pairing paste-first without init (v0.6.9) | Jul 2026 | Jul 2026 | Superseded by store-first (v0.6.11) |
 | Lab pairing store-first + gateway allowlist (v0.6.11) | Jul 2026 | Jul 2026 | Shipped |
 | Express 5 optional peer (v0.6.12) | Jul 2026 | Jul 2026 | Shipped — `express@^4 \|\| ^5` |
+| Production health & residual closure (v0.6.13) | Jul 2026 | Jul 2026 | Shipped — shared Lab state, strict CI, coverage, Playwright, `/health` |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | In progress |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |
