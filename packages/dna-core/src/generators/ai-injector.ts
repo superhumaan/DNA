@@ -35,6 +35,13 @@ export interface SyncAiInjectionOptions {
   preferRemoteStems?: boolean;
   featureFactory?: boolean;
   workbench?: boolean;
+  /**
+   * Force full re-injection: re-enable workbench, ensure cursor+claude tools,
+   * overwrite every managed rule/skill file. Used by `dna update`.
+   */
+  force?: boolean;
+  /** Persist workbench enabled + aiTools into config.dna.json (default: true when force). */
+  persistConfig?: boolean;
   /** Run verification after sync (default: true) */
   verify?: boolean;
   /** Pre-scanned project (avoids duplicate scan) */
@@ -200,8 +207,20 @@ export async function syncAiInjection(
 ): Promise<AiInjectionSyncResult> {
   const written: string[] = [];
   const scan = options.scan ?? (await scanProject(root));
+  const force = options.force === true;
   const featureFactory = options.featureFactory ?? config.featureFactory?.enabled !== false;
-  const workbench = options.workbench ?? isAiWorkbenchEnabled(config);
+  let workbench = options.workbench ?? isAiWorkbenchEnabled(config);
+
+  if (force) {
+    workbench = options.workbench !== false;
+    // enabled: true must win — do not let a prior `{ enabled: false }` overwrite via spread
+    config.aiWorkbench = { ...config.aiWorkbench, enabled: true };
+    config.featureFactory = { ...config.featureFactory, enabled: true };
+    const tools = new Set(config.aiTools.length ? config.aiTools : detectAiTools(scan));
+    tools.add("cursor");
+    tools.add("claude_code");
+    config.aiTools = [...tools];
+  }
 
   // Reasoning + behaviour — always on by default (no opt-in)
   for (const [file, content] of Object.entries(generateBehaviourFiles(config))) {
@@ -229,12 +248,18 @@ export async function syncAiInjection(
   }
 
   if (workbench) {
-    config.aiWorkbench = { enabled: true, ...config.aiWorkbench };
+    config.aiWorkbench = { ...config.aiWorkbench, enabled: true };
     written.push(
       ...(await installAiWorkbench(root, config, {
         preferRemoteStems: options.preferRemoteStems,
       })),
     );
+  }
+
+  const shouldPersist = options.persistConfig ?? force;
+  if (shouldPersist) {
+    config.updatedAt = new Date().toISOString();
+    await writeJsonFile(join(root, ".DNA", "config.dna.json"), config);
   }
 
   const report =
@@ -267,7 +292,7 @@ export function formatAiInjectionReport(report: AiInjectionReport): string {
   if (report.complete) {
     lines.push("  reasoning.behaviour.md, AGENTS.md, alwaysApply rules, and skills are current");
   } else {
-    lines.push("  Run `npx dna doctor` to repair injection");
+    lines.push("  Run `npx dna update` (or `npx dna doctor`) to force-repair injection");
   }
 
   return lines.join("\n");

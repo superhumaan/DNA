@@ -40,6 +40,17 @@ function pmRun(pm: string | undefined, script: string): string {
   }
 }
 
+function pmAuditCommand(pm: string | undefined): string {
+  switch (pm) {
+    case "pnpm":
+      return "pnpm audit --audit-level=high";
+    case "yarn":
+      return "yarn audit --level high";
+    default:
+      return "npm audit --audit-level=high";
+  }
+}
+
 function pmCache(pm: string | undefined): string | undefined {
   switch (pm) {
     case "pnpm":
@@ -257,6 +268,11 @@ export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string 
           retention-days: 14`);
   }
   if (scripts.build) qualitySteps.push(scriptStep("Build", "build", pm, continueOnError));
+  if (scripts["test:load:lab"]) {
+    qualitySteps.push(
+      scriptStep("DNA Lab load gate (200 concurrent viewers)", "test:load:lab", pm, continueOnError),
+    );
+  }
 
   const cacheBlock = cache ? `          cache: ${cache}` : "";
   const qualityReportFlags = strict ? " --fail" : "";
@@ -326,7 +342,7 @@ ${cacheBlock}
         run: ${pmInstallCommand(pm)}
 
       - name: Dependency audit (OWASP-aligned)
-        run: npm audit --audit-level=high
+        run: ${pmAuditCommand(pm)}
         continue-on-error: ${continueOnError}
 
 `;

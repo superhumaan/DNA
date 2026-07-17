@@ -1,6 +1,6 @@
 # DNA intelligence — Cursor commands
 
-**dna-by-humaan** — 65 prompt stem packs (bundled catalog v5) + 47 `/dna-*` CLI commands.
+**dna-by-humaan** — 77 prompt stem packs (bundled catalog v6) + 47 `/dna-*` CLI commands.
 
 ## Prompt stems (`.DNA/stems/<id>/`)
 
@@ -73,6 +73,18 @@ Each stem: **prompt + guidelines + expectations + context + examples**.
 | `/prioritize-opportunities` | Prioritize opportunities |
 | `/pmf-check` | PMF check |
 | `/handoff-to-engineering` | Handoff to engineering |
+| `/strategy-ladder` | Strategy ladder |
+| `/golden-circle` | Golden Circle |
+| `/business-strategy-canvas` | Business strategy canvas |
+| `/product-canvas` | Product canvas |
+| `/define-initiative` | Define initiative |
+| `/define-product` | Define product |
+| `/shape-feature` | Shape feature |
+| `/roadmap-now-next-later` | Roadmap Now / Next / Later |
+| `/north-star-metric` | North Star metric |
+| `/define-okrs` | Define OKRs |
+| `/define-kpis` | Define KPIs |
+| `/goal-cascade` | Goal cascade |
 
 Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 

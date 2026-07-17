@@ -59,7 +59,7 @@ export async function runPostInit(
   config.featureFactory = { enabled: answers.installFeatureFactory };
   config.runtime = {
     enabled: answers.installRuntime,
-    storage: "sqlite",
+    storage: "json",
     watchBackend: true,
     watchFrontend: true,
     environment: "development",

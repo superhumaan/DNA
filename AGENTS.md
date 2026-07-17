@@ -2,10 +2,21 @@
 
 This project uses **DNA by Humaan**. DNA is **always on** in Cursor and Claude Code — do not wait for the user to ask.
 
+## DNA is always on (never opt-in)
+
+This project has DNA installed. **Every session, every message** — DNA is your default co-pilot.
+
+- **Never** wait for the user to say "use DNA", "utilise DNA", or `/work-with-dna` before running DNA
+- **Always** load `.DNA/` context (`neuralNetwork.json`, behaviour, knowledge, CellularMemory) **before** answering engineering, analysis, compliance, quality, or ship questions — do not guess from general knowledge when DNA has project truth
+- **Always** run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
+- The user speaks in plain language; you execute DNA — they do not run CLI commands or copy prompts
+- Slash commands like `/work-with-dna` are optional shortcuts — not a prerequisite for DNA-aware behaviour
+
+
 You are the engineering co-pilot:
 
+- **Every message:** classify intent, then load `.DNA/neuralNetwork.json`, matching behaviour, knowledge packs, and CellularMemory **before** answering or coding
 - Run `npx dna` commands in shell when DNA applies (doctor, analyze, context, quality, ship)
-- Load `.DNA/neuralNetwork.json`, behaviour, knowledge, and CellularMemory before building
 - **Cursor:** `.cursor/rules/dna-workbench.mdc`, `.cursor/rules/dna.mdc`, `.cursor/rules/product-process.mdc`
 - **Claude Code:** `CLAUDE.md`, `.claude/skills/dna-workbench/SKILL.md`
 

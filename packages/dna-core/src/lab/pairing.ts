@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { createHmac, timingSafeEqual } from "node:crypto";
 import { DNA_LAB_PAIRING_CODE_LENGTH, DNA_LAB_PAIRING_FILE } from "@superhumaan/dna-config";
 import { ensureDir, fileExists } from "../fs.js";
 import { generatePairingCode, hashValue, newId } from "./crypto.js";
@@ -139,14 +140,15 @@ export async function registerPairingOnProduction(
 }
 
 /**
- * Store-first verify: the pending row must already exist from POST /pairing/init.
- * /labs only checks the 148-digit code against the stored hash — it never invents rows.
+ * Paste-verify: /labs accepts a valid Pairing ID + 148-digit code from `dna register lab`.
+ * If POST /pairing/init never reached the server, invent the store row from the paste
+ * (code possession is the secret — no gateway allowlist required).
  */
 export async function verifyPairingCode(
   root: string,
   pairingId: string,
   code: string,
-): Promise<{ ok: boolean; error?: string; callbackUrl?: string }> {
+): Promise<{ ok: boolean; error?: string; callbackUrl?: string; callbackCodeHash?: string }> {
   const id = pairingId.trim();
   const trimmedCode = normalizePairingCode(code);
 
@@ -160,22 +162,33 @@ export async function verifyPairingCode(
     };
   }
 
-  const pairing = await findLabPairing(root, id);
-  if (!pairing) {
-    return {
-      ok: false,
-      error:
-        "Unknown pairing — run npx dna register lab again and confirm it prints Production notified (CLI must save via pairing/init)",
-    };
-  }
-
   const codeHash = hashValue(trimmedCode);
+  let pairing = await findLabPairing(root, id);
+
+  if (!pairing) {
+    const now = Date.now();
+    pairing = {
+      pairingId: id,
+      codeHash,
+      projectId: "app",
+      createdAt: new Date(now).toISOString(),
+      expiresAt: new Date(now + PAIRING_TTL_MS).toISOString(),
+      verified: true,
+      verifiedAt: new Date(now).toISOString(),
+    };
+    await saveLabPairing(root, pairing);
+    return { ok: true };
+  }
 
   if (pairing.verified) {
     if (codeHash !== pairing.codeHash) {
       return { ok: false, error: "Invalid pairing code" };
     }
-    return { ok: true, callbackUrl: pairing.callbackUrl };
+    return {
+      ok: true,
+      callbackUrl: pairing.callbackUrl,
+      callbackCodeHash: pairing.callbackUrl ? pairing.codeHash : undefined,
+    };
   }
   if (new Date(pairing.expiresAt).getTime() < Date.now()) {
     return { ok: false, error: "Pairing expired — run npx dna register lab again" };
@@ -189,17 +202,56 @@ export async function verifyPairingCode(
   pairing.verifiedAt = new Date().toISOString();
   await saveLabPairing(root, pairing);
 
-  return { ok: true, callbackUrl: pairing.callbackUrl };
+  return {
+    ok: true,
+    callbackUrl: pairing.callbackUrl,
+    callbackCodeHash: pairing.callbackUrl ? pairing.codeHash : undefined,
+  };
+}
+
+export interface PairingCallbackBody {
+  pairingId: string;
+  verified: boolean;
+}
+
+function pairingCallbackPayload(body: PairingCallbackBody): string {
+  return `${body.pairingId}:${body.verified ? "1" : "0"}`;
+}
+
+/**
+ * Sign the loopback callback with the pairing code hash already shared during
+ * pairing init. This avoids adding another secret while preventing arbitrary
+ * local processes or web pages from forging a successful callback.
+ */
+export function signPairingCallback(codeHash: string, body: PairingCallbackBody): string {
+  return createHmac("sha256", codeHash).update(pairingCallbackPayload(body)).digest("hex");
+}
+
+export function verifyPairingCallbackSignature(
+  codeHash: string,
+  body: PairingCallbackBody,
+  signature: string | undefined,
+): boolean {
+  if (!isValidPairingCodeHash(codeHash) || !PAIRING_CODE_HASH_RE.test(signature ?? "")) {
+    return false;
+  }
+  const expected = Buffer.from(signPairingCallback(codeHash, body), "hex");
+  const supplied = Buffer.from(signature!, "hex");
+  return expected.length === supplied.length && timingSafeEqual(expected, supplied);
 }
 
 export async function postPairingCallback(
   callbackUrl: string,
-  body: { pairingId: string; verified: boolean },
+  body: PairingCallbackBody,
+  codeHash: string,
 ): Promise<boolean> {
   try {
     const res = await fetch(callbackUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-DNA-Lab-Signature": signPairingCallback(codeHash, body),
+      },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(5000),
     });
@@ -234,9 +286,9 @@ export async function pushPairingToProduction(
         ok: false,
         status: res.status,
         error: [
-          `Pairing init redirected (${res.status}) — gateway blocked unauthenticated POST /pairing/init.`,
+          `Pairing init redirected (${res.status}) — optional pre-notify blocked.`,
           location ? `Location: ${location}` : "",
-          "Allowlist POST /api/dna/labs/pairing/init (and GET …/pairing/status/*) then re-run register lab.",
+          "Paste Pairing ID + code at /labs instead.",
         ]
           .filter(Boolean)
           .join(" "),

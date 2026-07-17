@@ -21,7 +21,7 @@ import {
   fetchMarketplaceCatalog,
   searchCatalog,
   installKnowledgePackById,
-  checkMarketplaceUpdates,
+  applyMarketplaceUpdates,
   formatMarketplaceCatalog,
   formatUpdateResult,
   generateRbacPlan,
@@ -74,6 +74,7 @@ import {
   uninstallAiWorkbench,
   persistAiWorkbenchEnabled,
   syncAiInjection,
+  verifyAiInjection,
   formatAiInjectionReport,
   getPromptStemPacks,
   getPromptStemPack,
@@ -516,7 +517,7 @@ program
     const config = await loadDnaConfig(root);
     if (config) {
       config.runtime = {
-        storage: "sqlite",
+        storage: "json",
         watchBackend: true,
         watchFrontend: true,
         ...config.runtime,
@@ -1431,22 +1432,27 @@ ivfCmd
 
 program
   .command("update")
-  .description("Upgrade DNA CLI and refresh knowledge packs / workbench prompts")
+  .description(
+    "Upgrade DNA CLI, re-apply all installed knowledge packs, and force re-inject Cursor/Claude rules",
+  )
   .option("--cwd <path>", "Project root directory")
   .option("--channel <channel>", "stable|beta|nightly", "stable")
-  .option("--skip-workbench", "Do not refresh Cursor/Claude workbench prompts")
+  .option("--skip-workbench", "Do not refresh Cursor/Claude workbench prompts / rules")
   .option("--skip-cli", "Do not check or install a newer DNA CLI package")
-  .option("--check-only", "Report available updates without installing")
+  .option("--skip-packs", "Do not re-apply installed marketplace knowledge packs")
+  .option("--check-only", "Report available updates without installing or rewriting files")
   .action(async (options: {
     cwd?: string;
     channel?: "stable" | "beta" | "nightly";
     skipWorkbench?: boolean;
     skipCli?: boolean;
+    skipPacks?: boolean;
     checkOnly?: boolean;
   }) => {
     const root = getRoot(options);
-    const config = await loadDnaConfig(root);
+    let config = await loadDnaConfig(root);
     const channel = options.channel ?? config?.channel ?? "stable";
+    let injectionComplete = true;
 
     if (!options.skipCli) {
       const cliResult = await checkAndUpgradeCli({
@@ -1460,18 +1466,78 @@ program
       });
       console.log(formatCliUpgradeResult(cliResult));
       console.log("");
+
+      // After a real CLI install, finish packs + injection with the NEW package so
+      // generators match the published version (running process still has old code).
+      if (cliResult.installed && !options.checkOnly) {
+        const { spawnSync } = await import("node:child_process");
+        const args = [
+          "--yes",
+          `@superhumaan/dna-by-humaan@${cliResult.latestVersion ?? "latest"}`,
+          "update",
+          "--skip-cli",
+          "--cwd",
+          root,
+          "--channel",
+          channel,
+        ];
+        if (options.skipWorkbench) args.push("--skip-workbench");
+        if (options.skipPacks) args.push("--skip-packs");
+        console.log(`\n↻ Re-running update with newly installed CLI (${cliResult.latestVersion})…\n`);
+        const child = spawnSync("npx", args, { cwd: root, stdio: "inherit", env: process.env });
+        process.exit(child.status ?? 1);
+      }
     }
 
-    const result = await checkMarketplaceUpdates(root, channel);
-    console.log(formatUpdateResult(result));
-
-    if (config) {
-      const injection = await syncAiInjection(root, config, {
-        workbench: !options.skipWorkbench && config.aiWorkbench?.enabled !== false,
+    if (!options.skipPacks) {
+      const result = await applyMarketplaceUpdates(root, {
+        channel,
+        checkOnly: options.checkOnly,
+        foundation: true,
       });
+      console.log(formatUpdateResult(result));
+      // Individual pack failures are reported but do not fail the whole update —
+      // injection + CLI refresh must still complete. Exit non-zero only if every
+      // refresh attempt failed while packs were installed.
+      if (
+        !options.checkOnly &&
+        (result.failed?.length ?? 0) > 0 &&
+        (result.refreshed?.length ?? 0) === 0 &&
+        result.installed.length > 0
+      ) {
+        process.exitCode = 1;
+      }
+    } else {
+      console.log("DNA Marketplace Update");
+      console.log("============================");
+      console.log("");
+      console.log("Skipped pack refresh (--skip-packs).");
+    }
+
+    if (config && !options.checkOnly) {
+      config = (await loadDnaConfig(root)) ?? config;
+      const injection = await syncAiInjection(root, config, {
+        force: !options.skipWorkbench,
+        workbench: !options.skipWorkbench,
+        preferRemoteStems: true,
+      });
+      injectionComplete = injection.report.complete;
       const stems = injection.written.filter((p: string) => p.startsWith(".DNA/stems/"));
-      console.log(`\n✓ AI injection refreshed (${injection.written.length} files${stems.length ? ", stems synced" : ""})`);
+      const rules = injection.written.filter(
+        (p: string) => p.includes(".cursor/rules/") || p.includes(".claude/") || p === "AGENTS.md" || p === "CLAUDE.md",
+      );
+      console.log(
+        `\n✓ AI rules re-injected (${injection.written.length} files` +
+          `${rules.length ? `, ${rules.length} rules/skills` : ""}` +
+          `${stems.length ? `, stems synced` : ""})`,
+      );
       console.log(formatAiInjectionReport(injection.report));
+
+      if (!injection.report.complete) {
+        console.error("\n✗ DNA co-pilot injection incomplete — AI will not reliably consult DNA.");
+        console.error("  Fix missing/stale paths above, then re-run `dna update`.");
+        process.exitCode = 1;
+      }
 
       if (config.lab?.enabled !== false) {
         await ensureLabAssets(root);
@@ -1491,6 +1557,18 @@ program
       } catch {
         // no index yet
       }
+    } else if (config && options.checkOnly) {
+      const report = await verifyAiInjection(root, config);
+      injectionComplete = report.complete;
+      console.log(`\n${formatAiInjectionReport(report)}`);
+      if (!report.complete) process.exitCode = 1;
+    } else if (!config) {
+      console.log("\nDNA not installed in this project. Run `dna init` or `dna doctor` first.");
+      process.exitCode = 1;
+    }
+
+    if (injectionComplete && !options.checkOnly && config) {
+      console.log("\n✓ DNA update complete — CLI, knowledge packs, and always-on AI rules are current.");
     }
   });
 
@@ -2319,7 +2397,7 @@ const registerCmd = program.command("register").description("Register local proj
 
 registerCmd
   .command("lab")
-  .description("Generate 148-digit pairing code and notify production /labs")
+  .description("Generate 148-digit pairing code for production /labs (paste to verify)")
   .requiredOption("--url <productionUrl>", "Production URL, e.g. https://app.example.com")
   .option("--cwd <path>", "Project root directory")
   .option("--callback-port <number>", "Local callback port", "9473")
@@ -2343,9 +2421,6 @@ registerCmd
     console.log(result.message);
     if (result.verified) {
       console.log("\n✓ Verified via production callback. Finish account setup in your browser.");
-    }
-    if (!result.pushedToProduction) {
-      process.exitCode = 1;
     }
   });
 

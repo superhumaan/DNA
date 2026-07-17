@@ -514,6 +514,12 @@ export async function installFeatureFactory(
   const created: string[] = [];
 
   for (const [relPath, content] of Object.entries(generateFeatureFactoryFiles(config))) {
+    // Doctor/update refresh generated factory infrastructure, but an active
+    // feature brief is user/session state. Never replace it with the blank
+    // starter template on a routine refresh.
+    if (relPath === "ai/feature-request.md" && (await fileExists(join(root, relPath)))) {
+      continue;
+    }
     await writeFileEnsured(join(root, relPath), content);
     created.push(relPath);
   }

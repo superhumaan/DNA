@@ -1,42 +1,57 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-15. The user does not fill this in manually._
+_Auto-maintained by DNA. Updated 2026-07-17. The user does not fill this in manually._
 
 ## Latest request
 
-> Fix npm ERESOLVE when installing `@superhumaan/dna-by-humaan` into Express 5 apps — widen optional peer `express` to `^4.18.0 || ^5.0.0`.
+> Complete every residual item from the full repository review: security, CI,
+> dependency, multi-instance, legacy dashboard, API load, documentation,
+> verification, commit, and push.
 
 ## Problem
 
-Host apps on Express 5 cannot install DNA with default npm peer resolution.
+The review proved 200-viewer polling capacity after hardening but identified
+remaining trust-boundary, CI, dependency, topology, and compatibility risks.
 
 ## Current Pain
 
-AIStudio and Express 5 stacks hit ERESOLVE; must use `--legacy-peer-deps`.
+Unsafe configurations could leak OTPs, accept forged callbacks, silently split
+session state, skip dependency auditing, or regress under concurrent polling.
 
 ## Proposed Solution
 
-Widen Express peerDependencies on dna-cli + dna-runtime (same pattern as Fastify). Publish 0.6.12.
+Close each feasible risk with compatible fail-closed controls, regression
+tests, a deterministic load gate, truthful documentation, and verified release
+gates.
 
 ## Users
 
-Developers installing DNA into Express 5 Node apps.
+DNA operators, developers, and teams monitoring live production events.
 
 ## Desired Behaviour
 
-- `npm i @superhumaan/dna-by-humaan` succeeds alongside `express@^5` without flags
-- Express 4 hosts remain valid
+Specific request polling remains responsive for 200 concurrent viewers; full
+event detail loads only when requested; security and topology failures reject
+safely; generated CI performs real package auditing and load verification.
 
 ## Edge Cases
 
-- Optional peer when no express installed
-- npm / pnpm / yarn peer resolution
+Public previews running development builds, forged callbacks, stale configs
+using the historical `sqlite` label, declared multi-worker deployments,
+unchanged ETag polls, hidden tabs, and heavy filesystem test concurrency.
 
 ## Success Criteria
 
-- [x] peerDependencies accept Express 4 and 5
-- [ ] Published to npm
-- [ ] Install works with express 5
+- [x] Pairing callbacks authenticate and reject forged callbacks
+- [x] Public development hosts require auth and never receive dev OTPs
+- [x] Legacy dashboard exports delegate safely to Lab
+- [x] CI uses pnpm-native auditing and a deterministic 200-viewer load gate
+- [x] Toolchain advisories are remediated (`pnpm audit`: clean)
+- [x] Supported Lab state topology is explicit, observable, and fail-closed
+- [x] Full issue events load through a specific on-demand API
+- [x] Unit, integration, load, quality, Docker, and full build gates pass
+- [x] Review reports and CellularMemory reflect verified final state
+- [x] Changes committed and pushed to GitHub
 
 ---
 

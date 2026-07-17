@@ -41,7 +41,7 @@ Git remembers your code. **DNA remembers your system.**
 
 ## Portfolio positioning
 
-**One squad, many products, one install.** Run `dna doctor` on the parent folder — not per repo. One command scaffolds **59 stem packs**, **Cursor + Claude rules and skills**, **automatic detection** across every app, **CellularMemory**, **runtime observer**, **CI/hooks**, **feature factory**, and **897 knowledge packs**. Cross-product system maps, shared memory, same feature template every time. Enterprise platform-team capability without Backstage + Sentry + premium AI memory bills — the install teams keep like `tsconfig.json`.
+**One squad, many products, one install.** Run `dna doctor` on the parent folder — not per repo. One command scaffolds **77 stem packs**, **Cursor + Claude rules and skills**, **automatic detection** across every app, **CellularMemory**, **runtime observer**, **CI/hooks**, **feature factory**, and **897 knowledge packs**. Cross-product system maps, shared memory, same feature template every time. Enterprise platform-team capability without Backstage + Sentry + premium AI memory bills — the install teams keep like `tsconfig.json`.
 
 [Portfolio install manifest →](../product/portfolio-install.md)
 

@@ -30,7 +30,7 @@ Initialise DNA — `.DNA/`, Impressions, Behaviour, and AI tool files.
 
 ### /dna-update — DNA Update
 
-Upgrade DNA CLI and refresh knowledge packs / workbench prompts.
+Upgrade DNA CLI, re-apply all installed knowledge packs, and force re-inject Cursor/Claude always-on rules.
 
 **CLI:** `npx dna update`
 

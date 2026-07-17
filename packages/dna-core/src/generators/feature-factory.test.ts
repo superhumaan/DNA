@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { join } from "node:path";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 import type { DnaConfig } from "@superhumaan/dna-config";
@@ -87,6 +87,18 @@ describe("feature factory", () => {
     expect(await fileExists(join(root, ".DNA/workflows/feature-quality.workflow.md"))).toBe(
       true,
     );
+  });
+
+  it("preserves an active feature request during refresh", async () => {
+    const root = join(tmpdir(), `dna-ff-preserve-${randomUUID()}`);
+    await mkdir(join(root, "ai"), { recursive: true });
+    await writeFile(join(root, "package.json"), JSON.stringify({ name: "test" }));
+    const active = "# Feature Request\n\n> Keep this active brief.\n";
+    await writeFile(join(root, "ai", "feature-request.md"), active);
+
+    await installFeatureFactory(root, testConfig());
+
+    expect(await readFile(join(root, "ai", "feature-request.md"), "utf-8")).toBe(active);
   });
 
   it("uninstalls feature factory files", async () => {

@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "catalogVersion": 5,
+  "catalogVersion": 6,
   "source": "bundled",
-  "syncedAt": "2026-07-13T08:14:13.121Z",
-  "count": 65,
+  "syncedAt": "2026-07-17T03:19:13.156Z",
+  "count": 77,
   "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
   "packs": [
     {
@@ -1023,6 +1023,198 @@
       "category": "discovery",
       "slash": "handoff-to-engineering",
       "path": ".DNA/stems/handoff-to-engineering",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "strategy-ladder",
+      "name": "Strategy ladder",
+      "category": "strategy",
+      "slash": "strategy-ladder",
+      "path": ".DNA/stems/strategy-ladder",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "golden-circle",
+      "name": "Golden Circle",
+      "category": "strategy",
+      "slash": "golden-circle",
+      "path": ".DNA/stems/golden-circle",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "business-strategy-canvas",
+      "name": "Business strategy canvas",
+      "category": "strategy",
+      "slash": "business-strategy-canvas",
+      "path": ".DNA/stems/business-strategy-canvas",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "product-canvas",
+      "name": "Product canvas",
+      "category": "strategy",
+      "slash": "product-canvas",
+      "path": ".DNA/stems/product-canvas",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "define-initiative",
+      "name": "Define initiative",
+      "category": "strategy",
+      "slash": "define-initiative",
+      "path": ".DNA/stems/define-initiative",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "define-product",
+      "name": "Define product",
+      "category": "strategy",
+      "slash": "define-product",
+      "path": ".DNA/stems/define-product",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "shape-feature",
+      "name": "Shape feature",
+      "category": "strategy",
+      "slash": "shape-feature",
+      "path": ".DNA/stems/shape-feature",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "roadmap-now-next-later",
+      "name": "Roadmap Now / Next / Later",
+      "category": "strategy",
+      "slash": "roadmap-now-next-later",
+      "path": ".DNA/stems/roadmap-now-next-later",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "north-star-metric",
+      "name": "North Star metric",
+      "category": "strategy",
+      "slash": "north-star-metric",
+      "path": ".DNA/stems/north-star-metric",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "define-okrs",
+      "name": "Define OKRs",
+      "category": "strategy",
+      "slash": "define-okrs",
+      "path": ".DNA/stems/define-okrs",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "define-kpis",
+      "name": "Define KPIs",
+      "category": "strategy",
+      "slash": "define-kpis",
+      "path": ".DNA/stems/define-kpis",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "goal-cascade",
+      "name": "Goal cascade",
+      "category": "strategy",
+      "slash": "goal-cascade",
+      "path": ".DNA/stems/goal-cascade",
       "files": [
         "README.md",
         "prompt.md",

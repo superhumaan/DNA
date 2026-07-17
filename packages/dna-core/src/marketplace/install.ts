@@ -119,6 +119,10 @@ export async function checkMarketplaceUpdates(
     installed: installedIds.map((id) => `${id}@${registry[id]?.version ?? "?"}`),
     updatesAvailable,
     newPacks,
+    applied: false,
+    refreshed: [],
+    foundationInstalled: [],
+    failed: [],
   };
 }
 
@@ -147,7 +151,7 @@ export function formatMarketplaceCatalog(catalog: Awaited<ReturnType<typeof fetc
 
 export function formatUpdateResult(result: MarketplaceUpdateResult): string {
   const lines = [
-    "DNA Marketplace Update Check",
+    result.applied ? "DNA Marketplace Update" : "DNA Marketplace Update Check",
     "============================",
     "",
     `CLI version:    ${result.cliVersion}`,
@@ -157,31 +161,53 @@ export function formatUpdateResult(result: MarketplaceUpdateResult): string {
   ];
 
   if (result.installed.length) {
-    lines.push("Installed packs:");
+    lines.push(`Installed packs (${result.installed.length}):`);
     result.installed.forEach((p) => lines.push(`  • ${p}`));
     lines.push("");
   }
 
-  if (result.updatesAvailable.length) {
-    lines.push("Updates available:");
-    result.updatesAvailable.forEach((u) =>
-      lines.push(`  • ${u.id}: ${u.installedVersion} → ${u.latestVersion}`),
-    );
+  if (result.applied) {
+    const refreshed = result.refreshed ?? [];
+    const foundation = result.foundationInstalled ?? [];
+    if (refreshed.length) {
+      lines.push(`✓ Refreshed ${refreshed.length} installed pack(s) from catalog`);
+    } else if (result.installed.length === 0) {
+      lines.push("No marketplace packs installed yet.");
+    } else {
+      lines.push("✓ Installed packs re-applied from catalog");
+    }
+    if (foundation.length) {
+      lines.push(`✓ Foundation packs ensured (${foundation.length}): ${foundation.slice(0, 8).join(", ")}${foundation.length > 8 ? "…" : ""}`);
+    }
+    const failed = result.failed ?? [];
+    if (failed.length) {
+      lines.push(`✗ Failed to refresh ${failed.length} pack(s):`);
+      failed.slice(0, 10).forEach((f) => lines.push(`  • ${f.packId}: ${f.error}`));
+    }
     lines.push("");
-  }
+  } else {
+    if (result.updatesAvailable.length) {
+      lines.push("Version bumps available:");
+      result.updatesAvailable.forEach((u) =>
+        lines.push(`  • ${u.id}: ${u.installedVersion} → ${u.latestVersion}`),
+      );
+      lines.push("");
+    }
 
-  if (result.newPacks.length) {
-    lines.push("New packs available:");
-    result.newPacks.forEach((p) => lines.push(`  • ${p}`));
-    lines.push("");
-  }
+    if (result.newPacks.length) {
+      lines.push(`New packs in catalog: ${result.newPacks.length} (not auto-installed)`);
+      lines.push("");
+    }
 
-  if (!result.updatesAvailable.length && !result.newPacks.length) {
-    lines.push("All installed packs are up to date.");
+    if (result.installed.length) {
+      lines.push("Run `dna update` (without --check-only) to re-apply all installed pack content.");
+    } else {
+      lines.push("No packs installed — run `dna marketplace install <pack-id>` or `dna doctor`.");
+    }
   }
 
   lines.push("", "Browse: https://dna.humaan.app/marketplace");
-  lines.push("Install: dna marketplace install <pack-id>");
+  lines.push("Install more: dna marketplace install <pack-id>");
 
   return lines.join("\n");
 }

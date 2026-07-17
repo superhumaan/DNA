@@ -12,6 +12,7 @@ export const STEM_CATEGORIES = [
   "delivery",
   "methodology",
   "discovery",
+  "strategy",
   "marketplace",
   "memory",
 ] as const;

@@ -5,18 +5,25 @@ import { DNA_LAB_API_PREFIX, DNA_LAB_DEFAULT_PATH } from "@superhumaan/dna-confi
 import { LAB_INSTALL_SNIPPET } from "@superhumaan/dna-templates";
 import { fileExists, writeFileEnsured } from "../fs.js";
 import {
+  LAB_SESSION_COOKIE,
   clearSessionCookie,
   completeLogin,
   completeRegistration,
+  invalidateSessionCache,
+  parseCookies,
   resolveLabAuth,
   sessionCookieHeader,
   startLoginOtp,
   startRegisterOtp,
 } from "./auth.js";
-import { collectLabData, recordRelease } from "./collect.js";
+import { collectLabIssueEvents, getLabData, recordRelease } from "./collect.js";
 import { LAB_CLIENT_JS, LAB_CSS, LAB_HTML } from "./assets.js";
 import { hostFromRequest, isLocalLabRequest } from "./is-local.js";
-import { markLocalPairingVerified } from "./pairing.js";
+import {
+  markLocalPairingVerified,
+  readLocalPairing,
+  verifyPairingCallbackSignature,
+} from "./pairing.js";
 import {
   postPairingCallback,
   registerPairingOnProduction,
@@ -30,6 +37,36 @@ export interface LabServerOptions {
   config?: DnaConfig | null;
   labPath?: string;
   secureCookies?: boolean;
+}
+
+export interface LabStateTopology {
+  supported: boolean;
+  instanceCount: number;
+  backend: "single-instance-file";
+  reason?: string;
+}
+
+/**
+ * Lab auth, pairing and release state is an atomic local file. It is safe for
+ * concurrent requests and one Node process, but not for independent replicas.
+ * Fail closed when the deployment declares multiple workers instead of
+ * allowing sessions and pairing state to diverge silently.
+ */
+export function resolveLabStateTopology(
+  env: NodeJS.ProcessEnv = process.env,
+): LabStateTopology {
+  const declared = Number(env.DNA_LAB_INSTANCE_COUNT ?? env.WEB_CONCURRENCY ?? "1");
+  const instanceCount = Number.isFinite(declared) && declared > 0 ? Math.floor(declared) : 1;
+  if (instanceCount > 1) {
+    return {
+      supported: false,
+      instanceCount,
+      backend: "single-instance-file",
+      reason:
+        "DNA Lab file state supports one application instance. Use one replica/sticky deployment until a shared Lab state adapter is configured.",
+    };
+  }
+  return { supported: true, instanceCount: 1, backend: "single-instance-file" };
 }
 
 type Req = IncomingMessage & { body?: unknown };
@@ -75,10 +112,21 @@ export function buildLabHtml(apiPrefix: string): string {
     .replace("</head>", `${fontAwesomeKitTags()}\n</head>`);
 }
 
+/** Max JSON body accepted by Lab POST endpoints (auth, pairing, releases). */
+export const LAB_MAX_BODY_BYTES = 64 * 1024;
+
 async function readJsonBody(req: IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
+  let size = 0;
   for await (const chunk of req) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+    const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+    size += buf.length;
+    if (size > LAB_MAX_BODY_BYTES) {
+      const err = new Error("Request body too large");
+      (err as Error & { statusCode?: number }).statusCode = 413;
+      throw err;
+    }
+    chunks.push(buf);
   }
   if (!chunks.length) return {};
   try {
@@ -161,6 +209,17 @@ export async function handleLabRequest(
     return false;
   }
 
+  const topology = resolveLabStateTopology();
+  if (!topology.supported) {
+    sendJson(res, 503, {
+      error: "Unsupported DNA Lab deployment topology",
+      reason: topology.reason,
+      instanceCount: topology.instanceCount,
+      backend: topology.backend,
+    });
+    return true;
+  }
+
   if (isLabPage) {
     applyLabDocumentHeaders(res);
   }
@@ -174,6 +233,21 @@ export async function handleLabRequest(
 
   if (isGetOrHead && pathname === `${apiPrefix}/styles.css`) {
     sendText(res, 200, LAB_CSS, "text/css; charset=utf-8", undefined, req.method);
+    return true;
+  }
+
+  if (isGetOrHead && pathname === `${apiPrefix}/health`) {
+    sendJson(
+      res,
+      200,
+      {
+        ok: true,
+        stateBackend: topology.backend,
+        instanceCount: topology.instanceCount,
+      },
+      undefined,
+      req.method,
+    );
     return true;
   }
 
@@ -208,7 +282,7 @@ export async function handleLabRequest(
         user: auth.user ? { name: auth.user.name, email: auth.user.email } : undefined,
         labPath,
         pairing: {
-          mode: "store-first",
+          mode: "paste-verify",
           gatewayPublicPaths: [...DNA_LAB_GATEWAY_PUBLIC_PATHS],
         },
       },
@@ -227,7 +301,14 @@ export async function handleLabRequest(
   }
 
   if (req.method === "POST") {
-    const body = (await readJsonBody(req)) as Record<string, unknown>;
+    let body: Record<string, unknown>;
+    try {
+      body = (await readJsonBody(req)) as Record<string, unknown>;
+    } catch (err) {
+      const status = (err as { statusCode?: number }).statusCode ?? 400;
+      sendJson(res, status, { error: err instanceof Error ? err.message : "Bad request" });
+      return true;
+    }
 
     if (pathname === `${apiPrefix}/pairing/init`) {
       const result = await registerPairingOnProduction(options.root, {
@@ -244,11 +325,16 @@ export async function handleLabRequest(
       const pairingId = String(body.pairingId ?? "");
       const code = String(body.code ?? "");
       const result = await verifyPairingCode(options.root, pairingId, code);
-      if (result.ok && result.callbackUrl) {
-        await postPairingCallback(result.callbackUrl, { pairingId, verified: true });
+      if (result.ok && result.callbackUrl && result.callbackCodeHash) {
+        await postPairingCallback(
+          result.callbackUrl,
+          { pairingId, verified: true },
+          result.callbackCodeHash,
+        );
       }
       sendJson(res, result.ok ? 200 : 400, {
-        ...result,
+        ok: result.ok,
+        error: result.error,
         message: result.ok ? "Pairing verified — create your account" : result.error,
       });
       return true;
@@ -256,7 +342,18 @@ export async function handleLabRequest(
 
     if (pathname === `${apiPrefix}/pairing/callback`) {
       const pairingId = String(body.pairingId ?? "");
-      if (body.verified) {
+      const callbackBody = { pairingId, verified: body.verified === true };
+      const signatureHeader = req.headers["x-dna-lab-signature"];
+      const signature = Array.isArray(signatureHeader) ? signatureHeader[0] : signatureHeader;
+      const localPairing = await readLocalPairing(options.root);
+      const valid =
+        localPairing?.pairingId === pairingId &&
+        verifyPairingCallbackSignature(localPairing.codeHash, callbackBody, signature);
+      if (!valid) {
+        unauthorized(res);
+        return true;
+      }
+      if (callbackBody.verified) {
         await markLocalPairingVerified(options.root);
       }
       sendJson(res, 200, { ok: true, pairingId });
@@ -280,7 +377,12 @@ export async function handleLabRequest(
       }
       sendJson(res, 200, {
         ok: true,
-        devOtp: process.env.NODE_ENV !== "production" ? devOtp : undefined,
+        devOtp:
+          localMode &&
+          process.env.NODE_ENV !== "production" &&
+          options.config?.runtime?.environment !== "production"
+            ? devOtp
+            : undefined,
         message: "OTP generated",
       });
       return true;
@@ -331,6 +433,11 @@ export async function handleLabRequest(
 
     if (pathname === `${apiPrefix}/auth/logout`) {
       const secure = options.secureCookies ?? !localMode;
+      const cookieHeader = Array.isArray(req.headers?.cookie)
+        ? req.headers.cookie[0]
+        : req.headers?.cookie;
+      const sessionId = parseCookies(cookieHeader)[LAB_SESSION_COOKIE];
+      if (sessionId) invalidateSessionCache(sessionId);
       sendJson(res, 200, { ok: true }, { "Set-Cookie": clearSessionCookie(secure) });
       return true;
     }
@@ -375,8 +482,45 @@ export async function handleLabRequest(
       unauthorized(res);
       return true;
     }
-    const data = await collectLabData(options.root);
-    sendJson(res, 200, data, undefined, req.method);
+    const { data, etag } = await getLabData(options.root);
+    // Poll-friendly caching: revalidate every request but answer unchanged
+    // payloads with a cheap 304 so 100s of pollers cost near nothing.
+    const cacheHeaders = { ETag: etag, "Cache-Control": "private, max-age=0, must-revalidate" };
+    const ifNoneMatch = req.headers["if-none-match"];
+    const clientEtag = Array.isArray(ifNoneMatch) ? ifNoneMatch[0] : ifNoneMatch;
+    if (clientEtag && clientEtag === etag) {
+      res.writeHead(304, cacheHeaders);
+      res.end();
+      return true;
+    }
+    sendJson(res, 200, data, cacheHeaders, req.method);
+    return true;
+  }
+
+  const issueEventsPrefix = `${apiPrefix}/issues/`;
+  if (
+    isGetOrHead &&
+    pathname.startsWith(issueEventsPrefix) &&
+    pathname.endsWith("/events")
+  ) {
+    if (!localMode && !auth.authenticated) {
+      unauthorized(res);
+      return true;
+    }
+    const encodedIssueId = pathname.slice(issueEventsPrefix.length, -"/events".length);
+    let issueId: string;
+    try {
+      issueId = decodeURIComponent(encodedIssueId);
+    } catch {
+      sendJson(res, 400, { error: "Invalid issue ID" });
+      return true;
+    }
+    if (!issueId || issueId.length > 256) {
+      sendJson(res, 400, { error: "Invalid issue ID" });
+      return true;
+    }
+    const events = await collectLabIssueEvents(options.root, issueId);
+    sendJson(res, 200, { events }, undefined, req.method);
     return true;
   }
 

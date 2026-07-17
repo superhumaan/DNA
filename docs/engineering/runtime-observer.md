@@ -31,21 +31,47 @@ DNA Lab is the **production** observability UI — not localhost-only.
 
 ### Local vs production
 
-- **Local** (`localhost`, `127.0.0.1`, `development`): `/labs` opens with **no login**
+- **Local** (`localhost` / literal loopback host only): `/labs` opens with **no login**
 - **Production**: ColorParty-style sign-in (email + password + OTP) after pairing
 
-### Pairing flow (store-first)
+`NODE_ENV=development` is not an authentication bypass. Public preview hosts
+must sign in even when the process runs a development build, and development
+OTPs are only returned to a literal loopback request outside production.
+
+### Pairing flow (paste-verify)
 
 1. Deploy with `dna lab install` / `dna doctor` — `/labs` is live on your domain
-2. If an auth gateway sits in front of the app (Invitrace Connect, oauth2-proxy, etc.), **allowlist**:
-   - `POST /api/dna/labs/pairing/init`
-   - `GET /api/dna/labs/pairing/status/*`  
-   See `.DNA/lab/gateway-public-paths.md` (written by doctor / lab install).
-3. Locally: `npx dna register lab --url https://your-app.com` — must print **Production notified** (CLI saves `{ pairingId, codeHash }` into Lab store). Exit code 1 if init was blocked.
-4. On production `/labs` → paste Pairing ID + 148-digit code → verify against the store → create account
-5. Sign in on production anytime thereafter
+2. Locally: `npx dna register lab --url https://your-app.com` — copy Pairing ID + 148-digit code (production pre-notify is optional)
+3. On production `/labs` (sign into the app if the host requires a session) → paste Pairing ID + code → verify → create account
+4. Sign in on production anytime thereafter
 
-`/labs` never invents pairings from paste alone. Without a successful CLI `pairing/init`, verify returns **Unknown pairing**.
+`/labs` invents the store row from a valid paste when `pairing/init` never ran. No gateway allowlist is required.
+When production pre-notify supplies a loopback callback, the callback is
+authenticated with an HMAC derived from the pairing code hash; unsigned or
+modified callbacks return `401`.
+
+### Polling and live-event capacity
+
+Lab intentionally uses request polling, not sockets. Visible tabs poll the
+specific `/api/dna/labs/data` resource with jitter and `If-None-Match`;
+background tabs stop polling and unchanged snapshots return `304`. The server
+coalesces simultaneous readers and caps the wire payload. The repeatable gate is:
+
+```bash
+pnpm run test:load:lab
+```
+
+This simulates 200 concurrent viewers and fails on request errors, p95 above
+1500ms, or throughput below 500 requests/second.
+
+### State topology
+
+Lab users, sessions, pairings, releases, and source-map metadata use an atomic
+single-instance file store. Set `DNA_LAB_INSTANCE_COUNT` (or
+`WEB_CONCURRENCY`) accurately. Values above `1` fail closed with `503` rather
+than silently splitting authentication state. Run one Lab application instance
+until a shared state adapter is available; do not deploy the file store across
+independent serverless replicas.
 
 ### Screens
 
@@ -57,6 +83,8 @@ Overview · Issues · Events · Performance · Quality · Releases
 
 ### Release tracking & source maps (v2)
 
+- `GET /api/dna/labs/health` — unauthenticated liveness + state topology
+- `GET /api/dna/labs/issues/:id/events` — authenticated full event detail on demand
 - `POST /api/dna/labs/releases` — register deploy (`GIT_SHA`, version)
 - `POST /api/dna/labs/sourcemaps` — register source map metadata per release
 
@@ -157,7 +185,7 @@ export const GET = dnaRuntime.withNextHandler(async (request) => {
 
 | File | Contents |
 |------|----------|
-| `.DNA/data/runtime.db` | SQLite runtime events and issues (default) |
+| `.DNA/data/runtime.db` | Atomic JSON runtime store (default; legacy compatibility filename) |
 | `.DNA/runtime/events.jsonl` | Legacy JSONL events |
 | `.DNA/runtime/issues.jsonl` | Legacy classified issues |
 | `.DNA/data/feedback-queue.jsonl` | Queued upstream feedback (offline) |

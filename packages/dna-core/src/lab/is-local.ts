@@ -15,7 +15,8 @@ export function isLocalLabRequest(
   options?: { openLocalWithoutAuth?: boolean; nodeEnv?: string },
 ): boolean {
   if (options?.openLocalWithoutAuth === false) return false;
-  if (isLocalHost(host)) return true;
-  if ((options?.nodeEnv ?? process.env.NODE_ENV) === "development") return true;
-  return false;
+  // Environment labels are not a trust boundary. A public preview commonly
+  // runs with NODE_ENV=development, and treating that as local would bypass
+  // all Lab authentication. Only a literal loopback Host may use local mode.
+  return isLocalHost(host);
 }

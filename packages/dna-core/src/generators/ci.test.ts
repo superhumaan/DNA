@@ -61,10 +61,23 @@ describe("CI generator", () => {
   });
 
   it("adds pnpm setup when package manager is pnpm", () => {
-    const yaml = generateCiWorkflow(testConfig(), mockScan({ packageManager: "pnpm" }));
+    const yaml = generateCiWorkflow(
+      testConfig(),
+      mockScan({
+        packageManager: "pnpm",
+        scripts: {
+          build: "pnpm -r build",
+          "test:load:lab": "node scripts/lab-load-test.mjs",
+        },
+      }),
+    );
 
     expect(yaml).toContain("pnpm/action-setup@v4");
     expect(yaml).toContain("cache: pnpm");
+    expect(yaml).toContain("pnpm audit --audit-level=high");
+    expect(yaml).not.toMatch(/run: npm audit --audit-level=high/);
+    expect(yaml).toContain("DNA Lab load gate (200 concurrent viewers)");
+    expect(yaml).toContain("pnpm run test:load:lab");
   });
 
   it("generates OWASP ZAP security workflow", () => {

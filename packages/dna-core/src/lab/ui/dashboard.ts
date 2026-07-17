@@ -16,6 +16,8 @@ const state = {
   success: "",
   otpDev: "",
   lastRefresh: null,
+  dataEtag: null,
+  issueEvents: {},
 };
 
 const NAV = [
@@ -125,8 +127,15 @@ async function bootstrap() {
 }
 
 async function refreshData() {
-  state.data = await api("/data");
+  const headers = {};
+  if (state.dataEtag) headers["If-None-Match"] = state.dataEtag;
+  const res = await fetch(API + "/data", { credentials: "same-origin", headers });
   state.lastRefresh = new Date();
+  if (res.status === 304) return; // unchanged — skip re-render/redraw
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json.error || json.message || res.statusText);
+  state.dataEtag = res.headers.get("ETag") || state.dataEtag;
+  state.data = json;
   render();
 }
 
@@ -139,11 +148,20 @@ function findIssue(id) {
 
 function eventsForIssue(issue) {
   if (!issue || !state.data) return [];
+  const loaded = state.issueEvents[issue.id];
+  if (loaded) return loaded;
   return (state.data.runtimeEvents || []).filter((e) => {
     if (issue.fingerprint && e.fingerprint === issue.fingerprint) return true;
     if (issue.endpoint && e.endpoint === issue.endpoint) return true;
     return (e.message || "").includes(issue.title);
   }).slice(0, 50);
+}
+
+async function loadIssueEvents(issueId) {
+  if (!issueId || state.issueEvents[issueId]) return;
+  const result = await api("/issues/" + encodeURIComponent(issueId) + "/events");
+  state.issueEvents[issueId] = result.events || [];
+  if (state.selectedIssueId === issueId) render();
 }
 
 function contextTable(contexts) {
@@ -277,7 +295,7 @@ function signinView() {
 
 function registerView() {
   if ((state.registerStep || "pair") === "pair") {
-    const hero = '<h1>Pair your project</h1><h2>Connect local DNA to this deploy.</h2><p>Run <code>npx dna register lab --url ' + esc(location.origin) + '</code> until it prints <strong>Production notified</strong>, then paste the Pairing ID and 148-digit code below. The CLI must save the pairing on this server first — verify only checks the store.</p>';
+    const hero = '<h1>Pair your project</h1><h2>Link local DNA to this deploy.</h2><p>Run <code>npx dna register lab --url ' + esc(location.origin) + '</code>, then paste the Pairing ID and 148-digit code below. Sign into the app first if your host requires a session — pairing uses that session plus the code.</p>';
     const panel = (state.error ? '<div class="lab-error">' + esc(state.error) + '</div>' : '') +
       (state.success ? '<div class="lab-success">' + esc(state.success) + '</div>' : '') +
       '<form id="pair-form"><div class="field"><label>Pairing ID</label><input name="pairingId" required /></div>' +
@@ -641,7 +659,13 @@ function bind() {
     el.onclick = (e) => { e.preventDefault(); state.qualityTab = el.getAttribute("data-quality-tab"); render(); };
   });
   document.querySelectorAll("[data-issue]").forEach((el) => {
-    el.onclick = (e) => { e.preventDefault(); state.selectedIssueId = el.getAttribute("data-issue"); render(); };
+    el.onclick = (e) => {
+      e.preventDefault();
+      const issueId = el.getAttribute("data-issue");
+      state.selectedIssueId = issueId;
+      render();
+      loadIssueEvents(issueId).catch(() => {});
+    };
   });
   const search = document.querySelector("[data-search]");
   if (search) {
@@ -690,5 +714,25 @@ function bind() {
 }
 
 bootstrap();
-setInterval(() => { if (state.view === "dashboard") refreshData().catch(() => {}); }, 5000);
+
+// Poll-based refresh (no sockets). Optimised for many concurrent viewers:
+//  - pauses while the tab is hidden (backgrounded tabs cost nothing),
+//  - revalidates with ETag so unchanged data returns a cheap 304,
+//  - jitters the interval so 100s of tabs don't stampede the server in lockstep.
+let pollTimer = null;
+const POLL_BASE_MS = 5000;
+const POLL_JITTER_MS = 2000;
+function schedulePoll() {
+  clearTimeout(pollTimer);
+  pollTimer = setTimeout(async () => {
+    if (state.view === "dashboard" && !document.hidden) {
+      try { await refreshData(); } catch (_) {}
+    }
+    schedulePoll();
+  }, POLL_BASE_MS + Math.floor(Math.random() * POLL_JITTER_MS));
+}
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && state.view === "dashboard") refreshData().catch(() => {});
+});
+schedulePoll();
 `;

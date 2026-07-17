@@ -19,6 +19,23 @@ const MAX_OTP_ATTEMPTS = 5;
 
 export const LAB_SESSION_COOKIE = "dna_lab_session";
 
+/**
+ * Short-lived cache for resolved sessions. Auth runs on every Lab request —
+ * including the high-frequency `/data` poll — and each miss reads the lab
+ * store twice (session + user) under a global mutex, serialising all
+ * concurrent pollers. Caching a resolved context for a few seconds collapses
+ * that to roughly one store read per session per window without meaningfully
+ * extending a revoked session's lifetime.
+ */
+const SESSION_CACHE_TTL_MS = 5000;
+const sessionCache = new Map<string, { at: number; ctx: LabAuthContext }>();
+
+/** Invalidate a cached session (e.g. on logout). Clears all when no id given. */
+export function invalidateSessionCache(sessionId?: string): void {
+  if (sessionId) sessionCache.delete(sessionId);
+  else sessionCache.clear();
+}
+
 export function parseCookies(header: string | undefined): Record<string, string> {
   if (!header) return {};
   const out: Record<string, string> = {};
@@ -63,16 +80,27 @@ export async function resolveLabAuth(
   const sessionId = cookies[LAB_SESSION_COOKIE];
   if (!sessionId) return { authenticated: false, localMode: false };
 
+  const cached = sessionCache.get(sessionId);
+  if (cached && Date.now() - cached.at < SESSION_CACHE_TTL_MS) {
+    return cached.ctx;
+  }
+
   const session = await findLabSession(root, sessionId);
   if (!session || new Date(session.expiresAt).getTime() < Date.now()) {
     if (session) await deleteLabSession(root, session.id);
+    sessionCache.delete(sessionId);
     return { authenticated: false, localMode: false };
   }
 
   const user = await findLabUserById(root, session.userId);
-  if (!user) return { authenticated: false, localMode: false };
+  if (!user) {
+    sessionCache.delete(sessionId);
+    return { authenticated: false, localMode: false };
+  }
 
-  return { authenticated: true, user, localMode: false };
+  const ctx: LabAuthContext = { authenticated: true, user, localMode: false };
+  sessionCache.set(sessionId, { at: Date.now(), ctx });
+  return ctx;
 }
 
 export async function startLoginOtp(root: string, email: string): Promise<{ otp: string; error?: string }> {

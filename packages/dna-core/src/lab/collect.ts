@@ -1,11 +1,10 @@
-import { glob } from "../glob.js";
-import { join } from "node:path";
+import { createHash } from "node:crypto";
 import { runDoctorLite, type DoctorReport } from "../doctor.js";
 import { readRuntimeRecords, repairRuntimeDatabase } from "../storage/runtime-db.js";
-import { fileExists } from "../fs.js";
 import { listLabReleases, listSourceMapMeta } from "./storage.js";
 import {
   buildEventTimeline,
+  eventsForIssue,
   groupIssues,
   thirdPartyEvents,
   topSlowEndpoints,
@@ -65,12 +64,6 @@ export interface LabDashboardData {
 
 const DOCTOR_TTL_MS = 60_000;
 const doctorCache = new Map<string, { at: number; report: DoctorReport }>();
-
-async function listMarkdownFiles(dir: string, prefix: string): Promise<string[]> {
-  if (!(await fileExists(dir))) return [];
-  const files = await glob("**/*.md", { cwd: dir, onlyFiles: true });
-  return files.map((f) => `${prefix}/${f}`);
-}
 
 function computeStats(
   events: unknown[],
@@ -164,13 +157,14 @@ export async function collectLabData(root: string): Promise<LabDashboardData> {
   // Repair corrupt runtime.db before reads (quarantines + recreates empty store)
   await repairRuntimeDatabase(root).catch(() => undefined);
 
+  // Hot path: only gather what the Lab poll UI needs. Impressions /
+  // CellularMemory file trees are unused by the client and are skipped so a
+  // live-event poll storm does not thrash the filesystem.
   const settled = await Promise.allSettled([
     cachedDoctorLite(root),
     readRuntimeRecords(root, "issues"),
     readRuntimeRecords(root, "events"),
     listQualityReports(root),
-    listMarkdownFiles(join(root, "DNA", "Impressions"), "DNA/Impressions"),
-    listMarkdownFiles(join(root, ".DNA", "CellularMemory"), ".DNA/CellularMemory"),
     listLabReleases(root),
     listSourceMapMeta(root),
     readCoverageSummary(root),
@@ -186,15 +180,15 @@ export async function collectLabData(root: string): Promise<LabDashboardData> {
   const runtimeIssues = value(1, [] as unknown[]);
   const runtimeEvents = value(2, [] as unknown[]);
   const qualityReports = value(3, [] as LabDashboardData["qualityReports"]);
-  const impressions = value(4, [] as string[]);
-  const cellularMemory = value(5, [] as string[]);
-  const releases = value(6, [] as LabDashboardData["releases"]);
-  const sourceMaps = value(7, [] as LabDashboardData["sourceMaps"]);
-  const coverage = value(8, null as LabCoverageSummary | null);
-  const ciRuns = value(9, [] as LabCiRun[]);
+  const releases = value(4, [] as LabDashboardData["releases"]);
+  const sourceMaps = value(5, [] as LabDashboardData["sourceMaps"]);
+  const coverage = value(6, null as LabCoverageSummary | null);
+  const ciRuns = value(7, [] as LabCiRun[]);
   const issueGroups = groupIssues(runtimeIssues, runtimeEvents);
 
-  return {
+  // Aggregates use the full in-memory set; the wire payload is capped so a
+  // 200-viewer poll storm does not ship megabytes of raw events per request.
+  return trimLabPayload({
     doctor,
     runtimeIssues,
     runtimeEvents,
@@ -203,15 +197,178 @@ export async function collectLabData(root: string): Promise<LabDashboardData> {
     ciRuns,
     ciBillingBlocker: summarizeCiBillingBlocker(ciRuns),
     thirdPartyApis: thirdPartyEvents(runtimeEvents),
-    impressions,
-    cellularMemory,
+    impressions: [],
+    cellularMemory: [],
     releases,
     sourceMaps,
     issueGroups,
     eventTimeline: buildEventTimeline(runtimeEvents),
     slowEndpoints: topSlowEndpoints(runtimeEvents),
     stats: computeStats(runtimeEvents, issueGroups, coverage),
+  });
+}
+
+/**
+ * Fetch full event detail only when an operator opens an issue. The polling
+ * payload intentionally carries slim/capped rows; this endpoint preserves
+ * older stacks, breadcrumbs and contexts without making every viewer pay for
+ * them every five seconds.
+ */
+export async function collectLabIssueEvents(root: string, issueId: string): Promise<unknown[]> {
+  const [issues, events] = await Promise.all([
+    readRuntimeRecords(root, "issues"),
+    readRuntimeRecords(root, "events"),
+  ]);
+  return eventsForIssue(issueId, issues, events);
+}
+
+/** Max raw events shipped on the polling `/data` path. UI shows ≤100. */
+export const LAB_DATA_EVENT_CAP = 200;
+/** Max quality report rows on the wire. */
+export const LAB_DATA_QUALITY_CAP = 50;
+/** Max release rows on the wire. */
+export const LAB_DATA_RELEASE_CAP = 50;
+
+const LIST_EVENT_KEYS = [
+  "id",
+  "timestamp",
+  "type",
+  "message",
+  "endpoint",
+  "method",
+  "statusCode",
+  "durationMs",
+  "fingerprint",
+  "environment",
+  "release",
+  "source",
+  "provider",
+] as const;
+
+function slimListEvent(raw: unknown): Record<string, unknown> {
+  const event = (raw ?? {}) as Record<string, unknown>;
+  const slim: Record<string, unknown> = {};
+  for (const key of LIST_EVENT_KEYS) {
+    if (event[key] !== undefined) slim[key] = event[key];
+  }
+  return slim;
+}
+
+function parseEventTime(raw: unknown): number {
+  const ts = (raw as { timestamp?: string } | null)?.timestamp;
+  if (!ts) return 0;
+  const ms = new Date(ts).getTime();
+  return Number.isFinite(ms) ? ms : 0;
+}
+
+/**
+ * Shape the dashboard payload for the poll path:
+ *  - keep pre-aggregated views (issueGroups, timeline, slowEndpoints, stats)
+ *  - ship only the newest N slim events (list/detail filtering)
+ *  - drop unused/raw blobs the Lab UI never renders (full issues, file trees)
+ */
+export function trimLabPayload(data: LabDashboardData): LabDashboardData {
+  const recentEvents = [...data.runtimeEvents]
+    .sort((a, b) => parseEventTime(b) - parseEventTime(a))
+    .slice(0, LAB_DATA_EVENT_CAP)
+    .map(slimListEvent);
+
+  return {
+    ...data,
+    // Aggregates already carry the detail the UI needs (latestEvent, counts).
+    runtimeIssues: [],
+    runtimeEvents: recentEvents,
+    // File trees are unused by the Lab client and are expensive to serialise.
+    impressions: [],
+    cellularMemory: [],
+    qualityReports: data.qualityReports.slice(0, LAB_DATA_QUALITY_CAP),
+    releases: data.releases.slice(0, LAB_DATA_RELEASE_CAP),
+    sourceMaps: data.sourceMaps.slice(0, LAB_DATA_RELEASE_CAP),
+    ciRuns: data.ciRuns.slice(0, LAB_DATA_QUALITY_CAP),
   };
+}
+
+/**
+ * Micro-cache for the dashboard payload.
+ *
+ * The Lab dashboard is poll-based (no sockets): every open tab requests
+ * `GET {apiPrefix}/data` on an interval. During a live incident 100s of
+ * viewers can poll near-simultaneously. Without coalescing, each request
+ * runs `collectLabData` — which reads/parses the runtime DB (up to 2000
+ * events + 2000 issues) under a global lock and re-aggregates everything.
+ * That serialises on the store mutex and latency grows unbounded.
+ *
+ * `getLabData` collapses all reads inside a short TTL window into a single
+ * computation (single-flight) and hands every concurrent caller the same
+ * result plus a weak ETag so unchanged polls can be answered with 304.
+ */
+export const LAB_DATA_CACHE_TTL_MS = 2000;
+
+interface CacheEntry {
+  at: number;
+  etag: string;
+  data: LabDashboardData;
+}
+
+const dataCache = new Map<string, CacheEntry>();
+const inflight = new Map<string, Promise<CacheEntry>>();
+
+function weakEtag(data: LabDashboardData): string {
+  const hash = createHash("sha1").update(JSON.stringify(data)).digest("hex").slice(0, 27);
+  return `W/"${hash}"`;
+}
+
+async function computeAndCache(root: string): Promise<CacheEntry> {
+  const data = await collectLabData(root);
+  const entry: CacheEntry = { at: Date.now(), etag: weakEtag(data), data };
+  dataCache.set(root, entry);
+  return entry;
+}
+
+export interface CachedLabData {
+  data: LabDashboardData;
+  etag: string;
+  /** true when served from the micro-cache or a coalesced in-flight computation. */
+  cached: boolean;
+}
+
+/**
+ * Cached, request-coalesced accessor for {@link collectLabData}. Prefer this
+ * on the hot polling path; use `collectLabData` directly only when a fully
+ * fresh, uncached snapshot is required.
+ */
+export async function getLabData(
+  root: string,
+  opts?: { maxAgeMs?: number },
+): Promise<CachedLabData> {
+  const ttl = opts?.maxAgeMs ?? LAB_DATA_CACHE_TTL_MS;
+  const hit = dataCache.get(root);
+  if (hit && Date.now() - hit.at < ttl) {
+    return { data: hit.data, etag: hit.etag, cached: true };
+  }
+
+  let flight = inflight.get(root);
+  const isLeader = !flight;
+  if (!flight) {
+    flight = computeAndCache(root).finally(() => {
+      inflight.delete(root);
+    });
+    inflight.set(root, flight);
+  }
+
+  const entry = await flight;
+  return { data: entry.data, etag: entry.etag, cached: !isLeader };
+}
+
+/** Test/utility hook — drop cached payloads (e.g. between test cases). */
+export function clearLabDataCache(root?: string): void {
+  if (root) {
+    dataCache.delete(root);
+    inflight.delete(root);
+  } else {
+    dataCache.clear();
+    inflight.clear();
+  }
 }
 
 export async function recordRelease(

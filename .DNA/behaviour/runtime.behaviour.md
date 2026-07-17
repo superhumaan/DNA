@@ -8,7 +8,7 @@
 Runtime enabled: yes
 Backend watching: yes
 Frontend watching: yes
-Storage: sqlite (`.DNA/data/runtime.db`)
+Storage: json (atomic JSON; compatibility filename `.DNA/data/runtime.db`)
 AI repair: yes
 
 ## Rules

@@ -18,7 +18,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Brownfield** | IVF plans, `document --from-code`, deep analyze |
 | **Feature factory** | Plain-language features + mandatory 9-role agent loop (`AGENTS.md`) |
 | **AI Workbench** | Always-on Cursor/Claude co-pilot — no “use DNA” required |
-| **Prompt stem packs** | 59 copy-paste workflows in `.DNA/stems/` — guidelines, expectations, agent-loop roles |
+| **Prompt stem packs** | 77 copy-paste workflows in `.DNA/stems/` — guidelines, expectations, strategy ladder, agent-loop roles |
 | **`dna stems`** | List, show, and refresh prompt stem packs |
 | **GitHub** | Connect, auto-issues, push gates, browser login (`dna github login`) |
 | **Preview deploy** | `dna-preview.yml` scaffold with Vercel/Netlify + branch filter |
@@ -28,7 +28,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Runtime auto-wire** | Express, Fastify, Next.js middleware; preload fallback for other stacks |
 | **Sponsors & credits** | `dna credits`, public sponsor ledger, npm `funding` |
 | **`dna lab serve`** | Local Lab at `http://localhost:3200/labs` (no login on localhost) |
-| **`dna register lab`** | Pair local CLI to production Lab — CLI saves via `pairing/init`; `/labs` verifies store only; gateway allowlist for init/status |
+| **`dna register lab`** | Pair local CLI to production Lab — paste Pairing ID + code at `/labs` (paste-verify; optional pre-notify via `pairing/init`) |
 | **CellularMemory sync (MVP)** | `dna memory export` / `import` ([#13](https://github.com/superhumaan/DNA/issues/13)) |
 | **Impressions drift (MVP)** | Drift score in `dna scan`, `dna plan impressions-sync` ([#14](https://github.com/superhumaan/DNA/issues/14)) |
 | **Platform codegen (MVP)** | `dna generate feature audit-logging` ([#17](https://github.com/superhumaan/DNA/issues/17)) |

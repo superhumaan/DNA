@@ -24,5 +24,5 @@ Compliance level: none
 - Complete Phase 6 verification checklist before marking RBAC done
 - Redact sensitive data in logs and error reports
 - Review dependencies for known vulnerabilities
-- CI runs `npm audit --audit-level=high` and optional OWASP ZAP baseline — see `.github/workflows/dna-security.yml`
+- CI runs the package-manager-native audit command (`pnpm audit`, `yarn audit`, or `npm audit`) and optional OWASP ZAP baseline — see `.github/workflows/dna-security.yml`
 - Follow OWASP ASVS L1 checklist in `.DNA/knowledge/testing/owasp-zap/` for DAST setup

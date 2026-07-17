@@ -150,7 +150,7 @@ Compliance level: ${config.compliance}
 - Complete Phase 6 verification checklist before marking RBAC done
 - Redact sensitive data in logs and error reports
 - Review dependencies for known vulnerabilities
-- CI runs \`npm audit --audit-level=high\` and optional OWASP ZAP baseline — see \`.github/workflows/dna-security.yml\`
+- CI runs the package-manager-native audit command (\`pnpm audit\`, \`yarn audit\`, or \`npm audit\`) and optional OWASP ZAP baseline — see \`.github/workflows/dna-security.yml\`
 - Follow OWASP ASVS L1 checklist in \`.DNA/knowledge/testing/owasp-zap/\` for DAST setup
 `;
 }
@@ -163,7 +163,7 @@ function runtimeBehaviour(config: DnaConfig): string {
 Runtime enabled: ${config.runtime?.enabled ? "yes" : "no"}
 Backend watching: ${config.runtime?.watchBackend !== false ? "yes" : "no"}
 Frontend watching: ${config.runtime?.watchFrontend !== false ? "yes" : "no"}
-Storage: ${config.runtime?.storage ?? "sqlite"} (\`.DNA/data/runtime.db\`)
+Storage: ${config.runtime?.storage ?? "json"} (atomic JSON; compatibility filename \`.DNA/data/runtime.db\`)
 AI repair: ${config.ai?.repair?.enabled !== false ? "yes" : "no"}
 
 ## Rules

@@ -12,12 +12,12 @@ Share this with colleagues who want to try DNA on their own projects.
 |-------|-------------------|----------------|
 | Project brain | `dna init` | `.DNA/` + `DNA/Impressions/` scaffolded |
 | AI context | `dna context cursor` | Paste-ready context for your AI tool |
-| **Cursor workbench** | `dna init` / `dna doctor` | 59 prompt stem packs + `/dna-*` commands — DNA always on; `AGENTS.md` routes engineering work through the 9-role agent loop |
+| **Cursor workbench** | `dna init` / `dna doctor` | 77 prompt stem packs + `/dna-*` commands — DNA always on; `AGENTS.md` routes engineering work through the 9-role agent loop |
 | **Stem library** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) | Copy prompts + guidelines; each stem has MUST/NEVER rules and expectations |
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |
 | Runtime observer | `@superhumaan/dna-by-humaan/runtime` | Errors/slow requests → `.DNA/data/runtime.db` |
-| **DNA Lab** | `dna lab serve` / `/labs` | Local open access; production auth via `dna register lab` (store-first: CLI must reach `pairing/init`; allowlist behind Connect). After npm upgrade, **restart the API**. |
+| **DNA Lab** | `dna lab serve` / `/labs` | Local open access; production auth via `dna register lab` (paste-verify at `/labs`; optional pre-notify). After npm upgrade, **restart the API**. |
 | Upstream feedback | `dna feedback report` / auto | DNA-platform failures → sanitized upstream report (opt-in, `dna-only` default) |
 | GitHub (optional) | `dna doctor` (auto) | Browser login + remote detect; auto-issues for high/critical events |
 | AI repair (optional) | `dna ai repair --dry-run` | Branch + patch plan, never auto-merged |
@@ -76,7 +76,7 @@ npx @superhumaan/dna-by-humaan doctor
 
 **One `doctor` installs the full platform** for every product underneath:
 
-- **59 stem packs** + **`/dna-*` slash commands** (guidelines, expectations, workflows)
+- **77 stem packs** + **`/dna-*` slash commands** (guidelines, expectations, workflows; includes strategy ladder)
 - **Cursor + Claude rules, skills, `AGENTS.md`** — DNA always on, no “use DNA”
 - **Detection** — stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift, auth
 - **CellularMemory + system maps** — cross-product memory in git
