@@ -35,6 +35,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build
+        run: pnpm run build
+        continue-on-error: true
+
       - name: Lint
         run: pnpm run lint
         continue-on-error: true
@@ -74,10 +78,6 @@ jobs:
           name: coverage-report
           path: coverage/
           retention-days: 14
-
-      - name: Build
-        run: pnpm run build
-        continue-on-error: true
 
       - name: DNA Lab load gate (200 concurrent viewers)
         run: pnpm run test:load:lab

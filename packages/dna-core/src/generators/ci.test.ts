@@ -80,6 +80,27 @@ describe("CI generator", () => {
     expect(yaml).toContain("pnpm run test:load:lab");
   });
 
+  it("builds before clean-checkout typecheck and test gates", () => {
+    const yaml = generateCiWorkflow(
+      testConfig(),
+      mockScan({
+        packageManager: "pnpm",
+        scripts: {
+          build: "pnpm -r build",
+          typecheck: "pnpm -r typecheck",
+          test: "vitest run",
+          "test:coverage": "vitest run --coverage",
+        },
+      }),
+    );
+
+    const build = yaml.indexOf("name: Build");
+    expect(build).toBeGreaterThan(-1);
+    expect(build).toBeLessThan(yaml.indexOf("name: Typecheck"));
+    expect(build).toBeLessThan(yaml.indexOf("name: Unit tests"));
+    expect(build).toBeLessThan(yaml.indexOf("name: Coverage"));
+  });
+
   it("generates OWASP ZAP security workflow", () => {
     const yaml = generateSecurityWorkflow();
     expect(yaml).toContain("zaproxy/action-baseline");

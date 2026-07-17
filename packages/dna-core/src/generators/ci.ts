@@ -249,6 +249,9 @@ export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string 
   const continueOnError = !strict;
 
   const qualitySteps: string[] = [];
+  // Build first because monorepo tests and project references may consume
+  // package exports from dist/ on a clean checkout.
+  if (scripts.build) qualitySteps.push(scriptStep("Build", "build", pm, continueOnError));
   if (scripts.lint) qualitySteps.push(scriptStep("Lint", "lint", pm, continueOnError));
   if (scripts.typecheck) qualitySteps.push(scriptStep("Typecheck", "typecheck", pm, continueOnError));
   if (scripts.check) qualitySteps.push(scriptStep("Check", "check", pm, continueOnError));
@@ -278,7 +281,6 @@ export function generateCiWorkflow(config: DnaConfig, scan: ScanResult): string 
           path: coverage/
           retention-days: 14`);
   }
-  if (scripts.build) qualitySteps.push(scriptStep("Build", "build", pm, continueOnError));
   if (scripts["test:load:lab"]) {
     qualitySteps.push(
       scriptStep("DNA Lab load gate (200 concurrent viewers)", "test:load:lab", pm, continueOnError),

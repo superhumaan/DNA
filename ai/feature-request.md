@@ -50,6 +50,7 @@ unchanged ETag polls, hidden tabs, and heavy filesystem test concurrency.
 - [x] Supported Lab state topology is explicit, observable, and fail-closed
 - [x] Full issue events load through a specific on-demand API
 - [x] Unit, integration, load, quality, Docker, and full build gates pass
+- [x] Clean-checkout CI builds required workspace artifacts before validation
 - [x] Review reports and CellularMemory reflect verified final state
 - [x] Changes committed and pushed to GitHub
 

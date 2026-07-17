@@ -26,6 +26,7 @@ All notable changes to DNA are documented here.
 - **pnpm security scanning** — CI generators use the active package manager's native audit command rather than `npm audit` on pnpm lockfiles.
 - **Feature brief preservation** — `dna doctor` / feature-factory refresh no longer replaces an active `ai/feature-request.md` with the blank starter template.
 - **Preview opt-out and diagnostics** — CI generation respects `ci.pushToPreview: false`, removes stale generated preview workflows, and retains failed workflow logs for 24 hours before cleanup. This CLI/runtime monorepo is explicitly opted out because its prior Vercel IDs target the separate DNA-Web project.
+- **Clean-checkout CI ordering** — generated workflows build workspace packages before typecheck, unit, and coverage gates so tests that consume package exports do not rely on stale local `dist/` artifacts.
 
 ## [0.6.12] - 2026-07-14
 
