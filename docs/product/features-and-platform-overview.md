@@ -23,7 +23,7 @@ DNA ships as a single npm package with a broad feature surface. This page is the
 
 | Feature | Command | Purpose |
 |---------|---------|---------|
-| 897 knowledge packs | `dna marketplace list` | Frameworks, compliance, cloud, healthcare |
+| 965 knowledge packs | `dna marketplace list` | Frameworks, compliance, cloud, healthcare |
 | Offline fallback | Bundled in npm package | Works without remote marketplace |
 | Stack stems | `stem` tagged packs | Delivery surfaces (MUI, mobile UI, quality) |
 | Language stems | `languages/*` | i18n AI coordination |

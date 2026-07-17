@@ -23,7 +23,7 @@ Git remembers your code. **DNA remembers your system.**
 2. **Proportionate compliance** — startup baselines through enterprise GRC, not one-size-fits-all
 3. **Production-learned patterns** — platform catalog distilled from AIStudio, ColorParty, Humaan Ops, and Soli
 4. **One package, two modes** — CLI for intelligence; `/runtime` subpath for production observation
-5. **Marketplace scale** — 897 knowledge packs with offline bundled fallback
+5. **Marketplace scale** — 965 knowledge packs with offline bundled fallback
 
 ---
 
@@ -41,7 +41,7 @@ Git remembers your code. **DNA remembers your system.**
 
 ## Portfolio positioning
 
-**One squad, many products, one install.** Run `dna doctor` on the parent folder — not per repo. One command scaffolds **77 stem packs**, **Cursor + Claude rules and skills**, **automatic detection** across every app, **CellularMemory**, **runtime observer**, **CI/hooks**, **feature factory**, and **897 knowledge packs**. Cross-product system maps, shared memory, same feature template every time. Enterprise platform-team capability without Backstage + Sentry + premium AI memory bills — the install teams keep like `tsconfig.json`.
+**One squad, many products, one install.** Run `dna doctor` on the parent folder — not per repo. One command scaffolds **77 stem packs**, **Cursor + Claude rules and skills**, **automatic detection** across every app, **CellularMemory**, **runtime observer**, **CI/hooks**, **feature factory**, and **965 knowledge packs**. Cross-product system maps, shared memory, same feature template every time. Enterprise platform-team capability without Backstage + Sentry + premium AI memory bills — the install teams keep like `tsconfig.json`.
 
 [Portfolio install manifest →](../product/portfolio-install.md)
 

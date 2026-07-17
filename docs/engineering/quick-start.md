@@ -36,7 +36,7 @@ npm install                       # if doctor added @superhumaan/dna-by-humaan
 | **Detection** | stack, monorepo apps, AI tools, GitHub, healthcare/legal, drift |
 | **Feature factory** | 9-role loop, quality gates, same template every feature |
 | **Runtime + CI** | auto-wired observer, GitHub Actions, pre-push hook, Docker |
-| **897 knowledge packs** | foundation from scan + marketplace |
+| **965 knowledge packs** | foundation from scan + marketplace |
 
 Doctor opens GitHub browser sign-in when needed and auto-wires the runtime observer for Express, Fastify, and Next.js.
 

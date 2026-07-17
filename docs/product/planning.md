@@ -21,7 +21,7 @@ DNA development priorities and public roadmap.
 - **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
 - **77 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow (includes strategy ladder: Golden Circle → canvases → initiatives → Now/Next/Later)
 - **DNA Workbench** — default on init/doctor/update; `AGENTS.md` intent routing + mandatory 9-role agent loop for engineering work
-- 897 knowledge packs in stable channel
+- 965 knowledge packs in stable channel
 - Platform catalog from four reference production apps
 - Tiered compliance (GDPR, HIPAA, ISO, SOC 2)
 - Feature factory with quality gates + per-role agent-loop stems

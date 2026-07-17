@@ -4,66 +4,56 @@ _Auto-maintained by DNA. Updated 2026-07-17. The user does not fill this in manu
 
 ## Latest request
 
-> Fix every still-documented residual risk and any CellularMemory problems;
-> expand automated test reporting; publish current test results on GitHub and
-> an npm-facing summary; add a complete `/Health` project report page to
-> DNA-Web; then update package versions and all affected documentation.
+> Be consistent and show everything in marketplace and the real number.
+> Marketplace currently shows 885 packs while the total displays 910.
 
 ## Problem
 
-The hardening release still documented four unresolved risks: no shared Lab
-state adapter, advisory rather than blocking CI, repository coverage below the
-80% target, and no browser E2E suite. Test evidence was fragmented across review
-Markdown and workflow logs instead of being visible to GitHub, npm users, and
-the DNA-Web product site.
+The public marketplace total and the browsable catalog disagree. DNA-Web
+groups packs through a fixed category allowlist that omits methodologies,
+most industries, and related categories, so visitors see fewer packs than
+the published total. Docs and package claims still say 897 while the
+canonical DNA catalog has grown further.
 
 ## Current Pain
 
-Operators could not confidently assess current project health from one canonical
-source. Multi-instance Lab deployments were blocked, CI could hide gate
-failures, coverage was below policy, browser behavior was not exercised, and
-CellularMemory had become stale relative to verified results.
+Operators and visitors cannot trust the marketplace count. Homepage and
+marketing copy claim one number; the marketplace browser shows another;
+npm/README claims a third. Some packs are invisible in the UI even though
+they exist in the catalog.
 
 ## Proposed Solution
 
-Close the residuals with a shared Lab state design, strict CI, materially
-increased automated coverage, and browser E2E smoke tests. Produce a
-machine-readable canonical health report, expose it through GitHub reporting
-and npm documentation, render it on DNA-Web at `/Health`, reconcile
-CellularMemory, and version/release all affected packages and docs.
+Treat the canonical DNA bundled catalog length as the single source of
+truth. Synchronize that catalog into DNA-Web, render every pack in the
+marketplace (no silent category drops), and replace hard-coded totals with
+the live deduplicated catalog count everywhere it is shown.
 
 ## Users
 
-DNA operators, contributors, npm consumers, maintainers reviewing GitHub
-checks, and visitors evaluating project health on DNA-Web.
+Marketplace visitors on dna.humaan.app, npm consumers reading package docs,
+and maintainers checking catalog parity between DNA and DNA-Web.
 
 ## Desired Behaviour
 
-All enforced quality gates pass on clean runners; test and load results are
-generated rather than hand-copied; npm and GitHub show concise current
-summaries; `/Health` presents the complete project status accessibly and
-responsively; memory and version documentation agree with shipped evidence.
+Marketplace browser lists every pack. Displayed total equals unique catalog
+IDs. Homepage, marketplace, README, package descriptions, and docs all use
+the same real number. No pack category is hidden by an outdated allowlist.
 
 ## Edge Cases
 
-Unavailable shared-state infrastructure, stale or missing report artifacts,
-forked PR permissions, partial workflow failures, report schema changes,
-DNA-Web fetch failures, mobile rendering, package version skew, and preserving
-historical test results without presenting them as current.
+Packs matching multiple display categories must still count once in the
+total; empty categories; channel filtering; API/catalog asset missing in
+serverless deployments; discovery/legal/methodologies/industries packs.
 
 ## Success Criteria
 
-- [x] Shared Lab state supports the intended production instance topology
-- [x] CI is strict and fails when required quality/security gates fail
-- [x] Automated coverage reaches and enforces the agreed target
-- [x] Browser E2E smoke coverage protects the Lab's critical journeys
-- [x] Test/load/security results are emitted as canonical machine-readable data
-- [x] GitHub presents a durable test summary and downloadable reports
-- [x] npm-facing README/package documentation contains the latest verified summary
-- [x] DNA-Web `/Health` renders complete current reports with resilient states
-- [x] CellularMemory and review docs contain no stale or contradictory status
-- [x] Package versions, changelog, lockfile, roadmap, and release docs agree
-- [x] Both repositories pass their full quality/build/release gates and are pushed
+- [x] Marketplace unique visible packs == catalog unique pack IDs
+- [x] Homepage and marketplace totals use the same live count
+- [x] Hard-coded stale counts (897 / mismatched 910 claims) are updated or derived
+- [x] DNA-Web catalog is synchronized from DNA’s canonical catalog
+- [x] Automated test prevents regressions that hide packs from the browser
+- [ ] Both repos pass gates and are pushed
 
 ---
 

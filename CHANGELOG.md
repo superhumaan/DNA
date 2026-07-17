@@ -4,6 +4,10 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Marketplace catalog parity** — DNA-Web marketplace now lists every pack (methodologies, industries, discovery, residual Other) and shows the real unique total (**965**). Catalog sync script keeps DNA-Web assets aligned with DNA; public copy no longer claims 897/910.
+
 ## [0.6.13] - 2026-07-17
 
 ### Added

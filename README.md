@@ -12,7 +12,7 @@
 
 > Run `npx @superhumaan/dna-by-humaan doctor` — *“No amount of money ever bought a second of time.”*
 
-**DNA by Humaan** is an open-source delivery platform for TypeScript teams — describe features in plain language, run quality gates, push to GitHub, and ship with a **897-pack** knowledge marketplace, tiered compliance, runtime observer, and AI-assisted repair.
+**DNA by Humaan** is an open-source delivery platform for TypeScript teams — describe features in plain language, run quality gates, push to GitHub, and ship with a **965-pack** knowledge marketplace, tiered compliance, runtime observer, and AI-assisted repair.
 
 **One squad, many products?** Install DNA on the **parent folder** — not every repo. One brain remembers every app and how they connect. [Portfolio install →](./docs/product/portfolio-install.md)
 
@@ -38,7 +38,7 @@ DNA is not a documentation generator. It is:
 - An **AI behaviour layer** — rules that govern how Cursor, Copilot, and Claude work on *your* project
 - A **runtime issue detector** — classifies errors with project-specific context
 - A **GitHub automation engine** — contextual issues and repair PRs
-- A **knowledge marketplace** — **897** stack, compliance, and industry packs for `.DNA/knowledge/`
+- A **knowledge marketplace** — **965** stack, compliance, and industry packs for `.DNA/knowledge/`
 - A **software immune system** — severity, category, and discipline classification
 - A **memory layer** — CellularMemory that learns from your project's history
 
@@ -93,7 +93,7 @@ npx @superhumaan/dna-by-humaan doctor
 | **Detection** | Stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, Impressions drift, auth patterns |
 | **Runtime** | Observer auto-wired into Express/Fastify/Next.js → classified issues + repair plans |
 | **Delivery** | CI workflows, pre-push hook, Docker scaffold, GitHub browser login |
-| **Knowledge** | Foundation packs from scan + **897** marketplace packs (offline fallback) |
+| **Knowledge** | Foundation packs from scan + **965** marketplace packs (offline fallback) |
 
 One `.DNA/` at the parent remembers **every product and how they interconnect** — feature #5 uses the same template as feature #1; runtime errors explain *why* across the suite.
 
@@ -276,7 +276,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 
 | Item | Start | End | Status |
 |------|-------|-----|--------|
-| Knowledge pack marketplace (897 packs) | Jan 2026 | Jul 2026 | Shipped |
+| Knowledge pack marketplace (965 packs) | Jan 2026 | Jul 2026 | Shipped |
 | DNA always-on + `AGENTS.md` agent flow (v0.4.9) | Jul 2026 | Jul 2026 | Shipped |
 | Legal advisor + delivery methodology (v0.4.9) | Jul 2026 | Jul 2026 | Shipped |
 | Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |

@@ -598,7 +598,17 @@ function parseKnowledgePack(input: unknown): ParseResult<KnowledgePack> {
   if (!description.success) return description;
   const category = expectEnum(
     d.category,
-    ["languages", "frameworks", "platforms", "disciplines", "methodologies", "compliance", "legal", "industries"] as const,
+    [
+      "languages",
+      "frameworks",
+      "platforms",
+      "disciplines",
+      "methodologies",
+      "discovery",
+      "compliance",
+      "legal",
+      "industries",
+    ] as const,
     "category",
   );
   if (!category.success) return category;

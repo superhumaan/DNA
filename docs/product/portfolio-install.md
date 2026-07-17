@@ -29,7 +29,7 @@ Use this on [dna.humaan.app](https://dna.humaan.app), social posts, or conferenc
 
 Most teams cannot afford Sentry on every service, premium AI memory on every seat, and GitHub Teams on top of rent. Cursor forgets your auth pattern by lunch. Each repo is an island.
 
-**One `dna doctor`** installs the whole platform: **77 prompt stem packs**, **Cursor + Claude rules and skills**, **detection across every app**, **CellularMemory that never forgets**, **runtime observer**, **quality gates**, **GitHub automation**, and **897 knowledge packs** — on your **portfolio folder**, so AI remembers every product and how they interconnect.
+**One `dna doctor`** installs the whole platform: **77 prompt stem packs**, **Cursor + Claude rules and skills**, **detection across every app**, **CellularMemory that never forgets**, **runtime observer**, **quality gates**, **GitHub automation**, and **965 knowledge packs** — on your **portfolio folder**, so AI remembers every product and how they interconnect.
 
 Same feature template every time. Runtime errors become issues with context: what broke, why, what to fix — not a mystery diff at 2am.
 
@@ -157,7 +157,7 @@ One runtime config at the portfolio level understands **which app** failed and *
 | **GitHub browser login** | One-time sign-in — no token copy-paste |
 | **`dna github push`** | Push with quality gate awareness |
 
-### 8. Knowledge marketplace (897 packs)
+### 8. Knowledge marketplace (965 packs)
 
 Foundation packs install automatically from stack + domain detection. Browse and add more:
 

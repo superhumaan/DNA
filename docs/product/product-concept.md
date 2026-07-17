@@ -20,7 +20,7 @@ DNA is a **project intelligence system** — not a documentation generator. It g
 | **Human documentation** | `DNA/Impressions/` — product, architecture, compliance for people |
 | **AI behaviour layer** | Rules governing Cursor, Copilot, Claude on *your* project |
 | **Runtime observer** | Classifies errors with project-specific context |
-| **Knowledge marketplace** | 897 stack, compliance, and industry packs |
+| **Knowledge marketplace** | 965 stack, compliance, and industry packs |
 | **Software immune system** | Severity, category, discipline classification |
 | **GitHub automation** | Contextual issues and repair PRs (never auto-merge) |
 | **Portfolio install** | One `dna doctor` on the squad folder — every related product + interconnections |

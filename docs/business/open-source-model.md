@@ -18,7 +18,7 @@ DNA is **MIT licensed** and developed in the open at [github.com/superhumaan/DNA
 ## What is open
 
 - Full monorepo source (CLI, core, runtime, immune, GitHub, AI)
-- 897 bundled knowledge packs (offline fallback)
+- 965 bundled knowledge packs (offline fallback)
 - Behaviour templates, neuralNetwork intents, generators
 - Compliance reference documents (GDPR ingest pipeline)
 
