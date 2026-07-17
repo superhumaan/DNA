@@ -9,11 +9,11 @@
 |----------|------|---------|------|
 | DNA CI | `.github/workflows/dna-ci.yml` | push (all branches), PR | Advisory (`continue-on-error: true` on gates) |
 | DNA Security (ZAP) | `.github/workflows/dna-security.yml` | weekly + dispatch | Only if `vars.STAGING_URL` set |
-| DNA Preview | `.github/workflows/dna-preview.yml` | push/PR | Vercel preview |
+| DNA Preview | Disabled for this repository | — | Root is a CLI/runtime monorepo; the existing Vercel `dna` project belongs to DNA-Web |
 | Publish npm | `.github/workflows/publish-npm.yml` | dispatch | Requires `NPM_TOKEN` secret |
 | Cleanup failed runs | `.github/workflows/cleanup-failed-runs.yml` | schedule | Billing-aware |
 
-Config: `.DNA/config.dna.json` → `"ci": { "strict": false, "coverageThreshold": 80, "owasp": true }`.
+Config: `.DNA/config.dna.json` → `"ci": { "strict": false, "coverageThreshold": 80, "owasp": true, "pushToPreview": false }`.
 
 ## Commands run by CI (`dna-ci.yml`)
 

@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { DnaConfig, ScanResult } from "@superhumaan/dna-config";
 import { ensureDir, fileExists, writeFileEnsured } from "../fs.js";
@@ -91,6 +91,7 @@ function scriptStep(
 export function generateCleanupFailedRunsWorkflow(): string {
   return `# DNA cleanup — delete failed workflow runs after completion
 # Inline delete jobs cannot remove the current run (GitHub returns 403 while in progress).
+# Retains failures for 24 hours so logs remain available for diagnosis.
 # Skips instant billing/infra failures so cleanup does not cascade when Actions cannot start runners.
 
 name: Cleanup failed runs
@@ -133,6 +134,7 @@ jobs:
             const repo = context.repo.repo;
             const cleanupName = "Cleanup failed runs";
             const BILLING_MS = 45_000;
+            const RETENTION_MS = 24 * 60 * 60 * 1000;
 
             async function deleteRun(runId) {
               try {
@@ -152,6 +154,11 @@ jobs:
               const end = new Date(run.updated_at).getTime();
               if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return null;
               return end - start;
+            }
+
+            function isOldEnough(run) {
+              const completedAt = new Date(run.updated_at || run.created_at).getTime();
+              return Number.isFinite(completedAt) && Date.now() - completedAt >= RETENTION_MS;
             }
 
             async function looksLikeBillingBlock(run) {
@@ -208,6 +215,10 @@ jobs:
                     (run.conclusion === "failure" || run.conclusion === "cancelled") &&
                     run.name !== cleanupName
                   ) {
+                    if (!isOldEnough(run)) {
+                      console.log(\`Retain run \${run.id}: failure is less than 24 hours old\`);
+                      continue;
+                    }
                     if (await looksLikeBillingBlock(run)) {
                       console.log(\`Skip delete \${run.id}: billing/infra failure\`);
                       continue;
@@ -542,13 +553,23 @@ export async function installCiPipeline(options: InstallCiOptions): Promise<Inst
   }
 
   const previewExists = await fileExists(previewPath);
-  if (shouldScaffoldPreviewWorkflow(scan, config.stack.hosting) && (!skipIfExists || !previewExists)) {
+  const previewEnabled =
+    config.ci?.pushToPreview !== false &&
+    shouldScaffoldPreviewWorkflow(scan, config.stack.hosting);
+  if (previewEnabled && (!skipIfExists || !previewExists)) {
     await writeFileEnsured(previewPath, generatePreviewWorkflow(config, scan));
     created.push(
       previewExists ? ".github/workflows/dna-preview.yml (updated)" : ".github/workflows/dna-preview.yml",
     );
-  } else if (!shouldScaffoldPreviewWorkflow(scan, config.stack.hosting)) {
-    skipped.push("dna-preview.yml (hosting not Vercel/Netlify — skipped)");
+  } else if (!previewEnabled && previewExists) {
+    await unlink(previewPath);
+    created.push(".github/workflows/dna-preview.yml (removed — preview disabled)");
+  } else if (!previewEnabled) {
+    skipped.push(
+      config.ci?.pushToPreview === false
+        ? "dna-preview.yml (preview disabled in config — skipped)"
+        : "dna-preview.yml (hosting not Vercel/Netlify — skipped)",
+    );
   }
 
   const testFw = config.stack.testing ?? scan.testFramework ?? "vitest";

@@ -64,10 +64,10 @@ N/A for this stage.
 |---------|------|-------|
 | `pnpm run lint` | 0 | PASS |
 | `pnpm run typecheck` | 0 | PASS |
-| `pnpm run test` | 0 | **84 files / 309 tests PASS** |
+| `pnpm run test` | 0 | **84 files / 310 tests PASS** |
 | `pnpm run test:coverage` | 0 | 54.55% lines; advisory target remains 80% |
 | `pnpm run build` | 0 | PASS including example Express app |
-| `pnpm run test:load:lab` | 0 | AFTER p95 **448ms**, **1664 req/s**, **800×304**, **0 errors** |
+| `pnpm run test:load:lab` | 0 | AFTER p95 **168ms**, **4423 req/s**, **800×304**, **0 errors** |
 | `pnpm audit` | 0 | No known vulnerabilities |
 | `npx dna quality report --feature` | 0 | **PASS**, blocker=0, critical=0 |
 | `npx dna docker build` | 0 | `dna-app:local` built |
@@ -80,8 +80,8 @@ BEFORE  collectLabData per request (no cache)
   latency  avg=2971ms  p50=2974ms  p95=4133ms  p99=4313ms
 
 AFTER   HTTP /data (micro-cache + ETag/304)
-  requests=1000  throughput=1664 req/s  wall=601ms
-  latency  avg=111ms  p50=41ms  p95=448ms  p99=452ms
+  requests=1000  throughput=4423 req/s  wall=226ms
+  latency  avg=40ms  p50=11ms  p95=168ms  p99=171ms
   200=200  304=800  errors=0
 ```
 

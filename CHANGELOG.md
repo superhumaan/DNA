@@ -25,6 +25,7 @@ All notable changes to DNA are documented here.
 - **Unsafe replica topology** — declared multi-instance file-store deployments fail closed with 503 instead of splitting Lab authentication state.
 - **pnpm security scanning** — CI generators use the active package manager's native audit command rather than `npm audit` on pnpm lockfiles.
 - **Feature brief preservation** — `dna doctor` / feature-factory refresh no longer replaces an active `ai/feature-request.md` with the blank starter template.
+- **Preview opt-out and diagnostics** — CI generation respects `ci.pushToPreview: false`, removes stale generated preview workflows, and retains failed workflow logs for 24 hours before cleanup. This CLI/runtime monorepo is explicitly opted out because its prior Vercel IDs target the separate DNA-Web project.
 
 ## [0.6.12] - 2026-07-14
 

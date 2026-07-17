@@ -96,6 +96,8 @@ describe("CI generator", () => {
     expect(yaml).toContain("deleteWorkflowRun");
     expect(yaml).toContain("actions: write");
     expect(yaml).toContain("looksLikeBillingBlock");
+    expect(yaml).toContain("RETENTION_MS = 24 * 60 * 60 * 1000");
+    expect(yaml).toContain("Retain run");
     expect(yaml).toContain("continue-on-error: true");
     expect(yaml).toContain("Cleanup aborted safely");
   });
@@ -178,6 +180,39 @@ describe("CI generator", () => {
     });
 
     expect(result.created.some((f) => f.includes("dna-ci.yml"))).toBe(true);
+
+    await rm(root, { recursive: true, force: true });
+  });
+
+  it("removes generated preview workflow when preview is explicitly disabled", async () => {
+    const root = join(tmpdir(), `dna-ci-no-preview-${randomUUID()}`);
+    await mkdir(join(root, ".github", "workflows"), { recursive: true });
+    const { writeFile } = await import("node:fs/promises");
+    await writeFile(join(root, ".github/workflows/dna-preview.yml"), "name: DNA Preview\n");
+    await writeFile(join(root, "package.json"), JSON.stringify({ name: "ci-test", scripts: {} }));
+
+    const result = await installCiPipeline({
+      root,
+      config: {
+        ...testConfig(),
+        stack: { testing: "vitest", hosting: "vercel" },
+        ci: {
+          enabled: true,
+          strict: false,
+          perFileCoverage: true,
+          owasp: true,
+          pushToPreview: false,
+          previewProvider: "vercel",
+          coverageThreshold: 80,
+        },
+      },
+      scan: mockScan({ packageManager: "pnpm", scripts: {} }),
+    });
+
+    expect(result.created).toContain(
+      ".github/workflows/dna-preview.yml (removed — preview disabled)",
+    );
+    expect(await fileExists(join(root, ".github/workflows/dna-preview.yml"))).toBe(false);
 
     await rm(root, { recursive: true, force: true });
   });

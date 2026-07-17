@@ -58,7 +58,13 @@ Production Lab is mounted in the consumer app (or `dna lab serve` locally). Clie
 
 ## 5. Duplicate / Conflicting
 
-* Preview provider Vercel vs Docker gate — both present; OK for dual deploy stories
+* Docker is the deployable artifact for this repository; Vercel hosts the separate DNA-Web repository.
+
+Follow-up verification found the configured Vercel project belongs to the
+separate DNA-Web repository and this monorepo has no deployable root. Preview
+is now explicitly disabled in `.DNA/config.dna.json`; branch CI and Docker are
+the supported delivery gates. The generator removes stale preview workflows
+when opted out.
 
 ## 6. Missing Coverage
 

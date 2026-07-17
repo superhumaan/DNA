@@ -16,8 +16,11 @@ Verified with `scripts/lab-load-test.mjs --users 200 --polls 5 --events 2000`:
   200-viewer CI gate, and patched Vitest/esbuild toolchain.
 - Canonical runtime storage name is now `json`; historical `sqlite` configs
   normalize safely while the `runtime.db` compatibility filename remains.
-- Final gates: 84 files / 309 tests, quality PASS, Docker PASS, audit clean;
-  latest 200-viewer gate p95 448ms / 1664 req/s / 0 errors.
+- Final gates: 84 files / 310 tests, quality PASS, Docker PASS, audit clean;
+  latest 200-viewer gate p95 168ms / 4423 req/s / 0 errors.
+- Delivery follow-up: disabled the invalid root Vercel preview (the configured
+  `dna` project belongs to DNA-Web), made preview opt-out remove generated
+  workflows, and retained failed Action logs for 24 hours before cleanup.
 - Review artefacts: `docs/reviews/`.
 
 ## 2026-07-14 — v0.6.8 Lab CI billing blocker
