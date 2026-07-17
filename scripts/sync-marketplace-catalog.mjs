@@ -17,6 +17,7 @@ const SOURCE = join(ROOT, "packages", "dna-core", "assets", "marketplace-catalog
 const TARGETS = [
   join(DNA_WEB_ROOT, "packages", "dna-core", "assets", "marketplace-catalog.json"),
   join(DNA_WEB_ROOT, "packages", "dna-cli", "assets", "marketplace-catalog.json"),
+  join(DNA_WEB_ROOT, "apps", "web", "public", "marketplace", "v1", "catalog.json"),
 ];
 
 async function main() {

@@ -53,7 +53,7 @@ serverless deployments; discovery/legal/methodologies/industries packs.
 - [x] Hard-coded stale counts (897 / mismatched 910 claims) are updated or derived
 - [x] DNA-Web catalog is synchronized from DNA’s canonical catalog
 - [x] Automated test prevents regressions that hide packs from the browser
-- [ ] Both repos pass gates and are pushed
+- [x] Both repos pass gates and are pushed
 
 ---
 
