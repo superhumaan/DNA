@@ -1546,6 +1546,24 @@ program
           console.log("\n✓ DNA Lab wiring refreshed");
           for (const item of labWire.wired) console.log(`  · ${item}`);
         }
+        const {
+          reportLabInstalls,
+          formatLabInstallsReport,
+          fixLabInstalls,
+          LAB_UPGRADE_NEXT_STEPS,
+        } = await import("@superhumaan/dna-core");
+        const before = reportLabInstalls(root);
+        if (!before.ok && before.installs.length > 0) {
+          console.log("\nAligning nested/stale Lab package installs to @latest…\n");
+          const fixed = await fixLabInstalls(root);
+          console.log("");
+          console.log(formatLabInstallsReport(root, fixed.report));
+        } else {
+          console.log("");
+          console.log(formatLabInstallsReport(root, before));
+        }
+        console.log("");
+        console.log(LAB_UPGRADE_NEXT_STEPS);
       }
       const indexPath = join(root, ".DNA", "stems", "index.json");
       try {
@@ -2404,6 +2422,7 @@ lab
       reportLabInstalls,
       formatLabInstallsReport,
       fixLabInstalls,
+      LAB_UPGRADE_NEXT_STEPS,
     } = await import("@superhumaan/dna-core");
     if (options.fix) {
       console.log("Upgrading DNA in every package that owns an install…\n");
@@ -2411,13 +2430,17 @@ lab
       console.log("");
       console.log(formatLabInstallsReport(root, result.report));
       console.log("");
-      console.log("Restart the API process that mounts Lab, then hard-refresh /labs.");
+      console.log(LAB_UPGRADE_NEXT_STEPS);
       if (!result.report.ok) process.exitCode = 1;
       return;
     }
     const report = reportLabInstalls(root);
     console.log(formatLabInstallsReport(root, report));
-    if (!report.ok) process.exitCode = 1;
+    if (!report.ok) {
+      console.log("");
+      console.log(LAB_UPGRADE_NEXT_STEPS);
+      process.exitCode = 1;
+    }
   });
 
 const registerCmd = program.command("register").description("Register local project with DNA services");

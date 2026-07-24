@@ -232,6 +232,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   border-color: color-mix(in srgb, var(--color-brand-primary) 22%, transparent);
   color: var(--color-text-on-brand);
 }
+.btnp:disabled, .soli-admin-header-btn:disabled, .humaan-page-primary-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+}
+.btnp:disabled:hover, .soli-admin-header-btn:disabled:hover, .humaan-page-primary-btn:disabled:hover {
+  background: var(--color-brand-primary);
+  border-color: color-mix(in srgb, var(--color-brand-primary) 12%, transparent);
+}
+[data-action="refresh"] .fa-spin,
+.fa-rotate.fa-spin {
+  animation-duration: 0.55s;
+}
 .btns {
   display: inline-flex; align-items: center; justify-content: center; width: 100%;
   padding: 0 16px; border-radius: var(--radius-pill); border: 1.5px solid var(--color-border);
@@ -792,8 +806,34 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .lab-issue-trend { width: 100px; }
 .lab-spark { display: block; }
-.lab-issue-title-row { margin-bottom: 14px; }
+.lab-issue-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
 .lab-issue-title-row__badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.lab-issue-title-row__actions { flex-shrink: 0; }
+.lab-copy-issue-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 10px; border: 1px solid var(--lab-border, rgba(255,255,255,0.12));
+  background: transparent; color: var(--lab-fg, #e8eaed); font: inherit; font-size: 13px; cursor: pointer;
+}
+.lab-copy-issue-btn:hover { border-color: var(--lab-accent, #4ade9a); color: var(--lab-accent, #4ade9a); }
+.lab-copy-issue-btn.is-copied { border-color: var(--lab-accent, #4ade9a); color: var(--lab-accent, #4ade9a); }
+.lab-issue-copy-cell { width: 44px; text-align: right; }
+.lab-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 8px; border: 1px solid transparent;
+  background: transparent; color: var(--lab-muted, #94a3b8); cursor: pointer; font-size: 13px;
+}
+.lab-icon-btn:hover { color: var(--lab-accent, #4ade9a); border-color: var(--lab-border, rgba(255,255,255,0.12)); }
+.lab-th-actions { width: 44px; }
+.lab-toast {
+  margin: 0 var(--admin-header-content-gap, 16px) 12px;
+  padding: 10px 14px; border-radius: 10px; font-size: 13px;
+  background: rgba(74, 222, 154, 0.12); color: var(--lab-accent, #4ade9a);
+  border: 1px solid rgba(74, 222, 154, 0.28);
+}
+.lab-toast--error {
+  background: rgba(220, 38, 38, 0.12); color: #fca5a5;
+  border-color: rgba(220, 38, 38, 0.28);
+}
 .lab-issue-title {
   margin: 0 0 8px; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.02em;
   color: var(--color-text); line-height: 1.25;

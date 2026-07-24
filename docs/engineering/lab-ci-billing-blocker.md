@@ -17,13 +17,19 @@ When GitHub Actions cannot start runners (failed account payment or Actions spen
 
 ## Upgrade Lab in a host app
 
-`npx @superhumaan/dna-by-humaan@0.6.8` only runs the CLI (help / doctor / lab serve). It does **not** change `node_modules` in your app or reload a running API.
+`npx @superhumaan/dna-by-humaan@x.y.z` only runs the CLI. It does **not** change `node_modules` in your app or reload a running API. Nested backends are a common trap.
 
 ```bash
-# In the host app (e.g. Humaan)
-npm install @superhumaan/dna-by-humaan@0.6.8
-# Restart the API that mounts createLabMiddleware / dnaLabMiddleware
-# e.g. npm run dev:restart   or kill the process on your API port
+# Preferred (v0.6.16+) — CLI + packs + nested Lab installs
+npx @superhumaan/dna-by-humaan@latest update
+
+# Or force every owner package.json dir
+npx dna lab installs --fix
+
+# REQUIRED
+# 1. Restart the API that mounts createLabMiddleware / dnaLabMiddleware
+# 2. Hard-refresh /labs (Cmd+Shift+R)
+curl -s http://localhost:<api>/api/dna/labs/health | jq '{dnaVersion,labUi}'
 ```
 
-Then hard-refresh `/labs`. Vite proxy alone will keep serving the old in-memory Lab bundle until the API restarts.
+Vite proxy alone will keep serving the old in-memory Lab bundle until the API restarts. Full checklist: [lab-upgrade-dx](./lab-upgrade-dx-0.6.15.md).

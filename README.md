@@ -311,6 +311,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Production health & residual closure (v0.6.13) | Jul 2026 | Jul 2026 | Shipped — shared Lab state, strict CI, coverage, Playwright, `/health` |
 | Lab analytics Overview + Sentry-density Issues (v0.6.14) | Jul 2026 | Jul 2026 | Shipped — KPIs/batteries/charts; issue sparklines + deep detail |
 | Lab upgrade DX — nested install detect + disk UI (v0.6.15) | Jul 2026 | Jul 2026 | Shipped — health version, `dna lab installs --fix` |
+| Lab Refresh UX + Copy issue + install-safe upgrade (v0.6.16) | Jul 2026 | Jul 2026 | Shipped — disable/spin Refresh; doctor/update align Lab installs |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | Shipped — setup script + OAuth scaffolding |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |

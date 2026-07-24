@@ -6,7 +6,7 @@ import { loadDnaConfig, validateProject } from "./validator.js";
 import { scanProject } from "./scanner.js";
 import { isRealAiProvider } from "./ai-connect.js";
 import { verifyAiInjection } from "./generators/ai-injector.js";
-import { reportLabInstalls } from "./lab/sync-installs.js";
+import { reportLabInstalls, LAB_UPGRADE_NEXT_STEPS } from "./lab/sync-installs.js";
 
 export interface DoctorReport {
   dna: { installed: boolean; version?: string };
@@ -283,6 +283,8 @@ export function formatDoctorReport(report: DoctorReport): string {
   ];
   if (!report.labInstalls.ok && report.labInstalls.warnings.length) {
     for (const w of report.labInstalls.warnings) lines.push(`  · ${w}`);
+    lines.push("");
+    lines.push(LAB_UPGRADE_NEXT_STEPS);
   }
   return lines.join("\n");
 }

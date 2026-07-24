@@ -20,6 +20,7 @@ import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { writeFileEnsured, writeJsonFile, fileExists, ensureDir } from "./fs.js";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
 import { ensureLabAssets as ensureLabStore } from "./lab/server.js";
+import { fixLabInstalls, reportLabInstalls } from "./lab/sync-installs.js";
 import { wireLabStack } from "./generators/wire-lab-stack.js";
 import { detectGitHubRemote, resolveGitHubToken, loginWithWebFlow } from "@superhumaan/dna-github";
 import { analyzeProject } from "./ivf/analyze.js";
@@ -324,7 +325,11 @@ async function ensureRuntimeAssets(root: string, config: DnaConfig): Promise<str
   return actions;
 }
 
-async function ensureLabScaffold(root: string, config: DnaConfig): Promise<string[]> {
+async function ensureLabScaffold(
+  root: string,
+  config: DnaConfig,
+  onStatus?: (msg: string) => void,
+): Promise<string[]> {
   const actions: string[] = [];
   if (config.lab?.enabled === false) return actions;
 
@@ -350,6 +355,13 @@ async function ensureLabScaffold(root: string, config: DnaConfig): Promise<strin
   }
   for (const skip of wire.skipped) {
     actions.push(`(lab wire: ${skip})`);
+  }
+
+  const installs = reportLabInstalls(root);
+  if (!installs.ok && installs.installs.length > 0) {
+    onStatus?.("Aligning nested/stale Lab package installs to @latest…");
+    await fixLabInstalls(root);
+    actions.push("lab installs aligned to @latest — restart API processes that mount Lab");
   }
 
   return actions;
@@ -487,7 +499,7 @@ export async function runDoctorOrchestrator(
 
     actions.push(...(await repairMissingStructure(root, config)));
     actions.push(...(await ensureRuntimeAssets(root, config)));
-    actions.push(...(await ensureLabScaffold(root, config)));
+    actions.push(...(await ensureLabScaffold(root, config, onStatus)));
     actions.push(...(await ensureAiAndCi(root, config)));
     actions.push(...(await pullEssentials(root, config, currentCliVersion, cliEntryPath)));
 
@@ -546,6 +558,13 @@ export function formatDoctorOrchestratorResult(result: DoctorOrchestratorResult)
       lines.push(
         "Preview deploy: run `dna ci install` and set GitHub secrets for your provider (Vercel: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID; Netlify: NETLIFY_AUTH_TOKEN, NETLIFY_SITE_ID).",
       );
+    }
+    if (result.actions.some((a) => a.includes("lab installs aligned"))) {
+      lines.push("");
+      lines.push("Lab packages were upgraded. Restart every API that mounts Lab, then hard-refresh /labs.");
+    } else if (!result.report.labInstalls.ok && result.report.labInstalls.count > 0) {
+      lines.push("");
+      lines.push("Lab installs are nested/stale. Run `npx dna lab installs --fix`, restart the API, hard-refresh /labs.");
     }
   }
 

@@ -37,7 +37,7 @@ Includes an **Impressions drift** score when DNA is installed (missing docs, sta
 
 ## lab
 
-Production observability portal at `/labs` — Monitor (Overview, Issues, Events, Performance), Delivery (Releases, Source maps), Quality (Reports, Coverage, CI, APIs), Project (Doctor, Installs), and Intelligence (Impressions, Cellular Memory). Sidebar sections stay independently open. See [Lab analytics v0.6.14](./lab-analytics-0.6.14.md), [Lab upgrade DX v0.6.15](./lab-upgrade-dx-0.6.15.md), and [Lab UI Humaan parity v0.6.7](./lab-ui-humaan-0.6.7.md).
+Production observability portal at `/labs` — Monitor (Overview, Issues, Events, Performance), Delivery (Releases, Source maps), Quality (Reports, Coverage, CI, APIs), Project (Doctor, Installs), and Intelligence (Impressions, Cellular Memory). Sidebar sections stay independently open. Header **Refresh** disables + spins and reloads the active tab. See [Lab Refresh UX v0.6.16](./lab-refresh-ux-0.6.16.md), [Lab upgrade DX](./lab-upgrade-dx-0.6.15.md), [Lab analytics v0.6.14](./lab-analytics-0.6.14.md), and [Lab UI Humaan parity v0.6.7](./lab-ui-humaan-0.6.7.md).
 
 ```bash
 dna lab install
@@ -45,8 +45,11 @@ dna lab serve
 dna lab serve --port 3200
 dna lab installs            # list nested/stale DNA installs
 dna lab installs --fix     # upgrade every owner package to @latest
+dna update                  # also aligns Lab installs (v0.6.16+) then prints restart steps
 dna register lab --url https://your-app.example.com
 ```
+
+**After any Lab package bump:** restart the API that mounts Lab, then hard-refresh `/labs`. Confirm with `GET /api/dna/labs/health` → `dnaVersion`.
 
 Local: no login. Production: email + password + OTP after `dna register lab` pairing (paste Pairing ID + code at `/labs`; sign into the app if the host requires a session).
 

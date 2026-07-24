@@ -109,7 +109,7 @@ Each stem in `.DNA/stems/<id>/` includes **README, prompt, guidelines, expectati
 
 **Plus `/dna-*` slash commands** in `.cursor/commands/` and `.claude/commands/` — one per CLI surface (`/dna-doctor`, `/dna-analyze`, `/dna-feature`, `/dna-quality-report`, …) with full obedience rules.
 
-Refresh anytime: `dna update` or `dna workbench install`.
+Refresh anytime: `dna update` (also aligns nested Lab packages from v0.6.16+) or `dna workbench install`.
 
 Catalog: [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence)
 
@@ -349,10 +349,20 @@ That is a platform team in a folder — stems, rules, detection, memory, runtime
 ## Keep it current
 
 ```bash
-dna update              # CLI + stems + commands + knowledge packs
-dna doctor              # repair any missing scaffolding
-dna marketplace list    # new packs
+npx @superhumaan/dna-by-humaan@latest update   # CLI + stems + packs + nested Lab installs
+dna doctor                                     # repair scaffolding; auto-aligns stale Lab installs
+dna marketplace list                           # new packs
 ```
+
+**Lab UI after every bump** (do not skip):
+
+```bash
+# Restart every API / dna lab serve process that mounts Lab
+# Hard-refresh /labs
+curl -s http://localhost:<api>/api/dna/labs/health | jq '{dnaVersion,labUi}'
+```
+
+See [Lab upgrade DX](../engineering/lab-upgrade-dx-0.6.15.md).
 
 ---
 

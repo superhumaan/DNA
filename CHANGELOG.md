@@ -4,6 +4,17 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.16] - 2026-07-24
+
+### Added
+
+- **Lab Refresh UX** — header Refresh disables + spins on every page; reloads tab-specific data (Coverage / Releases / APIs / Installs / Intelligence) plus probe + `/data`. See [lab-refresh-ux-0.6.16](./docs/engineering/lab-refresh-ux-0.6.16.md).
+- **Lab Issues — Copy issue** — list + detail clipboard control with paste-ready markdown (title, severity, culprit, stack, tags, request, …).
+
+### Changed
+
+- **Lab upgrade is part of install/update** — `dna doctor` auto-aligns nested/stale `@superhumaan/dna-by-humaan` installs; `dna update` reports/fixes Lab installs and prints mandatory restart + hard-refresh next steps (`LAB_UPGRADE_NEXT_STEPS`). Canonical checklist: [lab-upgrade-dx-0.6.15](./docs/engineering/lab-upgrade-dx-0.6.15.md).
+
 ## [0.6.15] - 2026-07-24
 
 ### Added

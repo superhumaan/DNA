@@ -4,13 +4,13 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.6.15)
+## In scope (v0.6.16)
 
 | Area | Delivered |
 |------|-----------|
-| **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace, `dna ai force-repair`, `dna lab installs [--fix]` |
+| **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace, `dna ai force-repair`, `dna lab installs [--fix]`, `dna update` aligns nested Lab packages |
 | **Runtime** | Express 4/5, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`); Aggressive Repair Loop fingerprints + CellularMemory; EPIPE/ECONNRESET noise filter; outbound third-party capture + browser ingest |
-| **DNA Lab** | Production observability at `/labs` — **analytics Overview** + **Sentry-density Issues** + **upgrade DX** (health `dnaVersion` / labUi fingerprint, nested install detect, disk-backed `dist/lab-ui/*`); Humaan admin UI parity; Soli shell + Quality hub; fingerprint-grouped issues; local open access; production auth via `dna register lab`; CJS Express wire; Lite doctor polling; hardened `runtime.db` ([#12](https://github.com/superhumaan/DNA/issues/12), [lab-analytics-0.6.14](../engineering/lab-analytics-0.6.14.md), [lab-upgrade-dx-0.6.15](../engineering/lab-upgrade-dx-0.6.15.md)) |
+| **DNA Lab** | Production observability at `/labs` — **Refresh UX** (disable + spin, tab-aware reload) + **Copy issue** + **analytics Overview** + **Sentry-density Issues** + **upgrade DX** (health `dnaVersion` / labUi fingerprint, nested install detect/auto-fix on doctor+update, disk-backed `dist/lab-ui/*`); Humaan admin UI parity; Soli shell + Quality hub; fingerprint-grouped issues; local open access; production auth via `dna register lab`; CJS Express wire; Lite doctor polling; hardened `runtime.db` ([#12](https://github.com/superhumaan/DNA/issues/12), [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md), [lab-upgrade-dx-0.6.15](../engineering/lab-upgrade-dx-0.6.15.md), [lab-analytics-0.6.14](../engineering/lab-analytics-0.6.14.md)) |
 | **Supply chain** | **Zero production npm dependencies** (v0.4.6+), no install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
 | **Marketplace** | 965 packs, remote + bundled offline |
 | **Platform catalog** | Admin, SSO, RBAC, cloud deploy, CRM, CMS patterns |
@@ -59,7 +59,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 | Channel | Command |
 |---------|---------|
-| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.13`) |
+| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.16`) |
 | Monorepo dev | `git clone` + `pnpm dna:link` |
 
 ---

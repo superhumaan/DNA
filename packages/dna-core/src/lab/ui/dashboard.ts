@@ -21,6 +21,7 @@ const state = {
   releasesDetail: null,
   probeMeta: null,
   loading: false,
+  refreshing: false,
   data: null,
   error: "",
   success: "",
@@ -28,6 +29,7 @@ const state = {
   lastRefresh: null,
   dataEtag: null,
   issueEvents: {},
+  copyFeedback: "",
 };
 
 const NAV = [
@@ -210,6 +212,49 @@ async function loadIntelligence(force) {
   } catch (err) {
     state.error = err.message;
     state.intelligence = { impressions: [], cellularMemory: [] };
+  }
+}
+
+async function refreshTabDetail(tab) {
+  const t = tab || state.tab;
+  if (t === "impressions" || t === "memory") {
+    await loadIntelligence(true);
+    return;
+  }
+  if (t === "installs") {
+    await refreshInstalls();
+    return;
+  }
+  if (t === "coverage") {
+    try { state.coverageDetail = await api("/coverage"); }
+    catch (err) { state.error = err.message; state.coverageDetail = { summary: null, files: [] }; }
+    return;
+  }
+  if (t === "releases") {
+    try { state.releasesDetail = await api("/releases"); }
+    catch (err) { state.error = err.message; state.releasesDetail = { releases: [] }; }
+    return;
+  }
+  if (t === "apis") {
+    try { state.apisDetail = await api("/apis"); }
+    catch (err) { state.error = err.message; state.apisDetail = { operations: [], live: [], probes: [], stats: {} }; }
+  }
+}
+
+async function refreshAll() {
+  if (state.refreshing) return;
+  state.refreshing = true;
+  render();
+  try {
+    try {
+      const probe = await api("/probe");
+      state.probeMeta = probe;
+    } catch (_) {}
+    await refreshTabDetail(state.tab);
+    await refreshData();
+  } finally {
+    state.refreshing = false;
+    render();
   }
 }
 
@@ -427,11 +472,12 @@ function issueTable(issues, clickable, edge, emptyMsg) {
         '<td>' + esc(formatAge(i.ageMs)) + '</td>' +
         '<td class="lab-issue-trend">' + sparklineSvg(i.trend24h) + '</td>' +
         '<td>' + esc(i.count) + '</td>' +
-        '<td>' + esc(i.userCount != null ? i.userCount : "—") + '</td></tr>';
+        '<td>' + esc(i.userCount != null ? i.userCount : "—") + '</td>' +
+        '<td class="lab-issue-copy-cell"><button type="button" class="lab-icon-btn" data-copy-issue="' + esc(i.id) + '" title="Copy issue details" aria-label="Copy issue details"><i class="fa-solid fa-copy" aria-hidden="true"></i></button></td></tr>';
     }).join("")
-    : tableEmptyRow(6, emptyMsg || 'No issues match this filter.');
+    : tableEmptyRow(7, emptyMsg || 'No issues match this filter.');
   return '<table class="lab-table admin-table lab-table--issues' + (edge ? ' admin-table--edge' : '') + '"><thead><tr>' +
-    '<th>Issue</th><th>Last seen</th><th>Age</th><th>Trend <span class="lab-th-hint">24h</span></th><th>Events</th><th>Users</th>' +
+    '<th>Issue</th><th>Last seen</th><th>Age</th><th>Trend <span class="lab-th-hint">24h</span></th><th>Events</th><th>Users</th><th class="lab-th-actions"></th>' +
     '</tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
@@ -677,13 +723,18 @@ function pageHeader(title) {
   const probeLabel = probe && probe.lastProbeAt
     ? (probe.skipped ? "Probed " : "Just probed ") + timeAgo(probe.lastProbeAt)
     : "";
+  const refreshing = !!state.refreshing;
+  const refreshAttrs = refreshing
+    ? ' disabled aria-busy="true" aria-label="Refreshing"'
+    : ' aria-label="Refresh"';
+  const refreshIcon = 'fa-solid fa-rotate' + (refreshing ? ' fa-spin' : '');
   return '<header class="soli-administration-page-header">' +
     '<div class="soli-administration-page-header__title-row">' +
     '<h1 class="soli-administration-page-header__title">' + esc(title) + '</h1>' +
     (probeLabel ? '<span class="lab-probe-meta">' + esc(probeLabel) + '</span>' : '') +
     '</div>' +
     '<div class="soli-administration-page-header__actions">' +
-    '<button type="button" class="humaan-page-primary-btn soli-admin-header-btn" data-action="refresh"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Refresh</button>' +
+    '<button type="button" class="humaan-page-primary-btn soli-admin-header-btn"' + refreshAttrs + ' data-action="refresh"><i class="' + refreshIcon + '" aria-hidden="true"></i> Refresh</button>' +
     '</div></header>';
 }
 
@@ -921,6 +972,98 @@ function issuesPanel() {
     '</div>';
 }
 
+function formatIssueCopyText(issue) {
+  const events = eventsForIssue(issue);
+  const latest = events[0] || issue.latestEvent || {};
+  const shortId = issue.shortId || ("DNA-" + String(issue.id || "").slice(0, 4).toUpperCase());
+  const stack = latest.stack || issue.stackTraceSummary || "";
+  const frames = latest.frames || [];
+  const nl = String.fromCharCode(10);
+  const frameLines = frames.length
+    ? frames.slice(0, 40).map((f) => {
+      const loc = [f.filename, f.lineno != null ? ":" + f.lineno : "", f.colno != null ? ":" + f.colno : ""].join("");
+      return "  at " + (f.function || "<anonymous>") + (loc ? " (" + loc + ")" : "") + (f.inApp ? " [app]" : "");
+    }).join(nl)
+    : "";
+  const tags = latest.tags && typeof latest.tags === "object"
+    ? Object.entries(latest.tags).slice(0, 30).map(([k, v]) => "  " + k + ": " + v).join(nl)
+    : "";
+  const crumbs = (latest.breadcrumbs || []).slice(-20).map((b) =>
+    "  [" + (b.category || "log") + "] " + (b.message || "")
+  ).join(nl);
+  const req = latest.request || {};
+  const lines = [
+    "# DNA Lab issue " + shortId,
+    "",
+    "**Title:** " + (issue.title || "Untitled"),
+    "**Severity:** " + (issue.severity || "—"),
+    "**Category:** " + (issue.category || "—"),
+    "**Summary:** " + (issue.summary || latest.message || "—"),
+    issue.culprit ? "**Location / culprit:** " + issue.culprit : "",
+    issue.endpoint || latest.endpoint ? "**Endpoint:** " + (issue.endpoint || ((latest.method || "") + " " + (latest.endpoint || "")).trim()) : "",
+    issue.fingerprint ? "**Fingerprint:** " + issue.fingerprint : "",
+    "**Events:** " + (issue.count != null ? issue.count : events.length),
+    issue.userCount != null ? "**Users:** " + issue.userCount : "",
+    "**First seen:** " + (issue.firstSeen || "—"),
+    "**Last seen:** " + (issue.lastSeen || "—"),
+    (latest.environment || issue.environment) ? "**Environment:** " + (latest.environment || issue.environment) : "",
+    (latest.release || issue.release) ? "**Release:** " + (latest.release || issue.release) : "",
+    "",
+  ].filter(Boolean);
+  if (req.url || req.method || latest.method) {
+    lines.push("## Request", (req.method || latest.method || "") + " " + (req.url || latest.endpoint || "—"), "");
+  }
+  if (frameLines || stack) {
+    lines.push("## Stack");
+    if (frameLines) lines.push(frameLines);
+    else lines.push(String(stack).slice(0, 8000));
+    lines.push("");
+  }
+  if (tags) {
+    lines.push("## Tags", tags, "");
+  }
+  if (crumbs) {
+    lines.push("## Breadcrumbs (recent)", crumbs, "");
+  }
+  if (issue.suggestedFix) {
+    lines.push("## Suggested fix", issue.suggestedFix, "");
+  }
+  lines.push("---", "Copied from DNA Lab");
+  return lines.join(nl);
+}
+
+async function copyIssueToClipboard(issue) {
+  const text = formatIssueCopyText(issue);
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    state.copyFeedback = "Copied";
+    state.success = "Issue copied to clipboard";
+    render();
+    setTimeout(() => {
+      if (state.copyFeedback === "Copied") {
+        state.copyFeedback = "";
+        state.success = "";
+        render();
+      }
+    }, 2000);
+  } catch (err) {
+    state.error = err.message || "Copy failed";
+    render();
+  }
+}
+
 function issueDetailPanel(issue) {
   const events = eventsForIssue(issue);
   const latest = events[0] || issue.latestEvent || {};
@@ -938,6 +1081,7 @@ function issueDetailPanel(issue) {
         });
         return buckets;
       })();
+  const copyLabel = state.copyFeedback === "Copied" ? "Copied" : "Copy issue";
 
   return '<div class="admin-page-body admin-page-body--form lab-issue-detail">' +
     '<div class="lab-breadcrumb"><a href="#" data-tab="issues">Issues</a><span>/</span><code>' + esc(shortId) + '</code><span>/</span><span>' + esc(issue.title) + '</span></div>' +
@@ -947,7 +1091,11 @@ function issueDetailPanel(issue) {
     '<h2 class="lab-issue-title">' + esc(issue.title) + '</h2>' +
     '<p class="lab-issue-summary">' + esc(issue.summary || latest.message || "No summary") + '</p>' +
     (issue.culprit ? '<p class="lab-issue-culprit"><i class="fa-solid fa-code" aria-hidden="true"></i> ' + esc(issue.culprit) + '</p>' : '') +
-    '</div></div>' +
+    '</div>' +
+    '<div class="lab-issue-title-row__actions">' +
+    '<button type="button" class="btn lab-copy-issue-btn' + (state.copyFeedback === "Copied" ? " is-copied" : "") + '" data-action="copy-issue" title="Copy error and supporting details">' +
+    '<i class="fa-solid ' + (state.copyFeedback === "Copied" ? "fa-check" : "fa-copy") + '" aria-hidden="true"></i> ' + esc(copyLabel) +
+    '</button></div></div>' +
     issueHeroHtml({ ...issue, trend24h: trend }) +
     '<div class="lab-detail"><div class="lab-detail__main">' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Events</h2><span class="lab-panel__meta">24h</span></div>' +
@@ -1314,6 +1462,8 @@ function dashboardView() {
   return '<div class="soli-portal-root soli-portal-root--settings">' +
     '<div class="settings-shell">' + sidebar(active) +
     '<section class="settings-main">' + pageHeader(title) +
+    (state.success ? '<div class="lab-toast" role="status">' + esc(state.success) + '</div>' : '') +
+    (state.error ? '<div class="lab-toast lab-toast--error" role="alert">' + esc(state.error) + '</div>' : '') +
     '<div class="soli-admin-page-body">' + body + '</div></section></div></div>';
 }
 
@@ -1355,12 +1505,16 @@ function bind() {
         if (action === "signin") { state.view = "signin"; render(); return; }
         if (action === "register") { state.view = "register"; state.registerStep = "pair"; render(); return; }
         if (action === "refresh") {
-          if (state.tab === "impressions" || state.tab === "memory") await loadIntelligence(true);
-          if (state.tab === "installs") await refreshInstalls();
-          await refreshData();
+          await refreshAll();
           return;
         }
         if (action === "logout") { await api("/auth/logout", { method: "POST" }); state.view = "landing"; render(); return; }
+        if (action === "copy-issue") {
+          e.stopPropagation();
+          const issue = findIssue(state.selectedIssueId);
+          if (issue) await copyIssueToClipboard(issue);
+          return;
+        }
         if (action === "otp") {
           const email = document.querySelector('#signin-form [name=email]').value;
           const r = await api("/auth/otp", { method: "POST", body: JSON.stringify({ email, purpose: "login" }) });
@@ -1395,21 +1549,8 @@ function bind() {
       if (tab === "impressions" || tab === "memory") {
         await loadIntelligence(false);
         render();
-      }
-      if (tab === "installs") {
-        await refreshInstalls();
-        render();
-      }
-      if (tab === "coverage") {
-        try { state.coverageDetail = await api("/coverage"); } catch (err) { state.error = err.message; state.coverageDetail = { summary: null, files: [] }; }
-        render();
-      }
-      if (tab === "releases") {
-        try { state.releasesDetail = await api("/releases"); } catch (err) { state.error = err.message; state.releasesDetail = { releases: [] }; }
-        render();
-      }
-      if (tab === "apis") {
-        try { state.apisDetail = await api("/apis"); } catch (err) { state.error = err.message; state.apisDetail = { operations: [], live: [], probes: [], stats: {} }; }
+      } else if (tab === "installs" || tab === "coverage" || tab === "releases" || tab === "apis") {
+        await refreshTabDetail(tab);
         render();
       }
     };
@@ -1422,11 +1563,21 @@ function bind() {
   });
   document.querySelectorAll("[data-issue]").forEach((el) => {
     el.onclick = (e) => {
+      if (e.target && e.target.closest && e.target.closest("[data-copy-issue]")) return;
       e.preventDefault();
       const issueId = el.getAttribute("data-issue");
       state.selectedIssueId = issueId;
+      state.copyFeedback = "";
       render();
       loadIssueEvents(issueId).catch(() => {});
+    };
+  });
+  document.querySelectorAll("[data-copy-issue]").forEach((el) => {
+    el.onclick = async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const issue = findIssue(el.getAttribute("data-copy-issue"));
+      if (issue) await copyIssueToClipboard(issue);
     };
   });
   const search = document.querySelector("[data-search]");

@@ -21,10 +21,10 @@ Lab mirrors Humaan admin portal patterns: icon-only DNA brand, accordion sidebar
 ### UX-01 — Refresh is manual + silent background poll
 
 * **Severity:** Low
-* **Status:** Accepted
-* **Evidence:** Header Refresh button + background poll; no last-updated toast on 304
-* **Impact:** Operators may not know data is live
-* **Recommended fix:** Show `lastRefresh` relative time in header (state already tracks it)
+* **Status:** Partially addressed (v0.6.16)
+* **Evidence:** Header Refresh now disables + spins and reloads tab-specific data; background poll remains silent on 304
+* **Impact:** Operators see in-progress feedback on manual refresh; last-updated toast still optional
+* **Recommended fix (remaining):** Show `lastRefresh` relative time in header (state already tracks it)
 
 ### UX-02 — Issue detail loses related events older than cap
 

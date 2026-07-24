@@ -262,9 +262,17 @@ fail closed unless a shared Redis-compatible adapter is fully configured via
 `DNA_LAB_STATE_BACKEND=redis`, `DNA_LAB_REDIS_URL`, `DNA_LAB_REDIS_TOKEN`, and
 `DNA_LAB_REDIS_KEY`. `/api/dna/labs/health` reports the active backend.
 
-**UI (v0.6.15+):** Sidebar shows the live DNA version; install-mismatch banner when nested/stale copies exist — fix with `dna lab installs --fix` ([upgrade DX →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-upgrade-dx-0.6.15.md)). **(v0.6.14+):** Analytics Overview + Sentry-density Issues. [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-analytics-0.6.14.md). Humaan admin chrome (v0.6.7+): DNA logo only, primary pills, search → filters → tables, Monitor/Delivery accordion.
+**UI (v0.6.16+):** Header Refresh disables + spins and reloads the active tab; Issues have **Copy issue**. **(v0.6.15+):** Sidebar shows the live DNA version; install-mismatch banner when nested/stale copies exist — `dna doctor` / `dna update` auto-align, or run `dna lab installs --fix` ([upgrade DX →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-upgrade-dx-0.6.15.md)). **(v0.6.14+):** Analytics Overview + Sentry-density Issues. [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-refresh-ux-0.6.16.md). Humaan admin chrome (v0.6.7+): DNA logo only, primary pills, search → filters → tables, Monitor/Delivery accordion.
 
-After `npm install @superhumaan/dna-by-humaan@latest`, **restart the API** that mounts Lab — `npx …@x.y.z` alone does not refresh `/labs`.
+### Upgrade Lab (never skip)
+
+```bash
+npx @superhumaan/dna-by-humaan@latest update   # or: npx dna lab installs --fix
+# Restart the API that mounts Lab, then hard-refresh /labs
+curl -s http://localhost:<api>/api/dna/labs/health | jq '{dnaVersion,labUi}'
+```
+
+`npx …@x.y.z` alone does **not** refresh `/labs` in a running host app — install into `node_modules`, **restart the API**, hard-refresh the browser.
 
 ```typescript
 import { createLabMiddleware } from "@superhumaan/dna-by-humaan/lab";

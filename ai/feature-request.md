@@ -4,16 +4,15 @@ _Auto-maintained by DNA. Updated 2026-07-24._
 
 ## Latest request
 
-> Create amazing stem packs for product analysis (purpose, strengths, weaknesses), competitor analysis, and upgrade suggestions — grounded in real architecture and known debt, not stub Impressions.
+> update all docs, update all details, update dna-website, update npm details and publish to npm and update github details and publish to github — DONT FORGET TO UPDATE INSTALL INSTRUCTIONS AND INSTALL PROCESSES SO WE NEVER HAVE AN ISSUE UPGRADING LABS AGAIN
 
-## Status
+## Desired Behaviour
 
-Implemented — catalog v7, 88 stems. Product-intel suite installed via workbench.
+Ship Lab Refresh UX + Copy issue as **v0.6.16**, with install/upgrade docs and CLI processes that auto-align nested Lab packages and always print restart + hard-refresh next steps.
 
-## Acceptance
+## Acceptance Criteria
 
-- [x] `catalog-product-intel.ts` with 11 stems + evidence hierarchy
-- [x] Wired into catalog; tests pass
-- [x] Intelligence catalog regenerated (88 stems, v7)
-- [x] Workbench install refreshed `.DNA/stems/` + slash commands
-- [x] Docs/CHANGELOG/roadmap updated
+- [x] Refresh disables + spins on every Lab page; tab-aware reload
+- [x] Copy issue on Issues list/detail
+- [x] `dna doctor` / `dna update` / `dna lab installs` print mandatory Lab upgrade next steps; doctor auto-fixes stale installs
+- [x] Docs + DNA-Web + npm README + version bump + GitHub release + npm publish

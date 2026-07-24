@@ -17,7 +17,7 @@ Share this with colleagues who want to try DNA on their own projects.
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |
 | Runtime observer | `@superhumaan/dna-by-humaan/runtime` | Errors/slow requests → `.DNA/data/runtime.db` |
-| **DNA Lab** | `dna lab serve` / `/labs` | Local open access; production auth via `dna register lab` (paste-verify at `/labs`; optional pre-notify). Overview = analytics dashboard; Issues = Sentry-density detail. After npm upgrade, **restart the API**. See [lab-analytics-0.6.14](./docs/engineering/lab-analytics-0.6.14.md). |
+| **DNA Lab** | `dna lab serve` / `/labs` | Local open access; production auth via `dna register lab` (paste-verify at `/labs`; optional pre-notify). Overview = analytics dashboard; Issues = Sentry-density detail + **Copy issue**; Refresh disables + spins and reloads the active tab. **After every npm upgrade:** `npx dna lab installs --fix` (or `dna update`), **restart the API**, hard-refresh `/labs`. See [lab-upgrade-dx](./docs/engineering/lab-upgrade-dx-0.6.15.md) · [lab-refresh-ux](./docs/engineering/lab-refresh-ux-0.6.16.md). |
 | Upstream feedback | `dna feedback report` / auto | DNA-platform failures → sanitized upstream report (opt-in, `dna-only` default) |
 | GitHub (optional) | `dna doctor` (auto) | Browser login + remote detect; auto-issues for high/critical events |
 | AI repair (optional) | `dna ai repair --dry-run` | Branch + patch plan, never auto-merged |
@@ -63,7 +63,23 @@ npm install
 dna validate
 ```
 
-`dna doctor` replaces the older multi-step flow (`init`, `ci install`, `runtime install`, `github connect`). It auto-detects your GitHub remote, opens browser sign-in when needed, and **auto-wires the runtime observer** into Express/Fastify entry files or Next.js `middleware.ts`.
+`dna doctor` replaces the older multi-step flow (`init`, `ci install`, `runtime install`, `github connect`). It auto-detects your GitHub remote, opens browser sign-in when needed, and **auto-wires the runtime observer** into Express/Fastify entry files or Next.js `middleware.ts`. From v0.6.16 it also **auto-aligns nested/stale Lab package installs**.
+
+### Upgrade DNA Lab (required after every npm bump)
+
+`/labs` stays on a stale UI if a nested `node_modules` copy or a long-lived API process is left behind.
+
+```bash
+npx @superhumaan/dna-by-humaan@latest update   # preferred
+# or: npx dna lab installs --fix
+
+# Then ALWAYS:
+# 1. Restart the API / dna lab serve process that mounts Lab
+# 2. Hard-refresh /labs (Cmd+Shift+R)
+curl -s http://localhost:<api>/api/dna/labs/health | jq '{dnaVersion,labUi}'
+```
+
+See [lab-upgrade-dx](./docs/engineering/lab-upgrade-dx-0.6.15.md).
 
 ### Portfolio install (one squad, many products)
 

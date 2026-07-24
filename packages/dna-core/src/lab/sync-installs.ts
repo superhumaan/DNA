@@ -5,6 +5,15 @@ import { findDnaByHumaanInstalls, summarizeDnaInstalls, type DnaPackageInstall }
 
 const PKG = "@superhumaan/dna-by-humaan";
 
+/** Printed after every Lab package upgrade so /labs cannot stay on a stale UI. */
+export const LAB_UPGRADE_NEXT_STEPS = [
+  "Next steps (required — Lab UI will stay stale until you do both):",
+  "  1. Restart every Node process that mounts Lab (your API, or `dna lab serve`)",
+  "  2. Hard-refresh /labs (Cmd+Shift+R / Ctrl+Shift+R)",
+  "  3. Confirm: curl -s <api>/api/dna/labs/health | jq '{dnaVersion,labUi}'",
+  "Docs: https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-upgrade-dx-0.6.15.md",
+].join("\n");
+
 export interface LabInstallsReport {
   installs: DnaPackageInstall[];
   versions: string[];
@@ -48,7 +57,8 @@ export function formatLabInstallsReport(projectRoot: string, report: LabInstalls
     for (const w of report.warnings) lines.push(`✗ ${w}`);
     lines.push("");
     lines.push("Fix: npx dna lab installs --fix");
-    lines.push("Then restart every API process that mounts Lab (Node keeps the old module until restart).");
+    lines.push("");
+    lines.push(LAB_UPGRADE_NEXT_STEPS);
   }
   return lines.join("\n");
 }

@@ -52,6 +52,24 @@ import { dnaRuntime } from "@superhumaan/dna-by-humaan/runtime";
 
 ---
 
+## Upgrade DNA (including Lab UI)
+
+`/labs` is served by the package copy your **API process** resolves. Nested installs and long-lived Node processes are the usual reason Lab looks “stuck” on an old UI.
+
+```bash
+npx @superhumaan/dna-by-humaan@latest update   # CLI + packs + nested Lab installs
+# or: npx dna lab installs --fix
+
+# REQUIRED every time:
+# 1. Restart the API / dna lab serve process that mounts Lab
+# 2. Hard-refresh /labs (Cmd+Shift+R)
+curl -s http://localhost:<api>/api/dna/labs/health | jq '{dnaVersion,labUi}'
+```
+
+Full checklist: [Lab upgrade DX](./lab-upgrade-dx-0.6.15.md).
+
+---
+
 ## Portfolio install (multi-product squads)
 
 ```bash
