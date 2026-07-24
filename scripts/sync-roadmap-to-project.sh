@@ -18,8 +18,8 @@ fi
 ISSUES=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17)
 
 # Status field values — adjust if your project uses different option names
-SHIPPED=(1 2 3 4 5 6 7 8 9 10 12 13 14 15 16 17)
-IN_PROGRESS=(11)
+SHIPPED=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17)
+IN_PROGRESS=()
 PLANNED=()
 
 echo "Adding ${#ISSUES[@]} roadmap issues to project..."

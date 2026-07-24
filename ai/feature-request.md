@@ -15,4 +15,4 @@ _Auto-maintained by DNA. Updated 2026-07-24. The user does not fill this in manu
 - [x] Packages / Trace panels render when data exists; otherwise clear empty states
 - [x] Tag search/filter on detail when tags present
 - [x] Empty runtime still loads without broken charts
-- [ ] Quality gate PASS; docker build; push feature branch
+- [x] Quality gate PASS; docker build; push feature branch

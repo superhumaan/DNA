@@ -4,14 +4,15 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.6.9)
+## Current release focus (v0.6.14)
 
-- **Lab pairing store-first** — CLI must `POST /pairing/init` to save `{ pairingId, codeHash }`; `/labs` verify only checks the Lab store (no invent-on-paste)
-- Prior: Lab CI billing blocker (v0.6.8)
+- **Lab analytics Overview + Sentry-density Issues** — command-center Overview (KPIs, batteries, charts, tables) and investigation-grade Issues list/detail ([docs](../engineering/lab-analytics-0.6.14.md))
+- Prior: Production health & residual closure (v0.6.13)
 
 ## Shipped highlights
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.9)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.14)
+- **Lab analytics + Issues depth (v0.6.14)** — Overview performance dashboard; Issues short IDs, sparklines, users/age; Issue detail Highlights / Stack / Tags / JSON / Trace ([docs](../engineering/lab-analytics-0.6.14.md))
 - **Lab UI — Humaan admin parity** — icon-only DNA brand, Humaan primary pills + large pill tabs, list search → tabs → always-on tables, sidebar accordion ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **DNA Lab v4** — Soli admin shell, Quality hub, Sentry-depth envelopes ([docs](../engineering/lab-and-runtime-0.6.4.md))
 - **Runtime safety** — EPIPE/ECONNRESET ignored; hardened `runtime.db` / lab-store; non-blocking GitHub repair path
@@ -57,7 +58,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | DNA always-on + `AGENTS.md` agent flow (v0.4.9) | ✅ Shipped |
 | Legal advisor + delivery methodology (v0.4.9) | ✅ Shipped |
 | Upstream feedback — DNA platform auto-report (v0.4.8) | ✅ Shipped |
-| First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | 🚧 In progress — setup script shipped |
+| First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | ✅ Shipped — setup script + OAuth scaffolding |
 | Real-time dashboard UI / DNA Lab ([#12](https://github.com/superhumaan/DNA/issues/12)) | ✅ Shipped — `/labs`, `dna lab serve`, `dna register lab` |
 | Lab hardening + Aggressive Repair Loop (v0.6.3) | ✅ Shipped — see [lab-and-repair-0.6.3](../engineering/lab-and-repair-0.6.3.md) |
 | Lab UI v4 + runtime depth + EPIPE/repair harden (v0.6.4) | ✅ Shipped — see [lab-and-runtime-0.6.4](../engineering/lab-and-runtime-0.6.4.md) |
@@ -66,6 +67,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Lab pairing store-first (v0.6.11) | ✅ Shipped — CLI must save via pairing/init; verify is store-only; gateway allowlist docs |
 | Express 5 optional peer (v0.6.12) | ✅ Shipped — peer `express@^4.18.0 \|\| ^5.0.0` so npm installs cleanly with Express 5 |
 | Production health & residual closure (v0.6.13) | ✅ Shipped — shared Lab state, strict CI, scoped coverage, Playwright smoke, GitHub/npm/DNA-Web health |
+| Lab analytics Overview + Sentry-density Issues (v0.6.14) | ✅ Shipped — see [lab-analytics-0.6.14](../engineering/lab-analytics-0.6.14.md) |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | ✅ Shipped — import merge + team registry sync |
 | Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | ✅ Shipped — `dna scan --open-pr` |
 | Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | ✅ Shipped — platform codegen scaffolds |

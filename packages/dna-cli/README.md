@@ -260,7 +260,7 @@ fail closed unless a shared Redis-compatible adapter is fully configured via
 `DNA_LAB_STATE_BACKEND=redis`, `DNA_LAB_REDIS_URL`, `DNA_LAB_REDIS_TOKEN`, and
 `DNA_LAB_REDIS_KEY`. `/api/dna/labs/health` reports the active backend.
 
-**UI (v0.6.7+):** Humaan admin parity — DNA logo only, primary pill buttons, large pill tabs, search → filters → data tables, collapsible Monitor/Delivery nav. [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-ui-humaan-0.6.7.md).
+**UI (v0.6.14+):** Analytics Overview (KPIs, health batteries, charts, cross-domain tables) + Sentry-density Issues (short IDs, 24h sparklines, users/age, full issue detail: Highlights, Stack, Tags, Packages, Additional Data JSON, Trace). [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-analytics-0.6.14.md). Humaan admin chrome (v0.6.7+): DNA logo only, primary pills, search → filters → tables, Monitor/Delivery accordion.
 
 After `npm install @superhumaan/dna-by-humaan@latest`, **restart the API** that mounts Lab — `npx …@x.y.z` alone does not refresh `/labs`.
 
