@@ -4,11 +4,10 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.6.16)
+## Current release focus (v0.6.17)
 
-- **Lab Refresh UX + Copy issue** — disable/spin Refresh on every page; clipboard-ready issue summaries ([docs](../engineering/lab-refresh-ux-0.6.16.md))
-- **Lab upgrade is install-safe** — `dna doctor` / `dna update` auto-align nested installs; restart + hard-refresh checklist ([docs](../engineering/lab-upgrade-dx-0.6.15.md))
-- Prior: Lab upgrade DX (v0.6.15), analytics Overview + Sentry-density Issues (v0.6.14)
+- **Lab alert dark theme + force Refresh** — readable install/billing banners; Refresh always force-fetches and spins ≥450ms
+- Prior: Lab Refresh UX + Copy issue + install-safe upgrades (v0.6.16)
 - **Lab nav IA** — multi-open sections + Doctor / Installs / Intelligence / Quality peer pages ([docs](../engineering/lab-nav-ia.md))
 
 ## Shipped highlights
@@ -75,6 +74,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Lab analytics Overview + Sentry-density Issues (v0.6.14) | ✅ Shipped — see [lab-analytics-0.6.14](../engineering/lab-analytics-0.6.14.md) |
 | Lab upgrade DX — nested installs + disk UI (v0.6.15) | ✅ Shipped — see [lab-upgrade-dx-0.6.15](../engineering/lab-upgrade-dx-0.6.15.md) |
 | Lab Refresh UX + Copy issue + install-safe upgrade (v0.6.16) | ✅ Shipped — see [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md) |
+| Lab alert dark theme + force Refresh (v0.6.17) | ✅ Shipped — dark amber alerts; Refresh force-fetch + min spin |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | ✅ Shipped — import merge + team registry sync |
 | Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | ✅ Shipped — `dna scan --open-pr` |
 | Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | ✅ Shipped — platform codegen scaffolds |

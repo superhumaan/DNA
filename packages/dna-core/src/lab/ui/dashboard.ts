@@ -245,22 +245,26 @@ async function refreshAll() {
   if (state.refreshing) return;
   state.refreshing = true;
   render();
+  const started = Date.now();
   try {
     try {
       const probe = await api("/probe");
       state.probeMeta = probe;
     } catch (_) {}
     await refreshTabDetail(state.tab);
-    await refreshData();
+    await refreshData(true);
   } finally {
+    const minSpinMs = 450;
+    const wait = Math.max(0, minSpinMs - (Date.now() - started));
+    if (wait) await new Promise((r) => setTimeout(r, wait));
     state.refreshing = false;
     render();
   }
 }
 
-async function refreshData() {
+async function refreshData(force) {
   const headers = {};
-  if (state.dataEtag) headers["If-None-Match"] = state.dataEtag;
+  if (state.dataEtag && !force) headers["If-None-Match"] = state.dataEtag;
   const res = await fetch(API + "/data", { credentials: "same-origin", headers });
   state.lastRefresh = new Date();
   if (res.status === 304) return; // unchanged — skip re-render/redraw

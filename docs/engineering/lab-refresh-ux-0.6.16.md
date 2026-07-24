@@ -1,6 +1,6 @@
 # DNA Lab — Refresh UX + upgrade-safe installs (v0.6.16)
 
-**npm:** `@superhumaan/dna-by-humaan@0.6.16`  
+**npm:** `@superhumaan/dna-by-humaan@0.6.17` (Refresh UX landed in 0.6.16; alert theme + force Refresh in 0.6.17)  
 **Related:** [Lab upgrade DX v0.6.15](./lab-upgrade-dx-0.6.15.md) · [Lab analytics v0.6.14](./lab-analytics-0.6.14.md)
 
 ---
@@ -54,12 +54,8 @@ Sidebar should show **v0.6.16** (or newer). If not: wrong process still running,
 
 ---
 
-## Files
+### Fixed (v0.6.17)
 
-| Area | Path |
-|------|------|
-| Lab client | `packages/dna-core/src/lab/ui/dashboard.ts` |
-| Lab CSS | `packages/dna-core/src/lab/ui/styles.ts` |
-| Install scan / fix | `packages/dna-core/src/lab/sync-installs.ts` |
-| Doctor auto-fix | `packages/dna-core/src/doctor-orchestrator.ts` |
-| `dna update` Lab align | `packages/dna-cli/src/index.ts` |
+- Dark-theme install/billing alert banners (no cream light-mode clash)
+- Manual Refresh force-fetches (skips ETag 304), min 450ms disabled + fast spin
+- Refresh spin kept under `prefers-reduced-motion`

@@ -4,6 +4,17 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **Methodology expansion** — company-size packs (solo → enterprise / big-tech / agency / nonprofit / …), industry delivery overlays (`methodologies/industry-*`), and process packs (lean-startup, XP, dual-track, CD, DevOps, SRE, design/product ops, Nexus, Scrum@Scale). Marketplace catalog **998** packs. Purpose combos: `combo/startup-saas`, `combo/enterprise-healthcare`, `combo/agency-fintech`.
+
+## [0.6.17] - 2026-07-24
+
+### Fixed
+
+- **Lab install/billing alerts on dark theme** — amber surface alerts instead of cream light-mode banners (readable titles/body/`code`).
+- **Lab Refresh feedback** — manual Refresh force-fetches (skips 304), keeps the button disabled with a fast spin for ≥450ms, and keeps spin visible under `prefers-reduced-motion`.
+
 ## [0.6.16] - 2026-07-24
 
 ### Added

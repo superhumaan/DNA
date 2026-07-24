@@ -741,24 +741,26 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .lab-badge--medium, .lab-badge--warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
 .lab-badge--low, .lab-badge--info { background: var(--color-info-surface-bg); color: var(--color-info-surface-fg); border: 1px solid var(--color-info-surface-border); }
 .lab-badge--ok { background: var(--color-success-surface-bg); color: var(--color-success-surface-fg); border: 1px solid var(--color-success-surface-border); }
-.lab-badge--billing { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+.lab-badge--billing { background: color-mix(in srgb, #f59e0b 18%, var(--color-surface)); color: #fbbf24; border: 1px solid color-mix(in srgb, #f59e0b 45%, var(--color-border)); }
 
 .lab-alert {
   display: flex; gap: 14px; align-items: flex-start;
   padding: 14px 16px; margin-bottom: 16px;
   border-radius: 12px; border: 1px solid var(--color-border-muted);
   background: var(--color-surface);
+  color: var(--color-text);
 }
 .lab-alert--billing {
-  border-color: #f59e0b;
-  background: #fffbeb;
+  border-color: color-mix(in srgb, #f59e0b 50%, var(--color-border));
+  background: color-mix(in srgb, #f59e0b 14%, var(--color-surface));
 }
 .lab-alert--install {
-  border-color: #f97316;
-  background: #fff7ed;
+  border-color: color-mix(in srgb, #f97316 50%, var(--color-border));
+  background: color-mix(in srgb, #f97316 14%, var(--color-surface));
 }
 .lab-alert--install .lab-alert__icon {
-  background: #ffedd5; color: #c2410c;
+  background: color-mix(in srgb, #f97316 22%, var(--color-surface));
+  color: #fb923c;
 }
 .lab-runtime-version {
   margin: 0;
@@ -772,7 +774,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .lab-alert__icon {
   flex: 0 0 auto; width: 36px; height: 36px; border-radius: 10px;
   display: grid; place-items: center;
-  background: #fef3c7; color: #b45309; font-size: 16px;
+  background: color-mix(in srgb, #f59e0b 20%, var(--color-surface));
+  color: #fbbf24; font-size: 16px;
 }
 .lab-alert__title {
   display: block; font-size: 0.9375rem; font-weight: 700; color: var(--color-text); margin-bottom: 4px;
@@ -780,9 +783,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .lab-alert__text {
   margin: 0; font-size: 0.84375rem; line-height: 1.5; color: var(--color-text-secondary);
 }
+.lab-alert__text code,
+.lab-alert__actions code {
+  font-family: var(--font-mono);
+  font-size: 0.78em;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--color-bg-app);
+  color: var(--dna-accent);
+  border: 1px solid var(--color-border);
+}
 .lab-alert__sample { color: var(--color-text-tertiary); }
 .lab-alert__actions {
-  margin: 8px 0 0; font-size: 0.8125rem;
+  margin: 8px 0 0; font-size: 0.8125rem; color: var(--color-text-secondary);
 }
 .lab-alert__actions a {
   color: var(--color-brand-primary); font-weight: 600; text-decoration: none;
@@ -948,6 +961,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  /* Keep Refresh feedback visible even with reduced motion — operators need the busy state. */
+  [data-action="refresh"] .fa-spin,
+  .fa-rotate.fa-spin {
+    animation-duration: 0.55s !important;
+  }
 }
 
 @media (max-width: 960px) {
