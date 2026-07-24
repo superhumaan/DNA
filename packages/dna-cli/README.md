@@ -47,21 +47,21 @@ dna --version
 
 ## Verified results
 
-Latest gate run — **all green** (2026-07-17):
+Latest gate run — **all green** (2026-07-24 · v0.6.16):
 
 | Gate | Result |
 |------|--------|
-| Unit tests | ✅ 340/340 passing |
+| Unit tests | ✅ 356/356 passing |
 | Coverage (product-critical scope) | ✅ 92.51% lines · per-file gate ≥ 80% |
 | DNA Lab load (200 concurrent viewers) | ✅ p95 148.73 ms · 4,895 req/s · 0 errors |
 | Dependency audit (OWASP-aligned) | ✅ 0 critical · 0 high · 0 moderate |
-| Code quality (SAST) | ✅ PASS · 376 files scanned |
+| Code quality (SAST) | ✅ PASS · 393 files scanned |
 | Lab browser smoke (Chromium) | ✅ route · health · overview |
 
 These figures come from DNA's **canonical health report** (`scripts/health-report.mjs`),
 composed from machine-readable test, coverage, load, audit, and quality inputs. Every
 push publishes the report to the GitHub Actions **Step Summary** and uploads it as the
-durable `dna-health-report` artifact (JSON + Markdown). Coverage is enforced **per file
+durable `dna-health-report` artifact (JSON + Markdown). Public snapshot: [dna.humaan.app/health](https://dna.humaan.app/health). Coverage is enforced **per file
 (≥ 80%)** over the product-critical scope; regenerate locally with `pnpm run health:report`.
 
 ---
