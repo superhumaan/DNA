@@ -1,60 +1,59 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-17. The user does not fill this in manually._
+_Auto-maintained by DNA. Updated 2026-07-24. The user does not fill this in manually._
 
 ## Latest request
 
-> Be consistent and show everything in marketplace and the real number.
-> Marketplace currently shows 885 packs while the total displays 910.
+> In /labs overview, please make it much more useful, it's supposed to be an analytics dashboard of overall performance, graphs, charts, batteries, cards, tables, it needs to be extremely informative
 
 ## Problem
 
-The public marketplace total and the browsable catalog disagree. DNA-Web
-groups packs through a fixed category allowlist that omits methodologies,
-most industries, and related categories, so visitors see fewer packs than
-the published total. Docs and package claims still say 897 while the
-canonical DNA catalog has grown further.
+The Lab `/labs` Overview tab is a thin summary (4 KPI cards, one error bar chart, one issues table). Operators cannot see overall system performance at a glance — they must hop between Issues, Events, Performance, Quality, and Releases.
 
 ## Current Pain
 
-Operators and visitors cannot trust the marketplace count. Homepage and
-marketing copy claim one number; the marketplace browser shows another;
-npm/README claims a third. Some packs are invisible in the UI even though
-they exist in the catalog.
+- Overview does not surface performance, quality, CI, coverage, or release health already available in `GET /api/dna/labs/data`
+- Charts are minimal (single error series; no severity mix, latency, or quality trend on Overview)
+- No battery/gauge-style health meters for gate scores (doctor, error rate, coverage, quality, CI)
+- Dense cross-domain tables (slow endpoints, recent events, CI) live only on other tabs
 
 ## Proposed Solution
 
-Treat the canonical DNA bundled catalog length as the single source of
-truth. Synchronize that catalog into DNA-Web, render every pack in the
-marketplace (no silent category drops), and replace hard-coded totals with
-the live deduplicated catalog count everywhere it is shown.
+Rebuild Overview as an **analytics command center** that composes existing `LabDashboardData` into:
+
+1. **KPI cards** — expanded operational strip (issues, errors, rate, latency/slow, memory, third-party, coverage, CI)
+2. **Health batteries** — fill gauges for Doctor, Error-rate health, Coverage, Quality gate, CI success
+3. **Charts** — error+traffic timeline, severity distribution, quality score trend, slow-endpoint latency bars
+4. **Tables** — top issues, slow endpoints, recent CI runs, recent events (deep-links into existing tabs)
+
+Prefer **client-side aggregation** from the current payload; only extend the API if a needed series is missing.
 
 ## Users
 
-Marketplace visitors on dna.humaan.app, npm consumers reading package docs,
-and maintainers checking catalog parity between DNA and DNA-Web.
+DNA Lab operators monitoring runtime health locally (`dna lab serve`) or in production after lab pairing.
 
 ## Desired Behaviour
 
-Marketplace browser lists every pack. Displayed total equals unique catalog
-IDs. Homepage, marketplace, README, package descriptions, and docs all use
-the same real number. No pack category is hidden by an outdated allowlist.
+- Opening Overview answers: “Is the system healthy?” and “Where is pain?” without leaving the page
+- Batteries and cards use clear ok / warn / bad thresholds
+- Charts render empty states when data is missing
+- Rows deep-link to Issues / Performance / Quality / Events where useful
+- Layout stays within existing Humaan admin Lab chrome (gutters, panels, tokens)
+
+## Acceptance Criteria
+
+- [x] Overview shows ≥6 KPI cards covering runtime + delivery signals
+- [x] Overview shows ≥4 battery/gauge meters (doctor, error health, coverage, quality and/or CI)
+- [x] Overview shows ≥3 charts (timeline, severity mix, quality or latency)
+- [x] Overview shows ≥3 data tables (issues + slow endpoints + CI or events)
+- [x] Empty / zero-data states remain readable (no broken canvas)
+- [x] No regression on other Lab tabs; Refresh still reloads Overview charts
+- [x] Existing Lab tests pass; add/adjust UI or aggregate unit coverage where practical
 
 ## Edge Cases
 
-Packs matching multiple display categories must still count once in the
-total; empty categories; channel filtering; API/catalog asset missing in
-serverless deployments; discovery/legal/methodologies/industries packs.
-
-## Success Criteria
-
-- [x] Marketplace unique visible packs == catalog unique pack IDs
-- [x] Homepage and marketplace totals use the same live count
-- [x] Hard-coded stale counts (897 / mismatched 910 claims) are updated or derived
-- [x] DNA-Web catalog is synchronized from DNA’s canonical catalog
-- [x] Automated test prevents regressions that hide packs from the browser
-- [x] Both repos pass gates and are pushed
-
----
-
-**Project:** dna-by-humaan
+- No runtime.db / empty events → cards show zeros, charts show empty labels, tables show empty rows
+- Coverage / quality reports missing → batteries show “—” / empty, not fake 100%
+- CI billing blocker present → keep existing banner; reflect in CI battery as warn/bad
+- Narrow viewports → grids stack; charts remain full-width and readable
+- Large issue/event lists → Overview tables stay capped (top N), full lists remain on dedicated tabs

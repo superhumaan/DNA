@@ -213,41 +213,115 @@ function tagsHtml(tags) {
   ).join("") + '</div>';
 }
 
+function chartEmpty(ctx, w, h, msg) {
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = "22px ui-sans-serif, system-ui, sans-serif";
+  ctx.fillText(msg || "No data yet", 24, Math.max(40, h / 2));
+}
+
 function drawTimeline(canvas, buckets) {
-  if (!canvas || !buckets?.length) return;
+  if (!canvas) return;
   const ctx = canvas.getContext("2d");
-  const w = canvas.width = canvas.offsetWidth * 2;
-  const h = canvas.height = 280;
+  const w = canvas.width = Math.max(320, canvas.offsetWidth * 2);
+  const h = canvas.height = 320;
   ctx.clearRect(0, 0, w, h);
-  const pad = 24;
-  const max = Math.max(1, ...buckets.map((b) => b.errors));
+  if (!buckets?.length) { chartEmpty(ctx, w, h, "No event timeline yet"); return; }
+  const pad = 36;
+  const max = Math.max(1, ...buckets.map((b) => Math.max(b.errors || 0, b.total || 0)));
   const barW = (w - pad * 2) / buckets.length;
   buckets.forEach((b, i) => {
-    const barH = ((b.errors / max) * (h - pad * 2)) || 2;
-    const x = pad + i * barW + barW * 0.15;
-    const y = h - pad - barH;
-    ctx.fillStyle = b.errors ? "#dc2626" : "#e2e4e9";
-    ctx.fillRect(x, y, barW * 0.7, barH);
+    const totalH = ((b.total / max) * (h - pad * 2)) || 2;
+    const errH = ((b.errors / max) * (h - pad * 2)) || 0;
+    const x = pad + i * barW + barW * 0.12;
+    const bw = barW * 0.76;
+    ctx.fillStyle = "#e2e4e9";
+    ctx.fillRect(x, h - pad - totalH, bw, totalH);
+    if (errH > 0) {
+      ctx.fillStyle = "#dc2626";
+      ctx.fillRect(x, h - pad - errH, bw, errH);
+    }
   });
   ctx.fillStyle = "#64748b";
-  ctx.font = "20px Inter, sans-serif";
-  ctx.fillText("Errors (24h)", pad, 28);
+  ctx.font = "20px ui-sans-serif, system-ui, sans-serif";
+  ctx.fillText("Traffic (gray) · Errors (red) — 24h", pad, 26);
+}
+
+function drawSeverityChart(canvas, counts) {
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width = Math.max(320, canvas.offsetWidth * 2);
+  const h = canvas.height = 320;
+  ctx.clearRect(0, 0, w, h);
+  const entries = [
+    ["critical", counts.critical || 0, "#7f1d1d"],
+    ["high", counts.high || 0, "#dc2626"],
+    ["medium", counts.medium || 0, "#d97706"],
+    ["low", counts.low || 0, "#64748b"],
+  ];
+  const total = entries.reduce((n, e) => n + e[1], 0) + (counts.other || 0);
+  if (!total) { chartEmpty(ctx, w, h, "No issues to chart"); return; }
+  if (counts.other) entries.push(["other", counts.other, "#94a3b8"]);
+  const pad = 36;
+  const max = Math.max(1, ...entries.map((e) => e[1]));
+  const rowH = (h - pad * 2) / entries.length;
+  entries.forEach((e, i) => {
+    const barW = ((e[1] / max) * (w - pad * 2 - 120)) || 2;
+    const y = pad + i * rowH + rowH * 0.2;
+    ctx.fillStyle = e[2];
+    ctx.fillRect(pad + 100, y, barW, rowH * 0.55);
+    ctx.fillStyle = "#334155";
+    ctx.font = "20px ui-sans-serif, system-ui, sans-serif";
+    ctx.fillText(e[0], pad, y + rowH * 0.45);
+    ctx.fillStyle = "#64748b";
+    ctx.fillText(String(e[1]), pad + 110 + barW, y + rowH * 0.45);
+  });
+}
+
+function drawLatencyChart(canvas, slow) {
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width = Math.max(320, canvas.offsetWidth * 2);
+  const h = canvas.height = 320;
+  ctx.clearRect(0, 0, w, h);
+  const rows = (slow || []).slice(0, 8);
+  if (!rows.length) { chartEmpty(ctx, w, h, "No slow endpoints yet"); return; }
+  const pad = 36;
+  const max = Math.max(1, ...rows.map((r) => Math.max(r.avgMs || 0, r.maxMs || 0)));
+  const rowH = (h - pad * 2) / rows.length;
+  rows.forEach((r, i) => {
+    const label = ((r.method || "GET") + " " + (r.endpoint || "")).slice(0, 36);
+    const avgW = ((r.avgMs / max) * (w - pad * 2 - 160)) || 2;
+    const maxW = ((r.maxMs / max) * (w - pad * 2 - 160)) || 2;
+    const y = pad + i * rowH + rowH * 0.15;
+    ctx.fillStyle = "#c4b5fd";
+    ctx.fillRect(pad + 150, y, maxW, rowH * 0.55);
+    ctx.fillStyle = "#5b21b6";
+    ctx.fillRect(pad + 150, y, avgW, rowH * 0.55);
+    ctx.fillStyle = "#334155";
+    ctx.font = "18px ui-sans-serif, system-ui, sans-serif";
+    ctx.fillText(label, pad, y + rowH * 0.45);
+  });
+  ctx.fillStyle = "#64748b";
+  ctx.font = "18px ui-sans-serif, system-ui, sans-serif";
+  ctx.fillText("Avg (purple) · Max (lilac)", pad, 24);
 }
 
 function drawQualityTrend(canvas, reports) {
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
-  const w = canvas.width = canvas.offsetWidth * 2;
-  const h = canvas.height = 280;
+  const w = canvas.width = Math.max(320, canvas.offsetWidth * 2);
+  const h = canvas.height = 320;
   ctx.clearRect(0, 0, w, h);
   const scores = (reports || []).map((r) => r.score ?? 0).filter((s) => s > 0);
-  if (!scores.length) {
-    ctx.fillStyle = "#64748b";
-    ctx.font = "22px Inter, sans-serif";
-    ctx.fillText("No quality history yet", 24, 40);
-    return;
-  }
-  const pad = 24;
+  if (!scores.length) { chartEmpty(ctx, w, h, "No quality history yet"); return; }
+  const pad = 36;
+  // 80% reference line
+  ctx.strokeStyle = "#e2e4e9";
+  ctx.lineWidth = 2;
+  ctx.setLineDash([8, 8]);
+  const y80 = h - pad - 0.8 * (h - pad * 2);
+  ctx.beginPath(); ctx.moveTo(pad, y80); ctx.lineTo(w - pad, y80); ctx.stroke();
+  ctx.setLineDash([]);
   ctx.strokeStyle = "#5b21b6";
   ctx.lineWidth = 4;
   ctx.beginPath();
@@ -257,6 +331,9 @@ function drawQualityTrend(canvas, reports) {
     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
   });
   ctx.stroke();
+  ctx.fillStyle = "#64748b";
+  ctx.font = "20px ui-sans-serif, system-ui, sans-serif";
+  ctx.fillText("Quality score trend · 80% gate", pad, 26);
 }
 
 function stackHtml(stack) {
@@ -374,23 +451,195 @@ function ciBillingBanner() {
     '</div></div>';
 }
 
+function overviewCountBySeverity(issues) {
+  const counts = { critical: 0, high: 0, medium: 0, low: 0, other: 0 };
+  for (const issue of issues || []) {
+    const s = String(issue.severity || "").toLowerCase();
+    if (s === "critical" || s === "fatal") counts.critical += 1;
+    else if (s === "high" || s === "error") counts.high += 1;
+    else if (s === "medium" || s === "warning") counts.medium += 1;
+    else if (s === "low" || s === "info") counts.low += 1;
+    else counts.other += 1;
+  }
+  return counts;
+}
+
+function overviewCiSuccess(runs) {
+  let success = 0, total = 0, billing = 0;
+  for (const run of runs || []) {
+    if (run.failureKind === "billing") { billing += 1; total += 1; continue; }
+    const conclusion = String(run.conclusion || "").toLowerCase();
+    if (!conclusion && String(run.status || "").toLowerCase() === "in_progress") continue;
+    if (!conclusion) continue;
+    total += 1;
+    if (conclusion === "success") success += 1;
+  }
+  if (!total) return { percent: null, success: 0, total: 0, billing };
+  return { percent: Math.round((success / total) * 1000) / 10, success, total, billing };
+}
+
+function overviewLatestQuality(reports) {
+  if (!reports || !reports.length) return { score: null, gate: null };
+  const sorted = reports.slice().sort((a, b) => {
+    const ta = a.mtime ? new Date(a.mtime).getTime() : 0;
+    const tb = b.mtime ? new Date(b.mtime).getTime() : 0;
+    return tb - ta;
+  });
+  const latest = sorted[0];
+  return {
+    score: latest?.score != null && Number.isFinite(latest.score) ? Number(latest.score) : null,
+    gate: latest?.gate ?? null,
+  };
+}
+
+function overviewTone(value, warnBelow, badBelow) {
+  if (value == null || !Number.isFinite(value)) return "neutral";
+  if (value < badBelow) return "bad";
+  if (value < warnBelow) return "warn";
+  return "ok";
+}
+
+function overviewBatteries(d) {
+  const s = d.stats || {};
+  const doctorOk = !!d.doctor?.validation?.valid;
+  const doctorIssues = d.doctor?.validation?.issueCount ?? 0;
+  const errorHealth = Math.max(0, Math.min(100, Math.round(100 - (s.errorRate24h || 0))));
+  const coverage = s.coverageLines != null ? s.coverageLines : (d.coverage?.lines ?? null);
+  const q = overviewLatestQuality(d.qualityReports || []);
+  const ci = overviewCiSuccess(d.ciRuns || []);
+  return [
+    {
+      id: "doctor", label: "Doctor",
+      percent: doctorOk ? 100 : Math.max(10, 100 - doctorIssues * 15),
+      display: doctorOk ? "Healthy" : "Issues",
+      tone: doctorOk ? "ok" : "bad",
+      hint: doctorOk ? "Validation passed" : doctorIssues + " validation issue(s)",
+    },
+    {
+      id: "errors", label: "Error health",
+      percent: errorHealth, display: errorHealth + "%",
+      tone: overviewTone(errorHealth, 95, 90),
+      hint: (s.errorRate24h || 0) + "% error rate (24h)",
+    },
+    {
+      id: "coverage", label: "Coverage",
+      percent: coverage != null ? Math.round(coverage) : null,
+      display: coverage != null ? (Math.round(coverage * 10) / 10) + "%" : "—",
+      tone: overviewTone(coverage, 80, 60),
+      hint: coverage != null ? "Line coverage" : "Run test:coverage",
+    },
+    {
+      id: "quality", label: "Quality",
+      percent: q.score != null ? Math.round(q.score) : null,
+      display: q.score != null ? String(Math.round(q.score)) : (q.gate ? String(q.gate).toUpperCase() : "—"),
+      tone: q.gate === "pass" ? "ok" : q.gate === "fail" ? "bad" : overviewTone(q.score, 80, 60),
+      hint: q.gate ? "Gate: " + q.gate : "Latest quality report",
+    },
+    {
+      id: "ci", label: "CI success",
+      percent: ci.percent != null ? Math.round(ci.percent) : null,
+      display: ci.percent != null ? ci.percent + "%" : "—",
+      tone: ci.billing > 0 ? "warn" : overviewTone(ci.percent, 90, 70),
+      hint: ci.billing > 0 ? ci.billing + " billing-blocked run(s)" : (ci.total ? ci.success + "/" + ci.total + " recent runs" : "No concluded runs"),
+    },
+  ];
+}
+
+function batteryHtml(b) {
+  const pct = b.percent == null ? 0 : Math.max(0, Math.min(100, b.percent));
+  const empty = b.percent == null;
+  return '<div class="lab-battery lab-battery--' + esc(b.tone || "neutral") + (empty ? ' is-empty' : '') + '" title="' + esc(b.hint || "") + '">' +
+    '<div class="lab-battery__meta"><span class="lab-battery__label">' + esc(b.label) + '</span><span class="lab-battery__value">' + esc(b.display) + '</span></div>' +
+    '<div class="lab-battery__track" role="meter" aria-label="' + esc(b.label) + '" aria-valuemin="0" aria-valuemax="100"' +
+    (empty ? ' aria-valuetext="unknown"' : ' aria-valuenow="' + pct + '"') + '>' +
+    '<div class="lab-battery__fill" style="width:' + (empty ? 0 : pct) + '%"></div></div>' +
+    '<div class="lab-battery__hint">' + esc(b.hint || "") + '</div></div>';
+}
+
+function kpiCard(label, value, tone, sub) {
+  return '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">' + esc(label) + '</div>' +
+    '<div class="lab-stat-card__value' + (tone ? ' is-' + tone : '') + '">' + esc(value) + '</div>' +
+    (sub ? '<div class="lab-stat-card__sub">' + esc(sub) + '</div>' : '') + '</div>';
+}
+
+function overviewPanelLink(tab, label) {
+  return '<a href="#" class="lab-panel__link" data-tab="' + esc(tab) + '">' + esc(label) + ' <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>';
+}
+
 function overviewPanel() {
   const d = state.data || {};
   const s = d.stats || {};
-  const valid = d.doctor?.validation?.valid;
   const issues = (d.issueGroups || []).slice(0, 8);
-  return '<div class="admin-page-body admin-page-body--form">' +
+  const slow = (d.slowEndpoints || []).slice(0, 8);
+  const ciRuns = (d.ciRuns || []).slice(0, 6);
+  const events = (d.runtimeEvents || []).slice().reverse().slice(0, 8);
+  const releases = (d.releases || []).slice(0, 4);
+  const batteries = overviewBatteries(d);
+  const q = overviewLatestQuality(d.qualityReports || []);
+  const ci = overviewCiSuccess(d.ciRuns || []);
+  const coverage = s.coverageLines != null ? s.coverageLines : (d.coverage?.lines ?? null);
+  const doctorOk = !!d.doctor?.validation?.valid;
+
+  const slowRows = slow.length
+    ? slow.map((r) => '<tr><td><code>' + esc(r.method) + ' ' + esc(r.endpoint) + '</code></td><td>' + esc(r.count) + '</td><td>' + esc(r.avgMs) + 'ms</td><td>' + esc(r.maxMs) + 'ms</td></tr>').join("")
+    : tableEmptyRow(4, 'No slow requests yet.');
+
+  const ciRows = ciRuns.length
+    ? ciRuns.map((r) => {
+      const conclusion = (r.conclusion || r.status || "").toLowerCase();
+      const billing = r.failureKind === "billing";
+      const cls = billing ? "billing" : conclusion === "success" ? "ok" : conclusion === "failure" || conclusion === "cancelled" ? "critical" : "info";
+      const badgeLabel = billing ? "billing" : (r.conclusion || r.status || "—");
+      const title = r.url
+        ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">' + esc(r.displayTitle || r.workflowName) + '</a>'
+        : esc(r.displayTitle || r.workflowName || "run");
+      return '<tr><td>' + title + '<div class="lab-table__sub">' + esc(r.headBranch || r.workflowName || "") + '</div></td><td><span class="lab-badge lab-badge--' + cls + '">' + esc(badgeLabel) + '</span></td><td>' + timeAgo(r.updatedAt || r.createdAt) + '</td></tr>';
+    }).join("")
+    : tableEmptyRow(3, 'No CI runs yet.');
+
+  const eventRows = events.length
+    ? events.map((e) => '<tr><td>' + eventTypeBadge(e.type) + '</td><td><div class="lab-table__title">' + esc(e.message) + '</div><div class="lab-table__sub">' + esc(e.method || "") + ' ' + esc(e.endpoint || "") + '</div></td><td>' + timeAgo(e.timestamp) + '</td></tr>').join("")
+    : tableEmptyRow(3, 'No runtime events yet.');
+
+  const releaseBits = releases.length
+    ? releases.map((r) => '<span class="lab-chip"><strong>' + esc(r.version) + '</strong> · ' + esc(r.environment || "—") + ' · ' + timeAgo(r.deployedAt) + '</span>').join("")
+    : '<span class="lab-chip lab-chip--muted">No releases registered</span>';
+
+  return '<div class="admin-page-body admin-page-body--form lab-overview">' +
     ciBillingBanner() +
-    '<div class="lab-stats settings-grid">' +
-    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Unresolved issues</div><div class="lab-stat-card__value ' + (s.issueCount ? 'is-warn' : 'is-ok') + '">' + esc(s.issueCount) + '</div><div class="lab-stat-card__sub">' + esc(s.unresolvedCritical || 0) + ' critical/high</div></div>' +
-    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Errors (24h)</div><div class="lab-stat-card__value ' + (s.errors24h ? 'is-bad' : 'is-ok') + '">' + esc(s.errors24h) + '</div><div class="lab-stat-card__sub">' + esc(s.events24h) + ' events</div></div>' +
-    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Error rate</div><div class="lab-stat-card__value ' + (s.errorRate24h > 5 ? 'is-bad' : 'is-ok') + '">' + esc(s.errorRate24h) + '%</div></div>' +
-    '<div class="lab-stat-card settings-card"><div class="lab-stat-card__label">Doctor</div><div class="lab-stat-card__value ' + (valid ? 'is-ok' : 'is-bad') + '">' + (valid ? 'Healthy' : 'Issues') + '</div></div>' +
+    '<div class="lab-overview__intro"><div><h2 class="lab-overview__title">System performance</h2><p class="lab-overview__sub">Runtime, delivery, and quality signals from the last 24 hours.</p></div>' +
+    '<div class="lab-overview__release">' + releaseBits + '</div></div>' +
+    '<div class="lab-stats settings-grid lab-overview__kpis">' +
+    kpiCard("Unresolved issues", s.issueCount ?? 0, s.issueCount ? "warn" : "ok", (s.unresolvedCritical || 0) + " critical/high") +
+    kpiCard("Errors (24h)", s.errors24h ?? 0, s.errors24h ? "bad" : "ok", (s.events24h ?? 0) + " events") +
+    kpiCard("Error rate", (s.errorRate24h ?? 0) + "%", (s.errorRate24h || 0) > 5 ? "bad" : "ok", "of recent events") +
+    kpiCard("Slow requests", s.slowRequestCount ?? 0, s.slowRequestCount ? "warn" : "ok", "last 24h") +
+    kpiCard("Memory spikes", s.memorySpikeCount ?? 0, s.memorySpikeCount ? "warn" : "ok", "last 24h") +
+    kpiCard("Third-party", s.thirdPartyCount ?? 0, s.thirdPartyCount ? "warn" : "ok", "API captures") +
+    kpiCard("Coverage", coverage != null ? (Math.round(coverage * 10) / 10) + "%" : "—", coverage == null ? "" : coverage >= 80 ? "ok" : "warn", "line coverage") +
+    kpiCard("CI / Quality", (ci.percent != null ? ci.percent + "% CI" : "—") + (q.gate ? " · " + String(q.gate) : ""), doctorOk && (ci.percent == null || ci.percent >= 90) ? "ok" : "warn", "doctor " + (doctorOk ? "ok" : "issues")) +
     '</div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Error volume</h2></div><div class="lab-panel__body" style="padding:16px"><canvas class="lab-chart" id="error-chart"></canvas></div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Top unresolved issues</h2></div><div class="lab-panel__body">' +
+    '<div class="lab-batteries">' + batteries.map(batteryHtml).join("") + '</div>' +
+    '<div class="lab-overview__charts">' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Event volume</h2></div><div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart lab-chart--lg" id="error-chart"></canvas></div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Issue severity</h2></div><div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart lab-chart--lg" id="severity-chart"></canvas></div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Quality trend</h2>' + overviewPanelLink("quality", "Quality") + '</div><div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart lab-chart--lg" id="overview-quality-chart"></canvas></div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Latency (slow endpoints)</h2>' + overviewPanelLink("performance", "Performance") + '</div><div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart lab-chart--lg" id="latency-chart"></canvas></div></div>' +
+    '</div>' +
+    '<div class="lab-overview__tables">' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Top unresolved issues</h2>' + overviewPanelLink("issues", "Issues") + '</div><div class="lab-panel__body">' +
     issueTable(issues, true, false, 'No issues yet.') +
-    '</div></div></div>';
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Slow endpoints</h2>' + overviewPanelLink("performance", "Performance") + '</div><div class="lab-panel__body">' +
+    '<table class="lab-table admin-table"><thead><tr><th>Endpoint</th><th>Count</th><th>Avg</th><th>Max</th></tr></thead><tbody>' + slowRows + '</tbody></table>' +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Recent CI</h2>' + overviewPanelLink("quality", "Quality") + '</div><div class="lab-panel__body">' +
+    '<table class="lab-table admin-table"><thead><tr><th>Run</th><th>Status</th><th>When</th></tr></thead><tbody>' + ciRows + '</tbody></table>' +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Recent events</h2>' + overviewPanelLink("events", "Events") + '</div><div class="lab-panel__body">' +
+    '<table class="lab-table admin-table"><thead><tr><th>Type</th><th>Message</th><th>When</th></tr></thead><tbody>' + eventRows + '</tbody></table>' +
+    '</div></div>' +
+    '</div></div>';
 }
 
 function issueTable(issues, clickable, edge, emptyMsg) {
@@ -603,6 +852,12 @@ function render() {
   if (state.view === "dashboard" && state.data) {
     const chart = document.getElementById("error-chart");
     if (chart) drawTimeline(chart, state.data.eventTimeline);
+    const sev = document.getElementById("severity-chart");
+    if (sev) drawSeverityChart(sev, overviewCountBySeverity(state.data.issueGroups || []));
+    const lat = document.getElementById("latency-chart");
+    if (lat) drawLatencyChart(lat, state.data.slowEndpoints || []);
+    const oq = document.getElementById("overview-quality-chart");
+    if (oq) drawQualityTrend(oq, state.data.qualityReports);
     const q = document.getElementById("quality-chart");
     if (q) drawQualityTrend(q, state.data.qualityReports);
   }

@@ -4,8 +4,14 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **Lab Overview analytics dashboard** — `/labs` Overview is now a full performance command center: expanded KPI cards, health batteries (Doctor / error / coverage / quality / CI), dual-series event volume + severity + quality + latency charts, and capped tables for issues, slow endpoints, CI, and events with deep-links to Monitor/Delivery tabs.
+
 ### Fixed
 
+- **pnpm 11 allowBuilds** — set `esbuild: true` in `pnpm-workspace.yaml` (placeholder broke `pnpm install` / quality toolchain); moved esbuild override out of ignored `package.json#pnpm`.
+- **ESLint toolchain** — add direct `@eslint/js@9.39.4` so `pnpm lint` resolves under pnpm 11.
 - **Marketplace catalog parity** — DNA-Web marketplace now lists every pack (methodologies, industries, discovery, residual Other) and shows the real unique total (**965**). Catalog sync script keeps DNA-Web assets aligned with DNA; public copy no longer claims 897/910.
 
 ## [0.6.13] - 2026-07-17
