@@ -6,6 +6,7 @@ All notable changes to DNA are documented here.
 
 ### Added
 
+- **Lab Issues — Sentry-density investigation** — Issues list adds short ID, culprit, age, 24h sparklines, events, and users; Issue detail adds hero metrics, events chart, Highlights, Stack Trace, Breadcrumbs, Trace spans, searchable Tags, Contexts, Packages, Additional Data JSON, Request, and Related events.
 - **Lab Overview analytics dashboard** — `/labs` Overview is now a full performance command center: expanded KPI cards, health batteries (Doctor / error / coverage / quality / CI), dual-series event volume + severity + quality + latency charts, and capped tables for issues, slow endpoints, CI, and events with deep-links to Monitor/Delivery tabs.
 
 ### Fixed

@@ -6,6 +6,7 @@ const state = {
   selectedIssueId: null,
   severityFilter: "all",
   searchQuery: "",
+  tagSearchQuery: "",
   navOpenGroup: null,
   qualityTab: "reports",
   pairingId: null,
@@ -206,11 +207,146 @@ function requestHtml(req, event) {
     '</div>';
 }
 
-function tagsHtml(tags) {
-  if (!tags || !Object.keys(tags).length) return "";
-  return '<div class="lab-tags">' + Object.entries(tags).map(([k, v]) =>
-    '<span class="lab-tag"><strong>' + esc(k) + '</strong> ' + esc(v) + '</span>'
+function formatAge(ms) {
+  if (!ms || ms < 0) return "—";
+  const s = Math.floor(ms / 1000);
+  if (s < 60) return s + "s";
+  const m = Math.floor(s / 60);
+  if (m < 60) return m + "m";
+  const h = Math.floor(m / 60);
+  if (h < 48) return h + "h";
+  return Math.floor(h / 24) + "d";
+}
+
+function sparklineSvg(values, width, height) {
+  const vals = Array.isArray(values) ? values : [];
+  const w = width || 88;
+  const h = height || 28;
+  if (!vals.length) {
+    return '<svg class="lab-spark" width="' + w + '" height="' + h + '" aria-hidden="true"><line x1="0" y1="' + (h - 2) + '" x2="' + w + '" y2="' + (h - 2) + '" stroke="#e2e4e9" stroke-width="2"/></svg>';
+  }
+  const max = Math.max(1, ...vals);
+  const step = w / Math.max(vals.length - 1, 1);
+  const pts = vals.map((v, i) => {
+    const x = i * step;
+    const y = h - 2 - ((v / max) * (h - 6));
+    return x.toFixed(1) + "," + y.toFixed(1);
+  }).join(" ");
+  return '<svg class="lab-spark" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" aria-hidden="true">' +
+    '<polyline fill="none" stroke="#5b21b6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="' + pts + '"/>' +
+    '</svg>';
+}
+
+function prettyJson(value) {
+  try { return JSON.stringify(value, null, 2); } catch (_) { return String(value); }
+}
+
+function tagsTableHtml(tags, filterQ) {
+  const entries = Object.entries(tags || {});
+  if (!entries.length) return emptyState('fa-tags', 'No tags', 'Tags appear when the runtime client attaches key/value metadata.');
+  const q = String(filterQ || "").trim().toLowerCase();
+  const filtered = q
+    ? entries.filter(([k, v]) => (k + " " + v).toLowerCase().includes(q))
+    : entries;
+  const rows = filtered.length
+    ? filtered.map(([k, v]) => '<tr><td><code>' + esc(k) + '</code></td><td><code>' + esc(v) + '</code></td></tr>').join("")
+    : tableEmptyRow(2, 'No tags match this filter.');
+  return '<div class="lab-tag-filter"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>' +
+    '<input type="search" class="lab-tag-filter__input" data-tag-search placeholder="Filter tags…" value="' + esc(state.tagSearchQuery || "") + '" autocomplete="off" /></div>' +
+    '<table class="lab-table"><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function packagesHtml(contexts) {
+  const pkgs = contexts?.packages || contexts?.app?.packages;
+  if (!pkgs || typeof pkgs !== "object") {
+    return emptyState('fa-box', 'No packages', 'Dependency versions appear when the client sends contexts.packages.');
+  }
+  const entries = Array.isArray(pkgs)
+    ? pkgs.map((p) => [p.name || p, p.version || ""])
+    : Object.entries(pkgs);
+  if (!entries.length) return emptyState('fa-box', 'No packages', 'Dependency versions appear when the client sends contexts.packages.');
+  const rows = entries.slice(0, 80).map(([name, ver]) =>
+    '<tr><td><code>' + esc(name) + '</code></td><td><code>' + esc(ver) + '</code></td></tr>'
+  ).join("");
+  return '<table class="lab-table"><thead><tr><th>Package</th><th>Version</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function additionalDataHtml(event) {
+  const extra = event?.extra || {};
+  const known = new Set(["id","timestamp","type","message","stack","frames","breadcrumbs","contexts","tags","request","endpoint","method","statusCode","durationMs","environment","release","fingerprint","provider","source","responseBody","user","extra","spans"]);
+  const leftover = {};
+  Object.keys(event || {}).forEach((k) => {
+    if (!known.has(k) && event[k] != null) leftover[k] = event[k];
+  });
+  const payload = Object.keys(extra).length ? { ...extra, ...leftover } : leftover;
+  if (!Object.keys(payload).length) {
+    return emptyState('fa-brackets-curly', 'No additional data', 'Arbitrary event.extra fields will show here as JSON.');
+  }
+  return '<pre class="lab-json">' + esc(prettyJson(payload)) + '</pre>';
+}
+
+function spansHtml(spans) {
+  if (!spans || !spans.length) {
+    return emptyState('fa-timeline', 'No trace spans', 'Span waterfalls appear when events include OpenTelemetry-style spans.');
+  }
+  const maxDur = Math.max(1, ...spans.map((s) => Number(s.durationMs || ((s.timestamp - s.startTimestamp) * 1000) || 0)));
+  const rows = spans.slice(0, 40).map((s) => {
+    const dur = Number(s.durationMs || ((s.timestamp - s.startTimestamp) * 1000) || 0);
+    const pct = Math.max(2, Math.round((dur / maxDur) * 100));
+    return '<div class="lab-span"><div class="lab-span__meta"><span class="lab-span__op">' + esc(s.op || "span") + '</span> ' +
+      '<span class="lab-span__desc">' + esc(s.description || "") + '</span>' +
+      '<span class="lab-span__dur">' + esc(Math.round(dur)) + 'ms</span></div>' +
+      '<div class="lab-span__track"><div class="lab-span__bar" style="width:' + pct + '%"></div></div></div>';
+  }).join("");
+  return '<div class="lab-spans">' + rows + '</div>';
+}
+
+function highlightsHtml(issue, latest, events) {
+  const items = [];
+  if (issue.severity) items.push({ label: "Severity", value: issue.severity });
+  if (issue.culprit) items.push({ label: "Culprit", value: issue.culprit });
+  if (latest?.endpoint || issue.endpoint) items.push({ label: "Endpoint", value: (latest?.method || "GET") + " " + (latest?.endpoint || issue.endpoint) });
+  if (latest?.environment || issue.environment) items.push({ label: "Environment", value: latest?.environment || issue.environment });
+  if (latest?.release || issue.release) items.push({ label: "Release", value: latest?.release || issue.release });
+  const appFrame = (latest?.frames || []).find((f) => f.inApp);
+  if (appFrame) items.push({ label: "In-app frame", value: (appFrame.function || "?") + " · " + (appFrame.filename || "") + (appFrame.lineno != null ? ":" + appFrame.lineno : "") });
+  if (issue.topTags && issue.topTags[0]) items.push({ label: "Top tag", value: issue.topTags[0].key + "=" + issue.topTags[0].value });
+  if (events && events.length) items.push({ label: "Related events loaded", value: String(events.length) });
+  if (!items.length) return emptyState('fa-lightbulb', 'No highlights yet', 'Highlights appear once events include stack, tags, or request context.');
+  return '<div class="lab-highlights">' + items.map((it) =>
+    '<div class="lab-highlight"><span class="lab-highlight__label">' + esc(it.label) + '</span><span class="lab-highlight__value">' + esc(it.value) + '</span></div>'
   ).join("") + '</div>';
+}
+
+function issueHeroHtml(issue) {
+  return '<div class="lab-issue-hero">' +
+    '<div class="lab-issue-hero__stat"><span class="lab-issue-hero__label">Events</span><span class="lab-issue-hero__value">' + esc(issue.count ?? 0) + '</span></div>' +
+    '<div class="lab-issue-hero__stat"><span class="lab-issue-hero__label">Users</span><span class="lab-issue-hero__value">' + esc(issue.userCount != null ? issue.userCount : "—") + '</span></div>' +
+    '<div class="lab-issue-hero__stat"><span class="lab-issue-hero__label">First seen</span><span class="lab-issue-hero__value">' + esc(timeAgo(issue.firstSeen)) + '</span><span class="lab-issue-hero__sub">' + esc(issue.firstSeen ? new Date(issue.firstSeen).toLocaleString() : "—") + '</span></div>' +
+    '<div class="lab-issue-hero__stat"><span class="lab-issue-hero__label">Last seen</span><span class="lab-issue-hero__value">' + esc(timeAgo(issue.lastSeen)) + '</span><span class="lab-issue-hero__sub">' + esc(issue.lastSeen ? new Date(issue.lastSeen).toLocaleString() : "—") + '</span></div>' +
+    '<div class="lab-issue-hero__stat lab-issue-hero__stat--trend"><span class="lab-issue-hero__label">24h trend</span>' + sparklineSvg(issue.trend24h, 120, 32) + '</div>' +
+    '</div>';
+}
+
+function issueTable(issues, clickable, edge, emptyMsg) {
+  const rows = issues.length
+    ? issues.map((i) => {
+      const shortId = i.shortId || ("DNA-" + String(i.id || "").slice(0, 4).toUpperCase());
+      const culprit = i.culprit || i.endpoint || i.summary || "";
+      return '<tr class="' + (clickable ? 'is-clickable' : '') + '" data-issue="' + esc(i.id) + '">' +
+        '<td class="lab-issue-col"><div class="lab-issue-row__type">' + severityBadge(i.severity) + ' <span class="lab-issue-row__cat">' + esc(i.category || "error") + '</span></div>' +
+        '<div class="lab-table__title">' + esc(i.title) + '</div>' +
+        '<div class="lab-table__sub"><code>' + esc(shortId) + '</code>' + (culprit ? ' · ' + esc(String(culprit).slice(0, 80)) : '') + '</div></td>' +
+        '<td>' + esc(timeAgo(i.lastSeen)) + '</td>' +
+        '<td>' + esc(formatAge(i.ageMs)) + '</td>' +
+        '<td class="lab-issue-trend">' + sparklineSvg(i.trend24h) + '</td>' +
+        '<td>' + esc(i.count) + '</td>' +
+        '<td>' + esc(i.userCount != null ? i.userCount : "—") + '</td></tr>';
+    }).join("")
+    : tableEmptyRow(6, emptyMsg || 'No issues match this filter.');
+  return '<table class="lab-table admin-table lab-table--issues' + (edge ? ' admin-table--edge' : '') + '"><thead><tr>' +
+    '<th>Issue</th><th>Last seen</th><th>Age</th><th>Trend <span class="lab-th-hint">24h</span></th><th>Events</th><th>Users</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
 function chartEmpty(ctx, w, h, msg) {
@@ -304,6 +440,31 @@ function drawLatencyChart(canvas, slow) {
   ctx.fillStyle = "#64748b";
   ctx.font = "18px ui-sans-serif, system-ui, sans-serif";
   ctx.fillText("Avg (purple) · Max (lilac)", pad, 24);
+}
+
+function drawIssueEventsChart(canvas, trend) {
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width = Math.max(320, canvas.offsetWidth * 2);
+  const h = canvas.height = 220;
+  ctx.clearRect(0, 0, w, h);
+  const vals = Array.isArray(trend) ? trend : [];
+  if (!vals.length || !vals.some((v) => v > 0)) {
+    chartEmpty(ctx, w, h, "No events in the last 24h");
+    return;
+  }
+  const pad = 28;
+  const max = Math.max(1, ...vals);
+  const barW = (w - pad * 2) / vals.length;
+  vals.forEach((v, i) => {
+    const barH = ((v / max) * (h - pad * 2)) || (v ? 2 : 0);
+    const x = pad + i * barW + barW * 0.15;
+    ctx.fillStyle = v ? "#5b21b6" : "#e2e4e9";
+    ctx.fillRect(x, h - pad - Math.max(barH, v ? 2 : 1), barW * 0.7, Math.max(barH, v ? 2 : 1));
+  });
+  ctx.fillStyle = "#64748b";
+  ctx.font = "18px ui-sans-serif, system-ui, sans-serif";
+  ctx.fillText("Event volume (24h)", pad, 22);
 }
 
 function drawQualityTrend(canvas, reports) {
@@ -642,17 +803,10 @@ function overviewPanel() {
     '</div></div>';
 }
 
-function issueTable(issues, clickable, edge, emptyMsg) {
-  const rows = issues.length
-    ? issues.map((i) => '<tr class="' + (clickable ? 'is-clickable' : '') + '" data-issue="' + esc(i.id) + '"><td>' + severityBadge(i.severity) + '</td><td><div class="lab-table__title">' + esc(i.title) + '</div><div class="lab-table__sub">' + esc(i.category) + (i.endpoint ? ' · ' + esc(i.endpoint) : '') + '</div></td><td>' + esc(i.count) + '</td><td>' + timeAgo(i.lastSeen) + '</td></tr>').join("")
-    : tableEmptyRow(4, emptyMsg || 'No issues match this filter.');
-  return '<table class="lab-table admin-table' + (edge ? ' admin-table--edge' : '') + '"><thead><tr><th>Level</th><th>Issue</th><th>Events</th><th>Last seen</th></tr></thead><tbody>' + rows + '</tbody></table>';
-}
-
 function issuesPanel() {
   const match = matchesSearch();
   const all = (state.data?.issueGroups || []).filter((i) =>
-    match([i.title, i.category, i.endpoint, i.severity, i.summary])
+    match([i.title, i.category, i.endpoint, i.severity, i.summary, i.shortId, i.culprit, i.fingerprint])
   );
   const filtered = state.severityFilter === "all" ? all : all.filter((i) => i.severity === state.severityFilter);
   const tabs = ["all","critical","high","medium","low"].map((f) =>
@@ -666,27 +820,71 @@ function issuesPanel() {
 
 function issueDetailPanel(issue) {
   const events = eventsForIssue(issue);
-  const latest = issue.latestEvent || events[0] || {};
-  return '<div class="admin-page-body admin-page-body--form">' +
-    '<div class="lab-breadcrumb"><a href="#" data-tab="issues">Issues</a><span>/</span><span>' + esc(issue.title) + '</span></div>' +
-    '<div class="lab-detail"><div class="lab-detail__main">' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">' + severityBadge(issue.severity) + ' ' + esc(issue.title) + '</h2></div>' +
-    '<div class="lab-panel__body" style="padding:16px">' +
-    '<p style="margin:0 0 14px;color:var(--color-text-tertiary);line-height:1.5">' + esc(issue.summary || latest.message || "No summary") + '</p>' +
-    tagsHtml(latest.tags) +
-    '<h3 class="lab-section-title">Exception</h3>' +
-    framesHtml(latest.frames, latest.stack || issue.stackTraceSummary) +
+  const latest = events[0] || issue.latestEvent || {};
+  const shortId = issue.shortId || ("DNA-" + String(issue.id || "").slice(0, 4).toUpperCase());
+  const trend = issue.trend24h && issue.trend24h.length
+    ? issue.trend24h
+    : (function () {
+        const buckets = Array.from({ length: 24 }, () => 0);
+        const now = Date.now();
+        events.forEach((e) => {
+          const ts = e.timestamp ? new Date(e.timestamp).getTime() : 0;
+          if (!ts) return;
+          const ageH = Math.floor((now - ts) / 3600000);
+          if (ageH >= 0 && ageH < 24) buckets[23 - ageH] += 1;
+        });
+        return buckets;
+      })();
+
+  return '<div class="admin-page-body admin-page-body--form lab-issue-detail">' +
+    '<div class="lab-breadcrumb"><a href="#" data-tab="issues">Issues</a><span>/</span><code>' + esc(shortId) + '</code><span>/</span><span>' + esc(issue.title) + '</span></div>' +
+    '<div class="lab-issue-title-row">' +
+    '<div><div class="lab-issue-title-row__badges">' + severityBadge(issue.severity) +
+    ' <span class="lab-badge lab-badge--info">' + esc(issue.category || "error") + '</span></div>' +
+    '<h2 class="lab-issue-title">' + esc(issue.title) + '</h2>' +
+    '<p class="lab-issue-summary">' + esc(issue.summary || latest.message || "No summary") + '</p>' +
+    (issue.culprit ? '<p class="lab-issue-culprit"><i class="fa-solid fa-code" aria-hidden="true"></i> ' + esc(issue.culprit) + '</p>' : '') +
     '</div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Breadcrumbs</h2></div><div class="lab-panel__body">' + breadcrumbsHtml(latest.breadcrumbs) + '</div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Request</h2></div><div class="lab-panel__body" style="padding:16px">' + requestHtml(latest.request, latest) + '</div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Contexts</h2></div><div class="lab-panel__body" style="padding:16px">' + contextTable(latest.contexts) + '</div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Related events</h2></div><div class="lab-panel__body">' +
+    issueHeroHtml({ ...issue, trend24h: trend }) +
+    '<div class="lab-detail"><div class="lab-detail__main">' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Events</h2><span class="lab-panel__meta">24h</span></div>' +
+    '<div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart" id="issue-events-chart"></canvas></div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Highlights</h2></div><div class="lab-panel__body" style="padding:14px">' +
+    highlightsHtml(issue, latest, events) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Stack Trace</h2></div>' +
+    '<div class="lab-panel__body" style="padding:14px">' + framesHtml(latest.frames, latest.stack || issue.stackTraceSummary) + '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Breadcrumbs</h2><span class="lab-panel__meta">' + esc((latest.breadcrumbs || []).length) + '</span></div>' +
+    '<div class="lab-panel__body">' + breadcrumbsHtml((latest.breadcrumbs || []).slice(-100)) + '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Trace</h2></div><div class="lab-panel__body" style="padding:14px">' +
+    spansHtml(latest.spans) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Tags</h2></div><div class="lab-panel__body">' +
+    tagsTableHtml(latest.tags, state.tagSearchQuery) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Contexts</h2></div><div class="lab-panel__body" style="padding:14px">' +
+    contextTable(latest.contexts) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Packages</h2></div><div class="lab-panel__body">' +
+    packagesHtml(latest.contexts) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Additional Data</h2></div><div class="lab-panel__body" style="padding:14px">' +
+    additionalDataHtml(latest) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Request</h2></div><div class="lab-panel__body" style="padding:14px">' +
+    requestHtml(latest.request, latest) +
+    '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Related events</h2><span class="lab-panel__meta">' + esc(events.length) + '</span></div><div class="lab-panel__body">' +
     eventsTable(events, false, 'No matching runtime events (may be sampled).') +
     '</div></div></div>' +
-    '<div class="lab-detail__side"><div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Details</h2></div><div class="lab-panel__body" style="padding:16px"><div class="lab-kv">' +
+    '<div class="lab-detail__side">' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Details</h2></div><div class="lab-panel__body" style="padding:14px"><div class="lab-kv">' +
+    '<div class="lab-kv__row"><span class="lab-kv__key">ID</span><span class="lab-kv__val"><code>' + esc(shortId) + '</code></span></div>' +
     '<div class="lab-kv__row"><span class="lab-kv__key">Events</span><span class="lab-kv__val">' + esc(issue.count) + '</span></div>' +
-    '<div class="lab-kv__row"><span class="lab-kv__key">First seen</span><span class="lab-kv__val">' + timeAgo(issue.firstSeen) + '</span></div>' +
-    '<div class="lab-kv__row"><span class="lab-kv__key">Last seen</span><span class="lab-kv__val">' + timeAgo(issue.lastSeen) + '</span></div>' +
+    '<div class="lab-kv__row"><span class="lab-kv__key">Users</span><span class="lab-kv__val">' + esc(issue.userCount != null ? issue.userCount : "—") + '</span></div>' +
+    '<div class="lab-kv__row"><span class="lab-kv__key">Age</span><span class="lab-kv__val">' + esc(formatAge(issue.ageMs)) + '</span></div>' +
+    '<div class="lab-kv__row"><span class="lab-kv__key">First seen</span><span class="lab-kv__val">' + esc(timeAgo(issue.firstSeen)) + '</span></div>' +
+    '<div class="lab-kv__row"><span class="lab-kv__key">Last seen</span><span class="lab-kv__val">' + esc(timeAgo(issue.lastSeen)) + '</span></div>' +
     '<div class="lab-kv__row"><span class="lab-kv__key">Category</span><span class="lab-kv__val">' + esc(issue.category) + '</span></div>' +
     (issue.fingerprint ? '<div class="lab-kv__row"><span class="lab-kv__key">Fingerprint</span><span class="lab-kv__val"><code>' + esc(issue.fingerprint) + '</code></span></div>' : '') +
     (issue.endpoint ? '<div class="lab-kv__row"><span class="lab-kv__key">Endpoint</span><span class="lab-kv__val"><code>' + esc(issue.endpoint) + '</code></span></div>' : '') +
@@ -694,8 +892,8 @@ function issueDetailPanel(issue) {
     (latest.release || issue.release ? '<div class="lab-kv__row"><span class="lab-kv__key">Release</span><span class="lab-kv__val"><code>' + esc(latest.release || issue.release) + '</code></span></div>' : '') +
     (latest.source ? '<div class="lab-kv__row"><span class="lab-kv__key">Source</span><span class="lab-kv__val">' + esc(latest.source) + '</span></div>' : '') +
     (latest.provider ? '<div class="lab-kv__row"><span class="lab-kv__key">Provider</span><span class="lab-kv__val">' + esc(latest.provider) + '</span></div>' : '') +
-    '</div></div>' +
-    (issue.suggestedFix ? '<div class="lab-panel settings-card" style="margin-top:14px"><div class="lab-panel__head"><h2 class="lab-panel__title">Suggested fix</h2></div><div class="lab-panel__body" style="padding:16px;font-size:13px;line-height:1.5">' + esc(issue.suggestedFix) + '</div></div>' : '') +
+    '</div></div></div>' +
+    (issue.suggestedFix ? '<div class="lab-panel settings-card" style="margin-top:14px"><div class="lab-panel__head"><h2 class="lab-panel__title">Suggested fix</h2></div><div class="lab-panel__body" style="padding:14px;font-size:13px;line-height:1.5">' + esc(issue.suggestedFix) + '</div></div>' : '') +
     '</div></div></div>';
 }
 
@@ -860,6 +1058,11 @@ function render() {
     if (oq) drawQualityTrend(oq, state.data.qualityReports);
     const q = document.getElementById("quality-chart");
     if (q) drawQualityTrend(q, state.data.qualityReports);
+    const issueChart = document.getElementById("issue-events-chart");
+    if (issueChart && state.selectedIssueId) {
+      const issue = findIssue(state.selectedIssueId);
+      drawIssueEventsChart(issueChart, issue?.trend24h || []);
+    }
   }
 }
 
@@ -902,6 +1105,7 @@ function bind() {
       const tab = el.getAttribute("data-tab");
       state.tab = tab;
       state.selectedIssueId = null;
+      state.tagSearchQuery = "";
       state.searchQuery = "";
       state.navOpenGroup = groupForTab(tab);
       render();
@@ -937,6 +1141,24 @@ function bind() {
       const caret = state._searchCaret;
       if (caret) {
         try { search.setSelectionRange(caret[0], caret[1]); } catch (_) {}
+      }
+    }
+  }
+  const tagSearch = document.querySelector("[data-tag-search]");
+  if (tagSearch) {
+    tagSearch.oninput = (e) => {
+      state.tagSearchQuery = e.target.value;
+      state._tagCaret = [e.target.selectionStart, e.target.selectionEnd];
+      state._tagFocused = true;
+      render();
+    };
+    tagSearch.onfocus = () => { state._tagFocused = true; };
+    tagSearch.onblur = () => { state._tagFocused = false; };
+    if (state._tagFocused) {
+      tagSearch.focus();
+      const caret = state._tagCaret;
+      if (caret) {
+        try { tagSearch.setSelectionRange(caret[0], caret[1]); } catch (_) {}
       }
     }
   }
