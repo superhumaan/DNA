@@ -4,14 +4,16 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.6.14)
+## Current release focus (v0.6.15)
 
-- **Lab analytics Overview + Sentry-density Issues** — command-center Overview (KPIs, batteries, charts, tables) and investigation-grade Issues list/detail ([docs](../engineering/lab-analytics-0.6.14.md))
-- Prior: Production health & residual closure (v0.6.13)
+- **Lab upgrade DX** — version on `/health`, nested-install detect, `dna lab installs --fix`, disk-backed Lab UI ([docs](../engineering/lab-upgrade-dx-0.6.15.md))
+- Prior: Lab analytics Overview + Sentry-density Issues (v0.6.14)
+- **Lab nav IA** — multi-open sections + Doctor / Installs / Intelligence / Quality peer pages ([docs](../engineering/lab-nav-ia.md))
 
 ## Shipped highlights
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.14)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.15)
+- **Lab upgrade DX (v0.6.15)** — health `dnaVersion` + install scan/fix; disk Lab UI revalidation ([docs](../engineering/lab-upgrade-dx-0.6.15.md))
 - **Lab analytics + Issues depth (v0.6.14)** — Overview performance dashboard; Issues short IDs, sparklines, users/age; Issue detail Highlights / Stack / Tags / JSON / Trace ([docs](../engineering/lab-analytics-0.6.14.md))
 - **Lab UI — Humaan admin parity** — icon-only DNA brand, Humaan primary pills + large pill tabs, list search → tabs → always-on tables, sidebar accordion ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **DNA Lab v4** — Soli admin shell, Quality hub, Sentry-depth envelopes ([docs](../engineering/lab-and-runtime-0.6.4.md))
@@ -20,7 +22,7 @@ DNA development priorities and public roadmap.
 - **Aggressive Repair Loop** — fingerprinted errors, CellularMemory blockers, GitHub issue dedup, `dna ai force-repair` ([docs](../engineering/lab-and-repair-0.6.3.md))
 - **Zero npm dependencies** — published package has no production `dependencies`; internal git, glob, GitHub API, CLI parser, and config validators
 - **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
-- **77 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow (includes strategy ladder: Golden Circle → canvases → initiatives → Now/Next/Later)
+- **88 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow (includes strategy ladder: Golden Circle → canvases → initiatives → Now/Next/Later)
 - **DNA Workbench** — default on init/doctor/update; `AGENTS.md` intent routing + mandatory 9-role agent loop for engineering work
 - 965 knowledge packs in stable channel
 - Platform catalog from four reference production apps
@@ -51,7 +53,8 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Runtime SQLite storage ([#9](https://github.com/superhumaan/DNA/issues/9)) | ✅ Shipped |
 | Preview deployment workflow ([#10](https://github.com/superhumaan/DNA/issues/10)) | ✅ Shipped |
 | Prompt stem packs + intelligence library (v0.4.0) | ✅ Shipped |
-| Strategy stem ladder — Golden Circle → canvases → North Star/OKRs/KPIs → initiatives → Now/Next/Later (catalog v6, 77 stems) | ✅ Shipped |
+| Strategy stem ladder — Golden Circle → canvases → North Star/OKRs/KPIs → initiatives → Now/Next/Later (catalog v7, 88 stems) | ✅ Shipped |
+| Product intelligence stems — diagnose/SWOT/value/Kano + competitor + upgrade leverage (catalog v7) | ✅ Shipped |
 | Supply-chain hardening + Socket transparency (v0.4.4) | ✅ Shipped |
 | Zero npm dependencies — internal replacements for CLI/git/GitHub/glob (v0.4.5) | ✅ Shipped |
 | npm `dna doctor` workbench asset path fix (v0.4.6) | ✅ Shipped |
@@ -68,6 +71,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Express 5 optional peer (v0.6.12) | ✅ Shipped — peer `express@^4.18.0 \|\| ^5.0.0` so npm installs cleanly with Express 5 |
 | Production health & residual closure (v0.6.13) | ✅ Shipped — shared Lab state, strict CI, scoped coverage, Playwright smoke, GitHub/npm/DNA-Web health |
 | Lab analytics Overview + Sentry-density Issues (v0.6.14) | ✅ Shipped — see [lab-analytics-0.6.14](../engineering/lab-analytics-0.6.14.md) |
+| Lab upgrade DX — nested installs + disk UI (v0.6.15) | ✅ Shipped — see [lab-upgrade-dx-0.6.15](../engineering/lab-upgrade-dx-0.6.15.md) |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | ✅ Shipped — import merge + team registry sync |
 | Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | ✅ Shipped — `dna scan --open-pr` |
 | Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | ✅ Shipped — platform codegen scaffolds |

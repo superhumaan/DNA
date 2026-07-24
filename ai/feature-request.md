@@ -1,18 +1,19 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-24. The user does not fill this in manually._
+_Auto-maintained by DNA. Updated 2026-07-24._
 
 ## Latest request
 
-> I want this level of detail, /labs is extremely useful and helpful
-> (Sentry Issues list + Issue detail screenshots — approved)
+> Create amazing stem packs for product analysis (purpose, strengths, weaknesses), competitor analysis, and upgrade suggestions — grounded in real architecture and known debt, not stub Impressions.
 
-## Acceptance Criteria
+## Status
 
-- [x] Issues list shows: title + category, short ID / fingerprint hint, culprit, last seen, age, event count, optional users, severity, mini 24h trend
-- [x] Issue detail hero: Events, Users (or —), First seen, Last seen, severity, environment, release
-- [x] Issue detail includes Highlights (derived), Events volume chart, Stack Trace, Breadcrumbs, Tags, Contexts, Additional Data JSON, Related events
-- [x] Packages / Trace panels render when data exists; otherwise clear empty states
-- [x] Tag search/filter on detail when tags present
-- [x] Empty runtime still loads without broken charts
-- [x] Quality gate PASS; docker build; push feature branch
+Implemented — catalog v7, 88 stems. Product-intel suite installed via workbench.
+
+## Acceptance
+
+- [x] `catalog-product-intel.ts` with 11 stems + evidence hierarchy
+- [x] Wired into catalog; tests pass
+- [x] Intelligence catalog regenerated (88 stems, v7)
+- [x] Workbench install refreshed `.DNA/stems/` + slash commands
+- [x] Docs/CHANGELOG/roadmap updated

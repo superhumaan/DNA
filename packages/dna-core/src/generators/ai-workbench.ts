@@ -481,7 +481,7 @@ export function buildIntelligenceWorkbenchCatalog() {
     }));
 
   return {
-      version: 6,
+      version: 7,
       type: "workbench",
       catalogUrl: "https://dna.humaan.app/intelligence",
       generatedBy: "dna workbench install",

@@ -187,7 +187,7 @@ export const STEM_CATEGORY_LABELS: Record<StemCategory, { label: string; descrip
   strategy: {
     label: "Strategy",
     description:
-      "Golden Circle, canvases, North Star, OKRs, KPIs, initiatives, products, features, and Now/Next/Later roadmaps",
+      "Golden Circle, canvases, North Star, OKRs, KPIs, product intelligence (diagnose/SWOT/competitors/upgrades), initiatives, features, and Now/Next/Later roadmaps",
   },
   marketplace: { label: "Marketplace", description: "Search and install knowledge packs" },
   memory: { label: "Memory", description: "CellularMemory export and import" },

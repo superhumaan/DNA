@@ -4,6 +4,23 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.15] - 2026-07-24
+
+### Added
+
+- **Product intelligence stem packs (catalog v7, 88 stems)** — diagnose purpose/SWOT/value/Kano from real architecture + debt (never stub Impressions); competitor landscape/matrix/positioning; upgrade leverage map, modernization waves, and ranked recommendations with shape-feature handoff. Slash: `/product-diagnose`, `/product-swot`, `/competitor-landscape`, `/upgrade-recommend`, etc.
+- **Lab visual parity with dna.humaan.app** — DM Sans + Syne, dark mint tokens, 16px header→content gap.
+- **Lab shimmer + visit probes** — skeleton load on open; one-shot API probes with 5h TTL (`GET /api/dna/labs/probe`).
+- **Deep Coverage** — package bars, distribution, full file table (`GET /api/dna/labs/coverage`).
+- **APIs mini-Swagger** — Lab self-spec + project OpenAPI discovery + live/probe traffic (`GET /api/dna/labs/apis`).
+- **Releases from GitHub** — `GET /api/dna/labs/releases` via `gh` + store overlay.
+- **Source maps via doctor / lab install** — scan `dist` / package builds and register into Lab store.
+- **Lab nav IA expansion** — multi-open sidebar sections (Monitor / Delivery / Quality / Project / Intelligence); Quality split into Reports, Coverage, CI, APIs; new pages for Source maps, Doctor, Installs, Impressions, and Cellular Memory; on-demand `GET /api/dna/labs/intelligence` (poll `/data` stays lean).
+
+### Fixed
+
+- **Lab upgrade DX** — nested/outdated `@superhumaan/dna-by-humaan` installs no longer leave `/labs` silently on an old UI. Health + bootstrap expose `dnaVersion` / `labUi` fingerprint; UI shows version + install-mismatch banner; `dna doctor` and `dna lab installs [--fix]` scan and upgrade every owner path; Lab client/CSS prefer on-disk `dist/lab-ui/*` with mtime revalidation. See [lab-upgrade-dx-0.6.15](./docs/engineering/lab-upgrade-dx-0.6.15.md).
+
 ## [0.6.14] - 2026-07-24
 
 ### Added

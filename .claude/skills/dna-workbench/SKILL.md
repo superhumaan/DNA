@@ -133,7 +133,7 @@ Each command maps to `.DNA/stems/<id>/` — read **prompt.md, guidelines.md, exp
 | `/debug-issue` | debug-issue | Debug + fix loop |
 | `/ivf-shared-library` | ivf-shared-library | Extract shared UI library |
 
-Full library (77 stems): https://dna.humaan.app/intelligence#stem-library
+Full library (88 stems): https://dna.humaan.app/intelligence#stem-library
 
 Commands live in `.claude/commands/`. Stem data: `.DNA/stems/`.
 

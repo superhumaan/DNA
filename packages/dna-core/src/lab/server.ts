@@ -17,7 +17,15 @@ import {
   startRegisterOtp,
 } from "./auth.js";
 import { collectLabIssueEvents, getLabData, recordRelease } from "./collect.js";
-import { LAB_CLIENT_JS, LAB_CSS, LAB_HTML } from "./assets.js";
+import { collectLabIntelligence } from "./collect-intelligence.js";
+import { collectLabCoverageDetail } from "./collect-coverage-detail.js";
+import { collectLabApis } from "./collect-apis.js";
+import { runLabProbesIfStale } from "./collect-probe.js";
+import { fetchGitHubReleases } from "./collect-github-releases.js";
+import { scanAndRegisterSourceMaps } from "./scan-sourcemaps.js";
+import { LAB_HTML } from "./assets.js";
+import { resolveLabUiAssets } from "./lab-ui-assets.js";
+import { getLabRuntimeIdentity, summarizeDnaInstalls } from "./package-info.js";
 import { hostFromRequest, isLocalLabRequest } from "./is-local.js";
 import {
   markLocalPairingVerified,
@@ -32,6 +40,7 @@ import {
 import {
   LabStateConfigError,
   LabStateUnavailableError,
+  listLabReleases,
   pingLabStore,
   resolveLabStorageConfig,
   upsertSourceMapMeta,
@@ -133,9 +142,47 @@ function fontAwesomeKitTags(): string {
 }
 
 export function buildLabHtml(apiPrefix: string): string {
-  return LAB_HTML.replace("__LAB_CSS_INLINE__", LAB_CSS)
-    .replace("__LAB_JS_PATH__", `${apiPrefix}/client.js`)
-    .replace("</head>", `${fontAwesomeKitTags()}\n</head>`);
+  const identity = getLabRuntimeIdentity();
+  const assets = resolveLabUiAssets(identity);
+  const cacheBust = `${identity.dnaVersion}-${identity.labUiFingerprint}`;
+  const versionMeta = `  <meta name="dna-lab-version" content="${identity.dnaVersion}" />\n  <meta name="dna-lab-ui" content="${assets.source}:${identity.labUiFingerprint}" />`;
+  return LAB_HTML.replace("__LAB_CSS_INLINE__", assets.css)
+    .replace("__LAB_JS_PATH__", `${apiPrefix}/client.js?v=${encodeURIComponent(cacheBust)}`)
+    .replace("</head>", `${versionMeta}\n${fontAwesomeKitTags()}\n</head>`);
+}
+
+function labRuntimePayload(root: string) {
+  const identity = getLabRuntimeIdentity();
+  const assets = resolveLabUiAssets(identity);
+  const installs = summarizeDnaInstalls(root, identity);
+  return {
+    dnaVersion: identity.dnaVersion,
+    packagePath: identity.packagePath,
+    labUi: {
+      source: assets.source,
+      fingerprint: identity.labUiFingerprint,
+      hasAnalyticsUi: identity.hasAnalyticsUi,
+      jsMtimeMs: assets.jsMtimeMs,
+      cssMtimeMs: assets.cssMtimeMs,
+    },
+    installs: {
+      count: installs.installs.length,
+      versions: installs.versions,
+      multiVersion: installs.multiVersion,
+      staleCount: installs.staleCount,
+      warnings: installs.warnings,
+      activeVersion: installs.activeVersion,
+      activePackagePath: installs.activePackagePath,
+      activeHasAnalyticsUi: installs.activeHasAnalyticsUi,
+      activeInstallOwner: installs.activeInstallOwner,
+      paths: installs.installs.map((i) => ({
+        version: i.version,
+        packagePath: i.packagePath,
+        ownerPackageJson: i.ownerPackageJson,
+        hasAnalyticsUi: i.hasAnalyticsUi,
+      })),
+    },
+  };
 }
 
 /** Max JSON body accepted by Lab POST endpoints (auth, pairing, releases). */
@@ -275,16 +322,29 @@ async function handleLabRequestInner(
   const isGetOrHead = req.method === "GET" || req.method === "HEAD";
 
   if (isGetOrHead && pathname === `${apiPrefix}/client.js`) {
-    sendText(res, 200, LAB_CLIENT_JS, "application/javascript; charset=utf-8", undefined, req.method);
+    const identity = getLabRuntimeIdentity();
+    const assets = resolveLabUiAssets(identity);
+    sendText(res, 200, assets.js, "application/javascript; charset=utf-8", {
+      "Cache-Control": "no-cache, must-revalidate",
+      "X-Dna-Version": identity.dnaVersion,
+      "X-Dna-Lab-Ui": assets.source,
+    }, req.method);
     return true;
   }
 
   if (isGetOrHead && pathname === `${apiPrefix}/styles.css`) {
-    sendText(res, 200, LAB_CSS, "text/css; charset=utf-8", undefined, req.method);
+    const identity = getLabRuntimeIdentity();
+    const assets = resolveLabUiAssets(identity);
+    sendText(res, 200, assets.css, "text/css; charset=utf-8", {
+      "Cache-Control": "no-cache, must-revalidate",
+      "X-Dna-Version": identity.dnaVersion,
+      "X-Dna-Lab-Ui": assets.source,
+    }, req.method);
     return true;
   }
 
   if (isGetOrHead && pathname === `${apiPrefix}/health`) {
+    const runtime = labRuntimePayload(options.root);
     try {
       await pingLabStore(options.root);
       sendJson(
@@ -294,6 +354,7 @@ async function handleLabRequestInner(
           ok: true,
           stateBackend: topology.backend,
           instanceCount: topology.instanceCount,
+          ...runtime,
         },
         undefined,
         req.method,
@@ -311,11 +372,17 @@ async function handleLabRequestInner(
           stateBackend: topology.backend,
           instanceCount: topology.instanceCount,
           error: message,
+          ...runtime,
         },
         undefined,
         req.method,
       );
     }
+    return true;
+  }
+
+  if (isGetOrHead && pathname === `${apiPrefix}/installs`) {
+    sendJson(res, 200, labRuntimePayload(options.root), undefined, req.method);
     return true;
   }
 
@@ -341,6 +408,7 @@ async function handleLabRequestInner(
 
   if (isGetOrHead && pathname === `${apiPrefix}/bootstrap`) {
     const { DNA_LAB_GATEWAY_PUBLIC_PATHS } = await import("@superhumaan/dna-config");
+    const runtime = labRuntimePayload(options.root);
     sendJson(
       res,
       200,
@@ -353,6 +421,11 @@ async function handleLabRequestInner(
           mode: "paste-verify",
           gatewayPublicPaths: [...DNA_LAB_GATEWAY_PUBLIC_PATHS],
         },
+        dnaVersion: runtime.dnaVersion,
+        packagePath: runtime.packagePath,
+        labUi: runtime.labUi,
+        installWarnings: runtime.installs.warnings,
+        installs: runtime.installs,
       },
       undefined,
       req.method,
@@ -565,6 +638,85 @@ async function handleLabRequestInner(
     return true;
   }
 
+  if (isGetOrHead && pathname === `${apiPrefix}/intelligence`) {
+    if (!localMode && !auth.authenticated) {
+      unauthorized(res);
+      return true;
+    }
+    sendJson(res, 200, collectLabIntelligence(options.root), undefined, req.method);
+    return true;
+  }
+
+  if (isGetOrHead && pathname === `${apiPrefix}/coverage`) {
+    if (!localMode && !auth.authenticated) {
+      unauthorized(res);
+      return true;
+    }
+    const detail = await collectLabCoverageDetail(options.root);
+    sendJson(res, 200, detail ?? { summary: null, files: [], packages: [], distribution: [] }, undefined, req.method);
+    return true;
+  }
+
+  if (isGetOrHead && pathname === `${apiPrefix}/apis`) {
+    if (!localMode && !auth.authenticated) {
+      unauthorized(res);
+      return true;
+    }
+    sendJson(res, 200, await collectLabApis(options.root), undefined, req.method);
+    return true;
+  }
+
+  if (isGetOrHead && pathname === `${apiPrefix}/probe`) {
+    if (!localMode && !auth.authenticated) {
+      unauthorized(res);
+      return true;
+    }
+    const force = String(req.url || "").includes("force=1");
+    const host = hostFromRequest(req);
+    const portMatch = host.match(/:(\d+)$/);
+    const port = portMatch ? Number(portMatch[1]) : 3200;
+    const result = await runLabProbesIfStale(options.root, {
+      force,
+      port,
+      baseUrl: `http://127.0.0.1:${port}`,
+    });
+    sendJson(
+      res,
+      200,
+      {
+        skipped: result.skipped,
+        ttlHours: result.ttlHours,
+        lastProbeAt: result.store.lastProbeAt,
+        results: result.store.results,
+      },
+      undefined,
+      req.method,
+    );
+    return true;
+  }
+
+  if (isGetOrHead && pathname === `${apiPrefix}/releases`) {
+    if (!localMode && !auth.authenticated) {
+      unauthorized(res);
+      return true;
+    }
+    const [gh, local] = await Promise.all([
+      fetchGitHubReleases(options.root),
+      listLabReleases(options.root),
+    ]);
+    const byVersion = new Map<string, unknown>();
+    for (const r of local) byVersion.set(r.version, { ...r, source: "store" });
+    for (const r of gh) byVersion.set(r.version, r);
+    sendJson(
+      res,
+      200,
+      { releases: [...byVersion.values()].slice(0, 50), githubCount: gh.length, storeCount: local.length },
+      undefined,
+      req.method,
+    );
+    return true;
+  }
+
   const issueEventsPrefix = `${apiPrefix}/issues/`;
   if (
     isGetOrHead &&
@@ -631,6 +783,13 @@ export async function ensureLabAssets(root: string): Promise<string[]> {
   const gatewayExisted = await fileExists(gatewayPath);
   await writeFileEnsured(gatewayPath, GATEWAY_PUBLIC_PATHS_MARKDOWN);
   if (!gatewayExisted) actions.push(DNA_LAB_GATEWAY_ALLOWLIST_FILE);
+
+  try {
+    const maps = await scanAndRegisterSourceMaps(root);
+    if (maps.registered) actions.push(`sourcemaps:${maps.registered}`);
+  } catch {
+    /* non-fatal */
+  }
 
   return actions;
 }

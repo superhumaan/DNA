@@ -11,7 +11,7 @@ DNA ships as a single npm package with a broad feature surface. This page is the
 | Portfolio install | `dna doctor` at squad folder | One brain for every related product — [guide](./portfolio-install.md) |
 | Behaviour rules | `.DNA/behaviour/` | Govern how AI writes code, tests, docs, security |
 | neuralNetwork routing | `.DNA/neuralNetwork.json` | Intent → knowledge + Behaviour + memory |
-| **77 prompt stem packs** | `.DNA/stems/` | Guidelines, expectations, workflows + `/` slash commands (incl. strategy ladder) |
+| **88 prompt stem packs** | `.DNA/stems/` | Guidelines, expectations, workflows + `/` slash commands (incl. strategy ladder) |
 | **DNA Workbench** | `AGENTS.md`, `.cursor/`, `.claude/` | Always-on co-pilot — rules, skills, `/dna-*` commands |
 | AI tool files | `dna doctor` | Cursor, Claude, Copilot, Windsurf, Gemini |
 | Context export | `dna context <target>` | Feed Cursor, Claude, Copilot |

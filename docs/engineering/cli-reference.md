@@ -37,12 +37,14 @@ Includes an **Impressions drift** score when DNA is installed (missing docs, sta
 
 ## lab
 
-Production observability portal at `/labs` — analytics Overview (KPIs, health batteries, charts), Sentry-density Issues investigation, events, performance, quality, release tracking. UI matches Humaan admin list patterns (search → tabs → tables); see [Lab analytics v0.6.14](./lab-analytics-0.6.14.md) and [Lab UI Humaan parity v0.6.7](./lab-ui-humaan-0.6.7.md).
+Production observability portal at `/labs` — Monitor (Overview, Issues, Events, Performance), Delivery (Releases, Source maps), Quality (Reports, Coverage, CI, APIs), Project (Doctor, Installs), and Intelligence (Impressions, Cellular Memory). Sidebar sections stay independently open. See [Lab analytics v0.6.14](./lab-analytics-0.6.14.md), [Lab upgrade DX v0.6.15](./lab-upgrade-dx-0.6.15.md), and [Lab UI Humaan parity v0.6.7](./lab-ui-humaan-0.6.7.md).
 
 ```bash
 dna lab install
 dna lab serve
 dna lab serve --port 3200
+dna lab installs            # list nested/stale DNA installs
+dna lab installs --fix     # upgrade every owner package to @latest
 dna register lab --url https://your-app.example.com
 ```
 
@@ -271,7 +273,7 @@ Re-enable with `dna feature-factory install`.
 
 ## commands
 
-Install **DNA Workbench**, **`AGENTS.md`**, **77 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update. Engineering work routes through the mandatory 9-role agent loop (`ai/agent-loop.md`). Strategy stems (Golden Circle, canvases, initiatives, Now/Next/Later) install with the same workbench path.
+Install **DNA Workbench**, **`AGENTS.md`**, **88 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update. Engineering work routes through the mandatory 9-role agent loop (`ai/agent-loop.md`). Strategy + product-intelligence stems (Golden Circle, canvases, diagnose/SWOT/competitors/upgrade leverage, initiatives, Now/Next/Later) install with the same workbench path.
 
 ```bash
 dna workbench install

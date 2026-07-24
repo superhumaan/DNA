@@ -127,10 +127,23 @@ describe("lab server", () => {
 
     const health = await fetch(`http://127.0.0.1:${port}/api/dna/labs/health`);
     expect(health.status).toBe(200);
-    expect(await health.json()).toEqual({
+    const healthBody = (await health.json()) as {
+      ok: boolean;
+      stateBackend: string;
+      instanceCount: number;
+      dnaVersion: string;
+      labUi: { fingerprint: string; source: string };
+    };
+    expect(healthBody).toMatchObject({
       ok: true,
       stateBackend: "single-instance-file",
       instanceCount: 1,
+    });
+    expect(typeof healthBody.dnaVersion).toBe("string");
+    expect(healthBody.dnaVersion.length).toBeGreaterThan(0);
+    expect(healthBody.labUi).toMatchObject({
+      fingerprint: expect.any(String),
+      source: expect.stringMatching(/^(disk|embedded)$/),
     });
   });
 
@@ -173,11 +186,45 @@ describe("lab server", () => {
 
     const health = await fetch(`http://127.0.0.1:${port}/api/dna/labs/health`);
     expect(health.status).toBe(200);
-    expect(await health.json()).toEqual({
+    expect(await health.json()).toMatchObject({
       ok: true,
       stateBackend: "single-instance-file",
       instanceCount: 1,
+      dnaVersion: expect.any(String),
     });
+  });
+
+  it("serves on-demand /intelligence inventory", async () => {
+    root = await mkdtemp(join(tmpdir(), "dna-lab-intel-"));
+    await ensureLabStore(root);
+    const { mkdir, writeFile } = await import("node:fs/promises");
+    await mkdir(join(root, "DNA", "Impressions"), { recursive: true });
+    await mkdir(join(root, ".DNA", "CellularMemory", "hippocampus"), { recursive: true });
+    await writeFile(join(root, "DNA", "Impressions", "arch.md"), "# a\n");
+    await writeFile(join(root, ".DNA", "CellularMemory", "hippocampus", "summary.md"), "# m\n");
+
+    server = createServer(async (req, res) => {
+      const handled = await handleLabRequest(req, res, {
+        root,
+        config: { lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true } } as never,
+      });
+      if (!handled) {
+        res.writeHead(404);
+        res.end();
+      }
+    });
+
+    port = await listenOnEphemeralPort(server);
+    const res = await fetch(`http://127.0.0.1:${port}/api/dna/labs/intelligence`, {
+      headers: { Host: `127.0.0.1:${port}` },
+    });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as {
+      impressions: Array<{ path: string }>;
+      cellularMemory: Array<{ path: string }>;
+    };
+    expect(body.impressions.some((f) => f.path.endsWith("arch.md"))).toBe(true);
+    expect(body.cellularMemory.some((f) => f.path.includes("summary.md"))).toBe(true);
   });
 
   it("serves /data with an ETag and answers If-None-Match with 304", async () => {

@@ -45,14 +45,16 @@ Scope: $ARGUMENTS
 1. **Golden Circle** — Why / How / What
 2. **Business strategy canvas** — pillars, positioning, bets
 3. **Product canvas** — users, problems, value, metrics
-4. **North Star metric** — single primary product success signal
-5. **Define OKRs** — Objectives + Key Results for the period
-6. **Define KPIs** — health / operational metrics (distinct from OKRs)
-7. **Goal cascade** — company → team → initiative alignment
-8. **Define initiative** — outcome-shaped bets
-9. **Define product** — scope, ICP, non-goals
-10. **Shape feature** — brief ready for feature factory
-11. **Roadmap Now / Next / Later** — horizon plan
+4. **Product diagnose** (optional deepen) — purpose/SWOT/jobs from code + debt when Impressions are stubs — \`product-diagnose\`
+5. **North Star metric** — single primary product success signal
+6. **Define OKRs** — Objectives + Key Results for the period
+7. **Define KPIs** — health / operational metrics (distinct from OKRs)
+8. **Goal cascade** — company → team → initiative alignment
+9. **Define initiative** — outcome-shaped bets
+10. **Define product** — scope, ICP, non-goals
+11. **Shape feature** — brief ready for feature factory
+12. **Roadmap Now / Next / Later** — horizon plan
+13. **Upgrade recommend** (optional) — high-leverage changes from competitor + debt — \`upgrade-recommend\`
 
 ## Run
 
@@ -92,6 +94,7 @@ For each rung: short filled artifact path + 3–7 bullets. End with:
       "golden-circle",
       "business-strategy-canvas",
       "product-canvas",
+      "product-diagnose",
       "north-star-metric",
       "define-okrs",
       "define-kpis",
@@ -100,6 +103,7 @@ For each rung: short filled artifact path + 3–7 bullets. End with:
       "define-product",
       "shape-feature",
       "roadmap-now-next-later",
+      "upgrade-recommend",
     ],
   },
   {

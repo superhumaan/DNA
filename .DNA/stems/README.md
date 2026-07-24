@@ -1,6 +1,6 @@
 # DNA Prompt Stem Packs
 
-**dna-by-humaan** — 77 prompt stem packs (bundled catalog v6).
+**dna-by-humaan** — 88 prompt stem packs (bundled catalog v7).
 
 Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, context, and examples**.
 
@@ -118,3 +118,14 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `define-okrs` — Define OKRs
 - `define-kpis` — Define KPIs
 - `goal-cascade` — Goal cascade
+- `product-diagnose` — Product diagnose
+- `product-purpose-audit` — Product purpose audit
+- `product-swot` — Product SWOT
+- `product-value-proposition` — Product value proposition
+- `product-kano-scan` — Product Kano scan
+- `competitor-landscape` — Competitor landscape
+- `competitor-feature-matrix` — Competitor feature matrix
+- `competitor-positioning` — Competitor positioning
+- `upgrade-leverage-map` — Upgrade leverage map
+- `upgrade-modernization` — Upgrade modernization
+- `upgrade-recommend` — Upgrade recommend

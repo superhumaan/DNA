@@ -50,7 +50,7 @@ DNA is not a documentation generator. It is:
 cd /path/to/your-project    # or portfolio parent for multi-app squads
 npx @superhumaan/dna-by-humaan doctor
 
-# In Cursor: type / for 77 stems and /dna-* commands — already installed
+# In Cursor: type / for 88 stems and /dna-* commands — already installed
 # Portfolio squads: run doctor on the parent folder, not each repo
 ```
 
@@ -88,7 +88,7 @@ npx @superhumaan/dna-by-humaan doctor
 |-------|----------|
 | **Intelligence** | `.DNA/` — config, neuralNetwork, 8 behaviour files, 7 CellularMemory regions, immune system |
 | **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills, always-on co-pilot (no “use DNA”) |
-| **Stems & commands** | **77** prompt stem packs (guidelines, expectations, workflows) + **`/dna-*`** slash commands |
+| **Stems & commands**| **88** prompt stem packs (guidelines, expectations, workflows) + **`/dna-*`** slash commands |
 | **Feature factory** | 9-role agent loop, `ai/agent-loop.md`, product-process rules, quality gates |
 | **Detection** | Stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, Impressions drift, auth patterns |
 | **Runtime** | Observer auto-wired into Express/Fastify/Next.js → classified issues + repair plans |
@@ -286,7 +286,8 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | npm `dna doctor` workbench asset path fix (v0.4.6) | Jul 2026 | Jul 2026 | Shipped |
 | [Upstream feedback](https://github.com/superhumaan/DNA/issues) — DNA platform auto-report (v0.4.8) | Jul 2026 | Jul 2026 | Shipped |
 | [Prompt stem packs + intelligence library](https://dna.humaan.app/intelligence) | Jul 2026 | Jul 2026 | Shipped |
-| Strategy stem ladder (Golden Circle → canvases → OKRs/KPIs → Now/Next/Later; 77 stems, catalog v6) | Jul 2026 | Jul 2026 | Shipped |
+| Strategy stem ladder (Golden Circle → canvases → OKRs/KPIs → Now/Next/Later; 88 stems, catalog v7) | Jul 2026 | Jul 2026 | Shipped |
+| Product intelligence stems (diagnose/SWOT/competitors/upgrade leverage; catalog v7) | Jul 2026 | Jul 2026 | Shipped |
 | [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped |
 | [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped |
 | [Feature factory v2 + admin portal pattern](https://github.com/superhumaan/DNA/issues/3) | May 2026 | Jun 2026 | Shipped |
@@ -309,6 +310,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Express 5 optional peer (v0.6.12) | Jul 2026 | Jul 2026 | Shipped — `express@^4 \|\| ^5` |
 | Production health & residual closure (v0.6.13) | Jul 2026 | Jul 2026 | Shipped — shared Lab state, strict CI, coverage, Playwright, `/health` |
 | Lab analytics Overview + Sentry-density Issues (v0.6.14) | Jul 2026 | Jul 2026 | Shipped — KPIs/batteries/charts; issue sparklines + deep detail |
+| Lab upgrade DX — nested install detect + disk UI (v0.6.15) | Jul 2026 | Jul 2026 | Shipped — health version, `dna lab installs --fix` |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | Shipped — setup script + OAuth scaffolding |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |

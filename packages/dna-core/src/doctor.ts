@@ -6,6 +6,7 @@ import { loadDnaConfig, validateProject } from "./validator.js";
 import { scanProject } from "./scanner.js";
 import { isRealAiProvider } from "./ai-connect.js";
 import { verifyAiInjection } from "./generators/ai-injector.js";
+import { reportLabInstalls } from "./lab/sync-installs.js";
 
 export interface DoctorReport {
   dna: { installed: boolean; version?: string };
@@ -21,6 +22,15 @@ export interface DoctorReport {
   hooks: { prePushInstalled: boolean; hooksPathConfigured: boolean };
   preview: { enabled: boolean; workflowInstalled: boolean; provider: string };
   injection: { expected: boolean; complete: boolean; missing: string[]; stale: string[] };
+  labInstalls: {
+    count: number;
+    versions: string[];
+    multiVersion: boolean;
+    staleCount: number;
+    ok: boolean;
+    warnings: string[];
+  };
+  sourceMaps: { count: number; scanned: number };
   validation: { valid: boolean; issueCount: number };
 }
 
@@ -67,6 +77,26 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
   const injection = config
     ? await verifyAiInjection(root, config)
     : { expected: false, complete: true, missing: [], stale: [] };
+  const labInstallsReport = reportLabInstalls(root);
+  const labInstalls = {
+    count: labInstallsReport.installs.length,
+    versions: labInstallsReport.versions,
+    multiVersion: labInstallsReport.multiVersion,
+    staleCount: labInstallsReport.staleCount,
+    ok: labInstallsReport.ok || labInstallsReport.installs.length === 0,
+    warnings: labInstallsReport.warnings,
+  };
+
+  let sourceMaps = { count: 0, scanned: 0 };
+  try {
+    const { scanAndRegisterSourceMaps } = await import("./lab/scan-sourcemaps.js");
+    const { listSourceMapMeta } = await import("./lab/storage.js");
+    const scanned = await scanAndRegisterSourceMaps(root);
+    const listed = await listSourceMapMeta(root);
+    sourceMaps = { count: listed.length, scanned: scanned.registered };
+  } catch {
+    /* non-fatal */
+  }
 
   return {
     dna: {
@@ -114,6 +144,8 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
       missing: injection.missing,
       stale: injection.stale,
     },
+    labInstalls,
+    sourceMaps,
     validation: {
       valid: validation.valid,
       issueCount: validation.errors.length,
@@ -146,6 +178,15 @@ export async function runDoctorLite(root: string): Promise<DoctorReport> {
   const previewWorkflow = await fileExists(join(root, ".github", "workflows", "dna-preview.yml"));
   const dockerfile = await fileExists(join(root, "Dockerfile"));
   const prePushHook = await fileExists(join(root, ".DNA", "hooks", "pre-push"));
+  const labInstallsReport = reportLabInstalls(root);
+  const labInstalls = {
+    count: labInstallsReport.installs.length,
+    versions: labInstallsReport.versions,
+    multiVersion: labInstallsReport.multiVersion,
+    staleCount: labInstallsReport.staleCount,
+    ok: labInstallsReport.ok || labInstallsReport.installs.length === 0,
+    warnings: labInstallsReport.warnings,
+  };
 
   return {
     dna: { installed: dnaInstalled, version: config?.version },
@@ -182,6 +223,8 @@ export async function runDoctorLite(root: string): Promise<DoctorReport> {
       provider: config?.ci?.previewProvider ?? "vercel",
     },
     injection: { expected: false, complete: true, missing: [], stale: [] },
+    labInstalls,
+    sourceMaps: { count: 0, scanned: 0 },
     validation: {
       valid: dnaInstalled && behaviourMissing.length === 0,
       issueCount: behaviourMissing.length + (dnaInstalled ? 0 : 1),
@@ -191,6 +234,11 @@ export async function runDoctorLite(root: string): Promise<DoctorReport> {
 
 export function formatDoctorReport(report: DoctorReport): string {
   const status = (ok: boolean) => (ok ? "✓" : "✗");
+  const labLine = report.labInstalls.count
+    ? `${status(report.labInstalls.ok)} Lab package installs (${report.labInstalls.count} path(s), ${report.labInstalls.versions.join("|") || "none"})${
+        report.labInstalls.ok ? "" : " — run dna lab installs --fix"
+      }`
+    : `${status(true)} Lab package installs (none scanned)`;
   const lines = [
     "DNA Doctor",
     "==========",
@@ -228,8 +276,13 @@ export function formatDoctorReport(report: DoctorReport): string {
           ? ""
           : " (disabled)"
     }`,
+    labLine,
+    `${status(report.sourceMaps.count > 0)} Source maps (${report.sourceMaps.count} registered${report.sourceMaps.scanned ? `, scanned ${report.sourceMaps.scanned}` : ""})`,
     "",
     `${status(report.validation.valid)} Validation (${report.validation.issueCount} issues)`,
   ];
+  if (!report.labInstalls.ok && report.labInstalls.warnings.length) {
+    for (const w of report.labInstalls.warnings) lines.push(`  · ${w}`);
+  }
   return lines.join("\n");
 }

@@ -140,6 +140,15 @@ function emptyDoctor(): DoctorReport {
     hooks: { prePushInstalled: false, hooksPathConfigured: false },
     preview: { enabled: false, workflowInstalled: false, provider: "vercel" },
     injection: { expected: false, complete: true, missing: [], stale: [] },
+    labInstalls: {
+      count: 0,
+      versions: [],
+      multiVersion: false,
+      staleCount: 0,
+      ok: true,
+      warnings: [],
+    },
+    sourceMaps: { count: 0, scanned: 0 },
     validation: { valid: false, issueCount: 1 },
   };
 }

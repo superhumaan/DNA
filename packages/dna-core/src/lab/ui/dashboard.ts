@@ -7,11 +7,20 @@ const state = {
   severityFilter: "all",
   searchQuery: "",
   tagSearchQuery: "",
-  navOpenGroup: null,
-  qualityTab: "reports",
+  navOpenGroups: {},
   pairingId: null,
   registerStep: "pair",
   localMode: false,
+  dnaVersion: "",
+  packagePath: "",
+  installWarnings: [],
+  installs: null,
+  intelligence: null,
+  coverageDetail: null,
+  apisDetail: null,
+  releasesDetail: null,
+  probeMeta: null,
+  loading: false,
   data: null,
   error: "",
   success: "",
@@ -27,8 +36,18 @@ const NAV = [
   ["events", "Events", "fa-bolt", "Monitor"],
   ["performance", "Performance", "fa-gauge-high", "Monitor"],
   ["releases", "Releases", "fa-rocket", "Delivery"],
-  ["quality", "Quality", "fa-shield-halved", "Delivery"],
+  ["sourcemaps", "Source maps", "fa-map", "Delivery"],
+  ["reports", "Reports", "fa-file-shield", "Quality"],
+  ["coverage", "Coverage", "fa-chart-pie", "Quality"],
+  ["ci", "CI", "fa-gears", "Quality"],
+  ["apis", "APIs", "fa-plug", "Quality"],
+  ["doctor", "Doctor", "fa-stethoscope", "Project"],
+  ["installs", "Installs", "fa-box", "Project"],
+  ["impressions", "Impressions", "fa-book", "Intelligence"],
+  ["memory", "Cellular Memory", "fa-brain", "Intelligence"],
 ];
+
+const LEGACY_TABS = { quality: "reports" };
 
 function esc(t) {
   return String(t ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
@@ -40,9 +59,29 @@ function dnaWebBrand(href, fixed) {
     '</a>';
 }
 
+function normalizeTab(tab) {
+  const id = LEGACY_TABS[tab] || tab;
+  return NAV.some((n) => n[0] === id) ? id : "overview";
+}
+
 function groupForTab(tab) {
-  const item = NAV.find((n) => n[0] === tab);
+  const item = NAV.find((n) => n[0] === normalizeTab(tab));
   return item ? item[3] : "Monitor";
+}
+
+function isNavGroupOpen(group) {
+  if (Object.prototype.hasOwnProperty.call(state.navOpenGroups || {}, group)) {
+    return !!state.navOpenGroups[group];
+  }
+  return true;
+}
+
+function ensureNavGroupOpen(group) {
+  state.navOpenGroups = { ...(state.navOpenGroups || {}), [group]: true };
+}
+
+function toggleNavGroup(group) {
+  state.navOpenGroups = { ...(state.navOpenGroups || {}), [group]: !isNavGroupOpen(group) };
 }
 
 function matchesSearch() {
@@ -110,21 +149,68 @@ async function api(path, opts) {
   return json;
 }
 
+function shimmerView() {
+  return '<div class="soli-portal-root soli-portal-root--settings"><div class="settings-shell">' +
+    sidebar(normalizeTab(state.tab || "overview")) +
+    '<section class="settings-main">' + pageHeader("Loading Lab") +
+    '<div class="soli-admin-page-body"><div class="lab-shimmer-page">' +
+    '<div class="lab-shimmer-kpis">' +
+    Array.from({ length: 4 }).map(() => '<div class="lab-shimmer lab-shimmer-card"></div>').join("") +
+    '</div><div class="lab-shimmer lab-shimmer-chart"></div>' +
+    Array.from({ length: 6 }).map(() => '<div class="lab-shimmer lab-shimmer-row"></div>').join("") +
+    '</div></div></section></div></div>';
+}
+
 async function bootstrap() {
   try {
     const boot = await api("/bootstrap");
     state.localMode = boot.localMode;
+    state.dnaVersion = boot.dnaVersion || "";
+    state.packagePath = boot.packagePath || "";
+    state.installWarnings = Array.isArray(boot.installWarnings) ? boot.installWarnings : [];
+    state.installs = boot.installs || null;
     if (boot.localMode || boot.authenticated) {
       state.view = "dashboard";
+      state.loading = true;
+      render();
+      try {
+        const probe = await api("/probe");
+        state.probeMeta = probe;
+      } catch (_) {}
       await refreshData();
+      state.loading = false;
     } else {
       state.view = "landing";
     }
   } catch (e) {
     state.error = e.message;
     state.view = "landing";
+    state.loading = false;
   }
   render();
+}
+
+async function refreshInstalls() {
+  try {
+    const json = await api("/installs");
+    if (json.installs) state.installs = json.installs;
+    if (Array.isArray(json.installWarnings)) state.installWarnings = json.installWarnings;
+    else if (json.installs && Array.isArray(json.installs.warnings)) {
+      state.installWarnings = json.installs.warnings;
+    }
+    if (json.dnaVersion) state.dnaVersion = json.dnaVersion;
+    if (json.packagePath) state.packagePath = json.packagePath;
+  } catch (_) { /* keep bootstrap snapshot */ }
+}
+
+async function loadIntelligence(force) {
+  if (state.intelligence && !force) return;
+  try {
+    state.intelligence = await api("/intelligence");
+  } catch (err) {
+    state.error = err.message;
+    state.intelligence = { impressions: [], cellularMemory: [] };
+  }
 }
 
 async function refreshData() {
@@ -555,14 +641,13 @@ function registerView() {
 function sidebar(active) {
   const stats = state.data?.stats || {};
   const issueCount = stats.issueCount || 0;
-  const openGroup = openNavGroup(active);
   const groups = {};
   NAV.forEach(([id, label, icon, group]) => {
     if (!groups[group]) groups[group] = [];
     groups[group].push([id, label, icon]);
   });
   const sections = Object.keys(groups).map((group) => {
-    const isOpen = openGroup === group;
+    const isOpen = isNavGroupOpen(group);
     const links = groups[group].map(([id, label, icon]) => {
       const badge = id === "issues" && issueCount ? '<span class="nav-badge">' + issueCount + '</span>' : '';
       return '<button type="button" class="soli-settings-nav-link' + (active === id ? ' is-active' : '') + '" data-tab="' + id + '"><i class="fa-solid ' + icon + '" aria-hidden="true"></i><span>' + esc(label) + '</span>' + badge + '</button>';
@@ -579,18 +664,23 @@ function sidebar(active) {
     ? '<div class="settings-nav-group" style="margin-top:20px"><button type="button" class="soli-settings-nav-link" data-action="logout"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Sign out</span></button></div>'
     : '';
   return '<aside class="settings-nav">' +
-    '<div class="soli-portal-nav-brand">' + dnaWebBrand('/labs', false) + '</div>' +
+    '<div class="soli-portal-nav-brand">' + dnaWebBrand('/labs', false) +
+    (state.dnaVersion
+      ? '<div class="lab-runtime-version" title="' + esc(state.packagePath || '') + '">v' + esc(state.dnaVersion) + '</div>'
+      : '') +
+    '</div>' +
     '<div class="settings-nav-scroll">' + sections + logout + '</div></aside>';
 }
 
-function openNavGroup(active) {
-  return state.navOpenGroup != null ? state.navOpenGroup : groupForTab(active);
-}
-
 function pageHeader(title) {
+  const probe = state.probeMeta;
+  const probeLabel = probe && probe.lastProbeAt
+    ? (probe.skipped ? "Probed " : "Just probed ") + timeAgo(probe.lastProbeAt)
+    : "";
   return '<header class="soli-administration-page-header">' +
     '<div class="soli-administration-page-header__title-row">' +
     '<h1 class="soli-administration-page-header__title">' + esc(title) + '</h1>' +
+    (probeLabel ? '<span class="lab-probe-meta">' + esc(probeLabel) + '</span>' : '') +
     '</div>' +
     '<div class="soli-administration-page-header__actions">' +
     '<button type="button" class="humaan-page-primary-btn soli-admin-header-btn" data-action="refresh"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Refresh</button>' +
@@ -609,6 +699,18 @@ function ciBillingBanner() {
     ' · ' + esc(b.affectedRuns) + ' recent run(s).</p>' +
     '<p class="lab-alert__actions"><a href="' + esc(b.billingUrl) + '" target="_blank" rel="noopener noreferrer">Open GitHub Billing</a>' +
     ' · Fix payment or raise the Actions spending limit, then re-run CI.</p>' +
+    '</div></div>';
+}
+
+function installWarningBanner() {
+  const warnings = state.installWarnings || [];
+  if (!warnings.length) return "";
+  return '<div class="lab-alert lab-alert--install" role="alert">' +
+    '<div class="lab-alert__icon" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></div>' +
+    '<div class="lab-alert__body">' +
+    '<strong class="lab-alert__title">DNA install mismatch — Lab may be stale</strong>' +
+    warnings.map((w) => '<p class="lab-alert__text">' + esc(w) + '</p>').join('') +
+    '<p class="lab-alert__actions">Run <code>npx dna lab installs --fix</code> in the project root, then restart the API process that mounts Lab.</p>' +
     '</div></div>';
 }
 
@@ -767,6 +869,7 @@ function overviewPanel() {
     : '<span class="lab-chip lab-chip--muted">No releases registered</span>';
 
   return '<div class="admin-page-body admin-page-body--form lab-overview">' +
+    installWarningBanner() +
     ciBillingBanner() +
     '<div class="lab-overview__intro"><div><h2 class="lab-overview__title">System performance</h2><p class="lab-overview__sub">Runtime, delivery, and quality signals from the last 24 hours.</p></div>' +
     '<div class="lab-overview__release">' + releaseBits + '</div></div>' +
@@ -784,7 +887,7 @@ function overviewPanel() {
     '<div class="lab-overview__charts">' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Event volume</h2></div><div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart lab-chart--lg" id="error-chart"></canvas></div></div>' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Issue severity</h2></div><div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart lab-chart--lg" id="severity-chart"></canvas></div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Quality trend</h2>' + overviewPanelLink("quality", "Quality") + '</div><div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart lab-chart--lg" id="overview-quality-chart"></canvas></div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Quality trend</h2>' + overviewPanelLink("reports", "Reports") + '</div><div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart lab-chart--lg" id="overview-quality-chart"></canvas></div></div>' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Latency (slow endpoints)</h2>' + overviewPanelLink("performance", "Performance") + '</div><div class="lab-panel__body lab-panel__body--chart"><canvas class="lab-chart lab-chart--lg" id="latency-chart"></canvas></div></div>' +
     '</div>' +
     '<div class="lab-overview__tables">' +
@@ -794,7 +897,7 @@ function overviewPanel() {
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Slow endpoints</h2>' + overviewPanelLink("performance", "Performance") + '</div><div class="lab-panel__body">' +
     '<table class="lab-table admin-table"><thead><tr><th>Endpoint</th><th>Count</th><th>Avg</th><th>Max</th></tr></thead><tbody>' + slowRows + '</tbody></table>' +
     '</div></div>' +
-    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Recent CI</h2>' + overviewPanelLink("quality", "Quality") + '</div><div class="lab-panel__body">' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Recent CI</h2>' + overviewPanelLink("ci", "CI") + '</div><div class="lab-panel__body">' +
     '<table class="lab-table admin-table"><thead><tr><th>Run</th><th>Status</th><th>When</th></tr></thead><tbody>' + ciRows + '</tbody></table>' +
     '</div></div>' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Recent events</h2>' + overviewPanelLink("events", "Events") + '</div><div class="lab-panel__body">' +
@@ -935,54 +1038,111 @@ function performancePanel() {
 }
 
 function releasesPanel() {
+  const detail = state.releasesDetail;
+  const releases = detail && detail.releases ? detail.releases : (state.data && state.data.releases) || [];
+  if (detail === null && !(state.data && state.data.releases && state.data.releases.length)) {
+    return '<div class="admin-page-body admin-page-body--table">' + emptyState('fa-spinner', 'Loading releases…', 'Pulling GitHub Releases') + '</div>';
+  }
   const match = matchesSearch();
-  const releases = (state.data?.releases || []).filter((r) => match([r.version, r.environment, r.gitSha]));
-  const maps = state.data?.sourceMaps || [];
-  const rows = releases.length
-    ? releases.map((r) => '<tr><td><strong>' + esc(r.version) + '</strong></td><td>' + esc(r.environment) + '</td><td><code>' + esc((r.gitSha || "").slice(0, 8)) + '</code></td><td>' + timeAgo(r.deployedAt) + '</td></tr>').join("")
-    : tableEmptyRow(4, 'No releases match this search.');
+  const filtered = releases.filter((r) => match([r.version, r.environment, r.gitSha, r.notes, r.author]));
+  const rows = filtered.length
+    ? filtered.map((r) => {
+      const ver = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer"><strong>' + esc(r.version) + '</strong></a>' : '<strong>' + esc(r.version) + '</strong>';
+      return '<tr><td>' + ver + '<div class="lab-table__sub">' + esc(r.source || "store") + (r.author ? ' · ' + esc(r.author) : '') + '</div></td><td>' + esc(r.environment || '—') + '</td><td>' + esc((r.notes || '').slice(0, 120) || '—') + '</td><td>' + timeAgo(r.deployedAt) + '</td></tr>';
+    }).join("")
+    : tableEmptyRow(4, 'No GitHub releases yet. Connect GitHub (dna github connect) or publish a release.');
   return '<div class="admin-page-body admin-page-body--table">' +
     listToolbar('Search releases…', '') +
-    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Version</th><th>Env</th><th>SHA</th><th>Deployed</th></tr></thead><tbody>' + rows + '</tbody></table>' +
-    '<p class="lab-list-meta">' + esc(maps.length) + ' source map(s) registered</p>' +
+    '<p class="lab-list-meta">GitHub: ' + esc(detail && detail.githubCount != null ? detail.githubCount : '—') + ' · Store: ' + esc(detail && detail.storeCount != null ? detail.storeCount : '—') + '</p>' +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Version</th><th>Env</th><th>Notes</th><th>Published</th></tr></thead><tbody>' + rows + '</tbody></table>' +
     '</div>';
 }
 
-function qualityPanel() {
+function sourceMapsPanel() {
+  const match = matchesSearch();
+  const maps = (state.data?.sourceMaps || []).filter((m) => match([m.file, m.releaseId, m.id]));
+  const rows = maps.length
+    ? maps.map((m) => '<tr><td><code>' + esc(m.file || "—") + '</code></td><td><code>' + esc(m.releaseId || "—") + '</code></td><td>' + esc(m.sizeBytes != null ? m.sizeBytes + " B" : "—") + '</td><td>' + timeAgo(m.uploadedAt) + '</td></tr>').join("")
+    : tableEmptyRow(4, 'No source maps registered yet.');
+  return '<div class="admin-page-body admin-page-body--table">' +
+    listToolbar('Search source maps…', '') +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>File</th><th>Release</th><th>Size</th><th>Uploaded</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '</div>';
+}
+
+function reportsPanel() {
   const match = matchesSearch();
   const reports = (state.data?.qualityReports || []).filter((r) => match([r.name, r.summary, r.scope, r.gate]));
-  const coverage = state.data?.coverage;
-  const ciRuns = (state.data?.ciRuns || []).filter((r) => match([r.displayTitle, r.workflowName, r.headBranch, r.conclusion, r.status, r.event]));
-  const thirdParty = (state.data?.thirdPartyApis || []).filter((e) => match([e.provider, e.source, e.message, e.method]));
-
-  const qualityTabs = [
-    ["reports", "Reports"],
-    ["ci", "CI"],
-    ["apis", "APIs"],
-  ];
-  const activeQualityTab = state.qualityTab || "reports";
-  const tabs = qualityTabs.map(([id, label]) =>
-    '<button type="button" role="tab" class="lab-product-tabs__tab' + (activeQualityTab === id ? ' is-active' : '') + '" data-quality-tab="' + id + '" aria-selected="' + (activeQualityTab === id ? 'true' : 'false') + '">' + esc(label) + '</button>'
-  ).join("");
-
-  const covCards = '<div class="lab-list-stats"><div class="lab-stats">' +
-    '<div class="lab-stat-card"><div class="lab-stat-card__label">Lines</div><div class="lab-stat-card__value ' + ((coverage?.lines ?? 0) >= 80 ? 'is-ok' : 'is-warn') + '">' + (coverage?.lines != null ? esc(Math.round(coverage.lines * 10) / 10) + '%' : '—') + '</div></div>' +
-    '<div class="lab-stat-card"><div class="lab-stat-card__label">Statements</div><div class="lab-stat-card__value">' + (coverage?.statements != null ? esc(Math.round(coverage.statements * 10) / 10) + '%' : '—') + '</div></div>' +
-    '<div class="lab-stat-card"><div class="lab-stat-card__label">Functions</div><div class="lab-stat-card__value">' + (coverage?.functions != null ? esc(Math.round(coverage.functions * 10) / 10) + '%' : '—') + '</div></div>' +
-    '<div class="lab-stat-card"><div class="lab-stat-card__label">Branches</div><div class="lab-stat-card__value">' + (coverage?.branches != null ? esc(Math.round(coverage.branches * 10) / 10) + '%' : '—') + '</div></div>' +
-    '</div>' +
-    (coverage?.path ? '<p class="lab-list-meta">From <code>' + esc(coverage.path) + '</code> · ' + timeAgo(coverage.mtime) + '</p>' : '<p class="lab-list-meta">Run <code>npm run test:coverage</code> to generate coverage/coverage-summary.json</p>') +
-    '<canvas class="lab-chart" id="quality-chart" style="margin-top:12px"></canvas></div>';
-
-  const reportRows = reports.length
+  const rows = reports.length
     ? reports.slice().reverse().map((r) => {
       const gate = r.gate ? '<span class="lab-badge lab-badge--' + (r.gate === 'pass' ? 'ok' : 'critical') + '">' + esc(r.gate) + '</span>' : '—';
       const score = r.score != null ? esc(r.score) + (r.gate ? '' : '%') : '—';
       return '<tr><td><div class="lab-table__title">' + esc(r.name) + '</div><div class="lab-table__sub">' + esc(r.summary || r.scope || '') + '</div></td><td>' + gate + '</td><td>' + score + '</td><td>' + esc(r.blockers ?? '—') + ' / ' + esc(r.critical ?? '—') + '</td><td>' + timeAgo(r.mtime) + '</td></tr>';
     }).join("")
     : tableEmptyRow(5, 'No quality reports match this search.');
+  return '<div class="admin-page-body admin-page-body--table">' +
+    listToolbar('Search reports…', '') +
+    '<canvas class="lab-chart" id="quality-chart" style="margin:0 0 12px"></canvas>' +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Report</th><th>Gate</th><th>Score</th><th>Blocker / Critical</th><th>When</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '</div>';
+}
 
-  const ciRows = ciRuns.length
+function coveragePanel() {
+  const d = state.coverageDetail;
+  if (!d) {
+    return '<div class="admin-page-body admin-page-body--table">' + emptyState('fa-spinner', 'Loading coverage…', 'Reading coverage-summary.json') + '</div>';
+  }
+  if (!d.summary) {
+    return '<div class="admin-page-body admin-page-body--table">' + emptyState('fa-chart-pie', 'No coverage yet', 'Run npm run test:coverage then refresh Lab.') + '</div>';
+  }
+  const s = d.summary;
+  const metricCard = (label, m) => {
+    const pct = m && m.pct != null ? Math.round(m.pct * 10) / 10 : null;
+    const tone = pct == null ? "" : pct >= 80 ? "ok" : pct >= 60 ? "warn" : "bad";
+    const sub = m && m.covered != null && m.total != null ? (m.covered + " / " + m.total) : "—";
+    return kpiCard(label, pct != null ? pct + "%" : "—", tone, sub);
+  };
+  const match = matchesSearch();
+  let files = (d.files || []).filter((f) => match([f.path, f.package]));
+  if (state.coverageFilter === "below80") files = files.filter((f) => (f.lines && f.lines.pct != null ? f.lines.pct : 101) < 80);
+  const bars = (d.packages || []).slice(0, 8).map((p) => {
+    const pct = p.linesPct != null ? Math.max(0, Math.min(100, p.linesPct)) : 0;
+    return '<div class="lab-cov-bar"><div class="lab-cov-bar__label">' + esc(p.name) + ' · ' + esc(p.fileCount) + ' files</div>' +
+      '<div class="lab-cov-bar__track"><div class="lab-cov-bar__fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="lab-cov-bar__val">' + (p.linesPct != null ? esc(p.linesPct) + '%' : '—') + '</div></div>';
+  }).join("");
+  const dist = (d.distribution || []).map((b) => '<div class="lab-stat-card"><div class="lab-stat-card__label">' + esc(b.bucket) + '</div><div class="lab-stat-card__value">' + esc(b.count) + '</div><div class="lab-stat-card__sub">files</div></div>').join("");
+  const rows = files.length
+    ? files.map((f) => {
+      const pct = f.lines && f.lines.pct != null ? f.lines.pct : null;
+      const w = pct != null ? Math.max(0, Math.min(100, pct)) : 0;
+      return '<tr><td><code>' + esc(f.path) + '</code><div class="lab-table__sub">' + esc(f.package) + '</div></td>' +
+        '<td><div class="lab-mini-bar"><span style="width:' + w + '%"></span></div>' + (pct != null ? esc(Math.round(pct * 10) / 10) + '%' : '—') + '</td>' +
+        '<td>' + esc(f.statements && f.statements.pct != null ? Math.round(f.statements.pct * 10) / 10 + '%' : '—') + '</td>' +
+        '<td>' + esc(f.functions && f.functions.pct != null ? Math.round(f.functions.pct * 10) / 10 + '%' : '—') + '</td>' +
+        '<td>' + esc(f.branches && f.branches.pct != null ? Math.round(f.branches.pct * 10) / 10 + '%' : '—') + '</td></tr>';
+    }).join("")
+    : tableEmptyRow(5, 'No files match this filter.');
+  const tabs = [
+    ["all", "All files"],
+    ["below80", "Below 80%"],
+  ].map(([id, label]) => '<button type="button" role="tab" class="lab-product-tabs__tab' + ((state.coverageFilter || "all") === id ? ' is-active' : '') + '" data-cov-filter="' + id + '">' + esc(label) + '</button>').join("");
+  return '<div class="admin-page-body admin-page-body--table">' +
+    '<div class="lab-list-stats"><div class="lab-stats">' +
+    metricCard("Lines", s.lines) + metricCard("Statements", s.statements) + metricCard("Functions", s.functions) + metricCard("Branches", s.branches) +
+    '</div></div>' +
+    '<p class="lab-list-meta">From <code>' + esc(d.path || "coverage/coverage-summary.json") + '</code> · ' + esc(d.fileCount || 0) + ' files' + (d.capped ? ' (capped)' : '') + ' · ' + timeAgo(d.mtime) + '</p>' +
+    '<div class="lab-overview__charts" style="margin-bottom:16px"><div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">By package</h2></div><div class="lab-panel__body" style="padding:14px">' + (bars || emptyState('fa-folder', 'No packages', '')) + '</div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Distribution</h2></div><div class="lab-panel__body" style="padding:14px"><div class="lab-stats">' + dist + '</div></div></div></div>' +
+    listToolbar('Search files…', tabs) +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>File</th><th>Lines</th><th>Stmts</th><th>Fns</th><th>Branches</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '</div>';
+}
+
+function ciPanel() {
+  const match = matchesSearch();
+  const ciRuns = (state.data?.ciRuns || []).filter((r) => match([r.displayTitle, r.workflowName, r.headBranch, r.conclusion, r.status, r.event]));
+  const rows = ciRuns.length
     ? ciRuns.map((r) => {
       const conclusion = (r.conclusion || r.status || "").toLowerCase();
       const billing = r.failureKind === "billing";
@@ -993,32 +1153,142 @@ function qualityPanel() {
       return '<tr><td>' + title + '<div class="lab-table__sub">' + sub + '</div></td><td><span class="lab-badge lab-badge--' + cls + '">' + esc(badgeLabel) + '</span></td><td>' + esc(r.event || "—") + '</td><td>' + timeAgo(r.updatedAt || r.createdAt) + '</td></tr>';
     }).join("")
     : tableEmptyRow(4, 'No CI runs match this search.');
-
-  const apiRows = thirdParty.length
-    ? thirdParty.map((e) =>
-      '<tr><td><span class="lab-badge lab-badge--info">' + esc(e.provider || e.source || "api") + '</span></td><td><div class="lab-table__title">' + esc(e.message) + '</div><div class="lab-table__sub">' + esc(e.method || "") + ' ' + esc(e.statusCode ?? "") + (e.durationMs != null ? ' · ' + esc(e.durationMs) + 'ms' : '') + '</div></td><td><pre class="lab-pre lab-pre--sm">' + esc((e.responseBody || "").slice(0, 280) || "—") + '</pre></td><td>' + timeAgo(e.timestamp) + '</td></tr>'
-    ).join("")
-    : tableEmptyRow(4, 'No outbound API captures match this search.');
-
-  let table = '';
-  if (activeQualityTab === "ci") {
-    table = '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Run</th><th>Status</th><th>Event</th><th>When</th></tr></thead><tbody>' + ciRows + '</tbody></table>';
-  } else if (activeQualityTab === "apis") {
-    table = '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Provider</th><th>Call</th><th>Response</th><th>When</th></tr></thead><tbody>' + apiRows + '</tbody></table>';
-  } else {
-    table = '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Report</th><th>Gate</th><th>Score</th><th>Blocker / Critical</th><th>When</th></tr></thead><tbody>' + reportRows + '</tbody></table>';
-  }
-
   return '<div class="admin-page-body admin-page-body--table">' +
-    listToolbar('Search quality…', tabs) +
-    (activeQualityTab === "ci" ? ciBillingBanner() : "") +
-    covCards +
-    table +
+    listToolbar('Search CI runs…', '') +
+    ciBillingBanner() +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Run</th><th>Status</th><th>Event</th><th>When</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '</div>';
+}
+
+function apisPanel() {
+  const d = state.apisDetail;
+  if (!d) {
+    return '<div class="admin-page-body admin-page-body--table">' + emptyState('fa-spinner', 'Loading APIs…', 'Building OpenAPI explorer + live traffic') + '</div>';
+  }
+  const match = matchesSearch();
+  const ops = (d.operations || []).filter((o) => match([o.method, o.path, o.summary, (o.tags || []).join(" ")]));
+  const live = (d.live || []).concat(d.probes || []).filter((e) => match([e.method, e.path, e.message, e.provider]));
+  const opRows = ops.length
+    ? ops.map((o) => '<tr><td><span class="lab-badge lab-badge--info">' + esc(o.method) + '</span></td><td><code>' + esc(o.path) + '</code><div class="lab-table__sub">' + esc(o.summary || (o.tags || []).join(", ")) + ' · ' + esc(o.source) + '</div></td></tr>').join("")
+    : tableEmptyRow(2, 'No operations.');
+  const liveRows = live.length
+    ? live.slice(0, 80).map((e) => {
+      const ok = e.ok != null ? e.ok : (e.statusCode >= 200 && e.statusCode < 400);
+      return '<tr><td><span class="lab-badge lab-badge--' + (ok ? 'ok' : 'critical') + '">' + esc(e.method || 'GET') + '</span></td><td><code>' + esc(e.path || e.message || '—') + '</code><div class="lab-table__sub">' + esc(e.statusCode || 0) + (e.durationMs != null ? ' · ' + esc(e.durationMs) + 'ms' : '') + '</div></td><td><pre class="lab-pre lab-pre--sm">' + esc((e.responsePreview || e.message || '').slice(0, 200) || '—') + '</pre></td><td>' + timeAgo(e.timestamp) + '</td></tr>';
+    }).join("")
+    : tableEmptyRow(4, 'No live calls yet — probes run on Lab open (every 5h).');
+  const st = d.stats || {};
+  return '<div class="admin-page-body admin-page-body--table">' +
+    '<div class="lab-list-stats"><div class="lab-stats">' +
+    kpiCard("Operations", st.operationCount || ops.length, "ok", d.openapiSource ? "spec " + d.openapiSource : "Lab self-spec") +
+    kpiCard("Live captures", st.liveCount || 0, st.liveCount ? "warn" : "ok", "outbound") +
+    kpiCard("Probe OK", st.probeOk || 0, "ok", "last visit") +
+    kpiCard("Probe fail", st.probeFail || 0, st.probeFail ? "bad" : "ok", timeAgo(st.lastProbeAt)) +
+    '</div></div>' +
+    listToolbar('Search contract + traffic…', '') +
+    '<div class="lab-panel settings-card" style="margin-bottom:16px"><div class="lab-panel__head"><h2 class="lab-panel__title">Contract (mini Swagger)</h2></div><div class="lab-panel__body">' +
+    '<table class="lab-table admin-table"><thead><tr><th>Method</th><th>Path</th></tr></thead><tbody>' + opRows + '</tbody></table></div></div>' +
+    '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Live calls & responses</h2></div><div class="lab-panel__body">' +
+    '<table class="lab-table admin-table"><thead><tr><th>Method</th><th>Call</th><th>Response</th><th>When</th></tr></thead><tbody>' + liveRows + '</tbody></table></div></div>' +
+    '</div>';
+}
+
+function doctorStatus(ok, labelYes, labelNo) {
+  return ok
+    ? '<span class="lab-badge lab-badge--ok">' + esc(labelYes || "ok") + '</span>'
+    : '<span class="lab-badge lab-badge--critical">' + esc(labelNo || "missing") + '</span>';
+}
+
+function doctorPanel() {
+  const d = state.data?.doctor || {};
+  const rows = [
+    ["DNA installed", doctorStatus(!!d.dna?.installed, d.dna?.version || "installed", "not found")],
+    ["Validation", doctorStatus(!!d.validation?.valid, "valid", (d.validation?.issueCount || 0) + " issue(s)")],
+    ["Behaviour files", esc((d.behaviour?.files ?? 0) + " present") + ((d.behaviour?.missing || []).length ? ' · missing ' + esc(d.behaviour.missing.join(", ")) : "")],
+    ["Immune system", doctorStatus(!!d.immuneSystem?.configured)],
+    ["Cellular Memory", doctorStatus(!!d.cellularMemory?.configured)],
+    ["Runtime", doctorStatus(!!d.runtime?.configured, d.runtime?.enabled ? "enabled" : "configured", "missing")],
+    ["CI workflow", doctorStatus(!!d.ci?.workflowInstalled, d.ci?.enabled ? "enabled" : "installed", "missing")],
+    ["Preview workflow", doctorStatus(!!d.preview?.workflowInstalled, d.preview?.provider || "installed", "missing")],
+    ["Docker", doctorStatus(!!d.docker?.dockerfileInstalled)],
+    ["Pre-push hook", doctorStatus(!!d.hooks?.prePushInstalled)],
+    ["Hooks path", doctorStatus(!!d.hooks?.hooksPathConfigured)],
+    ["GitHub", doctorStatus(!!d.github?.configured, d.github?.signedIn ? "signed in" : "configured", "not configured")],
+    ["AI", doctorStatus(!!d.ai?.connected, d.ai?.provider || "connected", d.ai?.enabled ? "not connected" : "disabled")],
+    ["Lab installs", doctorStatus(!!d.labInstalls?.ok, (d.labInstalls?.count || 0) + " install(s)", (d.labInstalls?.staleCount || 0) + " stale / multi-version")],
+    ["Injection", doctorStatus(!!d.injection?.complete || !d.injection?.expected, "complete", ((d.injection?.missing || []).length) + " missing")],
+  ].map(([k, v]) => '<tr><td>' + esc(k) + '</td><td>' + v + '</td></tr>').join("");
+  const warnings = (d.labInstalls?.warnings || []).map((w) => '<p class="lab-list-meta">' + esc(w) + '</p>').join("");
+  return '<div class="admin-page-body admin-page-body--table">' +
+    installWarningBanner() +
+    '<div class="lab-list-stats"><div class="lab-stats">' +
+    kpiCard("Validation", d.validation?.valid ? "PASS" : "FAIL", d.validation?.valid ? "ok" : "bad", (d.validation?.issueCount || 0) + " issue(s)") +
+    kpiCard("Behaviour", d.behaviour?.files ?? 0, (d.behaviour?.missing || []).length ? "warn" : "ok", "files present") +
+    kpiCard("Lab installs", d.labInstalls?.count ?? 0, d.labInstalls?.ok ? "ok" : "warn", (d.labInstalls?.versions || []).join(", ") || "none") +
+    kpiCard("Runtime", d.runtime?.configured ? "ready" : "—", d.runtime?.configured ? "ok" : "warn", d.runtime?.enabled ? "enabled" : "check config") +
+    '</div></div>' +
+    warnings +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Check</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '</div>';
+}
+
+function installsPanel() {
+  const summary = state.installs || {};
+  const list = Array.isArray(summary.paths)
+    ? summary.paths
+    : (Array.isArray(summary.installs) ? summary.installs : []);
+  const match = matchesSearch();
+  const filtered = list.filter((i) => match([i.version, i.packagePath, i.ownerPackageJson]));
+  const rows = filtered.length
+    ? filtered.map((i) => {
+      const ui = i.hasAnalyticsUi
+        ? '<span class="lab-badge lab-badge--ok">analytics UI</span>'
+        : '<span class="lab-badge lab-badge--critical">stale UI</span>';
+      return '<tr><td><strong>v' + esc(i.version) + '</strong><div class="lab-table__sub">' + ui + '</div></td><td><code>' + esc(i.packagePath) + '</code></td><td><code>' + esc(i.ownerPackageJson) + '</code></td></tr>';
+    }).join("")
+    : tableEmptyRow(3, list.length ? 'No installs match this search.' : 'No @superhumaan/dna-by-humaan installs found under this project.');
+  const versions = (summary.versions || []).join(", ") || "—";
+  return '<div class="admin-page-body admin-page-body--table">' +
+    installWarningBanner() +
+    listToolbar('Search installs…', '') +
+    '<div class="lab-list-stats"><div class="lab-stats">' +
+    kpiCard("Installs", list.length || summary.count || 0, summary.multiVersion || summary.staleCount ? "warn" : "ok", versions) +
+    kpiCard("Active", summary.activeVersion || state.dnaVersion || "—", summary.activeHasAnalyticsUi === false ? "warn" : "ok", "serving Lab") +
+    kpiCard("Stale", summary.staleCount ?? 0, summary.staleCount ? "bad" : "ok", "missing analytics UI") +
+    kpiCard("Multi-version", summary.multiVersion ? "yes" : "no", summary.multiVersion ? "warn" : "ok", "align all owners") +
+    '</div></div>' +
+    '<p class="lab-list-meta">Fix with <code>npx dna lab installs --fix</code>, then restart the API that mounts Lab.</p>' +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Version</th><th>Package path</th><th>Owner package.json</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '</div>';
+}
+
+function intelligenceFilesPanel(kind) {
+  const intel = state.intelligence;
+  if (!intel) {
+    return '<div class="admin-page-body admin-page-body--table">' +
+      emptyState('fa-spinner', 'Loading…', 'Reading project intelligence files.') +
+      '</div>';
+  }
+  const match = matchesSearch();
+  const files = (kind === "memory" ? intel.cellularMemory : intel.impressions) || [];
+  const filtered = files.filter((f) => match([f.path, f.kind]));
+  const rows = filtered.length
+    ? filtered.map((f) => '<tr><td><code>' + esc(f.path) + '</code></td><td>' + esc(f.bytes != null ? f.bytes + " B" : "—") + '</td><td>' + timeAgo(f.mtime) + '</td></tr>').join("")
+    : tableEmptyRow(3, files.length ? 'No files match this search.' : (kind === "memory" ? 'No CellularMemory markdown files found.' : 'No Impressions markdown files found.'));
+  const title = kind === "memory" ? "Cellular Memory" : "Impressions";
+  const hint = kind === "memory"
+    ? "From <code>.DNA/CellularMemory/</code> — learned project context for agents."
+    : "From <code>DNA/Impressions/</code> — human-facing architecture and product docs.";
+  return '<div class="admin-page-body admin-page-body--table">' +
+    listToolbar('Search ' + title.toLowerCase() + '…', '') +
+    '<p class="lab-list-meta">' + hint + ' · ' + esc(files.length) + ' file(s)</p>' +
+    '<table class="lab-table admin-table admin-table--edge"><thead><tr><th>Path</th><th>Size</th><th>Updated</th></tr></thead><tbody>' + rows + '</tbody></table>' +
     '</div>';
 }
 
 function dashboardView() {
-  const active = state.tab || "overview";
+  const active = normalizeTab(state.tab || "overview");
+  state.tab = active;
   const navItem = NAV.find((n) => n[0] === active) || NAV[0];
   let body = "";
   if (state.selectedIssueId) {
@@ -1029,7 +1299,15 @@ function dashboardView() {
   else if (active === "events") body = eventsPanel();
   else if (active === "performance") body = performancePanel();
   else if (active === "releases") body = releasesPanel();
-  else if (active === "quality") body = qualityPanel();
+  else if (active === "sourcemaps") body = sourceMapsPanel();
+  else if (active === "reports") body = reportsPanel();
+  else if (active === "coverage") body = coveragePanel();
+  else if (active === "ci") body = ciPanel();
+  else if (active === "apis") body = apisPanel();
+  else if (active === "doctor") body = doctorPanel();
+  else if (active === "installs") body = installsPanel();
+  else if (active === "impressions") body = intelligenceFilesPanel("impressions");
+  else if (active === "memory") body = intelligenceFilesPanel("memory");
   else body = overviewPanel();
 
   const title = state.selectedIssueId ? "Issue detail" : navItem[1];
@@ -1045,9 +1323,10 @@ function render() {
   if (state.view === "landing") app.innerHTML = landingView();
   else if (state.view === "signin") app.innerHTML = signinView();
   else if (state.view === "register") app.innerHTML = registerView();
+  else if (state.view === "dashboard" && state.loading && !state.data) app.innerHTML = shimmerView();
   else app.innerHTML = dashboardView();
   bind();
-  if (state.view === "dashboard" && state.data) {
+  if (state.view === "dashboard" && state.data && !state.loading) {
     const chart = document.getElementById("error-chart");
     if (chart) drawTimeline(chart, state.data.eventTimeline);
     const sev = document.getElementById("severity-chart");
@@ -1075,7 +1354,12 @@ function bind() {
       try {
         if (action === "signin") { state.view = "signin"; render(); return; }
         if (action === "register") { state.view = "register"; state.registerStep = "pair"; render(); return; }
-        if (action === "refresh") { await refreshData(); return; }
+        if (action === "refresh") {
+          if (state.tab === "impressions" || state.tab === "memory") await loadIntelligence(true);
+          if (state.tab === "installs") await refreshInstalls();
+          await refreshData();
+          return;
+        }
         if (action === "logout") { await api("/auth/logout", { method: "POST" }); state.view = "landing"; render(); return; }
         if (action === "otp") {
           const email = document.querySelector('#signin-form [name=email]').value;
@@ -1094,28 +1378,47 @@ function bind() {
     el.onclick = (e) => {
       e.preventDefault();
       const group = el.getAttribute("data-nav-group");
-      const current = openNavGroup(state.tab || "overview");
-      state.navOpenGroup = current === group ? "" : group;
+      if (group) toggleNavGroup(group);
       render();
     };
   });
   document.querySelectorAll("[data-tab]").forEach((el) => {
-    el.onclick = (e) => {
+    el.onclick = async (e) => {
       e.preventDefault();
-      const tab = el.getAttribute("data-tab");
+      const tab = normalizeTab(el.getAttribute("data-tab"));
       state.tab = tab;
       state.selectedIssueId = null;
       state.tagSearchQuery = "";
       state.searchQuery = "";
-      state.navOpenGroup = groupForTab(tab);
+      ensureNavGroupOpen(groupForTab(tab));
       render();
+      if (tab === "impressions" || tab === "memory") {
+        await loadIntelligence(false);
+        render();
+      }
+      if (tab === "installs") {
+        await refreshInstalls();
+        render();
+      }
+      if (tab === "coverage") {
+        try { state.coverageDetail = await api("/coverage"); } catch (err) { state.error = err.message; state.coverageDetail = { summary: null, files: [] }; }
+        render();
+      }
+      if (tab === "releases") {
+        try { state.releasesDetail = await api("/releases"); } catch (err) { state.error = err.message; state.releasesDetail = { releases: [] }; }
+        render();
+      }
+      if (tab === "apis") {
+        try { state.apisDetail = await api("/apis"); } catch (err) { state.error = err.message; state.apisDetail = { operations: [], live: [], probes: [], stats: {} }; }
+        render();
+      }
     };
+  });
+  document.querySelectorAll("[data-cov-filter]").forEach((el) => {
+    el.onclick = (e) => { e.preventDefault(); state.coverageFilter = el.getAttribute("data-cov-filter"); render(); };
   });
   document.querySelectorAll("[data-filter]").forEach((el) => {
     el.onclick = (e) => { e.preventDefault(); state.severityFilter = el.getAttribute("data-filter"); render(); };
-  });
-  document.querySelectorAll("[data-quality-tab]").forEach((el) => {
-    el.onclick = (e) => { e.preventDefault(); state.qualityTab = el.getAttribute("data-quality-tab"); render(); };
   });
   document.querySelectorAll("[data-issue]").forEach((el) => {
     el.onclick = (e) => {

@@ -2393,6 +2393,33 @@ lab
     await new Promise(() => {});
   });
 
+lab
+  .command("installs")
+  .description("List every @superhumaan/dna-by-humaan install (detect nested/stale Lab UI)")
+  .option("--cwd <path>", "Project root directory")
+  .option("--fix", "Upgrade every owner package to @latest")
+  .action(async (options: { cwd?: string; fix?: boolean }) => {
+    const root = getRoot(options);
+    const {
+      reportLabInstalls,
+      formatLabInstallsReport,
+      fixLabInstalls,
+    } = await import("@superhumaan/dna-core");
+    if (options.fix) {
+      console.log("Upgrading DNA in every package that owns an install…\n");
+      const result = await fixLabInstalls(root);
+      console.log("");
+      console.log(formatLabInstallsReport(root, result.report));
+      console.log("");
+      console.log("Restart the API process that mounts Lab, then hard-refresh /labs.");
+      if (!result.report.ok) process.exitCode = 1;
+      return;
+    }
+    const report = reportLabInstalls(root);
+    console.log(formatLabInstallsReport(root, report));
+    if (!report.ok) process.exitCode = 1;
+  });
+
 const registerCmd = program.command("register").description("Register local project with DNA services");
 
 registerCmd

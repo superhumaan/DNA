@@ -13,7 +13,7 @@
 
 **One npm package. One install. Everything included.**
 
-DNA by Humaan is an open-source **project brain**, **runtime observer**, **77 prompt stem packs**, **965-pack knowledge marketplace**, and **AI-assisted repair** system for TypeScript squads.
+DNA by Humaan is an open-source **project brain**, **runtime observer**, **88 prompt stem packs**, **965-pack knowledge marketplace**, and **AI-assisted repair** system for TypeScript squads.
 
 **Recommended:** `npx @superhumaan/dna-by-humaan doctor` — one command for stems, rules, detection, memory, runtime, CI, and feature factory. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
 
@@ -23,7 +23,7 @@ Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
-| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 77 prompt stem packs + `/dna-*` CLI commands |
+| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 88 prompt stem packs + `/dna-*` CLI commands |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Supply chain** | [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) · [SECURITY.md](https://github.com/superhumaan/DNA/blob/main/SECURITY.md) |
@@ -91,7 +91,7 @@ npx @superhumaan/dna-by-humaan doctor
 | Included in one `doctor` | |
 |--------------------------|---|
 | `.DNA/` intelligence | behaviour, CellularMemory, immune system, neuralNetwork |
-| **77 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` |
+| **88 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` |
 | **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills — always on |
 | **Detection** | stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift |
 | **Feature factory** | 9-role loop, quality gates, same template every feature |
@@ -154,7 +154,7 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for Cursor / Copilot / Claude |
 | `dna update` | Upgrade CLI + re-apply all installed knowledge packs + force re-inject always-on AI rules |
-| `dna workbench install` | Refresh DNA Workbench + 77 prompt stem packs + `/dna-*` commands + `AGENTS.md` |
+| `dna workbench install` | Refresh DNA Workbench + 88 prompt stem packs + `/dna-*` commands + `AGENTS.md` |
 | `dna stems list` | List prompt stem packs (analyze, ship, agent-loop roles, …) |
 | `dna stems show <id>` | Copy variants and file paths for one stem |
 | `dna commands install` | Refresh `/dna-*` CLI slash commands only (also installed by init/doctor/update) |
@@ -178,6 +178,8 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna runtime install` | Framework snippets for production observer |
 | `dna lab install` | Scaffold DNA Lab at `/labs` + auto-wire middleware |
 | `dna lab serve` | Local Lab at `http://localhost:3200/labs` (no login on localhost) |
+| `dna lab installs` | List nested/stale `@superhumaan/dna-by-humaan` installs |
+| `dna lab installs --fix` | Upgrade every owner package to `@latest` |
 | `dna register lab --url <url>` | Pair local CLI to production Lab (148-digit code) |
 | `dna dashboard` | Legacy alias for `dna lab serve` |
 | `dna github connect` | Wire GitHub issues + repair workflow |
@@ -260,7 +262,7 @@ fail closed unless a shared Redis-compatible adapter is fully configured via
 `DNA_LAB_STATE_BACKEND=redis`, `DNA_LAB_REDIS_URL`, `DNA_LAB_REDIS_TOKEN`, and
 `DNA_LAB_REDIS_KEY`. `/api/dna/labs/health` reports the active backend.
 
-**UI (v0.6.14+):** Analytics Overview (KPIs, health batteries, charts, cross-domain tables) + Sentry-density Issues (short IDs, 24h sparklines, users/age, full issue detail: Highlights, Stack, Tags, Packages, Additional Data JSON, Trace). [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-analytics-0.6.14.md). Humaan admin chrome (v0.6.7+): DNA logo only, primary pills, search → filters → tables, Monitor/Delivery accordion.
+**UI (v0.6.15+):** Sidebar shows the live DNA version; install-mismatch banner when nested/stale copies exist — fix with `dna lab installs --fix` ([upgrade DX →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-upgrade-dx-0.6.15.md)). **(v0.6.14+):** Analytics Overview + Sentry-density Issues. [Release notes →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-analytics-0.6.14.md). Humaan admin chrome (v0.6.7+): DNA logo only, primary pills, search → filters → tables, Monitor/Delivery accordion.
 
 After `npm install @superhumaan/dna-by-humaan@latest`, **restart the API** that mounts Lab — `npx …@x.y.z` alone does not refresh `/labs`.
 

@@ -31,7 +31,7 @@ npm install                       # if doctor added @superhumaan/dna-by-humaan
 | Layer | Included |
 |-------|----------|
 | `.DNA/` intelligence | config, neuralNetwork, behaviour, CellularMemory, immune system |
-| **77 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows |
+| **88 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows |
 | **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills — always on |
 | **Detection** | stack, monorepo apps, AI tools, GitHub, healthcare/legal, drift |
 | **Feature factory** | 9-role loop, quality gates, same template every feature |
@@ -109,7 +109,7 @@ your-project/
 │   ├── config.dna.json
 │   ├── behaviour/
 │   ├── knowledge/
-│   ├── stems/               # 77 prompt stem packs
+│   ├── stems/               # 88 prompt stem packs
 │   ├── CellularMemory/
 │   └── runtime/
 └── DNA/Impressions/

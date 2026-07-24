@@ -33,9 +33,10 @@ Applies to: Issues, Events, Performance, Releases, Quality (Reports / CI / APIs 
 
 ### Sidebar accordion
 
-- **Monitor** and **Delivery** groups collapse
-- **One group open at a time**
-- Navigating to a page opens that page’s group
+- **Monitor**, **Delivery**, **Quality**, **Project**, and **Intelligence** groups collapse independently
+- **Multiple groups can stay open** (default: all open)
+- Navigating to a page opens that page’s group without collapsing the others
+- Expanded IA: Overview / Issues / Events / Performance · Releases / Source maps · Reports / Coverage / CI / APIs · Doctor / Installs · Impressions / Cellular Memory
 
 ---
 

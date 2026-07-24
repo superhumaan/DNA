@@ -1,7 +1,7 @@
 {
   "name": "@superhumaan/dna-by-humaan",
-  "version": "0.6.14",
-  "description": "DNA by Humaan — one doctor install: 77 stem packs, rules, detection, portfolio memory, 965-pack knowledge marketplace, runtime observer, Lab analytics + Sentry-density issues, feature factory, and AI repair for TypeScript squads",
+  "version": "0.6.15",
+  "description": "DNA by Humaan — one doctor install: 88 stem packs, rules, detection, portfolio memory, 965-pack knowledge marketplace, runtime observer, Lab analytics + product intelligence + upgrade DX, feature factory, and AI repair for TypeScript squads",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/superhumaan/DNA.git",
@@ -42,7 +42,7 @@
     "CREDITS.md"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsup && node scripts/copy-assets.mjs",
+    "build": "rm -rf dist && tsup && node scripts/copy-assets.mjs && node scripts/extract-lab-ui.mjs",
     "dev": "NODE_OPTIONS='--import @superhumaan/dna-by-humaan/runtime/preload' tsup src/index.ts --format esm --dts --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

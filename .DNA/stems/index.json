@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "catalogVersion": 6,
+  "catalogVersion": 7,
   "source": "bundled",
-  "syncedAt": "2026-07-17T03:34:30.723Z",
-  "count": 77,
+  "syncedAt": "2026-07-24T08:11:33.176Z",
+  "count": 88,
   "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
   "packs": [
     {
@@ -1215,6 +1215,182 @@
       "category": "strategy",
       "slash": "goal-cascade",
       "path": ".DNA/stems/goal-cascade",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "product-diagnose",
+      "name": "Product diagnose",
+      "category": "strategy",
+      "slash": "product-diagnose",
+      "path": ".DNA/stems/product-diagnose",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "product-purpose-audit",
+      "name": "Product purpose audit",
+      "category": "strategy",
+      "slash": "product-purpose-audit",
+      "path": ".DNA/stems/product-purpose-audit",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "product-swot",
+      "name": "Product SWOT",
+      "category": "strategy",
+      "slash": "product-swot",
+      "path": ".DNA/stems/product-swot",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "product-value-proposition",
+      "name": "Product value proposition",
+      "category": "strategy",
+      "slash": "product-value-proposition",
+      "path": ".DNA/stems/product-value-proposition",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "product-kano-scan",
+      "name": "Product Kano scan",
+      "category": "strategy",
+      "slash": "product-kano-scan",
+      "path": ".DNA/stems/product-kano-scan",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "competitor-landscape",
+      "name": "Competitor landscape",
+      "category": "strategy",
+      "slash": "competitor-landscape",
+      "path": ".DNA/stems/competitor-landscape",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "competitor-feature-matrix",
+      "name": "Competitor feature matrix",
+      "category": "strategy",
+      "slash": "competitor-feature-matrix",
+      "path": ".DNA/stems/competitor-feature-matrix",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "competitor-positioning",
+      "name": "Competitor positioning",
+      "category": "strategy",
+      "slash": "competitor-positioning",
+      "path": ".DNA/stems/competitor-positioning",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "upgrade-leverage-map",
+      "name": "Upgrade leverage map",
+      "category": "strategy",
+      "slash": "upgrade-leverage-map",
+      "path": ".DNA/stems/upgrade-leverage-map",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "upgrade-modernization",
+      "name": "Upgrade modernization",
+      "category": "strategy",
+      "slash": "upgrade-modernization",
+      "path": ".DNA/stems/upgrade-modernization",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "upgrade-recommend",
+      "name": "Upgrade recommend",
+      "category": "strategy",
+      "slash": "upgrade-recommend",
+      "path": ".DNA/stems/upgrade-recommend",
       "files": [
         "README.md",
         "prompt.md",

@@ -1,24 +1,14 @@
 /**
- * DNA Lab CSS — Soli administration design system (self-contained).
- * Source of truth: Soli `css/tokens.css`, `css/shell/settings.css`, `react-app/src/portal/portal.css`.
- * Rules: cool-neutral chrome; brand violet only for CTAs / active / focus; Inter; soft borders; no heavy shadow.
+ * DNA Lab CSS — visual parity with dna.humaan.app (DM Sans + Syne, dark mint).
+ * Layout remains Lab admin shell (sidebar + title bars). Header→content gap: 16px.
  */
 
 export const LAB_CSS = `
 :root {
-  --color-neutral-950: #0f172a;
-  --color-neutral-900: #0a2540;
-  --color-neutral-800: #1e293b;
-  --color-neutral-700: #334155;
-  --color-neutral-600: #475569;
-  --color-neutral-500: #64748b;
-  --color-neutral-400: #94a3b8;
-  --color-neutral-200: #e2e8f0;
-  --color-neutral-100: #f1f5f9;
-  --color-neutral-50: #f8fafc;
-  --color-neutral-0: #ffffff;
+  color-scheme: dark;
 
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Syne", "DM Sans", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Source Code Pro", Menlo, monospace;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -27,59 +17,68 @@ export const LAB_CSS = `
   --tracking-tight: -0.02em;
   --text-3xl: 1.375rem;
 
-  --color-brand-primary: #5b21b6;
-  --color-brand-primary-mid: #7c3aed;
-  --color-brand-primary-hover: #4c1d95;
-  --color-brand-primary-soft: #f5f3ff;
-  --color-text-on-brand: #ffffff;
-  --color-accent-action: var(--color-brand-primary);
+  --dna-bg: #07080c;
+  --dna-surface: #0f1118;
+  --dna-border: #1e2433;
+  --dna-muted: #8b95a8;
+  --dna-text: #e8ecf4;
+  --dna-accent: #4ade9a;
+  --dna-accent-dim: #2a9d6a;
+  --dna-glow: #4ade9a33;
 
-  --color-bg-app: #f6f9fc;
-  --color-bg-sidebar: #f6f9fc;
-  --color-surface: #ffffff;
-  --color-surface-elevated: #ffffff;
-  --color-surface-subtle: var(--color-neutral-50);
-  --color-hover-overlay: rgba(15, 23, 42, 0.045);
-  --color-border: #e6ebf1;
-  --color-border-strong: var(--color-neutral-200);
-  --color-border-muted: #e8edf4;
-  --color-table-border: #eef2f6;
-  --color-table-row-hover: rgba(15, 23, 42, 0.045);
+  --color-brand-primary: var(--dna-accent);
+  --color-brand-primary-mid: #6ee7b7;
+  --color-brand-primary-hover: #34d399;
+  --color-brand-primary-soft: rgba(74, 222, 154, 0.12);
+  --color-text-on-brand: #07080c;
+  --color-accent-action: var(--dna-accent);
 
-  --color-text: var(--color-neutral-900);
-  --color-text-secondary: #425466;
-  --color-text-tertiary: #64748b;
-  --color-text-muted: #697386;
-  --color-link: var(--color-brand-primary);
-  --color-link-hover: var(--color-brand-primary-hover);
-  --color-icon-muted: #334155;
+  --color-bg-app: var(--dna-bg);
+  --color-bg-sidebar: #0a0c12;
+  --color-surface: var(--dna-surface);
+  --color-surface-elevated: #141824;
+  --color-surface-subtle: #12151e;
+  --color-hover-overlay: rgba(232, 236, 244, 0.06);
+  --color-border: var(--dna-border);
+  --color-border-strong: #2a3348;
+  --color-border-muted: #181c28;
+  --color-table-border: #1a2030;
+  --color-table-row-hover: rgba(74, 222, 154, 0.06);
 
-  --color-focus-ring: rgba(91, 33, 182, 0.25);
-  --color-focus-ring-solid: var(--color-brand-primary);
+  --color-text: var(--dna-text);
+  --color-text-secondary: #c2c9d6;
+  --color-text-tertiary: var(--dna-muted);
+  --color-text-muted: #6b7589;
+  --color-link: var(--dna-accent);
+  --color-link-hover: var(--color-brand-primary-mid);
+  --color-icon-muted: #9aa3b5;
+
+  --color-focus-ring: var(--dna-glow);
+  --color-focus-ring-solid: var(--dna-accent);
   --focus-ring-width: 3px;
 
   --color-control-active-bg: var(--color-brand-primary-soft);
-  --color-control-active-fg: var(--color-brand-primary-hover);
-  --color-control-active-border: rgba(91, 33, 182, 0.32);
+  --color-control-active-fg: var(--dna-accent);
+  --color-control-active-border: rgba(74, 222, 154, 0.35);
 
-  --color-danger: #df1b41;
-  --color-success: #00825d;
-  --color-error: #9e2146;
-  --color-warning: #d97706;
-  --color-ok: #00825d;
+  --color-danger: #f87171;
+  --color-success: var(--dna-accent);
+  --color-error: #fb7185;
+  --color-warning: #fbbf24;
+  --color-ok: var(--dna-accent);
 
-  --color-warning-bg: #fff7ed;
-  --color-warning-fg: #9a3412;
-  --color-warning-border: #fed7aa;
-  --color-info-surface-bg: #eff6ff;
-  --color-info-surface-fg: #1e40af;
-  --color-info-surface-border: #bfdbfe;
-  --color-success-surface-bg: #ecfdf5;
-  --color-success-surface-fg: #047857;
-  --color-success-surface-border: #a7f3d0;
-  --color-danger-surface-bg: #fef2f2;
-  --color-danger-surface-fg: #991b1b;
-  --color-danger-surface-border: #fecaca;
+  --color-warning-bg: rgba(251, 191, 36, 0.12);
+  --color-warning-fg: #fbbf24;
+  --color-warning-border: rgba(251, 191, 36, 0.35);
+  --color-info-surface-bg: rgba(96, 165, 250, 0.12);
+  --color-info-surface-fg: #93c5fd;
+  --color-info-surface-border: rgba(96, 165, 250, 0.35);
+  --color-success-surface-bg: rgba(74, 222, 154, 0.12);
+  --color-success-surface-fg: var(--dna-accent);
+  --color-success-surface-border: rgba(74, 222, 154, 0.35);
+  --color-danger-surface-bg: rgba(248, 113, 113, 0.12);
+  --color-danger-surface-fg: #fca5a5;
+  --color-danger-surface-border: rgba(248, 113, 113, 0.35);
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -87,10 +86,10 @@ export const LAB_CSS = `
   --radius-pill: 999px;
   --control-height: 36px;
   --btn-min-height: 48px;
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
   --admin-page-gutter: 16px;
+  --admin-header-content-gap: 16px;
   --admin-title-bar-height: 64px;
-  --dna-accent: #4ade9a;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -110,7 +109,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   outline: none;
   box-shadow: 0 0 0 var(--focus-ring-width) var(--color-focus-ring);
 }
-::selection { background: rgba(91, 33, 182, 0.2); color: var(--color-text); }
+::selection { background: rgba(74, 222, 154, 0.28); color: var(--color-text); }
 
 /* DNA mark (icon only) */
 .dna-web-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--color-text); font-weight: 600; letter-spacing: var(--tracking-tight); }
@@ -122,23 +121,25 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   border: 1px solid rgba(74, 222, 154, 0.3); flex-shrink: 0;
 }
 
-/* Auth welcome (Soli auth shell) */
+/* Auth welcome */
 .soli-auth-root { min-height: 100dvh; position: relative; overflow: hidden; background: var(--color-bg-app); }
 .soli-auth-atmosphere {
   position: absolute; inset: 0; pointer-events: none; z-index: 0;
   background:
-    radial-gradient(140% 90% at 8% -6%, rgba(91, 33, 182, 0.13) 0%, rgba(91, 33, 182, 0) 56%),
-    radial-gradient(130% 95% at 82% 4%, rgba(148, 163, 184, 0.22) 0%, rgba(148, 163, 184, 0) 58%),
-    linear-gradient(140deg, #fff 0%, #f8fafc 40%, #f4f6fb 100%);
+    radial-gradient(140% 90% at 8% -6%, rgba(74, 222, 154, 0.16) 0%, rgba(74, 222, 154, 0) 56%),
+    radial-gradient(130% 95% at 82% 4%, rgba(46, 58, 90, 0.45) 0%, rgba(46, 58, 90, 0) 58%),
+    linear-gradient(140deg, #07080c 0%, #0a0c12 40%, #0f1118 100%);
 }
 .soli-auth-welcome { min-height: 100dvh; display: grid; place-items: center; padding: 24px; position: relative; z-index: 1; }
 .soli-auth-welcome__shell {
   width: min(518px, 100%); background: var(--color-surface);
   border: 1px solid var(--color-border); border-radius: 18px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07); overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45); overflow: hidden;
 }
 .soli-auth-welcome__hero { padding: 28px 28px 20px; }
-.soli-auth-welcome__hero h1 { margin: 0 0 6px; font-size: 1.5rem; font-weight: 700; letter-spacing: var(--tracking-tight); }
+.soli-auth-welcome__hero h1 {
+  margin: 0 0 6px; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: var(--tracking-tight);
+}
 .soli-auth-welcome__hero h2 { margin: 0 0 8px; font-size: 1rem; font-weight: 600; color: var(--color-text-secondary); }
 .soli-auth-welcome__hero p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--color-text-tertiary); }
 .soli-auth-welcome__panel { padding: 20px 28px 28px; border-top: 1px solid var(--color-border); display: flex; flex-direction: column; gap: 10px; }
@@ -147,6 +148,62 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px;
   color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.04em;
 }
+.field input, .field textarea, .field select {
+  width: 100%; padding: 10px 12px; background: var(--color-bg-app); color: var(--color-text);
+  border: 1px solid var(--color-border); border-radius: 8px; font-size: 14px; font-family: inherit;
+}
+.field textarea { min-height: 88px; font-family: var(--font-mono); font-size: 12px; }
+.lab-error { color: var(--color-danger); font-size: 13px; margin: 8px 0; }
+.lab-success { color: var(--color-ok); font-size: 13px; margin: 8px 0; }
+.lab-hint { font-size: 12px; color: var(--color-text-tertiary); margin-top: 8px; }
+.lab-otp-dev {
+  margin-top: 8px; padding: 8px 10px; border-radius: 8px;
+  background: var(--color-warning-bg); border: 1px solid var(--color-warning-border);
+  color: var(--color-warning-fg); font-family: var(--font-mono); font-size: 12px;
+}
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 0 16px; border-radius: var(--radius-pill); border: 1.5px solid var(--color-border);
+  background: var(--color-surface); color: var(--color-text); font-weight: 600; font-size: 14px;
+  cursor: pointer; font-family: inherit; text-decoration: none; white-space: nowrap;
+  min-height: var(--control-height);
+}
+.btn:hover { background: var(--color-hover-overlay); }
+.btn-primary, .humaan-page-primary-btn {
+  background: var(--dna-accent); color: var(--color-text-on-brand); border-color: transparent;
+  cursor: pointer; font-family: inherit; margin-top: 4px; min-height: var(--btn-min-height); height: var(--btn-min-height);
+  padding: 0 22px; border-radius: var(--radius-pill); font-weight: 700; font-size: 15px;
+}
+.btn-primary:hover, .humaan-page-primary-btn:hover { background: var(--color-brand-primary-hover); }
+.soli-admin-header-btn { margin-top: 0 !important; min-height: 40px !important; height: 40px !important; font-size: 14px !important; }
+
+/* Shimmer */
+@keyframes lab-shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.lab-shimmer {
+  background: linear-gradient(90deg, #12151e 0%, #1a2030 40%, #12151e 80%);
+  background-size: 800px 100%;
+  animation: lab-shimmer 1.2s ease-in-out infinite;
+  border-radius: 10px;
+}
+.lab-shimmer-page { padding: var(--admin-header-content-gap) var(--admin-page-gutter); }
+.lab-shimmer-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 16px; }
+.lab-shimmer-card { height: 88px; }
+.lab-shimmer-chart { height: 180px; margin-bottom: 16px; }
+.lab-shimmer-row { height: 44px; margin-bottom: 8px; }
+.lab-probe-meta { font-size: 12px; color: var(--color-text-tertiary); font-weight: 500; }
+
+.lab-cov-bar { display: grid; grid-template-columns: minmax(0, 1fr) 120px 52px; gap: 10px; align-items: center; margin-bottom: 10px; }
+.lab-cov-bar__label { font-size: 12px; color: var(--color-text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lab-cov-bar__track { height: 8px; border-radius: 999px; background: var(--color-bg-app); overflow: hidden; border: 1px solid var(--color-border); }
+.lab-cov-bar__fill { height: 100%; background: var(--dna-accent); border-radius: 999px; }
+.lab-cov-bar__val { font-size: 12px; font-weight: 600; text-align: right; color: var(--color-text); }
+.lab-mini-bar { display: inline-block; width: 64px; height: 6px; border-radius: 999px; background: var(--color-bg-app); border: 1px solid var(--color-border); vertical-align: middle; margin-right: 8px; overflow: hidden; }
+.lab-mini-bar span { display: block; height: 100%; background: var(--dna-accent); }
+
 .field input, .field textarea {
   width: 100%; min-height: var(--control-height); padding: 10px 12px;
   border: 1px solid var(--color-border); border-radius: 8px; font-size: 14px; font-family: inherit;
@@ -247,6 +304,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  gap: 16px;
   flex-shrink: 0;
   height: var(--admin-title-bar-height);
   min-height: var(--admin-title-bar-height);
@@ -397,6 +455,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .soli-admin-page-header h1 {
   margin: 0;
   min-width: 0;
+  font-family: var(--font-display);
   font-size: var(--text-3xl);
   font-weight: 700;
   color: var(--color-text);
@@ -427,10 +486,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 .admin-page-body { min-width: 0; box-sizing: border-box; }
-.admin-page-body--form { padding: var(--admin-page-gutter); }
-.admin-page-body--table { padding: 0 0 var(--admin-page-gutter); }
+/* Always 16px between the page header bar and first content. */
+.admin-page-body--form { padding: var(--admin-header-content-gap) var(--admin-page-gutter) var(--admin-page-gutter); }
+.admin-page-body--table { padding: var(--admin-header-content-gap) 0 var(--admin-page-gutter); }
 .admin-page-body--table .lab-list-toolbar {
-  padding: 16px var(--admin-page-gutter) 12px;
+  padding: 0 var(--admin-page-gutter) 12px;
 }
 .admin-page-body--table .lab-list-stats {
   padding: 0 var(--admin-page-gutter) 12px;
@@ -678,6 +738,22 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .lab-alert--billing {
   border-color: #f59e0b;
   background: #fffbeb;
+}
+.lab-alert--install {
+  border-color: #f97316;
+  background: #fff7ed;
+}
+.lab-alert--install .lab-alert__icon {
+  background: #ffedd5; color: #c2410c;
+}
+.lab-runtime-version {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
 }
 .lab-alert__icon {
   flex: 0 0 auto; width: 36px; height: 36px; border-radius: 10px;

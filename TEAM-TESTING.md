@@ -12,7 +12,7 @@ Share this with colleagues who want to try DNA on their own projects.
 |-------|-------------------|----------------|
 | Project brain | `dna init` | `.DNA/` + `DNA/Impressions/` scaffolded |
 | AI context | `dna context cursor` | Paste-ready context for your AI tool |
-| **Cursor workbench** | `dna init` / `dna doctor` | 77 prompt stem packs + `/dna-*` commands — DNA always on; `AGENTS.md` routes engineering work through the 9-role agent loop |
+| **Cursor workbench** | `dna init` / `dna doctor` | 88 prompt stem packs + `/dna-*` commands — DNA always on; `AGENTS.md` routes engineering work through the 9-role agent loop |
 | **Stem library** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) | Copy prompts + guidelines; each stem has MUST/NEVER rules and expectations |
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |
@@ -76,7 +76,7 @@ npx @superhumaan/dna-by-humaan doctor
 
 **One `doctor` installs the full platform** for every product underneath:
 
-- **77 stem packs** + **`/dna-*` slash commands** (guidelines, expectations, workflows; includes strategy ladder)
+- **88 stem packs** + **`/dna-*` slash commands** (guidelines, expectations, workflows; includes strategy ladder)
 - **Cursor + Claude rules, skills, `AGENTS.md`** — DNA always on, no “use DNA”
 - **Detection** — stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift, auth
 - **CellularMemory + system maps** — cross-product memory in git

@@ -29,7 +29,7 @@ Use this on [dna.humaan.app](https://dna.humaan.app), social posts, or conferenc
 
 Most teams cannot afford Sentry on every service, premium AI memory on every seat, and GitHub Teams on top of rent. Cursor forgets your auth pattern by lunch. Each repo is an island.
 
-**One `dna doctor`** installs the whole platform: **77 prompt stem packs**, **Cursor + Claude rules and skills**, **detection across every app**, **CellularMemory that never forgets**, **runtime observer**, **quality gates**, **GitHub automation**, and **965 knowledge packs** — on your **portfolio folder**, so AI remembers every product and how they interconnect.
+**One `dna doctor`** installs the whole platform: **88 prompt stem packs**, **Cursor + Claude rules and skills**, **detection across every app**, **CellularMemory that never forgets**, **runtime observer**, **quality gates**, **GitHub automation**, and **965 knowledge packs** — on your **portfolio folder**, so AI remembers every product and how they interconnect.
 
 Same feature template every time. Runtime errors become issues with context: what broke, why, what to fix — not a mystery diff at 2am.
 
@@ -42,7 +42,7 @@ dna analyze
 dna context cursor
 ```
 
-Type `/` in Cursor — **77 stems** and **`/dna-*` commands** are already there.
+Type `/` in Cursor — **88 stems** and **`/dna-*` commands** are already there.
 
 ### One-liner (tweet / npm)
 
@@ -64,7 +64,7 @@ Type `/` in Cursor — **77 stems** and **`/dna-*` commands** are already there.
 | **`CellularMemory/`** (7 regions) | Project memory that accumulates — plans, decisions, risks, patterns, system maps, UI standards |
 | **`immuneSystem/`** | Severity rules, issue classifier, severity model — runtime events → actionable categories |
 | **`knowledge/`** | Auto-installed foundation packs from stack scan + domain keywords (healthcare country, legal, compliance) |
-| **`stems/`** (**77 packs**) | Full prompt engineering library — guidelines, expectations, examples, workflows per stem |
+| **`stems/`** (**88 packs**) | Full prompt engineering library — guidelines, expectations, examples, workflows per stem |
 | **`workflows/`** | Feature factory, quality, admin-portal delivery workflows |
 | **`runtime/`** | Install snippets, browser client, env examples — ready to wire into every app |
 | **`data/runtime.db`** | SQLite store for runtime events and issues (local, under your control) |
@@ -90,7 +90,7 @@ Brownfield: `dna document --from-code` reverse-engineers Impressions from existi
 
 DNA is **active the moment you open the editor** — the user speaks in plain language; the agent runs DNA, loads context, and follows Behaviour. No copy-paste prompts. No “remember to use DNA.”
 
-### 4. Prompt stem packs (77) + slash commands
+### 4. Prompt stem packs (88) + slash commands
 
 Each stem in `.DNA/stems/<id>/` includes **README, prompt, guidelines, expectations, context, examples, workflow** — MUST/NEVER rules the agent reads before acting.
 
@@ -213,7 +213,7 @@ your-squad-folder/                    ← dna doctor HERE (once)
 │   ├── rules/                        ← dna-workbench, product-process, delivery, roles…
 │   ├── skills/dna-workbench/         ← session flows + prompt patterns
 │   ├── skills/dna-cli/               ← CLI obedience
-│   └── commands/                     ← 77 stems + /dna-* slash commands
+│   └── commands/                     ← 88 stems + /dna-* slash commands
 ├── .claude/                          ← mirror for Claude Code
 ├── .github/workflows/                ← dna-ci, dna-security, dna-preview, cleanup
 ├── .DNA/
@@ -223,7 +223,7 @@ your-squad-folder/                    ← dna doctor HERE (once)
 │   ├── CellularMemory/               ← 7 memory regions + system/dependency maps
 │   ├── immuneSystem/
 │   ├── knowledge/                    ← foundation + marketplace packs
-│   ├── stems/                        ← 77 prompt stem packs
+│   ├── stems/                        ← 88 prompt stem packs
 │   ├── workflows/
 │   ├── runtime/
 │   ├── hooks/pre-push
@@ -308,7 +308,7 @@ npm install   # if doctor added runtime package
 | Enterprise stack | Typical cost | DNA portfolio equivalent |
 |------------------|--------------|--------------------------|
 | Cursor / Copilot premium memory | $20–40/seat/mo | `.DNA/` + CellularMemory — persists in git |
-| Custom AI rules + prompt library | Consultant / staff time | 77 stems + rules + skills — installed |
+| Custom AI rules + prompt library | Consultant / staff time | 88 stems + rules + skills — installed |
 | Sentry per service | $26+/mo per project | Runtime observer + immune system → contextual issues |
 | GitHub Teams advanced | Per-seat | `dna github push` + quality gates (browser login) |
 | Backstage / service catalog | Platform team headcount | `parietalLobe` system + dependency maps |
@@ -326,7 +326,7 @@ npm install   # if doctor added runtime package
 | Sentry | No | No | Per service | Errors only | No | Per service |
 | Nx / Turborepo | Build graph | No | Monorepo | No | No | Yes |
 | Backstage | Catalog | No | Heavy setup | No | No | Yes (complex) |
-| **DNA — one `doctor`** | **Yes** | **77 + rules** | **Yes** | **Yes** | **Yes** | **Yes** |
+| **DNA — one `doctor`** | **Yes** | **88 + rules** | **Yes** | **Yes** | **Yes** | **Yes** |
 
 ---
 
