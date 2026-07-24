@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildEventTimeline,
+  buildIssueTrend,
   groupIssues,
   topSlowEndpoints,
 } from "./collect-aggregates.js";
@@ -70,6 +71,69 @@ describe("collect-aggregates", () => {
     const timeline = buildEventTimeline(events, 4);
     expect(timeline).toHaveLength(4);
     expect(timeline.some((b) => b.errors > 0)).toBe(true);
+  });
+
+  it("enriches issues with shortId, trend, users, culprit, and age", () => {
+    const now = Date.now();
+    const issues = [
+      {
+        id: "1",
+        title: "TypeError: boom",
+        severity: "high",
+        category: "exception",
+        fingerprint: "fp-user",
+        repeatCount: 2,
+        firstSeen: new Date(now - 2 * 60 * 60 * 1000).toISOString(),
+        lastSeen: new Date(now).toISOString(),
+        eventId: "e1",
+      },
+    ];
+    const events = [
+      {
+        id: "e1",
+        timestamp: new Date(now - 60 * 60 * 1000).toISOString(),
+        message: "TypeError: boom",
+        fingerprint: "fp-user",
+        endpoint: "/api/checkout",
+        method: "POST",
+        user: { id: "u1" },
+        frames: [{ filename: "checkout.ts", function: "pay", lineno: 42, inApp: true }],
+        tags: { browser: "Chrome", env: "production" },
+      },
+      {
+        id: "e2",
+        timestamp: new Date(now).toISOString(),
+        message: "TypeError: boom",
+        fingerprint: "fp-user",
+        user: { id: "u2" },
+        tags: { browser: "Chrome" },
+      },
+    ];
+    const grouped = groupIssues(issues, events);
+    expect(grouped).toHaveLength(1);
+    const row = grouped[0]!;
+    expect(row.shortId).toMatch(/^DNA-[0-9A-F]{4}$/);
+    expect(row.userCount).toBe(2);
+    expect(row.trend24h).toHaveLength(24);
+    expect(row.trend24h.reduce((a, b) => a + b, 0)).toBeGreaterThanOrEqual(2);
+    expect(row.culprit).toContain("pay");
+    expect(row.ageMs).toBeGreaterThan(0);
+    expect(row.topTags?.[0]?.key).toBe("browser");
+  });
+
+  it("builds issue trend buckets", () => {
+    const now = Date.now();
+    const trend = buildIssueTrend(
+      [
+        { timestamp: new Date(now).toISOString() },
+        { timestamp: new Date(now - 2 * 60 * 60 * 1000).toISOString() },
+      ],
+      24,
+      now,
+    );
+    expect(trend).toHaveLength(24);
+    expect(trend[23]).toBe(1);
+    expect(trend[21]).toBe(1);
   });
 
   it("ranks slow endpoints", () => {

@@ -17,7 +17,7 @@ Share this with colleagues who want to try DNA on their own projects.
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |
 | Validation | `dna validate` / `dna doctor` | Health checks against Behaviour rules |
 | Runtime observer | `@superhumaan/dna-by-humaan/runtime` | Errors/slow requests → `.DNA/data/runtime.db` |
-| **DNA Lab** | `dna lab serve` / `/labs` | Local open access; production auth via `dna register lab` (paste-verify at `/labs`; optional pre-notify). After npm upgrade, **restart the API**. |
+| **DNA Lab** | `dna lab serve` / `/labs` | Local open access; production auth via `dna register lab` (paste-verify at `/labs`; optional pre-notify). Overview = analytics dashboard; Issues = Sentry-density detail. After npm upgrade, **restart the API**. See [lab-analytics-0.6.14](./docs/engineering/lab-analytics-0.6.14.md). |
 | Upstream feedback | `dna feedback report` / auto | DNA-platform failures → sanitized upstream report (opt-in, `dna-only` default) |
 | GitHub (optional) | `dna doctor` (auto) | Browser login + remote detect; auto-issues for high/critical events |
 | AI repair (optional) | `dna ai repair --dry-run` | Branch + patch plan, never auto-merged |

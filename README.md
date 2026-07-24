@@ -308,7 +308,8 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Lab pairing store-first + gateway allowlist (v0.6.11) | Jul 2026 | Jul 2026 | Shipped |
 | Express 5 optional peer (v0.6.12) | Jul 2026 | Jul 2026 | Shipped — `express@^4 \|\| ^5` |
 | Production health & residual closure (v0.6.13) | Jul 2026 | Jul 2026 | Shipped — shared Lab state, strict CI, coverage, Playwright, `/health` |
-| [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | In progress |
+| Lab analytics Overview + Sentry-density Issues (v0.6.14) | Jul 2026 | Jul 2026 | Shipped — KPIs/batteries/charts; issue sparklines + deep detail |
+| [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | Shipped — setup script + OAuth scaffolding |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |
 | [Impressions drift → auto PR suggestions](https://github.com/superhumaan/DNA/issues/14) | Oct 2026 | Feb 2027 | Shipped |

@@ -25,7 +25,7 @@ See [LOCAL_WIKI.md](./LOCAL_WIKI.md) for wiki commands.
 | **Product** | [Product concept](./product/product-concept.md) · [Portfolio install](./product/portfolio-install.md) · [Features overview](./product/features-and-platform-overview.md) |
 | **Design** | [Naming conventions](./design/naming-conventions.md) |
 | **Delivery** | [Current version scope](./delivery/current-version-scope.md) |
-| **Engineering** | [Quick start](./engineering/quick-start.md) · [CLI reference](./engineering/cli-reference.md) · [Lab CI billing blocker](./engineering/lab-ci-billing-blocker.md) · [Lab UI Humaan parity v0.6.7](./engineering/lab-ui-humaan-0.6.7.md) · [Lab + runtime v0.6.4](./engineering/lab-and-runtime-0.6.4.md) |
+| **Engineering** | [Quick start](./engineering/quick-start.md) · [CLI reference](./engineering/cli-reference.md) · [Lab analytics v0.6.14](./engineering/lab-analytics-0.6.14.md) · [Lab CI billing blocker](./engineering/lab-ci-billing-blocker.md) · [Lab UI Humaan parity v0.6.7](./engineering/lab-ui-humaan-0.6.7.md) · [Lab + runtime v0.6.4](./engineering/lab-and-runtime-0.6.4.md) |
 | **Quality Assurance** | [Testing strategy](./quality-assurance/testing-strategy.md) |
 
 ---
