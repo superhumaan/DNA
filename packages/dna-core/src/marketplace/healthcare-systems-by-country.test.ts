@@ -31,4 +31,14 @@ describe("healthcare systems by country", () => {
     const packs = getCountrySystemsDnaPackIds("zz");
     expect(packs).toContain("healthcare/redox");
   });
+
+  it("UK systems catalog links Mirth Connect canonical pack id", () => {
+    const profile = getCountrySystemsProfile("uk");
+    const packs = getCountrySystemsDnaPackIds("uk");
+    expect(packs).toContain("healthcare/mirth-connect");
+    expect(packs).not.toContain("healthcare/mirth");
+    const md = buildSystemsIntegrationsMarkdown(profile);
+    expect(md).toContain("healthcare/mirth-connect");
+    expect(md).not.toContain("`healthcare/mirth`");
+  });
 });

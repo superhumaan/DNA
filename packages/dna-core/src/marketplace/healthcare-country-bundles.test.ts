@@ -101,6 +101,12 @@ describe("healthcare country bundles", () => {
     expect(bundle).toContain("healthcare/redox");
   });
 
+  it("UK bundle includes Mirth Connect canonical pack id", () => {
+    const bundle = resolveHealthcareCountryBundlePackIds("healthcare/overview-uk");
+    expect(bundle).toContain("healthcare/mirth-connect");
+    expect(bundle).not.toContain("healthcare/mirth");
+  });
+
   it("resolves france alias to overview-fr bundle via foundation", () => {
     const config = {
       description: "French healthcare portal with DMP integration",

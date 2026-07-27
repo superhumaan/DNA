@@ -1,6 +1,8 @@
 /** Retired marketplace pack IDs → current IDs. */
 export const PACK_ID_ALIASES: Record<string, string> = {
   "platforms/humaan-stack": "platforms/dna-stack",
+  // Short Mirth id used in early systems catalogs → catalog pack id
+  "healthcare/mirth": "healthcare/mirth-connect",
   // Healthcare country shortcuts — install full country bundle via overview pack
   france: "healthcare/overview-fr",
   french: "healthcare/overview-fr",

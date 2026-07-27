@@ -14,6 +14,8 @@ describe("marketplace aliases", () => {
   it("maps retired pack IDs to current IDs", () => {
     expect(normalizePackId("platforms/humaan-stack")).toBe("platforms/dna-stack");
     expect(normalizePackId("platforms/dna-stack")).toBe("platforms/dna-stack");
+    expect(normalizePackId("healthcare/mirth")).toBe("healthcare/mirth-connect");
+    expect(normalizePackId("healthcare/mirth-connect")).toBe("healthcare/mirth-connect");
   });
 
   it("maps retired knowledge paths to current paths", () => {
@@ -36,6 +38,11 @@ describe("marketplace aliases", () => {
   it("finds bundled pack by retired ID", () => {
     const pack = getBundledPack("platforms/humaan-stack");
     expect(pack?.id).toBe("platforms/dna-stack");
+  });
+
+  it("finds Mirth Connect pack by short healthcare/mirth alias", () => {
+    const pack = getBundledPack("healthcare/mirth");
+    expect(pack?.id).toBe("healthcare/mirth-connect");
   });
 
   it("documents all aliases", () => {

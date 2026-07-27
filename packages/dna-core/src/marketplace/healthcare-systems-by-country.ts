@@ -4,6 +4,8 @@
  * country support pack and enriches install bundles with vendor DNA packs.
  */
 
+import { normalizePackId } from "./aliases.js";
+
 export interface HealthcareSystemEntry {
   name: string;
   type: "national" | "hospital-ehr" | "ambulatory" | "payer" | "hie" | "integration" | "pharmacy" | "imaging";
@@ -67,7 +69,7 @@ export const HEALTHCARE_COUNTRY_SYSTEMS: Record<string, CountrySystemsProfile> =
       entry("Cerner / Oracle Health UK", "hospital-ehr", "Acute", "Millennium FHIR + UK Core", "healthcare/cerner-oracle-health"),
       entry("System C Medway", "hospital-ehr", "Acute PAS/EPR", "HL7 v2 + FHIR emerging; trust-specific", undefined),
       entry("EMIS / TPP SystmOne", "ambulatory", "GP systems", "GP Connect accreditation path — do not scrape", undefined),
-      entry("Mirth / Rhapsody", "integration", "Interface engine", "v2 ↔ FHIR translation for legacy trusts", "healthcare/mirth"),
+      entry("Mirth / Rhapsody", "integration", "Interface engine", "v2 ↔ FHIR translation for legacy trusts", "healthcare/mirth-connect"),
     ],
     playbook: `1. **UK Core FHIR** mandatory for NHS-facing APIs
 2. **GP Connect accreditation** for primary care data — months-long programme
@@ -430,7 +432,7 @@ Run \`dna marketplace install healthcare/overview-${profile.iso}\` — relevant 
 
 - **Never scrape** EMR portals — use sanctioned APIs, accreditation, or integration platforms
 - **Validate FHIR** against national IG (US Core, UK Core, AU Base, CI-SIS, etc.)
-- **Interface engine** (\`healthcare/mirth\`) when hospital only speaks HL7 v2
+- **Interface engine** (\`healthcare/mirth-connect\`) when hospital only speaks HL7 v2
 - **Redox** (\`healthcare/redox\`) when you need one API to many EHRs without per-vendor certification
 - Document subprocessors and **data residency** in Impressions`;
 }
@@ -451,7 +453,10 @@ export function getCountrySystemsTopic(
 export function getCountrySystemsDnaPackIds(iso: string): string[] {
   const profile = HEALTHCARE_COUNTRY_SYSTEMS[iso];
   if (!profile) return ["healthcare/redox"];
-  const packs = profile.systems.map((s) => s.dnaPack).filter((p): p is string => Boolean(p));
+  const packs = profile.systems
+    .map((s) => s.dnaPack)
+    .filter((p): p is string => Boolean(p))
+    .map(normalizePackId);
   return [...new Set(packs)];
 }
 
