@@ -4,8 +4,9 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.6.18)
+## Current release focus (v0.6.19)
 
+- **Marketplace purpose bundles** — 27 combos; `dna marketplace install combo/<id>` installs knowledge packs + prompt stems + AI rules; [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles)
 - **Knowledge marketplace** — **1045 rich packs** (0 stubs), 88 stem packs, strategy grounding (`STRATEGY_COMPLETE`)
 - **Lab APIs reference** — every Lab route with Description / Usage / Received / Sent; expandable APIs tab ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab URL deep links** — `/labs/<tab>`, `/labs/issues/<id>`; refresh keeps the page; 401 → sign-in (no Unauthorized toast)

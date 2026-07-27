@@ -13,7 +13,7 @@
 
 **One npm package. One install. Everything included.**
 
-DNA by Humaan is an open-source **project brain**, **runtime observer**, **88 prompt stem packs**, **965-pack knowledge marketplace**, and **AI-assisted repair** system for TypeScript squads.
+DNA by Humaan is an open-source **project brain**, **runtime observer**, **88 prompt stem packs**, **1045-pack knowledge marketplace**, **27 purpose bundles**, and **AI-assisted repair** system for TypeScript squads.
 
 **Recommended:** `npx @superhumaan/dna-by-humaan doctor` — one command for stems, rules, detection, memory, runtime, CI, and feature factory. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
 
@@ -22,7 +22,7 @@ Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 | | |
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
-| **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
+| **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · [Bundles](https://dna.humaan.app/marketplace#bundles) |
 | **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 88 prompt stem packs + `/dna-*` CLI commands |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
@@ -96,7 +96,8 @@ npx @superhumaan/dna-by-humaan doctor
 | **Detection** | stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift |
 | **Feature factory** | 9-role loop, quality gates, same template every feature |
 | **Runtime + CI** | auto-wired observer, GitHub Actions, pre-push hook, Docker |
-| **965 knowledge packs** | foundation from scan + marketplace |
+| **1045 knowledge packs** | foundation from scan + marketplace |
+| **27 purpose bundles** | `dna marketplace install combo/<id>` — packs + stems + AI rules |
 
 One brain for every related app — how they connect, what broke, what to fix. The install teams keep like `tsconfig.json`.
 
@@ -113,7 +114,7 @@ DNA is **not** a documentation generator. It is:
 | **Project intelligence** | Structured `.DNA/` context AI tools can actually use |
 | **AI behaviour layer** | Rules governing how Cursor, Copilot, and Claude work on *your* stack |
 | **Runtime observer** | Classifies production errors with project-specific context |
-| **Knowledge marketplace** | **965** curated packs — frameworks, cloud, healthcare, compliance, legal, payments, gaming, ERP |
+| **Knowledge marketplace** | **1045** curated packs + **27 purpose bundles** — frameworks, cloud, healthcare, compliance, legal, payments |
 | **Tiered compliance** | GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS — startup → enterprise |
 | **GDPR reference library** | **85+** governance, technical, and AI policy templates (bundled in CLI assets) |
 | **Platform catalog** | Production patterns from DNA reference systems (AIStudio, ColorParty, Humaan Ops, Soli) |
@@ -166,11 +167,11 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna context compliance` | Load tiered compliance knowledge for AI |
 | `dna platform list` | DNA production feature catalog |
 | `dna plan feature <id>` | End-to-end plans — SSO, admin, flags, Azure, CRM, CMS |
-| `dna marketplace list` | Browse 965 knowledge packs |
+| `dna marketplace list` | Browse 1045 knowledge packs + 27 bundles |
 | `dna legal advise` | Legal advisor — jurisdictions, sectors, engineering gates |
 | `dna plan legal` | Legal rollout plan + regional packs |
 | `dna methodology` | Delivery profile — Scrum, Kanban, Shape Up, ticket/doc systems |
-| `dna marketplace install <id>` | Install packs into `.DNA/knowledge/` |
+| `dna marketplace install <id>` | Install packs into `.DNA/knowledge/` or a purpose bundle (`combo/*`) |
 | `dna validate` | Check against Behaviour rules |
 | `dna doctor` | Full health check |
 | `dna feedback report` | Report DNA-platform issue upstream (sanitized) |
@@ -189,7 +190,7 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 
 ---
 
-## Knowledge marketplace (965 packs)
+## Knowledge marketplace (1045 packs + 27 bundles)
 
 ```bash
 dna marketplace list
@@ -198,13 +199,16 @@ dna marketplace search --query fhir
 dna marketplace install frameworks/nextjs
 dna marketplace install compliance/gdpr
 dna marketplace install healthcare/fhir-r4
+dna marketplace install combo/nextjs-fullstack
+dna marketplace install combo/gdpr-eu-ready
 dna update
 ```
 
-**Live catalog:** [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · Offline bundled fallback included.
+**Live catalog:** [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · [Purpose bundles](https://dna.humaan.app/marketplace#bundles) · Offline bundled fallback included.
 
 | Layer | Count | Examples |
 |-------|------:|----------|
+| **Purpose bundles** | **27** | `combo/nextjs-fullstack`, `combo/gdpr-eu-ready`, `combo/pmf-check` |
 | Core (frameworks, compliance, DNA stack) | 11 | Next.js, GDPR, RBAC |
 | Stem delivery surfaces | 21 | `stem/*` |
 | Language stems (i18n AI) | 18 | `languages/en`, `languages/vi`, … |
@@ -213,7 +217,7 @@ dna update
 | Wave 3 | 187 | Enterprise ERP, gaming/XR, clinical AI |
 | Wave 4 | 142 | Regional cloud, ORMs, security depth |
 | Wave 5 | 27 | FinOps, data mesh, store distribution |
-| **Total** | **965** | |
+| **Total** | **1045** | |
 
 **Healthcare:** 55 packs — FHIR R4, Epic, Cerner, Redox, HL7, MDR, patient portal, clinical AI, HIE networks, and more.
 
@@ -333,7 +337,7 @@ dna ai repair --file issue.json --dry-run
 your-project/
 ├── .DNA/                    # AI-first intelligence (machines)
 │   ├── behaviour/           # rules for Cursor, Copilot, Claude
-│   ├── knowledge/           # 965-pack marketplace installs
+│   ├── knowledge/           # 1045-pack marketplace + combo bundle installs
 │   ├── CellularMemory/      # learned history
 │   ├── immuneSystem/        # classification rules
 │   └── runtime/             # classified production issues
@@ -374,7 +378,7 @@ Commit `.DNA/` and `DNA/` so your team shares one brain.
 | Project intelligence for AI | A docs generator |
 | Behaviour rules for your stack | A linter replacement |
 | Runtime issue classification | A Sentry replacement — use both |
-| 965 knowledge packs + GDPR library | A hosted SaaS — runs in your repo |
+| 1045 knowledge packs + 27 purpose bundles + GDPR library | A hosted SaaS — runs in your repo |
 | GitHub issue + repair automation | Auto-merge or auto-deploy |
 
 ---
@@ -388,7 +392,7 @@ Commit `.DNA/` and `DNA/` so your team shares one brain.
 | [Concepts](https://github.com/superhumaan/DNA/blob/main/docs/concepts.md) | Behaviour, memory, immune system |
 | [CLI reference](https://github.com/superhumaan/DNA/blob/main/docs/cli-reference.md) | Every command |
 | [Runtime observer](https://github.com/superhumaan/DNA/blob/main/docs/runtime.md) | Express, Fastify, NestJS, Next.js |
-| [Marketplace](https://github.com/superhumaan/DNA/blob/main/docs/marketplace.md) | 965 knowledge packs |
+| [Marketplace](https://github.com/superhumaan/DNA/blob/main/docs/marketplace.md) | 1045 knowledge packs + 27 purpose bundles |
 | [Compliance](https://github.com/superhumaan/DNA/blob/main/docs/compliance.md) | Tiered GDPR, HIPAA, ISO, SOC 2 |
 | [Platform catalog](https://github.com/superhumaan/DNA/blob/main/docs/platform.md) | DNA production patterns |
 | [Changelog](https://github.com/superhumaan/DNA/blob/main/CHANGELOG.md) | Releases and migrations |

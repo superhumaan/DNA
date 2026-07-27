@@ -4,7 +4,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.6.18)
+## In scope (v0.6.19)
 
 | Area | Delivered |
 |------|-----------|
@@ -12,7 +12,8 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Runtime** | Express 4/5, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`); Aggressive Repair Loop fingerprints + CellularMemory; EPIPE/ECONNRESET noise filter; outbound third-party capture + browser ingest |
 | **DNA Lab** | Production observability at `/labs` — **APIs reference** (Description / Usage / Received / Sent for every Lab route) + **URL deep links** (`/labs/<tab>`, `/labs/issues/<id>`) + **401 → sign-in** (no Unauthorized toast) + **`requireAuthInProduction: false` open Lab** + dark-theme alerts + force Refresh + Copy issue + analytics Overview + Sentry-density Issues + upgrade DX; Humaan admin UI parity; Soli shell + Quality hub; fingerprint-grouped issues; local open access; production auth via `dna register lab` ([#12](https://github.com/superhumaan/DNA/issues/12), [lab-apis-reference-0.6.18](../engineering/lab-apis-reference-0.6.18.md), [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md)) |
 | **Supply chain** | **Zero production npm dependencies** (v0.4.6+), no install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
-| **Marketplace** | **1045 rich packs** (zero-stubs floor + P0 depth), remote + bundled offline |
+| **Marketplace** | **1045 rich packs** (zero-stubs floor + P0 depth), **27 purpose bundles** (`combo/*`), remote + bundled offline; combo install injects knowledge packs + prompt stems + Cursor rules |
+| **Marketplace website** | [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles) — bundles-first UX (DNA-Web); catalog `bundles[]` |
 | **Platform catalog** | Admin, SSO, RBAC, cloud deploy, CRM, CMS patterns |
 | **Compliance** | Tiered GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS |
 | **Brownfield** | IVF plans, `document --from-code`, deep analyze |
@@ -59,13 +60,13 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 | Channel | Command |
 |---------|---------|
-| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.18`) |
+| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.19`) |
 | Monorepo dev | `git clone` + `pnpm dna:link` |
 
 ---
 
 ## Related
 
-- [Planning](../product/planning.md)
 - [CHANGELOG](../../CHANGELOG.md)
-- [Team testing](../../TEAM-TESTING.md)
+- [CLI reference](../engineering/cli-reference.md)
+- [Marketplace](../product/marketplace.md)

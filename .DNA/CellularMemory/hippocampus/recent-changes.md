@@ -2,6 +2,12 @@
 
 _Last updated: 2026-07-27_
 
+## 2026-07-27 — Ship v0.6.19 (purpose bundles)
+
+- npm **0.6.19**: marketplace combo install (packs + stems + AI rules), catalog `bundles[]`, Mirth alias fix.
+- Docs: CHANGELOG, README, cli-reference, TEAM-TESTING, dna-cli README, current-version-scope, planning.
+- DNA-Web: homepage + marketplace bundles-first UX (separate repo `superhumaan/DNA-Web`).
+
 ## 2026-07-27 — Marketplace Bundles (Purpose Combos)
 
 - Catalog `bundles[]` (27 purpose combos) with linked knowledge packs + prompt stem ids.

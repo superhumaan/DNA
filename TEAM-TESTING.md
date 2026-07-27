@@ -99,7 +99,7 @@ npx @superhumaan/dna-by-humaan doctor
 - **Feature factory** — 9-role loop, same template for every feature
 - **Runtime observer** — auto-wired, classified issues, repair plans
 - **CI, hooks, Docker, GitHub login** — delivery pipeline ready
-- **965 knowledge packs** — foundation from scan + marketplace
+- **1045 knowledge packs + 27 purpose bundles** — foundation from scan + marketplace; `dna marketplace install combo/<id>` for one-command workflows
 
 Commit `.DNA/`, `DNA/`, `AGENTS.md`, `ai/`, `.cursor/`, `.claude/` at the parent so the squad shares one install forever.
 

@@ -38,7 +38,7 @@ DNA is not a documentation generator. It is:
 - An **AI behaviour layer** — rules that govern how Cursor, Copilot, and Claude work on *your* project
 - A **runtime issue detector** — classifies errors with project-specific context
 - A **GitHub automation engine** — contextual issues and repair PRs
-- A **knowledge marketplace** — **965** stack, compliance, and industry packs for `.DNA/knowledge/`
+- A **knowledge marketplace** — **1045** stack, compliance, and industry packs for `.DNA/knowledge/` plus **27 purpose bundles** (one-command combo install)
 - A **software immune system** — severity, category, and discipline classification
 - A **memory layer** — CellularMemory that learns from your project's history
 
@@ -93,7 +93,7 @@ npx @superhumaan/dna-by-humaan doctor
 | **Detection** | Stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, Impressions drift, auth patterns |
 | **Runtime** | Observer auto-wired into Express/Fastify/Next.js → classified issues + repair plans |
 | **Delivery** | CI workflows, pre-push hook, Docker scaffold, GitHub browser login |
-| **Knowledge** | Foundation packs from scan + **965** marketplace packs (offline fallback) |
+| **Knowledge** | Foundation packs from scan + **1045** marketplace packs + **27 purpose bundles** (offline fallback) |
 
 One `.DNA/` at the parent remembers **every product and how they interconnect** — feature #5 uses the same template as feature #1; runtime errors explain *why* across the suite.
 

@@ -4,9 +4,11 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.19] - 2026-07-27
+
 ### Added
 
-- **Marketplace Bundles** — Purpose Combos on [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles): each bundle lists knowledge packs + prompt stem packs; one `dna marketplace install combo/<id>` installs packs, injects stems/slash commands, always-on Cursor rules, and AI workbench context. Catalog `bundles[]` + `GET /marketplace/api/v1/bundles`.
+- **Marketplace purpose bundles** — 27 Purpose Combos on [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles): each bundle lists knowledge packs + prompt stem packs; one `dna marketplace install combo/<id>` installs packs, injects stems/slash commands, always-on Cursor rules, and AI workbench context. Catalog `bundles[]` + remote `GET /marketplace/api/v1/bundles` (DNA-Web).
 
 ### Fixed
 

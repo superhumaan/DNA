@@ -512,9 +512,13 @@ Categories: `languages`, `frameworks`, `platforms`, `disciplines`, `compliance`
 ```bash
 dna marketplace install frameworks/nextjs
 dna marketplace install compliance/gdpr
+dna marketplace install combo/nextjs-fullstack
+dna marketplace install combo/gdpr-eu-ready
 ```
 
 Installs files into `.DNA/knowledge/` and records version in config.
+
+**Purpose bundles (`combo/*`):** installs required + preferred knowledge packs, then injects linked prompt stem packs (`.DNA/stems/`), slash commands, always-on Cursor bundle rules, and refreshes AI workbench context. Browse: [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles). Catalog exposes `bundles[]` on `/marketplace/api/v1/catalog`.
 
 ## plan rbac
 
