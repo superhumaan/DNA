@@ -11,7 +11,7 @@ import { pack } from "./bundled-catalog-helpers.js";
 
 describe("long-tail richness floor", () => {
   it("lifts a synthetic stub pack to the richness bar", () => {
-    const stub = pack("tools/example-stub", "Example Stub", "tools", "Tiny stub", [
+    const stub = pack("tools/example-stub", "Example Stub", "disciplines", "Tiny stub", [
       { path: "tools/example-stub/positioning.dna.md", content: "# Example\n\nStub.\n" },
     ]);
     expect(meetsRichnessBar(stub)).toBe(false);

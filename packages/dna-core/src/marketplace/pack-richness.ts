@@ -675,7 +675,7 @@ export function liftPackToRichness(pack: KnowledgePack): KnowledgePack {
     const base = f.path.split("/").pop()!.replace(/\.dna\.md$/, "");
     if (reserved.has(base)) continue;
     if (f.path.includes("/assets/")) continue;
-    extras[base] = f.content;
+    extras[base] = f.content ?? "";
   }
 
   const files = buildRichFiles(
