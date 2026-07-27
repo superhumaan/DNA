@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { KnowledgePack, MarketplaceCatalog } from "@superhumaan/dna-config";
 import { normalizePackId } from "./aliases.js";
+import { purposeCombosAsMarketplaceBundles } from "./purpose-combos.js";
 
 const catalogCache = new Map<string, MarketplaceCatalog>();
 
@@ -40,6 +41,7 @@ export function getBundledCatalog(channel: "stable" | "beta" | "nightly" = "stab
     channel,
     source: "bundled",
     packs: [...byId.values()],
+    bundles: base.bundles?.length ? base.bundles : purposeCombosAsMarketplaceBundles(),
   };
   catalogCache.set(channel, catalog);
   return catalog;

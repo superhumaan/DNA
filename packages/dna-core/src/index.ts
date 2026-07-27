@@ -36,6 +36,7 @@ export * from "./marketplace/ensure.js";
 export * from "./marketplace/foundation.js";
 export * from "./marketplace/healthcare-country-bundles.js";
 export * from "./marketplace/healthcare-systems-by-country.js";
+export * from "./marketplace/purpose-combos.js";
 export * from "./marketplace/bundled-catalog.js";
 export * from "./cli-upgrade.js";
 export * from "./rbac/plan.js";

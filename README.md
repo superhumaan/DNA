@@ -19,7 +19,7 @@
 | | |
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
-| **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
+| **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · [Bundles](https://dna.humaan.app/marketplace#bundles) |
 | **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) |
 | **Health** | [dna.humaan.app/health](https://dna.humaan.app/health) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
@@ -187,10 +187,11 @@ Supports **Express**, **Fastify**, **NestJS**, and **Next.js**.
 dna marketplace list
 dna marketplace install frameworks/nextjs
 dna marketplace install compliance/gdpr
+dna marketplace install combo/nextjs-fullstack
 dna update
 ```
 
-Remote: [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · Offline bundled fallback included.
+Remote: [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · [Bundles](https://dna.humaan.app/marketplace#bundles) · Offline bundled fallback included.
 
 [Marketplace docs →](./docs/marketplace.md)
 

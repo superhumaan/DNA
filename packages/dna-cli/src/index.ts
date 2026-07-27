@@ -1641,17 +1641,32 @@ marketplace
       process.exit(1);
     }
 
-    const { pack, files, bundleInstalled } = await installKnowledgePackById(root, packId, options.channel ?? "stable");
+    const { pack, files, bundleInstalled, aiContext } = await installKnowledgePackById(
+      root,
+      packId,
+      options.channel ?? "stable",
+    );
     console.log(`✓ Installed ${pack.name} (${pack.id}@${pack.version})`);
     console.log(`  Files: ${files.length}`);
     files.forEach((f) => console.log(`    ${f}`));
     if (bundleInstalled?.length) {
-      console.log(`\n  Country bundle (+${bundleInstalled.length} supporting packs):`);
+      const label = packId.startsWith("combo/") ? "Purpose bundle" : "Country bundle";
+      console.log(`\n  ${label} (+${bundleInstalled.length} supporting packs):`);
       for (const entry of bundleInstalled) {
         console.log(`    • ${entry.pack.id} — ${entry.pack.name} (${entry.files.length} files)`);
       }
     }
-    console.log("\nBrowse: https://dna.humaan.app/marketplace");
+    if (aiContext) {
+      console.log(`\n  AI context (stems + rules):`);
+      console.log(`    Stems: ${aiContext.stems.join(", ") || "(none)"}`);
+      if (aiContext.skippedStems.length) {
+        console.log(`    Skipped unknown stems: ${aiContext.skippedStems.join(", ")}`);
+      }
+      for (const rule of aiContext.rulePaths) {
+        console.log(`    Rule: ${rule}`);
+      }
+    }
+    console.log("\nBrowse: https://dna.humaan.app/marketplace#bundles");
   });
 
 const plan = program.command("plan").description("Generate AI implementation plans from plain-language requirements");

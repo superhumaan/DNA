@@ -1,5 +1,6 @@
 import type { KnowledgePack, MarketplaceCatalog } from "@superhumaan/dna-config";
 import { PACKS } from "./bundled-catalog-packs.js";
+import { purposeCombosAsMarketplaceBundles } from "./purpose-combos.js";
 
 export { PACKS, BUNDLED_CATALOG_PACK_COUNT } from "./bundled-catalog-packs.js";
 
@@ -19,5 +20,6 @@ export function buildBundledCatalog(
     source: "bundled",
     marketplaceUrl: "https://dna.humaan.app/marketplace",
     packs: [...byId.values()],
+    bundles: purposeCombosAsMarketplaceBundles(),
   };
 }

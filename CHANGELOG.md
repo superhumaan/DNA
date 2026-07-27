@@ -4,6 +4,14 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **Marketplace Bundles** — Purpose Combos on [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles): each bundle lists knowledge packs + prompt stem packs; one `dna marketplace install combo/<id>` installs packs, injects stems/slash commands, always-on Cursor rules, and AI workbench context. Catalog `bundles[]` + `GET /marketplace/api/v1/bundles`.
+
+### Fixed
+
+- **Mirth pack id alias** — UK healthcare systems catalog and country-bundle enrichment now use canonical `healthcare/mirth-connect` (with `healthcare/mirth` aliased). Refreshing `healthcare/overview-uk` no longer warns about a missing `healthcare/mirth` pack.
+
 ## [0.6.18] - 2026-07-27
 
 ### Added

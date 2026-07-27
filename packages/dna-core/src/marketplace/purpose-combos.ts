@@ -17,6 +17,8 @@ export type PurposeCombo = {
   preferred: readonly string[];
   /** Suggested only — not auto-installed unless includeRecommended. */
   recommended: readonly string[];
+  /** Prompt stem pack ids installed + slash commands so AI knows the workflow. */
+  stems: readonly string[];
 };
 
 export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
@@ -42,6 +44,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
       "discovery/handoff-to-delivery",
       "languages/stem-bridge",
     ],
+    stems: ["work-with-dna","product-canvas","golden-circle","business-strategy-canvas","discovery-setup","marketplace-install"],
   },
   {
     id: "combo/product-diagnosis-upgrade",
@@ -66,6 +69,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
       "discovery/lifecycle/growth",
       "discovery/handoff-to-delivery",
     ],
+    stems: ["work-with-dna","strategy-ladder","product-diagnose","product-swot","competitor-landscape","upgrade-recommend","marketplace-install"],
   },
   {
     id: "combo/pmf-check",
@@ -83,6 +87,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
       "discovery/continuous-discovery",
     ],
     recommended: ["discovery/lifecycle/growth", "industries/saas-b2b"],
+    stems: ["work-with-dna","pmf-check","product-value-proposition","product-kano-scan","discovery-setup","marketplace-install"],
   },
   {
     id: "combo/discovery-to-delivery",
@@ -104,6 +109,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
       "discovery/events/story-mapping",
       "discovery/lifecycle/solution-validation",
     ],
+    stems: ["work-with-dna","handoff-to-engineering","synthesize-research","prioritize-opportunities","shape-feature","create-ticket","marketplace-install"],
   },
   {
     id: "combo/shape-up-cycle",
@@ -117,6 +123,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["methodologies/dna-default", "discovery/opportunity-solution-tree"],
     recommended: ["discovery/teams/discovery-squad", "industries/saas-b2b"],
+    stems: ["work-with-dna","shape-feature","break-down-work","align-delivery","write-spec","marketplace-install"],
   },
   {
     id: "combo/nextjs-fullstack",
@@ -137,6 +144,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
       "tools/shadcn-ui",
     ],
     recommended: ["ai/vercel-ai-sdk", "payments/stripe", "cloud/railway"],
+    stems: ["work-with-dna","plan-feature","generate-feature","recommend-architecture","ship-feature","agent-loop-full","marketplace-install"],
   },
   {
     id: "combo/saas-billing",
@@ -150,6 +158,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
       "databases/postgresql",
     ],
     recommended: ["payments/paddle", "payments/lemon-squeezy", "industries/saas-b2b"],
+    stems: ["work-with-dna","plan-feature","generate-feature","ship-feature","marketplace-install"],
   },
   {
     id: "combo/auth-rbac",
@@ -163,6 +172,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["auth/workos", "auth/scim", "auth/okta"],
     recommended: ["auth/stytch", "auth/magic-link", "disciplines/security"],
+    stems: ["work-with-dna","plan-rbac","security-audit","generate-feature","marketplace-install"],
   },
   {
     id: "combo/gdpr-eu-ready",
@@ -176,6 +186,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["compliance/eu-ai-act", "legal/regions/uk-gdpr", "disciplines/security"],
     recommended: ["compliance/wcag-22", "compliance/data-residency-eu"],
+    stems: ["work-with-dna","gdpr-engineering","plan-compliance","compliance-documents","legal-advise","marketplace-install"],
   },
   {
     id: "combo/healthcare-us",
@@ -200,6 +211,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
       "healthcare/tefca-qhin",
       "compliance/hipaa-depth",
     ],
+    stems: ["work-with-dna","plan-compliance","legal-advise","security-audit","marketplace-install"],
   },
   {
     id: "combo/ai-rag-product",
@@ -214,6 +226,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["ai/anthropic", "ai/vercel-ai-sdk", "ai/langsmith", "ai/braintrust"],
     recommended: ["ai/ollama", "ai/llamaindex", "observability/sentry"],
+    stems: ["work-with-dna","plan-feature","generate-feature","recommend-architecture","marketplace-install"],
   },
   {
     id: "combo/observability-sre",
@@ -231,6 +244,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
       "observability/pagerduty",
     ],
     recommended: ["testing/chaos-engineering", "cloud/kubernetes"],
+    stems: ["work-with-dna","runtime-investigate","debug-issue","dashboard-monitor","quality-gate","marketplace-install"],
   },
   {
     id: "combo/cloud-aws",
@@ -251,6 +265,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
       "observability/datadog",
     ],
     recommended: ["disciplines/security"],
+    stems: ["work-with-dna","stack-hosting","recommend-architecture","docker-build","ci-install","marketplace-install"],
   },
   {
     id: "combo/ecommerce-storefront",
@@ -265,6 +280,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["ecommerce/medusa", "payments/apple-google-pay", "auth/clerk"],
     recommended: ["observability/sentry"],
+    stems: ["work-with-dna","plan-feature","generate-feature","ship-feature","marketplace-install"],
   },
   {
     id: "combo/cms-marketing-site",
@@ -273,6 +289,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     required: ["cms/sanity", "frameworks/nextjs", "frameworks/react", "tools/tailwind-css"],
     preferred: ["cms/contentful", "platforms/marketing-website"],
     recommended: ["cloud/cloudflare-overview"],
+    stems: ["work-with-dna","plan-feature","generate-feature","marketplace-install"],
   },
   {
     id: "combo/fintech-open-banking",
@@ -287,6 +304,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["fintech/stripe-treasury", "compliance/soc2", "databases/postgresql"],
     recommended: ["disciplines/security"],
+    stems: ["work-with-dna","plan-compliance","security-audit","plan-feature","marketplace-install"],
   },
   {
     id: "combo/accessibility-ux",
@@ -300,6 +318,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["gov/section-508", "tools/shadcn-ui"],
     recommended: [],
+    stems: ["work-with-dna","product-purpose-audit","quality-scan","marketplace-install"],
   },
   {
     id: "combo/monorepo-platform",
@@ -314,6 +333,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["devtools/pnpm", "cloud/github-actions", "finops"],
     recommended: [],
+    stems: ["work-with-dna","recommend-architecture","ivf-shared-library","ci-install","platform-codegen","marketplace-install"],
   },
   {
     id: "combo/startup-saas",
@@ -327,6 +347,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["methodologies/shape-up", "methodologies/lean-startup"],
     recommended: ["auth/clerk", "payments/stripe"],
+    stems: ["work-with-dna","discovery-setup","plan-feature","ship-feature","agent-loop-full","marketplace-install"],
   },
   {
     id: "combo/enterprise-healthcare",
@@ -341,6 +362,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["methodologies/document-writing", "healthcare/phi-engineering"],
     recommended: ["healthcare/smart-on-fhir", "healthcare/overview-us"],
+    stems: ["work-with-dna","methodology-setup","plan-compliance","agent-loop-full","marketplace-install"],
   },
   {
     id: "combo/agency-fintech",
@@ -354,6 +376,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["payments/stripe", "compliance/soc2"],
     recommended: ["payments/plaid", "payments/open-banking"],
+    stems: ["work-with-dna","methodology-setup","plan-feature","plan-compliance","marketplace-install"],
   },
   {
     id: "combo/scrum-team",
@@ -367,6 +390,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["methodologies/estimation-planning-poker", "methodologies/document-writing"],
     recommended: ["methodologies/tdd", "methodologies/bdd"],
+    stems: ["work-with-dna","methodology-setup","break-down-work","create-ticket","align-delivery","marketplace-install"],
   },
   {
     id: "combo/less-org",
@@ -380,6 +404,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["methodologies/less-huge", "methodologies/user-stories"],
     recommended: ["methodologies/nexus", "companies/scale-up"],
+    stems: ["work-with-dna","methodology-setup","align-delivery","break-down-work","marketplace-install"],
   },
   {
     id: "combo/safe-enterprise",
@@ -393,6 +418,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["methodologies/definition-of-done", "methodologies/document-writing"],
     recommended: ["methodologies/okr-delivery"],
+    stems: ["work-with-dna","methodology-setup","define-okrs","roadmap-now-next-later","marketplace-install"],
   },
   {
     id: "combo/agency-delivery",
@@ -406,6 +432,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["methodologies/dna-default", "companies/consultancy"],
     recommended: ["methodologies/scrum"],
+    stems: ["work-with-dna","methodology-setup","create-ticket","write-spec","agent-loop-full","marketplace-install"],
   },
   {
     id: "combo/sme-scrum",
@@ -419,6 +446,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["methodologies/estimation-planning-poker", "industries/saas-b2b"],
     recommended: ["methodologies/dual-track-agile"],
+    stems: ["work-with-dna","methodology-setup","break-down-work","create-ticket","marketplace-install"],
   },
   {
     id: "combo/enterprise-devtools",
@@ -432,6 +460,7 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     ],
     preferred: ["disciplines/platform-engineering", "methodologies/definition-of-done"],
     recommended: ["methodologies/continuous-delivery"],
+    stems: ["work-with-dna","methodology-setup","platform-codegen","recommend-architecture","marketplace-install"],
   },
 ] as const;
 
@@ -479,4 +508,40 @@ export function allPurposeComboMemberPackIds(): string[] {
     for (const id of c.recommended) ids.add(id);
   }
   return [...ids];
+}
+
+/** Pack ids referenced by combos (excludes combo/* ids) — traffic-tier P0 set. */
+export function trafficTierPackIds(): string[] {
+  return allPurposeComboMemberPackIds().filter((id) => !id.startsWith("combo/"));
+}
+
+export type MarketplaceBundleView = {
+  id: string;
+  purpose: string;
+  description: string;
+  required: string[];
+  preferred: string[];
+  recommended: string[];
+  stems: string[];
+  installCommand: string;
+};
+
+/** Catalog/API shape for DNA-Web Bundles section. */
+export function purposeCombosAsMarketplaceBundles(): MarketplaceBundleView[] {
+  return PURPOSE_COMBOS.map((c) => ({
+    id: c.id,
+    purpose: c.purpose,
+    description: c.description,
+    required: [...c.required],
+    preferred: [...c.preferred],
+    recommended: [...c.recommended],
+    stems: [...c.stems],
+    installCommand: `dna marketplace install ${c.id}`,
+  }));
+}
+
+export function resolvePurposeComboStemIds(packId: string): string[] | null {
+  const combo = getPurposeCombo(packId);
+  if (!combo) return null;
+  return [...combo.stems];
 }

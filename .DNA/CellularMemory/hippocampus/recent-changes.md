@@ -2,6 +2,12 @@
 
 _Last updated: 2026-07-27_
 
+## 2026-07-27 — Marketplace Bundles (Purpose Combos)
+
+- Catalog `bundles[]` (27 purpose combos) with linked knowledge packs + prompt stem ids.
+- `dna marketplace install combo/<id>` installs packs, injects stems/slash commands, always-on Cursor rules, and AI workbench context.
+- DNA-Web `/marketplace#bundles` + `GET /marketplace/api/v1/bundles`.
+
 ## 2026-07-27 — Ship v0.6.18
 
 - npm + docs: Lab APIs reference, deep links, open-auth fix, marketplace richness (~1045 packs).

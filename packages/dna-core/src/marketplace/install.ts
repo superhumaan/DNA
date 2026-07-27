@@ -7,12 +7,18 @@ import { getBundledCatalog, getBundledPack } from "./bundled-catalog.js";
 import { normalizePackId } from "./aliases.js";
 import { resolveHealthcareCountryBundlePackIds } from "./healthcare-country-bundles.js";
 import { resolvePurposeComboPackIds } from "./purpose-combos.js";
+import {
+  installPurposeComboAiContext,
+  type PurposeComboAiInstallResult,
+} from "./install-purpose-combo-ai.js";
 
 export interface InstallKnowledgePackResult {
   pack: KnowledgePack;
   files: string[];
   /** Additional packs installed as part of a country healthcare or purpose combo bundle. */
   bundleInstalled?: Array<{ pack: KnowledgePack; files: string[] }>;
+  /** AI stems + rules injection when installing a purpose combo. */
+  aiContext?: PurposeComboAiInstallResult;
 }
 
 export async function installKnowledgePack(
@@ -89,6 +95,13 @@ export async function installKnowledgePackById(
 
   if (bundleInstalled.length) {
     primary.bundleInstalled = bundleInstalled;
+  }
+
+  if (isPurposeCombo) {
+    const aiContext = await installPurposeComboAiContext(root, resolvedId);
+    if (aiContext) {
+      primary.aiContext = aiContext;
+    }
   }
 
   return primary;

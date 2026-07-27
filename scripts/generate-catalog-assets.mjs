@@ -30,7 +30,7 @@ async function main() {
   await writeFile(marketplacePath, `${JSON.stringify(marketplace)}\n`, "utf-8");
   await writeFile(intelligencePath, `${JSON.stringify(intelligence)}\n`, "utf-8");
 
-  console.log(`✓ marketplace-catalog.json (${marketplace.packs.length} packs)`);
+  console.log(`✓ marketplace-catalog.json (${marketplace.packs.length} packs, ${marketplace.bundles?.length ?? 0} bundles)`);
   console.log(`✓ intelligence-catalog.json (${intelligence.stemPacks?.length ?? 0} stems)`);
 }
 

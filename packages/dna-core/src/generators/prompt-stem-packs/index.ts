@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { rm } from "node:fs/promises";
 import type { DnaConfig } from "@superhumaan/dna-config";
-import { fileExists } from "../../fs.js";
+import { fileExists, readJsonFile, writeFileEnsured, writeJsonFile } from "../../fs.js";
 import { PROMPT_STEM_DEFS } from "./catalog.js";
 import { finalizeStemPack, stemInstallPrefix } from "./builder.js";
 import { syncPromptStemPacks } from "./sync.js";
@@ -137,6 +137,79 @@ Refresh: \`npx dna workbench install\` or \`npx dna stems install\`
 export async function installPromptStemPacks(root: string, config: DnaConfig): Promise<string[]> {
   const result = await syncPromptStemPacks(root, config);
   return result.paths;
+}
+
+/**
+ * Install selected prompt stem packs (merge into existing `.DNA/stems/` index).
+ * Unknown ids are reported in `skipped` — does not fail the whole install.
+ */
+export async function installPromptStemPackIds(
+  root: string,
+  _config: DnaConfig,
+  stemIds: string[],
+): Promise<{ paths: string[]; installed: string[]; skipped: string[] }> {
+  const wanted = [...new Set(stemIds.map((id) => id.trim()).filter(Boolean))];
+  const byId = new Map(getPromptStemPacks().map((p) => [p.id, p]));
+  const installed: string[] = [];
+  const skipped: string[] = [];
+  const paths: string[] = [];
+
+  for (const id of wanted) {
+    const pack = byId.get(id);
+    if (!pack) {
+      skipped.push(id);
+      continue;
+    }
+    installed.push(id);
+    const prefix = stemInstallPrefix(pack.id);
+    for (const file of pack.files) {
+      const rel = `${prefix}/${file.path}`;
+      await writeFileEnsured(join(root, rel), file.content);
+      paths.push(rel);
+    }
+    if (pack.slash) {
+      const promptBody = pack.files.find((f) => f.path === "prompt.md")?.content ?? "";
+      const cursorRel = `.cursor/commands/${pack.slash}.md`;
+      const claudeRel = `.claude/commands/${pack.slash}.md`;
+      await writeFileEnsured(join(root, cursorRel), promptBody);
+      await writeFileEnsured(
+        join(root, claudeRel),
+        claudeFrontmatter(pack.summary, "[context or scope]") +
+          promptBody.replace(/^> \*\*DNA Prompt Stem:.*\n\n/, ""),
+      );
+      paths.push(cursorRel, claudeRel);
+    }
+  }
+
+  const indexPath = join(root, STEM_INDEX);
+  const existing =
+    (await readJsonFile<{
+      packs?: Array<{ id: string; name: string; category: string; slash?: string; path: string; files: string[] }>;
+    }>(indexPath)) ?? {};
+  const packMeta = new Map(
+    (existing.packs ?? []).map((p) => [p.id, p] as const),
+  );
+  for (const id of installed) {
+    const pack = byId.get(id)!;
+    packMeta.set(id, {
+      id: pack.id,
+      name: pack.name,
+      category: pack.category,
+      slash: pack.slash,
+      path: stemInstallPrefix(pack.id),
+      files: pack.files.map((f) => f.path),
+    });
+  }
+  await writeJsonFile(indexPath, {
+    version: 1,
+    count: packMeta.size,
+    catalogUrl: "https://dna.humaan.app/intelligence#stem-library",
+    syncedAt: new Date().toISOString(),
+    packs: [...packMeta.values()],
+  });
+  paths.push(STEM_INDEX);
+
+  return { paths: [...new Set(paths)], installed, skipped };
 }
 
 export async function uninstallPromptStemPacks(root: string): Promise<string[]> {

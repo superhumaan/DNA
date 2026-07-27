@@ -646,6 +646,41 @@ function parseKnowledgePack(input: unknown): ParseResult<KnowledgePack> {
   });
 }
 
+function parseMarketplaceBundle(input: unknown, label: string): ParseResult<MarketplaceBundle> {
+  const obj = expectObject(input, label);
+  if (!obj.success) return obj;
+  const d = obj.data;
+  const id = expectString(d.id, `${label}.id`);
+  if (!id.success) return id;
+  const purpose = expectString(d.purpose, `${label}.purpose`);
+  if (!purpose.success) return purpose;
+  const description = expectString(d.description, `${label}.description`);
+  if (!description.success) return description;
+  const required = parseStringArray(d.required ?? [], `${label}.required`);
+  if (!required.success) return required;
+  const preferred = parseStringArray(d.preferred ?? [], `${label}.preferred`);
+  if (!preferred.success) return preferred;
+  const recommended = parseStringArray(d.recommended ?? [], `${label}.recommended`);
+  if (!recommended.success) return recommended;
+  const stems = parseStringArray(d.stems ?? [], `${label}.stems`);
+  if (!stems.success) return stems;
+  const installCommand =
+    d.installCommand === undefined
+      ? ok(`dna marketplace install ${id.data}`)
+      : expectString(d.installCommand, `${label}.installCommand`);
+  if (!installCommand.success) return installCommand;
+  return ok({
+    id: id.data,
+    purpose: purpose.data,
+    description: description.data,
+    required: required.data,
+    preferred: preferred.data,
+    recommended: recommended.data,
+    stems: stems.data,
+    installCommand: installCommand.data,
+  });
+}
+
 function parseMarketplaceCatalog(input: unknown): ParseResult<MarketplaceCatalog> {
   const obj = expectObject(input);
   if (!obj.success) return obj;
@@ -664,6 +699,17 @@ function parseMarketplaceCatalog(input: unknown): ParseResult<MarketplaceCatalog
     if (!pack.success) return fail(`Invalid pack[${i}]: ${pack.error.message}`);
     packs.push(pack.data);
   }
+  let bundles: MarketplaceBundle[] | undefined;
+  if (d.bundles !== undefined) {
+    const bundlesArr = expectArray(d.bundles, "bundles");
+    if (!bundlesArr.success) return bundlesArr;
+    bundles = [];
+    for (let i = 0; i < bundlesArr.data.length; i++) {
+      const bundle = parseMarketplaceBundle(bundlesArr.data[i], `bundles[${i}]`);
+      if (!bundle.success) return fail(`Invalid bundles[${i}]: ${bundle.error.message}`);
+      bundles.push(bundle.data);
+    }
+  }
   const source = d.source === undefined
     ? undefined
     : expectEnum(d.source, ["remote", "bundled"] as const, "source");
@@ -675,6 +721,7 @@ function parseMarketplaceCatalog(input: unknown): ParseResult<MarketplaceCatalog
     source: source?.success ? source.data : undefined,
     marketplaceUrl: optionalString(d.marketplaceUrl),
     packs,
+    bundles,
   });
 }
 
@@ -1085,6 +1132,19 @@ export interface KnowledgePack {
   publishedAt?: string;
 }
 
+/** Purpose combo / installable marketplace bundle (knowledge packs + prompt stems). */
+export interface MarketplaceBundle {
+  id: string;
+  purpose: string;
+  description: string;
+  required: string[];
+  preferred: string[];
+  recommended: string[];
+  /** Prompt stem pack ids (`.DNA/stems/<id>/`) injected on install. */
+  stems: string[];
+  installCommand: string;
+}
+
 export interface MarketplaceCatalog {
   version: string;
   channel: "stable" | "beta" | "nightly";
@@ -1092,6 +1152,8 @@ export interface MarketplaceCatalog {
   source?: "remote" | "bundled";
   marketplaceUrl?: string;
   packs: KnowledgePack[];
+  /** Purpose Combos — one-command install of linked packs + stems. */
+  bundles?: MarketplaceBundle[];
 }
 
 export interface MarketplaceUpdateResult {

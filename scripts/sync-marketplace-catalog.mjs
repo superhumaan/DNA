@@ -25,7 +25,7 @@ async function main() {
   for (const target of TARGETS) {
     await mkdir(dirname(target), { recursive: true });
     await copyFile(SOURCE, target);
-    console.log(`✓ ${target} (${catalog.packs.length} packs)`);
+  console.log(`✓ ${target} (${catalog.packs.length} packs, ${catalog.bundles?.length ?? 0} bundles)`);
   }
 }
 

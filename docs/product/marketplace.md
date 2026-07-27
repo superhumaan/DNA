@@ -1,10 +1,12 @@
 # Knowledge Pack Marketplace
 
-Curated guidance packs install into `.DNA/knowledge/`. DNA ships **965 packs** in the stable channel — frameworks, compliance, cloud, healthcare, and production platform patterns.
+Curated guidance packs install into `.DNA/knowledge/`. DNA ships **1045 packs** plus **27 purpose bundles** in the stable channel — frameworks, compliance, cloud, healthcare, and production platform patterns.
 
 | | |
 |---|---|
 | **Live catalog** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
+| **Purpose bundles** | [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles) — one-command install of linked packs + stem packs + AI rules |
+| **Bundles API** | `GET /marketplace/api/v1/bundles` |
 | **Web app** | [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web) (Next.js — landing + marketplace UI + API) |
 | **Offline fallback** | Bundled catalog in `@superhumaan/dna-by-humaan` when remote is unavailable |
 | **Legacy API** | `apps/marketplace` (standalone Node server for local dev) |
@@ -12,6 +14,24 @@ Curated guidance packs install into `.DNA/knowledge/`. DNA ships **965 packs** i
 > **Pack renames:** `platforms/humaan-stack` → `platforms/dna-stack` — retired IDs resolve automatically. See [CHANGELOG](../CHANGELOG.md).
 
 ---
+
+## Purpose bundles
+
+Install an entire workflow (knowledge packs + prompt stem packs + Cursor always-on rules):
+
+```bash
+dna marketplace install combo/nextjs-fullstack
+dna marketplace install combo/gdpr-eu-ready
+dna marketplace install combo/product-diagnosis-upgrade
+```
+
+Each bundle:
+
+1. Installs **required** + **preferred** knowledge packs into `.DNA/knowledge/`
+2. Writes linked **prompt stem packs** to `.DNA/stems/` (+ slash commands)
+3. Injects `.cursor/rules/dna-bundle-*.mdc` and refreshes AI workbench so the co-pilot knows the purpose
+
+Browse all bundles on the website or `GET /marketplace/api/v1/catalog` (`bundles[]`).
 
 ## CLI usage
 
@@ -24,12 +44,13 @@ dna marketplace search --category compliance
 dna marketplace install frameworks/vite
 dna marketplace install cms/sanity
 dna marketplace install browsers/cross-browser
+dna marketplace install combo/saas-billing
 dna update
 ```
 
 ## Catalog size
 
-**965 packs** in the stable channel:
+**1045 packs** + **27 purpose bundles** in the stable channel:
 
 | Layer | Count | Tag / prefix |
 |-------|------:|--------------|
