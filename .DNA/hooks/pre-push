@@ -1,9 +1,13 @@
 #!/bin/sh
 # DNA pre-push hook — runs quality report on every git push (installed by dna init)
-# Mode: advisory (never blocks push)
+# Mode: strict (BLOCKS the push when the quality gate fails)
 
-echo "🧬 DNA pre-push: running quality report..."
+echo "🧬 DNA pre-push: running quality report (strict)..."
 
-npx --yes @superhumaan/dna-by-humaan quality report || true
+if ! npx --yes @superhumaan/dna-by-humaan quality report --fail; then
+  echo "✗ DNA pre-push: quality gate FAILED — push blocked." >&2
+  echo "  Fix the reported blocker/critical issues, or bypass with 'git push --no-verify'." >&2
+  exit 1
+fi
 
-echo "✓ DNA pre-push complete — pushing"
+echo "✓ DNA pre-push: quality gate passed — pushing"

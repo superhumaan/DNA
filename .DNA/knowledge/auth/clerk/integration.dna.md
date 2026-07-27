@@ -1,3 +1,3 @@
-# Clerk — Integration
+# Integration
 
-Middleware protection. Organizations for B2B. Webhooks for user sync.
+Pair `frameworks/nextjs`, `combo/auth-rbac`. Webhooks for user lifecycle. Never trust client-only role checks.

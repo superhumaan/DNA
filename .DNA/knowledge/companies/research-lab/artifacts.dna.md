@@ -1,12 +1,7 @@
-# Artifacts — Research Lab
+# Artifacts
 
-## Spec (lightweight)
-- Hypothesis
-- Eval plan
-- Safety constraints
-- Rollback / kill criteria
+## Spec
+Hypothesis, eval, safety, rollback
 
 ## Experiment ticket
-- Experiment ID
-- Model/version
-- Metrics dashboard link
+Experiment ID, model/version, dashboard link

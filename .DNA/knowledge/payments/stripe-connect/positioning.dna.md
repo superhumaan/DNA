@@ -1,3 +1,3 @@
 # Stripe Connect
 
-Platform payments split.
+Use for multi-party money movement (marketplaces, platforms). Choose Standard / Express / Custom intentionally.

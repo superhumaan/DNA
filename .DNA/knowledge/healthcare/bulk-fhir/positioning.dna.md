@@ -6,3 +6,5 @@
 
 ## Use
 Payer, population health, de-identified analytics pipelines
+
+Population-level NDJSON export for analytics and payer apps

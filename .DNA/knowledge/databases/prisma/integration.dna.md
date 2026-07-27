@@ -1,3 +1,3 @@
-# Prisma ORM — Integration
+# Integration
 
-Schema in prisma file. Migrate deploy in CI.
+Pair `databases/postgresql`. Avoid long interactive transactions under load.

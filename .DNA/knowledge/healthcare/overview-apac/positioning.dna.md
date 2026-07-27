@@ -40,3 +40,5 @@ Regional stem pack for **Asia-Pacific and Oceania**. Install before or with a co
 dna marketplace install healthcare/overview-apac
 dna marketplace install healthcare/overview-au   # example
 ```
+
+APAC regional healthcare — FHIR adoption, data residency, cross-border patterns

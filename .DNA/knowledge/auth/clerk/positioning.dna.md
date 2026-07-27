@@ -1,3 +1,3 @@
-# Clerk
+# Clerk — Positioning
 
-Default DNA auth for Next SaaS.
+DNA default hosted auth for many stacks. Use organizations for B2B tenancy when needed.

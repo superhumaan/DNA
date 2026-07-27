@@ -1,3 +1,3 @@
-# OpenAI API — Integration
+# Integration
 
-Server-side only. Structured outputs. Retry with backoff.
+Pair `ai/vercel-ai-sdk`, `ai/rag-patterns`, evals. Log prompts carefully (PII).

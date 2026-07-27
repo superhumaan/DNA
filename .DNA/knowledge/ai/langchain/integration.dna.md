@@ -1,3 +1,3 @@
-# LangChain — Integration
+# Integration
 
-LCEL pipelines. LangSmith tracing optional.
+Pair vector stores via `ai/rag-patterns`. Evaluate before adding agent complexity.

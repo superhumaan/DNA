@@ -1,3 +1,3 @@
-# Prisma ORM
+# Prisma
 
-DNA default ORM for Node.
+Typed ORM popular in DNA/Next stacks. Schema-first; migrate thoughtfully for prod locks.

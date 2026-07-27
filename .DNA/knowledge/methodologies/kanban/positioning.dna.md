@@ -1,12 +1,8 @@
 # Kanban
 
-Optimise flow, not time boxes. Pull work when capacity exists.
+Optimise **flow**. Pull work when capacity exists. Optional classes of service (expedite, fixed date, standard).
 
-## Core practices
-- Visualise workflow (columns)
-- Limit WIP per column
-- Manage flow — measure cycle time and throughput
-- Explicit policies per column
-
-## AI rule
-No sprint numbers. Focus on **priority order** and **WIP**. Suggest splitting items that exceed WIP policy.
+## When to use
+- Interrupt-driven ops / platform teams
+- Uneven arrival of work
+- Want metrics (lead time, WIP, throughput) over sprint theatre

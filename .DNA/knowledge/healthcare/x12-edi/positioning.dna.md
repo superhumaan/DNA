@@ -8,3 +8,5 @@ Legacy but mandatory for US billing. Often via clearinghouse not direct payer.
 - 837P professional / 837I institutional
 - 835 ERA
 - 270/271 eligibility
+
+ASC X12 transactions — 837 claims, 835 remittance, 270/271 eligibility

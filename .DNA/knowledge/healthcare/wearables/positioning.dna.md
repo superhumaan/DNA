@@ -8,3 +8,5 @@
 
 ## Clinical RPM
 - **Validic**, **Human API** — FDA-regulated device data pipelines
+
+Apple HealthKit, Google Health Connect, Fitbit, Validic, device ingestion

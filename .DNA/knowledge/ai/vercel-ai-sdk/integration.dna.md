@@ -1,3 +1,3 @@
-# Vercel AI SDK — Integration
+# Integration
 
-streamText, generateObject with Zod. Provider abstraction.
+Pair Next.js Route Handlers, `ai/rag-patterns`, observability.

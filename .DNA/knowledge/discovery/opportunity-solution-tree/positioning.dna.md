@@ -1,5 +1,3 @@
 # Opportunity Solution Tree
 
-# Opportunity Solution Tree (OST)
-
-Visual map: **Outcome** → **Opportunities** → **Solutions** → **Experiments**.
+Visual structure linking desired outcome to opportunities and solution experiments.

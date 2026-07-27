@@ -8,3 +8,5 @@ Dominant US hospital EHR. Integration via **Epic on FHIR** + App Orchard approva
 - Hyperspace (clinician UI)
 - MyChart (patient portal)
 - Cosmos (research)
+
+Largest US EHR — App Orchard, FHIR, Hyperdrive, Cosmos

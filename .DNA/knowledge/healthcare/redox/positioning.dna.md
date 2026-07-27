@@ -9,3 +9,5 @@ Normalized JSON over HTTPS; Redox translates to EHR-specific protocols.
 
 ## Use when
 - Need ADT, orders, results, scheduling across heterogeneous hospitals
+
+Healthcare integration platform — one API to many EHRs

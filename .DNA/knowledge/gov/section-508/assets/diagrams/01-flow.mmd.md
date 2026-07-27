@@ -1,0 +1,9 @@
+# Diagram — Section 508 / EN 301 549 flow
+
+```mermaid
+flowchart LR
+  A[Intake] --> B[Plan]
+  B --> C[Build]
+  C --> D[Verify]
+  D --> E[Ship]
+```

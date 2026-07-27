@@ -1,3 +1,3 @@
-# Supabase Platform
+# Supabase
 
-Auth + storage + realtime + edge.
+Postgres BaaS with Auth, Storage, Realtime. Treat RLS as mandatory for multi-tenant tables.

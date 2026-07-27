@@ -1,9 +1,11 @@
-# Startup Archetype
+# Startup
+
+Early product-market exploration. Bias to action; process only when it prevents rework.
 
 ## Delivery
 - Minimal hierarchy: issue → PR
-- Docs in Notion or GitHub wiki
-- Ship daily, retro weekly optional
+- Optional weekly retro
+- DNA Feature Factory for multi-file changes
 
 ## AI tone
-Bias to action. Short tickets. Skip ceremony unless user asks.
+Short tickets. Skip enterprise ceremony unless regulated industry overlay is active.

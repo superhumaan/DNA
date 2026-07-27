@@ -47,3 +47,5 @@ dna marketplace install healthcare/fhir-r4
 - Never log PHI, prompts, or raw clinical documents
 - Encrypt ePHI in transit (TLS 1.2+) and at rest
 - Audit every PHI access; run `dna plan compliance --frameworks hipaa`
+
+Country router — FHIR-first strategy; install one country overview stem pack

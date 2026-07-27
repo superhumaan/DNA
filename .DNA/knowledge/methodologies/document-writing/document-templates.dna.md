@@ -29,7 +29,7 @@
 1. Status, Context, Decision, Consequences
 
 ## Shape Up pitch
-See `methodologies/shape-up/artifacts.dna.md`
+See `methodologies/shape-up/positioning.dna.md` and templates in that pack's `assets/`
 
 ## Scrum epic brief
 Problem, outcome, stories list, success metrics, target PI/sprint

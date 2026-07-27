@@ -1,3 +1,3 @@
-# Anthropic Claude
+# Anthropic
 
-Long context, safety-focused.
+Claude models for assistants and agents. Same rules as other LLMs: server keys, validate outputs, bound autonomy.

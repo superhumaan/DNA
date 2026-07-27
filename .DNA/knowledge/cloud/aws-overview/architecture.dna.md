@@ -1,13 +1,4 @@
-# AWS Overview — Architecture
+# Architecture
 
-## When to use
-Default enterprise cloud. Multi-account landing zone.
-
-## System boundaries
-- Document integration points in Impressions: `architecture/system-boundaries.md`
-- List data categories processed (PII, payments, PHI) and subprocessors
-- Define failure modes: vendor outage, rate limits, webhook delays
-
-## DNA alignment
-- Pair with `disciplines/security` and `compliance/tiered-standards`
-- Run `dna plan compliance` when regulated data is involved
+Org / accounts → VPC → compute (ECS/Lambda) → data (RDS/S3) → edge (CloudFront)  
+Prefer IaC (Terraform/CDK) over console clicks for prod.

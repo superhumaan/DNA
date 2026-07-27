@@ -7,3 +7,5 @@ Composable patient record for digital health builders.
 ## Use
 - Embeddable clinical timeline
 - Reduced EHR one-off integrations
+
+Shared health record composable data layer — ZAP Pro

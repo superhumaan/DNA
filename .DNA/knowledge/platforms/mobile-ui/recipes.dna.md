@@ -1,0 +1,25 @@
+# Recipes — Mobile UI
+
+Practical drills. Run in staging before production changes.
+
+### Recipe 1
+
+Mobile UI happy-path smoke
+
+**Steps:** prepare → execute → verify → clean up.
+
+### Recipe 2
+
+Mobile UI failure / timeout path
+
+**Steps:** prepare → execute → verify → clean up.
+
+### Recipe 3
+
+Mobile UI rollback or flag-off
+
+**Steps:** prepare → execute → verify → clean up.
+
+
+## Definition of success
+Each recipe leaves the system healthy and leaves an audit trail (logs or ticket note).

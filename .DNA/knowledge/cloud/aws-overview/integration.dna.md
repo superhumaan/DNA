@@ -1,3 +1,3 @@
-# AWS Overview — Integration
+# Integration
 
-Organizations, SCPs, IAM Identity Center. Tagging strategy. Data HQ per region.
+Child packs: `cloud/aws-lambda`, `cloud/aws-rds`, `cloud/aws-s3`, `cloud/aws-cognito`, etc.

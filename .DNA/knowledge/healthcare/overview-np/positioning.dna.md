@@ -18,3 +18,5 @@ APAC country pack. Pair with `healthcare/overview-apac` and `healthcare/overview
 - **DHIS2** used for public health reporting
 - **HL7 v2** in tertiary hospitals
 - **ICD-10**
+
+Nepal healthcare — regulation, FHIR, integration (APAC)

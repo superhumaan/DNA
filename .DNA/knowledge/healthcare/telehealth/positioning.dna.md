@@ -11,3 +11,5 @@
 - Informed consent documented
 - State licensure for clinicians (varies US)
 - Waiting room and access control
+
+Video visits, scheduling, consent — Doxy.me, Twilio Video, Zoom Healthcare

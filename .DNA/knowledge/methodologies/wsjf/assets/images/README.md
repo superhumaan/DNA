@@ -1,0 +1,6 @@
+# Images — WSJF Prioritisation
+
+1. **board.png** — WSJF Prioritisation — delivery board (caption stub; replace with real screenshot)
+2. **ceremony.png** — WSJF Prioritisation — ceremony room / remote board (caption stub)
+
+_Replace stubs with project screenshots when available. Captions required._

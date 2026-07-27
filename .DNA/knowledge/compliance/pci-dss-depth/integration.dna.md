@@ -1,3 +1,3 @@
-# PCI DSS Depth — Integration
+# Integration
 
-Network segmentation. ASV scans. QSA assessment path.
+`payments/stripe`, network diagrams, logging without PAN.

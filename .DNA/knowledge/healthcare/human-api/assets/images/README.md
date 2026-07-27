@@ -1,0 +1,6 @@
+# Images — Human API
+
+1. **board.png** — Human API — delivery board (caption stub; replace with real screenshot)
+2. **ceremony.png** — Human API — ceremony room / remote board (caption stub)
+
+_Replace stubs with project screenshots when available. Captions required._

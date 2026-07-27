@@ -1,0 +1,8 @@
+# Diagram — Healthcare Support — India roles
+
+```mermaid
+flowchart TB
+  PO[Product] --> Team[Delivery team]
+  SM[Process] --> Team
+  Team --> Stakeholders
+```

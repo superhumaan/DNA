@@ -2,7 +2,8 @@
 
 | Ceremony | Purpose |
 |----------|---------|
-| Overall retro | Cross-team improvement |
-| Multi-team PBR | Refine epics spanning teams |
-| System demo | Integrated increment demo |
-| Scrum of Scrums | Coordination (lightweight) |
+| Sprint Planning One | Common Product Backlog selection |
+| Sprint Planning Two | Team-level planning |
+| Overall PBR | Multi-team refinement |
+| System Demo | Integrated Increment |
+| Overall Retrospective | Cross-team improvement |

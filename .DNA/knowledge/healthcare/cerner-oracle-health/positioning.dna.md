@@ -7,3 +7,5 @@ Major US EHR. **Cerner Open Developer Experience (CODE)** for FHIR apps.
 ## Notes
 - Oracle Health rebrand — APIs migrating; verify docs per release
 - Millennium domains per health system
+
+Millennium EHR — CODE sandbox, FHIR R4, Oracle migration path

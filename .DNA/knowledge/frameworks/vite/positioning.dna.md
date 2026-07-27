@@ -1,3 +1,3 @@
 # Vite — Positioning
 
-Use Vite for fast dev server and optimized production builds.
+Default bundler/dev server for Vite-based DNA frontends and package builds (tsup still common for libs).

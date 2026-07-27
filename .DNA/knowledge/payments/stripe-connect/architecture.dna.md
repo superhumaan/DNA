@@ -1,13 +1,4 @@
-# Stripe Connect — Architecture
+# Architecture
 
-## When to use
-Platform payments split.
-
-## System boundaries
-- Document integration points in Impressions: `architecture/system-boundaries.md`
-- List data categories processed (PII, payments, PHI) and subprocessors
-- Define failure modes: vendor outage, rate limits, webhook delays
-
-## DNA alignment
-- Pair with `disciplines/security` and `compliance/tiered-standards`
-- Run `dna plan compliance` when regulated data is involved
+Platform account → Connected accounts → Charges with `transfer_data` / destination charges  
+Onboarding Express accounts for sellers.

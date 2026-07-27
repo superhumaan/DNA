@@ -18,3 +18,5 @@ APAC country pack. Pair with `healthcare/overview-apac` and `healthcare/overview
 - **HL7 v2** common in hospitals
 - **FHIR** — early adoption; follow MOHFW digital health roadmap
 - **ICD-10**
+
+Bangladesh healthcare — regulation, FHIR, integration (APAC)

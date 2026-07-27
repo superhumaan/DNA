@@ -1,22 +1,6 @@
 # Artifacts — Scrum
 
-## User story template
-```
-As a [persona]
-I want [capability]
-So that [outcome]
-
-Acceptance criteria:
-- [ ] Given … When … Then …
-
-Definition of Done:
-- [ ] Code reviewed
-- [ ] Tests pass
-- [ ] Deployed to staging
-```
-
-## Sprint goal
-One sentence — what the sprint achieves
-
-## Retro notes
-Start / Stop / Continue format
+- **Product Backlog** — single ordered list
+- **Sprint Backlog** — plan to achieve Sprint Goal
+- **Increment** — Done sum of all prior Increments
+- **Definition of Done** — quality shared by org/team

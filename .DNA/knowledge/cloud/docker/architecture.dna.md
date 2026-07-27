@@ -1,13 +1,4 @@
-# Docker — Architecture
+# Architecture
 
-## When to use
-Local dev and CI images.
-
-## System boundaries
-- Document integration points in Impressions: `architecture/system-boundaries.md`
-- List data categories processed (PII, payments, PHI) and subprocessors
-- Define failure modes: vendor outage, rate limits, webhook delays
-
-## DNA alignment
-- Pair with `disciplines/security` and `compliance/tiered-standards`
-- Run `dna plan compliance` when regulated data is involved
+deps stage → build stage → runtime stage  
+Healthcheck + read-only root FS where possible.

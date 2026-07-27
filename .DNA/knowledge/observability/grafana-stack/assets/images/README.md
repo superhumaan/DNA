@@ -1,0 +1,6 @@
+# Images — Grafana Stack
+
+1. **board.png** — Grafana Stack — delivery board (caption stub; replace with real screenshot)
+2. **ceremony.png** — Grafana Stack — ceremony room / remote board (caption stub)
+
+_Replace stubs with project screenshots when available. Captions required._

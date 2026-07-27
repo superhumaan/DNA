@@ -1,3 +1,3 @@
-# Docker — Integration
+# Integration
 
-Multi-stage builds. Non-root USER.
+Pair CI (`cloud/github-actions`), registry push, compose for local deps only.

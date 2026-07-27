@@ -1,3 +1,3 @@
-# Drizzle ORM — Integration
+# Integration
 
-Schema as code. drizzle-kit push/migrate.
+Pair Postgres. Works well with edge/serverless when pooled.

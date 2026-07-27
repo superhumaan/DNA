@@ -7,3 +7,5 @@ API-first clinical data platform for apps needing consolidated records.
 ## Use
 - Digital health startups
 - Care navigation, prior auth support
+
+Patient health record API — FHIR, TEFCA-aligned access

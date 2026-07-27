@@ -6,3 +6,5 @@ National e-prescribing backbone. **EPCS** requires identity proofing and two-fac
 
 ## Use
 - Medication ordering from your app
+
+US e-prescribing network — EPCS, medication history

@@ -1,15 +1,10 @@
-# Artifacts — Agency
+# Artifacts
 
 ## SOW milestone
-- Deliverable description
-- Acceptance sign-off
-- Hours budget
-- Industry pack reference (`industry.active`)
+Deliverable, acceptance, hours budget
 
 ## Client spec
-Non-technical summary + appendix for engineering detail
+Non-technical summary + engineering appendix
 
-## Industry handoff
-- Active sector documented in `.DNA/config.dna.json`
-- `dna context industry` run at engagement start
-- Linked compliance packs installed per regulation.dna.md
+## Engagement config
+`industry.active` + installed compliance packs

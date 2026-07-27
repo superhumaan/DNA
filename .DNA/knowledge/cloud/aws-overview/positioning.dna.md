@@ -1,3 +1,3 @@
 # AWS Overview
 
-Default enterprise cloud. Multi-account landing zone.
+Enterprise cloud hub. Start with IAM least privilege, one region, and clear account boundaries before service sprawl.

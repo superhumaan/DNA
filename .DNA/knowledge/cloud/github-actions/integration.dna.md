@@ -1,3 +1,3 @@
-# GitHub Actions — Integration
+# Integration
 
-OIDC to cloud — no long-lived keys. Reusable workflows.
+`dna ci install` scaffolds workflows. Pair `cloud/docker`, npm publish workflow with `NPM_TOKEN` secret.

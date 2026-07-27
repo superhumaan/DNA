@@ -6,3 +6,5 @@ If software **diagnoses, treats, or drives clinical decisions**, may be SaMD —
 
 ## Tiers
 IEC 62304 software lifecycle, ISO 14971 risk, clinical validation evidence
+
+Software as a Medical Device — US regulatory considerations for clinical software

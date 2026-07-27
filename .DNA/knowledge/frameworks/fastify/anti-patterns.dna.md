@@ -1,3 +1,4 @@
-# Fastify — Anti-patterns
+# Anti-patterns
 
-Do not bypass schema validation on public routes.
+- Bypassing schema validation
+- Global mutable state outside decorate

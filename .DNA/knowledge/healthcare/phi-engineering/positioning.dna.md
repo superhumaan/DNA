@@ -17,3 +17,5 @@
 - Never log PHI, prompts, or raw clinical documents
 - Encrypt ePHI in transit (TLS 1.2+) and at rest
 - Audit every PHI access; run `dna plan compliance --frameworks hipaa`
+
+Build systems that handle protected health information safely

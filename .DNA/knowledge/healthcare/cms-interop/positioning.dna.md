@@ -8,3 +8,5 @@ Rules pushing FHIR APIs for Medicare Advantage, ACA plans, hospitals.
 - Patient access API
 - Provider access API
 - Payer-to-payer exchange
+
+US CMS patient access, payer-provider APIs, information blocking

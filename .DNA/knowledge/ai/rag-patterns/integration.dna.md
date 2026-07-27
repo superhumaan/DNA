@@ -1,3 +1,3 @@
-# RAG Patterns — Integration
+# Integration
 
-Chunking, hybrid search, rerankers, eval sets.
+Pair vector DB packs, `ai/openai` embeddings, AI SDK generate step.

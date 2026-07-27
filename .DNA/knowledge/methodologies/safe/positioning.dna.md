@@ -1,11 +1,6 @@
 # SAFe
 
-Enterprise scaling: **Agile Release Trains (ARTs)**, **Program Increments (PIs)**.
+Enterprise scaling with **Agile Release Trains (ARTs)** and **Program Increments (PIs)**. Use when many teams need synchronized planning and portfolio lean governance.
 
-## Work types
-- **Features** — user-facing, WSJF prioritised
-- **Enablers** — architecture, infrastructure, exploration
-- **Bugs** — production defects
-
-## AI rule
-Tag work as feature/enabler/bug. Reference **PI objective** when known. Use WSJF language if team uses it.
+## Prefer lighter first
+Try LeSS / Nexus before SAFe unless enterprise already mandates SAFe.

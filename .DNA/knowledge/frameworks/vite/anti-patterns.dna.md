@@ -1,3 +1,4 @@
-# Vite — Anti-patterns
+# Anti-patterns
 
-Do not disable HMR in development without reason.
+- Putting secrets in `VITE_` env
+- Disabling HMR permanently

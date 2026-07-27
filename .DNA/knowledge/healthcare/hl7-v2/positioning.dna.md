@@ -8,3 +8,5 @@ Still dominant in hospitals for ADT (admit/discharge/transfer), orders, results.
 - Hospital interface engine projects
 - LIS/RIS/PACS integrations
 - Redox/Mirth often translate v2 ↔ FHIR
+
+Legacy hospital messaging — ADT, ORM, ORU over MLLP

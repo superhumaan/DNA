@@ -1,0 +1,18 @@
+{
+  "name": "cloud-oracle-cloud-sample",
+  "methodology": "Oracle Cloud Infrastructure",
+  "items": [
+    {
+      "id": "PBI-1",
+      "title": "Sample backlog item",
+      "status": "ready",
+      "points": 3
+    },
+    {
+      "id": "PBI-2",
+      "title": "Integration spike",
+      "status": "refining",
+      "points": 5
+    }
+  ]
+}

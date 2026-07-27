@@ -1,3 +1,3 @@
-# HIPAA Depth — Integration
+# Integration
 
-Administrative, physical, technical safeguards. Risk analysis annually.
+`industries/healthcare`, `methodologies/industry-healthcare`, FHIR packs.

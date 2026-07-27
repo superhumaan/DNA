@@ -1,5 +1,3 @@
-# Product–Market Fit
+# Product-Market Fit
 
-# Product–Market Fit
-
-Stage where retention and satisfaction prove the product meets a real market need.
+Treat PMF as evidence, not vibes. Combine retention, willingness-to-pay, and qualitative saturation.

@@ -1,3 +1,3 @@
-# PostgreSQL — Integration
+# Integration
 
-Use managed RDS/Neon/Supabase. Migrations via Prisma/Drizzle/Flyway. PITR backups. Read replicas for scale.
+Pair `databases/prisma` or `databases/drizzle`, `cloud/aws-rds`, `databases/supabase-platform` when BaaS.

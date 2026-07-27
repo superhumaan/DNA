@@ -1,5 +1,6 @@
-# express — Anti-patterns
+# Express — Anti-patterns
 
-- Do not bypass framework conventions
-- Do not mix incompatible state management patterns
-- Do not ignore framework security recommendations
+- Committing secrets or tokens
+- Treating stub Impressions as implemented controls
+- Skipping staging verification
+- Silent failures without alerts

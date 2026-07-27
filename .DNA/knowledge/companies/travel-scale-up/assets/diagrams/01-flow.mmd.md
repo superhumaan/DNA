@@ -1,0 +1,9 @@
+# Diagram — Travel Scale-up flow
+
+```mermaid
+flowchart LR
+  A[Intake] --> B[Plan]
+  B --> C[Build]
+  C --> D[Verify]
+  D --> E[Ship]
+```

@@ -1,3 +1,3 @@
 # PCI DSS Depth
 
-Beyond SAQ A merchant scope.
+Cardholder data rules. Prefer Stripe/Checkout to minimize scope; never store PAN/CVV.

@@ -27,3 +27,5 @@ Country-specific stem pack. Pair with `healthcare/overview` (router) and `health
 - Never log PHI, prompts, or raw clinical documents
 - Encrypt in transit (TLS 1.2+) and at rest
 - Audit every PHI access; document subprocessors in Impressions
+
+European Union healthcare software — regulation, health system, FHIR, and integration strategy

@@ -18,3 +18,5 @@ APAC country pack. Pair with `healthcare/overview-apac` and `healthcare/overview
 - **HL7 v2** dominant
 - **FHIR** — emerging in tertiary hospitals
 - **ICD-10**
+
+Pakistan healthcare — regulation, FHIR, integration (APAC)

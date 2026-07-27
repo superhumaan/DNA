@@ -1,3 +1,3 @@
-# MongoDB — Integration
+# Integration
 
-Define schema in app layer. Transactions for multi-doc. Atlas for managed.
+Official drivers; change streams for projections. Pair carefully with relational reporting needs.

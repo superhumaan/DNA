@@ -1,0 +1,18 @@
+{
+  "name": "auth-auth0-sample",
+  "methodology": "Auth0",
+  "items": [
+    {
+      "id": "PBI-1",
+      "title": "Sample backlog item",
+      "status": "ready",
+      "points": 3
+    },
+    {
+      "id": "PBI-2",
+      "title": "Integration spike",
+      "status": "refining",
+      "points": 5
+    }
+  ]
+}

@@ -1,5 +1,3 @@
 # Continuous Discovery
 
-# Continuous Discovery
-
-Weekly customer touchpoints + Opportunity Solution Trees. Pair with `discovery/opportunity-solution-tree`.
+Ongoing product learning, not a phase gate. Keep a backlog of opportunities ranked by outcome.

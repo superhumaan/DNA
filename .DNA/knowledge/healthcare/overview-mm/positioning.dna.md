@@ -18,3 +18,5 @@ APAC country pack. Pair with `healthcare/overview-apac` and `healthcare/overview
 - **HL7 v2** rare outside tertiary centres
 - **Paper + EMR hybrid** common
 - **ICD-10**
+
+Myanmar healthcare — regulation, FHIR, integration (APAC)

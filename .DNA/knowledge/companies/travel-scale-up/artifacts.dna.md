@@ -1,13 +1,10 @@
-# Artifacts — Travel Scale-up
+# Artifacts
 
 ## Initiative
-- Tribe, quarter, OKR link
-- Revenue/conversion impact estimate
+Tribe, quarter, conversion impact
 
 ## Epic
-- Squad owner(s)
-- A/B experiment plan if applicable
-- Rollout: dark launch → % traffic → full
+Experiment plan, dark launch → % traffic
 
 ## Labels
-`tribe-*`, `squad-*`, `experiment`, `tech-debt`
+`tribe-*`, `squad-*`, `experiment`

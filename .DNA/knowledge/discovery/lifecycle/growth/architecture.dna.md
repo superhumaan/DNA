@@ -1,0 +1,7 @@
+# Growth — Architecture
+
+## Boundaries
+Document integration points, data classes, and failure modes for **Growth**.
+
+## DNA
+Update Impressions when architecture changes. Pair security/compliance packs when regulated.

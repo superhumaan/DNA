@@ -1,3 +1,3 @@
 # NestJS — Positioning
 
-Modules, providers, guards, interceptors, and DTO validation.
+Modular Node backend with DI. Use for enterprise APIs needing structure over micro-handlers.

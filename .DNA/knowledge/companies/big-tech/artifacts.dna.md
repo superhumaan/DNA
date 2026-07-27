@@ -1,10 +1,10 @@
-# Artifacts — Big Tech
+# Artifacts
 
 ## Design doc
-Required for cross-team or high-risk changes. Reviewers assigned explicitly.
+Summary, goals/non-goals, alternatives, rollout
 
 ## OKR
-Objective + 3–5 key results with measurable targets
+Objective + measurable KRs
 
 ## Launch checklist
-Privacy, security, SRE, localization, accessibility
+Privacy, security, SRE, i18n, a11y

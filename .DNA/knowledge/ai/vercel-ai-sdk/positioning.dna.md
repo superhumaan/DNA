@@ -1,3 +1,3 @@
 # Vercel AI SDK
 
-Next.js chat and tools.
+Default orchestration for streaming chat UIs on Vercel. Prefer `"provider/model"` via AI Gateway unless the user asks for direct provider packages.

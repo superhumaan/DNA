@@ -1,3 +1,3 @@
-# Redis — Integration
+# Integration
 
-Never primary source of truth. TLS, AUTH, persistence AOF/RDB if needed.
+Pair with Postgres as SoR. DNA Lab may use Redis-compatible adapters for shared state.

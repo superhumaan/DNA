@@ -1,0 +1,2 @@
+- Colocate tests with modules
+- BDD for cross-cutting user journeys only — avoid cucumber soup

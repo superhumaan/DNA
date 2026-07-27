@@ -1,16 +1,5 @@
-# Stripe Connect — Implementation Checklist
+# Checklist
 
-## Before production
-- [ ] API keys in environment / secrets manager — never in repo
-- [ ] Webhook signatures verified (HMAC, JWT, or vendor-specific)
-- [ ] Idempotency keys on writes and payment-like operations
-- [ ] Rate limits, retries with backoff, and circuit breakers
-- [ ] Structured logging without secrets or regulated payloads
-- [ ] Monitoring alerts on error rate and latency SLOs
-
-## Integration steps
-Express vs Custom accounts. KYC flows.
-
-## Verify
-- [ ] Staging sandbox tested end-to-end
-- [ ] Rollback plan documented in Impressions
+- [ ] Connected account onboarding complete before payouts
+- [ ] Application fees explicit
+- [ ] Webhook covers account.updated + capability changes

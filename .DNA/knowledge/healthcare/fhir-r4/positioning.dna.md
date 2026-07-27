@@ -8,3 +8,5 @@
 - Mandated trajectory (US CMS interoperability, NHS, AU My Health Record)
 - REST + JSON + OAuth — fits DNA web stacks
 - Implementation Guides (IGs) constrain profiles per use case
+
+Fast Healthcare Interoperability Resources — modern clinical API standard

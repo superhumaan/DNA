@@ -1,3 +1,3 @@
-# Stripe Connect — Integration
+# Integration
 
-Express vs Custom accounts. KYC flows.
+Pair `companies/platform-marketplace`, `payments/stripe`, strong admin/moderation packs.

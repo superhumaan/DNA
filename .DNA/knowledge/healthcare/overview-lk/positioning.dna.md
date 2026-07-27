@@ -18,3 +18,5 @@ APAC country pack. Pair with `healthcare/overview-apac` and `healthcare/overview
 - **HL7 v2** in hospitals
 - **FHIR** — pilot stages in digital health strategy
 - **ICD-10**
+
+Sri Lanka healthcare — regulation, FHIR, integration (APAC)

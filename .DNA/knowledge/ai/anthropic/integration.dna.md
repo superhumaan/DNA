@@ -1,3 +1,3 @@
-# Anthropic Claude — Integration
+# Integration
 
-Messages API. Tool use. Prompt caching.
+Pair AI SDK provider strings or `@ai-sdk/anthropic` only when direct wiring is intentional.

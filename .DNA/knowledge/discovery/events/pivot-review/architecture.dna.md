@@ -1,0 +1,7 @@
+# Pivot Review — Architecture
+
+## Boundaries
+Document integration points, data classes, and failure modes for **Pivot Review**.
+
+## DNA
+Update Impressions when architecture changes. Pair security/compliance packs when regulated.
