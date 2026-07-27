@@ -8,6 +8,63 @@ Walk purpose → strategy → goals/metrics → product → initiatives → feat
 
 Scope: $ARGUMENTS
 
+## Grounding & Verification (mandatory — before strategy)
+
+Execute in order. Do **not** invent product strategy from stub Impressions.
+
+### 1. DNA CLI (structural truth)
+
+```bash
+npx dna analyze
+npx dna scan
+```
+
+Optional when architecture docs are missing/stubby: `npx dna document --from-code`
+
+### 2. CellularMemory (system history)
+
+Load `.DNA/CellularMemory/` — especially `prefrontalCortex/decisions.md`, `amygdala/blockers.md`, `parietalLobe/system-map.md`, repeated-failures / previous-solutions.
+
+### 3. Impression Guard
+
+For each file under `DNA/Impressions/` you open:
+- If empty, TODO, placeholder, or generic boilerplate that could belong to any product → mark **EMPTY_STUB_RESOLVED**
+- Do **not** cite stubs as evidence
+- Ground in code + CellularMemory instead; then **write** real artifacts
+
+### Artifacts (strategy / diagnose outputs)
+
+| Artifact | Path | Contents |
+|----------|------|----------|
+| Diagnosis | `./artifacts/diagnosis.md` or `DNA/Impressions/product/product-diagnose.md` | Debt ledger + friction |
+| Competitor map | `./artifacts/competitor_map.md` or Impressions competitor docs | Capability delta |
+| Upgrades | `./artifacts/upgrades.md` or upgrade-* Impressions | High-leverage targets + risk |
+
+### Handoff — do not mutate application code
+
+When the strategy/diagnose pass is done, emit:
+
+```json
+{
+  "status": "STRATEGY_COMPLETE",
+  "source_stem": "<this-stem-id>",
+  "context_grounding": {
+    "dna_checksum": "sha256_or_analyze_summary",
+    "cellular_memory_epoch": "decisions-or-recent-changes-date",
+    "impressions_state": "EMPTY_STUB_RESOLVED | PARTIAL | GROUNDED"
+  },
+  "artifacts": {
+    "diagnostic_path": "…",
+    "competitor_path": "…",
+    "upgrade_path": "…"
+  },
+  "next_step": "TRIGGER_FEATURE_FACTORY"
+}
+```
+
+Then hand off via `shape-feature` / agent-loop — **no** app code edits from this stem.
+
+
 ## Altitude order (do not skip upward without cause)
 
 1. **Golden Circle** — Why / How / What
@@ -39,3 +96,4 @@ For each rung: short filled artifact path + 3–7 bullets. End with:
 - Recommended next stem if the user wants to go deeper on one rung
 - Open assumptions needing discovery
 - Reminder: engineering starts only after `shape-feature` → `plan-feature` / agent-loop with approval
+- Emit `STRATEGY_COMPLETE` JSON (see Grounding section) before any Feature Factory handoff

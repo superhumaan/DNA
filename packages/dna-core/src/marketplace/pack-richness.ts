@@ -624,7 +624,8 @@ export function meetsP0DepthBar(pack: KnowledgePack): boolean {
 }
 
 function fileEnding(pack: KnowledgePack, suffix: string): string | undefined {
-  return pack.files.find((f) => f.path.endsWith(suffix))?.content;
+  const content = pack.files.find((f) => f.path.endsWith(suffix))?.content;
+  return content == null || content === "" ? undefined : content;
 }
 
 /**
@@ -715,6 +716,16 @@ export function liftPackToRichness(pack: KnowledgePack): KnowledgePack {
       },
     },
   );
+
+  // Keep legacy flat knowledge paths (e.g. security/rbac-fundamentals.dna.md) so
+  // neuralNetwork + resolvePackIdsForKnowledgePaths keep working after lift.
+  const richPaths = new Set(files.map((f) => f.path));
+  for (const orig of pack.files) {
+    if (!orig.path.endsWith(".dna.md")) continue;
+    if (richPaths.has(orig.path)) continue;
+    files.push({ path: orig.path, content: orig.content ?? "" });
+    richPaths.add(orig.path);
+  }
 
   return {
     ...pack,

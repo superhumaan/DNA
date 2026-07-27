@@ -6,6 +6,63 @@ allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
 
 Run the product-intelligence ladder for THIS repo. Scope: $ARGUMENTS
 
+## Grounding & Verification (mandatory — before strategy)
+
+Execute in order. Do **not** invent product strategy from stub Impressions.
+
+### 1. DNA CLI (structural truth)
+
+```bash
+npx dna analyze
+npx dna scan
+```
+
+Optional when architecture docs are missing/stubby: `npx dna document --from-code`
+
+### 2. CellularMemory (system history)
+
+Load `.DNA/CellularMemory/` — especially `prefrontalCortex/decisions.md`, `amygdala/blockers.md`, `parietalLobe/system-map.md`, repeated-failures / previous-solutions.
+
+### 3. Impression Guard
+
+For each file under `DNA/Impressions/` you open:
+- If empty, TODO, placeholder, or generic boilerplate that could belong to any product → mark **EMPTY_STUB_RESOLVED**
+- Do **not** cite stubs as evidence
+- Ground in code + CellularMemory instead; then **write** real artifacts
+
+### Artifacts (strategy / diagnose outputs)
+
+| Artifact | Path | Contents |
+|----------|------|----------|
+| Diagnosis | `./artifacts/diagnosis.md` or `DNA/Impressions/product/product-diagnose.md` | Debt ledger + friction |
+| Competitor map | `./artifacts/competitor_map.md` or Impressions competitor docs | Capability delta |
+| Upgrades | `./artifacts/upgrades.md` or upgrade-* Impressions | High-leverage targets + risk |
+
+### Handoff — do not mutate application code
+
+When the strategy/diagnose pass is done, emit:
+
+```json
+{
+  "status": "STRATEGY_COMPLETE",
+  "source_stem": "<this-stem-id>",
+  "context_grounding": {
+    "dna_checksum": "sha256_or_analyze_summary",
+    "cellular_memory_epoch": "decisions-or-recent-changes-date",
+    "impressions_state": "EMPTY_STUB_RESOLVED | PARTIAL | GROUNDED"
+  },
+  "artifacts": {
+    "diagnostic_path": "…",
+    "competitor_path": "…",
+    "upgrade_path": "…"
+  },
+  "next_step": "TRIGGER_FEATURE_FACTORY"
+}
+```
+
+Then hand off via `shape-feature` / agent-loop — **no** app code edits from this stem.
+
+
 ## Evidence bootstrap (mandatory — run first)
 
 ```bash
@@ -37,7 +94,7 @@ For each Impression you open: if it is empty, "TODO", or could belong to any pro
 3. **Value delivered** — Gains/pains the codebase actually addresses. Optionally `product-value-proposition`.
 4. **Jobs** — Top jobs users can complete end-to-end today vs broken/missing.
 5. **Confidence** — High / medium / low per claim + what would raise confidence.
-6. **Handoff** — Next: `competitor-landscape` then `upgrade-leverage-map` / `upgrade-recommend`.
+6. **Handoff** — Next: `competitor-landscape` then `upgrade-leverage-map` / `upgrade-recommend`. Emit `STRATEGY_COMPLETE` when the diagnose→upgrade ladder for this pass is done.
 
 ## Persist
 
@@ -54,4 +111,4 @@ Write `DNA/Impressions/product/product-diagnose.md` (and fill stubs you relied o
 | Jobs broken/missing | | | |
 | Stub Impressions replaced | | | |
 
-End with: next stem + 3 open questions. No code. No feature factory yet.
+End with: next stem + 3 open questions + `STRATEGY_COMPLETE` JSON when ready for Feature Factory. No code. No feature factory yet.

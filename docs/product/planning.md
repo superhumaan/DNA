@@ -6,10 +6,10 @@ DNA development priorities and public roadmap.
 
 ## Current release focus (v0.6.18)
 
+- **Knowledge marketplace** — **1045 rich packs** (0 stubs), 88 stem packs, strategy grounding (`STRATEGY_COMPLETE`)
 - **Lab APIs reference** — every Lab route with Description / Usage / Received / Sent; expandable APIs tab ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab URL deep links** — `/labs/<tab>`, `/labs/issues/<id>`; refresh keeps the page; 401 → sign-in (no Unauthorized toast)
 - **`requireAuthInProduction: false`** honored for open Lab on public hosts ([docs](../engineering/lab-open-auth-requireAuthInProduction.md))
-- **Knowledge pack richness** — P0/Wave2 packs + agile family + purpose combos; catalog ~1045 packs
 - Prior: Lab alert dark theme + force Refresh (v0.6.17)
 
 ## Shipped highlights
