@@ -4,63 +4,50 @@ _Auto-maintained by DNA. Updated 2026-07-27._
 
 ## Latest request
 
-> **Skeletor** is the IDE built with Labs + DNA. Purpose: enhance the AI experience while building with AI — without forcing migration, double billing, or upgrades. Users can (1) install DNA npm into Cursor + install Skeletor and the two auto-connect, or (2) install Skeletor alone and it auto-installs DNA into Cursor (same for Claude). That unlocks packs/guidance/knowledge plus live Labs for local dev that push Labs into production.
+> Create a new section on the website marketplace for **bundles** that show the stem packs, make it easy to install entire bundles, and ensure AI knows too (rules + injection).
 
 ## Problem
 
-AI coding happens in Cursor/Claude. DNA already improves that via npm. There is no Lab-first desktop surface that **bridges** to those editors — only parallel tools that force a new platform or a second AI bill.
+Purpose Combos exist in CLI (`combo/…`) but are invisible on DNA-Web marketplace. Users must install packs one-by-one. Stem packs / Cursor·Claude rules are not part of combo install, so AI does not automatically learn the bundle workflow.
 
 ## Pain
 
-- Lab local → production has no dedicated IDE home
-- Installing DNA + opening Lab is fragmented across terminal/browser
-- Fear of “new IDE = migrate + re-pay for AI”
-- Cursor/Claude users need DNA packs/rules without leaving their editor
+- Marketplace only lists individual knowledge packs
+- Combos not in catalog (0 `combo/` entries)
+- No one-command / one-click “install this purpose” UX
+- Bundle install does not inject stems + always-on rules
 
 ## Users
 
-- Developers in Cursor or Claude Code who want DNA + Lab without switching editors
-- Teams that want local Lab while coding, then the same Lab in production
-- People who install Skeletor first and expect DNA to land in their existing AI IDE automatically
+- Developers browsing dna.humaan.app/marketplace
+- AI co-pilots (Cursor / Claude) that need stems + rules after install
+- Teams adopting DNA for a purpose (PMF, Next.js fullstack, GDPR, etc.)
 
 ## Desired Behaviour
 
-1. **Skeletor** = Lab-first IDE shell powered by DNA (theme aligned with dna.humaan.app)
-2. **Non-displace:** keep using Cursor/Claude AI; no forced platform migration; no double AI billing; no forced upgrade
-3. **Auth (locked):**
-   - **Sign in** with Google, Apple, or Microsoft (identity only)
-   - **Then connect** AI accounts (Anthropic, Gemini, etc.) — separate step; BYOK / official APIs; no second forced AI subscription
-4. **Bridge modes:**
-   - DNA already in project + Skeletor installed → auto-detect and connect (shared `.DNA/`, Lab, runtime)
-   - Skeletor only → detect Cursor and/or Claude Code → auto-run DNA install (doctor/workbench) into that environment
-5. Bridge enables packs, stems, guidance, knowledge in the AI IDE the user already pays for
-6. Skeletor provides **live Lab** for local development
-7. Same Lab contract **pushes / continues into production** Lab
-8. npm path remains first-class (`npx dna` without Skeletor)
+1. Marketplace has a **Bundles** section listing Purpose Combos
+2. Each bundle shows: purpose, description, knowledge packs (required/preferred), related **stem packs**, install command
+3. `dna marketplace install combo/<id>` installs knowledge packs **and** injects linked stem packs + workbench rules so AI knows
+4. Catalog/API exposes bundles for CLI + website
+5. Copy-paste install is one command; AI prompt optional for agents
 
 ## Acceptance criteria
 
-- [ ] Skeletor scaffold in monorepo; DNA theme; Lab as primary surface
-- [ ] Sign-in: Google, Apple, Microsoft (OIDC identity)
-- [ ] Post-login: Connect AI accounts flow (separate from identity)
-- [ ] Bridge protocol: Skeletor ↔ project `.DNA/` ↔ Cursor/Claude workbench
-- [ ] If DNA missing: Skeletor auto-installs DNA into detected Cursor and/or Claude project
-- [ ] If DNA present: Skeletor connects without reinstall / without touching AI billing
-- [ ] Local Lab live in Skeletor; production Lab continuity documented + wired
-- [ ] Explicit non-goals enforced in UX copy: no migrate-off-Cursor, no second AI subscription required
-- [ ] Architect plan approved before implementation
+- [ ] DNA-Web `/marketplace` has Bundles section (or tab) with all purpose combos
+- [ ] Bundle cards list knowledge packs + stem packs + copyable install cmd
+- [ ] Catalog includes combo metadata (or `/marketplace/api/v1/bundles`)
+- [ ] CLI install of `combo/*` installs required+preferred packs and injects stems/rules
+- [ ] Tests cover combo→pack resolution and stem injection hook
+- [ ] Docs/CHANGELOG updated; preview pushed
 
 ## Edge cases
 
-- Neither Cursor nor Claude installed → Skeletor still runs Lab + offers npm/CLI DNA install into folder
-- Multiple projects / portfolio parent `.DNA/` → bridge to parent when applicable
-- User declines auto-install → manual path; no silent global mutation outside chosen project
-- Cursor vs Claude both present → install DNA once at project; workbench rules for both
-- Offline: bridge uses local `.DNA/` + local Lab; cloud IdP optional
+- Offline: bundled catalog must include combo metadata
+- Unknown stem id: skip with warning, do not fail whole install
+- Healthcare country bundles remain separate; show under Bundles if practical
+- DNA-Web may lag DNA package sync — sync script must include combos
 
-## Out of scope (v0)
+## Out of scope
 
-- Replacing Cursor/Claude as the AI coding host
-- Reselling Cursor/Claude subscription tokens
-- Full Code-OSS fork parity on day one (Lab + bridge first; editor host can be thin)
-- Forcing Skeletor account to use models
+- Paid marketplace / auth for install
+- Redesigning the full intelligence stem library page
