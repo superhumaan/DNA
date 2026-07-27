@@ -12,7 +12,7 @@
 
 > Run `npx @superhumaan/dna-by-humaan doctor` — *“No amount of money ever bought a second of time.”*
 
-**DNA by Humaan** is an open-source delivery platform for TypeScript teams — describe features in plain language, run quality gates, push to GitHub, and ship with a **965-pack** knowledge marketplace, tiered compliance, runtime observer, and AI-assisted repair.
+**DNA by Humaan** is an open-source delivery platform for TypeScript teams — describe features in plain language, run quality gates, push to GitHub, and ship with a **1045-pack** knowledge marketplace, tiered compliance, runtime observer, and AI-assisted repair.
 
 **One squad, many products?** Install DNA on the **parent folder** — not every repo. One brain remembers every app and how they connect. [Portfolio install →](./docs/product/portfolio-install.md)
 
@@ -276,7 +276,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 
 | Item | Start | End | Status |
 |------|-------|-----|--------|
-| Knowledge pack marketplace (965 packs) | Jan 2026 | Jul 2026 | Shipped |
+| Knowledge pack marketplace (~1045 packs) | Jan 2026 | Jul 2026 | Shipped |
 | DNA always-on + `AGENTS.md` agent flow (v0.4.9) | Jul 2026 | Jul 2026 | Shipped |
 | Legal advisor + delivery methodology (v0.4.9) | Jul 2026 | Jul 2026 | Shipped |
 | Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |
@@ -313,6 +313,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Lab upgrade DX — nested install detect + disk UI (v0.6.15) | Jul 2026 | Jul 2026 | Shipped — health version, `dna lab installs --fix` |
 | Lab Refresh UX + Copy issue + install-safe upgrade (v0.6.16) | Jul 2026 | Jul 2026 | Shipped — disable/spin Refresh; doctor/update align Lab installs |
 | Lab alert dark theme + force Refresh (v0.6.17) | Jul 2026 | Jul 2026 | Shipped — readable install banner; Refresh always shows busy state |
+| Lab APIs reference + deep links + open-auth fix (v0.6.18) | Jul 2026 | Jul 2026 | Shipped — full API docs; URL tabs; requireAuthInProduction honored |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | Shipped — setup script + OAuth scaffolding |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |

@@ -1,18 +1,25 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-24._
+_Auto-maintained by DNA. Updated 2026-07-27._
 
 ## Latest request
 
-> update all docs, update all details, update dna-website, update npm details and publish to npm and update github details and publish to github — DONT FORGET TO UPDATE INSTALL INSTRUCTIONS AND INSTALL PROCESSES SO WE NEVER HAVE AN ISSUE UPGRADING LABS AGAIN
+> in labs, for the apis, we should add every single api we have, then a description of what it does, then it's usage, received, sent  
+> **Approved: implement.** Continue: ship with open Lab auth fix + OWASP audit clean.
 
-## Desired Behaviour
+## Problem
 
-Ship Lab Refresh UX + Copy issue as **v0.6.16**, with install/upgrade docs and CLI processes that auto-align nested Lab packages and always print restart + hard-refresh next steps.
+Lab **APIs** tab was a thin contract list. Also PR #28 OWASP gate failed (postcss / brace-expansion).
 
-## Acceptance Criteria
+## Desired behaviour
 
-- [x] Refresh disables + spins on every Lab page; tab-aware reload
-- [x] Copy issue on Issues list/detail
-- [x] `dna doctor` / `dna update` / `dna lab installs` print mandatory Lab upgrade next steps; doctor auto-fixes stale installs
-- [x] Docs + DNA-Web + npm README + version bump + GitHub release + npm publish
+1. Every Lab HTTP API with Description, Usage, Received, Sent.
+2. Ship with `requireAuthInProduction: false` open-auth fix.
+3. Clean high+ audit for CI.
+
+## Acceptance criteria
+
+- [x] Catalog includes all Lab routes
+- [x] Expandable Description / Usage / Received / Sent
+- [x] Unit tests
+- [ ] CI green (OWASP) + npm publish

@@ -99,8 +99,9 @@ export function ensureLabUiDiskAssets(packagePath: string): { jsPath: string; cs
   mkdirSync(uiDir, { recursive: true });
   const jsPath = join(uiDir, "client.js");
   const cssPath = join(uiDir, "styles.css");
-  if (!existsSync(jsPath)) writeFileSync(jsPath, LAB_CLIENT_JS, "utf8");
-  if (!existsSync(cssPath)) writeFileSync(cssPath, LAB_CSS, "utf8");
+  // Always refresh — Lab prefers disk over embedded; stale files would hide UI fixes.
+  writeFileSync(jsPath, LAB_CLIENT_JS, "utf8");
+  writeFileSync(cssPath, LAB_CSS, "utf8");
   return { jsPath, cssPath };
 }
 

@@ -838,7 +838,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .lab-icon-btn:hover { color: var(--lab-accent, #4ade9a); border-color: var(--lab-border, rgba(255,255,255,0.12)); }
 .lab-th-actions { width: 44px; }
 .lab-toast {
-  margin: 0 var(--admin-header-content-gap, 16px) 12px;
+  /* Always 16px between title bar and toast (same token as page body). */
+  margin: var(--admin-header-content-gap) var(--admin-page-gutter) 12px;
   padding: 10px 14px; border-radius: 10px; font-size: 13px;
   background: rgba(74, 222, 154, 0.12); color: var(--lab-accent, #4ade9a);
   border: 1px solid rgba(74, 222, 154, 0.28);
@@ -939,6 +940,40 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .lab-kv { display: grid; gap: 10px; }
 .lab-kv__row { display: grid; grid-template-columns: 110px 1fr; gap: 8px; font-size: 13px; }
 .lab-kv__key { color: var(--color-text-tertiary); font-weight: 600; }
+
+/* Lab APIs reference — expandable contract docs */
+.lab-table--apis td.lab-api-op { padding: 0; vertical-align: top; }
+.lab-api-doc { margin: 0; }
+.lab-api-doc__summary {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px; cursor: pointer; list-style: none;
+}
+.lab-api-doc__summary::-webkit-details-marker { display: none; }
+.lab-api-doc__summary::before {
+  content: ""; flex: 0 0 6px; width: 6px; height: 6px; margin-top: 8px;
+  border-right: 1.5px solid var(--color-text-tertiary);
+  border-bottom: 1.5px solid var(--color-text-tertiary);
+  transform: rotate(-45deg); transition: transform 0.15s ease;
+}
+.lab-api-doc[open] > .lab-api-doc__summary::before { transform: rotate(45deg); margin-top: 6px; }
+.lab-api-doc__summary:hover { background: var(--color-table-row-hover); }
+.lab-api-doc__path { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.lab-api-doc__path code { word-break: break-all; }
+.lab-api-doc__body {
+  display: grid; gap: 12px;
+  padding: 0 16px 14px 34px;
+  border-top: 1px solid var(--color-table-border);
+  background: var(--color-surface-subtle);
+}
+.lab-api-doc__field { display: grid; gap: 4px; padding-top: 12px; }
+.lab-api-doc__label {
+  font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--color-text-tertiary); font-weight: 600;
+}
+.lab-api-doc__value {
+  font-size: 13px; line-height: 1.5; color: var(--color-text-secondary);
+  white-space: pre-wrap; word-break: break-word;
+}
 
 /* Legacy chip filters kept for safety — prefer .lab-product-tabs */
 .lab-filters, .admin-filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 0; }

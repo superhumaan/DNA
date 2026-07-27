@@ -4,15 +4,18 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.6.17)
+## Current release focus (v0.6.18)
 
-- **Lab alert dark theme + force Refresh** — readable install/billing banners; Refresh always force-fetches and spins ≥450ms
-- Prior: Lab Refresh UX + Copy issue + install-safe upgrades (v0.6.16)
-- **Lab nav IA** — multi-open sections + Doctor / Installs / Intelligence / Quality peer pages ([docs](../engineering/lab-nav-ia.md))
+- **Lab APIs reference** — every Lab route with Description / Usage / Received / Sent; expandable APIs tab ([docs](../engineering/lab-apis-reference-0.6.18.md))
+- **Lab URL deep links** — `/labs/<tab>`, `/labs/issues/<id>`; refresh keeps the page; 401 → sign-in (no Unauthorized toast)
+- **`requireAuthInProduction: false`** honored for open Lab on public hosts ([docs](../engineering/lab-open-auth-requireAuthInProduction.md))
+- **Knowledge pack richness** — P0/Wave2 packs + agile family + purpose combos; catalog ~1045 packs
+- Prior: Lab alert dark theme + force Refresh (v0.6.17)
 
 ## Shipped highlights
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.16)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.18)
+- **Lab APIs reference + deep links (v0.6.18)** — full HTTP catalog; History API routing; open-auth flag ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab Refresh UX + Copy issue (v0.6.16)** — disable/spin Refresh; tab-aware reload; issue clipboard ([docs](../engineering/lab-refresh-ux-0.6.16.md))
 - **Lab upgrade DX (v0.6.15+)** — health `dnaVersion` + install scan/fix on doctor/update; disk Lab UI revalidation ([docs](../engineering/lab-upgrade-dx-0.6.15.md))
 - **Lab analytics + Issues depth (v0.6.14)** — Overview performance dashboard; Issues short IDs, sparklines, users/age; Issue detail Highlights / Stack / Tags / JSON / Trace ([docs](../engineering/lab-analytics-0.6.14.md))
@@ -25,7 +28,7 @@ DNA development priorities and public roadmap.
 - **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
 - **88 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow (includes strategy ladder: Golden Circle → canvases → initiatives → Now/Next/Later)
 - **DNA Workbench** — default on init/doctor/update; `AGENTS.md` intent routing + mandatory 9-role agent loop for engineering work
-- 965 knowledge packs in stable channel
+- ~1045 knowledge packs in stable channel
 - Platform catalog from four reference production apps
 - Tiered compliance (GDPR, HIPAA, ISO, SOC 2)
 - Feature factory with quality gates + per-role agent-loop stems
@@ -75,6 +78,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Lab upgrade DX — nested installs + disk UI (v0.6.15) | ✅ Shipped — see [lab-upgrade-dx-0.6.15](../engineering/lab-upgrade-dx-0.6.15.md) |
 | Lab Refresh UX + Copy issue + install-safe upgrade (v0.6.16) | ✅ Shipped — see [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md) |
 | Lab alert dark theme + force Refresh (v0.6.17) | ✅ Shipped — dark amber alerts; Refresh force-fetch + min spin |
+| Lab APIs reference + deep links + open-auth (v0.6.18) | ✅ Shipped — see [lab-apis-reference-0.6.18](../engineering/lab-apis-reference-0.6.18.md) |
 | Multi-project CellularMemory sync ([#13](https://github.com/superhumaan/DNA/issues/13)) | ✅ Shipped — import merge + team registry sync |
 | Impressions drift → auto PR suggestions ([#14](https://github.com/superhumaan/DNA/issues/14)) | ✅ Shipped — `dna scan --open-pr` |
 | Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | ✅ Shipped — platform codegen scaffolds |

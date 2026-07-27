@@ -94,6 +94,7 @@ export * from "./lab/sync-installs.js";
 export type { LabDashboardOptions } from "./lab/local-server.js";
 export type { LabServerOptions } from "./lab/server.js";
 export type { RegisterLabOptions, RegisterLabResult } from "./lab/register.js";
+export * from "./lab/ui/lab-routes.js";
 export * from "./lab/collect.js";
 export * from "./lab/collect-intelligence.js";
 export * from "./lab/collect-coverage-detail.js";

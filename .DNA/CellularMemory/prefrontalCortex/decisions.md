@@ -16,3 +16,17 @@
 - Publish one sanitized, versioned health schema to GitHub, npm documentation,
   and DNA-Web; never expose raw paths, runtime events, or secrets.
 - Use `/health` as the canonical public route and redirect `/Health` for compatibility.
+
+## 2026-07-24: Knowledge packs zero-stubs + strategy grounding (APPROVED)
+
+- Marketplace knowledge packs must reach **0% stubs**; richness bar includes
+  docs + `assets/` (diagrams, images, documents, templates, fixtures, references).
+- Purpose **Combos** install linked packs for one purpose (required / preferred /
+  recommended); healthcare country bundles are the precedent.
+- Strategy stems **must** run DNA CLI → CellularMemory → Impression Guard before
+  any product strategy text; stub Impressions = EMPTY.
+- Strategy stems emit `diagnosis.md`, `competitor_map.md`, `upgrades.md` then
+  `STRATEGY_COMPLETE` → Feature Factory; **no application code mutation** in the
+  strategy stem.
+- Canvas `knowledge-pack-advancement.canvas.tsx` is the review source of truth
+  for per-pack advancement columns.

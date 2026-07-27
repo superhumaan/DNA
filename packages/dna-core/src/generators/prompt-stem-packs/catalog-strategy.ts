@@ -1,24 +1,32 @@
 import type { PromptStemPackDef } from "./types.js";
+import {
+  STRATEGY_GROUNDING_GUIDELINES,
+  STRATEGY_GROUNDING_MARKDOWN,
+  mergeGuidelines,
+} from "./strategy-grounding.js";
 
-const STRATEGY_GROUND = {
-  must: [
-    "Load `.DNA/neuralNetwork.json`, Impressions product/strategy artifacts, and CellularMemory before drafting",
-    "Write durable outputs to `DNA/Impressions/` (and CellularMemory when decisions are made) — not chat-only",
-    "Stay at the intended altitude of the stem — do not jump to code or Solution Architect implementation",
-    "Hand off downstream via workflow stems; end strategy outputs with explicit next stem",
-  ],
-  never: [
-    "Invent market facts, competitor claims, or metrics without labeling them as assumptions",
-    "Skip Why (purpose) when running golden-circle or strategy-ladder from scratch",
-    "Treat DNA's own docs/product/product-canvas.md as the host project's canvas — build for THIS project",
-    "Start the 9-role agent loop or edit product code from a strategy stem",
-  ],
-  should: [
-    "Reuse existing Impressions content; revise rather than duplicate",
-    "Flag open questions and validation needs for discovery stems",
-    "Keep Now / Next / Later mutually exclusive and outcome-oriented",
-  ],
-};
+const STRATEGY_GROUND = mergeGuidelines(
+  {
+    must: [
+      "Load `.DNA/neuralNetwork.json`, Impressions product/strategy artifacts, and CellularMemory before drafting",
+      "Write durable outputs to `DNA/Impressions/` (and CellularMemory when decisions are made) — not chat-only",
+      "Stay at the intended altitude of the stem — do not jump to code or Solution Architect implementation",
+      "Hand off downstream via workflow stems; end strategy outputs with explicit next stem",
+    ],
+    never: [
+      "Invent market facts, competitor claims, or metrics without labeling them as assumptions",
+      "Skip Why (purpose) when running golden-circle or strategy-ladder from scratch",
+      "Treat DNA's own docs/product/product-canvas.md as the host project's canvas — build for THIS project",
+      "Start the 9-role agent loop or edit product code from a strategy stem",
+    ],
+    should: [
+      "Reuse existing Impressions content; revise rather than duplicate",
+      "Flag open questions and validation needs for discovery stems",
+      "Keep Now / Next / Later mutually exclusive and outcome-oriented",
+    ],
+  },
+  STRATEGY_GROUNDING_GUIDELINES,
+);
 
 export const STRATEGY_STEM_DEFS: PromptStemPackDef[] = [
   {
@@ -39,6 +47,8 @@ export const STRATEGY_STEM_DEFS: PromptStemPackDef[] = [
 Walk purpose → strategy → goals/metrics → product → initiatives → features → roadmap for this project.
 
 Scope: $ARGUMENTS
+
+${STRATEGY_GROUNDING_MARKDOWN}
 
 ## Altitude order (do not skip upward without cause)
 
@@ -70,7 +80,8 @@ For each rung: short filled artifact path + 3–7 bullets. End with:
 
 - Recommended next stem if the user wants to go deeper on one rung
 - Open assumptions needing discovery
-- Reminder: engineering starts only after \`shape-feature\` → \`plan-feature\` / agent-loop with approval`,
+- Reminder: engineering starts only after \`shape-feature\` → \`plan-feature\` / agent-loop with approval
+- Emit \`STRATEGY_COMPLETE\` JSON (see Grounding section) before any Feature Factory handoff`,
     guidelines: STRATEGY_GROUND,
     expectations: [
       "All rungs addressed or explicitly deferred with reason",

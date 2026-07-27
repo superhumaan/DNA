@@ -6,8 +6,9 @@ Aligns `/labs` with [dna.humaan.app](https://dna.humaan.app) and fills Delivery 
 
 - Fonts: **DM Sans** (UI) + **Syne** (titles)
 - Dark mint tokens (`#07080c` / `#4ade9a`)
-- **16px** gap under page header bars
+- **16px** gap under page header bars (including toasts)
 - Shimmer skeletons on first dashboard load
+- **URL deep links** — `/labs/<tab>`, `/labs/issues/<id>` (History API); refresh keeps the page
 
 ## Visit probes (not live monitoring)
 
@@ -18,7 +19,7 @@ Aligns `/labs` with [dna.humaan.app](https://dna.humaan.app) and fills Delivery 
 | Endpoint | Purpose |
 |----------|---------|
 | `/coverage` | Full coverage detail (files, packages, distribution) |
-| `/apis` | Mini OpenAPI explorer + live/probe traffic |
+| `/apis` | Full Lab API reference (Description / Usage / Received / Sent) + project OpenAPI + live/probe traffic |
 | `/releases` | GitHub Releases + Lab store |
 | `/probe` | Visit-gated probes |
 | `/intelligence` | Impressions / CellularMemory inventory |

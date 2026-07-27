@@ -1,9 +1,12 @@
 export const LAB_CLIENT_JS = `
 const API = "/api/dna/labs";
+const LAB_TAB_STORAGE_KEY = "dna_lab_route";
+
 const state = {
   view: "landing",
   tab: "overview",
   selectedIssueId: null,
+  labPath: "/labs",
   severityFilter: "all",
   searchQuery: "",
   tagSearchQuery: "",
@@ -56,7 +59,7 @@ function esc(t) {
 }
 
 function dnaWebBrand(href, fixed) {
-  return '<a class="dna-web-brand' + (fixed ? ' dna-web-brand--fixed' : '') + '" href="' + esc(href || '/labs') + '" aria-label="DNA Lab">' +
+  return '<a class="dna-web-brand' + (fixed ? ' dna-web-brand--fixed' : '') + '" href="' + esc(href || state.labPath || '/labs') + '" aria-label="DNA Lab">' +
     '<span class="dna-web-brand__icon"><i class="fa-duotone fa-solid fa-dna" aria-hidden="true"></i></span>' +
     '</a>';
 }
@@ -64,6 +67,116 @@ function dnaWebBrand(href, fixed) {
 function normalizeTab(tab) {
   const id = LEGACY_TABS[tab] || tab;
   return NAV.some((n) => n[0] === id) ? id : "overview";
+}
+
+/** Mirrors packages/dna-core/src/lab/ui/lab-routes.ts — keep in sync. */
+function normalizeLabBasePath(labPath) {
+  const raw = String(labPath || "/labs").trim() || "/labs";
+  const withSlash = raw.startsWith("/") ? raw : "/" + raw;
+  return withSlash.replace(/[/]+$/, "") || "/labs";
+}
+
+function parseLabLocation(pathname, labPath) {
+  const base = normalizeLabBasePath(labPath);
+  const path = String(pathname || "/").split("?")[0].split("#")[0] || "/";
+  if (path === base || path === base + "/") {
+    return { tab: "overview", issueId: null, bare: true };
+  }
+  if (!path.startsWith(base + "/")) {
+    return { tab: "overview", issueId: null, bare: true };
+  }
+  const parts = path.slice(base.length + 1).split("/").filter(Boolean).map(function (p) {
+    try { return decodeURIComponent(p); } catch (_) { return p; }
+  });
+  if (!parts.length) return { tab: "overview", issueId: null, bare: true };
+  if (parts[0] === "issues" && parts[1]) {
+    return { tab: "issues", issueId: parts[1], bare: false };
+  }
+  return { tab: normalizeTab(parts[0]), issueId: null, bare: false };
+}
+
+function buildLabPath(tab, issueId) {
+  const base = normalizeLabBasePath(state.labPath);
+  const t = normalizeTab(tab);
+  if (issueId && t === "issues") return base + "/issues/" + encodeURIComponent(issueId);
+  if (t === "overview") return base + "/overview";
+  return base + "/" + t;
+}
+
+function persistLabRoute() {
+  try {
+    sessionStorage.setItem(LAB_TAB_STORAGE_KEY, JSON.stringify({
+      tab: state.tab,
+      issueId: state.selectedIssueId || null,
+    }));
+  } catch (_) {}
+}
+
+function readPersistedLabRoute() {
+  try {
+    const raw = sessionStorage.getItem(LAB_TAB_STORAGE_KEY);
+    if (!raw) return null;
+    const saved = JSON.parse(raw);
+    return {
+      tab: normalizeTab(saved && saved.tab),
+      issueId: saved && saved.issueId ? String(saved.issueId) : null,
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
+function clearPersistedLabRoute() {
+  try { sessionStorage.removeItem(LAB_TAB_STORAGE_KEY); } catch (_) {}
+}
+
+function syncLabUrl(replace) {
+  if (typeof history === "undefined" || typeof location === "undefined") return;
+  const href = buildLabPath(state.tab, state.selectedIssueId);
+  const method = replace ? "replaceState" : "pushState";
+  if (location.pathname !== href) {
+    history[method]({ tab: state.tab, issueId: state.selectedIssueId || null }, "", href);
+  }
+  persistLabRoute();
+}
+
+function applyRouteFromLocation() {
+  const parsed = parseLabLocation(
+    (typeof location !== "undefined" && location.pathname) || "/",
+    state.labPath,
+  );
+  let tab = parsed.bare ? null : parsed.tab;
+  let issueId = parsed.bare ? null : parsed.issueId;
+  if (!tab) {
+    const saved = readPersistedLabRoute();
+    if (saved) {
+      tab = saved.tab;
+      issueId = saved.issueId;
+    }
+  }
+  state.tab = normalizeTab(tab || "overview");
+  state.selectedIssueId = issueId;
+  ensureNavGroupOpen(groupForTab(state.tab));
+}
+
+function isUnauthorizedMessage(message) {
+  const m = String(message || "").trim().toLowerCase();
+  return m === "unauthorized" || m === "401" || m.slice(-12) === "unauthorized";
+}
+
+function handleUnauthorized() {
+  if (state.localMode) return false;
+  state.view = "signin";
+  state.error = "";
+  state.success = "";
+  state.data = null;
+  state.loading = false;
+  state.refreshing = false;
+  state.coverageDetail = null;
+  state.apisDetail = null;
+  state.releasesDetail = null;
+  state.intelligence = null;
+  return true;
 }
 
 function groupForTab(tab) {
@@ -111,7 +224,7 @@ function authAtmosphere() {
 }
 
 function authShell(hero, panel) {
-  return '<div class="soli-auth-root">' + authAtmosphere() + dnaWebBrand('/labs', true) +
+  return '<div class="soli-auth-root">' + authAtmosphere() + dnaWebBrand(state.labPath || '/labs', true) +
     '<div class="soli-auth-welcome"><main class="soli-auth-welcome__shell">' +
     '<div class="soli-auth-welcome__hero">' + hero + '</div>' +
     '<div class="soli-auth-welcome__panel">' + panel + '</div></main></div></div>';
@@ -147,7 +260,21 @@ async function api(path, opts) {
     ...opts,
   });
   const json = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(json.error || json.message || res.statusText);
+  if (!res.ok) {
+    const message = json.error || json.message || res.statusText;
+    const publicAuth =
+      path === "/bootstrap" ||
+      path.indexOf("/auth/") === 0 ||
+      path.indexOf("/pairing/") === 0;
+    if (res.status === 401 && !publicAuth && handleUnauthorized()) {
+      render();
+      const err = new Error("Signed out");
+      err.status = 401;
+      err.handledUnauthorized = true;
+      throw err;
+    }
+    throw new Error(message);
+  }
   return json;
 }
 
@@ -167,10 +294,13 @@ async function bootstrap() {
   try {
     const boot = await api("/bootstrap");
     state.localMode = boot.localMode;
+    state.labPath = normalizeLabBasePath(boot.labPath || state.labPath || "/labs");
     state.dnaVersion = boot.dnaVersion || "";
     state.packagePath = boot.packagePath || "";
     state.installWarnings = Array.isArray(boot.installWarnings) ? boot.installWarnings : [];
     state.installs = boot.installs || null;
+    applyRouteFromLocation();
+    syncLabUrl(true);
     if (boot.localMode || boot.authenticated) {
       state.view = "dashboard";
       state.loading = true;
@@ -178,15 +308,29 @@ async function bootstrap() {
       try {
         const probe = await api("/probe");
         state.probeMeta = probe;
-      } catch (_) {}
-      await refreshData();
+      } catch (err) {
+        if (err && err.handledUnauthorized) return;
+      }
+      try {
+        await refreshData();
+        await refreshTabDetail(state.tab);
+        if (state.selectedIssueId) loadIssueEvents(state.selectedIssueId).catch(function () {});
+      } catch (err) {
+        if (err && err.handledUnauthorized) return;
+        throw err;
+      }
       state.loading = false;
     } else {
       state.view = "landing";
     }
   } catch (e) {
-    state.error = e.message;
-    state.view = "landing";
+    if (e && e.handledUnauthorized) return;
+    state.error = isUnauthorizedMessage(e && e.message) ? "" : (e && e.message) || "";
+    if (isUnauthorizedMessage(e && e.message) && handleUnauthorized()) {
+      /* signed out */
+    } else {
+      state.view = "landing";
+    }
     state.loading = false;
   }
   render();
@@ -210,7 +354,8 @@ async function loadIntelligence(force) {
   try {
     state.intelligence = await api("/intelligence");
   } catch (err) {
-    state.error = err.message;
+    if (err && err.handledUnauthorized) return;
+    if (!isUnauthorizedMessage(err && err.message)) state.error = err.message;
     state.intelligence = { impressions: [], cellularMemory: [] };
   }
 }
@@ -227,17 +372,29 @@ async function refreshTabDetail(tab) {
   }
   if (t === "coverage") {
     try { state.coverageDetail = await api("/coverage"); }
-    catch (err) { state.error = err.message; state.coverageDetail = { summary: null, files: [] }; }
+    catch (err) {
+      if (err && err.handledUnauthorized) return;
+      if (!isUnauthorizedMessage(err && err.message)) state.error = err.message;
+      state.coverageDetail = { summary: null, files: [] };
+    }
     return;
   }
   if (t === "releases") {
     try { state.releasesDetail = await api("/releases"); }
-    catch (err) { state.error = err.message; state.releasesDetail = { releases: [] }; }
+    catch (err) {
+      if (err && err.handledUnauthorized) return;
+      if (!isUnauthorizedMessage(err && err.message)) state.error = err.message;
+      state.releasesDetail = { releases: [] };
+    }
     return;
   }
   if (t === "apis") {
     try { state.apisDetail = await api("/apis"); }
-    catch (err) { state.error = err.message; state.apisDetail = { operations: [], live: [], probes: [], stats: {} }; }
+    catch (err) {
+      if (err && err.handledUnauthorized) return;
+      if (!isUnauthorizedMessage(err && err.message)) state.error = err.message;
+      state.apisDetail = { operations: [], live: [], probes: [], stats: {} };
+    }
   }
 }
 
@@ -250,9 +407,14 @@ async function refreshAll() {
     try {
       const probe = await api("/probe");
       state.probeMeta = probe;
-    } catch (_) {}
+    } catch (err) {
+      if (err && err.handledUnauthorized) return;
+    }
     await refreshTabDetail(state.tab);
     await refreshData(true);
+  } catch (err) {
+    if (err && err.handledUnauthorized) return;
+    if (!isUnauthorizedMessage(err && err.message)) state.error = err.message;
   } finally {
     const minSpinMs = 450;
     const wait = Math.max(0, minSpinMs - (Date.now() - started));
@@ -269,7 +431,17 @@ async function refreshData(force) {
   state.lastRefresh = new Date();
   if (res.status === 304) return; // unchanged — skip re-render/redraw
   const json = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(json.error || json.message || res.statusText);
+  if (!res.ok) {
+    const message = json.error || json.message || res.statusText;
+    if (res.status === 401 && handleUnauthorized()) {
+      render();
+      const err = new Error("Signed out");
+      err.status = 401;
+      err.handledUnauthorized = true;
+      throw err;
+    }
+    throw new Error(message);
+  }
   state.dataEtag = res.headers.get("ETag") || state.dataEtag;
   state.data = json;
   render();
@@ -1312,16 +1484,39 @@ function ciPanel() {
     '</div>';
 }
 
+function apiDocField(label, value) {
+  if (!value) return "";
+  return '<div class="lab-api-doc__field"><span class="lab-api-doc__label">' + esc(label) + '</span><div class="lab-api-doc__value">' + esc(value) + '</div></div>';
+}
+
 function apisPanel() {
   const d = state.apisDetail;
   if (!d) {
     return '<div class="admin-page-body admin-page-body--table">' + emptyState('fa-spinner', 'Loading APIs…', 'Building OpenAPI explorer + live traffic') + '</div>';
   }
   const match = matchesSearch();
-  const ops = (d.operations || []).filter((o) => match([o.method, o.path, o.summary, (o.tags || []).join(" ")]));
+  const ops = (d.operations || []).filter((o) => match([
+    o.method, o.path, o.summary, o.description, o.usage, o.received, o.sent, (o.tags || []).join(" "), o.source,
+  ]));
   const live = (d.live || []).concat(d.probes || []).filter((e) => match([e.method, e.path, e.message, e.provider]));
   const opRows = ops.length
-    ? ops.map((o) => '<tr><td><span class="lab-badge lab-badge--info">' + esc(o.method) + '</span></td><td><code>' + esc(o.path) + '</code><div class="lab-table__sub">' + esc(o.summary || (o.tags || []).join(", ")) + ' · ' + esc(o.source) + '</div></td></tr>').join("")
+    ? ops.map((o) => {
+      const title = esc(o.summary || (o.tags || []).join(", ") || "API");
+      const meta = esc(o.source || "lab") + ((o.tags || []).length ? " · " + esc((o.tags || []).join(", ")) : "");
+      return '<tr><td colspan="2" class="lab-api-op">' +
+        '<details class="lab-api-doc">' +
+        '<summary class="lab-api-doc__summary">' +
+        '<span class="lab-badge lab-badge--info">' + esc(o.method) + '</span>' +
+        '<span class="lab-api-doc__path"><code>' + esc(o.path) + '</code>' +
+        '<span class="lab-table__sub">' + title + ' · ' + meta + '</span></span>' +
+        '</summary>' +
+        '<div class="lab-api-doc__body">' +
+        apiDocField("Description", o.description || o.summary) +
+        apiDocField("Usage", o.usage) +
+        apiDocField("Received", o.received) +
+        apiDocField("Sent", o.sent) +
+        '</div></details></td></tr>';
+    }).join("")
     : tableEmptyRow(2, 'No operations.');
   const liveRows = live.length
     ? live.slice(0, 80).map((e) => {
@@ -1338,8 +1533,8 @@ function apisPanel() {
     kpiCard("Probe fail", st.probeFail || 0, st.probeFail ? "bad" : "ok", timeAgo(st.lastProbeAt)) +
     '</div></div>' +
     listToolbar('Search contract + traffic…', '') +
-    '<div class="lab-panel settings-card" style="margin-bottom:16px"><div class="lab-panel__head"><h2 class="lab-panel__title">Contract (mini Swagger)</h2></div><div class="lab-panel__body">' +
-    '<table class="lab-table admin-table"><thead><tr><th>Method</th><th>Path</th></tr></thead><tbody>' + opRows + '</tbody></table></div></div>' +
+    '<div class="lab-panel settings-card" style="margin-bottom:16px"><div class="lab-panel__head"><h2 class="lab-panel__title">API reference</h2></div><div class="lab-panel__body">' +
+    '<table class="lab-table admin-table lab-table--apis"><thead><tr><th colspan="2">Method · Path · Description · Usage · Received · Sent</th></tr></thead><tbody>' + opRows + '</tbody></table></div></div>' +
     '<div class="lab-panel settings-card"><div class="lab-panel__head"><h2 class="lab-panel__title">Live calls & responses</h2></div><div class="lab-panel__body">' +
     '<table class="lab-table admin-table"><thead><tr><th>Method</th><th>Call</th><th>Response</th><th>When</th></tr></thead><tbody>' + liveRows + '</tbody></table></div></div>' +
     '</div>';
@@ -1467,7 +1662,7 @@ function dashboardView() {
     '<div class="settings-shell">' + sidebar(active) +
     '<section class="settings-main">' + pageHeader(title) +
     (state.success ? '<div class="lab-toast" role="status">' + esc(state.success) + '</div>' : '') +
-    (state.error ? '<div class="lab-toast lab-toast--error" role="alert">' + esc(state.error) + '</div>' : '') +
+    (state.error && !isUnauthorizedMessage(state.error) ? '<div class="lab-toast lab-toast--error" role="alert">' + esc(state.error) + '</div>' : '') +
     '<div class="soli-admin-page-body">' + body + '</div></section></div></div>';
 }
 
@@ -1512,7 +1707,14 @@ function bind() {
           await refreshAll();
           return;
         }
-        if (action === "logout") { await api("/auth/logout", { method: "POST" }); state.view = "landing"; render(); return; }
+        if (action === "logout") {
+          try { await api("/auth/logout", { method: "POST" }); } catch (_) {}
+          clearPersistedLabRoute();
+          state.view = "landing";
+          state.data = null;
+          render();
+          return;
+        }
         if (action === "copy-issue") {
           e.stopPropagation();
           const issue = findIssue(state.selectedIssueId);
@@ -1549,6 +1751,7 @@ function bind() {
       state.tagSearchQuery = "";
       state.searchQuery = "";
       ensureNavGroupOpen(groupForTab(tab));
+      syncLabUrl(false);
       render();
       if (tab === "impressions" || tab === "memory") {
         await loadIntelligence(false);
@@ -1570,8 +1773,10 @@ function bind() {
       if (e.target && e.target.closest && e.target.closest("[data-copy-issue]")) return;
       e.preventDefault();
       const issueId = el.getAttribute("data-issue");
+      state.tab = "issues";
       state.selectedIssueId = issueId;
       state.copyFeedback = "";
+      syncLabUrl(false);
       render();
       loadIssueEvents(issueId).catch(() => {});
     };
@@ -1625,7 +1830,15 @@ function bind() {
     e.preventDefault();
     try {
       await api("/auth/login", { method: "POST", body: JSON.stringify(Object.fromEntries(new FormData(signin))) });
-      state.view = "dashboard"; await refreshData();
+      applyRouteFromLocation();
+      syncLabUrl(true);
+      state.view = "dashboard";
+      state.loading = true;
+      render();
+      await refreshData();
+      await refreshTabDetail(state.tab);
+      state.loading = false;
+      render();
     } catch (err) { state.error = err.message; render(); }
   };
   const pair = document.getElementById("pair-form");
@@ -1643,9 +1856,36 @@ function bind() {
     const body = Object.fromEntries(new FormData(reg)); body.pairingId = state.pairingId;
     try {
       await api("/auth/register", { method: "POST", body: JSON.stringify(body) });
-      state.view = "dashboard"; await refreshData();
+      applyRouteFromLocation();
+      syncLabUrl(true);
+      state.view = "dashboard";
+      state.loading = true;
+      render();
+      await refreshData();
+      await refreshTabDetail(state.tab);
+      state.loading = false;
+      render();
     } catch (err) { state.error = err.message; render(); }
   };
+}
+
+async function onLabPopState() {
+  applyRouteFromLocation();
+  syncLabUrl(true);
+  if (state.view !== "dashboard") {
+    render();
+    return;
+  }
+  render();
+  try {
+    await refreshTabDetail(state.tab);
+    if (state.selectedIssueId) loadIssueEvents(state.selectedIssueId).catch(function () {});
+  } catch (_) {}
+  render();
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("popstate", function () { onLabPopState(); });
 }
 
 bootstrap();

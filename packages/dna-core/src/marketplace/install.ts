@@ -6,11 +6,12 @@ import { fetchMarketplaceCatalog, fetchKnowledgePack } from "./client.js";
 import { getBundledCatalog, getBundledPack } from "./bundled-catalog.js";
 import { normalizePackId } from "./aliases.js";
 import { resolveHealthcareCountryBundlePackIds } from "./healthcare-country-bundles.js";
+import { resolvePurposeComboPackIds } from "./purpose-combos.js";
 
 export interface InstallKnowledgePackResult {
   pack: KnowledgePack;
   files: string[];
-  /** Additional packs installed as part of a country healthcare bundle. */
+  /** Additional packs installed as part of a country healthcare or purpose combo bundle. */
   bundleInstalled?: Array<{ pack: KnowledgePack; files: string[] }>;
 }
 
@@ -53,7 +54,10 @@ export async function installKnowledgePackById(
   channel?: DnaConfig["channel"],
 ): Promise<InstallKnowledgePackResult> {
   const resolvedId = normalizePackId(packId);
-  const bundleIds = resolveHealthcareCountryBundlePackIds(resolvedId);
+  const purposeComboIds = resolvePurposeComboPackIds(resolvedId);
+  const healthcareBundleIds = resolveHealthcareCountryBundlePackIds(resolvedId);
+  const bundleIds = purposeComboIds ?? healthcareBundleIds;
+  const isPurposeCombo = purposeComboIds !== null;
   const targetIds = bundleIds ?? [resolvedId];
 
   let primary: InstallKnowledgePackResult | null = null;
@@ -66,7 +70,13 @@ export async function installKnowledgePackById(
     }
     const files = await installKnowledgePack(root, pack);
     const entry = { pack, files };
-    if (id === resolvedId) {
+    if (isPurposeCombo) {
+      if (!primary) {
+        primary = { ...entry, bundleInstalled: undefined };
+      } else {
+        bundleInstalled.push(entry);
+      }
+    } else if (id === resolvedId) {
       primary = { ...entry, bundleInstalled: undefined };
     } else {
       bundleInstalled.push(entry);

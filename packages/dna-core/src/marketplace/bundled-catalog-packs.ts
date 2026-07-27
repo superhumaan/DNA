@@ -13,8 +13,10 @@ import { QUALITY_STEM_PACKS } from "./bundled-stem-quality.js";
 import { METHODOLOGY_PACKS } from "./bundled-catalog-methodologies.js";
 import { DISCOVERY_PACKS } from "./bundled-catalog-discovery.js";
 import { INDUSTRY_PACKS } from "./bundled-catalog-industries.js";
+import { P0_RICH_PACKS } from "./bundled-catalog-p0-rich.js";
+import { finalizeCatalogPacks } from "./pack-richness.js";
 
-export const PACKS: KnowledgePack[] = [
+const PACKS_RAW: KnowledgePack[] = [
   pack("frameworks/vite", "Vite", "frameworks", "Vite framework knowledge for DNA projects", [
     {
       path: "frameworks/vite/positioning.dna.md",
@@ -209,7 +211,12 @@ Test with fresh session per role. Refresh after login. Try direct URLs.
   ...METHODOLOGY_PACKS,
   ...DISCOVERY_PACKS,
   ...INDUSTRY_PACKS,
+  // Last-write-wins: Wave 1+2 P0 richness overrides thin stubs
+  ...P0_RICH_PACKS,
 ];
 
+/** Deduped + long-tail-lifted packs (matches `buildBundledCatalog().packs`). */
+export const PACKS: KnowledgePack[] = finalizeCatalogPacks(PACKS_RAW);
+
 /** Deduped pack count (matches `buildBundledCatalog().packs.length`). */
-export const BUNDLED_CATALOG_PACK_COUNT = new Set(PACKS.map((p) => p.id)).size;
+export const BUNDLED_CATALOG_PACK_COUNT = PACKS.length;

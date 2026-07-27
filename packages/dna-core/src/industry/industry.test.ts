@@ -4,18 +4,22 @@ import { INDUSTRY_PACKS, INDUSTRY_PACK_COUNT } from "../marketplace/bundled-cata
 import { INDUSTRY_CATALOG, parseIndustryInput, knowledgePackIdsForIndustry } from "../industry/catalog.js";
 import { industryKnowledgePaths } from "../industry/pack-factory.js";
 import { getBundledCatalog } from "../marketplace/bundled-catalog.js";
+import { INDUSTRY_SECTOR_DEFINITIONS } from "./sector-definitions.js";
+
+const SECTOR_COUNT = INDUSTRY_SECTOR_DEFINITIONS.length;
 
 describe("industry packs", () => {
-  it("exports overview plus 12 sector packs", () => {
-    expect(INDUSTRY_PACK_COUNT).toBe(13);
-    expect(INDUSTRY_PACKS).toHaveLength(13);
-    expect(INDUSTRY_CATALOG).toHaveLength(12);
-    expect(INDUSTRY_SECTORS).toHaveLength(12);
+  it("exports overview plus all sector packs", () => {
+    expect(SECTOR_COUNT).toBe(INDUSTRY_SECTORS.length);
+    expect(INDUSTRY_PACK_COUNT).toBe(SECTOR_COUNT + 1);
+    expect(INDUSTRY_PACKS).toHaveLength(SECTOR_COUNT + 1);
+    expect(INDUSTRY_CATALOG).toHaveLength(SECTOR_COUNT);
+    expect(INDUSTRY_SECTORS).toHaveLength(SECTOR_COUNT);
   });
 
   it("each sector pack has 8 standard knowledge files", () => {
     const sectorPacks = INDUSTRY_PACKS.filter((p) => p.id !== "industries/overview");
-    expect(sectorPacks).toHaveLength(12);
+    expect(sectorPacks).toHaveLength(SECTOR_COUNT);
     for (const pack of sectorPacks) {
       expect(pack.category).toBe("industries");
       expect(pack.files).toHaveLength(8);
@@ -28,10 +32,12 @@ describe("industry packs", () => {
     expect(parseIndustryInput("fintech")).toBe("fintech");
     expect(parseIndustryInput("e-commerce")).toBe("ecommerce-retail");
     expect(parseIndustryInput("gov")).toBe("gov-public-sector");
+    expect(parseIndustryInput("crypto")).toBe("crypto-web3");
+    expect(parseIndustryInput("devtools")).toBe("developer-tools");
   });
 
   it("rejects unknown industries", () => {
-    expect(() => parseIndustryInput("crypto")).toThrow(/Unknown industry/);
+    expect(() => parseIndustryInput("not-a-real-vertical-xyz")).toThrow(/Unknown industry/);
   });
 
   it("knowledge paths cover all standard files", () => {

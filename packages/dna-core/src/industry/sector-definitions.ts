@@ -1,4 +1,5 @@
 import type { IndustrySectorDef } from "./types.js";
+import { SOFTWARE_VERTICAL_SECTORS } from "../marketplace/software-vertical-sectors.js";
 
 export const INDUSTRY_SECTOR_DEFINITIONS: IndustrySectorDef[] = [
   {
@@ -534,4 +535,5 @@ export const INDUSTRY_SECTOR_DEFINITIONS: IndustrySectorDef[] = [
     linkedPacks: ["legal/domains/intellectual-property", "legal/domains/privacy"],
     tags: ["legal-tech", "professional-services"],
   },
+  ...SOFTWARE_VERTICAL_SECTORS,
 ];

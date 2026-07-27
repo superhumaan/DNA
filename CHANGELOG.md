@@ -4,13 +4,33 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **Long-tail zero-stubs** — catalog-wide richness floor via `finalizeCatalogPacks` / `liftPackToRichness`; wave `packsFromDefs` emits rich packs. **1045/1045 rich** (0 stubs, 0 thin). CI: `longtail-richness-gate.test.ts`.
+- **Wave 2 P0 packs (≥12k chars)** — databases (postgres/redis/mongo/prisma/drizzle/supabase), AI (openai/anthropic/ai-sdk/langchain/rag), discovery flagships, compliance (gdpr/soc2/hipaa-depth/pci-dss-depth) with ops/security/troubleshooting depth pads; CI enforces `meetsP0DepthBar`.
+- **Wave 1 P0 pack enrichment** — rich overrides for nextjs, react, vite, nestjs, fastify, clerk, stripe, payments/overview, stripe-connect, github-actions, aws-overview, docker (`bundled-catalog-p0-rich.ts`).
+- **Pack richness CI gate** — `pack-richness-gate.test.ts` fails if P0 or agile-family packs regress below richness bar.
+- **Strategy grounding contract** — shared Impression Guard + `STRATEGY_COMPLETE` handoff (`strategy-grounding.ts`) wired into `strategy-ladder` and `product-diagnose`.
+- **Knowledge pack advancements (Wave A)** — shared `pack-richness` builder (≥8 docs + `assets/` diagrams/images/documents/templates/fixtures/references).
+- **Agile family** — rich Scrum, LeSS, LeSS Huge, Kanban, SAFe, Nexus, Scrum@Scale, Scrum of Scrums, Shape Up, Spotify, plus companions (DoD, user stories, estimation, WSJF, TDD, BDD, pair/mob, OKRs). Combos: `combo/scrum-team`, `combo/less-org`, `combo/safe-enterprise`, `combo/agency-delivery`, `combo/sme-scrum`, `combo/enterprise-devtools`.
+- **Software verticals** — 18 new industry sectors (cyber, climate, agritech, aerospace, automotive, telecom, web3, HR, martech, biotech, construction, sports, DevTools, marketplace, civic, gaming, manufacturing, insurtech) + matching `methodologies/industry-*` overlays.
+- **Org archetypes** — consultancy, bootstrapped, unicorn, government-digital (alongside existing size packs).
+- Marketplace catalog **1045** packs.
+- **Methodology expansion** — company-size packs (solo → enterprise / big-tech / agency / nonprofit / …), industry delivery overlays (`methodologies/industry-*`), and process packs (lean-startup, XP, dual-track, CD, DevOps, SRE, design/product ops, Nexus, Scrum@Scale). Purpose combos: `combo/startup-saas`, `combo/enterprise-healthcare`, `combo/agency-fintech`.
+
+## [0.6.18] - 2026-07-27
+
 ### Fixed
 
-- **Lab `requireAuthInProduction: false` actually opens Lab APIs** — the flag was in config schema but unused; only loopback Host granted `localMode`. Non-localhost hosts (Invitrace / previews) got 401 on `/coverage`, `/intelligence`, `/apis`, `/releases`, `/probe`, and `/data` even when apps faked an open bootstrap. Setting `lab.requireAuthInProduction: false` now grants open Lab auth on public hosts; default remains `true` (closed). See [lab-open-auth-requireAuthInProduction](./docs/engineering/lab-open-auth-requireAuthInProduction.md).
+- **Lab never toasts raw "Unauthorized"** — 401 on Lab APIs sends the user to sign-in instead of a dashboard error banner; Coverage/APIs/etc. no longer surface that string.
+- **Lab title bar → toast gap** — error/success toasts use `--admin-header-content-gap` (16px) under the page header.
+- **Lab `requireAuthInProduction: false` actually opens Lab APIs** — the flag was in config schema but unused; only loopback Host granted `localMode`. Non-localhost hosts (Invitrace / previews) got 401 on `/coverage`, `/intelligence`, `/apis`, `/releases`, `/probe`, and `/data` even when apps faked an open bootstrap. Setting `lab.requireAuthInProduction: false` now grants open Lab auth on public hosts; default remains `true` (closed).
+- **OWASP CI** — pin `postcss@8.5.23` and `brace-expansion@5.0.8` via pnpm overrides so `pnpm audit --audit-level=high` passes.
 
 ### Added
 
-- **Methodology expansion** — company-size packs (solo → enterprise / big-tech / agency / nonprofit / …), industry delivery overlays (`methodologies/industry-*`), and process packs (lean-startup, XP, dual-track, CD, DevOps, SRE, design/product ops, Nexus, Scrum@Scale). Marketplace catalog **998** packs. Purpose combos: `combo/startup-saas`, `combo/enterprise-healthcare`, `combo/agency-fintech`.
+- **Lab URL deep links** — `/labs/coverage`, `/labs/issues/:id`, etc. via History API + `popstate`; refresh keeps the current page; bare `/labs` restores the last tab from `sessionStorage`.
+- **Lab APIs reference** — full Lab HTTP catalog (all `server.ts` routes) with Description, Usage, Received, and Sent per operation; expandable rows in the Lab APIs tab; project OpenAPI ops inherit the same fields when present.
 
 ## [0.6.17] - 2026-07-24
 

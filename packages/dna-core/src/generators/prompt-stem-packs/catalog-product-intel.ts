@@ -1,33 +1,41 @@
 import type { PromptStemPackDef } from "./types.js";
+import {
+  STRATEGY_GROUNDING_GUIDELINES,
+  STRATEGY_GROUNDING_MARKDOWN,
+  mergeGuidelines,
+} from "./strategy-grounding.js";
 
 /**
  * Product intelligence stems — diagnose product, competitors, and high-leverage upgrades.
  * Quality bar: code + DNA CLI + CellularMemory first; stub Impressions are not truth.
  */
-export const PRODUCT_INTEL_GROUND = {
-  must: [
-    "Run evidence bootstrap before drafting: `npx dna analyze` and `npx dna scan` (add `npx dna document --from-code` when architecture docs are missing or stubby)",
-    "Load `.DNA/neuralNetwork.json`, CellularMemory (system-map, decisions, blockers, debt, repeated failures/patterns), README, CHANGELOG, and real package/app entrypoints",
-    "Treat DNA Impressions as stubs until proven otherwise — if a file is placeholder, empty, or generic boilerplate, say so and ground elsewhere",
-    "Cite concrete evidence (paths, packages, routes, APIs, tests, debt notes) for every strength, weakness, and upgrade claim",
-    "Label market, competitor, and user claims without primary research as **assumptions**",
-    "Persist filled artifacts under `DNA/Impressions/product/` so stubs become real project truth",
-    "Stay at product/competitive/upgrade altitude — hand off via `shape-feature` / agent-loop; do not implement code from these stems",
-  ],
-  never: [
-    "Treat stub or template Impressions as product truth",
-    "Invent competitor features, pricing, market share, or metrics — research or label as assumption",
-    "Give upgrade advice without tying it to architecture evidence or known debt",
-    "Start the 9-role agent loop or edit product application code from these stems",
-    "Produce generic SWOT / competitor / roadmap text that could apply to any SaaS",
-  ],
-  should: [
-    "Prefer thin-slice / strangler upgrades that reuse existing patterns in-repo",
-    "Score effort × impact with explicit rationale (files touched, risk, reuse)",
-    "End every stem with next stem in the product-intel ladder and open questions",
-    "When Impressions were stubs, list which files you created or replaced",
-  ],
-};
+export const PRODUCT_INTEL_GROUND = mergeGuidelines(
+  {
+    must: [
+      "Run evidence bootstrap before drafting: `npx dna analyze` and `npx dna scan` (add `npx dna document --from-code` when architecture docs are missing or stubby)",
+      "Load `.DNA/neuralNetwork.json`, CellularMemory (system-map, decisions, blockers, debt, repeated failures/patterns), README, CHANGELOG, and real package/app entrypoints",
+      "Treat DNA Impressions as stubs until proven otherwise — if a file is placeholder, empty, or generic boilerplate, say so and ground elsewhere",
+      "Cite concrete evidence (paths, packages, routes, APIs, tests, debt notes) for every strength, weakness, and upgrade claim",
+      "Label market, competitor, and user claims without primary research as **assumptions**",
+      "Persist filled artifacts under `DNA/Impressions/product/` so stubs become real project truth",
+      "Stay at product/competitive/upgrade altitude — hand off via `shape-feature` / agent-loop; do not implement code from these stems",
+    ],
+    never: [
+      "Treat stub or template Impressions as product truth",
+      "Invent competitor features, pricing, market share, or metrics — research or label as assumption",
+      "Give upgrade advice without tying it to architecture evidence or known debt",
+      "Start the 9-role agent loop or edit product application code from these stems",
+      "Produce generic SWOT / competitor / roadmap text that could apply to any SaaS",
+    ],
+    should: [
+      "Prefer thin-slice / strangler upgrades that reuse existing patterns in-repo",
+      "Score effort × impact with explicit rationale (files touched, risk, reuse)",
+      "End every stem with next stem in the product-intel ladder and open questions",
+      "When Impressions were stubs, list which files you created or replaced",
+    ],
+  },
+  STRATEGY_GROUNDING_GUIDELINES,
+);
 
 const EVIDENCE_BOOTSTRAP = `## Evidence bootstrap (mandatory — run first)
 
@@ -71,6 +79,8 @@ export const PRODUCT_INTEL_STEM_DEFS: PromptStemPackDef[] = [
 
 Run the product-intelligence ladder for THIS repo. Scope: $ARGUMENTS
 
+${STRATEGY_GROUNDING_MARKDOWN}
+
 ${EVIDENCE_BOOTSTRAP}
 
 ## Ladder (do in order — short, evidence-backed sections)
@@ -80,7 +90,7 @@ ${EVIDENCE_BOOTSTRAP}
 3. **Value delivered** — Gains/pains the codebase actually addresses. Optionally \`product-value-proposition\`.
 4. **Jobs** — Top jobs users can complete end-to-end today vs broken/missing.
 5. **Confidence** — High / medium / low per claim + what would raise confidence.
-6. **Handoff** — Next: \`competitor-landscape\` then \`upgrade-leverage-map\` / \`upgrade-recommend\`.
+6. **Handoff** — Next: \`competitor-landscape\` then \`upgrade-leverage-map\` / \`upgrade-recommend\`. Emit \`STRATEGY_COMPLETE\` when the diagnose→upgrade ladder for this pass is done.
 
 ## Persist
 
@@ -97,7 +107,7 @@ Write \`DNA/Impressions/product/product-diagnose.md\` (and fill stubs you relied
 | Jobs broken/missing | | | |
 | Stub Impressions replaced | | | |
 
-End with: next stem + 3 open questions. No code. No feature factory yet.`,
+End with: next stem + 3 open questions + \`STRATEGY_COMPLETE\` JSON when ready for Feature Factory. No code. No feature factory yet.`,
     guidelines: PRODUCT_INTEL_GROUND,
     expectations: [
       "Evidence bootstrap commands run and summarized",

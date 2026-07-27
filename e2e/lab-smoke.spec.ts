@@ -40,6 +40,14 @@ test.describe("DNA Lab smoke", () => {
     await expect(page.locator('[data-tab="overview"]')).toBeVisible();
   });
 
+  test("coverage deep link restores the Coverage title after load", async ({ page }) => {
+    await page.goto("/labs/coverage");
+    await expect(
+      page.locator(".soli-administration-page-header__title", { hasText: "Coverage" }),
+    ).toBeVisible();
+    await expect(page).toHaveURL(/\/labs\/coverage$/);
+  });
+
   test("data endpoint returns overview stats", async ({ request }) => {
     const res = await request.get(`${API}/data`);
     expect(res.status()).toBe(200);
