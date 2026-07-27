@@ -69,7 +69,7 @@ DNA spans local developer tooling, optional cloud-adjacent services, and generat
 | **GitHub integration** | `packages/dna-github` | OAuth device flow, token storage, push automation, issue/PR workflows |
 | **AI repair** | `packages/dna-ai` | Orchestrates automated repair workflows using project context |
 | **Marketplace** | Bundled + [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) | 965+ knowledge packs installed into `.DNA/knowledge/` |
-| **Web UI** | [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web) | Landing page, marketplace UI, hosted catalog API |
+| **Public web surface** | [dna.humaan.app](https://dna.humaan.app) | Public docs, marketplace, intelligence library, hosted catalog API |
 | **Generated artifacts** | Consumer repos | CI workflows, Dockerfiles, git hooks, behaviour rules, compliance templates |
 
 DNA maintains two worlds in managed projects:
@@ -91,7 +91,7 @@ DNA maintains two worlds in managed projects:
 2. **Email**  
    Send details to [security@humaan.com](mailto:security@humaan.com) with the subject line `DNA Security Report`.
 
-For issues specific to the hosted web application or marketplace API, you may also report via the same channels and note **DNA-Web** in the subject or body. We coordinate across repositories when needed.
+For issues specific to the hosted web application or marketplace API, report them through the same channels and note that they affect the public web surface.
 
 ### What to include
 
@@ -101,7 +101,7 @@ The more detail you provide, the faster we can triage and reproduce.
 | ----- | -------- |
 | **Summary** | One-paragraph description of the vulnerability |
 | **Impact** | What an attacker could achieve (RCE, token theft, data exposure, etc.) |
-| **Affected component** | CLI, runtime, GitHub auth, marketplace, generator, DNA-Web, etc. |
+| **Affected component** | CLI, runtime, GitHub auth, marketplace, generator, public web surface, etc. |
 | **Steps to reproduce** | Commands, config files, minimal project setup |
 | **Proof of concept** | Code, screenshots, or logs (redact third-party secrets) |
 | **DNA version** | Output of `dna --version` or `npm ls @superhumaan/dna-by-humaan` |
@@ -200,10 +200,10 @@ The following classes of vulnerability are **in scope** when they affect DNA too
 - Prompt injection leading to execution of attacker-controlled shell commands via DNA repair workflows
 - Unauthorised disclosure of repository contents, `.DNA/` memory, or private GitHub data to external AI providers beyond documented behaviour
 
-### Web and API (DNA-Web)
+### Web and API
 
-- Vulnerabilities in [dna.humaan.app](https://dna.humaan.app) or the marketplace API hosted from [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web)  
-  Report via the same channels; we route to the appropriate maintainers.
+- Vulnerabilities in [dna.humaan.app](https://dna.humaan.app) or its hosted marketplace API  
+  Report via the same channels; we route internally to the appropriate maintainers.
 
 ---
 
@@ -485,7 +485,7 @@ When we fix a vulnerability:
 | Repository | Relationship |
 | ---------- | ------------ |
 | [superhumaan/DNA](https://github.com/superhumaan/DNA) | Core monorepo — this policy |
-| [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web) | Web UI and marketplace API — report via same channels |
+| [dna.humaan.app](https://dna.humaan.app) | Public web surface and marketplace API — report via same channels |
 | Consumer projects | Your responsibility — DNA provides tooling, not ongoing security operations |
 
 ---

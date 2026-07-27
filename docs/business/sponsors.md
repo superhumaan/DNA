@@ -65,7 +65,6 @@ The sync script updates:
 - `packages/dna-cli/SPONSORS.md` and `CREDITS.md`
 - `packages/dna-cli/assets/sponsors.json` (bundled for `dna credits`)
 - `.github/FUNDING.yml` (GitHub repo **Sponsor** button)
-- `DNA-Web/apps/web/src/data/sponsors.json` (when `DNA - Web` is alongside the monorepo)
 
 `scripts/publish-npm.sh` runs `sponsors:sync` before publish.
 
@@ -81,7 +80,7 @@ The sync script updates:
 }
 ```
 
-Place logo files in DNA-Web `apps/web/public/sponsors/logos/`.
+Place logo files in the public site asset location used by the maintainer workflow.
 
 ---
 

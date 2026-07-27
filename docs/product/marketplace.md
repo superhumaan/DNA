@@ -7,7 +7,6 @@ Curated guidance packs install into `.DNA/knowledge/`. DNA ships **1045 packs** 
 | **Live catalog** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) |
 | **Purpose bundles** | [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles) — one-command install of linked packs + stem packs + AI rules |
 | **Bundles API** | `GET /marketplace/api/v1/bundles` |
-| **Web app** | [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web) (Next.js — landing + marketplace UI + API) |
 | **Offline fallback** | Bundled catalog in `@superhumaan/dna-by-humaan` when remote is unavailable |
 | **Legacy API** | `apps/marketplace` (standalone Node server for local dev) |
 
@@ -320,20 +319,6 @@ export DNA_MARKETPLACE_URL=http://localhost:3100/marketplace
 | **Plan prefetch** | `dna plan feature`, `dna plan rbac`, `dna plan compliance` | All knowledge required by the plan |
 
 Optional packs remain available via `dna marketplace install <id>`.
-
-## Run marketplace locally
-
-```bash
-# Clone the web repo (sibling to DNA monorepo)
-git clone https://github.com/superhumaan/DNA-Web.git
-cd DNA-Web && pnpm install && pnpm dev
-# http://localhost:3101/marketplace — filters: Healthcare, Enterprise, Cloud, Databases, AI, Gaming, Payments, CMS
-# http://localhost:3101/marketplace/api/v1/catalog
-```
-
-## Deploy to dna.humaan.app
-
-Deploy [DNA-Web](https://github.com/superhumaan/DNA-Web) to Vercel (project root: `apps/web`). Pushes to `main` auto-deploy.
 
 ## Creating packs (future)
 

@@ -13,7 +13,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **DNA Lab** | Production observability at `/labs` — **APIs reference** (Description / Usage / Received / Sent for every Lab route) + **URL deep links** (`/labs/<tab>`, `/labs/issues/<id>`) + **401 → sign-in** (no Unauthorized toast) + **`requireAuthInProduction: false` open Lab** + dark-theme alerts + force Refresh + Copy issue + analytics Overview + Sentry-density Issues + upgrade DX; Humaan admin UI parity; Soli shell + Quality hub; fingerprint-grouped issues; local open access; production auth via `dna register lab` ([#12](https://github.com/superhumaan/DNA/issues/12), [lab-apis-reference-0.6.18](../engineering/lab-apis-reference-0.6.18.md), [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md)) |
 | **Supply chain** | **Zero production npm dependencies** (v0.4.6+), no install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
 | **Marketplace** | **1045 rich packs** (zero-stubs floor + P0 depth), **27 purpose bundles** (`combo/*`), remote + bundled offline; combo install injects knowledge packs + prompt stems + Cursor rules |
-| **Marketplace website** | [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles) — bundles-first UX (DNA-Web); catalog `bundles[]` |
+| **Public marketplace** | [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles) — bundles-first UX; catalog `bundles[]` |
 | **Platform catalog** | Admin, SSO, RBAC, cloud deploy, CRM, CMS patterns |
 | **Compliance** | Tiered GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS |
 | **Brownfield** | IVF plans, `document --from-code`, deep analyze |
@@ -25,7 +25,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Preview deploy** | `dna-preview.yml` scaffold with Vercel/Netlify + branch filter |
 | **CI hygiene** | `cleanup-failed-runs.yml` deletes failed/cancelled runs after completion; skips billing/infra instant failures and never cascades |
 | **Strict quality gates** | Blocking lint/typecheck/test/coverage/load/audit/quality/Docker; product-critical coverage ≥80% per file; Playwright Lab smoke |
-| **Canonical health report** | GitHub Step Summary + artifacts; npm Verified results; DNA-Web `/health` |
+| **Canonical health report** | GitHub Step Summary + artifacts; npm Verified results; public `/health` snapshot |
 | **Shared Lab state** | Optional Redis-compatible adapter for multi-instance; file default remains fail-closed for undeclared replicas |
 | **Lab CI billing** | `/labs` banners GitHub Actions payment/spending-limit blocks separately from code CI failures |
 | **Doctor orchestrator** | `dna doctor` — scaffold, CI, runtime auto-wire, Lab scaffold, GitHub browser login |

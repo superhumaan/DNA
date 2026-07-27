@@ -8,7 +8,7 @@ All notable changes to DNA are documented here.
 
 ### Added
 
-- **Marketplace purpose bundles** — 27 Purpose Combos on [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles): each bundle lists knowledge packs + prompt stem packs; one `dna marketplace install combo/<id>` installs packs, injects stems/slash commands, always-on Cursor rules, and AI workbench context. Catalog `bundles[]` + remote `GET /marketplace/api/v1/bundles` (DNA-Web).
+- **Marketplace purpose bundles** — 27 Purpose Combos on [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles): each bundle lists knowledge packs + prompt stem packs; one `dna marketplace install combo/<id>` installs packs, injects stems/slash commands, always-on Cursor rules, and AI workbench context. Catalog `bundles[]` + remote `GET /marketplace/api/v1/bundles`.
 
 ### Fixed
 
@@ -78,7 +78,7 @@ All notable changes to DNA are documented here.
 
 - **pnpm 11 allowBuilds** — set `esbuild: true` in `pnpm-workspace.yaml` (placeholder broke `pnpm install` / quality toolchain); moved esbuild override into workspace config (kept dual `package.json#pnpm` overrides for Docker pnpm 9).
 - **ESLint toolchain** — add direct `@eslint/js@9.39.4` so `pnpm lint` resolves under pnpm 11.
-- **Marketplace catalog parity** — DNA-Web marketplace now lists every pack (methodologies, industries, discovery, residual Other) and shows the real unique total (**965**). Catalog sync script keeps DNA-Web assets aligned with DNA; public copy no longer claims 897/910.
+- **Marketplace catalog parity** — the public marketplace now lists every pack (methodologies, industries, discovery, residual Other) and shows the real unique total (**965**). Public copy no longer claims 897/910.
 
 ## [0.6.13] - 2026-07-17
 
@@ -88,9 +88,9 @@ All notable changes to DNA are documented here.
 - **Lab load harness** — `scripts/lab-load-test.mjs` compares raw per-request `collectLabData` vs the HTTP `/data` path under N concurrent pollers (default 200). Full review reports in `docs/reviews/`.
 - **CI Lab capacity gate** — generated pnpm workflows run the deterministic 200-viewer after-only load gate after build.
 - **Shared Lab state adapter** — optional Redis-compatible store (`DNA_LAB_STATE_BACKEND=redis` + URL/token/key) with distributed locking; file remains the zero-config default.
-- **Canonical health report** — `pnpm run health:report` emits sanitized JSON/Markdown consumed by GitHub Step Summary, npm README, and DNA-Web `/health`.
+- **Canonical health report** — `pnpm run health:report` emits sanitized JSON/Markdown consumed by GitHub Step Summary, npm README, and the public `/health` snapshot.
 - **Lab browser smoke** — Playwright Chromium covers `/labs`, Lab `/health`, and overview rendering.
-- Public DNA-Web `/health` page (capital `/Health` redirects) with sanitized report schema.
+- Public `/health` snapshot with sanitized report schema.
 
 ### Changed
 
@@ -109,9 +109,9 @@ All notable changes to DNA are documented here.
 - **Unsafe replica topology** — declared multi-instance file-store deployments fail closed with 503 instead of splitting Lab authentication state.
 - **pnpm security scanning** — CI generators use the active package manager's native audit command rather than `npm audit` on pnpm lockfiles.
 - **Feature brief preservation** — `dna doctor` / feature-factory refresh no longer replaces an active `ai/feature-request.md` with the blank starter template.
-- **Preview opt-out and diagnostics** — CI generation respects `ci.pushToPreview: false`, removes stale generated preview workflows, and retains failed workflow logs for 24 hours before cleanup. This CLI/runtime monorepo is explicitly opted out because its prior Vercel IDs target the separate DNA-Web project.
+- **Preview opt-out and diagnostics** — CI generation respects `ci.pushToPreview: false`, removes stale generated preview workflows, and retains failed workflow logs for 24 hours before cleanup.
 - **Clean-checkout CI ordering** — generated workflows build workspace packages before typecheck, unit, and coverage gates so tests that consume package exports do not rely on stale local `dist/` artifacts.
-- **DNA-Web sync path** — sync scripts default to `../DNA-Web` instead of the stale spaced checkout.
+- **Public asset sync path** — sync scripts default to the sibling site checkout instead of the stale spaced checkout.
 
 ## [0.6.12] - 2026-07-14
 
@@ -219,7 +219,7 @@ See also [docs/engineering/lab-and-runtime-0.6.4.md](docs/engineering/lab-and-ru
 
 - Workbench rules and `reasoning.behaviour.md` — mandatory repair loop when blockers exist; agents must load memory before fixing recurring errors.
 - **Lab UI v2** — Sentry-inspired observability portal: dark sidebar navigation, 24h error volume chart, grouped issues with detail pages and stack traces, slow endpoint performance table, release history, and quality trend chart.
-- **Lab UI v3** — Soli admin shell (248px white sidebar, violet active states, `settings-shell` layout) and DNA-Web logo (`fa-duotone fa-dna` + “by Humaan”). Removed production observability hero banner.
+- **Lab UI v3** — Soli admin shell (248px white sidebar, violet active states, `settings-shell` layout) and the DNA brand lockup (`fa-duotone fa-dna` + “by Humaan”). Removed production observability hero banner.
 - **Lab UI modules** — dashboard/shell/styles extracted under `packages/dna-core/src/lab/ui/`; collect aggregates split to `collect-aggregates.ts`.
 
 ### Fixed
@@ -484,8 +484,8 @@ See also [docs/engineering/lab-and-repair-0.6.3.md](docs/engineering/lab-and-rep
 - **`dna commands` packages** — full **Cursor** (`.cursor/skills/dna-cli/`, obedience rule, 44 detailed slash commands) and **Claude Code** (`.claude/skills/dna-cli/`, 44 commands with frontmatter) packages. Each command includes purpose, when to use/not use, **MUST/NEVER** obedience rules, output interpretation, exit codes, workflows, and examples.
 - **`dna commands`** — install, list, export-catalog, and uninstall (v0.3.6 baseline; packages expanded in 0.3.7).
 - Commands scaffold automatically on **`dna init`**, **`dna feature-factory install`**, and **`dna doctor`**.
-- **`pnpm intelligence:sync`** — sync command catalog JSON to [DNA-Web](https://github.com/superhumaan/DNA-Web) for [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence).
-- DNA-Web **`/intelligence`** page — browse all Cursor and Claude commands with CLI equivalents.
+- **`pnpm intelligence:sync`** — sync command catalog JSON to the public intelligence library at [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence).
+- Public **`/intelligence`** library — browse all Cursor and Claude commands with CLI equivalents.
 
 ## [0.3.5] - 2026-07-10
 
@@ -520,7 +520,7 @@ See also [docs/engineering/lab-and-repair-0.6.3.md](docs/engineering/lab-and-rep
 
 ### Added
 
-- **Sponsors & commercial services:** public sponsor ledger ([`sponsors.json`](./sponsors.json)), `pnpm sponsors:sync`, `.github/FUNDING.yml` (GitHub **Sponsor** button), `dna credits`, bundled `CREDITS.md` / `SPONSORS.md`, npm `funding` + `contributors`. DNA-Web `/sponsors` and `/services` pages with monthly homepage logo rotation for company sponsors.
+- **Sponsors & commercial services:** public sponsor ledger ([`sponsors.json`](./sponsors.json)), `pnpm sponsors:sync`, `.github/FUNDING.yml` (GitHub **Sponsor** button), `dna credits`, bundled `CREDITS.md` / `SPONSORS.md`, npm `funding` + `contributors`.
 - **Doctor preview checks:** `dna doctor` reports preview workflow status and setup hints when `pushToPreview` is enabled.
 - `DNA_REFERENCE_ROOT` environment variable for locating DNA reference repos on your machine. See [integrations.md](./docs/integrations.md).
 - `DNA_GDPR_SOURCE_DOCS` environment variable for GDPR doc ingest (`pnpm gdpr:ingest`).

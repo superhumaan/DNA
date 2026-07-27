@@ -75,7 +75,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Lab CI billing blocker + cleanup anti-cascade (v0.6.8) | ✅ Shipped — see [lab-ci-billing-blocker](../engineering/lab-ci-billing-blocker.md) |
 | Lab pairing store-first (v0.6.11) | ✅ Shipped — CLI must save via pairing/init; verify is store-only; gateway allowlist docs |
 | Express 5 optional peer (v0.6.12) | ✅ Shipped — peer `express@^4.18.0 \|\| ^5.0.0` so npm installs cleanly with Express 5 |
-| Production health & residual closure (v0.6.13) | ✅ Shipped — shared Lab state, strict CI, scoped coverage, Playwright smoke, GitHub/npm/DNA-Web health |
+| Production health & residual closure (v0.6.13) | ✅ Shipped — shared Lab state, strict CI, scoped coverage, Playwright smoke, GitHub/npm/public health snapshot |
 | Lab analytics Overview + Sentry-density Issues (v0.6.14) | ✅ Shipped — see [lab-analytics-0.6.14](../engineering/lab-analytics-0.6.14.md) |
 | Lab upgrade DX — nested installs + disk UI (v0.6.15) | ✅ Shipped — see [lab-upgrade-dx-0.6.15](../engineering/lab-upgrade-dx-0.6.15.md) |
 | Lab Refresh UX + Copy issue + install-safe upgrade (v0.6.16) | ✅ Shipped — see [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md) |

@@ -68,7 +68,7 @@ apps/
   marketplace/    Standalone marketplace API (local dev)
 ```
 
-Web UI: [superhumaan/DNA-Web](https://github.com/superhumaan/DNA-Web) → dna.humaan.app
+Public web surface: [dna.humaan.app](https://dna.humaan.app)
 
 See [Monorepo](./monorepo.md).
 
