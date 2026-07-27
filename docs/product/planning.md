@@ -46,6 +46,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Item | Status |
 |------|--------|
 | Knowledge pack marketplace | ✅ Shipped |
+| Marketplace purpose bundles (Purpose Combos) (v0.6.19) | ✅ Shipped |
 | Fastify, NestJS, Next.js runtime adapters | ✅ Shipped |
 | End-to-end delivery pipeline ([#1](https://github.com/superhumaan/DNA/issues/1)) | ✅ Shipped |
 | Interactive onboarding wizard ([#2](https://github.com/superhumaan/DNA/issues/2)) | ✅ Shipped |

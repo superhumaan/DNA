@@ -278,6 +278,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Item | Start | End | Status |
 |------|-------|-----|--------|
 | Knowledge pack marketplace (~1045 packs) | Jan 2026 | Jul 2026 | Shipped |
+| Marketplace purpose bundles (Purpose Combos) (27 combos) | Jul 2026 | Jul 2026 | Shipped |
 | DNA always-on + `AGENTS.md` agent flow (v0.4.9) | Jul 2026 | Jul 2026 | Shipped |
 | Legal advisor + delivery methodology (v0.4.9) | Jul 2026 | Jul 2026 | Shipped |
 | Fastify, NestJS, Next.js runtime adapters | Feb 2026 | Apr 2026 | Shipped |
