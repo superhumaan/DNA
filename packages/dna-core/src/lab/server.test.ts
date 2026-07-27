@@ -307,6 +307,53 @@ describe("lab server", () => {
     expect(body.error).toMatch(/too large/i);
   });
 
+  it("opens Lab APIs on a public host when requireAuthInProduction is false", async () => {
+    root = await mkdtemp(join(tmpdir(), "dna-lab-open-prod-"));
+    await ensureLabStore(root);
+
+    server = createServer(async (req, res) => {
+      const handled = await handleLabRequest(req, res, {
+        root,
+        config: {
+          runtime: { environment: "production" },
+          lab: {
+            enabled: true,
+            path: "/labs",
+            requireAuthInProduction: false,
+            openLocalWithoutAuth: true,
+          },
+        } as never,
+      });
+      if (!handled) {
+        res.writeHead(404);
+        res.end();
+      }
+    });
+
+    port = await listenOnEphemeralPort(server);
+    const publicHeaders = {
+      Host: `127.0.0.1:${port}`,
+      "X-Forwarded-Host": "preview.example.test",
+    };
+
+    const boot = await fetch(`http://127.0.0.1:${port}/api/dna/labs/bootstrap`, {
+      headers: publicHeaders,
+    });
+    const bootstrap = (await boot.json()) as { localMode: boolean; authenticated: boolean };
+    expect(bootstrap.localMode).toBe(true);
+    expect(bootstrap.authenticated).toBe(true);
+
+    const coverage = await fetch(`http://127.0.0.1:${port}/api/dna/labs/coverage`, {
+      headers: publicHeaders,
+    });
+    expect(coverage.status).toBe(200);
+
+    const data = await fetch(`http://127.0.0.1:${port}/api/dna/labs/data`, {
+      headers: publicHeaders,
+    });
+    expect(data.status).toBe(200);
+  });
+
   it("never treats a public development host as local or exposes its OTP", async () => {
     root = await mkdtemp(join(tmpdir(), "dna-lab-public-"));
     await ensureLabStore(root);

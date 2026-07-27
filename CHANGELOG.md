@@ -4,6 +4,10 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Lab `requireAuthInProduction: false` actually opens Lab APIs** — the flag was in config schema but unused; only loopback Host granted `localMode`. Non-localhost hosts (Invitrace / previews) got 401 on `/coverage`, `/intelligence`, `/apis`, `/releases`, `/probe`, and `/data` even when apps faked an open bootstrap. Setting `lab.requireAuthInProduction: false` now grants open Lab auth on public hosts; default remains `true` (closed). See [lab-open-auth-requireAuthInProduction](./docs/engineering/lab-open-auth-requireAuthInProduction.md).
+
 ### Added
 
 - **Methodology expansion** — company-size packs (solo → enterprise / big-tech / agency / nonprofit / …), industry delivery overlays (`methodologies/industry-*`), and process packs (lean-startup, XP, dual-track, CD, DevOps, SRE, design/product ops, Nexus, Scrum@Scale). Marketplace catalog **998** packs. Purpose combos: `combo/startup-saas`, `combo/enterprise-healthcare`, `combo/agency-fintech`.

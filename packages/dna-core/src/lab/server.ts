@@ -293,10 +293,16 @@ async function handleLabRequestInner(
   const url = new URL(req.url ?? "/", "http://local");
   const pathname = url.pathname;
   const host = hostFromRequest(req);
-  const localMode = isLocalLabRequest(host, {
+  // Loopback Host → localMode. Separately, requireAuthInProduction:false is an
+  // explicit opt-in to open Lab on non-localhost (Invitrace / private previews).
+  // That flag was schema'd but unused — Coverage/APIs returned 401 while bootstrap
+  // looked "open" when hosts patched only the bootstrap response.
+  const loopbackLocal = isLocalLabRequest(host, {
     openLocalWithoutAuth: options.config?.lab?.openLocalWithoutAuth !== false,
     nodeEnv: options.config?.runtime?.environment ?? process.env.NODE_ENV,
   });
+  const openLabWithoutAuth = options.config?.lab?.requireAuthInProduction === false;
+  const localMode = loopbackLocal || openLabWithoutAuth;
 
   const isLabPage = pathname === labPath || pathname.startsWith(`${labPath}/`);
   const isLabApi = pathname.startsWith(apiPrefix);
