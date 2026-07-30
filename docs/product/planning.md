@@ -62,6 +62,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Prompt stem packs + intelligence library (v0.4.0) | ✅ Shipped |
 | Strategy stem ladder — Golden Circle → canvases → North Star/OKRs/KPIs → initiatives → Now/Next/Later (catalog v7) | ✅ Shipped |
 | Day-to-day stems — admin, Tauri, fleet, PR, preview, audits, incident, MCP, i18n (catalog v8, 103 stems) | ✅ Shipped |
+| **Skeletor bridge** — DNA pulls local fleet into AI context by default when Skeletor is installed (0.6.22) | ✅ Shipped |
 | Product intelligence stems — diagnose/SWOT/value/Kano + competitor + upgrade leverage (catalog v7) | ✅ Shipped |
 | Supply-chain hardening + Socket transparency (v0.4.4) | ✅ Shipped |
 | Zero npm dependencies — internal replacements for CLI/git/GitHub/glob (v0.4.5) | ✅ Shipped |

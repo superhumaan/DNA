@@ -10,6 +10,8 @@ import { TARGET_INTENTS, type ContextTarget } from "./context-intents.js";
 import { generateMethodologyContext } from "./delivery/context.js";
 import { generateDiscoveryContext } from "./discovery/context.js";
 import { generateIndustryContext, appendIndustryKnowledgeToContext } from "./industry/context.js";
+import { loadDnaConfig } from "./validator.js";
+import { formatSkeletorContextSection, pullSkeletorData } from "./skeletor/index.js";
 
 export type { ContextTarget };
 
@@ -158,6 +160,17 @@ export async function generateContext(root: string, target: ContextTarget): Prom
       const content = await readFile(path, "utf-8");
       sections.push(`### ${mem}\n`, content, "\n");
     }
+  }
+
+  try {
+    const config = await loadDnaConfig(root);
+    const pull = await pullSkeletorData({ config });
+    const skeletorSection = formatSkeletorContextSection(pull);
+    if (skeletorSection) {
+      sections.push(skeletorSection);
+    }
+  } catch {
+    // Skeletor pull is best-effort — never fail context generation
   }
 
   return sections.join("\n");

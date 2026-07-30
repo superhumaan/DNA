@@ -16,6 +16,8 @@
 
 **One squad, many products?** Install DNA on the **parent folder** — not every repo. One brain remembers every app and how they connect. [Portfolio install →](./docs/product/portfolio-install.md)
 
+**Skeletor installed?** DNA pulls the local fleet bridge by default and feeds it to AI (`dna skeletor status`). [Skeletor →](https://dna.humaan.app/skeletor)
+
 | | |
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |

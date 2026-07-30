@@ -198,6 +198,23 @@ dna memory sync
 dna watch    # optional — CellularMemory updates when files change
 ```
 
+### 11. Skeletor bridge (default when Skeletor is installed)
+
+If [Skeletor](https://dna.humaan.app/skeletor) is on the machine, DNA **automatically** pulls the local fleet bridge and feeds it to AI — no extra install step.
+
+| Surface | What happens |
+|---------|----------------|
+| `dna doctor` | Writes `.DNA/CellularMemory/parietalLobe/skeletor-fleet.md` |
+| `dna context` | Appends a **Skeletor fleet** section (sibling labs, DNA versions, doctor/care) |
+| Always-on rules | Tell agents to use the fleet feed for cross-lab coordination |
+| CLI | `dna skeletor status` · `dna skeletor feed` · `dna skeletor context` |
+
+Skeletor writes `~/Library/Application Support/app.humaan.skeletor/bridge/fleet.json` on each full fleet scan. Opt out:
+
+```json
+{ "skeletor": { "enabled": false } }
+```
+
 ---
 
 ## Full tree after one portfolio install

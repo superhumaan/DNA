@@ -4,6 +4,12 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.22] - 2026-07-30
+
+### Added
+
+- **Skeletor bridge (default-on)** — when Skeletor is installed, DNA pulls the local fleet snapshot (`~/Library/Application Support/app.humaan.skeletor/bridge/fleet.json`) and feeds it to AI via `dna context`, `dna doctor` (CellularMemory `parietalLobe/skeletor-fleet.md`), and always-on rules. New CLI: `dna skeletor status|feed|context`. Opt out with `"skeletor": { "enabled": false }` in `config.dna.json`.
+
 ## [0.6.21] - 2026-07-30
 
 ### Added

@@ -330,6 +330,14 @@ export const DNA_AI_COMMAND_CATALOG: readonly DnaAiCommandDef[] = [
     argumentHint: "<packId>",
   },
   {
+    id: "skeletor-status",
+    category: "core",
+    title: "Skeletor Status",
+    description: "Detect Skeletor and show fleet bridge status for AI cross-lab coordination.",
+    cli: "npx dna skeletor status",
+    followUp: "If installed, run `dna skeletor feed` and load `.DNA/CellularMemory/parietalLobe/skeletor-fleet.md` for cross-lab work.",
+  },
+  {
     id: "memory-export",
     category: "memory",
     title: "Memory Export",

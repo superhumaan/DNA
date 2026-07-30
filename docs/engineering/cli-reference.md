@@ -73,6 +73,25 @@ dna memory sync --registry <path>
 
 Conflict strategies: `newest` (default), `keep-local`, `keep-remote`.
 
+## skeletor
+
+When [Skeletor](https://dna.humaan.app/skeletor) is installed, DNA pulls the local fleet bridge by default and feeds it to AI (`dna context`, doctor → CellularMemory).
+
+```bash
+dna skeletor status     # detect install + bridge
+dna skeletor feed       # write .DNA/CellularMemory/parietalLobe/skeletor-fleet.md
+dna skeletor context    # print fleet markdown
+```
+
+Opt out in `.DNA/config.dna.json`:
+
+```json
+{ "skeletor": { "enabled": false } }
+```
+
+Bridge file (written by Skeletor on full fleet scan):
+`~/Library/Application Support/app.humaan.skeletor/bridge/fleet.json`
+
 ## generate
 
 Platform feature code scaffolds.

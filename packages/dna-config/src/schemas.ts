@@ -233,6 +233,15 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     };
   }
 
+  let skeletor: DnaConfig["skeletor"];
+  if (d.skeletor !== undefined) {
+    const sk = expectObject(d.skeletor, "skeletor");
+    if (!sk.success) return sk;
+    skeletor = {
+      enabled: withDefault(optionalBoolean(sk.data.enabled), true),
+    };
+  }
+
   let delivery: DnaConfig["delivery"];
   if (d.delivery !== undefined) {
     const del = expectObject(d.delivery, "delivery");
@@ -390,6 +399,7 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     industry,
     lab,
     feedback,
+    skeletor,
     platformFeatures: platformFeatures.data,
   });
 }
@@ -830,6 +840,10 @@ export interface DnaConfig {
     path: string;
     requireAuthInProduction: boolean;
     openLocalWithoutAuth: boolean;
+  };
+  /** Pull Skeletor fleet into AI context when Skeletor is installed (default: on). */
+  skeletor?: {
+    enabled: boolean;
   };
   platformFeatures: string[];
 }

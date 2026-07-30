@@ -6,6 +6,8 @@
 
 **One squad, many products?** Install on the **parent folder** — one brain for every related app. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
 
+**Skeletor installed?** DNA pulls the local fleet into AI context by default (`dna skeletor status`). [Skeletor →](https://dna.humaan.app/skeletor)
+
 [![npm](https://img.shields.io/npm/v/@superhumaan/dna-by-humaan)](https://www.npmjs.com/package/@superhumaan/dna-by-humaan)
 [![Socket](https://socket.dev/api/badge/npm/package/@superhumaan/dna-by-humaan)](https://socket.dev/npm/package/@superhumaan/dna-by-humaan)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)

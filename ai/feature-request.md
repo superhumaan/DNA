@@ -4,26 +4,26 @@ _Auto-maintained by DNA. Updated 2026-07-30._
 
 ## Latest request
 
-> From now on we don't talk about thin or advanced — the checklist + artifacts + failure modes + dense MUST/SHOULD + 2–3 examples bar is the basic we expect each time.
-> Now push to npm, update npm details, update GitHub and GitHub details, update DNA-web website details.
+> Go into DNA, make sure that DNA by default, pulls data from Skeletor, if skeletor is installed, and it feeds the AI, so that it's much easier to share, cross coordinate and work with it
 
 ## Problem
 
-Day-to-day stems met a depth bar that was labeled "advanced"; that language must become the default stem quality baseline. The 15 stems + catalog v8 need to ship to npm, GitHub, and dna.humaan.app (DNA-web).
+DNA projects are islands. Skeletor already scans the whole Projects folder but that intelligence lived only inside the desktop app. DNA CLI / workbench never read it.
 
-## Desired Behaviour
+## Desired behaviour
 
-1. Rename/reframe stem quality: baseline bar, not thin vs advanced
-2. Encode bar in tests + authoring docs so future stems must meet it
-3. Version bump, CHANGELOG, ship-sync docs
-4. Commit + push to GitHub
-5. Publish npm via GitHub Actions Publish npm workflow
-6. Update DNA-web / intelligence catalog site details for 103 stems / v8
+1. Skeletor writes `bridge/fleet.json` on each full fleet scan
+2. DNA detects Skeletor by default and pulls settings + kit + fleet
+3. Feeds AI via `dna context`, doctor CellularMemory, always-on rules
+4. CLI: `dna skeletor status|feed|context`
+5. Opt out: `"skeletor": { "enabled": false }`
 
 ## Acceptance criteria
 
-- [ ] No "thin/advanced" framing for stem depth in new authoring copy
-- [ ] Baseline stem quality documented + tested for day-to-day set (and guidance for all new stems)
-- [ ] Version bumped; GitHub updated
-- [ ] npm publish triggered via GH Actions
-- [ ] DNA-web website/catalog details updated for stem count + new stems
+- [x] DNA detects Skeletor Application Support
+- [x] Skeletor writes fleet bridge on full scan
+- [x] `dna context` / doctor feed include Skeletor section
+- [x] Always-on rules mention Skeletor pull
+- [x] Absent Skeletor → silent skip
+- [x] Unit tests for detect / pull / opt-out / feed
+- [x] Opt-out via config

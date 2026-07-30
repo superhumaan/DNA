@@ -9,6 +9,7 @@ DNA ships as a single npm package with a broad feature surface. This page is the
 | Feature | Command / path | Purpose |
 |---------|----------------|---------|
 | Portfolio install | `dna doctor` at squad folder | One brain for every related product — [guide](./portfolio-install.md) |
+| **Skeletor bridge** | `dna skeletor status` / `feed` | When Skeletor is installed, DNA pulls fleet data into AI context by default |
 | Behaviour rules | `.DNA/behaviour/` | Govern how AI writes code, tests, docs, security |
 | neuralNetwork routing | `.DNA/neuralNetwork.json` | Intent → knowledge + Behaviour + memory |
 | **103 prompt stem packs** | `.DNA/stems/` | Guidelines, expectations, workflows + `/` slash commands (strategy ladder + day-to-day operator stems) |

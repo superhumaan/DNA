@@ -114,6 +114,7 @@ export * from "./generators/wire-lab-stack.js";
 export * from "./platform/codegen/audit-logging.js";
 export * from "./platform/codegen/platform-features.js";
 export * from "./stack/hosting.js";
+export * from "./skeletor/index.js";
 export {
   analyzeSharedLibrary,
   ensureSharedLibrary,

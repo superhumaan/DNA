@@ -114,6 +114,10 @@ import {
   syncFromTeamRegistry,
   formatMemoryExportSummary,
   formatMemoryImportSummary,
+  pullSkeletorData,
+  feedSkeletorToAi,
+  formatSkeletorStatus,
+  formatSkeletorContextSection,
   analyzeSharedLibrary,
   planSharedLibraryExecution,
   formatSharedLibraryDryRun,
@@ -2309,6 +2313,65 @@ discovery
   });
 
 const memory = program.command("memory").description("CellularMemory export and import across projects");
+
+const skeletorCmd = program
+  .command("skeletor")
+  .description("Skeletor desktop bridge — fleet data for AI cross-lab coordination");
+
+skeletorCmd
+  .command("status")
+  .description("Detect Skeletor install and show fleet bridge status")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const pull = await pullSkeletorData({ config });
+    console.log(formatSkeletorStatus(pull));
+    if (pull.detection.installed) {
+      console.log(`  Prefs: ${pull.detection.prefsDir}`);
+      if (pull.settings?.projectsContainer) {
+        console.log(`  Container: ${pull.settings.projectsContainer}`);
+      }
+      if (pull.fleet) {
+        console.log(
+          `  Bridge: ${pull.detection.fleetBridgePath} (${pull.fleet.projects?.length ?? 0} projects)`,
+        );
+      } else {
+        console.log(`  Bridge: missing — open Skeletor and refresh fleet once`);
+      }
+    }
+  });
+
+skeletorCmd
+  .command("feed")
+  .description("Pull Skeletor fleet into CellularMemory for AI agents")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const fed = await feedSkeletorToAi(root, config);
+    if (fed) {
+      console.log(`✓ Skeletor fleet fed to AI → ${fed}`);
+    } else {
+      console.log(formatSkeletorStatus(await pullSkeletorData({ config })));
+    }
+  });
+
+skeletorCmd
+  .command("context")
+  .description("Print Skeletor fleet markdown (same section as dna context)")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const pull = await pullSkeletorData({ config });
+    const section = formatSkeletorContextSection(pull);
+    if (!section) {
+      console.log(formatSkeletorStatus(pull));
+      return;
+    }
+    console.log(section);
+  });
 
 memory
   .command("export")

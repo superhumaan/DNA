@@ -27,6 +27,7 @@ import { analyzeProject } from "./ivf/analyze.js";
 import { documentFromCode } from "./ivf/document.js";
 import { generateIvfPlan } from "./ivf/plan.js";
 import { ALL_IVF_VERTICALS } from "./ivf/verticals.js";
+import { feedSkeletorToAi, formatSkeletorStatus, pullSkeletorData } from "./skeletor/index.js";
 
 export interface DoctorOrchestratorOptions {
   root: string;
@@ -378,6 +379,18 @@ async function ensureAiAndCi(root: string, config: DnaConfig): Promise<string[]>
   } else {
     const gaps = [...injection.report.missing, ...injection.report.stale];
     actions.push(`AI injection gaps remain: ${gaps.join(", ")}`);
+  }
+
+  try {
+    const fed = await feedSkeletorToAi(root, config);
+    if (fed) {
+      actions.push(`Skeletor fleet fed to AI (${fed})`);
+    } else {
+      const pull = await pullSkeletorData({ config });
+      actions.push(formatSkeletorStatus(pull));
+    }
+  } catch {
+    actions.push("Skeletor fleet feed skipped");
   }
 
   const ci = await installCiPipeline({ root, config, scan, skipIfExists: false });
