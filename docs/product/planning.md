@@ -4,18 +4,19 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.6.19)
+## Current release focus (v0.6.20)
 
+- **Lab mobile shell** — ColorParty-style off-canvas nav ≤900px; sticky chrome; scrollable tables ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **Marketplace purpose bundles** — 27 combos; `dna marketplace install combo/<id>` installs knowledge packs + prompt stems + AI rules; [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles)
 - **Knowledge marketplace** — **1045 rich packs** (0 stubs), 88 stem packs, strategy grounding (`STRATEGY_COMPLETE`)
 - **Lab APIs reference** — every Lab route with Description / Usage / Received / Sent; expandable APIs tab ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab URL deep links** — `/labs/<tab>`, `/labs/issues/<id>`; refresh keeps the page; 401 → sign-in (no Unauthorized toast)
-- **`requireAuthInProduction: false`** honored for open Lab on public hosts ([docs](../engineering/lab-open-auth-requireAuthInProduction.md))
-- Prior: Lab alert dark theme + force Refresh (v0.6.17)
+- Prior: `requireAuthInProduction: false` for open Lab (v0.6.18); Lab alert dark theme + force Refresh (v0.6.17)
 
 ## Shipped highlights
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.18)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.20)
+- **Lab mobile shell (v0.6.20)** — ColorParty admin parity on phones/tablets ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **Lab APIs reference + deep links (v0.6.18)** — full HTTP catalog; History API routing; open-auth flag ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab Refresh UX + Copy issue (v0.6.16)** — disable/spin Refresh; tab-aware reload; issue clipboard ([docs](../engineering/lab-refresh-ux-0.6.16.md))
 - **Lab upgrade DX (v0.6.15+)** — health `dnaVersion` + install scan/fix on doctor/update; disk Lab UI revalidation ([docs](../engineering/lab-upgrade-dx-0.6.15.md))
@@ -68,7 +69,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Legal advisor + delivery methodology (v0.4.9) | ✅ Shipped |
 | Upstream feedback — DNA platform auto-report (v0.4.8) | ✅ Shipped |
 | First-party GitHub OAuth app ([#11](https://github.com/superhumaan/DNA/issues/11)) | ✅ Shipped — setup script + OAuth scaffolding |
-| Real-time dashboard UI / DNA Lab ([#12](https://github.com/superhumaan/DNA/issues/12)) | ✅ Shipped — `/labs`, `dna lab serve`, `dna register lab` |
+| Real-time dashboard UI / DNA Lab ([#12](https://github.com/superhumaan/DNA/issues/12)) | ✅ Shipped — `/labs` mobile shell (v0.6.20), `dna lab serve`, `dna register lab` |
 | Lab hardening + Aggressive Repair Loop (v0.6.3) | ✅ Shipped — see [lab-and-repair-0.6.3](../engineering/lab-and-repair-0.6.3.md) |
 | Lab UI v4 + runtime depth + EPIPE/repair harden (v0.6.4) | ✅ Shipped — see [lab-and-runtime-0.6.4](../engineering/lab-and-runtime-0.6.4.md) |
 | Lab UI Humaan admin parity (v0.6.7) | ✅ Shipped — see [lab-ui-humaan-0.6.7](../engineering/lab-ui-humaan-0.6.7.md) |
