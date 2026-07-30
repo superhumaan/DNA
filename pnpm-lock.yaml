@@ -17,8 +17,8 @@ importers:
   .:
     dependencies:
       '@superhumaan/dna-by-humaan':
-        specifier: workspace:*
-        version: link:packages/dna-cli
+        specifier: ^0.6.20
+        version: 0.6.20(@nestjs/common@11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@7.2.0))(express@4.22.2(supports-color@7.2.0))(fastify@5.9.0)
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.4
@@ -812,6 +812,22 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@superhumaan/dna-by-humaan@0.6.20':
+    resolution: {integrity: sha512-waE7JivabExfgrQoNtelYOfzr539h8wjsiPIk/bmX0HrwiFFVQZJnugXL/2xnUKqJefGorauL0l8d01oJcMcDw==}
+    engines: {node: '>=20'}
+    hasBin: true
+    peerDependencies:
+      '@nestjs/common': ^10.0.0 || ^11.0.0
+      express: ^4.18.0 || ^5.0.0
+      fastify: ^4.0.0 || ^5.0.0
+    peerDependenciesMeta:
+      '@nestjs/common':
+        optional: true
+      express:
+        optional: true
+      fastify:
+        optional: true
 
   '@tokenizer/inflate@0.4.1':
     resolution: {integrity: sha512-2mAv+8pkG6GIZiF1kNg1jAjh27IDxEPKwdGul3snfztFerfPGI1LjDezZp3i7BElXompqEtPmoPx6c2wgtWsOA==}
@@ -2590,6 +2606,12 @@ snapshots:
     optional: true
 
   '@standard-schema/spec@1.1.0': {}
+
+  '@superhumaan/dna-by-humaan@0.6.20(@nestjs/common@11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@7.2.0))(express@4.22.2(supports-color@7.2.0))(fastify@5.9.0)':
+    optionalDependencies:
+      '@nestjs/common': 11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@7.2.0)
+      express: 4.22.2(supports-color@7.2.0)
+      fastify: 5.9.0
 
   '@tokenizer/inflate@0.4.1(supports-color@7.2.0)':
     dependencies:

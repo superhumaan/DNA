@@ -1,6 +1,6 @@
 # DNA intelligence — Cursor commands
 
-**dna-by-humaan** — 88 prompt stem packs (remote catalog v7) + 47 `/dna-*` CLI commands.
+**dna-by-humaan** — 103 prompt stem packs (bundled catalog v8) + 47 `/dna-*` CLI commands.
 
 ## Prompt stems (`.DNA/stems/<id>/`)
 
@@ -96,6 +96,21 @@ Each stem: **prompt + guidelines + expectations + context + examples**.
 | `/upgrade-leverage-map` | Upgrade leverage map |
 | `/upgrade-modernization` | Upgrade modernization |
 | `/upgrade-recommend` | Upgrade recommend |
+| `/plan-admin-portal` | Plan admin portal |
+| `/build-analytics-dashboard` | Build analytics dashboard |
+| `/design-onboarding` | Design onboarding |
+| `/plan-mcp-server` | Plan MCP server |
+| `/implement-i18n` | Implement i18n |
+| `/plan-fleet-scan` | Plan fleet scan |
+| `/ship-tauri-release` | Ship Tauri release |
+| `/create-pr` | Create pull request |
+| `/ship-preview` | Ship preview |
+| `/a11y-audit` | Accessibility audit |
+| `/perf-audit` | Performance audit |
+| `/security-patch-deps` | Security patch dependencies |
+| `/visual-qa-pass` | Visual QA pass |
+| `/incident-postmortem` | Incident postmortem |
+| `/write-release-notes` | Write release notes |
 
 Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 

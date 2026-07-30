@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "catalogVersion": 7,
-  "source": "remote",
-  "syncedAt": "2026-07-27T05:18:30.731Z",
-  "count": 88,
+  "catalogVersion": 8,
+  "source": "bundled",
+  "syncedAt": "2026-07-30T05:06:54.651Z",
+  "count": 103,
   "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
   "packs": [
     {
@@ -1391,6 +1391,246 @@
       "category": "strategy",
       "slash": "upgrade-recommend",
       "path": ".DNA/stems/upgrade-recommend",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "plan-admin-portal",
+      "name": "Plan admin portal",
+      "category": "features",
+      "slash": "plan-admin-portal",
+      "path": ".DNA/stems/plan-admin-portal",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "build-analytics-dashboard",
+      "name": "Build analytics dashboard",
+      "category": "features",
+      "slash": "build-analytics-dashboard",
+      "path": ".DNA/stems/build-analytics-dashboard",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "design-onboarding",
+      "name": "Design onboarding",
+      "category": "features",
+      "slash": "design-onboarding",
+      "path": ".DNA/stems/design-onboarding",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "plan-mcp-server",
+      "name": "Plan MCP server",
+      "category": "features",
+      "slash": "plan-mcp-server",
+      "path": ".DNA/stems/plan-mcp-server",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "implement-i18n",
+      "name": "Implement i18n",
+      "category": "features",
+      "slash": "implement-i18n",
+      "path": ".DNA/stems/implement-i18n",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "plan-fleet-scan",
+      "name": "Plan fleet scan",
+      "category": "analysis",
+      "slash": "plan-fleet-scan",
+      "path": ".DNA/stems/plan-fleet-scan",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "ship-tauri-release",
+      "name": "Ship Tauri release",
+      "category": "delivery",
+      "slash": "ship-tauri-release",
+      "path": ".DNA/stems/ship-tauri-release",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "create-pr",
+      "name": "Create pull request",
+      "category": "delivery",
+      "slash": "create-pr",
+      "path": ".DNA/stems/create-pr",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "ship-preview",
+      "name": "Ship preview",
+      "category": "delivery",
+      "slash": "ship-preview",
+      "path": ".DNA/stems/ship-preview",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "a11y-audit",
+      "name": "Accessibility audit",
+      "category": "quality",
+      "slash": "a11y-audit",
+      "path": ".DNA/stems/a11y-audit",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "perf-audit",
+      "name": "Performance audit",
+      "category": "quality",
+      "slash": "perf-audit",
+      "path": ".DNA/stems/perf-audit",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "security-patch-deps",
+      "name": "Security patch dependencies",
+      "category": "quality",
+      "slash": "security-patch-deps",
+      "path": ".DNA/stems/security-patch-deps",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "visual-qa-pass",
+      "name": "Visual QA pass",
+      "category": "quality",
+      "slash": "visual-qa-pass",
+      "path": ".DNA/stems/visual-qa-pass",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "incident-postmortem",
+      "name": "Incident postmortem",
+      "category": "debug",
+      "slash": "incident-postmortem",
+      "path": ".DNA/stems/incident-postmortem",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "write-release-notes",
+      "name": "Write release notes",
+      "category": "docs",
+      "slash": "write-release-notes",
+      "path": ".DNA/stems/write-release-notes",
       "files": [
         "README.md",
         "prompt.md",

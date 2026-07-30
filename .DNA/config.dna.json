@@ -4,7 +4,7 @@
   "projectName": "dna-by-humaan",
   "description": "Software project",
   "createdAt": "2026-07-11T10:27:53.301Z",
-  "updatedAt": "2026-07-27T05:19:14.270Z",
+  "updatedAt": "2026-07-30T05:06:54.724Z",
   "stack": {
     "archetype": "react-vite-api",
     "frontend": "react",
@@ -1113,9 +1113,9 @@
   },
   "aiWorkbench": {
     "enabled": true,
-    "lastSyncAt": "2026-07-27T05:18:30.874Z",
-    "catalogVersion": 7,
-    "stemSource": "remote"
+    "lastSyncAt": "2026-07-30T05:06:54.724Z",
+    "catalogVersion": 8,
+    "stemSource": "bundled"
   },
   "lab": {
     "enabled": true,

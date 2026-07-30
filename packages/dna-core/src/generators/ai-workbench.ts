@@ -481,12 +481,12 @@ export function buildIntelligenceWorkbenchCatalog() {
     }));
 
   return {
-      version: 7,
+      version: 8,
       type: "workbench",
       catalogUrl: "https://dna.humaan.app/intelligence",
       generatedBy: "dna workbench install",
       tagline:
-        "Copy-paste prompt stem packs for Cursor. Each stem includes guidelines, expectations, and context so the AI sticks to the workflow.",
+        "Prompt stem packs for Cursor/Claude. Baseline quality: checklist + artifact paths + failure modes, dense guidelines, 2–3 examples per stem.",
       packages: {
         cursor: {
           rule: ".cursor/rules/dna-workbench.mdc",

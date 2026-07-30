@@ -4,6 +4,13 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.21] - 2026-07-30
+
+### Added
+
+- **Day-to-day stem packs (catalog v8, 103 stems)** — Skeletor/DNA operator workflows: `/plan-admin-portal`, `/ship-tauri-release`, `/build-analytics-dashboard`, `/plan-fleet-scan`, `/create-pr`, `/ship-preview`, `/a11y-audit`, `/perf-audit`, `/incident-postmortem`, `/design-onboarding`, `/plan-mcp-server`, `/implement-i18n`, `/write-release-notes`, `/security-patch-deps`, `/visual-qa-pass`.
+- **Stem quality baseline** — every new stem must include checklist + artifact paths + failure modes, dense MUST/SHOULD/NEVER, and 2–3 examples (`STEM_QUALITY_BASELINE` / `stem-quality.ts`). Day-to-day stems meet this bar.
+
 ## [0.6.20] - 2026-07-30
 
 ### Added

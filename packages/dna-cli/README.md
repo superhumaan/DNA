@@ -13,7 +13,7 @@
 
 **One npm package. One install. Everything included.**
 
-DNA by Humaan is an open-source **project brain**, **runtime observer**, **88 prompt stem packs**, **1045-pack knowledge marketplace**, **27 purpose bundles**, and **AI-assisted repair** system for TypeScript squads.
+DNA by Humaan is an open-source **project brain**, **runtime observer**, **103 prompt stem packs**, **1045-pack knowledge marketplace**, **27 purpose bundles**, and **AI-assisted repair** system for TypeScript squads.
 
 **Recommended:** `npx @superhumaan/dna-by-humaan doctor` — one command for stems, rules, detection, memory, runtime, CI, and feature factory. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
 
@@ -23,7 +23,7 @@ Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
 | **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · [Bundles](https://dna.humaan.app/marketplace#bundles) |
-| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 88 prompt stem packs + `/dna-*` CLI commands |
+| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 103 prompt stem packs + `/dna-*` CLI commands |
 | **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Supply chain** | [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) · [SECURITY.md](https://github.com/superhumaan/DNA/blob/main/SECURITY.md) |
@@ -91,7 +91,7 @@ npx @superhumaan/dna-by-humaan doctor
 | Included in one `doctor` | |
 |--------------------------|---|
 | `.DNA/` intelligence | behaviour, CellularMemory, immune system, neuralNetwork |
-| **88 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` |
+| **103 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` |
 | **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills — always on |
 | **Detection** | stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift |
 | **Feature factory** | 9-role loop, quality gates, same template every feature |
@@ -155,7 +155,7 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for Cursor / Copilot / Claude |
 | `dna update` | Upgrade CLI + re-apply all installed knowledge packs + force re-inject always-on AI rules |
-| `dna workbench install` | Refresh DNA Workbench + 88 prompt stem packs + `/dna-*` commands + `AGENTS.md` |
+| `dna workbench install` | Refresh DNA Workbench + 103 prompt stem packs + `/dna-*` commands + `AGENTS.md` |
 | `dna stems list` | List prompt stem packs (analyze, ship, agent-loop roles, …) |
 | `dna stems show <id>` | Copy variants and file paths for one stem |
 | `dna commands install` | Refresh `/dna-*` CLI slash commands only (also installed by init/doctor/update) |

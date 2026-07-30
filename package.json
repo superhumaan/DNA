@@ -2,7 +2,7 @@
   "name": "dna-by-humaan",
   "version": "0.1.0",
   "private": true,
-  "description": "DNA by Humaan — one doctor install: 88 stem packs, rules, detection, portfolio memory, 1045-pack knowledge marketplace, DNA Lab at /labs, runtime observer, feature factory, and AI repair for TypeScript squads",
+  "description": "DNA by Humaan — one doctor install: 103 stem packs, rules, detection, portfolio memory, 1045-pack knowledge marketplace, DNA Lab at /labs, runtime observer, feature factory, and AI repair for TypeScript squads",
   "author": "Humaan by Superlite",
   "license": "MIT",
   "homepage": "https://dna.humaan.app",
@@ -101,6 +101,6 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
-    "@superhumaan/dna-by-humaan": "workspace:*"
+    "@superhumaan/dna-by-humaan": "^0.6.20"
   }
 }

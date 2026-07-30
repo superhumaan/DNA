@@ -1,6 +1,6 @@
 # DNA Prompt Stem Packs
 
-**dna-by-humaan** — 88 prompt stem packs (remote catalog v7).
+**dna-by-humaan** — 103 prompt stem packs (bundled catalog v8).
 
 Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, context, and examples**.
 
@@ -23,6 +23,7 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `stack-hosting` — Stack & hosting
 - `recommend-architecture` — Recommend architecture
 - `security-audit` — Security audit
+- `plan-fleet-scan` — Plan fleet scan
 
 ### features
 - `ship-feature` — Ship a feature
@@ -30,11 +31,20 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `plan-rbac` — Plan RBAC
 - `generate-feature` — Generate feature scaffold
 - `platform-codegen` — Platform codegen
+- `plan-admin-portal` — Plan admin portal
+- `build-analytics-dashboard` — Build analytics dashboard
+- `design-onboarding` — Design onboarding
+- `plan-mcp-server` — Plan MCP server
+- `implement-i18n` — Implement i18n
 
 ### quality
 - `quality-gate` — Quality gate
 - `quality-scan` — Quality scan
 - `pre-push-review` — Pre-push review
+- `a11y-audit` — Accessibility audit
+- `perf-audit` — Performance audit
+- `security-patch-deps` — Security patch dependencies
+- `visual-qa-pass` — Visual QA pass
 
 ### compliance
 - `plan-compliance` — Plan compliance
@@ -52,11 +62,13 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `ai-repair` — AI repair
 - `runtime-investigate` — Runtime investigate
 - `dashboard-monitor` — Dashboard monitor
+- `incident-postmortem` — Incident postmortem
 
 ### docs
 - `sync-impressions` — Sync Impressions
 - `impressions-drift-pr` — Impressions drift PR
 - `document-from-code` — Document from code
+- `write-release-notes` — Write release notes
 
 ### ivf
 - `plan-ivf` — Plan IVF
@@ -68,6 +80,9 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `docker-build` — Docker build
 - `github-push` — GitHub push
 - `ci-install` — CI install
+- `ship-tauri-release` — Ship Tauri release
+- `create-pr` — Create pull request
+- `ship-preview` — Ship preview
 
 ### marketplace
 - `marketplace-search` — Marketplace search

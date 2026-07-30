@@ -50,7 +50,7 @@ DNA is not a documentation generator. It is:
 cd /path/to/your-project    # or portfolio parent for multi-app squads
 npx @superhumaan/dna-by-humaan doctor
 
-# In Cursor: type / for 88 stems and /dna-* commands — already installed
+# In Cursor: type / for 103 stems and /dna-* commands — already installed
 # Portfolio squads: run doctor on the parent folder, not each repo
 ```
 
@@ -88,7 +88,7 @@ npx @superhumaan/dna-by-humaan doctor
 |-------|----------|
 | **Intelligence** | `.DNA/` — config, neuralNetwork, 8 behaviour files, 7 CellularMemory regions, immune system |
 | **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills, always-on co-pilot (no “use DNA”) |
-| **Stems & commands**| **88** prompt stem packs (guidelines, expectations, workflows) + **`/dna-*`** slash commands |
+| **Stems & commands**| **103** prompt stem packs (guidelines, expectations, workflows) + **`/dna-*`** slash commands |
 | **Feature factory** | 9-role agent loop, `ai/agent-loop.md`, product-process rules, quality gates |
 | **Detection** | Stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, Impressions drift, auth patterns |
 | **Runtime** | Observer auto-wired into Express/Fastify/Next.js → classified issues + repair plans |
@@ -288,7 +288,8 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | npm `dna doctor` workbench asset path fix (v0.4.6) | Jul 2026 | Jul 2026 | Shipped |
 | [Upstream feedback](https://github.com/superhumaan/DNA/issues) — DNA platform auto-report (v0.4.8) | Jul 2026 | Jul 2026 | Shipped |
 | [Prompt stem packs + intelligence library](https://dna.humaan.app/intelligence) | Jul 2026 | Jul 2026 | Shipped |
-| Strategy stem ladder (Golden Circle → canvases → OKRs/KPIs → Now/Next/Later; 88 stems, catalog v7) | Jul 2026 | Jul 2026 | Shipped |
+| Strategy stem ladder (Golden Circle → canvases → OKRs/KPIs → Now/Next/Later; catalog v7) | Jul 2026 | Jul 2026 | Shipped |
+| Day-to-day stems (admin, Tauri, fleet, PR, preview, a11y/perf, incident, MCP, i18n; 103 stems, catalog v8) | Jul 2026 | Jul 2026 | Shipped |
 | Product intelligence stems (diagnose/SWOT/competitors/upgrade leverage; catalog v7) | Jul 2026 | Jul 2026 | Shipped |
 | [End-to-end delivery pipeline](https://github.com/superhumaan/DNA/issues/1) | May 2026 | Jul 2026 | Shipped |
 | [Interactive onboarding wizard](https://github.com/superhumaan/DNA/issues/2) | May 2026 | Jun 2026 | Shipped |

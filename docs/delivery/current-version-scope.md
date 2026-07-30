@@ -19,7 +19,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Brownfield** | IVF plans, `document --from-code`, deep analyze |
 | **Feature factory** | Plain-language features + mandatory 9-role agent loop (`AGENTS.md`) |
 | **AI Workbench** | Always-on Cursor/Claude co-pilot — no “use DNA” required |
-| **Prompt stem packs** | 88 copy-paste workflows in `.DNA/stems/` — guidelines, expectations, strategy ladder, product intelligence (diagnose/competitors/upgrades), agent-loop roles |
+| **Prompt stem packs** | 103 copy-paste workflows in `.DNA/stems/` — guidelines, expectations, strategy ladder, product intelligence, day-to-day operator stems (admin/Tauri/fleet/PR/preview/audits), agent-loop roles |
 | **`dna stems`** | List, show, and refresh prompt stem packs |
 | **GitHub** | Connect, auto-issues, push gates, browser login (`dna github login`) |
 | **Preview deploy** | `dna-preview.yml` scaffold with Vercel/Netlify + branch filter |

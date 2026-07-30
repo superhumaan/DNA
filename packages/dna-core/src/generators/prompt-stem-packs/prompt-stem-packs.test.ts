@@ -1,15 +1,49 @@
 import { describe, it, expect } from "vitest";
 import { PROMPT_STEM_DEFS, getPromptStemPacks, intelligenceStemPackEntries } from "./index.js";
 import { finalizeStemPack } from "./builder.js";
+import { checkStemQualityBaseline } from "./stem-quality.js";
 
 describe("prompt stem packs", () => {
   it("defines a large stem library", () => {
-    expect(PROMPT_STEM_DEFS.length).toBeGreaterThanOrEqual(77);
+    expect(PROMPT_STEM_DEFS.length).toBeGreaterThanOrEqual(103);
   });
 
   it("has unique stem ids", () => {
     const ids = PROMPT_STEM_DEFS.map((d) => d.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("day-to-day stems meet baseline stem quality", () => {
+    const dayToDayIds = [
+      "plan-admin-portal",
+      "ship-tauri-release",
+      "build-analytics-dashboard",
+      "plan-fleet-scan",
+      "create-pr",
+      "ship-preview",
+      "a11y-audit",
+      "perf-audit",
+      "incident-postmortem",
+      "design-onboarding",
+      "plan-mcp-server",
+      "implement-i18n",
+      "write-release-notes",
+      "security-patch-deps",
+      "visual-qa-pass",
+    ];
+    for (const id of dayToDayIds) {
+      const def = PROMPT_STEM_DEFS.find((d) => d.id === id);
+      expect(def, id).toBeDefined();
+      expect(def?.slash).toBe(id);
+      const quality = checkStemQualityBaseline(def!);
+      expect(quality.ok, `${id}: ${quality.failures.join("; ")}`).toBe(true);
+    }
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "plan-admin-portal")?.category).toBe("features");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "create-pr")?.category).toBe("delivery");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "a11y-audit")?.category).toBe("quality");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "incident-postmortem")?.category).toBe("debug");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "write-release-notes")?.category).toBe("docs");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "plan-fleet-scan")?.category).toBe("analysis");
   });
 
   it("includes strategy ladder stems", () => {

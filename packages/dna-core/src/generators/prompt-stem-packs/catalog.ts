@@ -4,6 +4,7 @@ import { METHODOLOGY_STEM_DEFS } from "./catalog-methodology.js";
 import { DISCOVERY_STEM_DEFS } from "./catalog-discovery.js";
 import { STRATEGY_STEM_DEFS } from "./catalog-strategy.js";
 import { PRODUCT_INTEL_STEM_DEFS } from "./catalog-product-intel.js";
+import { DAY_TO_DAY_STEM_DEFS } from "./catalog-day-to-day.js";
 
 const GROUND = {
   must: [
@@ -1533,4 +1534,5 @@ Summarize segments synced, conflicts, and resolution strategy.`,
   ...DISCOVERY_STEM_DEFS,
   ...STRATEGY_STEM_DEFS,
   ...PRODUCT_INTEL_STEM_DEFS,
+  ...DAY_TO_DAY_STEM_DEFS,
 ];

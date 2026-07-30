@@ -11,6 +11,7 @@ export * from "./types.js";
 export { PROMPT_STEM_DEFS } from "./catalog.js";
 export * from "./sync.js";
 export * from "./remote.js";
+export * from "./stem-quality.js";
 
 const STEM_INDEX = ".DNA/stems/index.json";
 
@@ -95,14 +96,22 @@ export function generatePromptStemPackFiles(config: DnaConfig): Record<string, s
 
 Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, context, and examples** so the AI sticks to the workflow.
 
-## Structure per stem
+## Files in this stem pack
 
-\`.DNA/stems/<id>/\`
-- \`prompt.md\` — full agent prompt
-- \`guidelines.md\` — MUST / NEVER / SHOULD
-- \`expectations.md\` — output format and definition of done
-- \`context.md\` — DNA files and CLI commands
-- \`examples.md\` — sample exchanges
+| File | Purpose |
+|------|---------|
+| \`prompt.md\` | Full agent prompt — copy-paste or slash command body |
+| \`guidelines.md\` | MUST / NEVER / SHOULD — non-negotiable behaviour |
+| \`expectations.md\` | Output format and definition of done |
+| \`context.md\` | DNA files and CLI commands |
+| \`examples.md\` | Sample exchanges |
+
+## Baseline quality (required for every new stem)
+
+- \`prompt.md\` includes **Checklist**, **Artifacts** (paths), and **Failure modes**
+- Dense MUST / SHOULD / NEVER in \`guidelines.md\`
+- **2–3** examples in \`examples.md\`
+- See \`stem-quality.ts\` (\`STEM_QUALITY_BASELINE\`)
 
 ## Catalog
 

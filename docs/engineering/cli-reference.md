@@ -276,7 +276,7 @@ Re-enable with `dna feature-factory install`.
 
 ## commands
 
-Install **DNA Workbench**, **`AGENTS.md`**, **88 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update. Engineering work routes through the mandatory 9-role agent loop (`ai/agent-loop.md`). Strategy + product-intelligence stems (Golden Circle, canvases, diagnose/SWOT/competitors/upgrade leverage, initiatives, Now/Next/Later) install with the same workbench path.
+Install **DNA Workbench**, **`AGENTS.md`**, **103 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update. Engineering work routes through the mandatory 9-role agent loop (`ai/agent-loop.md`). Strategy + product-intelligence + day-to-day operator stems (Golden Circle, canvases, diagnose/SWOT/competitors/upgrade leverage, admin/Tauri/fleet/PR/preview/audits) install with the same workbench path.
 
 ```bash
 dna workbench install
