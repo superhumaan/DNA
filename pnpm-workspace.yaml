@@ -4,6 +4,9 @@ packages:
   - "apps/examples/*"
 allowBuilds:
   esbuild: true
+# Own publishes are always "too new" for minimumReleaseAge — exclude the CLI package.
+minimumReleaseAgeExclude:
+  - "@superhumaan/dna-by-humaan"
 overrides:
   esbuild: "0.28.1"
   find-my-way: "9.7.0"
