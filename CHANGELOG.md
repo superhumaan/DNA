@@ -4,6 +4,10 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **Lab mobile shell** — `/labs` mirrors ColorParty admin responsiveness: off-canvas sidebar (≤900px), sticky mobile chrome with hamburger, backdrop + Escape to close, horizontally scrollable tables, wrapping page-header actions. Desktop layout unchanged.
+
 ## [0.6.19] - 2026-07-27
 
 ### Added

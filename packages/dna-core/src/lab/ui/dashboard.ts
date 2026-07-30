@@ -1,6 +1,8 @@
 export const LAB_CLIENT_JS = `
 const API = "/api/dna/labs";
 const LAB_TAB_STORAGE_KEY = "dna_lab_route";
+/** Matches Lab CSS mobile shell breakpoint (ColorParty admin parity). */
+const LAB_MOBILE_SHELL_MQ = "(max-width: 900px)";
 
 const state = {
   view: "landing",
@@ -11,6 +13,7 @@ const state = {
   searchQuery: "",
   tagSearchQuery: "",
   navOpenGroups: {},
+  navOpen: false,
   pairingId: null,
   registerStep: "pair",
   localMode: false,
@@ -278,16 +281,50 @@ async function api(path, opts) {
   return json;
 }
 
+function syncBodyScrollLock() {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+  const media = window.matchMedia(LAB_MOBILE_SHELL_MQ);
+  if (state.navOpen && media.matches) document.body.style.overflow = "hidden";
+  else document.body.style.overflow = "";
+}
+
+function closeMobileNav() {
+  if (!state.navOpen) return;
+  state.navOpen = false;
+}
+
+function mobileChrome() {
+  const open = !!state.navOpen;
+  return '<div class="settings-mobile-chrome">' +
+    '<button type="button" class="settings-mobile-chrome__menu" data-action="nav-toggle"' +
+    ' aria-label="' + (open ? "Close Lab menu" : "Open Lab menu") + '"' +
+    ' aria-expanded="' + (open ? "true" : "false") + '"' +
+    ' aria-controls="lab-settings-nav">' +
+    '<i class="fa-solid fa-' + (open ? "xmark" : "bars") + '" aria-hidden="true"></i></button>' +
+    '<span class="settings-mobile-chrome__label">Lab</span></div>';
+}
+
+function settingsShell(active, mainInner) {
+  const openClass = state.navOpen ? " settings-shell--nav-open" : "";
+  return '<div class="settings-shell' + openClass + '">' +
+    '<button type="button" class="settings-nav-backdrop" data-action="nav-close"' +
+    ' aria-label="Close Lab menu" tabindex="' + (state.navOpen ? "0" : "-1") + '"></button>' +
+    sidebar(active) +
+    mobileChrome() +
+    '<section class="settings-main">' + mainInner + '</section></div>';
+}
+
 function shimmerView() {
-  return '<div class="soli-portal-root soli-portal-root--settings"><div class="settings-shell">' +
-    sidebar(normalizeTab(state.tab || "overview")) +
-    '<section class="settings-main">' + pageHeader("Loading Lab") +
+  const active = normalizeTab(state.tab || "overview");
+  const main =
+    pageHeader("Loading Lab") +
     '<div class="soli-admin-page-body"><div class="lab-shimmer-page">' +
     '<div class="lab-shimmer-kpis">' +
     Array.from({ length: 4 }).map(() => '<div class="lab-shimmer lab-shimmer-card"></div>').join("") +
     '</div><div class="lab-shimmer lab-shimmer-chart"></div>' +
     Array.from({ length: 6 }).map(() => '<div class="lab-shimmer lab-shimmer-row"></div>').join("") +
-    '</div></div></section></div></div>';
+    '</div></div>';
+  return '<div class="soli-portal-root soli-portal-root--settings">' + settingsShell(active, main) + '</div>';
 }
 
 async function bootstrap() {
@@ -885,11 +922,15 @@ function sidebar(active) {
   const logout = !state.localMode
     ? '<div class="settings-nav-group" style="margin-top:20px"><button type="button" class="soli-settings-nav-link" data-action="logout"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Sign out</span></button></div>'
     : '';
-  return '<aside class="settings-nav">' +
-    '<div class="soli-portal-nav-brand">' + dnaWebBrand('/labs', false) +
+  return '<aside class="settings-nav" id="lab-settings-nav" aria-label="Lab navigation">' +
+    '<div class="soli-portal-nav-brand">' +
+    '<div class="soli-portal-nav-brand__mark">' + dnaWebBrand(state.labPath || '/labs', false) +
     (state.dnaVersion
       ? '<div class="lab-runtime-version" title="' + esc(state.packagePath || '') + '">v' + esc(state.dnaVersion) + '</div>'
       : '') +
+    '</div>' +
+    '<button type="button" class="settings-nav-close" data-action="nav-close" aria-label="Close menu">' +
+    '<i class="fa-solid fa-xmark" aria-hidden="true"></i></button>' +
     '</div>' +
     '<div class="settings-nav-scroll">' + sections + logout + '</div></aside>';
 }
@@ -1658,23 +1699,27 @@ function dashboardView() {
   else body = overviewPanel();
 
   const title = state.selectedIssueId ? "Issue detail" : navItem[1];
-  return '<div class="soli-portal-root soli-portal-root--settings">' +
-    '<div class="settings-shell">' + sidebar(active) +
-    '<section class="settings-main">' + pageHeader(title) +
+  const main =
+    pageHeader(title) +
     (state.success ? '<div class="lab-toast" role="status">' + esc(state.success) + '</div>' : '') +
     (state.error && !isUnauthorizedMessage(state.error) ? '<div class="lab-toast lab-toast--error" role="alert">' + esc(state.error) + '</div>' : '') +
-    '<div class="soli-admin-page-body">' + body + '</div></section></div></div>';
+    '<div class="soli-admin-page-body">' + body + '</div>';
+  return '<div class="soli-portal-root soli-portal-root--settings">' + settingsShell(active, main) + '</div>';
 }
 
 function render() {
   const app = document.getElementById("app");
   if (!app) return;
+  if (state.view === "landing" || state.view === "signin" || state.view === "register") {
+    closeMobileNav();
+  }
   if (state.view === "landing") app.innerHTML = landingView();
   else if (state.view === "signin") app.innerHTML = signinView();
   else if (state.view === "register") app.innerHTML = registerView();
   else if (state.view === "dashboard" && state.loading && !state.data) app.innerHTML = shimmerView();
   else app.innerHTML = dashboardView();
   bind();
+  syncBodyScrollLock();
   if (state.view === "dashboard" && state.data && !state.loading) {
     const chart = document.getElementById("error-chart");
     if (chart) drawTimeline(chart, state.data.eventTimeline);
@@ -1703,6 +1748,16 @@ function bind() {
       try {
         if (action === "signin") { state.view = "signin"; render(); return; }
         if (action === "register") { state.view = "register"; state.registerStep = "pair"; render(); return; }
+        if (action === "nav-toggle") {
+          state.navOpen = !state.navOpen;
+          render();
+          return;
+        }
+        if (action === "nav-close") {
+          closeMobileNav();
+          render();
+          return;
+        }
         if (action === "refresh") {
           await refreshAll();
           return;
@@ -1710,6 +1765,7 @@ function bind() {
         if (action === "logout") {
           try { await api("/auth/logout", { method: "POST" }); } catch (_) {}
           clearPersistedLabRoute();
+          closeMobileNav();
           state.view = "landing";
           state.data = null;
           render();
@@ -1750,6 +1806,7 @@ function bind() {
       state.selectedIssueId = null;
       state.tagSearchQuery = "";
       state.searchQuery = "";
+      closeMobileNav();
       ensureNavGroupOpen(groupForTab(tab));
       syncLabUrl(false);
       render();
@@ -1776,6 +1833,7 @@ function bind() {
       state.tab = "issues";
       state.selectedIssueId = issueId;
       state.copyFeedback = "";
+      closeMobileNav();
       syncLabUrl(false);
       render();
       loadIssueEvents(issueId).catch(() => {});
@@ -1886,6 +1944,26 @@ async function onLabPopState() {
 
 if (typeof window !== "undefined") {
   window.addEventListener("popstate", function () { onLabPopState(); });
+  if (!window.__dnaLabMobileNavBound) {
+    window.__dnaLabMobileNavBound = true;
+    window.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape" || !state.navOpen) return;
+      event.preventDefault();
+      closeMobileNav();
+      render();
+      const btn = document.querySelector('[data-action="nav-toggle"]');
+      if (btn) btn.focus();
+    });
+    const media = window.matchMedia(LAB_MOBILE_SHELL_MQ);
+    media.addEventListener("change", function () {
+      if (!media.matches && state.navOpen) {
+        closeMobileNav();
+        render();
+      } else {
+        syncBodyScrollLock();
+      }
+    });
+  }
 }
 
 bootstrap();

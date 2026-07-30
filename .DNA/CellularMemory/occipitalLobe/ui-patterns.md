@@ -7,6 +7,7 @@
 - Load issue event detail on demand rather than expanding the hot payload
 - Reuse table/search/tab/status primitives and consistent empty/error/loading states
 - Never expose admin/auth surfaces solely through visual hiding
+- **Mobile (≤900px):** ColorParty-style off-canvas nav — `settings-mobile-chrome` hamburger, backdrop, Escape/tab-close; tables scroll horizontally (`min-width: 640px`)
 
 ## DNA-Web
 

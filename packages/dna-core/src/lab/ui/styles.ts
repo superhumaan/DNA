@@ -317,8 +317,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .soli-portal-nav-brand {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
+  justify-content: space-between;
+  gap: 12px;
   flex-shrink: 0;
   height: var(--admin-title-bar-height);
   min-height: var(--admin-title-bar-height);
@@ -327,6 +327,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   padding: 0 12px;
   border-bottom: 1px solid var(--color-border-muted);
   background: var(--color-surface);
+}
+.soli-portal-nav-brand__mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.settings-nav-backdrop,
+.settings-mobile-chrome,
+.settings-nav-close {
+  display: none;
 }
 
 .settings-nav-scroll {
@@ -1003,13 +1015,233 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   }
 }
 
-@media (max-width: 960px) {
-  .settings-shell { grid-template-columns: 1fr; height: auto; min-height: 100dvh; }
-  .soli-portal-root--settings { height: auto; overflow: visible; }
-  .settings-nav { height: auto; border-right: none; border-bottom: 1px solid var(--color-border-muted); }
-  .settings-nav-scroll { max-height: none; }
-  .settings-main { height: auto; overflow: visible; }
-  .soli-admin-page-body { overflow: visible; }
+/* Mobile Lab shell — ColorParty admin parity: off-canvas nav, chrome, scrollable tables */
+@media (max-width: 900px) {
+  .settings-shell {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    height: 100%;
+    min-height: 100dvh;
+  }
+
+  .settings-nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+  }
+
+  .settings-shell--nav-open .settings-nav-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .settings-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1200;
+    width: min(280px, 86vw);
+    max-width: 280px;
+    height: 100dvh;
+    border-right: 1px solid var(--color-border-muted);
+    border-bottom: none;
+    box-shadow: 8px 0 24px rgba(0, 0, 0, 0.35);
+    transform: translateX(-105%);
+    transition: transform 0.2s ease;
+    visibility: hidden;
+  }
+
+  .settings-shell--nav-open .settings-nav {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .settings-nav-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 8px;
+    margin: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font: inherit;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .settings-nav-close:hover {
+    background: var(--color-hover-overlay);
+    color: var(--color-text);
+  }
+
+  .settings-nav-close:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
+
+  .settings-nav-close .fa-solid {
+    font-size: 18px;
+    width: 1em;
+    line-height: 1;
+  }
+
+  .settings-mobile-chrome {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    height: 56px;
+    min-height: 56px;
+    padding: 0 8px;
+    box-sizing: border-box;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border-muted);
+    z-index: 1050;
+  }
+
+  .settings-mobile-chrome__menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 8px;
+    margin: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .settings-mobile-chrome__menu:hover {
+    background: var(--color-hover-overlay);
+    color: var(--color-text);
+  }
+
+  .settings-mobile-chrome__menu:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
+
+  .settings-mobile-chrome__menu .fa-solid {
+    font-size: 18px;
+    width: 1em;
+    line-height: 1;
+  }
+
+  .settings-mobile-chrome__label {
+    margin-left: 4px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+  }
+
+  .settings-main {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .soli-portal-root--settings {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .soli-admin-page-body {
+    overflow: visible;
+  }
+
+  .soli-administration-page-header,
+  .soli-admin-page-header {
+    height: auto;
+    max-height: none;
+    min-height: var(--admin-title-bar-height);
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    row-gap: 10px;
+  }
+
+  .soli-administration-page-header__title-row {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .soli-administration-page-header__title,
+  .soli-admin-page-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .soli-administration-page-header__actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .admin-page-body--table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-page-body--table .lab-table,
+  .admin-page-body--table .admin-table,
+  .admin-page-body--table table {
+    width: max(100%, 640px);
+    min-width: 640px;
+  }
+
+  .lab-product-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
   .lab-detail { grid-template-columns: 1fr; }
+
+  .lab-highlight {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .lab-kv__row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .lab-issue-title-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .settings-nav,
+    .settings-nav-backdrop {
+      transition: none;
+    }
+  }
 }
 `;

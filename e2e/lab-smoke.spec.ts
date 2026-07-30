@@ -40,6 +40,28 @@ test.describe("DNA Lab smoke", () => {
     await expect(page.locator('[data-tab="overview"]')).toBeVisible();
   });
 
+  test("mobile shell opens and closes the off-canvas nav", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/labs");
+    await expect(
+      page.locator(".soli-administration-page-header__title", { hasText: "Overview" }),
+    ).toBeVisible();
+
+    const menu = page.locator('[data-action="nav-toggle"]');
+    await expect(menu).toBeVisible();
+    await expect(page.locator(".settings-shell--nav-open")).toHaveCount(0);
+
+    await menu.click();
+    await expect(page.locator(".settings-shell--nav-open")).toHaveCount(1);
+    await expect(menu).toHaveAttribute("aria-expanded", "true");
+
+    await page.locator('[data-tab="coverage"]').click();
+    await expect(
+      page.locator(".soli-administration-page-header__title", { hasText: "Coverage" }),
+    ).toBeVisible();
+    await expect(page.locator(".settings-shell--nav-open")).toHaveCount(0);
+  });
+
   test("coverage deep link restores the Coverage title after load", async ({ page }) => {
     await page.goto("/labs/coverage");
     await expect(

@@ -60,4 +60,6 @@ npx @superhumaan/dna-by-humaan lab serve
 
 Check: icon-only logo, no env/updated meta, pill Refresh, Issues search → severity pills → table headers when empty, sidebar accordion.
 
+**Mobile (ColorParty admin parity):** ≤900px shows sticky `settings-mobile-chrome` with hamburger; sidebar is off-canvas (`settings-shell--nav-open`); backdrop / Escape / nav link closes; tables scroll horizontally. Desktop unchanged.
+
 **Note:** `npx @superhumaan/dna-by-humaan@x.y.z` alone does not upgrade Lab in a running host app — install into `node_modules` and **restart the API**. See [lab-ci-billing-blocker — Upgrade](./lab-ci-billing-blocker.md#upgrade-lab-in-a-host-app).

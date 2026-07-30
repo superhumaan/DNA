@@ -1,53 +1,57 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-07-27._
+_Auto-maintained by DNA. Updated 2026-07-30._
 
 ## Latest request
 
-> Create a new section on the website marketplace for **bundles** that show the stem packs, make it easy to install entire bundles, and ensure AI knows too (rules + injection).
+> Make `/labs` mobile responsive. Review ColorParty admin panel (already mobile responsive). Use DNA.
 
 ## Problem
 
-Purpose Combos exist in CLI (`combo/…`) but are invisible on DNA-Web marketplace. Users must install packs one-by-one. Stem packs / Cursor·Claude rules are not part of combo install, so AI does not automatically learn the bundle workflow.
+DNA Lab (`/labs`) uses a fixed desktop admin shell (sidebar + main). On narrow viewports the current CSS only stacks the full sidebar above content (`@media max-width: 960px`), which wastes vertical space and makes navigation/tables hard to use on phones.
 
 ## Pain
 
-- Marketplace only lists individual knowledge packs
-- Combos not in catalog (0 `combo/` entries)
-- No one-command / one-click “install this purpose” UX
-- Bundle install does not inject stems + always-on rules
+- Sidebar always visible on mobile — pushes overview KPIs and tables below the fold
+- Tables/headers do not scroll or reflow like ColorParty admin
+- No hamburger / off-canvas nav, backdrop, or Escape-to-close
+- Operators cannot comfortably use Lab on a phone during incidents
 
 ## Users
 
-- Developers browsing dna.humaan.app/marketplace
-- AI co-pilots (Cursor / Claude) that need stems + rules after install
-- Teams adopting DNA for a purpose (PMF, Next.js fullstack, GDPR, etc.)
+- Developers and operators opening `/labs` on phones/tablets
+- Anyone using `dna lab serve` or production Lab during on-call
 
 ## Desired Behaviour
 
-1. Marketplace has a **Bundles** section listing Purpose Combos
-2. Each bundle shows: purpose, description, knowledge packs (required/preferred), related **stem packs**, install command
-3. `dna marketplace install combo/<id>` installs knowledge packs **and** injects linked stem packs + workbench rules so AI knows
-4. Catalog/API exposes bundles for CLI + website
-5. Copy-paste install is one command; AI prompt optional for agents
+1. Mirror **ColorParty admin** mobile shell (`settings-mobile-chrome`, off-canvas `settings-nav`, backdrop, `settings-shell--nav-open`)
+2. ≤900px: hide sidebar off-canvas; show sticky mobile chrome with menu toggle
+3. Open nav via menu; close on Escape, backdrop click, tab navigate, or viewport widen
+4. Tables horizontally scrollable; page headers/actions wrap; KPI grids already collapse (keep)
+5. Desktop (≥901px) unchanged
+6. Unit/source tests + optional Playwright smoke for mobile menu
 
 ## Acceptance criteria
 
-- [ ] DNA-Web `/marketplace` has Bundles section (or tab) with all purpose combos
-- [ ] Bundle cards list knowledge packs + stem packs + copyable install cmd
-- [ ] Catalog includes combo metadata (or `/marketplace/api/v1/bundles`)
-- [ ] CLI install of `combo/*` installs required+preferred packs and injects stems/rules
-- [ ] Tests cover combo→pack resolution and stem injection hook
-- [ ] Docs/CHANGELOG updated; preview pushed
+- [x] Mobile chrome + hamburger visible only ≤900px
+- [x] Off-canvas nav slides in with backdrop; body scroll locked while open
+- [x] Escape / backdrop / nav link closes menu; focus returns to menu button
+- [x] Tables scroll horizontally on small screens (min-width + overflow)
+- [x] Page title bar actions wrap / full-width where needed
+- [x] Desktop layout unchanged
+- [x] Tests cover mobile shell markers (ColorParty-style source/CSS assertions)
+- [x] Docs/CHANGELOG note; quality PASS; preview push
 
 ## Edge cases
 
-- Offline: bundled catalog must include combo metadata
-- Unknown stem id: skip with warning, do not fail whole install
-- Healthcare country bundles remain separate; show under Bundles if practical
-- DNA-Web may lag DNA package sync — sync script must include combos
+- Auth/pairing screens already centered — leave alone unless broken at small widths
+- Reduced-motion: keep transitions short/off but menu still usable
+- Deep links (`/labs/coverage`) should open with nav closed
+- Sign-out in sidebar still reachable when menu open
 
 ## Out of scope
 
-- Paid marketplace / auth for install
-- Redesigning the full intelligence stem library page
+- Redesigning Lab visual tokens / Humaan brand
+- New Lab pages or API changes
+- Changing ColorParty itself
+- Native PWA install for Lab
