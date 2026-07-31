@@ -46,16 +46,7 @@ Full reference: [CLI reference](../engineering/cli-reference.md)
 
 ## Reference production systems
 
-DNA learned patterns from four Humaan reference apps:
-
-| ID | Project | Patterns |
-|----|---------|----------|
-| `app` | a production app | Azure B2C, AI governance, admin portal |
-| `app` | a production app | OAuth, SSO bridge, gamification |
-| `humaan` | ops tooling | Roadmap, surveys, Jira/Harvest |
-| `soli` | a production app | Multi-tenant, kanban, STT notes |
-
-See [Platform catalog](./platform-catalog.md).
+Patterns DNA coordinates (admin, auth, cloud, integrations) live in the platform catalog — see [Platform catalog](./platform-catalog.md).
 
 ---
 

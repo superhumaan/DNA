@@ -54,4 +54,4 @@ Do **not** treat `NODE_ENV=development` as open — only this flag or loopback H
 
 ## Host-app compatibility
 
-Until npm ships this DNA build, host apps `dnaLabWire` spoofs `Host` / `X-Forwarded-Host` to `127.0.0.1` when `COLORPARTY_LAB_OPEN=1`, and still intercepts bootstrap + fast `/data`. After upgrade, the spoof can be removed; keep `requireAuthInProduction: !isLabOpenWithoutAuth()`.
+Until npm ships this DNA build, host apps may spoof `Host` / `X-Forwarded-Host` to `127.0.0.1` when Lab is intentionally open, and still intercept bootstrap + fast `/data`. After upgrade, the spoof can be removed; keep `requireAuthInProduction: !isLabOpenWithoutAuth()`.
