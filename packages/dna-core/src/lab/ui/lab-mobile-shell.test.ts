@@ -37,7 +37,7 @@ describe("Lab mobile responsive CSS", () => {
     expect(stylesSource).toMatch(/min-width:\s*640px/);
     expect(stylesSource).toMatch(/-webkit-overflow-scrolling:\s*touch/);
     expect(stylesSource).toMatch(
-      /\.soli-administration-page-header__actions\s*\{[^}]*width:\s*100%/s,
+      /\.lab-administration-page-header__actions\s*\{[^}]*width:\s*100%/s,
     );
   });
 

@@ -63,7 +63,7 @@ export const PLATFORM_FEATURES: PlatformFeature[] = [
     name: "Cross-App SSO Bridge",
     category: "auth",
     sourceProjects: [],
-    description: "Silent SSO between sibling apps via shared JWT + OTT handoff",
+    description: "Optional app-layer pattern notes — not a DNA runtime feature",
     knowledgeFiles: ["integrations/sso-bridge.dna.md"],
   },
   {

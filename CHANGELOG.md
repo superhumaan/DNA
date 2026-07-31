@@ -7,10 +7,16 @@ All notable changes to DNA are documented here.
 ### Docs
 - **v0.9.0 roadmap** — 21 small Planned issues (#29–#49) on [DNA Roadmap](https://github.com/users/superhumaan/projects/3/views/1) / [milestone](https://github.com/superhumaan/DNA/milestone/7): outcome combos, repair learning, architecture graph, memory, factory, IDE extension, MCP, cloud spike. Synced in `docs/product/planning.md` + README.
 
+## [0.6.27] - 2026-07-31
+
+### Changed
+- Lab UI class names use `lab-*` prefixes
+- Lab open-auth docs cover DNA Lab config only
+
 ## [0.6.26] - 2026-07-31
 
 ### Changed
-- SSO bridge knowledge examples use generic hostnames
+- Knowledge pack examples use generic hostnames
 
 ## [0.6.25] - 2026-07-31
 
@@ -238,7 +244,7 @@ See [docs/engineering/lab-ui-humaan-0.6.7.md](docs/engineering/lab-ui-humaan-0.6
 
 ### Added
 
-- **Lab UI v4** — Full administration shell parity: portal root, 56px nav brand + title bars, `soli-settings-nav-link`, flat page body / edge tables, design tokens & design rules (cool-neutral chrome, violet for action/active only, Inter).
+- **Lab UI v4** — Full administration shell parity: portal root, 56px nav brand + title bars, `lab-settings-nav-link`, flat page body / edge tables, design tokens & design rules (cool-neutral chrome, violet for action/active only, Inter).
 - **Lab Sentry-depth issues** — fingerprint upsert (one row per issue), rich envelopes (stack frames, breadcrumbs, contexts, tags, request), browser ingest on `POST /api/dna/runtime`, outbound `third_party_response` capture (errors/slow always; healthy sampled).
 - **Lab Quality hub** — gate PASS/FAIL + severity counts from quality JSON/MD, coverage from `coverage/coverage-summary.json`, recent GitHub Actions runs via `gh`, third-party API response table.
 - **Anti-spam sampling** — per-fingerprint 60s cooldown on full event persist; client 15s dedupe; secrets redacted.

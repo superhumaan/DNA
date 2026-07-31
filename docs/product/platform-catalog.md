@@ -10,7 +10,6 @@ dna platform list
 
 # Generate an implementation plan from plain language
 dna plan feature admin-portal --quote "Admin portal with Google directory sync and audit log"
-dna plan feature sso-bridge --quote "Silent SSO between sibling app subdomains"
 dna plan feature azure-deploy
 dna plan feature feature-flags --quote "Env toggles plus admin KV for per-tenant flags"
 

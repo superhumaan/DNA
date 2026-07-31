@@ -1,19 +1,5 @@
-# Cross-App SSO Bridge (DNA)
+# Cross-App SSO (optional pattern)
 
-## Pattern
-Sibling apps on a shared parent domain share `JWT_SECRET`.
+Generic pattern notes for teams that share auth across sibling apps. Not a DNA runtime feature — DNA does not implement SSO between apps.
 
-## Flow
-1. User logged into source app
-2. Target app probes `/api/auth/session` with `X-Session-Probe: 1`
-3. Or OTT handoff: `?ott=` → exchange at source `/api/auth/ott/exchange`
-4. Target `POST /api/auth/establish-session` → httpOnly cookie
-
-## Implementation
-- CORS allow sibling origins on the shared parent domain
-- Verify shared SSO JWT; re-issue app-specific token
-- Upsert user record on first bridge login
-
-## Reference
-- `ssoBridge.js` (or equivalent) in the source app
-- `SsoBridge.jsx` (or equivalent) in the target app
+If you need this in your own product, design it in your app layer. Keep secrets in env / vault only.

@@ -122,27 +122,27 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* Auth welcome */
-.soli-auth-root { min-height: 100dvh; position: relative; overflow: hidden; background: var(--color-bg-app); }
-.soli-auth-atmosphere {
+.lab-auth-root { min-height: 100dvh; position: relative; overflow: hidden; background: var(--color-bg-app); }
+.lab-auth-atmosphere {
   position: absolute; inset: 0; pointer-events: none; z-index: 0;
   background:
     radial-gradient(140% 90% at 8% -6%, rgba(74, 222, 154, 0.16) 0%, rgba(74, 222, 154, 0) 56%),
     radial-gradient(130% 95% at 82% 4%, rgba(46, 58, 90, 0.45) 0%, rgba(46, 58, 90, 0) 58%),
     linear-gradient(140deg, #07080c 0%, #0a0c12 40%, #0f1118 100%);
 }
-.soli-auth-welcome { min-height: 100dvh; display: grid; place-items: center; padding: 24px; position: relative; z-index: 1; }
-.soli-auth-welcome__shell {
+.lab-auth-welcome { min-height: 100dvh; display: grid; place-items: center; padding: 24px; position: relative; z-index: 1; }
+.lab-auth-welcome__shell {
   width: min(518px, 100%); background: var(--color-surface);
   border: 1px solid var(--color-border); border-radius: 18px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45); overflow: hidden;
 }
-.soli-auth-welcome__hero { padding: 28px 28px 20px; }
-.soli-auth-welcome__hero h1 {
+.lab-auth-welcome__hero { padding: 28px 28px 20px; }
+.lab-auth-welcome__hero h1 {
   margin: 0 0 6px; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: var(--tracking-tight);
 }
-.soli-auth-welcome__hero h2 { margin: 0 0 8px; font-size: 1rem; font-weight: 600; color: var(--color-text-secondary); }
-.soli-auth-welcome__hero p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--color-text-tertiary); }
-.soli-auth-welcome__panel { padding: 20px 28px 28px; border-top: 1px solid var(--color-border); display: flex; flex-direction: column; gap: 10px; }
+.lab-auth-welcome__hero h2 { margin: 0 0 8px; font-size: 1rem; font-weight: 600; color: var(--color-text-secondary); }
+.lab-auth-welcome__hero p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--color-text-tertiary); }
+.lab-auth-welcome__panel { padding: 20px 28px 28px; border-top: 1px solid var(--color-border); display: flex; flex-direction: column; gap: 10px; }
 .field { margin-bottom: 12px; }
 .field label {
   display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px;
@@ -176,7 +176,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   padding: 0 22px; border-radius: var(--radius-pill); font-weight: 700; font-size: 15px;
 }
 .btn-primary:hover, .humaan-page-primary-btn:hover { background: var(--color-brand-primary-hover); }
-.soli-admin-header-btn { margin-top: 0 !important; min-height: 40px !important; height: 40px !important; font-size: 14px !important; }
+.lab-admin-header-btn { margin-top: 0 !important; min-height: 40px !important; height: 40px !important; font-size: 14px !important; }
 
 /* Shimmer */
 @keyframes lab-shimmer {
@@ -212,7 +212,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .field input:focus, .field textarea:focus { border-color: var(--color-brand-primary); outline: none; box-shadow: 0 0 0 3px var(--color-focus-ring); }
 .field textarea { min-height: 88px; font-family: var(--font-mono); font-size: 12px; }
 /* Humaan admin primary pill buttons */
-.btnp, .soli-admin-header-btn, .humaan-page-primary-btn {
+.btnp, .lab-admin-header-btn, .humaan-page-primary-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   flex-shrink: 0;
   min-height: var(--btn-min-height); height: var(--btn-min-height);
@@ -227,18 +227,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 .btnp { width: 100%; padding: 0 18px; }
-.btnp:hover, .soli-admin-header-btn:hover, .humaan-page-primary-btn:hover {
+.btnp:hover, .lab-admin-header-btn:hover, .humaan-page-primary-btn:hover {
   background: var(--color-brand-primary-hover);
   border-color: color-mix(in srgb, var(--color-brand-primary) 22%, transparent);
   color: var(--color-text-on-brand);
 }
-.btnp:disabled, .soli-admin-header-btn:disabled, .humaan-page-primary-btn:disabled {
+.btnp:disabled, .lab-admin-header-btn:disabled, .humaan-page-primary-btn:disabled {
   opacity: 0.65;
   cursor: not-allowed;
   pointer-events: none;
   box-shadow: none;
 }
-.btnp:disabled:hover, .soli-admin-header-btn:disabled:hover, .humaan-page-primary-btn:disabled:hover {
+.btnp:disabled:hover, .lab-admin-header-btn:disabled:hover, .humaan-page-primary-btn:disabled:hover {
   background: var(--color-brand-primary);
   border-color: color-mix(in srgb, var(--color-brand-primary) 12%, transparent);
 }
@@ -253,14 +253,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   cursor: pointer; font-family: inherit; margin-top: 4px; min-height: var(--btn-min-height); height: var(--btn-min-height);
 }
 .btns:hover { background: var(--color-hover-overlay); }
-.btnp--sm, .btns--sm, .soli-admin-header-btn--ghost {
+.btnp--sm, .btns--sm, .lab-admin-header-btn--ghost {
   width: auto; min-height: var(--control-height); height: auto; padding: 0 12px; font-size: 0.8125rem;
   border-radius: 8px; box-shadow: none;
 }
-.soli-admin-header-btn--ghost {
+.lab-admin-header-btn--ghost {
   background: transparent; color: var(--color-brand-primary); border-color: var(--color-border);
 }
-.soli-admin-header-btn--ghost:hover { background: var(--color-brand-primary-soft); border-color: var(--color-control-active-border); }
+.lab-admin-header-btn--ghost:hover { background: var(--color-brand-primary-soft); border-color: var(--color-control-active-border); }
 .lab-error {
   margin-bottom: 12px; padding: 10px 12px; border-radius: 8px;
   background: var(--color-danger-surface-bg); border: 1px solid var(--color-danger-surface-border);
@@ -278,12 +278,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* ─── administration portal shell ─── */
-.soli-portal-root {
+.lab-portal-root {
   min-height: 100dvh;
   box-sizing: border-box;
   background: var(--color-bg-app);
 }
-.soli-portal-root--settings {
+.lab-portal-root--settings {
   padding: 0;
   height: 100dvh;
   overflow: hidden;
@@ -314,7 +314,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   box-shadow: none;
 }
 
-.soli-portal-nav-brand {
+.lab-portal-nav-brand {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -328,7 +328,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   border-bottom: 1px solid var(--color-border-muted);
   background: var(--color-surface);
 }
-.soli-portal-nav-brand__mark {
+.lab-portal-nav-brand__mark {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -388,8 +388,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .sn-title + .sn-title,
 .settings-nav-group + .settings-nav-group { margin-top: 12px; }
 
-.soli-settings-nav-link,
-.settings-nav button.soli-settings-nav-link {
+.lab-settings-nav-link,
+.settings-nav button.lab-settings-nav-link {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -409,26 +409,26 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   font-family: inherit;
   font-weight: 400;
 }
-.soli-settings-nav-link:hover {
+.lab-settings-nav-link:hover {
   background: var(--color-hover-overlay);
   border-color: transparent;
 }
-.soli-settings-nav-link.is-active,
-.soli-settings-nav-link.on {
+.lab-settings-nav-link.is-active,
+.lab-settings-nav-link.on {
   background: var(--color-brand-primary-soft);
   border-color: transparent;
   color: var(--color-brand-primary);
   font-weight: 600;
 }
-.soli-settings-nav-link i {
+.lab-settings-nav-link i {
   width: 17px;
   text-align: center;
   color: var(--color-text-tertiary);
   font-size: 14px;
   flex-shrink: 0;
 }
-.soli-settings-nav-link.is-active i,
-.soli-settings-nav-link.on i { color: var(--color-brand-primary); }
+.lab-settings-nav-link.is-active i,
+.lab-settings-nav-link.on i { color: var(--color-brand-primary); }
 
 .nav-badge {
   margin-left: auto;
@@ -453,8 +453,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   box-sizing: border-box;
 }
 
-.soli-administration-page-header,
-.soli-admin-page-header {
+.lab-administration-page-header,
+.lab-admin-page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -470,15 +470,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
 }
-.soli-administration-page-header__title-row {
+.lab-administration-page-header__title-row {
   display: flex;
   align-items: center;
   gap: 10px;
   min-width: 0;
   flex: 1 1 auto;
 }
-.soli-administration-page-header__title,
-.soli-admin-page-header h1 {
+.lab-administration-page-header__title,
+.lab-admin-page-header h1 {
   margin: 0;
   min-width: 0;
   font-family: var(--font-display);
@@ -488,7 +488,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   letter-spacing: var(--tracking-tight);
   line-height: 1.25;
 }
-.soli-administration-page-header__actions {
+.lab-administration-page-header__actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -496,13 +496,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   flex-shrink: 0;
   margin-left: auto;
 }
-.soli-admin-page-header__meta {
+.lab-admin-page-header__meta {
   font-size: 12px;
   color: var(--color-text-tertiary);
   white-space: nowrap;
 }
 
-.soli-admin-page-body {
+.lab-admin-page-body {
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
@@ -1162,18 +1162,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     overflow: visible;
   }
 
-  .soli-portal-root--settings {
+  .lab-portal-root--settings {
     height: auto;
     min-height: 100dvh;
     overflow: visible;
   }
 
-  .soli-admin-page-body {
+  .lab-admin-page-body {
     overflow: visible;
   }
 
-  .soli-administration-page-header,
-  .soli-admin-page-header {
+  .lab-administration-page-header,
+  .lab-admin-page-header {
     height: auto;
     max-height: none;
     min-height: var(--admin-title-bar-height);
@@ -1184,17 +1184,17 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
     row-gap: 10px;
   }
 
-  .soli-administration-page-header__title-row {
+  .lab-administration-page-header__title-row {
     flex: 1 1 auto;
     width: 100%;
   }
 
-  .soli-administration-page-header__title,
-  .soli-admin-page-header h1 {
+  .lab-administration-page-header__title,
+  .lab-admin-page-header h1 {
     font-size: 1.2rem;
   }
 
-  .soli-administration-page-header__actions {
+  .lab-administration-page-header__actions {
     width: 100%;
     margin-left: 0;
     justify-content: flex-start;

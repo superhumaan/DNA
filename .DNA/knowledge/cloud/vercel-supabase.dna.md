@@ -1,16 +1,17 @@
-# Vercel + Supabase (a production app, Ops)
+# Vercel + Supabase
 
-## Topology
-- Vercel frontend (`dist/`)
-- Vercel backend (`backend/server.js` serverless)
+Optional hosting stack notes for apps that use DNA.
+
+## Common topology
+- Vercel frontend
+- Vercel serverless / Node backend
 - Supabase Postgres
-- Upstash Redis (rate limits)
+- Redis (rate limits) when needed
 
 ## Patterns
-- `vercel.ts` — CSP, API rewrite to backend project
-- Migrations in `supabase/migrations/` + cold-start bootstrap
+- Env vars in Vercel project settings (never commit secrets)
+- SQL migrations under version control
 - Cron via Vercel cron or GitHub Actions
-- `sync:vercel-env` for local dev parity
+- Local env sync for development
 
-## SSO
-Shared JWT secret across sibling apps for cross-app bridge.
+DNA Lab and quality gates work with this stack when wired via `dna lab` / doctor.

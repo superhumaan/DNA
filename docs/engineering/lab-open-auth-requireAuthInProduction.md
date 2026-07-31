@@ -1,48 +1,21 @@
-# Lab open auth — honor `requireAuthInProduction: false`
+# Lab open auth — `requireAuthInProduction`
 
-**Source:** production Lab coverage `/labs` Coverage page (2026-07-27)  
-**Status:** Implemented in `packages/dna-core` (this change set); a production app keeps a Host-spoof shim until the published `@superhumaan/dna-by-humaan` includes it.
+DNA Lab config flag. Documented for DNA Lab only.
 
-## Symptom
+## Behaviour
 
-On a non-localhost Lab host (a sibling app / preview):
-
-1. App sets `lab.requireAuthInProduction: false` (or fakes bootstrap `localMode: true`).
-2. Lab shell loads without Sign in / Pair.
-3. Refresh on **Coverage** calls `GET /api/dna/labs/coverage` → **401 Unauthorized**.
-4. UI shows red “Unauthorized” and empty “No coverage yet” (catch sets empty detail).
-
-Same gate hits `/intelligence`, `/apis`, `/releases`, `/probe`, `/data`.
-
-## Root cause
-
-`lab.requireAuthInProduction` existed in `dna-config` schema and wire templates but was **never read** by `handleLabRequestInner`. Open Lab without pairing only happened when `isLocalHost(Host | X-Forwarded-Host)` was true.
-
-Apps that only patched `/bootstrap` looked authenticated in the UI while every detail API still required a Lab pairing session.
-
-## Fix (global)
-
-In `packages/dna-core/src/lab/server.ts`:
-
-```ts
-const loopbackLocal = isLocalLabRequest(host, { … });
-const openLabWithoutAuth = options.config?.lab?.requireAuthInProduction === false;
-const localMode = loopbackLocal || openLabWithoutAuth;
-```
-
-- Default `requireAuthInProduction: true` → behaviour unchanged (public hosts stay closed).
-- Explicit `false` → open Lab APIs on public hosts (intentional private preview / private preview opt-in).
-
-Regression: `opens Lab APIs on a public host when requireAuthInProduction is false` in `server.test.ts`.
-
-## Consumer guidance
+| Setting | Effect |
+|---------|--------|
+| `lab.requireAuthInProduction: true` (default) | Non-loopback hosts require Lab pairing / sign-in for Lab APIs |
+| `lab.requireAuthInProduction: false` | Lab APIs open without pairing on public hosts (use only for intentional open Lab) |
+| Loopback `Host` | Always treated as local open access when `openLocalWithoutAuth` is true |
 
 ```json
 {
   "lab": {
     "enabled": true,
     "path": "/labs",
-    "requireAuthInProduction": false,
+    "requireAuthInProduction": true,
     "openLocalWithoutAuth": true
   }
 }
@@ -52,6 +25,4 @@ Or pass the same into `createLabMiddleware({ config: { lab: { … } } })`.
 
 Do **not** treat `NODE_ENV=development` as open — only this flag or loopback Host.
 
-## Host-app compatibility
-
-Until npm ships this DNA build, host apps may spoof `Host` / `X-Forwarded-Host` to `127.0.0.1` when Lab is intentionally open, and still intercept bootstrap + fast `/data`. After upgrade, the spoof can be removed; keep `requireAuthInProduction: !isLabOpenWithoutAuth()`.
+Covered by regression tests in `packages/dna-core/src/lab/server.test.ts`.

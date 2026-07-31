@@ -223,14 +223,14 @@ function tableEmptyRow(colspan, message) {
 }
 
 function authAtmosphere() {
-  return '<div class="soli-auth-atmosphere" aria-hidden="true"></div>';
+  return '<div class="lab-auth-atmosphere" aria-hidden="true"></div>';
 }
 
 function authShell(hero, panel) {
-  return '<div class="soli-auth-root">' + authAtmosphere() + dnaWebBrand(state.labPath || '/labs', true) +
-    '<div class="soli-auth-welcome"><main class="soli-auth-welcome__shell">' +
-    '<div class="soli-auth-welcome__hero">' + hero + '</div>' +
-    '<div class="soli-auth-welcome__panel">' + panel + '</div></main></div></div>';
+  return '<div class="lab-auth-root">' + authAtmosphere() + dnaWebBrand(state.labPath || '/labs', true) +
+    '<div class="lab-auth-welcome"><main class="lab-auth-welcome__shell">' +
+    '<div class="lab-auth-welcome__hero">' + hero + '</div>' +
+    '<div class="lab-auth-welcome__panel">' + panel + '</div></main></div></div>';
 }
 
 function timeAgo(iso) {
@@ -318,13 +318,13 @@ function shimmerView() {
   const active = normalizeTab(state.tab || "overview");
   const main =
     pageHeader("Loading Lab") +
-    '<div class="soli-admin-page-body"><div class="lab-shimmer-page">' +
+    '<div class="lab-admin-page-body"><div class="lab-shimmer-page">' +
     '<div class="lab-shimmer-kpis">' +
     Array.from({ length: 4 }).map(() => '<div class="lab-shimmer lab-shimmer-card"></div>').join("") +
     '</div><div class="lab-shimmer lab-shimmer-chart"></div>' +
     Array.from({ length: 6 }).map(() => '<div class="lab-shimmer lab-shimmer-row"></div>').join("") +
     '</div></div>';
-  return '<div class="soli-portal-root soli-portal-root--settings">' + settingsShell(active, main) + '</div>';
+  return '<div class="lab-portal-root lab-portal-root--settings">' + settingsShell(active, main) + '</div>';
 }
 
 async function bootstrap() {
@@ -909,7 +909,7 @@ function sidebar(active) {
     const isOpen = isNavGroupOpen(group);
     const links = groups[group].map(([id, label, icon]) => {
       const badge = id === "issues" && issueCount ? '<span class="nav-badge">' + issueCount + '</span>' : '';
-      return '<button type="button" class="soli-settings-nav-link' + (active === id ? ' is-active' : '') + '" data-tab="' + id + '"><i class="fa-solid ' + icon + '" aria-hidden="true"></i><span>' + esc(label) + '</span>' + badge + '</button>';
+      return '<button type="button" class="lab-settings-nav-link' + (active === id ? ' is-active' : '') + '" data-tab="' + id + '"><i class="fa-solid ' + icon + '" aria-hidden="true"></i><span>' + esc(label) + '</span>' + badge + '</button>';
     }).join("");
     return '<div class="settings-nav-group' + (isOpen ? ' is-open' : '') + '">' +
       '<button type="button" class="sn-title sn-title--toggle" data-nav-group="' + esc(group) + '" aria-expanded="' + (isOpen ? 'true' : 'false') + '">' +
@@ -920,11 +920,11 @@ function sidebar(active) {
       '</div>';
   }).join("");
   const logout = !state.localMode
-    ? '<div class="settings-nav-group" style="margin-top:20px"><button type="button" class="soli-settings-nav-link" data-action="logout"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Sign out</span></button></div>'
+    ? '<div class="settings-nav-group" style="margin-top:20px"><button type="button" class="lab-settings-nav-link" data-action="logout"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Sign out</span></button></div>'
     : '';
   return '<aside class="settings-nav" id="lab-settings-nav" aria-label="Lab navigation">' +
-    '<div class="soli-portal-nav-brand">' +
-    '<div class="soli-portal-nav-brand__mark">' + dnaWebBrand(state.labPath || '/labs', false) +
+    '<div class="lab-portal-nav-brand">' +
+    '<div class="lab-portal-nav-brand__mark">' + dnaWebBrand(state.labPath || '/labs', false) +
     (state.dnaVersion
       ? '<div class="lab-runtime-version" title="' + esc(state.packagePath || '') + '">v' + esc(state.dnaVersion) + '</div>'
       : '') +
@@ -945,13 +945,13 @@ function pageHeader(title) {
     ? ' disabled aria-busy="true" aria-label="Refreshing"'
     : ' aria-label="Refresh"';
   const refreshIcon = 'fa-solid fa-rotate' + (refreshing ? ' fa-spin' : '');
-  return '<header class="soli-administration-page-header">' +
-    '<div class="soli-administration-page-header__title-row">' +
-    '<h1 class="soli-administration-page-header__title">' + esc(title) + '</h1>' +
+  return '<header class="lab-administration-page-header">' +
+    '<div class="lab-administration-page-header__title-row">' +
+    '<h1 class="lab-administration-page-header__title">' + esc(title) + '</h1>' +
     (probeLabel ? '<span class="lab-probe-meta">' + esc(probeLabel) + '</span>' : '') +
     '</div>' +
-    '<div class="soli-administration-page-header__actions">' +
-    '<button type="button" class="humaan-page-primary-btn soli-admin-header-btn"' + refreshAttrs + ' data-action="refresh"><i class="' + refreshIcon + '" aria-hidden="true"></i> Refresh</button>' +
+    '<div class="lab-administration-page-header__actions">' +
+    '<button type="button" class="humaan-page-primary-btn lab-admin-header-btn"' + refreshAttrs + ' data-action="refresh"><i class="' + refreshIcon + '" aria-hidden="true"></i> Refresh</button>' +
     '</div></header>';
 }
 
@@ -1703,8 +1703,8 @@ function dashboardView() {
     pageHeader(title) +
     (state.success ? '<div class="lab-toast" role="status">' + esc(state.success) + '</div>' : '') +
     (state.error && !isUnauthorizedMessage(state.error) ? '<div class="lab-toast lab-toast--error" role="alert">' + esc(state.error) + '</div>' : '') +
-    '<div class="soli-admin-page-body">' + body + '</div>';
-  return '<div class="soli-portal-root soli-portal-root--settings">' + settingsShell(active, main) + '</div>';
+    '<div class="lab-admin-page-body">' + body + '</div>';
+  return '<div class="lab-portal-root lab-portal-root--settings">' + settingsShell(active, main) + '</div>';
 }
 
 function render() {

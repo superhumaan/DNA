@@ -572,7 +572,6 @@ Generate an end-to-end implementation plan for a platform feature.
 
 ```bash
 dna plan feature admin-portal --quote "Admin portal with Google directory sync"
-dna plan feature sso-bridge --quote "Silent SSO between subdomains"
 dna plan feature azure-deploy --reference-project app
 dna context platform
 dna context platform --feature admin-portal

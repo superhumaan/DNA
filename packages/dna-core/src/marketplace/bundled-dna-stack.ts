@@ -105,8 +105,8 @@ Issue capabilities from server JWT/session — never trust client role strings a
 \`menuSegments.js\` — each item declares required role/permission.
 Filter segments before render; do not render disabled items for unauthorized users.
 
-## SSO bridge
-Cross-app auth between \`*.humaan.app\` subdomains — see integrations/sso-bridge.dna.md
+## Optional patterns
+App-layer auth patterns (if needed) belong in your app — not in DNA runtime.
 `,
     },
     {
@@ -349,22 +349,23 @@ Use with \`dna plan feature aws-deploy\` and \`integrations/nginx.dna.md\`.
     },
     {
       path: "cloud/vercel-supabase.dna.md",
-      content: `# Vercel + Supabase (production apps, Ops)
+      content: `# Vercel + Supabase
 
-## Topology
-- Vercel frontend (\`dist/\`)
-- Vercel backend (\`backend/server.js\` serverless)
+Optional hosting stack notes for apps that use DNA.
+
+## Common topology
+- Vercel frontend
+- Vercel serverless / Node backend
 - Supabase Postgres
-- Upstash Redis (rate limits)
+- Redis (rate limits) when needed
 
 ## Patterns
-- \`vercel.ts\` — CSP, API rewrite to backend project
-- Migrations in \`supabase/migrations/\` + cold-start bootstrap
+- Env vars in Vercel project settings (never commit secrets)
+- SQL migrations under version control
 - Cron via Vercel cron or GitHub Actions
-- \`sync:vercel-env\` for local dev parity
+- Local env sync for development
 
-## SSO
-Shared JWT secret across sibling apps for cross-app bridge.
+DNA Lab and quality gates work with this stack when wired via \`dna lab\` / doctor.
 `,
     },
     {
@@ -399,25 +400,11 @@ Route \`/legacy/\` to older upstream; document in Impressions integration-map.
     },
     {
       path: "integrations/sso-bridge.dna.md",
-      content: `# Cross-App SSO Bridge (DNA)
+      content: `# Cross-App SSO (optional pattern)
 
-## Pattern
-Sibling apps on a shared parent domain share \`JWT_SECRET\`.
+Generic pattern notes for teams that share auth across sibling apps. Not a DNA runtime feature — DNA does not implement SSO between apps.
 
-## Flow
-1. User logged into source app
-2. Target app probes \`/api/auth/session\` with \`X-Session-Probe: 1\`
-3. Or OTT handoff: \`?ott=\` → exchange at source \`/api/auth/ott/exchange\`
-4. Target \`POST /api/auth/establish-session\` → httpOnly cookie
-
-## Implementation
-- CORS allow sibling origins on the shared parent domain
-- Verify shared SSO JWT; re-issue app-specific token
-- Upsert user record on first bridge login
-
-## Reference
-- \`ssoBridge.js\` (or equivalent) in the source app
-- \`SsoBridge.jsx\` (or equivalent) in the target app
+If you need this in your own product, design it in your app layer. Keep secrets in env / vault only.
 `,
     },
     {
