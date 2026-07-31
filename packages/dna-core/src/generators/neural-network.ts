@@ -141,7 +141,7 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
   },
   {
     intent: "implement_sso_bridge",
-    description: "Cross-app SSO between subdomains via shared JWT and OTT handoff",
+    description: "Optional app-layer SSO notes — not a DNA runtime feature",
     requiredKnowledge: ["integrations/sso-bridge.dna.md", "disciplines/auth-mfa.dna.md"],
     requiredBehaviour: ["security.behaviour.md", "coding.behaviour.md", "testing.behaviour.md"],
     cellularMemory: ["prefrontalCortex/decisions.md", "amygdala/risks.md"],
