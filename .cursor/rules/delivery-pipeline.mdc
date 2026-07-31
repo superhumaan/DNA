@@ -10,7 +10,7 @@ You are working on **dna-by-humaan**. DNA never misses a beat — follow this pi
 ## 1. Push to preview (always)
 
 After local gates pass:
-1. Commit with a clear message
+1. Commit with a clear message using `[DNA] type(scope): summary`
 2. **Push to the preview branch** (or current feature branch — CI deploys preview on every push)
 3. Never leave work only on localhost — preview must stay current
 
@@ -34,36 +34,25 @@ For any user request to build, add, or change:
 
 ## 4. CI quality gates (every push)
 
-**Default (public / OSS):** DNA CI is **advisory** — workflows report lint, test, coverage, and SAST findings but **never fail the GitHub Actions run**. Set `"ci": { "strict": true }` in `.DNA/config.dna.json` to enforce blocking gates.
+**Default (public / OSS):** DNA CI is **advisory**. Set `"ci": { "strict": true }` in `.DNA/config.dna.json` to enforce blocking gates.
 
-**Local:** `.DNA/hooks/pre-push` runs `dna quality report` before every `git push` (advisory by default — never blocks push).
+**Local:** `.DNA/hooks/pre-push` runs `dna quality report` before every `git push`.
 
-**Remote:** CI (`.github/workflows/dna-ci.yml`) runs on **every push**:
-| Gate | Advisory (default) | Strict (`ci.strict: true`) |
-|------|-------------------|------------------------------|
-| Lint + typecheck | Report | Must pass |
-| Unit tests | Report | Must pass |
-| Code coverage | Report (80% target) | **80% per file AND overall** |
-| OWASP dependency audit | Report | high+ vulnerabilities block |
-| DNA SAST quality scan | Report | blocker/critical = fail |
-| Docker build | Report | Must pass when Dockerfile present |
-
-Before pushing, run locally (or let the pre-push hook run it):
+Before pushing:
 ```bash
 dna quality report && dna docker build
 ```
 
 Then push:
 ```bash
-dna github push --message "feat: <what you built>"
+dna github push --message "[DNA] feat: <what you built>"
 ```
 
-GitHub permissions are granted once during `dna init` via browser login — no manual tokens.
+Coverage target: 80%.
 
 ## 5. Keep DNA current
 
-- `dna doctor` — ensures scaffolding, packs, runtime DB, CI, and AI repair are enabled
-- `dna update` — pull latest knowledge packs
+- `dna doctor` / `dna update`
 - Update CellularMemory and Impressions when architecture changes
 
 **Opt out** only via `.DNA/config.dna.json` — defaults are ON.

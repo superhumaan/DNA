@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
+import { resolveProjectGitIdentity } from "@superhumaan/dna-config";
 import { writeFileEnsured, writeJsonFile } from "../../fs.js";
 import { finalizeStemPack, stemInstallPrefix } from "./builder.js";
 import { PROMPT_STEM_DEFS } from "./catalog.js";
@@ -75,6 +76,8 @@ function buildStemInstallFiles(
   const bundledById = new Map(bundledPacks().map((p) => [p.id, p]));
   const installed: Array<{ id: string; name: string; category: string; slash?: string; path: string; files: string[] }> =
     [];
+  const { tag } = resolveProjectGitIdentity(config);
+  const injectTag = (content: string): string => content.replaceAll("[ProjectTag]", `[${tag}]`);
 
   for (const entry of entries) {
     const bundled = bundledById.get(entry.id);
@@ -82,15 +85,15 @@ function buildStemInstallFiles(
     const prefix = stemInstallPrefix(pack.id);
 
     for (const file of pack.files) {
-      files[`${prefix}/${file.path}`] = file.content;
+      files[`${prefix}/${file.path}`] = injectTag(file.content);
     }
 
     if (pack.slash) {
       const promptBody = pack.files.find((f) => f.path === "prompt.md")?.content ?? "";
-      files[`.cursor/commands/${pack.slash}.md`] = promptBody;
+      files[`.cursor/commands/${pack.slash}.md`] = injectTag(promptBody);
       files[`.claude/commands/${pack.slash}.md`] =
         claudeFrontmatter(pack.summary, "[context or scope]") +
-        promptBody.replace(/^> \*\*DNA Prompt Stem:.*\n\n/, "");
+        injectTag(promptBody.replace(/^> \*\*DNA Prompt Stem:.*\n\n/, ""));
     }
 
     installed.push({

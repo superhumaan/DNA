@@ -39,6 +39,18 @@ describe("mock AI repair", () => {
     expect(plan.prBody).toContain("Not auto-merged");
   });
 
+  it("uses host project identity when provided", async () => {
+    const provider = createAiProvider({ provider: "mock" });
+    const plan = await runRepairWorkflow(provider, sampleIssue, {
+      behaviour: [],
+      memory: [],
+      codeSnippets: [],
+      projectIdentity: { tag: "ColorParty", branchSlug: "colorparty" },
+    });
+    expect(plan.prTitle).toBe("[ColorParty] Fix: Runtime error in API");
+    expect(plan.branchName).toMatch(/^colorparty\/fix\//);
+  });
+
   it("skips patches for EPIPE noise", async () => {
     const provider = createAiProvider({ provider: "mock" });
     const plan = await runRepairWorkflow(

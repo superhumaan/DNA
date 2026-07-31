@@ -1,4 +1,10 @@
-import type { AiRepairPlan, ClassifiedIssue } from "@superhumaan/dna-config";
+import type { AiRepairPlan, ClassifiedIssue, ProjectGitIdentity } from "@superhumaan/dna-config";
+import {
+  formatRepairBranch,
+  formatTaggedCommit,
+  formatTaggedPrTitle,
+  resolveProjectGitIdentity,
+} from "@superhumaan/dna-config";
 import {
   parseRepairResponse,
   buildStructuredRepairPromptSuffix,
@@ -14,6 +20,14 @@ export interface RepairContext {
   memory: string[];
   codeSnippets: Array<{ file: string; content: string }>;
   neuralNetworkIntent?: string;
+  /** Host project identity for commits / PRs / branches (defaults to DNA). */
+  projectIdentity?: ProjectGitIdentity;
+}
+
+const DEFAULT_IDENTITY: ProjectGitIdentity = { tag: "DNA", branchSlug: "dna" };
+
+function identityFrom(context: RepairContext): ProjectGitIdentity {
+  return context.projectIdentity ?? DEFAULT_IDENTITY;
 }
 
 export interface AiProviderConfig {
@@ -39,7 +53,11 @@ class MockAiProvider implements AiProvider {
   name = "mock";
 
   async diagnose(issue: ClassifiedIssue, context: RepairContext): Promise<AiRepairPlan> {
-    const branchName = `dna/fix/${issue.fingerprint ?? issue.category}-${issue.id.slice(0, 8)}`;
+    const identity = identityFrom(context);
+    const branchName = formatRepairBranch(
+      identity,
+      `${issue.fingerprint ?? issue.category}-${issue.id.slice(0, 8)}`,
+    );
     const isGateway =
       issue.category === "deployment" || /HTTP 50[234]|bad gateway/i.test(issue.summary);
 
@@ -84,9 +102,9 @@ class MockAiProvider implements AiProvider {
       confidence: issue.confidence,
       proposedChanges,
       branchName,
-      prTitle: `[DNA] Fix: ${issue.title}`,
+      prTitle: formatTaggedPrTitle(identity, "Fix", issue.title),
       prBody: [
-        "## DNA AI Repair (Mock)",
+        `## DNA AI Repair (Mock) — ${identity.tag}`,
         "",
         "### Diagnosis",
         issue.summary,
@@ -146,7 +164,10 @@ class OpenAiCompatibleProvider implements AiProvider {
       };
       const content = data.choices?.[0]?.message?.content ?? "";
 
-      return parseStructuredPlan(content, issue) ?? new MockAiProvider().diagnose(issue, context);
+      return (
+        parseStructuredPlan(content, issue, identityFrom(context)) ??
+        new MockAiProvider().diagnose(issue, context)
+      );
     } catch {
       return new MockAiProvider().diagnose(issue, context);
     }
@@ -191,14 +212,21 @@ class AnthropicCompatibleProvider implements AiProvider {
       };
       const content = data.content?.[0]?.text ?? "";
 
-      return parseStructuredPlan(content, issue) ?? new MockAiProvider().diagnose(issue, context);
+      return (
+        parseStructuredPlan(content, issue, identityFrom(context)) ??
+        new MockAiProvider().diagnose(issue, context)
+      );
     } catch {
       return new MockAiProvider().diagnose(issue, context);
     }
   }
 }
 
-function parseStructuredPlan(content: string, issue: ClassifiedIssue): AiRepairPlan | null {
+function parseStructuredPlan(
+  content: string,
+  issue: ClassifiedIssue,
+  identity: ProjectGitIdentity,
+): AiRepairPlan | null {
   const parsed = parseRepairResponse(content);
   if (!parsed?.proposedChanges?.length && !parsed?.diagnosis) return null;
 
@@ -206,17 +234,22 @@ function parseStructuredPlan(content: string, issue: ClassifiedIssue): AiRepairP
     diagnosis: parsed.diagnosis ?? issue.summary,
     confidence: parsed.confidence ?? issue.confidence,
     proposedChanges: parsed.proposedChanges ?? [],
-    branchName: parsed.branchName ?? `dna/fix/${issue.fingerprint ?? issue.id.slice(0, 8)}`,
-    prTitle: parsed.prTitle ?? `[DNA] Fix: ${issue.title}`,
+    branchName:
+      parsed.branchName ??
+      formatRepairBranch(identity, issue.fingerprint ?? issue.id.slice(0, 8)),
+    prTitle: parsed.prTitle ?? formatTaggedPrTitle(identity, "Fix", issue.title),
     prBody: parsed.prBody ?? parsed.diagnosis ?? issue.summary,
     testPlan: parsed.testPlan ?? issue.testRecommendation ?? "Add regression test",
   };
 }
 
 function buildRepairPrompt(issue: ClassifiedIssue, context: RepairContext): string {
+  const identity = identityFrom(context);
   return [
     "You are DNA by Humaan aggressive repair. Diagnose this production issue and produce applicable code patches.",
     "Never suggest editing secrets. Always include tests in testPlan. Never suggest auto-merge.",
+    `Project tag for PR titles / commits / branches: [${identity.tag}] (branch slug: ${identity.branchSlug}).`,
+    `Use prTitle like "${formatTaggedPrTitle(identity, "Fix", "short title")}" and branchName like "${formatRepairBranch(identity, "issue-id")}".`,
     issue.isBlocker ? "This is a BLOCKER — repeat threshold exceeded. You MUST propose concrete code changes." : "",
     "",
     `Issue: ${issue.title}`,
@@ -241,6 +274,8 @@ function buildRepairPrompt(issue: ClassifiedIssue, context: RepairContext): stri
     .filter(Boolean)
     .join("\n");
 }
+
+export { resolveProjectGitIdentity, formatTaggedCommit, formatTaggedPrTitle, formatRepairBranch };
 
 export async function runRepairWorkflow(
   provider: AiProvider,

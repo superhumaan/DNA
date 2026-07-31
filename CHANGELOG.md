@@ -4,7 +4,16 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
-## [0.6.22] - 2026-07-30
+## [0.6.23] - 2026-07-31
+
+### Added
+
+- **Project git naming defaults for AI** — commits, PR titles, and repair branches use a per-project tag (`[ColorParty]`, `[DNA]`, …) from `projectId` / optional `git.projectTag` + `git.branchSlug` in `.DNA/config.dna.json`
+- Always-on workbench / AGENTS / delivery behaviour / stems inject the live tag; AI repair no longer hardcodes `[DNA]` when the host project differs
+
+### Changed
+
+- Prefer `fix`/`feat` over bare `chore` in AI ship examples; stems use `[ProjectTag] …` (substituted at install)
 
 ### Added
 

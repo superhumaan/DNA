@@ -1,6 +1,7 @@
 import { unlink } from "node:fs/promises";
 import { join } from "node:path";
 import type { DnaConfig } from "@superhumaan/dna-config";
+import { projectGitNamingSection, resolveProjectGitIdentity } from "@superhumaan/dna-config";
 import { fileExists, writeFileEnsured, writeJsonFile } from "../fs.js";
 import {
   generatePromptStemPackFiles,
@@ -13,9 +14,9 @@ import {
 } from "./prompt-stem-packs/index.js";
 import { DNA_AI_COMMAND_CATALOG, installAiCommands } from "./ai-commands.js";
 import {
-  DNA_AGENT_FLOW_SECTION,
   DNA_ALWAYS_ON_SECTION,
   DNA_INTENT_ROUTING_SECTION,
+  buildAgentFlowSection,
 } from "./dna-default-on.js";
 import { DNA_CRITICAL_THINKING_SECTION, DNA_AGGRESSIVE_REPAIR_SECTION } from "./dna-reasoning.js";
 
@@ -45,6 +46,7 @@ function mdcRule(description: string, alwaysApply = false): string {
 }
 
 function buildWorkbenchRule(config: DnaConfig): string {
+  const identity = resolveProjectGitIdentity(config);
   return `${mdcRule("DNA Workbench — prompt-first Cursor workflow with DNA CLI as your engineering co-pilot", true)}# DNA Workbench — ${config.projectName}
 
 You are the user's **engineering co-pilot** inside Cursor. DNA is installed. The user speaks in plain language; you handle DNA context, CLI, planning, and implementation.
@@ -54,6 +56,8 @@ ${DNA_ALWAYS_ON_SECTION}
 ${DNA_CRITICAL_THINKING_SECTION}
 
 ${DNA_AGGRESSIVE_REPAIR_SECTION}
+
+${projectGitNamingSection(identity)}
 
 ## How the user works (never break this)
 
@@ -72,7 +76,7 @@ ${DNA_AGGRESSIVE_REPAIR_SECTION}
 
 ${DNA_INTENT_ROUTING_SECTION}
 
-${DNA_AGENT_FLOW_SECTION}
+${buildAgentFlowSection(config)}
 
 ## Intent → DNA CLI (run in shell)
 
@@ -100,6 +104,7 @@ Prefer \`npx dna\` when \`dna\` is not on PATH.
 - **Narrow scope** — Smallest correct diff; no drive-by refactors.
 - **Verify loops** — lint → test → \`dna quality report --feature\` → docker → push.
 - **One voice** — Plain language summaries for the user; technical depth in code and plans.
+- **Tagged git** — commits and PRs always use \`[${identity.tag}]\`; prefer fix/feat over bare chore.
 
 See \`.cursor/rules/product-process.mdc\`, \`AGENTS.md\`, and \`.cursor/skills/dna-workbench/dna-session-flow.md\`.
 
@@ -283,7 +288,7 @@ ${DNA_CRITICAL_THINKING_SECTION}
 
 ${DNA_INTENT_ROUTING_SECTION}
 
-${DNA_AGENT_FLOW_SECTION}
+${buildAgentFlowSection(config)}
 
 ## Read first
 

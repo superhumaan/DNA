@@ -119,6 +119,16 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     };
   }
 
+  let git: DnaConfig["git"];
+  if (d.git !== undefined) {
+    const gitObj = expectObject(d.git, "git");
+    if (!gitObj.success) return gitObj;
+    git = {
+      projectTag: optionalString(gitObj.data.projectTag),
+      branchSlug: optionalString(gitObj.data.branchSlug),
+    };
+  }
+
   let ai: DnaConfig["ai"];
   if (d.ai !== undefined) {
     const aiObj = expectObject(d.ai, "ai");
@@ -389,6 +399,7 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     })(),
     knowledgePacks: knowledgePacks.data,
     github,
+    git,
     ai,
     runtime,
     ci,
@@ -766,6 +777,13 @@ export interface DnaConfig {
     owner?: string;
     repo?: string;
     authenticated?: boolean;
+  };
+  /** Project identity for AI commits, PR titles, and repair branches. */
+  git?: {
+    /** Display tag, e.g. ColorParty — defaults from projectId/projectName */
+    projectTag?: string;
+    /** Branch prefix slug, e.g. colorparty — defaults from projectId */
+    branchSlug?: string;
   };
   ai?: {
     enabled: boolean;

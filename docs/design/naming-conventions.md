@@ -45,6 +45,29 @@ The platform catalog learns from four **reference projects** (not product rename
 
 Code constants use `DNA_REFERENCE_PROJECT_DEFS` (formerly `HUMAAN_PROJECTS`). The `humaan` project ID refers to the **Humaan Ops** app, not the company name alone.
 
+## Git commits, PRs, and AI repair (project tag)
+
+Every DNA project has a **project tag** used by AI for commits, PR titles, and repair branches. Resolved from `projectId` / `projectName`, overridable in `.DNA/config.dna.json`:
+
+```json
+{
+  "git": {
+    "projectTag": "ColorParty",
+    "branchSlug": "colorparty"
+  }
+}
+```
+
+| Artifact | Format | Example (ColorParty) |
+|----------|--------|----------------------|
+| Commit | `[Tag] type(scope): summary` | `[ColorParty] fix(admin): dedupe filter` |
+| PR title | `[Tag] Type: summary` | `[ColorParty] Fix: uncaught exception` |
+| Branch | `<slug>/type/short-id` | `colorparty/fix/abc123` |
+
+**Defaults:** `colorparty` → `ColorParty`, `dna-by-humaan` → `DNA`, `ai-studio` → `AIStudio`, `humaan` → `Humaan`, `soli` → `Soli`. Prefer `fix`/`feat` over bare `chore` unless deps/tooling.
+
+Installed into always-on AI rules via `dna doctor` / `dna workbench install` / `dna update`. Helper: `resolveProjectGitIdentity()` in `@superhumaan/dna-config`.
+
 ## npm scope
 
 `@superhumaan/*` is the npm scope for published packages. It reflects the GitHub org (`superhumaan/DNA`), not the `platforms/dna-stack` pack ID. Changing the scope would be a separate, breaking release.

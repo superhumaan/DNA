@@ -26,7 +26,7 @@ Load `.DNA/neuralNetwork.json`, relevant `.DNA/behaviour/`, CellularMemory (syst
 ```bash
 npx dna quality report --feature
 npx dna docker build
-npx dna github push --message "chore: preview <summary>"
+npx dna github push --message "[DNA] chore: preview <summary>"
 ```
 
 ## Checklist

@@ -64,7 +64,8 @@ describe("executeRepairWorkflow", () => {
       dryRun: true,
     });
 
-    expect(result.plan.branchName).toMatch(/^dna\/fix\//);
+    expect(result.plan.branchName).toMatch(/^repair-test\/fix\//);
+    expect(result.plan.prTitle).toMatch(/^\[RepairTest\] Fix:/);
     expect(result.plan.proposedChanges.length).toBeGreaterThan(0);
 
     await rm(root, { recursive: true, force: true });

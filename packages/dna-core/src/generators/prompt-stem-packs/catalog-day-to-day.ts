@@ -860,7 +860,7 @@ ${EVIDENCE}
 \`\`\`bash
 npx dna quality report --feature
 npx dna docker build
-npx dna github push --message "chore: preview <summary>"
+npx dna github push --message "[ProjectTag] chore: preview <summary>"
 \`\`\`
 
 ## Checklist

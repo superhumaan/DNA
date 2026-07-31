@@ -1,4 +1,5 @@
 import type { DnaConfig } from "@superhumaan/dna-config";
+import { resolveProjectGitIdentity } from "@superhumaan/dna-config";
 
 function mdcFrontmatter(description: string): string {
   return `---
@@ -11,6 +12,7 @@ alwaysApply: true
 
 export function generateDeliveryPipelineRule(config: DnaConfig): string {
   const threshold = config.ci?.coverageThreshold ?? 80;
+  const identity = resolveProjectGitIdentity(config);
 
   return `${mdcFrontmatter("DNA delivery pipeline — preview push, bug loop, factory, CI gates on every push")}# DNA Delivery Pipeline (mandatory)
 
@@ -19,7 +21,7 @@ You are working on **${config.projectName}**. DNA never misses a beat — follow
 ## 1. Push to preview (always)
 
 After local gates pass:
-1. Commit with a clear message
+1. Commit with a clear message using \`[${identity.tag}] type(scope): summary\`
 2. **Push to the preview branch** (or current feature branch — CI deploys preview on every push)
 3. Never leave work only on localhost — preview must stay current
 
@@ -64,7 +66,7 @@ dna quality report && dna docker build
 
 Then push:
 \`\`\`bash
-dna github push --message "feat: <what you built>"
+dna github push --message "[${identity.tag}] feat: <what you built>"
 \`\`\`
 
 GitHub permissions are granted once during \`dna init\` via browser login — no manual tokens.

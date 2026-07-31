@@ -1,10 +1,12 @@
 import type { DnaConfig } from "@superhumaan/dna-config";
+import { projectGitNamingSection, resolveProjectGitIdentity } from "@superhumaan/dna-config";
 import { getArchetypeMeta, getMethodologyMeta, resolveDeliveryProfile } from "./catalog.js";
 
 export function deliveryBehaviourMarkdown(config: DnaConfig): string {
   const profile = resolveDeliveryProfile(config);
   const meta = getMethodologyMeta(profile.methodology);
   const archetype = getArchetypeMeta(profile.companyArchetype);
+  const identity = resolveProjectGitIdentity(config);
 
   return `<!-- DNA Behaviour — DNA by Humaan -->
 <!-- Do not edit unless explicitly requested. Managed by DNA. -->
@@ -19,6 +21,8 @@ export function deliveryBehaviourMarkdown(config: DnaConfig): string {
 - **Doc system:** ${profile.docSystem}
 - **Work hierarchy:** ${profile.hierarchy.join(" → ")}
 - **Custom overrides:** \`${profile.customProfile}\`
+
+${projectGitNamingSection(identity)}
 
 ## Rules — tickets and documents
 

@@ -4,10 +4,11 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.6.20)
+## In scope (v0.6.23)
 
 | Area | Delivered |
 |------|-----------|
+| **Project git naming** | AI commits, PR titles, and repair branches use per-project tags (`[ColorParty]`, `[DNA]`, …) from `projectId` / `git.projectTag`; always-on workbench + delivery behaviour + stems |
 | **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace, `dna ai force-repair`, `dna lab installs [--fix]`, `dna update` aligns nested Lab packages |
 | **Runtime** | Express 4/5, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`); Aggressive Repair Loop fingerprints + CellularMemory; EPIPE/ECONNRESET noise filter; outbound third-party capture + browser ingest |
 | **DNA Lab** | Production observability at `/labs` — **mobile shell (≤900px ColorParty parity)** + **APIs reference** (Description / Usage / Received / Sent for every Lab route) + **URL deep links** (`/labs/<tab>`, `/labs/issues/<id>`) + **401 → sign-in** (no Unauthorized toast) + **`requireAuthInProduction: false` open Lab** + dark-theme alerts + force Refresh + Copy issue + analytics Overview + Sentry-density Issues + upgrade DX; Humaan admin UI parity; Soli shell + Quality hub; fingerprint-grouped issues; local open access; production auth via `dna register lab` ([#12](https://github.com/superhumaan/DNA/issues/12), [lab-ui-humaan-0.6.7](../engineering/lab-ui-humaan-0.6.7.md), [lab-apis-reference-0.6.18](../engineering/lab-apis-reference-0.6.18.md), [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md)) |

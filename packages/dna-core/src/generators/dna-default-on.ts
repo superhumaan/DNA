@@ -1,4 +1,6 @@
 /** Shared copy: DNA is the default co-pilot — never wait for user opt-in. */
+import type { DnaConfig } from "@superhumaan/dna-config";
+import { projectGitNamingSection, resolveProjectGitIdentity } from "@superhumaan/dna-config";
 import { DNA_CRITICAL_THINKING_SECTION } from "./dna-reasoning.js";
 
 export { DNA_CRITICAL_THINKING_SECTION };
@@ -32,7 +34,9 @@ If intent is ambiguous between Q&A and engineering work, ask **one** clarifying 
 `;
 
 /** Mandatory feature-factory flow for all engineering work. */
-export const DNA_AGENT_FLOW_SECTION = `## Agent flow (mandatory for engineering work)
+export function buildAgentFlowSection(config?: Pick<DnaConfig, "projectId" | "projectName" | "git">): string {
+  const identity = config ? resolveProjectGitIdentity(config) : { tag: "ProjectTag", branchSlug: "project" };
+  return `## Agent flow (mandatory for engineering work)
 
 Every **build, add, enable, fix, or change** request MUST go through the DNA feature factory. **No shortcuts. No jumping straight to code.**
 
@@ -52,7 +56,7 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 4. **Solution Architect** → implementation plan (scope, files, API, risks)
 5. **STOP — wait for user approval** before any code edits
 6. After approval: **Backend** → **Frontend** → **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
-7. Close: \`npx dna quality report --feature\` PASS → \`npx dna docker build\` → \`npx dna github push\`
+7. Close: \`npx dna quality report --feature\` PASS → \`npx dna docker build\` → \`npx dna github push --message "[${identity.tag}] feat: <summary>"\`
 
 ### The 9 roles (sequential — never skip)
 
@@ -73,9 +77,14 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 - **No complete** until \`npx dna quality report --feature\` PASS
 - **No ship** until docker build succeeds and GitHub push completes
 - **Never** ask the user to copy prompts or fill templates
+- **Git naming:** commits and PRs must use \`[${identity.tag}]\` — see Project git naming below
 
 **Admin / backoffice:** when user says admin, backoffice, or control panel — read \`.cursor/rules/admin-portal.mdc\`; scaffold \`/admin\` in a new tab with RBAC (see agent loop).
 `;
+}
+
+/** @deprecated Prefer buildAgentFlowSection(config) — static fallback for catalogs without config */
+export const DNA_AGENT_FLOW_SECTION = buildAgentFlowSection();
 
 export function buildClaudeWorkbenchSection(): string {
   return `## DNA Workbench (default — Claude Code)
@@ -111,7 +120,12 @@ Optional catalog: https://dna.humaan.app/intelligence · Regenerate: \`npx dna w
 Remove workbench: \`npx dna workbench uninstall\``;
 }
 
-export function buildAgentsMd(projectName: string): string {
+export function buildAgentsMd(config: Pick<DnaConfig, "projectId" | "projectName" | "git"> | string): string {
+  const projectName = typeof config === "string" ? config : config.projectName;
+  const identity =
+    typeof config === "string"
+      ? resolveProjectGitIdentity({ projectId: config, projectName: config })
+      : resolveProjectGitIdentity(config);
   return `# Agent instructions — ${projectName}
 
 This project uses **DNA by Humaan**. DNA is **always on** in Cursor and Claude Code — do not wait for the user to ask.
@@ -131,7 +145,9 @@ ${DNA_CRITICAL_THINKING_SECTION}
 
 ${DNA_INTENT_ROUTING_SECTION}
 
-${DNA_AGENT_FLOW_SECTION}
+${typeof config === "string" ? DNA_AGENT_FLOW_SECTION : buildAgentFlowSection(config)}
+
+${projectGitNamingSection(identity)}
 `;
 }
 

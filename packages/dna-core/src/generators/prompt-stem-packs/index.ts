@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { rm } from "node:fs/promises";
 import type { DnaConfig } from "@superhumaan/dna-config";
+import { resolveProjectGitIdentity } from "@superhumaan/dna-config";
 import { fileExists, readJsonFile, writeFileEnsured, writeJsonFile } from "../../fs.js";
 import { PROMPT_STEM_DEFS } from "./catalog.js";
 import { finalizeStemPack, stemInstallPrefix } from "./builder.js";
@@ -70,18 +71,23 @@ export function getPromptStemInstallPaths(): string[] {
 export function generatePromptStemPackFiles(config: DnaConfig): Record<string, string> {
   const files: Record<string, string> = {};
   const packs = getPromptStemPacks();
+  const { tag } = resolveProjectGitIdentity(config);
+
+  const injectTag = (content: string): string =>
+    content.replaceAll("[ProjectTag]", `[${tag}]`);
 
   for (const pack of packs) {
     const prefix = stemInstallPrefix(pack.id);
     for (const file of pack.files) {
-      files[`${prefix}/${file.path}`] = file.content;
+      files[`${prefix}/${file.path}`] = injectTag(file.content);
     }
 
     if (pack.slash) {
       const cursorCmd = pack.files.find((f) => f.path === "prompt.md")?.content ?? "";
-      files[`.cursor/commands/${pack.slash}.md`] = cursorCmd;
+      files[`.cursor/commands/${pack.slash}.md`] = injectTag(cursorCmd);
       files[`.claude/commands/${pack.slash}.md`] =
-        claudeFrontmatter(pack.summary, "[context or scope]") + cursorCmd.replace(/^> \*\*DNA Prompt Stem:.*\n\n/, "");
+        claudeFrontmatter(pack.summary, "[context or scope]") +
+        injectTag(cursorCmd.replace(/^> \*\*DNA Prompt Stem:.*\n\n/, ""));
     }
   }
 

@@ -1,10 +1,11 @@
 import type { DnaConfig, WizardAnswers } from "@superhumaan/dna-config";
+import { projectGitNamingSection, resolveProjectGitIdentity } from "@superhumaan/dna-config";
 import { generateDeliveryPipelineRule } from "./delivery-pipeline.js";
 import {
   buildAgentsMd,
+  buildAgentFlowSection,
   buildClaudeWorkbenchSection,
   buildCursorWorkbenchSection,
-  DNA_AGENT_FLOW_SECTION,
   DNA_ALWAYS_ON_SECTION,
   DNA_INTENT_ROUTING_SECTION,
 } from "./dna-default-on.js";
@@ -26,7 +27,8 @@ export function generateAiToolFiles(
   featureFactory = false,
 ): Record<string, string> {
   const files: Record<string, string> = {};
-  const factoryBlock = featureFactory ? `\n${DNA_AGENT_FLOW_SECTION}\n` : "";
+  const identity = resolveProjectGitIdentity(config);
+  const factoryBlock = featureFactory ? `\n${buildAgentFlowSection(config)}\n` : "";
 
   const preamble = `# DNA by Humaan — AI Instructions
 
@@ -38,6 +40,8 @@ ${DNA_ALWAYS_ON_SECTION}
 ${DNA_CRITICAL_THINKING_SECTION}
 
 ${DNA_INTENT_ROUTING_SECTION}
+
+${projectGitNamingSection(identity)}
 
 ## Default behaviour
 
@@ -112,7 +116,7 @@ ${buildCursorWorkbenchSection()}`;
     files["CLAUDE.md"] ??= claudePreamble;
   }
 
-  files["AGENTS.md"] ??= buildAgentsMd(config.projectName);
+  files["AGENTS.md"] ??= buildAgentsMd(config);
 
   return files;
 }

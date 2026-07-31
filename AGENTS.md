@@ -98,3 +98,22 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 
 **Admin / backoffice:** when user says admin, backoffice, or control panel — read `.cursor/rules/admin-portal.mdc`; scaffold `/admin` in a new tab with RBAC (see agent loop).
 
+## Project git naming (mandatory for AI)
+
+**Project tag:** `DNA` · **Branch slug:** `dna`
+(from `.DNA/config.dna.json` — override with `git.projectTag` / `git.branchSlug`)
+
+| Artifact | Format | Example |
+|----------|--------|---------|
+| Commit | `[DNA] type(scope): summary` | `[DNA] fix(admin): dedupe filter` |
+| PR title | `[DNA] Type: summary` | `[DNA] Fix: uncaught exception on /api` |
+| Branch | `dna/type/short-id` | `dna/fix/abc123` |
+
+### Rules
+
+- **Always** prefix commits and PR titles with `[DNA]`
+- Prefer `fix` / `feat` / `docs` / `test` / `refactor` — use `chore` only for deps, version bumps, or pure tooling
+- Keep conventional **type** after the tag so semver tools still parse
+- Ship / push examples: `npx dna github push --message "[DNA] feat: <summary>"`
+- DNA AI repair must use this tag (never hardcode a different project brand)
+

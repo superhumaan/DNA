@@ -4,7 +4,11 @@ import { exec } from "node:child_process";
 import { promisify } from "node:util";
 import { git } from "@superhumaan/dna-github";
 import type { AiRepairPlan, ClassifiedIssue, DnaConfig } from "@superhumaan/dna-config";
-import { resolveRepairConfig } from "@superhumaan/dna-config";
+import {
+  formatTaggedCommit,
+  resolveProjectGitIdentity,
+  resolveRepairConfig,
+} from "@superhumaan/dna-config";
 import {
   createAiProvider,
   type RepairContext,
@@ -43,6 +47,7 @@ async function loadRepairContext(
   dnaRoot: string,
   issue: ClassifiedIssue,
   projectRoot: string,
+  config: DnaConfig,
 ): Promise<RepairContext> {
   const behaviour: string[] = [];
   const memory: string[] = [];
@@ -93,6 +98,7 @@ async function loadRepairContext(
     memory,
     codeSnippets,
     neuralNetworkIntent: issue.isBlocker ? "force_fix_blocker" : "fix_runtime_error",
+    projectIdentity: resolveProjectGitIdentity(config),
   };
 }
 
@@ -140,10 +146,11 @@ export async function executeRepairWorkflow(
   const { projectRoot, dnaRoot, issue, config, issueNumber, dryRun } = options;
   const repairConfig = resolveRepairConfig(config.ai);
 
-  const context = await loadRepairContext(dnaRoot, issue, projectRoot);
+  const context = await loadRepairContext(dnaRoot, issue, projectRoot, config);
   const provider = createAiProvider(getAiConfig(config));
   let plan = await provider.diagnose(issue, context);
   plan = enrichPlanWithGatewayFixes(issue, plan);
+  const identity = resolveProjectGitIdentity(config);
 
   if (dryRun || !config.github?.owner || !config.github?.repo) {
     return {
@@ -190,7 +197,9 @@ export async function executeRepairWorkflow(
 
   if (modified.length > 0) {
     await g.add(modified);
-    await g.commit(`fix(dna): ${issue.title}\n\nDNA aggressive repair — not auto-merged`);
+    await g.commit(
+      `${formatTaggedCommit(identity, "fix", issue.title, "dna")}\n\nDNA aggressive repair — not auto-merged`,
+    );
   }
 
   const testsPassed = modified.length > 0 ? await runTests(projectRoot) : false;

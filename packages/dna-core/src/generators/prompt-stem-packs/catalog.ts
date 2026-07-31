@@ -1352,7 +1352,7 @@ Report image tag, build success/failure, fix blockers if failed.`,
 Prerequisite: quality PASS.
 
 \`\`\`bash
-npx dna github push --message "feat: <summary>"
+npx dna github push --message "[ProjectTag] feat: <summary>"
 \`\`\`
 
 Message context: $ARGUMENTS`,

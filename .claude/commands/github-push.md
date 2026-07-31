@@ -7,7 +7,7 @@ allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
 Prerequisite: quality PASS.
 
 ```bash
-npx dna github push --message "feat: <summary>"
+npx dna github push --message "[DNA] feat: <summary>"
 ```
 
 Message context: $ARGUMENTS

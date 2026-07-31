@@ -14,6 +14,6 @@ Acceptance criteria from `ai/feature-request.md` met. No unrelated rewrites.
 
 1. `npx dna quality report --feature` — **PASS**
 2. `npx dna docker build`
-3. `npx dna github push --message "feat: <summary>"`
+3. `npx dna github push --message "[DNA] feat: <summary>"`
 
 Report: gate status, docker tag, branch URL, CI triggered.

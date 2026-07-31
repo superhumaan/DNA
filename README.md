@@ -319,6 +319,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Lab Refresh UX + Copy issue + install-safe upgrade (v0.6.16) | Jul 2026 | Jul 2026 | Shipped — disable/spin Refresh; doctor/update align Lab installs |
 | Lab alert dark theme + force Refresh (v0.6.17) | Jul 2026 | Jul 2026 | Shipped — readable install banner; Refresh always shows busy state |
 | Lab APIs reference + deep links + open-auth fix (v0.6.18) | Jul 2026 | Jul 2026 | Shipped — full API docs; URL tabs; requireAuthInProduction honored |
+| Project git naming for AI commits/PRs (v0.6.23) | Jul 2026 | Jul 2026 | Shipped — `[ColorParty]` / `[DNA]` tags from config; repair uses host project |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | Shipped — setup script + OAuth scaffolding |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |
