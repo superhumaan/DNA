@@ -1,6 +1,12 @@
 # Recent Changes
 
-_Last updated: 2026-07-27_
+_Last updated: 2026-07-31_
+
+## 2026-07-31 — v0.9.0 next-bets roadmap on GitHub
+
+- Milestone **v0.9.0 — Next product bets** + issues **#29–#49** (21 XS/S tickets: Now → Next → Later).
+- Project board #3 Todo column synced; `sync-roadmap-to-project.sh` / `sync-project-status.sh` updated.
+- Docs: `planning.md`, README roadmap table, `current-version-scope.md`, CHANGELOG Unreleased.
 
 ## 2026-07-27 — Ship v0.6.19 (purpose bundles)
 

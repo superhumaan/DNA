@@ -10,7 +10,7 @@
 
 **Git remembers your code. DNA remembers your system.**
 
-Open-source project brain for TypeScript squads — plain-language features, quality gates, GitHub push, runtime Lab, and a **1045-pack** marketplace. AI commits and PRs are tagged per project (`[ColorParty]`, `[DNA]`, …).
+Open-source project brain for TypeScript squads — plain-language features, quality gates, GitHub push, runtime Lab, and a **1045-pack** marketplace. AI commits and PRs are tagged per project (`[Acme]`, `[DNA]`, …).
 
 ```bash
 cd /path/to/your-project    # or portfolio parent for multi-app squads
@@ -112,7 +112,7 @@ One `.DNA/` at the parent remembers **every product and how they interconnect** 
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for your tool |
 | `dna plan rbac` | RBAC plan from plain language → permission matrix |
-| `dna platform list` | DNA production feature catalog (AIStudio, ColorParty, Humaan Ops, Soli) |
+| `dna platform list` | DNA production feature catalog |
 | `dna plan feature <id>` | End-to-end feature plan — Azure, SSO, admin, flags, CRM, CMS |
 | `dna plan compliance` | Tiered ISO/GDPR/HIPAA/SOC 2 plan by org size |
 | `dna compliance list` | Startup → enterprise compliance catalog |
@@ -317,7 +317,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Lab Refresh UX + Copy issue + install-safe upgrade (v0.6.16) | Jul 2026 | Jul 2026 | Shipped — disable/spin Refresh; doctor/update align Lab installs |
 | Lab alert dark theme + force Refresh (v0.6.17) | Jul 2026 | Jul 2026 | Shipped — readable install banner; Refresh always shows busy state |
 | Lab APIs reference + deep links + open-auth fix (v0.6.18) | Jul 2026 | Jul 2026 | Shipped — full API docs; URL tabs; requireAuthInProduction honored |
-| Project git naming for AI commits/PRs (v0.6.23) | Jul 2026 | Jul 2026 | Shipped — `[ColorParty]` / `[DNA]` tags from config; repair uses host project |
+| Project git naming for AI commits/PRs (v0.6.23) | Jul 2026 | Jul 2026 | Shipped — `[Tag]` on commits/PRs from config; repair uses host project |
 | npm + GitHub listing polish (v0.6.24) | Jul 2026 | Jul 2026 | Shipped — shorter description, hero READMEs, live health link |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | Shipped — setup script + OAuth scaffolding |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
@@ -325,6 +325,29 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | [Impressions drift → auto PR suggestions](https://github.com/superhumaan/DNA/issues/14) | Oct 2026 | Feb 2027 | Shipped |
 | [Platform feature codegen (SSO, multi-tenant, flags)](https://github.com/superhumaan/DNA/issues/17) | Nov 2026 | Feb 2027 | Shipped |
 | [Multi-tenant gradual rollout patterns](https://github.com/superhumaan/DNA/issues/15) | Jan 2027 | Mar 2027 | Shipped |
+| [Bundle scorecard CLI](https://github.com/superhumaan/DNA/issues/29) | Aug 2026 | Aug 2026 | Planned — XS |
+| [GDPR combo outcome gate](https://github.com/superhumaan/DNA/issues/30) | Aug 2026 | Aug 2026 | Planned — S |
+| [Repair outcome → CellularMemory](https://github.com/superhumaan/DNA/issues/31) | Aug 2026 | Aug 2026 | Planned — S |
+| [force-repair fingerprint ranking](https://github.com/superhumaan/DNA/issues/32) | Aug 2026 | Sep 2026 | Planned — S |
+| [`dna lab immune-report`](https://github.com/superhumaan/DNA/issues/33) | Sep 2026 | Sep 2026 | Planned — XS |
+| [Architecture graph JSON](https://github.com/superhumaan/DNA/issues/34) | Sep 2026 | Sep 2026 | Planned — S |
+| [Lab Architecture tab](https://github.com/superhumaan/DNA/issues/35) | Sep 2026 | Oct 2026 | Planned — S |
+| [Blast-radius in `dna context`](https://github.com/superhumaan/DNA/issues/36) | Oct 2026 | Oct 2026 | Planned — XS |
+| [Memory snapshots](https://github.com/superhumaan/DNA/issues/37) | Oct 2026 | Oct 2026 | Planned — S |
+| [`dna memory diff`](https://github.com/superhumaan/DNA/issues/38) | Oct 2026 | Nov 2026 | Planned — S |
+| [Lab Memory timeline](https://github.com/superhumaan/DNA/issues/39) | Nov 2026 | Nov 2026 | Planned — XS |
+| [`dna factory run --dry-run`](https://github.com/superhumaan/DNA/issues/40) | Nov 2026 | Nov 2026 | Planned — S |
+| [Lab factory approve/reject](https://github.com/superhumaan/DNA/issues/41) | Nov 2026 | Nov 2026 | Planned — S |
+| [Editor extension + quality status](https://github.com/superhumaan/DNA/issues/42) | Nov 2026 | Dec 2026 | Planned — S |
+| [Extension blockers panel](https://github.com/superhumaan/DNA/issues/43) | Dec 2026 | Dec 2026 | Planned — S |
+| [DNA MCP: context + doctor](https://github.com/superhumaan/DNA/issues/44) | Jan 2027 | Jan 2027 | Planned — S |
+| [DNA MCP: quality + memory + repair](https://github.com/superhumaan/DNA/issues/45) | Jan 2027 | Feb 2027 | Planned — S |
+| [`document --from-code` confidence](https://github.com/superhumaan/DNA/issues/46) | Feb 2027 | Feb 2027 | Planned — S |
+| [Lab friction signals](https://github.com/superhumaan/DNA/issues/47) | Feb 2027 | Mar 2027 | Planned — S |
+| [Hosted DNA Cloud design spike](https://github.com/superhumaan/DNA/issues/48) | Mar 2027 | Mar 2027 | Planned — S |
+| [Hosted Lab auth prototype](https://github.com/superhumaan/DNA/issues/49) | Apr 2027 | May 2027 | Planned — M (after #48) |
+
+Milestone: [v0.9.0 — Next product bets](https://github.com/superhumaan/DNA/milestone/7) · Board: [DNA Roadmap](https://github.com/users/superhumaan/projects/3/views/1)
 
 ---
 

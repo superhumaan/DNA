@@ -1,6 +1,6 @@
 # DNA intelligence — Cursor commands
 
-**dna-by-humaan** — 103 prompt stem packs (bundled catalog v8) + 47 `/dna-*` CLI commands.
+**dna-by-humaan** — 103 prompt stem packs (bundled catalog v8) + 48 `/dna-*` CLI commands.
 
 ## Prompt stems (`.DNA/stems/<id>/`)
 

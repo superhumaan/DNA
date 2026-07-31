@@ -60,6 +60,7 @@ Engineering work (build, add, fix, change) **must** follow `ai/agent-loop.md` �
 | `/dna-marketplace-list` | Marketplace List | npx dna marketplace list |
 | `/dna-marketplace-search` | Marketplace Search | npx dna marketplace search "<args>" |
 | `/dna-marketplace-install` | Marketplace Install | npx dna marketplace install <args> |
+| `/dna-skeletor-status` | Skeletor Status | npx dna skeletor status |
 | `/dna-memory-export` | Memory Export | npx dna memory export --out .DNA/exports/memory.json |
 | `/dna-memory-import` | Memory Import | npx dna memory import <args> --merge |
 | `/dna-compliance-list` | Compliance List | npx dna compliance list |
@@ -91,7 +92,7 @@ Full detail: read `.cursor/skills/dna-cli/commands-reference.md` or invoke any `
 
 ## Supporting files
 
-- `commands-reference.md` — all 47 commands with purpose and must-rules
+- `commands-reference.md` — all 48 commands with purpose and must-rules
 - `workflows.md` — chained workflows and hard gates
 - `.cursor/commands/dna-*.md` — per-command extreme detail (invoke with `/`)
 

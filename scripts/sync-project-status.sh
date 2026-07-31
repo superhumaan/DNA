@@ -10,9 +10,10 @@ OWNER="superhumaan"
 PROJECT_NUMBER="${1:-3}"
 REPO="superhumaan/DNA"
 
-SHIPPED=(1 2 3 4 5 6 7 8 9 10)
-IN_PROGRESS=(11 12 13 14 15 16 17)
-PLANNED=()
+# Project #3 (Roadmap): Done / In progress / Todo
+SHIPPED=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17)
+IN_PROGRESS=()
+PLANNED=(29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49)
 
 if ! gh project view "$PROJECT_NUMBER" --owner "$OWNER" &>/dev/null; then
   echo "Missing project scopes. Run:"
@@ -58,7 +59,7 @@ set_status_for_issue() {
   local url item_id
   url=$(gh issue view "$num" --repo "$REPO" --json url -q .url)
   gh project item-add "$PROJECT_NUMBER" --owner "$OWNER" --url "$url" 2>/dev/null || true
-  item_id=$(gh project item-list "$PROJECT_NUMBER" --owner "$OWNER" --format json -q ".items[] | select(.content.number==$num) | .id" | head -1)
+  item_id=$(gh project item-list "$PROJECT_NUMBER" --owner "$OWNER" --format json --limit 100 -q ".items[] | select(.content.number==$num) | .id" | head -1)
   if [[ -z "$item_id" ]]; then
     echo "WARN: no project item for #$num"
     return
@@ -70,10 +71,8 @@ set_status_for_issue() {
 
 echo "Syncing project #$PROJECT_NUMBER ($PROJECT_ID)..."
 
-for num in "${SHIPPED[@]}"; do set_status_for_issue "$num" "$SHIPPED_OPT"; done
-for num in "${IN_PROGRESS[@]}"; do set_status_for_issue "$num" "$IN_PROGRESS_OPT"; done
-if ((${#PLANNED[@]})); then
-  for num in "${PLANNED[@]}"; do set_status_for_issue "$num" "$PLANNED_OPT"; done
-fi
+for num in "${SHIPPED[@]+"${SHIPPED[@]}"}"; do set_status_for_issue "$num" "$SHIPPED_OPT"; done
+for num in "${IN_PROGRESS[@]+"${IN_PROGRESS[@]}"}"; do set_status_for_issue "$num" "$IN_PROGRESS_OPT"; done
+for num in "${PLANNED[@]+"${PLANNED[@]}"}"; do set_status_for_issue "$num" "$PLANNED_OPT"; done
 
 echo "Done."
