@@ -294,7 +294,7 @@ async function handleLabRequestInner(
   const pathname = url.pathname;
   const host = hostFromRequest(req);
   // Loopback Host → localMode. Separately, requireAuthInProduction:false is an
-  // explicit opt-in to open Lab on non-localhost (Invitrace / private previews).
+  // explicit opt-in to open Lab on non-localhost (sibling apps / private previews).
   // That flag was schema'd but unused — Coverage/APIs returned 401 while bootstrap
   // looked "open" when hosts patched only the bootstrap response.
   const loopbackLocal = isLocalLabRequest(host, {

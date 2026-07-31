@@ -1,4 +1,4 @@
-# Notes + Markdown + STT (Soli)
+# Notes + Markdown + STT 
 
 ## Notes
 - Scopes: personal | team | shared

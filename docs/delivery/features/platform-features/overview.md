@@ -9,7 +9,7 @@ DNA's platform catalog encodes production patterns as planable, installable feat
 ```bash
 dna platform list
 dna platform projects
-dna platform project aistudio
+dna platform project app
 ```
 
 Set reference repos on your machine:

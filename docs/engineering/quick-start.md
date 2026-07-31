@@ -192,7 +192,7 @@ Each feature gets a **local quality report** (SonarQube-style SAST + lint/typech
 
 ## Optional: local reference repos
 
-If you clone DNA's reference production apps (AIStudio, ColorParty, Humaan Ops, Soli), point the CLI at them:
+If you clone DNA's reference production apps (a production app, a production app, ops tooling, a production app), point the CLI at them:
 
 ```bash
 export DNA_REFERENCE_ROOT=~/Projects

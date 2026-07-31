@@ -26,7 +26,7 @@ describe("platform feature plan", () => {
     await runWizard({
       root,
       answers: {
-        projectDescription: "Humaan-style ops platform",
+        projectDescription: "app-style ops platform",
         acceptRecommendation: true,
         aiTools: ["cursor"],
         compliance: "none",
@@ -41,13 +41,13 @@ describe("platform feature plan", () => {
       root,
       featureId: "admin-portal",
       quote: "Build admin portal with Google directory sync",
-      referenceProject: "humaan",
-    });
+          });
 
     expect(result.context).toContain("Admin Portal");
-    expect(result.context).toContain("DNA production reference");
+    expect(result.context).toContain("## Patterns");
     expect(result.context).toContain("platforms/dna/admin-portal.dna.md");
     expect(result.planPath).toContain("feature-admin-portal.md");
+    expect(result.context).not.toMatch(/Reference project/i);
 
     await rm(root, { recursive: true, force: true });
   });

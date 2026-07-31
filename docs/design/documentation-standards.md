@@ -16,7 +16,7 @@ How DNA projects should write human documentation in `DNA/Impressions/` and how 
 
 ## Wiki structure (this repo)
 
-This repository follows the Humaan / AI Studio Docusaurus pattern:
+This repository follows the Humaan / a production app Docusaurus pattern:
 
 | Section | Purpose |
 |---------|---------|

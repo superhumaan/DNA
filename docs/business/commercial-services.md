@@ -60,7 +60,7 @@ DNA drives adoption. Humaan ships the build — admin portals, SSO, RBAC, Azure 
 
 | Includes | |
 |----------|---|
-| Patterns from AIStudio, ColorParty, Humaan Ops, and Soli | |
+| Patterns from a production app, a production app, ops tooling, and a production app | |
 | `dna plan feature` as the implementation brief | |
 | End-to-end platform engineering and cloud deploy | |
 

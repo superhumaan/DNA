@@ -32,7 +32,7 @@ DNA Lab is the **production** observability UI — not localhost-only.
 ### Local vs production
 
 - **Local** (`localhost` / literal loopback host only): `/labs` opens with **no login**
-- **Production**: ColorParty-style sign-in (email + password + OTP) after pairing
+- **Production**:  sign-in (email + password + OTP) after pairing
 
 `NODE_ENV=development` is not an authentication bypass. Public preview hosts
 must sign in even when the process runs a development build, and development

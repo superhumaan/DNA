@@ -240,7 +240,7 @@ Products that live inside or beside ChatGPT: Custom GPTs, Actions (OpenAPI), and
 | Apps SDK | Rich UI embedded in ChatGPT (when available) |
 
 Server-proxy all model calls — API keys never in GPT instructions or client bundles.
-Pair with \`platforms/aistudio/ai-governance.dna.md\` for production AI guardrails.
+Pair with \`platforms/dna/ai-governance.dna.md\` for production AI guardrails.
 `,
       },
       {

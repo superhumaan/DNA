@@ -45,48 +45,48 @@ describe("git project identity config", () => {
   it("parses git.projectTag and git.branchSlug", () => {
     const parsed = DnaConfigSchema.parse(
       base({
-        projectId: "colorparty",
-        projectName: "colorparty",
-        git: { projectTag: "ColorParty", branchSlug: "colorparty" },
+        projectId: "myapp",
+        projectName: "myapp",
+        git: { projectTag: "MyApp", branchSlug: "myapp" },
       }),
     );
-    expect(parsed.git?.projectTag).toBe("ColorParty");
-    expect(parsed.git?.branchSlug).toBe("colorparty");
+    expect(parsed.git?.projectTag).toBe("MyApp");
+    expect(parsed.git?.branchSlug).toBe("myapp");
   });
 
-  it("resolves known lab tags from projectId", () => {
-    expect(resolveProjectGitIdentity(base({ projectId: "colorparty", projectName: "colorparty" }))).toEqual({
-      tag: "ColorParty",
-      branchSlug: "colorparty",
+  it("resolves tags from projectId (DNA known; others title-cased)", () => {
+    expect(resolveProjectGitIdentity(base({ projectId: "myapp", projectName: "myapp" }))).toEqual({
+      tag: "Myapp",
+      branchSlug: "myapp",
     });
     expect(resolveProjectGitIdentity(base({ projectId: "dna-by-humaan", projectName: "dna-by-humaan" }))).toEqual({
       tag: "DNA",
       branchSlug: "dna",
     });
-    expect(resolveProjectGitIdentity(base({ projectId: "ai-studio", projectName: "ai-studio" })).tag).toBe(
-      "AIStudio",
+    expect(resolveProjectGitIdentity(base({ projectId: "acme-web", projectName: "acme-web" })).tag).toBe(
+      "AcmeWeb",
     );
   });
 
   it("honours explicit overrides", () => {
     const id = resolveProjectGitIdentity(
       base({
-        projectId: "colorparty",
-        projectName: "colorparty",
-        git: { projectTag: "CP", branchSlug: "cp" },
+        projectId: "myapp",
+        projectName: "myapp",
+        git: { projectTag: "MyApp", branchSlug: "myapp" },
       }),
     );
-    expect(id).toEqual({ tag: "CP", branchSlug: "cp" });
+    expect(id).toEqual({ tag: "MyApp", branchSlug: "myapp" });
   });
 
   it("formats commit, PR, and branch names", () => {
-    const id = { tag: "ColorParty", branchSlug: "colorparty" };
+    const id = { tag: "MyApp", branchSlug: "myapp" };
     expect(formatTaggedCommit(id, "fix", "dedupe filter", "admin")).toBe(
-      "[ColorParty] fix(admin): dedupe filter",
+      "[MyApp] fix(admin): dedupe filter",
     );
     expect(formatTaggedPrTitle(id, "Fix", "uncaught exception")).toBe(
-      "[ColorParty] Fix: uncaught exception",
+      "[MyApp] Fix: uncaught exception",
     );
-    expect(formatRepairBranch(id, "abc-123")).toBe("colorparty/fix/abc-123");
+    expect(formatRepairBranch(id, "abc-123")).toBe("myapp/fix/abc-123");
   });
 });

@@ -442,6 +442,20 @@ Install a knowledge pack into .DNA/knowledge/ and register version in config.
 - Read the **full terminal output** (stdout and stderr) before summarizing or acting.
 - Prefer `npx dna` when `dna` is not on PATH; use global `dna` when available.
 
+## Core
+
+### /dna-skeletor-status — Skeletor Status
+
+Detect Skeletor and show fleet bridge status for AI cross-lab coordination.
+
+**CLI:** `npx dna skeletor status`
+
+**Must:**
+- Run the real CLI command in the shell — never invent or simulate DNA output.
+- Execute from the **project root** unless `--cwd` is explicitly required.
+- Read the **full terminal output** (stdout and stderr) before summarizing or acting.
+- Prefer `npx dna` when `dna` is not on PATH; use global `dna` when available.
+
 ## Memory
 
 ### /dna-memory-export — Memory Export
@@ -510,7 +524,7 @@ List platform features DNA learned from production projects.
 
 ### /dna-platform-projects — Platform Projects
 
-List reference production projects (aistudio, colorparty, humaan, soli).
+List platform features (`dna platform list`).
 
 **CLI:** `npx dna platform projects`
 

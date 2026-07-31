@@ -6,34 +6,22 @@
 import type { DnaConfig } from "./schemas.js";
 
 export interface ProjectGitIdentity {
-  /** Display tag in brackets, e.g. ColorParty, DNA */
+  /** Display tag in brackets, e.g. MyApp, DNA */
   tag: string;
-  /** Lowercase slug for branch prefixes, e.g. colorparty, dna */
+  /** Lowercase slug for branch prefixes, e.g. myapp, dna */
   branchSlug: string;
 }
 
-/** Well-known lab IDs → display tags (fleet convention). */
+/** Well-known open-source project IDs → display tags. */
 const KNOWN_PROJECT_TAGS: Record<string, string> = {
-  colorparty: "ColorParty",
-  "color-party": "ColorParty",
   dna: "DNA",
   "dna-by-humaan": "DNA",
-  aistudio: "AIStudio",
-  "ai-studio": "AIStudio",
-  humaan: "Humaan",
-  soli: "Soli",
 };
 
-/** Prefer short branch prefixes for known labs. */
+/** Prefer short branch prefixes for known projects. */
 const KNOWN_BRANCH_SLUGS: Record<string, string> = {
-  colorparty: "colorparty",
-  "color-party": "colorparty",
   dna: "dna",
   "dna-by-humaan": "dna",
-  aistudio: "aistudio",
-  "ai-studio": "aistudio",
-  humaan: "humaan",
-  soli: "soli",
 };
 
 function slugifyBranch(raw: string): string {

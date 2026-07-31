@@ -377,7 +377,7 @@ export const DNA_AI_COMMAND_CATALOG: readonly DnaAiCommandDef[] = [
     id: "platform-projects",
     category: "platform",
     title: "Platform Projects",
-    description: "List reference production projects (aistudio, colorparty, humaan, soli).",
+    description: "List reference production projects (feature ids via dna platform list).",
     cli: "npx dna platform projects",
   },
   {

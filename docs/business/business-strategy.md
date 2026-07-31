@@ -21,7 +21,7 @@ Git remembers your code. **DNA remembers your system.**
 
 1. **Open by default** — MIT license, npm distribution, GitHub-first development
 2. **Proportionate compliance** — startup baselines through enterprise GRC, not one-size-fits-all
-3. **Production-learned patterns** — platform catalog distilled from AIStudio, ColorParty, Humaan Ops, and Soli
+3. **Production-learned patterns** — platform catalog distilled from a production app, a production app, ops tooling, and a production app
 4. **One package, two modes** — CLI for intelligence; `/runtime` subpath for production observation
 5. **Marketplace scale** — 965 knowledge packs with offline bundled fallback
 
@@ -66,7 +66,7 @@ Git remembers your code. **DNA remembers your system.**
 | [dna.humaan.app](https://dna.humaan.app) | Product site + marketplace UI |
 | [npm](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) | `npx @superhumaan/dna-by-humaan init` |
 | [GitHub](https://github.com/superhumaan/DNA) | Source, issues, wiki |
-| Reference apps | AIStudio, ColorParty, Humaan Ops, Soli — pattern sources |
+| Reference apps | a production app, a production app, ops tooling, a production app — pattern sources |
 
 ---
 

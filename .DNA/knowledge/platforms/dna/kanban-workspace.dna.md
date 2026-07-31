@@ -1,4 +1,4 @@
-# Kanban Workspace (Soli)
+# Kanban Workspace 
 
 ## Boards
 - Personal (`/work`) and team (`/team-work`)

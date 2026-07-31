@@ -8,10 +8,10 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 | Area | Delivered |
 |------|-----------|
-| **Project git naming** | AI commits, PR titles, and repair branches use per-project tags (`[ColorParty]`, `[DNA]`, …) from `projectId` / `git.projectTag`; always-on workbench + delivery behaviour + stems |
+| **Project git naming** | AI commits, PR titles, and repair branches use per-project tags (`[MyApp]`, `[DNA]`, …) from `projectId` / `git.projectTag`; always-on workbench + delivery behaviour + stems |
 | **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace, `dna ai force-repair`, `dna lab installs [--fix]`, `dna update` aligns nested Lab packages |
 | **Runtime** | Express 4/5, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`); Aggressive Repair Loop fingerprints + CellularMemory; EPIPE/ECONNRESET noise filter; outbound third-party capture + browser ingest |
-| **DNA Lab** | Production observability at `/labs` — **mobile shell (≤900px ColorParty parity)** + **APIs reference** (Description / Usage / Received / Sent for every Lab route) + **URL deep links** (`/labs/<tab>`, `/labs/issues/<id>`) + **401 → sign-in** (no Unauthorized toast) + **`requireAuthInProduction: false` open Lab** + dark-theme alerts + force Refresh + Copy issue + analytics Overview + Sentry-density Issues + upgrade DX; Humaan admin UI parity; Soli shell + Quality hub; fingerprint-grouped issues; local open access; production auth via `dna register lab` ([#12](https://github.com/superhumaan/DNA/issues/12), [lab-ui-humaan-0.6.7](../engineering/lab-ui-humaan-0.6.7.md), [lab-apis-reference-0.6.18](../engineering/lab-apis-reference-0.6.18.md), [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md)) |
+| **DNA Lab** | Production observability at `/labs` — **mobile shell (≤900px mobile admin parity)** + **APIs reference** (Description / Usage / Received / Sent for every Lab route) + **URL deep links** (`/labs/<tab>`, `/labs/issues/<id>`) + **401 → sign-in** (no Unauthorized toast) + **`requireAuthInProduction: false` open Lab** + dark-theme alerts + force Refresh + Copy issue + analytics Overview + Sentry-density Issues + upgrade DX; Humaan admin UI parity; admin shell + Quality hub; fingerprint-grouped issues; local open access; production auth via `dna register lab` ([#12](https://github.com/superhumaan/DNA/issues/12), [lab-ui-humaan-0.6.7](../engineering/lab-ui-humaan-0.6.7.md), [lab-apis-reference-0.6.18](../engineering/lab-apis-reference-0.6.18.md), [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md)) |
 | **Supply chain** | **Zero production npm dependencies** (v0.4.6+), no install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
 | **Marketplace** | **1045 rich packs** (zero-stubs floor + P0 depth), **27 purpose bundles** (`combo/*`), remote + bundled offline; combo install injects knowledge packs + prompt stems + Cursor rules |
 | **Public marketplace** | [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles) — bundles-first UX; catalog `bundles[]` |
@@ -49,11 +49,12 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 | Item | Notes |
 |------|-------|
-| Hosted DNA SaaS | Self-hosted CLI + runtime + Lab only |
+| Hosted DNA SaaS | Self-hosted CLI + runtime + Lab only — design spike [#48](https://github.com/superhumaan/DNA/issues/48) then optional prototype [#49](https://github.com/superhumaan/DNA/issues/49) |
 | Hosted feedback ingest API | Client POSTs to `dna.humaan.app/api/v1/feedback`; server endpoint planned — maintainer `ingest` works today via `DNA_FEEDBACK_TOKEN` |
 | Non-TypeScript primary stacks | Limited pack coverage |
 | Auto-merge PRs | Safety boundary — never auto-merge |
 | External uptime monitoring | DNA Lab complements ping/uptime tools — does not replace them |
+| v0.9.0 next bets | Tracked as Planned issues [#29](https://github.com/superhumaan/DNA/issues/29)–[#49](https://github.com/superhumaan/DNA/issues/49) — see [planning.md](../product/planning.md) |
 
 ---
 

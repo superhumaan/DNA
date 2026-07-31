@@ -1,4 +1,4 @@
-# Azure (AIStudio, Soli)
+# Azure (a production app, a production app)
 
 ## Services used in production
 - **Azure Container Apps** — SPA + API single container
@@ -6,7 +6,7 @@
 - **Azure Key Vault** — secrets
 - **Azure AD B2C** — production SSO (MSAL + server session exchange)
 - **Azure Communication Email** — transactional email
-- **Azure SQL** — Soli multi-tenant persistence option
+- **Azure SQL** — a production app multi-tenant persistence option
 - **Log Analytics** — observability
 
 ## Terraform

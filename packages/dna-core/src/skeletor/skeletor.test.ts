@@ -50,8 +50,8 @@ async function fakeSkeletorHome(): Promise<string> {
       },
       projects: [
         {
-          name: "ColorParty",
-          path: "/Users/me/Projects/ColorParty",
+          name: "LabA",
+          path: "/Users/me/Projects/LabA",
           hasDna: true,
           dnaVersion: "0.6.20",
           gitDirty: true,
@@ -95,7 +95,7 @@ describe("skeletor bridge", () => {
 
     const section = formatSkeletorContextSection(pull);
     expect(section).toContain("Skeletor fleet");
-    expect(section).toContain("ColorParty");
+    expect(section).toContain("LabA");
     expect(section).toContain("GET /error");
 
     expect(formatSkeletorStatus(pull)).toMatch(/installed/);
@@ -130,7 +130,7 @@ describe("skeletor bridge", () => {
       expect(written).toBe(".DNA/CellularMemory/parietalLobe/skeletor-fleet.md");
       const { readFile } = await import("node:fs/promises");
       const body = await readFile(join(root, written!), "utf-8");
-      expect(body).toContain("ColorParty");
+      expect(body).toContain("LabA");
     } finally {
       if (prev === undefined) delete process.env.HOME;
       else process.env.HOME = prev;

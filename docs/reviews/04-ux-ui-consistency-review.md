@@ -14,7 +14,7 @@
 
 ## 3. Implementation Map
 
-Lab mirrors Humaan admin portal patterns: icon-only DNA brand, accordion sidebar (Monitor / Delivery), primary pills, list toolbar (search → tabs → table), severity badges, empty states. Auth uses Soli-style atmosphere shell.
+Lab mirrors Humaan admin portal patterns: icon-only DNA brand, accordion sidebar (Monitor / Delivery), primary pills, list toolbar (search → tabs → table), severity badges, empty states. Auth uses a production app-style atmosphere shell.
 
 ## 4. Findings
 

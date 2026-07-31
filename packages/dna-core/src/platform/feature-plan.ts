@@ -12,18 +12,13 @@ import {
   featuresForProject,
   type PlatformFeature,
 } from "./catalog.js";
-import {
-  formatCodeReference,
-  getReferenceProject,
-  type ReferenceProject,
-} from "./reference-projects.js";
 
 export interface FeaturePlanOptions {
   root: string;
   featureId: string;
   quote?: string;
-  /** Reference a DNA production project for patterns */
-  referenceProject?: "aistudio" | "colorparty" | "humaan" | "soli";
+  /** @deprecated Ignored. */
+  referenceProject?: string;
 }
 
 export interface FeaturePlanResult {
@@ -97,10 +92,9 @@ function buildFeatureBrief(
   options: FeaturePlanOptions,
   config: DnaConfig | null,
   installedPacks: string[],
-  project: ReferenceProject | undefined,
 ): string {
   const phases = PHASE_TEMPLATES[feature.category] ?? PHASE_TEMPLATES.product;
-  const refProject = options.referenceProject ?? feature.sourceProjects[0];
+  void options.referenceProject;
 
   const lines = [
     `# DNA Feature Plan: ${feature.name}`,
@@ -116,17 +110,10 @@ function buildFeatureBrief(
     `- **ID:** ${feature.id}`,
     `- **Category:** ${feature.category}`,
     `- **Description:** ${feature.description}`,
-    `- **Reference project:** ${project?.name ?? refProject} (${project?.stack ?? "see DNA catalog"})`,
     "",
-    "## DNA production reference",
+    "## Patterns",
     "",
-    "DNA has shipped this in production. Study these patterns before improvising:",
-    "",
-    ...(project?.highlights.map((h) => `- ${h}`) ?? ["- See platform catalog"]),
-    "",
-    ...(feature.referencePaths && refProject && feature.referencePaths[refProject]
-      ? [`**Code reference:** ${formatCodeReference(project, feature.referencePaths[refProject])}`]
-      : []),
+    "Follow the knowledge files below. Do not invent parallel architectures.",
     "",
     "## Knowledge to load (mandatory)",
     "",
@@ -216,9 +203,7 @@ export async function generateFeaturePlan(options: FeaturePlanOptions): Promise<
   const ensureResult = await ensureKnowledgeInstalled(options.root, packIds, config.channel);
   const installedPacks = [...ensureResult.installed, ...ensureResult.refreshed];
 
-  const refProject = options.referenceProject ?? feature.sourceProjects[0];
-  const project = refProject ? await getReferenceProject(refProject) : undefined;
-  const context = buildFeatureBrief(feature, options, config, installedPacks, project);
+  const context = buildFeatureBrief(feature, options, config, installedPacks);
   const slug = feature.id;
   const planPath = join(options.root, ".DNA", "plans", `feature-${slug}.md`);
   await writeFileEnsured(planPath, context);
@@ -240,20 +225,10 @@ export function formatPlatformCatalog(): string {
     "DNA Platform Feature Catalog",
     "===============================",
     "",
-    "Production projects DNA learned from:",
+    "Reusable production patterns (dna plan feature <id>):",
     "",
   ];
 
-  for (const p of DNA_REFERENCE_PROJECT_DEFS) {
-    lines.push(`• ${p.id} — ${p.name}`);
-    lines.push(`  ${p.stack}`);
-    for (const h of p.highlights.slice(0, 3)) {
-      lines.push(`  - ${h}`);
-    }
-    lines.push("");
-  }
-
-  lines.push("Features (dna plan feature <id>):", "");
   const byCategory = new Map<string, PlatformFeature[]>();
   for (const f of PLATFORM_FEATURES) {
     const list = byCategory.get(f.category) ?? [];
@@ -272,29 +247,9 @@ export function formatPlatformCatalog(): string {
   return lines.join("\n");
 }
 
-export function formatProjectFeatures(projectId: "aistudio" | "colorparty" | "humaan" | "soli"): string {
-  const project = DNA_REFERENCE_PROJECT_DEFS.find((p) => p.id === projectId);
-  if (!project) return `Unknown project: ${projectId}`;
-
-  const features = featuresForProject(projectId);
-  const lines = [
-    `${project.name} — DNA Feature Map`,
-    "=".repeat(40),
-    "",
-    project.stack,
-    "",
-    "Features to reference when building similar systems:",
-    "",
-  ];
-
-  for (const f of features) {
-    lines.push(`• ${f.id}`);
-    lines.push(`  ${f.description}`);
-    lines.push(`  dna plan feature ${f.id} --reference-project ${projectId}`);
-    lines.push("");
-  }
-
-  return lines.join("\n");
+/** @deprecated Prefer `formatPlatformCatalog()`. */
+export function formatProjectFeatures(_projectId: string): string {
+  return formatPlatformCatalog();
 }
 
 export {

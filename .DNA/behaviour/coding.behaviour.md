@@ -16,7 +16,7 @@
 
 **Do NOT add these technologies to this project:** next, nestjs, ghost, vue, svelte, angular, nuxt
 
-React single-page app with Vite, separate Express or Fastify API. ColorParty-style DNA web pattern.
+React single-page app with Vite, separate Express or Fastify API. Vite SPA + separate API DNA web pattern.
 
 ## Rules
 

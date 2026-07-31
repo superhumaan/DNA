@@ -1,4 +1,4 @@
-# Vercel + Supabase (ColorParty, Ops)
+# Vercel + Supabase (a production app, Ops)
 
 ## Topology
 - Vercel frontend (`dist/`)
@@ -13,4 +13,4 @@
 - `sync:vercel-env` for local dev parity
 
 ## SSO
-Shared JWT secret with invitrace.humaan.app for cross-app bridge.
+Shared JWT secret with sibling-app.humaan.app for cross-app bridge.

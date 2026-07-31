@@ -9,7 +9,7 @@
 
 **Git remembers your code. DNA remembers your system.**
 
-One `doctor` install gives Cursor/Claude a project brain — stems, rules, Lab, marketplace, and AI repair that tags commits and PRs per project (`[ColorParty]`, `[DNA]`, …).
+One `doctor` install gives Cursor/Claude a project brain — stems, rules, Lab, marketplace, and AI repair that tags commits and PRs per project (`[Acme]`, `[DNA]`, …).
 
 ```bash
 npx @superhumaan/dna-by-humaan doctor
@@ -33,7 +33,7 @@ Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 | Pain | DNA |
 |------|-----|
 | AI invents architecture | Loads `.DNA/` behaviour + knowledge first |
-| Generic `chore:` commits across labs | `[ColorParty] fix(…):` / `[DNA] feat:…` from config |
+| Generic `chore:` commits across labs | `[Acme] fix(…):` / `[DNA] feat:…` from config |
 | Runtime errors with no project context | Lab + immune classification + repair PRs |
 | Knowledge scattered per repo | Portfolio/`doctor` on the parent folder |
 
@@ -113,9 +113,9 @@ DNA is **not** a documentation generator. It is:
 | **Knowledge marketplace** | **1045** curated packs + **27 purpose bundles** — frameworks, cloud, healthcare, compliance, legal, payments |
 | **Tiered compliance** | GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS — startup → enterprise |
 | **GDPR reference library** | **85+** governance, technical, and AI policy templates (bundled in CLI assets) |
-| **Platform catalog** | Production patterns from DNA reference systems (AIStudio, ColorParty, Humaan Ops, Soli) |
+| **Platform catalog** | Production patterns from the platform catalog (admin, auth, cloud, integrations) |
 | **IVF (brownfield)** | Install into existing codebases — analyze, document, phased migration plans |
-| **GitHub automation** | Contextual issues and AI-assisted repair PRs with **project tags** (`[ColorParty]`, …) |
+| **GitHub automation** | Contextual issues and AI-assisted repair PRs with **project tags** (`[MyApp]`, …) |
 | **Software immune system** | Severity, category, and discipline classification |
 | **Project git naming** | AI commits/PRs tagged per project — see [naming conventions](https://github.com/superhumaan/DNA/blob/main/docs/design/naming-conventions.md) |
 
@@ -262,7 +262,7 @@ fail closed unless a shared Redis-compatible adapter is fully configured via
 `DNA_LAB_STATE_BACKEND=redis`, `DNA_LAB_REDIS_URL`, `DNA_LAB_REDIS_TOKEN`, and
 `DNA_LAB_REDIS_KEY`. `/api/dna/labs/health` reports the active backend.
 
-**UI (v0.6.20+):** Mobile-responsive Lab shell (ColorParty admin parity — off-canvas nav ≤900px). **(v0.6.18+):** **APIs** tab documents every Lab route (Description / Usage / Received / Sent); URL deep links (`/labs/coverage`, `/labs/issues/:id`); 401 → sign-in. [APIs reference →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-apis-reference-0.6.18.md). **(v0.6.16+):** Header Refresh disables + spins and reloads the active tab; Issues have **Copy issue**. **(v0.6.15+):** Sidebar shows the live DNA version; install-mismatch banner when nested/stale copies exist — `dna doctor` / `dna update` auto-align, or run `dna lab installs --fix` ([upgrade DX →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-upgrade-dx-0.6.15.md)). **(v0.6.14+):** Analytics Overview + Sentry-density Issues. Humaan admin chrome (v0.6.7+): DNA logo only, primary pills, search → filters → tables, Monitor/Delivery accordion.
+**UI (v0.6.20+):** Mobile-responsive Lab shell (mobile admin parity — off-canvas nav ≤900px). **(v0.6.18+):** **APIs** tab documents every Lab route (Description / Usage / Received / Sent); URL deep links (`/labs/coverage`, `/labs/issues/:id`); 401 → sign-in. [APIs reference →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-apis-reference-0.6.18.md). **(v0.6.16+):** Header Refresh disables + spins and reloads the active tab; Issues have **Copy issue**. **(v0.6.15+):** Sidebar shows the live DNA version; install-mismatch banner when nested/stale copies exist — `dna doctor` / `dna update` auto-align, or run `dna lab installs --fix` ([upgrade DX →](https://github.com/superhumaan/DNA/blob/main/docs/engineering/lab-upgrade-dx-0.6.15.md)). **(v0.6.14+):** Analytics Overview + Sentry-density Issues. Humaan admin chrome (v0.6.7+): DNA logo only, primary pills, search → filters → tables, Monitor/Delivery accordion.
 
 ### Upgrade Lab (never skip)
 

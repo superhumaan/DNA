@@ -66,7 +66,7 @@ RBAC is incomplete if a non-admin can see the link, open the URL, or call the AP
 - Test direct URL bar navigation for both roles
 
 ## Reference projects
-- AIStudio: AI governance, content policy, data export
-- ColorParty: live map, feedback moderation, profanity
-- Humaan Ops: org (people, departments), report config
-- Soli: entity templates, data export, usage
+- a production app: AI governance, content policy, data export
+- a production app: live map, feedback moderation, profanity
+- ops tooling: org (people, departments), report config
+- a production app: entity templates, data export, usage

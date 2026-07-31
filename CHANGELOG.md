@@ -4,6 +4,14 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Docs
+- **v0.9.0 roadmap** — 21 small Planned issues (#29–#49) on [DNA Roadmap](https://github.com/users/superhumaan/projects/3/views/1) / [milestone](https://github.com/superhumaan/DNA/milestone/7): outcome combos, repair learning, architecture graph, memory, factory, IDE extension, MCP, cloud spike. Synced in `docs/product/planning.md` + README.
+
+## [0.6.25] - 2026-07-31
+
+### Changed
+- **Platform catalog** — `dna platform list` lists feature ids; knowledge packs live under `platforms/dna/*`; git-tag examples use `[MyApp]` / `[DNA]`
+
 ## [0.6.24] - 2026-07-31
 
 ### Changed
@@ -14,7 +22,7 @@ All notable changes to DNA are documented here.
 
 ### Added
 
-- **Project git naming defaults for AI** — commits, PR titles, and repair branches use a per-project tag (`[ColorParty]`, `[DNA]`, …) from `projectId` / optional `git.projectTag` + `git.branchSlug` in `.DNA/config.dna.json`
+- **Project git naming defaults for AI** — commits, PR titles, and repair branches use a per-project tag (`[MyApp]`, `[DNA]`, …) from `projectId` / optional `git.projectTag` + `git.branchSlug` in `.DNA/config.dna.json`
 - Always-on workbench / AGENTS / delivery behaviour / stems inject the live tag; AI repair no longer hardcodes `[DNA]` when the host project differs
 
 ### Changed
@@ -36,7 +44,7 @@ All notable changes to DNA are documented here.
 
 ### Added
 
-- **Lab mobile shell** — `/labs` mirrors ColorParty admin responsiveness: off-canvas sidebar (≤900px), sticky mobile chrome with hamburger, backdrop + Escape to close, horizontally scrollable tables, wrapping page-header actions. Desktop layout unchanged.
+- **Lab mobile shell** — `/labs` mirrors mobile admin responsiveness: off-canvas sidebar (≤900px), sticky mobile chrome with hamburger, backdrop + Escape to close, horizontally scrollable tables, wrapping page-header actions. Desktop layout unchanged.
 
 ## [0.6.19] - 2026-07-27
 
@@ -58,7 +66,7 @@ All notable changes to DNA are documented here.
 
 - **Lab never toasts raw "Unauthorized"** — 401 on Lab APIs sends the user to sign-in instead of a dashboard error banner; Coverage/APIs/etc. no longer surface that string.
 - **Lab title bar → toast gap** — error/success toasts use `--admin-header-content-gap` (16px) under the page header.
-- **Lab `requireAuthInProduction: false` actually opens Lab APIs** — the flag was in config schema but unused; only loopback Host granted `localMode`. Non-localhost hosts (Invitrace / previews) got 401 on `/coverage`, `/intelligence`, `/apis`, `/releases`, `/probe`, and `/data` even when apps faked an open bootstrap. Setting `lab.requireAuthInProduction: false` now grants open Lab auth on public hosts; default remains `true` (closed).
+- **Lab `requireAuthInProduction: false` actually opens Lab APIs** — the flag was in config schema but unused; only loopback Host granted `localMode`. Non-localhost hosts (a sibling app / previews) got 401 on `/coverage`, `/intelligence`, `/apis`, `/releases`, `/probe`, and `/data` even when apps faked an open bootstrap. Setting `lab.requireAuthInProduction: false` now grants open Lab auth on public hosts; default remains `true` (closed).
 - **OWASP CI** — pin `postcss@8.5.23` and `brace-expansion@5.0.8` via pnpm overrides so `pnpm audit --audit-level=high` passes.
 
 ### Added
@@ -225,7 +233,7 @@ See [docs/engineering/lab-ui-humaan-0.6.7.md](docs/engineering/lab-ui-humaan-0.6
 
 ### Added
 
-- **Lab UI v4** — Full Soli administration shell parity: portal root, 56px nav brand + title bars, `soli-settings-nav-link`, flat page body / edge tables, Soli tokens & design rules (cool-neutral chrome, violet for action/active only, Inter).
+- **Lab UI v4** — Full administration shell parity: portal root, 56px nav brand + title bars, `soli-settings-nav-link`, flat page body / edge tables, design tokens & design rules (cool-neutral chrome, violet for action/active only, Inter).
 - **Lab Sentry-depth issues** — fingerprint upsert (one row per issue), rich envelopes (stack frames, breadcrumbs, contexts, tags, request), browser ingest on `POST /api/dna/runtime`, outbound `third_party_response` capture (errors/slow always; healthy sampled).
 - **Lab Quality hub** — gate PASS/FAIL + severity counts from quality JSON/MD, coverage from `coverage/coverage-summary.json`, recent GitHub Actions runs via `gh`, third-party API response table.
 - **Anti-spam sampling** — per-fingerprint 60s cooldown on full event persist; client 15s dedupe; secrets redacted.
@@ -253,7 +261,7 @@ See also [docs/engineering/lab-and-runtime-0.6.4.md](docs/engineering/lab-and-ru
 
 - Workbench rules and `reasoning.behaviour.md` — mandatory repair loop when blockers exist; agents must load memory before fixing recurring errors.
 - **Lab UI v2** — Sentry-inspired observability portal: dark sidebar navigation, 24h error volume chart, grouped issues with detail pages and stack traces, slow endpoint performance table, release history, and quality trend chart.
-- **Lab UI v3** — Soli admin shell (248px white sidebar, violet active states, `settings-shell` layout) and the DNA brand lockup (`fa-duotone fa-dna` + “by Humaan”). Removed production observability hero banner.
+- **Lab UI v3** — admin shell (248px white sidebar, violet active states, `settings-shell` layout) and the DNA brand lockup (`fa-duotone fa-dna` + “by Humaan”). Removed production observability hero banner.
 - **Lab UI modules** — dashboard/shell/styles extracted under `packages/dna-core/src/lab/ui/`; collect aggregates split to `collect-aggregates.ts`.
 
 ### Fixed
@@ -305,7 +313,7 @@ See also [docs/engineering/lab-and-repair-0.6.3.md](docs/engineering/lab-and-rep
 
 ### Added
 
-- **DNA Lab** — production observability at `/labs` ([#12](https://github.com/superhumaan/DNA/issues/12)): Soli-styled UI, ColorParty-style production auth, local open access, pairing via `npx dna register lab --url <deploy-url>`, 148-digit verification code, email/password/OTP sign-in.
+- **DNA Lab** — production observability at `/labs` ([#12](https://github.com/superhumaan/DNA/issues/12)): admin-styled UI, production auth, local open access, pairing via `npx dna register lab --url <deploy-url>`, 148-digit verification code, email/password/OTP sign-in.
 - **`dna lab install`** — scaffold Lab assets and auto-wire Express/Fastify middleware.
 - **`dna lab serve`** — local Lab at `http://localhost:3200/labs` (no login on localhost).
 - **`dna register lab`** — generate pairing code, push hash to production, optional `--wait` for callback.
@@ -572,7 +580,7 @@ See also [docs/engineering/lab-and-repair-0.6.3.md](docs/engineering/lab-and-rep
 - **Workflow cleanup:** Restore `cleanup-failed-runs.yml` with `workflow_run` deletion after completion — inline delete jobs returned 403 because GitHub cannot delete a run while it is still in progress. Scheduled and manual sweeps remove failed/cancelled backlog.
 - **GitHub auth UX:** Doctor and docs steer users to `dna github login` + `dna github connect` instead of `GITHUB_TOKEN`-only setup. `dna github issue` resolves stored, `gh`, and env tokens.
 - **Platform knowledge pack rename:** `platforms/humaan-stack` → `platforms/dna-stack`; knowledge files moved from `platforms/humaan/*.dna.md` to `platforms/dna/*.dna.md`.
-- **Reference project paths:** `dna platform projects` no longer prints author-specific absolute paths. Set `DNA_REFERENCE_ROOT` to the parent folder containing `AIStudio`, `ColorParty`, `Humaan`, and `Soli` clones.
+- **Reference project paths:** `dna platform projects` no longer prints author-specific absolute paths. Prefer `dna platform list`.
 
 ### Migration — `platforms/humaan-stack` → `platforms/dna-stack`
 

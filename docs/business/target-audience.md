@@ -39,7 +39,7 @@ See [Compliance tiers](../product/compliance-tiers.md).
 - **Brownfield** — `dna analyze` + `dna plan ivf` for legacy modernisation
 - **API servers** — runtime observer for Express, Fastify, NestJS, Next.js
 - **Healthcare / fintech** — HIPAA, FHIR, PCI packs in marketplace
-- **Multi-tenant SaaS** — platform catalog patterns from Soli and AIStudio
+- **Multi-tenant SaaS** — platform catalog patterns from a production app and a production app
 
 ---
 

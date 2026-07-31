@@ -187,7 +187,7 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
   {
     intent: "implement_ai_governance",
     description: "AI chat with content policy, quotas, server-proxy models, and admin governance",
-    requiredKnowledge: ["platforms/aistudio/ai-governance.dna.md", "platforms/dna/audit.dna.md"],
+    requiredKnowledge: ["platforms/dna/ai-governance.dna.md", "platforms/dna/audit.dna.md"],
     requiredBehaviour: ["security.behaviour.md", "ai.behaviour.md", "coding.behaviour.md"],
     cellularMemory: ["amygdala/risks.md", "prefrontalCortex/decisions.md"],
     impressions: ["security/threat-model.md"],
@@ -358,7 +358,7 @@ const INTENTS: NeuralNetwork["intents"][string][] = [
     requiredKnowledge: [
       "platforms/gpt-apps/positioning.dna.md",
       "platforms/gpt-apps/actions.dna.md",
-      "platforms/aistudio/ai-governance.dna.md",
+      "platforms/dna/ai-governance.dna.md",
     ],
     requiredBehaviour: ["security.behaviour.md", "ai.behaviour.md", "coding.behaviour.md"],
     cellularMemory: ["amygdala/risks.md", "prefrontalCortex/decisions.md"],

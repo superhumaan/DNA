@@ -780,9 +780,9 @@ export interface DnaConfig {
   };
   /** Project identity for AI commits, PR titles, and repair branches. */
   git?: {
-    /** Display tag, e.g. ColorParty — defaults from projectId/projectName */
+    /** Display tag, e.g. production apps — defaults from projectId/projectName */
     projectTag?: string;
-    /** Branch prefix slug, e.g. colorparty — defaults from projectId */
+    /** Branch prefix slug, e.g. myapp — defaults from projectId */
     branchSlug?: string;
   };
   ai?: {

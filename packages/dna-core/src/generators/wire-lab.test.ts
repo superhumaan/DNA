@@ -35,7 +35,7 @@ describe("wireExpressLabCjsContent", () => {
   it("mounts dnaLabMiddleware via CJS bridge — never require() ESM lab export", () => {
     const wired = wireExpressLabCjsContent(
       EXPRESS_CJS_WITH_CONFIGURE,
-      "colorparty",
+      "myapp",
       "../.DNA/lab/express-wire.cjs",
     );
     expect(wired).not.toBeNull();
@@ -56,10 +56,10 @@ describe("wireExpressLabCjsContent", () => {
   it("is idempotent when already wired with dnaLabMiddleware", () => {
     const once = wireExpressLabCjsContent(
       EXPRESS_CJS_WITH_CONFIGURE,
-      "colorparty",
+      "myapp",
       "../.DNA/lab/express-wire.cjs",
     );
-    expect(wireExpressLabCjsContent(once!, "colorparty", "../.DNA/lab/express-wire.cjs")).toBeNull();
+    expect(wireExpressLabCjsContent(once!, "myapp", "../.DNA/lab/express-wire.cjs")).toBeNull();
   });
 });
 
@@ -73,7 +73,7 @@ describe("wireExpressLabEsmContent", () => {
 
 describe("wireExpressLabContent", () => {
   it("routes CJS entries to the bridge pattern", () => {
-    const wired = wireExpressLabContent(EXPRESS_CJS_WITH_CONFIGURE, "colorparty");
+    const wired = wireExpressLabContent(EXPRESS_CJS_WITH_CONFIGURE, "myapp");
     expect(wired).toContain("dnaLabMiddleware()");
     expect(wired).not.toContain('require("@superhumaan/dna-by-humaan/lab")');
   });

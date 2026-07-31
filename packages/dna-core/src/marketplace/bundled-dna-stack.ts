@@ -5,7 +5,7 @@ export const DNA_STACK_PACK: KnowledgePack = pack(
   "platforms/dna-stack",
   "DNA Production Stack",
   "platforms",
-  "Full-stack patterns from AIStudio, ColorParty, Humaan Ops, and Soli — auth, admin, integrations, cloud",
+  "Full-stack patterns — auth, admin, integrations, cloud",
   [
     {
       path: "platforms/dna/admin-portal.dna.md",
@@ -77,10 +77,10 @@ RBAC is incomplete if a non-admin can see the link, open the URL, or call the AP
 - Test direct URL bar navigation for both roles
 
 ## Reference projects
-- AIStudio: AI governance, content policy, data export
-- ColorParty: live map, feedback moderation, profanity
-- Humaan Ops: org (people, departments), report config
-- Soli: entity templates, data export, usage
+- production apps: AI governance, content policy, data export
+- production apps: live map, feedback moderation, profanity
+- ops tooling: org (people, departments), report config
+- production apps: entity templates, data export, usage
 `,
     },
     {
@@ -90,15 +90,15 @@ RBAC is incomplete if a non-admin can see the link, open the URL, or call the AP
 ## Role hierarchies used in production
 | Project | Roles |
 |---------|-------|
-| AIStudio | owner → admin → employee |
-| ColorParty | user → manager → hr → admin → owner |
-| Humaan Ops | employee → manager → admin (+ custom per-person) |
-| Soli | employee → admin → owner |
+| production apps | owner → admin → employee |
+| production apps | user → manager → hr → admin → owner |
+| ops tooling | employee → manager → admin (+ custom per-person) |
+| production apps | employee → admin → owner |
 
 ## Capability model
 Issue capabilities from server JWT/session — never trust client role strings alone.
 
-## Permission map (Humaan Ops)
+## Permission map (ops tooling)
 \`permissionMap.json\` — fine-grained toggles: \`reporting.view_dashboard\`, etc.
 
 ## Menu segments
@@ -111,11 +111,11 @@ Cross-app auth between \`*.humaan.app\` subdomains — see integrations/sso-brid
     },
     {
       path: "platforms/dna/multi-tenant.dna.md",
-      content: `# Multi-Tenant (AIStudio, Soli)
+      content: `# Multi-Tenant (production apps, production apps)
 
 ## Models
-- **Deployment-per-tenant** (AIStudio): one Container App per customer, account URL subdomain
-- **Row-level tenant** (Soli): \`tenantId\` on every store bucket, SQL JSON row per tenant
+- **Deployment-per-tenant** (production apps): one Container App per customer, account URL subdomain
+- **Row-level tenant** : \`tenantId\` on every store bucket, SQL JSON row per tenant
 
 ## Rules
 - Resolve tenant from session on every API call
@@ -126,7 +126,7 @@ Cross-app auth between \`*.humaan.app\` subdomains — see integrations/sso-brid
     },
     {
       path: "platforms/dna/product-roadmap.dna.md",
-      content: `# Product Roadmap (Humaan Ops — ProdPad alternative)
+      content: `# Product Roadmap (ops tooling — ProdPad alternative)
 
 ## Hierarchy
 Initiative → Project → Phase → Epic → Story
@@ -174,7 +174,7 @@ Cron checks campaign_enabled; NPS tied to active CSS campaign in DNA production 
     },
     {
       path: "platforms/dna/reporting.dna.md",
-      content: `# Reporting (Humaan Ops)
+      content: `# Reporting (ops tooling)
 
 ## Layers
 1. **Personal/team weekly** — workspace reporting submit
@@ -209,8 +209,8 @@ Secrets, raw AI prompts, full PII payloads — redact.
 `,
     },
     {
-      path: "platforms/aistudio/ai-governance.dna.md",
-      content: `# AI Governance (AI Studio)
+      path: "platforms/dna/ai-governance.dna.md",
+      content: `# AI Governance (production apps)
 
 ## Pipeline (mandatory order)
 validate → input guard → content policy → quota → prompt assembly → model → postprocess
@@ -232,8 +232,8 @@ Classify issues; never store raw prompts in audit trail.
 `,
     },
     {
-      path: "platforms/colorparty/gamification.dna.md",
-      content: `# Gamification (ColorParty)
+      path: "platforms/dna/gamification.dna.md",
+      content: `# Gamification (production apps)
 
 ## Badges
 - Catalog with thresholds, prestige tiers, holiday badges
@@ -252,8 +252,8 @@ Classify issues; never store raw prompts in audit trail.
 `,
     },
     {
-      path: "platforms/soli/kanban-workspace.dna.md",
-      content: `# Kanban Workspace (Soli)
+      path: "platforms/dna/kanban-workspace.dna.md",
+      content: `# Kanban Workspace 
 
 ## Boards
 - Personal (\`/work\`) and team (\`/team-work\`)
@@ -270,8 +270,8 @@ Classify issues; never store raw prompts in audit trail.
 `,
     },
     {
-      path: "platforms/soli/notes-stt.dna.md",
-      content: `# Notes + Markdown + STT (Soli)
+      path: "platforms/dna/notes-stt.dna.md",
+      content: `# Notes + Markdown + STT 
 
 ## Notes
 - Scopes: personal | team | shared
@@ -288,8 +288,8 @@ Admin-managed note templates per industry.
 `,
     },
     {
-      path: "platforms/soli/custom-entities.dna.md",
-      content: `# Custom Entities (Soli)
+      path: "platforms/dna/custom-entities.dna.md",
+      content: `# Custom Entities 
 
 ## Model
 - singular/plural labels, icon, industry preset
@@ -305,7 +305,7 @@ Entity ↔ notes ↔ work items ↔ team schedules
     },
     {
       path: "cloud/azure.dna.md",
-      content: `# Azure (AIStudio, Soli)
+      content: `# Azure (production apps, production apps)
 
 ## Services used in production
 - **Azure Container Apps** — SPA + API single container
@@ -313,7 +313,7 @@ Entity ↔ notes ↔ work items ↔ team schedules
 - **Azure Key Vault** — secrets
 - **Azure AD B2C** — production SSO (MSAL + server session exchange)
 - **Azure Communication Email** — transactional email
-- **Azure SQL** — Soli multi-tenant persistence option
+- **Azure SQL** — production apps multi-tenant persistence option
 - **Log Analytics** — observability
 
 ## Terraform
@@ -349,7 +349,7 @@ Use with \`dna plan feature aws-deploy\` and \`integrations/nginx.dna.md\`.
     },
     {
       path: "cloud/vercel-supabase.dna.md",
-      content: `# Vercel + Supabase (ColorParty, Ops)
+      content: `# Vercel + Supabase (production apps, Ops)
 
 ## Topology
 - Vercel frontend (\`dist/\`)
@@ -364,7 +364,7 @@ Use with \`dna plan feature aws-deploy\` and \`integrations/nginx.dna.md\`.
 - \`sync:vercel-env\` for local dev parity
 
 ## SSO
-Shared JWT secret with invitrace.humaan.app for cross-app bridge.
+Shared JWT secret with sibling-app.humaan.app for cross-app bridge.
 `,
     },
     {
@@ -405,7 +405,7 @@ Route \`/legacy/\` to older upstream; document in Impressions integration-map.
 Apps on \`*.humaan.app\` share \`JWT_SECRET\`.
 
 ## Flow
-1. User logged into invitrace.humaan.app (source)
+1. User logged into sibling-app.humaan.app (source)
 2. Target app (e.g. color.humaan.app) probes \`/api/auth/session\` with \`X-Session-Probe: 1\`
 3. Or OTT handoff: \`?ott=\` → exchange at source \`/api/auth/ott/exchange\`
 4. Target \`POST /api/auth/establish-session\` → httpOnly cookie
@@ -416,7 +416,7 @@ Apps on \`*.humaan.app\` share \`JWT_SECRET\`.
 - Upsert user record on first bridge login
 
 ## Reference
-ColorParty: \`invitraceSsoBridge.js\`
+production apps: \`ssoBridge.js\`
 Ops: \`SsoBridge.jsx\`
 `,
     },
@@ -463,7 +463,7 @@ Users sign in at tenant-specific URL; validate at login.
     },
     {
       path: "integrations/harvest-jira.dna.md",
-      content: `# Harvest + Jira (Humaan Ops)
+      content: `# Harvest + Jira (ops tooling)
 
 ## Harvest
 - Time tracking reports, recon, people sync
@@ -566,7 +566,7 @@ Route via intent matching feature category.
       path: "disciplines/auth-mfa.dna.md",
       content: `# 2FA / MFA / OTP
 
-## AIStudio + Soli pattern
+## production apps + production apps pattern
 - Email + password + OTP for local auth
 - Invite-only onboarding with temp password
 - Password reset via OTP flow
@@ -607,10 +607,10 @@ Dept reports can pull pipeline snapshots.
       content: `# CMS & Content Management
 
 ## Patterns in DNA stack
-- **AIStudio knowledge docs** — admin PDF/URL ingest into chat context
+- **production apps knowledge docs** — admin PDF/URL ingest into chat context
 - **Ops job directory** — structured content for people sync mapping
 - **Survey form builder** — JSON-driven sections/fields (CMS-like)
-- **Soli note/entity templates** — admin-managed content schemas
+- **production apps note/entity templates** — admin-managed content schemas
 
 ## Implementation
 - Admin CRUD for content types

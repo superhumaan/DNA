@@ -1,4 +1,4 @@
-# Custom Entities (Soli)
+# Custom Entities 
 
 ## Model
 - singular/plural labels, icon, industry preset

@@ -28,7 +28,7 @@ const I = (id: string, name: string, desc: string, when: string, how: string, ta
 export const AI_PACK_DEFS = [
   I("ai/openai", "OpenAI API", "GPT-4o, embeddings, assistants", "General LLM default.", "Server-side only. Structured outputs. Retry with backoff."),
   I("ai/anthropic", "Anthropic Claude", "Claude models API", "Long context, safety-focused.", "Messages API. Tool use. Prompt caching."),
-  I("ai/google-gemini", "Google Gemini", "Gemini via AI Studio / Vertex", "Google ecosystem, multimodal.", "Vertex for enterprise. Safety settings."),
+  I("ai/google-gemini", "Google Gemini", "Gemini via production apps / Vertex", "Google ecosystem, multimodal.", "Vertex for enterprise. Safety settings."),
   I("ai/azure-openai", "Azure OpenAI", "OpenAI on Azure", "Enterprise HIPAA/BAA path.", "Private endpoints. Content filtering. Regional deployment."),
   I("ai/aws-bedrock", "AWS Bedrock", "Multi-model AWS gateway", "Claude, Llama on AWS.", "IAM auth. Guardrails. Model access policies."),
   I("ai/vercel-ai-sdk", "Vercel AI SDK", "Streaming UI for LLMs", "Next.js chat and tools.", "streamText, generateObject with Zod. Provider abstraction."),

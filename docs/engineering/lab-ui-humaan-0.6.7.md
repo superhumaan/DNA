@@ -1,6 +1,6 @@
 # DNA Lab UI — Humaan admin parity (v0.6.7)
 
-Release notes for Lab `/labs` UI alignment with Humaan Operations admin patterns.
+Release notes for Lab `/labs` UI alignment with ops tooling admin patterns.
 
 **npm:** `@superhumaan/dna-by-humaan@0.6.7`  
 **Related:** [v0.6.4 Lab + runtime](./lab-and-runtime-0.6.4.md) · [v0.6.3 Lab + ARL](./lab-and-repair-0.6.3.md)
@@ -18,7 +18,7 @@ Release notes for Lab `/labs` UI alignment with Humaan Operations admin patterns
 ### Humaan admin controls
 
 - **Primary buttons** — 48px pill CTAs (`border-radius: 999px`, brand `#5b21b6`) matching `HumaanPagePrimaryButton`
-- **Tabs** — large filled brand pills (ProductStyleTabBar-style) instead of small Soli chips
+- **Tabs** — large filled brand pills (ProductStyleTabBar-style) instead of small chips
 - **Refresh** uses the Humaan primary pill in the title bar
 
 ### List pages
@@ -60,6 +60,6 @@ npx @superhumaan/dna-by-humaan lab serve
 
 Check: icon-only logo, no env/updated meta, pill Refresh, Issues search → severity pills → table headers when empty, sidebar accordion.
 
-**Mobile (ColorParty admin parity):** ≤900px shows sticky `settings-mobile-chrome` with hamburger; sidebar is off-canvas (`settings-shell--nav-open`); backdrop / Escape / nav link closes; tables scroll horizontally. Desktop unchanged.
+**Mobile (mobile admin parity):** ≤900px shows sticky `settings-mobile-chrome` with hamburger; sidebar is off-canvas (`settings-shell--nav-open`); backdrop / Escape / nav link closes; tables scroll horizontally. Desktop unchanged.
 
 **Note:** `npx @superhumaan/dna-by-humaan@x.y.z` alone does not upgrade Lab in a running host app — install into `node_modules` and **restart the API**. See [lab-ci-billing-blocker — Upgrade](./lab-ci-billing-blocker.md#upgrade-lab-in-a-host-app).

@@ -7,7 +7,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const dashboardSource = readFileSync(join(here, "dashboard.ts"), "utf8");
 const stylesSource = readFileSync(join(here, "styles.ts"), "utf8");
 
-describe("Lab mobile shell (ColorParty admin parity)", () => {
+describe("Lab mobile shell (production apps admin parity)", () => {
   it("defines the 900px mobile shell breakpoint", () => {
     expect(dashboardSource).toMatch(/LAB_MOBILE_SHELL_MQ\s*=\s*"\(max-width: 900px\)"/);
   });

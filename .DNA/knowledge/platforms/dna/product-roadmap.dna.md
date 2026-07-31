@@ -1,4 +1,4 @@
-# Product Roadmap (Humaan Ops — ProdPad alternative)
+# Product Roadmap (ops tooling — ProdPad alternative)
 
 ## Hierarchy
 Initiative → Project → Phase → Epic → Story

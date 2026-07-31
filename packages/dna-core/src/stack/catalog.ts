@@ -38,7 +38,7 @@ export const STACK_ARCHETYPES: StackArchetype[] = [
     id: "react-vite-api",
     name: "React SPA + API",
     description:
-      "React single-page app with Vite, separate Express or Fastify API. ColorParty-style DNA web pattern.",
+      "React single-page app with Vite, separate Express or Fastify API. production apps-style DNA web pattern.",
     platform: "web",
     layers: {
       language: ["typescript", "javascript"],
@@ -52,7 +52,7 @@ export const STACK_ARCHETYPES: StackArchetype[] = [
     excludes: ["next", "nestjs", "ghost", "vue", "svelte", "angular", "nuxt"],
     knowledgePacks: ["frameworks/vite", "frameworks/react", "frameworks/express", "disciplines/security"],
     runtimeAdapters: ["express", "fastify"],
-    referenceProjects: ["colorparty", "humaan"],
+    referenceProjects: [],
   },
   {
     id: "vercel-supabase",
@@ -71,7 +71,7 @@ export const STACK_ARCHETYPES: StackArchetype[] = [
     excludes: ["next", "nestjs", "ghost", "vue", "svelte"],
     knowledgePacks: ["frameworks/vite", "frameworks/react", "platforms/b2b-saas", "disciplines/security"],
     runtimeAdapters: ["express"],
-    referenceProjects: ["humaan", "colorparty"],
+    referenceProjects: [],
   },
   {
     id: "next-fullstack",

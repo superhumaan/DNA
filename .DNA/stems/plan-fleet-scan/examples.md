@@ -5,7 +5,7 @@
 **User:** Scan all products under this folder for DNA health
 
 **Good response shape:**
-4 apps with .DNA/. Care: 2 doctor gaps, 1 open blocker. Cache 1h. Recommend ColorParty first. Wrote fleet-scan.md. Execute scans?
+4 apps with .DNA/. Care: 2 doctor gaps, 1 open blocker. Cache 1h. Recommend the highest-risk lab first. Wrote fleet-scan.md. Execute scans?
 
 ## Example 2
 

@@ -18,7 +18,7 @@ export async function generatePlatformContext(
   const sections: string[] = [
     "# DNA Platform Context",
     "",
-    "_DNA production patterns from AIStudio, ColorParty, Humaan Ops, and Soli._",
+    "_DNA production patterns as reusable knowledge packs._",
     "",
     formatPlatformCatalog(),
     "",

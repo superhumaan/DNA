@@ -6,7 +6,7 @@ DNA development priorities and public roadmap.
 
 ## Current release focus (v0.6.20)
 
-- **Lab mobile shell** — ColorParty-style off-canvas nav ≤900px; sticky chrome; scrollable tables ([docs](../engineering/lab-ui-humaan-0.6.7.md))
+- **Lab mobile shell** — mobile-style off-canvas nav ≤900px; sticky chrome; scrollable tables ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **Marketplace purpose bundles** — 27 combos; `dna marketplace install combo/<id>` installs knowledge packs + prompt stems + AI rules; [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles)
 - **Knowledge marketplace** — **1045 rich packs** (0 stubs), 103 stem packs, strategy grounding (`STRATEGY_COMPLETE`)
 - **Lab APIs reference** — every Lab route with Description / Usage / Received / Sent; expandable APIs tab ([docs](../engineering/lab-apis-reference-0.6.18.md))
@@ -16,13 +16,13 @@ DNA development priorities and public roadmap.
 ## Shipped highlights
 
 - `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.20)
-- **Lab mobile shell (v0.6.20)** — ColorParty admin parity on phones/tablets ([docs](../engineering/lab-ui-humaan-0.6.7.md))
+- **Lab mobile shell (v0.6.20)** — mobile admin parity on phones/tablets ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **Lab APIs reference + deep links (v0.6.18)** — full HTTP catalog; History API routing; open-auth flag ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab Refresh UX + Copy issue (v0.6.16)** — disable/spin Refresh; tab-aware reload; issue clipboard ([docs](../engineering/lab-refresh-ux-0.6.16.md))
 - **Lab upgrade DX (v0.6.15+)** — health `dnaVersion` + install scan/fix on doctor/update; disk Lab UI revalidation ([docs](../engineering/lab-upgrade-dx-0.6.15.md))
 - **Lab analytics + Issues depth (v0.6.14)** — Overview performance dashboard; Issues short IDs, sparklines, users/age; Issue detail Highlights / Stack / Tags / JSON / Trace ([docs](../engineering/lab-analytics-0.6.14.md))
 - **Lab UI — Humaan admin parity** — icon-only DNA brand, Humaan primary pills + large pill tabs, list search → tabs → always-on tables, sidebar accordion ([docs](../engineering/lab-ui-humaan-0.6.7.md))
-- **DNA Lab v4** — Soli admin shell, Quality hub, Sentry-depth envelopes ([docs](../engineering/lab-and-runtime-0.6.4.md))
+- **DNA Lab v4** — admin shell, Quality hub, Sentry-depth envelopes ([docs](../engineering/lab-and-runtime-0.6.4.md))
 - **Runtime safety** — EPIPE/ECONNRESET ignored; hardened `runtime.db` / lab-store; non-blocking GitHub repair path
 - **Mock AI guardrails** — no placeholder patches; `applyPatches` will not invent junk files
 - **Aggressive Repair Loop** — fingerprinted errors, CellularMemory blockers, GitHub issue dedup, `dna ai force-repair` ([docs](../engineering/lab-and-repair-0.6.3.md))
@@ -63,7 +63,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Strategy stem ladder — Golden Circle → canvases → North Star/OKRs/KPIs → initiatives → Now/Next/Later (catalog v7) | ✅ Shipped |
 | Day-to-day stems — admin, Tauri, fleet, PR, preview, audits, incident, MCP, i18n (catalog v8, 103 stems) | ✅ Shipped |
 | **Skeletor bridge** — DNA pulls local fleet into AI context by default when Skeletor is installed (0.6.22) | ✅ Shipped |
-| **Project git naming** — AI commits/PRs use `[ColorParty]` / `[DNA]` tags from config (0.6.23) | ✅ Shipped |
+| **Project git naming** — AI commits/PRs use `[MyApp]` / `[DNA]` tags from config (0.6.23) | ✅ Shipped |
 | **npm + GitHub listing polish** (0.6.24) | ✅ Shipped |
 | Product intelligence stems — diagnose/SWOT/value/Kano + competitor + upgrade leverage (catalog v7) | ✅ Shipped |
 | Supply-chain hardening + Socket transparency (v0.4.4) | ✅ Shipped |
@@ -91,7 +91,46 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Multi-tenant gradual rollout ([#15](https://github.com/superhumaan/DNA/issues/15)) | ✅ Shipped — platform codegen scaffolds |
 | IVF Phase 4b — shared library extraction ([#16](https://github.com/superhumaan/DNA/issues/16)) | ✅ Shipped — `--execute` with rollback |
 | Platform feature codegen ([#17](https://github.com/superhumaan/DNA/issues/17)) | ✅ Shipped — SSO, flags, multi-tenant, rollout |
-| Hosted DNA Cloud (optional) | Exploring |
+
+### v0.9.0 — Next product bets (broken down)
+
+Milestone: [v0.9.0 — Next product bets](https://github.com/superhumaan/DNA/milestone/7). Each issue is **XS–S (½–2 days)** unless noted. Pick any unchecked Now item first.
+
+#### Now — Outcome combos & repair learning (Aug–Sep 2026)
+
+| Item | Effort | Status |
+|------|--------|--------|
+| Bundle scorecard CLI ([#29](https://github.com/superhumaan/DNA/issues/29)) | XS | Planned |
+| GDPR combo outcome gate ([#30](https://github.com/superhumaan/DNA/issues/30)) | S | Planned |
+| Repair outcome → CellularMemory writeback ([#31](https://github.com/superhumaan/DNA/issues/31)) | S | Planned |
+| force-repair ranks by past fingerprints ([#32](https://github.com/superhumaan/DNA/issues/32)) | S | Planned |
+| `dna lab immune-report` ([#33](https://github.com/superhumaan/DNA/issues/33)) | XS | Planned |
+
+#### Next — Architecture, memory, factory, IDE (Sep–Dec 2026)
+
+| Item | Effort | Status |
+|------|--------|--------|
+| `dna scan` architecture graph JSON ([#34](https://github.com/superhumaan/DNA/issues/34)) | S | Planned |
+| Lab Architecture tab ([#35](https://github.com/superhumaan/DNA/issues/35)) | S | Planned |
+| Blast-radius in `dna context` ([#36](https://github.com/superhumaan/DNA/issues/36)) | XS–S | Planned |
+| Memory snapshots on doctor ([#37](https://github.com/superhumaan/DNA/issues/37)) | S | Planned |
+| `dna memory diff --since` ([#38](https://github.com/superhumaan/DNA/issues/38)) | S | Planned |
+| Lab Memory timeline ([#39](https://github.com/superhumaan/DNA/issues/39)) | XS | Planned |
+| `dna factory run --dry-run` ([#40](https://github.com/superhumaan/DNA/issues/40)) | S | Planned |
+| Lab factory approve/reject ([#41](https://github.com/superhumaan/DNA/issues/41)) | S | Planned |
+| Editor extension + quality status ([#42](https://github.com/superhumaan/DNA/issues/42)) | S | Planned |
+| Extension blockers panel ([#43](https://github.com/superhumaan/DNA/issues/43)) | S | Planned |
+
+#### Later — MCP, brownfield, product intel, cloud (2027)
+
+| Item | Effort | Status |
+|------|--------|--------|
+| DNA MCP: context + doctor ([#44](https://github.com/superhumaan/DNA/issues/44)) | S | Planned |
+| DNA MCP: quality + memory + repair dry-run ([#45](https://github.com/superhumaan/DNA/issues/45)) | S | Planned |
+| `document --from-code` confidence tags ([#46](https://github.com/superhumaan/DNA/issues/46)) | S | Planned |
+| Lab Overview friction signals ([#47](https://github.com/superhumaan/DNA/issues/47)) | S | Planned |
+| Hosted DNA Cloud design spike ([#48](https://github.com/superhumaan/DNA/issues/48)) | S | Planned |
+| Hosted Lab auth prototype ([#49](https://github.com/superhumaan/DNA/issues/49)) | M | Planned (after #48) |
 
 Track on the [DNA Roadmap project board](https://github.com/users/superhumaan/projects/3/views/1). Defect and gap fixes are tracked on [DNA - Defects](https://github.com/users/superhumaan/projects/4/views/1).
 
@@ -103,12 +142,12 @@ Track releases: [CHANGELOG.md](../../CHANGELOG.md)
 
 New capabilities should strengthen the core loop:
 
-1. **Better context** — richer neuralNetwork intents, smarter `dna context`
-2. **Safer automation** — GitHub + AI repair with explicit safety boundaries
-3. **Broader stacks** — more marketplace packs, stem surfaces
-4. **Brownfield depth** — IVF analysis, `document --from-code`
+1. **Better context** — richer neuralNetwork intents, smarter `dna context`, architecture blast radius
+2. **Safer automation** — GitHub + AI repair with explicit safety boundaries + outcome learning
+3. **Broader stacks** — marketplace packs, stem surfaces, **outcome combos** (prove, not just install)
+4. **Brownfield depth** — IVF analysis, `document --from-code` with confidence tags
 5. **Compliance depth** — tier-appropriate controls, not checkbox audits
-
+6. **Optional cloud** — design spike first; CLI stays offline-first
 ---
 
 ## Related

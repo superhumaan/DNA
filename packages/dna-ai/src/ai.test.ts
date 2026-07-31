@@ -45,10 +45,10 @@ describe("mock AI repair", () => {
       behaviour: [],
       memory: [],
       codeSnippets: [],
-      projectIdentity: { tag: "ColorParty", branchSlug: "colorparty" },
+      projectIdentity: { tag: "MyApp", branchSlug: "myapp" },
     });
-    expect(plan.prTitle).toBe("[ColorParty] Fix: Runtime error in API");
-    expect(plan.branchName).toMatch(/^colorparty\/fix\//);
+    expect(plan.prTitle).toBe("[MyApp] Fix: Runtime error in API");
+    expect(plan.branchName).toMatch(/^myapp\/fix\//);
   });
 
   it("skips patches for EPIPE noise", async () => {

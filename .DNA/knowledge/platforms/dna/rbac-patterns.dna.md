@@ -3,15 +3,15 @@
 ## Role hierarchies used in production
 | Project | Roles |
 |---------|-------|
-| AIStudio | owner → admin → employee |
-| ColorParty | user → manager → hr → admin → owner |
-| Humaan Ops | employee → manager → admin (+ custom per-person) |
-| Soli | employee → admin → owner |
+| a production app | owner → admin → employee |
+| a production app | user → manager → hr → admin → owner |
+| ops tooling | employee → manager → admin (+ custom per-person) |
+| a production app | employee → admin → owner |
 
 ## Capability model
 Issue capabilities from server JWT/session — never trust client role strings alone.
 
-## Permission map (Humaan Ops)
+## Permission map (ops tooling)
 `permissionMap.json` — fine-grained toggles: `reporting.view_dashboard`, etc.
 
 ## Menu segments

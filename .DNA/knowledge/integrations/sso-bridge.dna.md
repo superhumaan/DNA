@@ -4,7 +4,7 @@
 Apps on `*.humaan.app` share `JWT_SECRET`.
 
 ## Flow
-1. User logged into invitrace.humaan.app (source)
+1. User logged into sibling-app.humaan.app (source)
 2. Target app (e.g. color.humaan.app) probes `/api/auth/session` with `X-Session-Probe: 1`
 3. Or OTT handoff: `?ott=` → exchange at source `/api/auth/ott/exchange`
 4. Target `POST /api/auth/establish-session` → httpOnly cookie
@@ -15,5 +15,5 @@ Apps on `*.humaan.app` share `JWT_SECRET`.
 - Upsert user record on first bridge login
 
 ## Reference
-ColorParty: `invitraceSsoBridge.js`
+a production app: `invitraceSsoBridge.js`
 Ops: `SsoBridge.jsx`

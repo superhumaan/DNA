@@ -124,7 +124,7 @@ Doctor and scan **detect**; they do not ask you to lie on a form.
 | **CI / hosting** | Existing workflows, Vercel/Netlify signals | Preview workflow only when relevant |
 | **AI tools** | Cursor, Claude Code, Copilot, Windsurf, Gemini | Installs the right rules files only |
 | **GitHub remote** | `origin` URL | Auto-configures owner/repo; browser login |
-| **Healthcare domain** | Description keywords → country overview packs (US, UK, AU, …) | Invitrace-style suites get the right HIPAA/NHS packs |
+| **Healthcare domain** | Description keywords → country overview packs (US, UK, AU, …) | healthcare suites get the right HIPAA/NHS packs |
 | **Legal jurisdiction** | Region keywords → legal tier packs | Engineering gates without a lawyer on retainer |
 | **Impressions drift** | Code vs docs mismatch score | `dna scan --open-pr` opens sync PR when critical |
 | **Auth / patterns** | `dna analyze` — guards, middleware, shared auth across apps | AI stops hallucinating per-app auth |
@@ -179,7 +179,7 @@ Offline bundled fallback — works without network after install.
 | **Admin portal pattern** | `/admin` in new tab, RBAC, `requireAdmin` APIs — auto when mentioned |
 | **`dna quality report --feature`** | Local SAST — blocker/critical must pass before complete |
 | **`dna generate feature <id>`** | SSO, multi-tenant, feature-flags, audit-logging scaffolds |
-| **Platform catalog** | Production patterns from reference apps (AIStudio, ColorParty, Humaan Ops, Soli) |
+| **Platform catalog** | Production patterns from the platform catalog (admin, auth, cloud, integrations) |
 
 ### 10. Squad sync (portfolio memory across machines)
 
@@ -261,7 +261,7 @@ Commit `.DNA/`, `DNA/`, `AGENTS.md`, `ai/`, `.cursor/`, `.claude/`, and workflow
 
 | Scenario | Parent folder | What DNA remembers |
 |----------|---------------|-------------------|
-| **Healthcare product suite** | One org folder (e.g. Invitrace) | Shared auth, PHI boundaries, API contracts across apps |
+| **Healthcare product suite** | One org folder (e.g. a sibling app) | Shared auth, PHI boundaries, API contracts across apps |
 | **Monorepo squad** | `apps/` + `packages/` root | Shared libraries, feature patterns, dependency graph |
 | **Agency client folder** | Client name directory | Brand rules, stack, deployment patterns across microsites |
 | **Platform team** | Platform repo root | Service map, SSO, admin, multi-tenant patterns |
@@ -274,7 +274,7 @@ You do **not** need a separate `.DNA/` per app if the apps relate and live under
 
 ```bash
 # 1. Go to the folder that contains ALL related products
-cd ~/work/invitrace          # example: enterprise health squad folder
+cd ~/work/org-suite            # example: multi-app org folder
 
 # 2. One install — everything above
 npx @superhumaan/dna-by-humaan doctor
@@ -347,11 +347,11 @@ npm install   # if doctor added runtime package
 
 ---
 
-## Invitrace-style walkthrough
+## Multi-app portfolio walkthrough
 
 One squad handles all enterprise health products under one folder:
 
-1. **`dna doctor`** at `invitrace/` — scaffolds everything in this doc, once
+1. **`dna doctor`** at `org-suite/` — scaffolds everything in this doc, once
 2. **Detection** — healthcare country packs, HIPAA compliance tier, monorepo apps
 3. **`dna analyze`** — `product-a`, `product-b`, `shared-api`, shared auth, IVF gaps
 4. **Open Cursor in `product-b`** — `/ship-feature` and `AGENTS.md` already active; AI knows Product A’s audit rules

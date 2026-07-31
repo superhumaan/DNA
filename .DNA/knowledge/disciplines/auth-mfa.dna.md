@@ -1,6 +1,6 @@
 # 2FA / MFA / OTP
 
-## AIStudio + Soli pattern
+## a production app + a production app pattern
 - Email + password + OTP for local auth
 - Invite-only onboarding with temp password
 - Password reset via OTP flow

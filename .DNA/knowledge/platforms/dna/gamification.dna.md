@@ -1,4 +1,4 @@
-# Gamification (ColorParty)
+# Gamification (a production app)
 
 ## Badges
 - Catalog with thresholds, prestige tiers, holiday badges

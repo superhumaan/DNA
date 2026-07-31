@@ -1,7 +1,7 @@
 export const LAB_CLIENT_JS = `
 const API = "/api/dna/labs";
 const LAB_TAB_STORAGE_KEY = "dna_lab_route";
-/** Matches Lab CSS mobile shell breakpoint (ColorParty admin parity). */
+/** Matches Lab CSS mobile shell breakpoint (production apps admin parity). */
 const LAB_MOBILE_SHELL_MQ = "(max-width: 900px)";
 
 const state = {

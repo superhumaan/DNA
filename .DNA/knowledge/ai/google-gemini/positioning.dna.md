@@ -2,4 +2,4 @@
 
 Google ecosystem, multimodal.
 
-Gemini via AI Studio / Vertex
+Gemini via a production app / Vertex

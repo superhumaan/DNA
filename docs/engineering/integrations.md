@@ -211,7 +211,7 @@ Uses fingerprint labels (`fp:…`) to dedupe — repeat reports comment `+1 occu
 | `ANTHROPIC_API_KEY` | Anthropic repair | |
 | `DNA_PROJECT_ID` | Runtime | Defaults to `config.projectId` |
 | `DNA_MARKETPLACE_URL` | Custom marketplace | Default: `https://dna.humaan.app/marketplace` |
-| `DNA_REFERENCE_ROOT` | Platform reference repos | Parent of `AIStudio/`, `ColorParty/`, `Humaan/`, `Soli/` — see [Platform](./platform.md#reference-repos-on-your-machine) |
+| `DNA_REFERENCE_ROOT` | Platform reference repos | Parent of `a production app/`, `a production app/`, `Humaan/`, `a production app/` — see [Platform](./platform.md#reference-repos-on-your-machine) |
 | `DNA_GDPR_SOURCE_DOCS` | GDPR doc ingest (contributors) | Source folder for `pnpm gdpr:ingest` |
 | `GIT_SHA` | Runtime release tracking | CI commit SHA |
 

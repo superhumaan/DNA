@@ -1,4 +1,4 @@
-# Harvest + Jira (Humaan Ops)
+# Harvest + Jira (ops tooling)
 
 ## Harvest
 - Time tracking reports, recon, people sync

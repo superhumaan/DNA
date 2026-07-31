@@ -277,7 +277,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   font-size: 12px; color: var(--color-text-tertiary); line-height: 1.45;
 }
 
-/* ─── Soli administration portal shell ─── */
+/* ─── administration portal shell ─── */
 .soli-portal-root {
   min-height: 100dvh;
   box-sizing: border-box;
@@ -602,7 +602,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   font-size: 0.875rem;
 }
 
-/* Cards — Soli settings-card (no heavy shadow) */
+/* Cards — settings-card (no heavy shadow) */
 .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 16px; margin-bottom: 16px; }
 .settings-card,
 .lab-panel,
@@ -714,7 +714,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .lab-overview__tables { grid-template-columns: 1fr; }
 }
 
-/* Tables — Soli admin edge + bordered */
+/* Tables — admin edge + bordered */
 .lab-table, .admin-table {
   width: 100%; border-collapse: collapse; font-size: 0.84375rem;
 }
@@ -1015,7 +1015,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   }
 }
 
-/* Mobile Lab shell — ColorParty admin parity: off-canvas nav, chrome, scrollable tables */
+/* Mobile Lab shell — production apps admin parity: off-canvas nav, chrome, scrollable tables */
 @media (max-width: 900px) {
   .settings-shell {
     display: flex;

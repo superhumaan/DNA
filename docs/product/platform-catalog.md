@@ -1,41 +1,17 @@
 # DNA Platform Catalog
 
-DNA learned production patterns from four reference systems and encodes them as **knowledge packs**, **feature plans**, and **neuralNetwork intents** so AI can build end-to-end — from Azure/AWS deploy through nginx, directory sync, SSO bridges, admin portals, feature flags, CRM, CMS, and RBAC.
+DNA encodes production patterns as **knowledge packs**, **feature plans**, and **neuralNetwork intents** so AI can build end-to-end — from Azure/AWS deploy through nginx, directory sync, SSO bridges, admin portals, feature flags, CRM, CMS, and RBAC.
 
-See [naming conventions](./naming.md) for how **DNA** (product) relates to **Humaan** (company) and reference project IDs.
-
-## Reference projects
-
-| ID | Project | What DNA learned |
-|----|---------|------------------|
-| `aistudio` | AI Studio | Custom GPT, AI governance, Azure B2C, quotas, admin portal |
-| `colorparty` | ColorParty | Location praise, gamification, Google OAuth, SSO bridge |
-| `humaan` | Humaan Ops | ProdPad-style roadmap, CSS/NPS surveys, Harvest/Jira, reporting |
-| `soli` | Soli | Multi-tenant, notes/STT, kanban, custom entities |
-
-## Reference repos on your machine
-
-`dna platform projects` and feature plans can point at real code paths when you clone the reference apps. Set the parent directory:
-
-```bash
-export DNA_REFERENCE_ROOT=~/Projects   # contains AIStudio/, ColorParty/, Humaan/, Soli/
-dna platform projects
-```
-
-Without `DNA_REFERENCE_ROOT`, the CLI shows folder names only (no author-specific paths). Knowledge packs and plans still work — they use `.DNA/knowledge/`, not your local clones.
-
-## Commands
+See [naming conventions](../design/naming-conventions.md) for how **DNA** (product) relates to **Humaan** (company). ## Commands
 
 ```bash
 # Browse the catalog
 dna platform list
-dna platform projects
-dna platform project humaan
 
 # Generate an implementation plan from plain language
 dna plan feature admin-portal --quote "Admin portal with Google directory sync and audit log"
-dna plan feature sso-bridge --quote "Silent SSO between invitrace and color subdomains"
-dna plan feature azure-deploy --reference-project aistudio
+dna plan feature sso-bridge --quote "Silent SSO between sibling app subdomains"
+dna plan feature azure-deploy
 dna plan feature feature-flags --quote "Env toggles plus admin KV for per-tenant flags"
 
 # Load full platform context for your AI tool
@@ -77,7 +53,7 @@ dna marketplace install platforms/dna-stack
 ## Typical workflow
 
 1. **Describe** what you need in plain language.
-2. **`dna plan feature <id> --quote "..."`** — DNA writes `.DNA/plans/feature-<id>.md` with phases, knowledge paths, and production reference notes.
+2. **`dna plan feature <id> --quote "..."`** — DNA writes `.DNA/plans/feature-<id>.md` with phases and knowledge paths.
 3. **`dna context platform`** — paste into Cursor/Claude with behaviour + knowledge loaded.
 4. **`dna plan rbac`** — if roles/permissions are involved (menus, routes, APIs must all align).
 5. **`dna validate`** — confirm DNA structure before shipping.
@@ -107,4 +83,4 @@ DNA does not replace your app code — it **coordinates AI** across layers that 
 - Feature flags default-off in production
 - Audit without logging secrets or raw AI prompts
 
-See also: [RBAC](./rbac.md), [Marketplace](./marketplace.md), [CLI reference](./cli-reference.md).
+See also: [RBAC](./rbac.md), [Marketplace](./marketplace.md), [CLI reference](../engineering/cli-reference.md).

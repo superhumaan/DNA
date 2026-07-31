@@ -1,11 +1,11 @@
 # Lab open auth — honor `requireAuthInProduction: false`
 
-**Source:** ColorParty Invitrace `/labs` Coverage page (2026-07-27)  
-**Status:** Implemented in `packages/dna-core` (this change set); ColorParty keeps a Host-spoof shim until the published `@superhumaan/dna-by-humaan` includes it.
+**Source:** production Lab coverage `/labs` Coverage page (2026-07-27)  
+**Status:** Implemented in `packages/dna-core` (this change set); a production app keeps a Host-spoof shim until the published `@superhumaan/dna-by-humaan` includes it.
 
 ## Symptom
 
-On a non-localhost Lab host (Invitrace / preview):
+On a non-localhost Lab host (a sibling app / preview):
 
 1. App sets `lab.requireAuthInProduction: false` (or fakes bootstrap `localMode: true`).
 2. Lab shell loads without Sign in / Pair.
@@ -31,7 +31,7 @@ const localMode = loopbackLocal || openLabWithoutAuth;
 ```
 
 - Default `requireAuthInProduction: true` → behaviour unchanged (public hosts stay closed).
-- Explicit `false` → open Lab APIs on public hosts (intentional Invitrace / private preview opt-in).
+- Explicit `false` → open Lab APIs on public hosts (intentional private preview / private preview opt-in).
 
 Regression: `opens Lab APIs on a public host when requireAuthInProduction is false` in `server.test.ts`.
 
@@ -52,6 +52,6 @@ Or pass the same into `createLabMiddleware({ config: { lab: { … } } })`.
 
 Do **not** treat `NODE_ENV=development` as open — only this flag or loopback Host.
 
-## ColorParty compatibility
+## Host-app compatibility
 
-Until npm ships this DNA build, ColorParty `dnaLabWire` spoofs `Host` / `X-Forwarded-Host` to `127.0.0.1` when `COLORPARTY_LAB_OPEN=1`, and still intercepts bootstrap + fast `/data`. After upgrade, the spoof can be removed; keep `requireAuthInProduction: !isLabOpenWithoutAuth()`.
+Until npm ships this DNA build, host apps `dnaLabWire` spoofs `Host` / `X-Forwarded-Host` to `127.0.0.1` when `COLORPARTY_LAB_OPEN=1`, and still intercepts bootstrap + fast `/data`. After upgrade, the spoof can be removed; keep `requireAuthInProduction: !isLabOpenWithoutAuth()`.

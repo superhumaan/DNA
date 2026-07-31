@@ -28,10 +28,7 @@ import {
   parseRolesInput,
   generateFeaturePlan,
   formatPlatformCatalog,
-  formatProjectFeatures,
   generatePlatformContext,
-  resolveReferenceProjects,
-  formatReferencePath,
   generateCompliancePlan,
   formatComplianceCatalog,
   generateComplianceContext,
@@ -1733,7 +1730,7 @@ plan
   .option("--quote <text>", "Plain-language requirement from the user")
   .option(
     "--reference-project <id>",
-    "Reference project: aistudio|colorparty|humaan|soli",
+    "Deprecated — ignored",
   )
   .option("--cwd <path>", "Project root directory")
   .action(
@@ -1741,7 +1738,7 @@ plan
       featureId: string,
       options: {
         quote?: string;
-        referenceProject?: "aistudio" | "colorparty" | "humaan" | "soli";
+        referenceProject?: string;
         cwd?: string;
       },
     ) => {
@@ -2685,43 +2682,28 @@ legal
     },
   );
 
-const platform = program.command("platform").description("DNA production platform catalog");
+const platform = program.command("platform").description("DNA platform feature catalog");
 
 platform
   .command("list")
-  .description("List platform features DNA learned from production projects")
+  .description("List platform features")
   .action(() => {
     console.log(formatPlatformCatalog());
   });
 
 platform
   .command("projects")
-  .description("List reference production projects")
-  .action(async () => {
-    const projects = await resolveReferenceProjects();
-    console.log("DNA production reference projects:\n");
-    for (const p of projects) {
-      console.log(`• ${p.id} — ${p.name}`);
-      console.log(`  ${formatReferencePath(p)}`);
-      console.log(`  ${p.stack}`);
-      for (const h of p.highlights) {
-        console.log(`  - ${h}`);
-      }
-      console.log("");
-    }
+  .description("Alias for dna platform list")
+  .action(() => {
+    console.log(formatPlatformCatalog());
   });
 
 platform
   .command("project")
-  .description("Show features mapped to a reference project")
-  .argument("<projectId>", "aistudio|colorparty|humaan|soli")
-  .action((projectId: string) => {
-    const valid = ["aistudio", "colorparty", "humaan", "soli"] as const;
-    if (!valid.includes(projectId as (typeof valid)[number])) {
-      console.error(`Unknown project: ${projectId}`);
-      process.exit(1);
-    }
-    console.log(formatProjectFeatures(projectId as (typeof valid)[number]));
+  .description("Show platform features (same as dna platform list)")
+  .argument("[projectId]", "Ignored")
+  .action(() => {
+    console.log(formatPlatformCatalog());
   });
 
 program

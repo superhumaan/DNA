@@ -1,4 +1,4 @@
-# Reporting (Humaan Ops)
+# Reporting (ops tooling)
 
 ## Layers
 1. **Personal/team weekly** — workspace reporting submit

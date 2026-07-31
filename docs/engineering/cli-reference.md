@@ -37,7 +37,7 @@ Includes an **Impressions drift** score when DNA is installed (missing docs, sta
 
 ## lab
 
-Production observability portal at `/labs` — Monitor (Overview, Issues, Events, Performance), Delivery (Releases, Source maps), Quality (Reports, Coverage, CI, APIs), Project (Doctor, Installs), and Intelligence (Impressions, Cellular Memory). **APIs** tab documents every Lab route (Description / Usage / Received / Sent). URL deep links: `/labs/<tab>`, `/labs/issues/<id>`. Sidebar sections stay independently open. Header **Refresh** disables + spins and reloads the active tab. **Mobile (≤900px):** ColorParty-style off-canvas nav + sticky chrome. See [Lab APIs reference v0.6.18](./lab-apis-reference-0.6.18.md), [Lab Refresh UX v0.6.16](./lab-refresh-ux-0.6.16.md), [Lab upgrade DX](./lab-upgrade-dx-0.6.15.md), [Lab analytics v0.6.14](./lab-analytics-0.6.14.md), and [Lab UI Humaan parity v0.6.7](./lab-ui-humaan-0.6.7.md).
+Production observability portal at `/labs` — Monitor (Overview, Issues, Events, Performance), Delivery (Releases, Source maps), Quality (Reports, Coverage, CI, APIs), Project (Doctor, Installs), and Intelligence (Impressions, Cellular Memory). **APIs** tab documents every Lab route (Description / Usage / Received / Sent). URL deep links: `/labs/<tab>`, `/labs/issues/<id>`. Sidebar sections stay independently open. Header **Refresh** disables + spins and reloads the active tab. **Mobile (≤900px):**  off-canvas nav + sticky chrome. See [Lab APIs reference v0.6.18](./lab-apis-reference-0.6.18.md), [Lab Refresh UX v0.6.16](./lab-refresh-ux-0.6.16.md), [Lab upgrade DX](./lab-upgrade-dx-0.6.15.md), [Lab analytics v0.6.14](./lab-analytics-0.6.14.md), and [Lab UI Humaan parity v0.6.7](./lab-ui-humaan-0.6.7.md).
 
 ```bash
 dna lab install
@@ -556,7 +556,7 @@ Writes `.DNA/plans/rbac-*.md`, permission matrix, and installs `security/rbac-ze
 
 ## platform
 
-Browse and plan features DNA learned from production reference projects (AIStudio, ColorParty, Humaan Ops, Soli).
+Browse and plan features DNA learned from production reference projects (a production app, a production app, ops tooling, a production app).
 
 ```bash
 dna platform list
@@ -573,7 +573,7 @@ Generate an end-to-end implementation plan for a platform feature.
 ```bash
 dna plan feature admin-portal --quote "Admin portal with Google directory sync"
 dna plan feature sso-bridge --quote "Silent SSO between subdomains"
-dna plan feature azure-deploy --reference-project aistudio
+dna plan feature azure-deploy --reference-project app
 dna context platform
 dna context platform --feature admin-portal
 ```

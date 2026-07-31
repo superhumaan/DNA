@@ -7,11 +7,11 @@ Release notes for Lab UI depth, observability envelopes, and repair/safety fixes
 
 ---
 
-## Lab UI v4 (Soli parity)
+## Lab UI v4 (admin parity)
 
 - Portal root, 56px nav brand + title bars, `soli-settings-nav-link`
 - Flat page body / edge tables
-- Soli design tokens (cool-neutral chrome; violet for action/active only; Inter)
+- design tokens (cool-neutral chrome; violet for action/active only; Inter)
 
 ## Sentry-depth issues
 

@@ -50,10 +50,10 @@ DNA learned patterns from four Humaan reference apps:
 
 | ID | Project | Patterns |
 |----|---------|----------|
-| `aistudio` | AI Studio | Azure B2C, AI governance, admin portal |
-| `colorparty` | ColorParty | OAuth, SSO bridge, gamification |
-| `humaan` | Humaan Ops | Roadmap, surveys, Jira/Harvest |
-| `soli` | Soli | Multi-tenant, kanban, STT notes |
+| `app` | a production app | Azure B2C, AI governance, admin portal |
+| `app` | a production app | OAuth, SSO bridge, gamification |
+| `humaan` | ops tooling | Roadmap, surveys, Jira/Harvest |
+| `soli` | a production app | Multi-tenant, kanban, STT notes |
 
 See [Platform catalog](./platform-catalog.md).
 
