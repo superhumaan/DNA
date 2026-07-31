@@ -1,47 +1,52 @@
 # DNA by Humaan
 
-> **Git remembers your code. DNA remembers your system.**
-
-> Run `npx @superhumaan/dna-by-humaan doctor` — *“No amount of money ever bought a second of time.”*
-
-**One squad, many products?** Install on the **parent folder** — one brain for every related app. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
-
-**Skeletor installed?** DNA pulls the local fleet into AI context by default (`dna skeletor status`). [Skeletor →](https://dna.humaan.app/skeletor)
-
 [![npm](https://img.shields.io/npm/v/@superhumaan/dna-by-humaan)](https://www.npmjs.com/package/@superhumaan/dna-by-humaan)
 [![Socket](https://socket.dev/api/badge/npm/package/@superhumaan/dna-by-humaan)](https://socket.dev/npm/package/@superhumaan/dna-by-humaan)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/superhumaan/DNA/blob/main/LICENSE)
 
-**One npm package. One install. Everything included.**
+# DNA
 
-DNA by Humaan is an open-source **project brain**, **runtime observer**, **103 prompt stem packs**, **1045-pack knowledge marketplace**, **27 purpose bundles**, and **AI-assisted repair** system for TypeScript squads.
+**Git remembers your code. DNA remembers your system.**
 
-**Recommended:** `npx @superhumaan/dna-by-humaan doctor` — one command for stems, rules, detection, memory, runtime, CI, and feature factory. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md)
+One `doctor` install gives Cursor/Claude a project brain — stems, rules, Lab, marketplace, and AI repair that tags commits and PRs per project (`[ColorParty]`, `[DNA]`, …).
 
-Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
+```bash
+npx @superhumaan/dna-by-humaan doctor
+```
 
 | | |
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
-| **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · [Bundles](https://dna.humaan.app/marketplace#bundles) |
-| **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) — 103 prompt stem packs + `/dna-*` CLI commands |
-| **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
-| **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
-| **Supply chain** | [Socket.dev report](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) · [SECURITY.md](https://github.com/superhumaan/DNA/blob/main/SECURITY.md) |
+| **Marketplace** | [Marketplace](https://dna.humaan.app/marketplace) · [Bundles](https://dna.humaan.app/marketplace#bundles) |
+| **Health** | [Live gates](https://dna.humaan.app/health) |
+| **Repo** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
+
+Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
+
+**Latest (v0.6.24):** Project git naming for AI · Skeletor fleet in context by default · 103 stems · 1045 packs · 27 purpose bundles.
+
+---
+
+## Why teams install DNA
+
+| Pain | DNA |
+|------|-----|
+| AI invents architecture | Loads `.DNA/` behaviour + knowledge first |
+| Generic `chore:` commits across labs | `[ColorParty] fix(…):` / `[DNA] feat:…` from config |
+| Runtime errors with no project context | Lab + immune classification + repair PRs |
+| Knowledge scattered per repo | Portfolio/`doctor` on the parent folder |
+
+**Squads:** install once on the parent folder. [Portfolio install →](https://github.com/superhumaan/DNA/blob/main/docs/product/portfolio-install.md) · **Skeletor:** `dna skeletor status` — [Skeletor →](https://dna.humaan.app/skeletor)
 
 ---
 
 ## Supply chain & trust
 
-DNA is published from [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) under the `@superhumaan` npm scope with **MIT license**, **npm provenance**, and **zero production npm dependencies** (v0.4.5+).
-
-Security scanners may flag network, shell, or filesystem access — expected for a CLI that scaffolds projects, talks to GitHub, and syncs knowledge packs. The npm package no longer pulls third-party runtime libraries (`commander`, `zod`, `simple-git`, etc.); those capabilities are implemented in-tree and bundled into `dist/`. See [SECURITY.md — Supply-chain transparency](https://github.com/superhumaan/DNA/blob/main/SECURITY.md#supply-chain-transparency-socketdev--security-scanners) for the full endpoint list and when each runs.
-
-**Verify your install:**
+Published from [superhumaan/DNA](https://github.com/superhumaan/DNA) — **MIT**, **npm provenance**, **zero production npm dependencies**. Scanners may flag network/shell/filesystem access; expected for a CLI that scaffolds, talks to GitHub, and syncs packs. Details: [SECURITY.md](https://github.com/superhumaan/DNA/blob/main/SECURITY.md#supply-chain-transparency-socketdev--security-scanners).
 
 ```bash
-npm view @superhumaan/dna-by-humaan repository.url
+npm view @superhumaan/dna-by-humaan version
 dna --version
 ```
 
@@ -49,22 +54,11 @@ dna --version
 
 ## Verified results
 
-Latest gate run — **all green** (2026-07-24 · v0.6.16):
+Canonical health is published on every push (GitHub Actions Step Summary + `dna-health-report` artifact).
 
-| Gate | Result |
-|------|--------|
-| Unit tests | ✅ 356/356 passing |
-| Coverage (product-critical scope) | ✅ 92.51% lines · per-file gate ≥ 80% |
-| DNA Lab load (200 concurrent viewers) | ✅ p95 148.73 ms · 4,895 req/s · 0 errors |
-| Dependency audit (OWASP-aligned) | ✅ 0 critical · 0 high · 0 moderate |
-| Code quality (SAST) | ✅ PASS · 393 files scanned |
-| Lab browser smoke (Chromium) | ✅ route · health · overview |
+**Live snapshot:** [dna.humaan.app/health](https://dna.humaan.app/health)
 
-These figures come from DNA's **canonical health report** (`scripts/health-report.mjs`),
-composed from machine-readable test, coverage, load, audit, and quality inputs. Every
-push publishes the report to the GitHub Actions **Step Summary** and uploads it as the
-durable `dna-health-report` artifact (JSON + Markdown). Public snapshot: [dna.humaan.app/health](https://dna.humaan.app/health). Coverage is enforced **per file
-(≥ 80%)** over the product-critical scope; regenerate locally with `pnpm run health:report`.
+Regenerate locally: `pnpm run health:report`. Coverage gate: **≥ 80% per file** on the product-critical scope.
 
 ---
 
@@ -74,7 +68,7 @@ durable `dna-health-report` artifact (JSON + Markdown). Public snapshot: [dna.hu
 npx @superhumaan/dna-by-humaan doctor
 ```
 
-Doctor is the recommended entry point — it scaffolds `.DNA/`, CI, runtime, Docker, hooks, GitHub sign-in, and auto-wires middleware. Use `init` only when you want the interactive wizard first.
+Scaffolds `.DNA/`, CI, runtime, Docker, hooks, GitHub sign-in, and AI workbench. Use `init` only when you want the interactive wizard first.
 
 ```bash
 # Production runtime (same package)
@@ -121,9 +115,9 @@ DNA is **not** a documentation generator. It is:
 | **GDPR reference library** | **85+** governance, technical, and AI policy templates (bundled in CLI assets) |
 | **Platform catalog** | Production patterns from DNA reference systems (AIStudio, ColorParty, Humaan Ops, Soli) |
 | **IVF (brownfield)** | Install into existing codebases — analyze, document, phased migration plans |
-| **GitHub automation** | Contextual issues and AI-assisted repair PRs |
+| **GitHub automation** | Contextual issues and AI-assisted repair PRs with **project tags** (`[ColorParty]`, …) |
 | **Software immune system** | Severity, category, and discipline classification |
-| **CellularMemory** | Learns from your project's history |
+| **Project git naming** | AI commits/PRs tagged per project — see [naming conventions](https://github.com/superhumaan/DNA/blob/main/docs/design/naming-conventions.md) |
 
 ---
 

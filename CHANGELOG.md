@@ -4,6 +4,12 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.24] - 2026-07-31
+
+### Changed
+
+- **npm + GitHub listing** — shorter package description, sharper README heroes, live health link instead of stale 0.6.16 gate table, refreshed keywords and repo About
+
 ## [0.6.23] - 2026-07-31
 
 ### Added

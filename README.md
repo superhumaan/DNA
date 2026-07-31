@@ -6,29 +6,31 @@
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 
-> **Git remembers your code. DNA remembers your system.**
+# DNA
 
-> **Sentry tells you what broke. DNA tells you why, remembers it, and opens the PR.**
+**Git remembers your code. DNA remembers your system.**
 
-> Run `npx @superhumaan/dna-by-humaan doctor` — *“No amount of money ever bought a second of time.”*
+Open-source project brain for TypeScript squads — plain-language features, quality gates, GitHub push, runtime Lab, and a **1045-pack** marketplace. AI commits and PRs are tagged per project (`[ColorParty]`, `[DNA]`, …).
 
-**DNA by Humaan** is an open-source delivery platform for TypeScript teams — describe features in plain language, run quality gates, push to GitHub, and ship with a **1045-pack** knowledge marketplace, tiered compliance, runtime observer, and AI-assisted repair.
-
-**One squad, many products?** Install DNA on the **parent folder** — not every repo. One brain remembers every app and how they connect. [Portfolio install →](./docs/product/portfolio-install.md)
-
-**Skeletor installed?** DNA pulls the local fleet bridge by default and feeds it to AI (`dna skeletor status`). [Skeletor →](https://dna.humaan.app/skeletor)
+```bash
+cd /path/to/your-project    # or portfolio parent for multi-app squads
+npx @superhumaan/dna-by-humaan doctor
+```
 
 | | |
 |---|---|
 | **Website** | [dna.humaan.app](https://dna.humaan.app) |
-| **Marketplace** | [dna.humaan.app/marketplace](https://dna.humaan.app/marketplace) · [Bundles](https://dna.humaan.app/marketplace#bundles) |
+| **Marketplace** | [Marketplace](https://dna.humaan.app/marketplace) · [Bundles](https://dna.humaan.app/marketplace#bundles) |
 | **Intelligence** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) |
 | **Health** | [dna.humaan.app/health](https://dna.humaan.app/health) |
 | **npm** | [@superhumaan/dna-by-humaan](https://www.npmjs.com/package/@superhumaan/dna-by-humaan) |
 | **Supply chain** | [Socket.dev](https://socket.dev/npm/package/@superhumaan/dna-by-humaan) · [SECURITY.md](./SECURITY.md) |
-| **Repository** | [github.com/superhumaan/DNA](https://github.com/superhumaan/DNA) |
 
 Built by **[Humaan](https://dna.humaan.app)** · **[Superlite](https://superlite.ai)**
+
+**Latest (v0.6.24):** Sharper npm/GitHub listing · project git naming (v0.6.23) · Skeletor fleet in AI context by default.
+
+**Team rollouts:** [TEAM-TESTING.md](./TEAM-TESTING.md) · **Portfolio:** [docs/product/portfolio-install.md](./docs/product/portfolio-install.md) · **Docs:** [docs/](./docs/README.md) · **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
 
 ---
 
@@ -39,8 +41,8 @@ DNA is not a documentation generator. It is:
 - A **project intelligence system** — structured context AI can actually use
 - An **AI behaviour layer** — rules that govern how Cursor, Copilot, and Claude work on *your* project
 - A **runtime issue detector** — classifies errors with project-specific context
-- A **GitHub automation engine** — contextual issues and repair PRs
-- A **knowledge marketplace** — **1045** stack, compliance, and industry packs for `.DNA/knowledge/` plus **27 purpose bundles** (one-command combo install)
+- A **GitHub automation engine** — contextual issues and repair PRs with **project-tagged** titles
+- A **knowledge marketplace** — **1045** stack, compliance, and industry packs plus **27 purpose bundles**
 - A **software immune system** — severity, category, and discipline classification
 - A **memory layer** — CellularMemory that learns from your project's history
 
@@ -55,10 +57,6 @@ npx @superhumaan/dna-by-humaan doctor
 # In Cursor: type / for 103 stems and /dna-* commands — already installed
 # Portfolio squads: run doctor on the parent folder, not each repo
 ```
-
-**Team rollout guide:** [TEAM-TESTING.md](./TEAM-TESTING.md)  
-**Portfolio install:** [docs/product/portfolio-install.md](./docs/product/portfolio-install.md)  
-**Full documentation:** [docs/](./docs/README.md) · **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
 
 ---
 
@@ -320,6 +318,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Lab alert dark theme + force Refresh (v0.6.17) | Jul 2026 | Jul 2026 | Shipped — readable install banner; Refresh always shows busy state |
 | Lab APIs reference + deep links + open-auth fix (v0.6.18) | Jul 2026 | Jul 2026 | Shipped — full API docs; URL tabs; requireAuthInProduction honored |
 | Project git naming for AI commits/PRs (v0.6.23) | Jul 2026 | Jul 2026 | Shipped — `[ColorParty]` / `[DNA]` tags from config; repair uses host project |
+| npm + GitHub listing polish (v0.6.24) | Jul 2026 | Jul 2026 | Shipped — shorter description, hero READMEs, live health link |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | Shipped — setup script + OAuth scaffolding |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |
