@@ -1,19 +1,19 @@
 # Cross-App SSO Bridge (DNA)
 
 ## Pattern
-Apps on `*.humaan.app` share `JWT_SECRET`.
+Sibling apps on a shared parent domain share `JWT_SECRET`.
 
 ## Flow
-1. User logged into sibling-app.humaan.app (source)
-2. Target app (e.g. color.humaan.app) probes `/api/auth/session` with `X-Session-Probe: 1`
+1. User logged into source app
+2. Target app probes `/api/auth/session` with `X-Session-Probe: 1`
 3. Or OTT handoff: `?ott=` → exchange at source `/api/auth/ott/exchange`
 4. Target `POST /api/auth/establish-session` → httpOnly cookie
 
 ## Implementation
-- CORS allow `*.humaan.app`
+- CORS allow sibling origins on the shared parent domain
 - Verify shared SSO JWT; re-issue app-specific token
 - Upsert user record on first bridge login
 
 ## Reference
-a production app: `invitraceSsoBridge.js`
-Ops: `SsoBridge.jsx`
+- `ssoBridge.js` (or equivalent) in the source app
+- `SsoBridge.jsx` (or equivalent) in the target app

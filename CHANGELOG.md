@@ -7,6 +7,11 @@ All notable changes to DNA are documented here.
 ### Docs
 - **v0.9.0 roadmap** — 21 small Planned issues (#29–#49) on [DNA Roadmap](https://github.com/users/superhumaan/projects/3/views/1) / [milestone](https://github.com/superhumaan/DNA/milestone/7): outcome combos, repair learning, architecture graph, memory, factory, IDE extension, MCP, cloud spike. Synced in `docs/product/planning.md` + README.
 
+## [0.6.26] - 2026-07-31
+
+### Changed
+- SSO bridge knowledge examples use generic hostnames
+
 ## [0.6.25] - 2026-07-31
 
 ### Changed

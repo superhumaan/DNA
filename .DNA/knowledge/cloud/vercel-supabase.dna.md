@@ -13,4 +13,4 @@
 - `sync:vercel-env` for local dev parity
 
 ## SSO
-Shared JWT secret with sibling-app.humaan.app for cross-app bridge.
+Shared JWT secret across sibling apps for cross-app bridge.
