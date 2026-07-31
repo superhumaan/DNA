@@ -1,0 +1,88 @@
+# Unpublish recent npm versions (<72h) and deprecate older ones.
+# Keeps the current clean latest (default 0.6.27) published.
+
+name: npm unpublish / deprecate
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'scrub' to confirm"
+        required: true
+      keep_version:
+        description: "Keep this version published (do not unpublish)"
+        required: true
+        default: "0.6.27"
+
+jobs:
+  scrub:
+    if: github.event.inputs.confirm == 'scrub'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Unpublish recent leaky versions; deprecate older
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          KEEP: ${{ github.event.inputs.keep_version }}
+        run: |
+          set -euo pipefail
+          PKG='@superhumaan/dna-by-humaan'
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          echo "always-auth=true" >> ~/.npmrc
+
+          NOW_MS=$(date +%s)000
+          KEEP="${KEEP}"
+
+          # Versions within 72h except KEEP → unpublish
+          node <<'NODE'
+          const { execSync } = require('child_process');
+          const pkg = '@superhumaan/dna-by-humaan';
+          const keep = process.env.KEEP;
+          const time = JSON.parse(execSync(`npm view ${pkg} time --json`, { encoding: 'utf8' }));
+          const now = Date.now();
+          const WINDOW = 72 * 60 * 60 * 1000;
+          const toUnpublish = [];
+          const older = [];
+          for (const [ver, ts] of Object.entries(time)) {
+            if (ver === 'created' || ver === 'modified') continue;
+            if (ver === keep) continue;
+            const age = now - new Date(ts).getTime();
+            if (age < WINDOW) toUnpublish.push(ver);
+            else older.push(ver);
+          }
+          toUnpublish.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+          older.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+          console.log('KEEP', keep);
+          console.log('UNPUBLISH', toUnpublish.join(', ') || '(none)');
+          console.log('DEPRECATE', older.length, 'older versions');
+          require('fs').writeFileSync('/tmp/npm-unpublish.txt', toUnpublish.join('\n'));
+          require('fs').writeFileSync('/tmp/npm-deprecate.txt', older.join('\n'));
+          NODE
+
+          MSG="Superseded — use ${KEEP}+ (https://www.npmjs.com/package/@superhumaan/dna-by-humaan)"
+
+          if [[ -s /tmp/npm-unpublish.txt ]]; then
+            while IFS= read -r VER; do
+              [[ -z "$VER" ]] && continue
+              echo "→ unpublish ${PKG}@${VER}"
+              npm unpublish "${PKG}@${VER}" --force || echo "warn: unpublish ${VER} failed"
+            done < /tmp/npm-unpublish.txt
+          fi
+
+          if [[ -s /tmp/npm-deprecate.txt ]]; then
+            while IFS= read -r VER; do
+              [[ -z "$VER" ]] && continue
+              echo "→ deprecate ${PKG}@${VER}"
+              npm deprecate "${PKG}@${VER}" "$MSG" || echo "warn: deprecate ${VER} failed"
+            done < /tmp/npm-deprecate.txt
+          fi
+
+          echo "Done. Remaining versions:"
+          npm view "$PKG" versions --json
