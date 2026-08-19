@@ -1,8 +1,11 @@
-# DNA-generated — local smoke test after every feature
+# DNA — local smoke test
+name: dna
+
 services:
   app:
     build: .
-    image: dna-app:local
+    image: dna:local
+    container_name: dna-app
     ports:
       - "3000:3000"
     environment:

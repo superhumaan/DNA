@@ -74,7 +74,7 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 4. **Solution Architect** → implementation plan (scope, files, API, risks)
 5. **STOP — wait for user approval** before any code edits
 6. After approval: **Backend** → **Frontend** → **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
-7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push --message "[DNA] feat: <summary>"`
+7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push --message "[DNA] feat: <summary>"` (trunk / current branch — no inventing feature remotes)
 
 ### The 9 roles (sequential — never skip)
 
@@ -134,8 +134,11 @@ Each command maps to `.DNA/stems/<id>/` — read **prompt.md, guidelines.md, exp
 | `/legal-engineering` | legal-engineering | Sector checklist on a feature |
 | `/debug-issue` | debug-issue | Debug + fix loop |
 | `/ivf-shared-library` | ivf-shared-library | Extract shared UI library |
+| `/expo-architect` | expo-architect | Expo iOS/Android architecture + BFF decisions |
+| `/expo-dynamic-builds` | expo-dynamic-builds | EAS Update OTA vs native binary |
+| `/expo-bff` | expo-bff | Mobile backend-for-frontend |
 
-Full library (103 stems): https://dna.humaan.app/intelligence#stem-library
+Full library (127 stems): https://dna.humaan.app/intelligence#stem-library
 
 Commands live in `.cursor/commands/`. Stem data: `.DNA/stems/`.
 

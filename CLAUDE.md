@@ -10,6 +10,7 @@ This project has DNA installed. **Every session, every message** — DNA is your
 - **Never** wait for the user to say "use DNA", "utilise DNA", or `/work-with-dna` before running DNA
 - **Always** load `.DNA/` context (`neuralNetwork.json`, behaviour, knowledge, CellularMemory) **before** answering engineering, analysis, compliance, quality, or ship questions — do not guess from general knowledge when DNA has project truth
 - **Always** run `npx dna` when their intent matches health, analysis, features, compliance, quality, or ship
+- **When Skeletor is installed**, DNA pulls the local fleet bridge by default (`dna context`, doctor feed → `.DNA/CellularMemory/parietalLobe/skeletor-fleet.md`) — use it for cross-lab coordination; opt out with `"skeletor": { "enabled": false }`
 - The user speaks in plain language; you execute DNA — they do not run CLI commands or copy prompts
 - Slash commands like `/work-with-dna` are optional shortcuts — not a prerequisite for DNA-aware behaviour
 
@@ -44,6 +45,27 @@ DNA thinks **across the whole system by default**, not just the file in front of
 | **Debug** | error, bug, crash, production issue, failing test | Read `reasoning.behaviour.md` → OODA + scientific debug → runtime DB / `npx dna lab serve` → fix → test → quality → push |
 
 If intent is ambiguous between Q&A and engineering work, ask **one** clarifying question. If they want a change, use the agent loop.
+
+
+## Project git naming (mandatory for AI)
+
+**Project tag:** `DNA` · **Branch slug:** `dna`
+(from `.DNA/config.dna.json` — override with `git.projectTag` / `git.branchSlug`)
+
+| Artifact | Format | Example |
+|----------|--------|---------|
+| Commit | `[DNA] type(scope): summary` | `[DNA] fix(admin): dedupe filter` |
+| PR title | `[DNA] Type: summary` | `[DNA] Fix: uncaught exception on /api` |
+| Branch | `dna/type/short-id` | `dna/fix/abc123` |
+
+### Rules
+
+- **Always** prefix commits and PR titles with `[DNA]`
+- Prefer `fix` / `feat` / `docs` / `test` / `refactor` — use `chore` only for deps, version bumps, or pure tooling
+- Keep conventional **type** after the tag so semver tools still parse
+- Ship / push examples: `npx dna github push --message "[DNA] feat: <summary>"`
+- DNA AI repair must use this tag (never hardcode a different project brand)
+- **Trunk by default:** stay on `main`/`master` (or the one branch the user chose). Do **not** invent `feature/*` remotes or hop branches to "test on preview". Opt out only with `"git": { "branchingStrategy": "feature-branch" }`.
 
 
 ## Default behaviour
@@ -93,7 +115,7 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 4. **Solution Architect** → implementation plan (scope, files, API, risks)
 5. **STOP — wait for user approval** before any code edits
 6. After approval: **Backend** → **Frontend** → **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
-7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push`
+7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push --message "[DNA] feat: <summary>"`
 
 ### The 9 roles (sequential — never skip)
 
@@ -114,6 +136,7 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 - **No complete** until `npx dna quality report --feature` PASS
 - **No ship** until docker build succeeds and GitHub push completes
 - **Never** ask the user to copy prompts or fill templates
+- **Git naming:** commits and PRs must use `[DNA]` — see Project git naming below
 
 **Admin / backoffice:** when user says admin, backoffice, or control panel — read `.cursor/rules/admin-portal.mdc`; scaffold `/admin` in a new tab with RBAC (see agent loop).
 
@@ -135,23 +158,3 @@ The user works in plain language inside Claude Code. You run DNA CLI and load `.
 
 Optional catalog: https://dna.humaan.app/intelligence · Regenerate: `npx dna workbench install`
 Remove workbench: `npx dna workbench uninstall`
-
-## Project git naming (mandatory for AI)
-
-**Project tag:** `DNA` · **Branch slug:** `dna`
-(from `.DNA/config.dna.json` — override with `git.projectTag` / `git.branchSlug`)
-
-| Artifact | Format | Example |
-|----------|--------|---------|
-| Commit | `[DNA] type(scope): summary` | `[DNA] fix(admin): dedupe filter` |
-| PR title | `[DNA] Type: summary` | `[DNA] Fix: uncaught exception on /api` |
-| Branch | `dna/type/short-id` | `dna/fix/abc123` |
-
-### Rules
-
-- **Always** prefix commits and PR titles with `[DNA]`
-- Prefer `fix` / `feat` / `docs` / `test` / `refactor` — use `chore` only for deps, version bumps, or pure tooling
-- Keep conventional **type** after the tag so semver tools still parse
-- Ship / push examples: `npx dna github push --message "[DNA] feat: <summary>"`
-- DNA AI repair must use this tag (never hardcode a different project brand)
-

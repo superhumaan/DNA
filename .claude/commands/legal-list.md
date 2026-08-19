@@ -2,7 +2,8 @@
 description: List legal domains and supported jurisdictions (PDPA, GDPR, CCPA, etc.).
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Legal catalog
+---
+# Legal catalog
 
 ```bash
 npx dna legal list

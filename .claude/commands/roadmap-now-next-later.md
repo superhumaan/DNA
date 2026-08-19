@@ -2,7 +2,8 @@
 description: Build an outcome roadmap across Now, Next, and Later horizons.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Roadmap — Now / Next / Later
+---
+# Roadmap — Now / Next / Later
 
 Place initiatives and features on a three-horizon roadmap.
 

@@ -2,7 +2,8 @@
 description: Rank opportunities on the OST using ICE, RICE, or team framework.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Prioritize opportunities
+---
+# Prioritize opportunities
 
 Rank opportunities from opportunity-tree.md for the next cycle.
 

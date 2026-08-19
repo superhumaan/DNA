@@ -2,7 +2,8 @@
 description: Map category alternatives, do-nothing, and positioning axes — assumptions labeled; our side grounded in code.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Competitor landscape
+---
+# Competitor landscape
 
 Map the competitive field for THIS product. Our capabilities come from code; theirs from named research or **assumptions**.
 

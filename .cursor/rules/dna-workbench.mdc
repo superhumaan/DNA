@@ -67,6 +67,7 @@ On **every session start** and **debug/engineering intent**:
 - Keep conventional **type** after the tag so semver tools still parse
 - Ship / push examples: `npx dna github push --message "[DNA] feat: <summary>"`
 - DNA AI repair must use this tag (never hardcode a different project brand)
+- **Trunk by default:** stay on `main`/`master` (or the one branch the user chose). Do **not** invent `feature/*` remotes or hop branches to "test on preview". Opt out only with `"git": { "branchingStrategy": "feature-branch" }`.
 
 
 ## How the user works (never break this)
@@ -120,7 +121,7 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 4. **Solution Architect** → implementation plan (scope, files, API, risks)
 5. **STOP — wait for user approval** before any code edits
 6. After approval: **Backend** → **Frontend** → **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
-7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push --message "[DNA] feat: <summary>"`
+7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push --message "[DNA] feat: <summary>"` (trunk / current branch — no inventing feature remotes)
 
 ### The 9 roles (sequential — never skip)
 
@@ -178,7 +179,7 @@ See `.cursor/rules/product-process.mdc`, `AGENTS.md`, and `.cursor/skills/dna-wo
 
 ## Slash commands & stem packs
 
-Type `/` in chat for **103** prompt stems (e.g. `work-with-dna`, `analyze-project`, `what-next`, `ship-feature`).
+Type `/` in chat for **127** prompt stems (e.g. `work-with-dna`, `analyze-project`, `what-next`, `ship-feature`).
 
 Each stem has full guidelines in `.DNA/stems/<id>/` — read **all files** before executing.
 

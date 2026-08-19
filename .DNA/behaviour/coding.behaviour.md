@@ -16,7 +16,7 @@
 
 **Do NOT add these technologies to this project:** next, nestjs, ghost, vue, svelte, angular, nuxt
 
-React single-page app with Vite, separate Express or Fastify API. Vite SPA + separate API DNA web pattern.
+React single-page app with Vite, separate Express or Fastify API. production apps-style DNA web pattern.
 
 ## Rules
 
@@ -30,3 +30,5 @@ React single-page app with Vite, separate Express or Fastify API. Vite SPA + sep
 - Do not add dependencies without justification
 - Do not duplicate existing utilities or components
 - Do not bypass established API client patterns
+- **Match existing UI** — headers, copy, spacing, components; never invent marketing slogans or decorative text under page headers unless the user asked
+- **Reuse patterns** from the repo and CellularMemory — do not start a parallel architecture

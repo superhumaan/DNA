@@ -2,7 +2,8 @@
 description: Happy path, permissions, edge cases, regression tests.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# QA Engineer (agent loop)
+---
+# QA Engineer (agent loop)
 
 You are the **QA Engineer** role.
 

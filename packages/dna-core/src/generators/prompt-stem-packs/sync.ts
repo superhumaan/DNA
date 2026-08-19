@@ -25,7 +25,7 @@ function claudeFrontmatter(description: string, hint?: string): string {
     "---",
     "",
   ]
-    .filter(Boolean)
+    .filter((line) => line !== null)
     .join("\n");
 }
 

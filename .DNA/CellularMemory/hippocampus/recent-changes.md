@@ -1,6 +1,12 @@
 # Recent Changes
 
-_Last updated: 2026-07-31_
+_Last updated: 2026-08-19_
+
+## 2026-08-19 — Expo / React Native stem packs (catalog v9)
+
+- 23 Expo stems: architect, workflow, BFF, init, Router, dynamic builds (EAS Update), EAS Build, dev client, app.config, iOS/Android ship + permissions, auth, offline, perf, a11y, testing, notifications, deep links, store submit, CI, native modules.
+- Combo `combo/expo-mobile`. Knowledge files under `frameworks/react-native/` (ADR, BFF, EAS, OTA, iOS, Android).
+- Intelligence catalog **127** stems, **28** purpose bundles.
 
 ## 2026-07-31 — v0.9.0 next-bets roadmap on GitHub
 

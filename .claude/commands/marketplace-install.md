@@ -2,7 +2,8 @@
 description: Install a knowledge pack into .DNA/knowledge/.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Marketplace install
+---
+# Marketplace install
 
 ```bash
 npx dna marketplace install <packId>

@@ -2,7 +2,8 @@
 description: Load domain DNA context — security, backend, frontend, QA, compliance.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Load DNA context
+---
+# Load DNA context
 
 Load domain-specific intelligence for this session.
 

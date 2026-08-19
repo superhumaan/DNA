@@ -10,8 +10,9 @@
 - Cite concrete evidence (paths, CLI output, configs) for every material claim
 - Provide 2–3 example-quality responses in spirit: specific, scoped, next-step clear
 - Quality PASS before push
-- Push preview/feature branch — never force-push main/master
+- Push current trunk / user-chosen branch only — never invent feature remotes
 - Report quality path + docker + branch URL
+- Confirm the user explicitly asked for preview
 
 ## SHOULD
 - If a surface (Tauri, fleet, Lab, admin, i18n) is missing, say so and degrade gracefully
@@ -28,3 +29,5 @@
 - Leave work with no artifact path and no explicit deferral reason
 - Skip quality gate to get it on preview
 - Treat ship-preview as approval to implement unplanned features
+- Create feature/* or hop branches to 'test on preview'
+- Use preview ship as recovery for dual-tracked WIP

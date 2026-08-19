@@ -2,7 +2,8 @@
 description: Open DNA Lab — runtime feed, performance, and quality at /labs.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Dashboard monitor
+---
+# Dashboard monitor
 
 ```bash
 npx dna lab serve --port 3200

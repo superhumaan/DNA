@@ -1,7 +1,7 @@
-# Multi-Tenant (a production app, a production app)
+# Multi-Tenant (production apps, production apps)
 
 ## Models
-- **Deployment-per-tenant** (a production app): one Container App per customer, account URL subdomain
+- **Deployment-per-tenant** (production apps): one Container App per customer, account URL subdomain
 - **Row-level tenant** : `tenantId` on every store bucket, SQL JSON row per tenant
 
 ## Rules

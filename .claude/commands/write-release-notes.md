@@ -2,7 +2,8 @@
 description: User-facing changelog from commits and Impressions — not raw commit dumps.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Write release notes
+---
+# Write release notes
 
 Version / scope: $ARGUMENTS
 

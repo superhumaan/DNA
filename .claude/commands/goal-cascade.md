@@ -2,7 +2,8 @@
 description: Align company → product → team goals so OKRs, KPIs, and initiatives connect.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Goal cascade
+---
+# Goal cascade
 
 Map how purpose and strategy flow into measurable goals and work — find misalignment gaps.
 

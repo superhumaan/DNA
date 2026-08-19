@@ -29,8 +29,20 @@ Integrate to \`main\` at least daily. Branches live < 2 days or use feature flag
 ## Practices
 - Feature flags for incomplete work (\`disciplines/feature-flags\`)
 - Small PRs with tests
-- Main always deployable`,
-    `## Anti-patterns\n- Long-lived \`develop\` branch\n- Release branches without automated backport\n- Merging without CI green`,
+- Main always deployable
+- DNA default: \`git.branchingStrategy: trunk\` — \`dna github push\` stays on the current branch
+
+## Agent rules
+- Never invent \`feature/*\` remotes or hop branches to "test on preview"
+- Never dual-track the same feature across multiple remotes
+- Match existing patterns — no invented slogans under page headers`,
+    `## Anti-patterns
+- Long-lived \`develop\` branch
+- Release branches without automated backport
+- Merging without CI green
+- Inventing \`feature/*\` remotes or hopping branches for preview
+- Dual-tracking WIP then recovering with preview hops
+- Agents inventing slogans, parallel architectures, or forgetting CellularMemory`,
   ),
   discipline(
     "tdd-bdd",

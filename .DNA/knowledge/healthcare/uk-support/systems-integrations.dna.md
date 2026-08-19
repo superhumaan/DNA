@@ -16,7 +16,7 @@
 | Cerner / Oracle Health UK | Hospital / acute EHR | Acute | Millennium FHIR + UK Core | `healthcare/cerner-oracle-health` |
 | System C Medway | Hospital / acute EHR | Acute PAS/EPR | HL7 v2 + FHIR emerging; trust-specific | — |
 | EMIS / TPP SystmOne | Ambulatory / GP | GP systems | GP Connect accreditation path — do not scrape | — |
-| Mirth / Rhapsody | Integration platform | Interface engine | v2 ↔ FHIR translation for legacy trusts | `healthcare/mirth` |
+| Mirth / Rhapsody | Integration platform | Interface engine | v2 ↔ FHIR translation for legacy trusts | `healthcare/mirth-connect` |
 
 ## Integration playbook
 
@@ -33,6 +33,6 @@ Run `dna marketplace install healthcare/overview-uk` — relevant vendor packs f
 
 - **Never scrape** EMR portals — use sanctioned APIs, accreditation, or integration platforms
 - **Validate FHIR** against national IG (US Core, UK Core, AU Base, CI-SIS, etc.)
-- **Interface engine** (`healthcare/mirth`) when hospital only speaks HL7 v2
+- **Interface engine** (`healthcare/mirth-connect`) when hospital only speaks HL7 v2
 - **Redox** (`healthcare/redox`) when you need one API to many EHRs without per-vendor certification
 - Document subprocessors and **data residency** in Impressions

@@ -73,6 +73,8 @@ No unrelated rewrites, tests/build pass, acceptance criteria met.
 
 1. `dna quality report --feature` — gate **PASS**
 2. `dna docker build` — image builds successfully
-3. `dna github push --message "feat: <summary>"` — feature branch on GitHub
+3. `dna github push --message "[ProjectTag] feat: <summary>"` — push **current trunk / user-chosen branch** (default: no auto `feature/*` hop)
+
+**Never** invent preview remotes or dual-track features to "test on preview". Use `/trunk-based-delivery`.
 
 **Output:** Docker tag + pushed branch URL + gate status.

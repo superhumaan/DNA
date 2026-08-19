@@ -2,7 +2,8 @@
 description: Map vision, pillars, positioning, bets, and success metrics for the business.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Business strategy canvas
+---
+# Business strategy canvas
 
 Map how this business wins — grounded in Golden Circle when present.
 

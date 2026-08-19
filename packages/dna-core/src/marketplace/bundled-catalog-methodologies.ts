@@ -40,7 +40,12 @@ Default DNA delivery model for OSS and small teams.
 1. User describes goal in plain language
 2. \`ai/feature-request.md\` updated automatically
 3. Agent loop roles: PA → SA → (approval) → BE → FE → UX → QA → CQ → Refactor → Final
-4. Quality gate → docker → github push
+4. Quality gate → docker → github push on **trunk** (current line of work)
+
+## Trunk (default)
+- Stay on \`main\`/\`master\` or one user-chosen short-lived branch
+- Never invent \`feature/*\` remotes or hop branches to "test on preview"
+- Opt out: \`"git": { "branchingStrategy": "feature-branch" }\`
 
 ## Artifacts
 - **Plan:** Solution Architect plan in chat (approval gate)
@@ -66,13 +71,13 @@ Sections: Problem, Users, Desired behaviour, Edge cases, Success criteria
 Scope, files, API, security, tests, risks — **no code until approval**
 
 ## Close-out
-Quality PASS, docker build, github push, manual QA checklist`,
+Quality PASS, docker build, github push on trunk, manual QA checklist`,
     `# Ceremonies — DNA Default
 
 - **Plan** — Solution Architect produces plan; user approves
 - **Implement** — Backend → Frontend → UX
 - **Quality gate** — \`dna quality report --feature\`
-- **Ship** — docker build + github push`,
+- **Ship** — docker build + github push (trunk by default)`,
   ),
   // Scrum/LeSS/Kanban/SAFe/Shape Up/Spotify → AGILE_FAMILY_PACKS
 

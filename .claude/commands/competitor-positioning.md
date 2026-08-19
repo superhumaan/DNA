@@ -2,7 +2,8 @@
 description: Positioning statement and perceptual map — our proof points from architecture; competitor placement labeled.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Competitor positioning
+---
+# Competitor positioning
 
 Produce a crisp positioning statement and map.
 

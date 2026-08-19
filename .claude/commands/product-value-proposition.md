@@ -2,7 +2,8 @@
 description: Value Proposition Canvas — customer jobs/pains/gains vs what the product actually delivers in code.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Product value proposition
+---
+# Product value proposition
 
 Value Proposition Canvas for THIS product — products & services must map to real surfaces.
 

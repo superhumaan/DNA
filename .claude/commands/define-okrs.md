@@ -2,7 +2,8 @@
 description: Write Objectives and Key Results for a period — outcomes, not task lists.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Define OKRs
+---
+# Define OKRs
 
 Create Objectives and Key Results for the stated period. OKRs are **outcomes**; leave tasks for roadmap/features.
 

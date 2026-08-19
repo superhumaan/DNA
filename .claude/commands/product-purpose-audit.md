@@ -2,7 +2,8 @@
 description: Derive Why / How / What and jobs-to-be-done from real surfaces in the codebase — not from stub canvases.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Product purpose audit
+---
+# Product purpose audit
 
 Derive purpose and jobs from what the system **does**, not what stub docs claim.
 

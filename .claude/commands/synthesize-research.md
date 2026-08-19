@@ -2,7 +2,8 @@
 description: Turn raw research into opportunities and update DNA Impressions.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Synthesize research
+---
+# Synthesize research
 
 Cluster findings into themes and opportunities. Update DNA artifacts.
 

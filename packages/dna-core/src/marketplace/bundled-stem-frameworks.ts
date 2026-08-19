@@ -165,20 +165,116 @@ Use \`ghost-cms\` archetype. Excludes React SPA in the Ghost core app.
     "frameworks/react-native",
     "React Native / Expo",
     "frameworks",
-    "Expo and React Native — navigation, native modules, EAS builds",
+    "Expo and React Native — architecture decisions, BFF, EAS dynamic builds, iOS/Android ship",
     [
       {
         path: "frameworks/react-native/positioning.dna.md",
         content: `# React Native / Expo — Positioning
 
-Mobile-first UI with Expo managed workflow unless native modules require bare workflow.
+Mobile-first UI with **Expo** (CNG / managed) unless native modules require owned \`ios/\` \`android/\` trees.
 
 ## Stack
 - Expo Router for file-based navigation
-- Backend: separate API (Express/Fastify) or Supabase — not Next.js in the app binary
-- Auth: secure storage (expo-secure-store), never AsyncStorage for tokens
+- Backend: **BFF** (Express/Fastify) or BaaS (Supabase) — not a Next.js HTML app inside the binary
+- Auth: \`expo-secure-store\`, never AsyncStorage for tokens
+- Updates: EAS Update for JS; EAS Build when native/permissions change
 
-Pair with \`disciplines/mobile-development\` and \`mobile-expo\` archetype.
+Pair with \`disciplines/mobile-development\`, \`platforms/mobile-ui\`, and \`mobile-expo\` archetype.
+Stems: \`/expo-architect\`, \`/expo-bff\`, \`/expo-dynamic-builds\`.
+`,
+      },
+      {
+        path: "frameworks/react-native/architecture-decisions.dna.md",
+        content: `# Expo — Architecture decisions
+
+Write an ADR before scaffolding. Stems: \`/expo-architect\`, \`/expo-workflow-decision\`.
+
+## Must decide
+1. Expo Go vs **dev client** vs bare/CNG-owned native
+2. Expo Router vs React Navigation
+3. BFF vs direct BaaS vs public API
+4. OTA policy (\`runtimeVersion\`) vs store binary
+5. iOS vs Android deltas (permissions, back, stores)
+
+## Never
+- Use Expo Go for custom native modules or production-like push
+- Collapse iOS and Android into one “mobile” checklist
+- Invent a second UI kit when \`platforms/mobile-ui\` exists
+`,
+      },
+      {
+        path: "frameworks/react-native/bff.dna.md",
+        content: `# Expo — Backend for frontend
+
+Mobile clients should not fan-out to many domain services on a 3G radio.
+
+## BFF does
+- Aggregate screen payloads (\`/mobile/v1/...\`)
+- Exchange tokens; **never** ship service-role keys in the app
+- Cursor pagination, image variants, typed error codes
+- Feature flags / kill switches for store-review builds
+
+## BFF does not
+- Render HTML/RSC for the phone
+- Replace RLS on a BaaS when a BFF is not needed (simple CRUD)
+
+Stem: \`/expo-bff\`. HTTPS only (iOS ATS, Android cleartext off).
+`,
+      },
+      {
+        path: "frameworks/react-native/eas-builds.dna.md",
+        content: `# Expo — EAS Build
+
+Profiles: **development** (dev client), **preview** (internal), **production** (store).
+
+## Rules
+- Pin image / resource class; keep SDK aligned
+- iOS bundle ID + Android applicationId per flavor (\`app.config.ts\`)
+- Credentials live in EAS / CI secrets — **names only** in docs
+- Prefer AAB for Play; IPA via EAS Submit / TestFlight
+
+Stems: \`/expo-eas-build\`, \`/expo-dev-client\`, \`/expo-ci-eas\`.
+`,
+      },
+      {
+        path: "frameworks/react-native/dynamic-updates.dna.md",
+        content: `# Expo — Dynamic builds (EAS Update)
+
+OTA **JS/assets** when \`runtimeVersion\` matches the installed binary.
+
+## OTA allowed
+- JS/TS, most update assets, flags that do not need new entitlements
+
+## Binary required (block OTA-only)
+- Native modules, config plugins, permissions, splash/icon native resources, SDK bump
+
+Channels: preview vs production. Document rollback. Stem: \`/expo-dynamic-builds\`.
+`,
+      },
+      {
+        path: "frameworks/react-native/ios.dna.md",
+        content: `# Expo — iOS
+
+- TestFlight then App Store; EAS Submit
+- Usage strings + privacy manifest; ATT **only** if tracking
+- Associated domains for Universal Links
+- Push: APNs key on EAS; request permission in context
+- Keychain via expo-secure-store; swipe-back must work
+
+Stems: \`/expo-ios-ship\`, \`/expo-ios-permissions\`, \`/expo-deep-links\`.
+`,
+      },
+      {
+        path: "frameworks/react-native/android.dna.md",
+        content: `# Expo — Android
+
+- AAB + Play App Signing; internal/closed/production tracks
+- Target API per Play; 13+ notification + photo picker policies
+- App Links + assetlinks.json; predictive back
+- FCM via expo-notifications; POST_NOTIFICATIONS runtime
+- Do not request background location without a store-justified product need
+
+Stems: \`/expo-android-ship\`, \`/expo-android-permissions\`.
 `,
       },
       {
@@ -203,8 +299,11 @@ Pair with \`disciplines/mobile-development\` and \`mobile-expo\` archetype.
         content: `# React Native — Testing
 
 - Jest + @testing-library/react-native
-- Detox or Maestro for E2E on device/simulator
+- Detox or Maestro for E2E on device/simulator — pick one
 - Test deep links and push notification cold start
+- Mock expo-secure-store; never commit real tokens
+
+Stem: \`/expo-testing-mobile\`.
 `,
       },
     ],

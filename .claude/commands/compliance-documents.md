@@ -2,7 +2,8 @@
 description: UK GDPR document catalog and scrubbed templates.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Compliance documents
+---
+# Compliance documents
 
 ```bash
 npx dna compliance documents

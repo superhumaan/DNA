@@ -20,7 +20,7 @@ Load `.DNA/neuralNetwork.json`, relevant `.DNA/behaviour/`, CellularMemory (syst
 3. **Root cause** — falsifiable hypothesis; fix cause not symptoms
 4. **Regression** — test that fails without the fix
 5. **Quality** — `npx dna quality report --feature` PASS
-6. **Push** — preview/feature branch; never auto-merge AI repair PRs
+6. **Push** — current trunk / user-chosen branch (no inventing feature remotes); never auto-merge AI repair PRs
 7. **Write-up** — timeline, impact, cause, fix, follow-ups
 
 ```bash

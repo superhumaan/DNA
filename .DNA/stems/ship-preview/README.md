@@ -1,6 +1,6 @@
 # Ship preview
 
-Quality → docker → preview push — lighter close-out than full ship-feature.
+Explicit-user-only: quality → docker → push current trunk for CI preview. Never invent feature remotes.
 
 - **Stem ID:** `ship-preview`
 - **Category:** delivery

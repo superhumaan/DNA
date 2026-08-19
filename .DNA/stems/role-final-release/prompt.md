@@ -14,6 +14,8 @@ Acceptance criteria from `ai/feature-request.md` met. No unrelated rewrites.
 
 1. `npx dna quality report --feature` — **PASS**
 2. `npx dna docker build`
-3. `npx dna github push --message "[DNA] feat: <summary>"`
+3. `npx dna github push --message "[DNA] feat: <summary>"` — **current trunk / user-chosen branch** (default: no auto `feature/*` hop)
 
 Report: gate status, docker tag, branch URL, CI triggered.
+
+**Never** invent preview remotes or dual-track the feature onto a new branch to "test on preview".

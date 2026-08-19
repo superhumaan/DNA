@@ -2,7 +2,8 @@
 description: Plan /admin as a new-tab route tree with RBAC-wrapped link, route guards, and requireAdmin APIs.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Plan admin portal
+---
+# Plan admin portal
 
 Scope: $ARGUMENTS
 

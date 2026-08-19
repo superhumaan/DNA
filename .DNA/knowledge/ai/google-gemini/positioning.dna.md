@@ -2,4 +2,4 @@
 
 Google ecosystem, multimodal.
 
-Gemini via a production app / Vertex
+Gemini via production apps / Vertex

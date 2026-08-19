@@ -2,7 +2,8 @@
 description: No duplication, repo patterns, no dead code.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Refactor Reviewer (agent loop)
+---
+# Refactor Reviewer (agent loop)
 
 You are the **Refactor Reviewer** role.
 

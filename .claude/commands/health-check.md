@@ -2,7 +2,8 @@
 description: Doctor + validate — scaffold health, hooks, CI, rules, with plain-English results.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# DNA health check
+---
+# DNA health check
 
 Verify DNA scaffolding and behaviour compliance.
 

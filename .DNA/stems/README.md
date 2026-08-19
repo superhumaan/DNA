@@ -1,12 +1,25 @@
 # DNA Prompt Stem Packs
 
-**dna-by-humaan** — 103 prompt stem packs (bundled catalog v8).
+**dna-by-humaan** — 127 prompt stem packs installed by DNA Workbench.
 
-Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, context, and examples**.
+Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, context, and examples** so the AI sticks to the workflow.
 
-Refresh: `npx dna update` or `npx dna stems install`
+## Files in this stem pack
 
-Copy-paste library: https://dna.humaan.app/intelligence#stem-library
+| File | Purpose |
+|------|---------|
+| `prompt.md` | Full agent prompt — copy-paste or slash command body |
+| `guidelines.md` | MUST / NEVER / SHOULD — non-negotiable behaviour |
+| `expectations.md` | Output format and definition of done |
+| `context.md` | DNA files and CLI commands |
+| `examples.md` | Sample exchanges |
+
+## Baseline quality (required for every new stem)
+
+- `prompt.md` includes **Checklist**, **Artifacts** (paths), and **Failure modes**
+- Dense MUST / SHOULD / NEVER in `guidelines.md`
+- **2–3** examples in `examples.md`
+- See `stem-quality.ts` (`STEM_QUALITY_BASELINE`)
 
 ## Catalog
 
@@ -24,6 +37,9 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `recommend-architecture` — Recommend architecture
 - `security-audit` — Security audit
 - `plan-fleet-scan` — Plan fleet scan
+- `expo-architect` — Expo architect
+- `expo-workflow-decision` — Expo workflow decision
+- `expo-native-modules` — Expo native modules
 
 ### features
 - `ship-feature` — Ship a feature
@@ -36,6 +52,16 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `design-onboarding` — Design onboarding
 - `plan-mcp-server` — Plan MCP server
 - `implement-i18n` — Implement i18n
+- `expo-bff` — Expo backend for frontend
+- `expo-init` — Expo init
+- `expo-router-navigation` — Expo Router navigation
+- `expo-app-config` — Expo app config
+- `expo-ios-permissions` — Expo iOS permissions
+- `expo-android-permissions` — Expo Android permissions
+- `expo-auth-secure` — Expo auth secure storage
+- `expo-offline-sync` — Expo offline sync
+- `expo-notifications` — Expo push notifications
+- `expo-deep-links` — Expo deep links
 
 ### quality
 - `quality-gate` — Quality gate
@@ -45,6 +71,9 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `perf-audit` — Performance audit
 - `security-patch-deps` — Security patch dependencies
 - `visual-qa-pass` — Visual QA pass
+- `expo-perf-mobile` — Expo mobile performance
+- `expo-a11y-mobile` — Expo mobile accessibility
+- `expo-testing-mobile` — Expo mobile testing
 
 ### compliance
 - `plan-compliance` — Plan compliance
@@ -83,6 +112,14 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `ship-tauri-release` — Ship Tauri release
 - `create-pr` — Create pull request
 - `ship-preview` — Ship preview
+- `trunk-based-delivery` — Trunk-based delivery
+- `expo-dynamic-builds` — Expo dynamic builds
+- `expo-eas-build` — Expo EAS Build
+- `expo-dev-client` — Expo dev client
+- `expo-ios-ship` — Expo iOS ship
+- `expo-android-ship` — Expo Android ship
+- `expo-store-submit` — Expo store submit
+- `expo-ci-eas` — Expo CI EAS
 
 ### marketplace
 - `marketplace-search` — Marketplace search
@@ -144,3 +181,7 @@ Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 - `upgrade-leverage-map` — Upgrade leverage map
 - `upgrade-modernization` — Upgrade modernization
 - `upgrade-recommend` — Upgrade recommend
+
+Copy-paste library: https://dna.humaan.app/intelligence#stem-library
+
+Refresh: `npx dna workbench install` or `npx dna stems install`

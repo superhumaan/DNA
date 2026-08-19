@@ -3,6 +3,7 @@
 ## DNA files
 - `ai/feature-request.md`
 - `.cursor/rules/delivery-pipeline.mdc`
+- `.DNA/knowledge/disciplines/trunk-based-development/`
 
 ## DNA CLI
 - `npx dna quality report --feature`

@@ -2,7 +2,8 @@
 description: Run the full strategy → canvas → goals (North Star/OKRs/KPIs) → initiative → product → feature → Now-Next-Later ladder.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Strategy ladder
+---
+# Strategy ladder
 
 Walk purpose → strategy → goals/metrics → product → initiatives → features → roadmap for this project.
 

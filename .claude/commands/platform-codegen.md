@@ -2,7 +2,8 @@
 description: Scaffold SSO, multi-tenant, feature flags, gradual rollout, or audit logging.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Platform codegen
+---
+# Platform codegen
 
 ```bash
 npx dna generate feature audit-logging

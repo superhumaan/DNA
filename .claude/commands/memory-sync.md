@@ -2,7 +2,8 @@
 description: Sync CellularMemory from team registry — export, import, conflict resolution.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Memory sync
+---
+# Memory sync
 
 ```bash
 npx dna memory sync

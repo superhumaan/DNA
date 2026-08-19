@@ -2,7 +2,8 @@
 description: Design first-run, kit install, and Continue-to-dashboard onboarding flows.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Design onboarding
+---
+# Design onboarding
 
 Scope: $ARGUMENTS
 

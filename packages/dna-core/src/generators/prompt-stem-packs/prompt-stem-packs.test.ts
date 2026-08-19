@@ -1,11 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { PROMPT_STEM_DEFS, getPromptStemPacks, intelligenceStemPackEntries } from "./index.js";
+import { PROMPT_STEM_DEFS, getPromptStemPacks, intelligenceStemPackEntries, generatePromptStemPackFiles } from "./index.js";
 import { finalizeStemPack } from "./builder.js";
 import { checkStemQualityBaseline } from "./stem-quality.js";
+import { EXPO_STEM_DEFS, EXPO_STEM_IDS } from "./catalog-expo.js";
 
 describe("prompt stem packs", () => {
   it("defines a large stem library", () => {
-    expect(PROMPT_STEM_DEFS.length).toBeGreaterThanOrEqual(103);
+    expect(PROMPT_STEM_DEFS.length).toBeGreaterThanOrEqual(126);
   });
 
   it("has unique stem ids", () => {
@@ -21,6 +22,7 @@ describe("prompt stem packs", () => {
       "plan-fleet-scan",
       "create-pr",
       "ship-preview",
+      "trunk-based-delivery",
       "a11y-audit",
       "perf-audit",
       "incident-postmortem",
@@ -112,5 +114,51 @@ describe("prompt stem packs", () => {
     expect(entries.find((e) => e.id === "define-kpis")?.slash).toBe("define-kpis");
     expect(entries.find((e) => e.id === "product-diagnose")?.slash).toBe("product-diagnose");
     expect(entries.find((e) => e.id === "upgrade-recommend")?.slash).toBe("upgrade-recommend");
+    expect(entries.find((e) => e.id === "expo-architect")?.slash).toBe("expo-architect");
+    expect(entries.find((e) => e.id === "expo-dynamic-builds")?.slash).toBe("expo-dynamic-builds");
+    expect(entries.find((e) => e.id === "expo-bff")?.slash).toBe("expo-bff");
+  });
+
+  it("expo / react-native stems meet baseline stem quality", () => {
+    expect(EXPO_STEM_DEFS.map((d) => d.id)).toEqual([...EXPO_STEM_IDS]);
+    expect(EXPO_STEM_DEFS.length).toBe(23);
+    for (const id of EXPO_STEM_IDS) {
+      const def = PROMPT_STEM_DEFS.find((d) => d.id === id);
+      expect(def, id).toBeDefined();
+      expect(def?.slash).toBe(id);
+      expect(def?.tags).toContain("expo");
+      expect(def?.tags).toContain("react-native");
+      const quality = checkStemQualityBaseline(def!);
+      expect(quality.ok, `${id}: ${quality.failures.join("; ")}`).toBe(true);
+    }
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "expo-architect")?.category).toBe("analysis");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "expo-bff")?.category).toBe("features");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "expo-dynamic-builds")?.category).toBe("delivery");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "expo-ios-ship")?.category).toBe("delivery");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "expo-android-ship")?.category).toBe("delivery");
+    expect(PROMPT_STEM_DEFS.find((d) => d.id === "expo-perf-mobile")?.category).toBe("quality");
+  });
+
+  it("writes Claude slash commands with YAML frontmatter then a heading", () => {
+    const files = generatePromptStemPackFiles({
+      version: "0.1.0",
+      projectId: "test",
+      projectName: "Test",
+      createdAt: "2026-01-01T00:00:00.000Z",
+      updatedAt: "2026-01-01T00:00:00.000Z",
+      stack: {},
+      compliance: "none",
+      stage: "new",
+      aiTools: ["cursor"],
+      autoUpdate: true,
+      channel: "stable",
+      knowledgePacks: [],
+      platformFeatures: [],
+    });
+    const claude = files[".claude/commands/expo-bff.md"];
+    expect(claude).toMatch(/^---\n/);
+    expect(claude).toContain("\n---\n# Expo backend for frontend");
+    expect(JSON.parse(files[".DNA/stems/index.json"]).catalogVersion).toBe(9);
+    expect(JSON.parse(files[".DNA/stems/index.json"]).count).toBe(PROMPT_STEM_DEFS.length);
   });
 });

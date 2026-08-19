@@ -2,7 +2,8 @@
 description: Start any DNA-aware session — plain language, DNA runs CLI and loads context.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Work with DNA
+---
+# Work with DNA
 
 You are in a DNA by Humaan project. The user speaks normally; you run DNA and load intelligence.
 

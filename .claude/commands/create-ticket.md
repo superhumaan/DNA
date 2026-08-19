@@ -2,7 +2,8 @@
 description: Write work items in org-correct format (Jira, Linear, GitHub, Azure DevOps).
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Create ticket
+---
+# Create ticket
 
 Write work item(s) matching this team's delivery profile.
 

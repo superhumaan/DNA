@@ -2,7 +2,8 @@
 description: Run quality report until PASS — lint, coverage, SAST.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Code Quality Analyst (agent loop)
+---
+# Code Quality Analyst (agent loop)
 
 You are the **Code Quality Analyst** role.
 

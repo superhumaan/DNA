@@ -127,7 +127,7 @@ your-project/
 │   ├── config.dna.json
 │   ├── behaviour/
 │   ├── knowledge/
-│   ├── stems/               # 103 prompt stem packs
+│   ├── stems/               # 127 prompt stem packs
 │   ├── CellularMemory/
 │   └── runtime/
 └── DNA/Impressions/

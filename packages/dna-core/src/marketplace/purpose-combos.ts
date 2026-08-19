@@ -462,6 +462,31 @@ export const PURPOSE_COMBOS: readonly PurposeCombo[] = [
     recommended: ["methodologies/continuous-delivery"],
     stems: ["work-with-dna","methodology-setup","platform-codegen","recommend-architecture","marketplace-install"],
   },
+  {
+    id: "combo/expo-mobile",
+    purpose: "React Native / Expo iOS + Android",
+    description:
+      "Expo architecture decisions, mobile BFF, EAS dynamic builds, and store ship for iOS and Android.",
+    required: [
+      "frameworks/react-native",
+      "disciplines/mobile-development",
+      "platforms/mobile-ui",
+      "disciplines/security",
+    ],
+    preferred: ["cloud/github-actions", "frameworks/express", "observability/sentry"],
+    recommended: ["auth/clerk"],
+    stems: [
+      "work-with-dna",
+      "expo-architect",
+      "expo-workflow-decision",
+      "expo-bff",
+      "expo-dynamic-builds",
+      "expo-eas-build",
+      "expo-ios-ship",
+      "expo-android-ship",
+      "marketplace-install",
+    ],
+  },
 ] as const;
 
 export type ResolvePurposeComboOptions = {

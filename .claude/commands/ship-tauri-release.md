@@ -2,7 +2,8 @@
 description: Desktop packaging, notarization, auto-update, and signed builds for Tauri apps.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Ship Tauri release
+---
+# Ship Tauri release
 
 Scope: $ARGUMENTS
 

@@ -32,6 +32,8 @@
 - DNA AI repair must use this tag (never hardcode a different project brand)
 
 
+- **Trunk by default:** stay on `main`/`master` (or the one branch the user chose). Do **not** invent `feature/*` remotes or hop branches to "test on preview". Opt out only with `"git": { "branchingStrategy": "feature-branch" }`.
+
 ## Rules — tickets and documents
 
 1. **Before creating tickets or specs:** run `dna context methodology` or read `.DNA/knowledge/methodologies/`
@@ -50,8 +52,10 @@
 
 ## Stem packs
 
+- `/trunk-based-delivery` — default ship mode: stay on trunk, no preview-branch hopping
 - `/create-ticket` — write work items in org format
 - `/write-spec` — PRD, design doc, RFC per methodology
 - `/break-down-work` — decompose initiative to executable units
 - `/align-delivery` — verify plan matches how this team works
 - `/methodology-setup` — configure or change delivery profile
+- `/ship-preview` — only when the user explicitly asks for preview (never invent remotes)

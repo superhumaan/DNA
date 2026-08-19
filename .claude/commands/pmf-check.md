@@ -2,7 +2,8 @@
 description: Review product–market fit signals and recommend persevere, pivot, or kill.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# PMF check
+---
+# PMF check
 
 Review product–market fit using discovery packs and Impressions.
 

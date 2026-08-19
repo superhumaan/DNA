@@ -2,7 +2,8 @@
 description: Jurisdiction + sector legal plan — privacy, banking, healthcare, IP, regional law.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Plan legal
+---
+# Plan legal
 
 ```bash
 npx dna legal list

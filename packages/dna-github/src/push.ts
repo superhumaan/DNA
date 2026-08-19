@@ -6,7 +6,10 @@ export interface PushFeatureOptions {
   root: string;
   message?: string;
   branch?: string;
-  /** Create branch from current HEAD if not on a feature branch */
+  /**
+   * When true (legacy feature-branch mode), hop off main onto feature/*.
+   * Default / trunk mode: false — push stays on the current branch.
+   */
   createBranch?: boolean;
 }
 
@@ -62,7 +65,8 @@ export async function pushFeatureToGitHub(
   const status = await g.status();
   let branch = options.branch ?? status.current ?? "main";
 
-  if (options.createBranch && (branch === "main" || branch === "master")) {
+  // Default createBranch is false (trunk). Only hop off main when explicitly requested.
+  if (options.createBranch === true && (branch === "main" || branch === "master")) {
     branch = slugifyBranch(message);
     await g.checkoutLocalBranch(branch);
   }

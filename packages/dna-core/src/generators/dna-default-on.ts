@@ -56,7 +56,7 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 4. **Solution Architect** → implementation plan (scope, files, API, risks)
 5. **STOP — wait for user approval** before any code edits
 6. After approval: **Backend** → **Frontend** → **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
-7. Close: \`npx dna quality report --feature\` PASS → \`npx dna docker build\` → \`npx dna github push --message "[${identity.tag}] feat: <summary>"\`
+7. Close: \`npx dna quality report --feature\` PASS → \`npx dna docker build\` → \`npx dna github push --message "[${identity.tag}] feat: <summary>"\` (trunk / current branch — no inventing feature remotes)
 
 ### The 9 roles (sequential — never skip)
 

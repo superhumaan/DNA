@@ -2,7 +2,8 @@
 description: Plan an MCP server for Cursor/Claude — tools, security, and client wiring.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Plan MCP server
+---
+# Plan MCP server
 
 Scope: $ARGUMENTS
 

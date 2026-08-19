@@ -2,7 +2,8 @@
 description: Map users, problems, value proposition, channels, and metrics for the product.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Product canvas
+---
+# Product canvas
 
 High-level product map for THIS host project (not DNA's internal docs canvas).
 

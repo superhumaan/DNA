@@ -2,7 +2,8 @@
 description: Execute shared library extraction — copy, rewire imports, test, rollback on failure.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# IVF shared library execute
+---
+# IVF shared library execute
 
 Requires prior `--dry-run` approval.
 

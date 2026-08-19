@@ -4,6 +4,7 @@ import {
   formatRepairBranch,
   formatTaggedCommit,
   formatTaggedPrTitle,
+  resolveGitBranchingStrategy,
   resolveProjectGitIdentity,
 } from "./project-git-identity.js";
 
@@ -52,6 +53,16 @@ describe("git project identity config", () => {
     );
     expect(parsed.git?.projectTag).toBe("MyApp");
     expect(parsed.git?.branchSlug).toBe("myapp");
+    expect(parsed.git?.branchingStrategy).toBe("trunk");
+  });
+
+  it("parses git.branchingStrategy feature-branch", () => {
+    const parsed = DnaConfigSchema.parse(
+      base({
+        git: { branchingStrategy: "feature-branch" },
+      }),
+    );
+    expect(parsed.git?.branchingStrategy).toBe("feature-branch");
   });
 
   it("resolves tags from projectId (DNA known; others title-cased)", () => {
@@ -88,5 +99,14 @@ describe("git project identity config", () => {
       "[MyApp] Fix: uncaught exception",
     );
     expect(formatRepairBranch(id, "abc-123")).toBe("myapp/fix/abc-123");
+  });
+
+  it("defaults branching strategy to trunk", () => {
+    expect(resolveGitBranchingStrategy(undefined)).toBe("trunk");
+    expect(resolveGitBranchingStrategy({})).toBe("trunk");
+    expect(resolveGitBranchingStrategy({ git: { branchingStrategy: "trunk" } })).toBe("trunk");
+    expect(resolveGitBranchingStrategy({ git: { branchingStrategy: "feature-branch" } })).toBe(
+      "feature-branch",
+    );
   });
 });

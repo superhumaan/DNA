@@ -192,7 +192,7 @@ When the user says **admin**, **backoffice**, **admin panel**, or **control pane
 - Run lint/typecheck/tests/build; fix failures you cause
 - Run \`dna quality report --feature\` before marking complete; fix blocker/critical issues
 - Run \`dna docker build\` at the end — container must build successfully
-- Run \`dna github push\` to push the feature branch (GitHub login is handled via browser during onboarding)
+- Run \`dna github push\` to push the **current trunk / user-chosen branch** (GitHub login via browser during onboarding; default: no auto \`feature/*\` hop)
 - Complete database + API + frontend together when needed
 
 ## Completion output
@@ -469,7 +469,9 @@ No unrelated rewrites, tests/build pass, acceptance criteria met.
 
 1. \`dna quality report --feature\` — gate **PASS**
 2. \`dna docker build\` — image builds successfully
-3. \`dna github push --message "[ProjectTag] feat: <summary>"\` — feature branch on GitHub
+3. \`dna github push --message "[ProjectTag] feat: <summary>"\` — push **current trunk / user-chosen branch** (default: no auto \`feature/*\` hop)
+
+**Never** invent preview remotes or dual-track features to "test on preview". Use \`/trunk-based-delivery\`.
 
 **Output:** Docker tag + pushed branch URL + gate status.
 `,

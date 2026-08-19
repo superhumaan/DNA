@@ -110,6 +110,13 @@ export const DEFAULT_DELIVERY_PROFILE = {
   customProfile: ".DNA/delivery/profile.md",
 } as const;
 
+/**
+ * How agents ship git work.
+ * - `trunk` (default): stay on main/master (or the one branch the user chose); never invent feature remotes for preview
+ * - `feature-branch`: allow `dna github push` to create `feature/*` when on main (legacy hop behaviour)
+ */
+export const GIT_BRANCHING_STRATEGIES = ["trunk", "feature-branch"] as const;
+
 /** Product lifecycle stage — upstream of engineering delivery */
 export const DISCOVERY_LIFECYCLE_STAGES = [
   "ideation",

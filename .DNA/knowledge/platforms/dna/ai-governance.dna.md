@@ -1,4 +1,4 @@
-# AI Governance (a production app)
+# AI Governance (production apps)
 
 ## Pipeline (mandatory order)
 validate → input guard → content policy → quota → prompt assembly → model → postprocess

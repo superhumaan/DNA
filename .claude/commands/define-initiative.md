@@ -2,7 +2,8 @@
 description: Define an outcome-shaped initiative with bets, metrics, and child products/features.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Define initiative
+---
+# Define initiative
 
 Create or refine an outcome-shaped initiative (larger than a feature, smaller than company strategy).
 

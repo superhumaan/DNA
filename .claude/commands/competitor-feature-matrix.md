@@ -2,7 +2,8 @@
 description: Battlecard-style feature matrix — our rows proven in code; competitor cells researched or assumed.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Competitor feature matrix
+---
+# Competitor feature matrix
 
 Build a capability matrix for competitive decisions.
 

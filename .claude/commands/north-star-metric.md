@@ -2,7 +2,8 @@
 description: Choose one primary product success metric and the supporting input metrics.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# North Star metric
+---
+# North Star metric
 
 Pick the single metric that best represents delivered customer value for THIS product.
 

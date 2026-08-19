@@ -836,8 +836,9 @@ ${FAILURE_COMMON}`,
     name: "Ship preview",
     category: "delivery",
     slash: "ship-preview",
-    summary: "Quality → docker → preview push — lighter close-out than full ship-feature.",
-    tags: ["delivery", "preview", "ci", "push"],
+    summary:
+      "Explicit-user-only: quality → docker → push current trunk for CI preview. Never invent feature remotes.",
+    tags: ["delivery", "preview", "ci", "push", "trunk"],
     copyVariants: [
       "Push this to preview",
       "Quality gate then preview deploy",
@@ -847,7 +848,9 @@ ${FAILURE_COMMON}`,
 
 Scope: $ARGUMENTS
 
-Use when work is **already implemented** and needs preview — not a substitute for \`ship-feature\` when building new scope.
+**Only when the user explicitly asks for preview.** Not a substitute for \`ship-feature\` or \`trunk-based-delivery\`. Not a recovery strategy for dual-tracked branches.
+
+Use when work is **already implemented** on the **current line of work** (trunk / user-chosen branch).
 
 ${EVIDENCE}
 
@@ -855,7 +858,7 @@ ${EVIDENCE}
 
 1. \`npx dna quality report --feature\` — PASS
 2. \`npx dna docker build\` — success when Dockerfile present
-3. Push **preview / feature branch** (CI deploys preview)
+3. Push the **current branch** (trunk by default — CI may deploy preview from that push)
 
 \`\`\`bash
 npx dna quality report --feature
@@ -865,9 +868,10 @@ npx dna github push --message "[ProjectTag] chore: preview <summary>"
 
 ## Checklist
 
+- [ ] User explicitly asked for preview (not agent-invented)
 - [ ] Quality PASS (report path noted)
 - [ ] Docker status
-- [ ] Branch pushed (not force main)
+- [ ] Pushed **same** branch already in use — no new \`feature/*\` hop
 - [ ] CI/preview URL if available
 - [ ] No unplanned feature factory
 
@@ -884,6 +888,8 @@ npx dna github push --message "[ProjectTag] chore: preview <summary>"
 |------|----------|
 | Quality FAIL | Fix or stop — never "just push" |
 | No Dockerfile | Skip docker with explicit note |
+| Agent tempted to create a new remote "for preview" | Refuse — stay on trunk / current branch; use \`/trunk-based-delivery\` |
+| Dual-tracked WIP across feature remotes | Stop; consolidate on one line; do not hop |
 | User asks for new feature mid-flight | Redirect to \`ship-feature\` |
 
 ${FAILURE_COMMON}`,
@@ -892,25 +898,29 @@ ${FAILURE_COMMON}`,
       must: [
         ...DAY_GROUND.must,
         "Quality PASS before push",
-        "Push preview/feature branch — never force-push main/master",
+        "Push current trunk / user-chosen branch only — never invent feature remotes",
         "Report quality path + docker + branch URL",
+        "Confirm the user explicitly asked for preview",
       ],
       never: [
         ...DAY_GROUND.never,
         "Skip quality gate to get it on preview",
         "Treat ship-preview as approval to implement unplanned features",
+        "Create feature/* or hop branches to 'test on preview'",
+        "Use preview ship as recovery for dual-tracked WIP",
       ],
     },
     expectations: [
       "Quality PASS with report path",
       "Docker build status (or skip reason)",
-      "Preview branch pushed",
+      "Same line of work pushed (trunk / user branch)",
       "CI/preview URL if available",
     ],
     contextLoads: [
       ".DNA/behaviour/testing.behaviour.md",
       ".DNA/hooks/pre-push",
       ".github/workflows/dna-preview.yml",
+      ".DNA/knowledge/disciplines/trunk-based-development/",
     ],
     cliCommands: [
       "npx dna quality report --feature",
@@ -920,18 +930,149 @@ ${FAILURE_COMMON}`,
     examples: [
       {
         userSays: "Get this Lab CSS fix on preview",
-        goodResponse: "Quality PASS (.DNA/reports/quality/…). Docker OK. Pushed preview/lab-mobile. CI running.",
+        goodResponse:
+          "Quality PASS (.DNA/reports/quality/…). Docker OK. Pushed main (trunk). CI preview running. No feature hop.",
       },
       {
         userSays: "Preview even though quality failed",
         goodResponse: "Refused. 2 blockers in quality report. Fix first or explicitly override — not default.",
       },
       {
-        userSays: "Also add a new billing page while previewing",
-        goodResponse: "Out of scope for ship-preview. Use /ship-feature for billing. Preview push stays CSS-only.",
+        userSays: "We're split across two feature remotes — hop each to preview to test",
+        goodResponse:
+          "Refused. That dual-track hop is how we corrupt branches. Consolidate on trunk (or one short-lived branch you choose), then push once. Use /trunk-based-delivery.",
       },
     ],
-    workflow: ["quality-gate", "docker-build", "github-push"],
+    workflow: ["quality-gate", "docker-build", "github-push", "trunk-based-delivery"],
+  },
+  {
+    id: "trunk-based-delivery",
+    name: "Trunk-based delivery",
+    category: "delivery",
+    slash: "trunk-based-delivery",
+    summary:
+      "Default ship mode: stay on trunk, small merges, no preview-branch hopping, no invented remotes.",
+    tags: ["delivery", "trunk", "git", "ci", "push"],
+    copyVariants: [
+      "Ship on trunk — no feature branch hop",
+      "Keep us on main and push this fix",
+      "Enforce trunk-based delivery for this work",
+    ],
+    prompt: `# Trunk-based delivery
+
+Scope: $ARGUMENTS
+
+**Default DNA ship mode.** Integrate to \`main\`/\`master\` (or the one short-lived branch the user already chose). Do not invent parallel remotes.
+
+${EVIDENCE}
+
+Also load:
+
+- \`.DNA/knowledge/disciplines/trunk-based-development/\`
+- \`.DNA/config.dna.json\` → \`git.branchingStrategy\` (default \`trunk\`)
+- CellularMemory: \`hippocampus/recent-changes.md\`, \`temporalLobe/previous-solutions.md\`, \`amygdala/blockers.md\`
+
+## Rules (hard)
+
+1. **Stay on one line of work** — trunk, or a single user-chosen short-lived branch (< 2 days)
+2. **Never invent** \`feature/*\` remotes or hop branches "to test on preview"
+3. **Never dual-track** the same feature across multiple remotes
+4. **Match existing patterns** — no invented slogans under headers, no parallel architectures
+5. Feature flags for incomplete work when needed (\`disciplines/feature-flags\`)
+
+## Close-out (order)
+
+1. \`npx dna quality report --feature\` — PASS
+2. \`npx dna docker build\` — when Dockerfile present
+3. \`npx dna github push --message "[ProjectTag] feat: <summary>"\` — pushes **current** branch (trunk mode does not auto-create \`feature/*\`)
+
+\`\`\`bash
+npx dna quality report --feature
+npx dna docker build
+npx dna github push --message "[ProjectTag] feat: <summary>"
+\`\`\`
+
+Opt into legacy hop only if the user set \`"git": { "branchingStrategy": "feature-branch" }\` or passed \`--create-branch\` explicitly.
+
+## Checklist
+
+- [ ] CellularMemory loaded (no repeated forgotten work)
+- [ ] On trunk or one user-chosen branch — not agent-invented
+- [ ] Quality PASS
+- [ ] Docker status
+- [ ] Push stayed on the same line of work
+- [ ] No invented UI slogans / off-pattern chrome in the diff
+
+## Artifacts
+
+| Artifact | Path |
+|----------|------|
+| Quality report | \`.DNA/reports/quality/\` |
+| Push notes | Branch + CI URL in reply |
+| Memory updates | CellularMemory when architecture or delivery decisions change |
+
+## Failure modes
+
+| Mode | Response |
+|------|----------|
+| Agent wants a new remote "just for preview" | Refuse — stay on trunk; CI previews the push of the current branch |
+| Concurrent WIP already split across remotes | Stop; consolidate; do not hop each branch |
+| User asks for long-lived feature branch | Confirm once; use \`feature-branch\` strategy or explicit \`--create-branch\` |
+| Quality FAIL | Fix or stop |
+
+${FAILURE_COMMON}`,
+    guidelines: {
+      ...DAY_GROUND,
+      must: [
+        ...DAY_GROUND.must,
+        "Stay on trunk or the one user-chosen short-lived branch",
+        "Load CellularMemory before shipping so prior decisions are not forgotten",
+        "Quality PASS before push",
+        "Push current branch only — no inventing remotes",
+      ],
+      never: [
+        ...DAY_GROUND.never,
+        "Create feature/* or hop branches to test on preview",
+        "Dual-track the same feature across multiple remotes",
+        "Invent marketing slogans or decorative subheaders under page titles",
+        "Start a parallel architecture that ignores existing repo patterns",
+      ],
+    },
+    expectations: [
+      "Branching strategy confirmed (trunk default)",
+      "CellularMemory consulted",
+      "Quality PASS with report path",
+      "Push stayed on the same line of work",
+    ],
+    contextLoads: [
+      ".DNA/behaviour/delivery.behaviour.md",
+      ".DNA/knowledge/disciplines/trunk-based-development/",
+      ".cursor/rules/delivery-pipeline.mdc",
+      ".DNA/CellularMemory/hippocampus/recent-changes.md",
+    ],
+    cliCommands: [
+      "npx dna quality report --feature",
+      "npx dna docker build",
+      "npx dna github push",
+    ],
+    examples: [
+      {
+        userSays: "Ship this fix — keep us on main",
+        goodResponse:
+          "Loaded recent-changes + previous-solutions. Quality PASS. Docker OK. Pushed main (trunk). No feature hop.",
+      },
+      {
+        userSays: "Spin up a preview branch for each open feature so we can test",
+        goodResponse:
+          "Refused. That dual-track hop is banned under trunk-based-delivery. Stay on one line; push once; CI previews that push.",
+      },
+      {
+        userSays: "We need the old feature/* hop behaviour",
+        goodResponse:
+          "Set git.branchingStrategy to feature-branch in .DNA/config.dna.json (or pass --create-branch once). Trunk remains the default on download.",
+      },
+    ],
+    workflow: ["quality-gate", "docker-build", "github-push", "ship-feature"],
   },
 
   // ─── Quality ─────────────────────────────────────────────────────────────
@@ -1302,7 +1443,7 @@ ${EVIDENCE}
 3. **Root cause** — falsifiable hypothesis; fix cause not symptoms
 4. **Regression** — test that fails without the fix
 5. **Quality** — \`npx dna quality report --feature\` PASS
-6. **Push** — preview/feature branch; never auto-merge AI repair PRs
+6. **Push** — current trunk / user-chosen branch (no inventing feature remotes); never auto-merge AI repair PRs
 7. **Write-up** — timeline, impact, cause, fix, follow-ups
 
 \`\`\`bash

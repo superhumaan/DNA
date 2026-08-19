@@ -1,4182 +1,4182 @@
 {
   "disciplines/security": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.784Z"
+    "installedAt": "2026-08-11T02:25:17.536Z"
   },
   "compliance/tiered-standards": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.786Z"
+    "installedAt": "2026-08-11T02:25:17.538Z"
   },
   "disciplines/qa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.794Z"
+    "installedAt": "2026-08-11T02:25:17.544Z"
   },
   "testing/code-coverage": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.797Z"
+    "installedAt": "2026-08-11T02:25:17.547Z"
   },
   "cloud/github-actions": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.799Z"
+    "installedAt": "2026-08-11T02:25:17.550Z"
   },
   "tools/eslint-prettier": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.802Z"
+    "installedAt": "2026-08-11T02:25:17.552Z"
   },
   "testing/owasp-zap": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.804Z"
+    "installedAt": "2026-08-11T02:25:17.554Z"
   },
   "frameworks/vite": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.830Z"
+    "installedAt": "2026-08-11T02:25:17.574Z"
   },
   "frameworks/react": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.833Z"
+    "installedAt": "2026-08-11T02:25:17.578Z"
   },
   "frameworks/express": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.836Z"
+    "installedAt": "2026-08-11T02:25:17.580Z"
   },
   "browsers/cross-browser": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.838Z"
+    "installedAt": "2026-08-11T02:25:17.583Z"
   },
   "disciplines/coding-trends-2025": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.841Z"
+    "installedAt": "2026-08-11T02:25:17.587Z"
   },
   "platforms/dna-stack": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.066Z"
+    "installedAt": "2026-08-11T02:25:12.500Z"
   },
   "disciplines/monorepo": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.069Z"
+    "installedAt": "2026-08-11T02:25:12.503Z"
   },
   "legal/tiered-standards": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.791Z"
+    "installedAt": "2026-08-11T02:25:17.542Z"
   },
   "discovery/overview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.807Z"
+    "installedAt": "2026-08-11T02:25:17.557Z"
   },
   "discovery/continuous-discovery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.814Z"
+    "installedAt": "2026-08-11T02:25:17.560Z"
   },
   "discovery/opportunity-solution-tree": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.818Z"
+    "installedAt": "2026-08-11T02:25:17.562Z"
   },
   "discovery/product-market-fit": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.821Z"
+    "installedAt": "2026-08-11T02:25:17.565Z"
   },
   "discovery/ux-research-foundations": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.824Z"
+    "installedAt": "2026-08-11T02:25:17.568Z"
   },
   "discovery/handoff-to-delivery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.827Z"
+    "installedAt": "2026-08-11T02:25:17.571Z"
   },
   "discovery/lifecycle/ideation": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.098Z"
+    "installedAt": "2026-08-11T02:25:12.528Z"
   },
   "frameworks/nextjs": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.102Z"
+    "installedAt": "2026-08-11T02:25:12.531Z"
   },
   "frameworks/fastify": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.105Z"
+    "installedAt": "2026-08-11T02:25:12.533Z"
   },
   "frameworks/nestjs": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.108Z"
+    "installedAt": "2026-08-11T02:25:12.536Z"
   },
   "compliance/gdpr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.249Z"
+    "installedAt": "2026-08-11T02:25:14.135Z"
   },
   "compliance/soc2": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.121Z"
+    "installedAt": "2026-08-11T02:25:12.543Z"
   },
   "platforms/b2b-saas": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.124Z"
+    "installedAt": "2026-08-11T02:25:12.546Z"
   },
   "security/rbac-zero-trust": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.127Z"
+    "installedAt": "2026-08-11T02:25:12.549Z"
   },
   "legal/regions/eu-gdpr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.130Z"
+    "installedAt": "2026-08-11T02:25:12.552Z"
   },
   "legal/regions/uk-gdpr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.134Z"
+    "installedAt": "2026-08-11T02:25:12.554Z"
   },
   "legal/regions/us-privacy": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.137Z"
+    "installedAt": "2026-08-11T02:25:12.557Z"
   },
   "legal/regions/sg-pdpa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.140Z"
+    "installedAt": "2026-08-11T02:25:12.560Z"
   },
   "legal/regions/th-pdpa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.143Z"
+    "installedAt": "2026-08-11T02:25:12.563Z"
   },
   "legal/regions/my-pdpa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.146Z"
+    "installedAt": "2026-08-11T02:25:12.565Z"
   },
   "legal/regions/au-privacy": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.151Z"
+    "installedAt": "2026-08-11T02:25:12.569Z"
   },
   "legal/regions/ca-pipeda": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.154Z"
+    "installedAt": "2026-08-11T02:25:12.572Z"
   },
   "legal/regions/in-dpdp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.160Z"
+    "installedAt": "2026-08-11T02:25:12.574Z"
   },
   "legal/regions/br-lgpd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.164Z"
+    "installedAt": "2026-08-11T02:25:12.576Z"
   },
   "legal/regions/jp-appi": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.167Z"
+    "installedAt": "2026-08-11T02:25:12.580Z"
   },
   "legal/regions/kr-pipa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.169Z"
+    "installedAt": "2026-08-11T02:25:12.583Z"
   },
   "legal/regions/id-pdp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.172Z"
+    "installedAt": "2026-08-11T02:25:12.586Z"
   },
   "legal/regions/ph-dpa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.175Z"
+    "installedAt": "2026-08-11T02:25:12.589Z"
   },
   "legal/regions/vn-pdpd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.178Z"
+    "installedAt": "2026-08-11T02:25:12.591Z"
   },
   "legal/regions/hk-pdpo": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.182Z"
+    "installedAt": "2026-08-11T02:25:12.594Z"
   },
   "legal/regions/tw-pdpa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.186Z"
+    "installedAt": "2026-08-11T02:25:12.598Z"
   },
   "legal/regions/cn-pipl": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.189Z"
+    "installedAt": "2026-08-11T02:25:12.601Z"
   },
   "frameworks/vue": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.192Z"
+    "installedAt": "2026-08-11T02:25:12.603Z"
   },
   "frameworks/svelte": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.195Z"
+    "installedAt": "2026-08-11T02:25:12.606Z"
   },
   "frameworks/astro": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.198Z"
+    "installedAt": "2026-08-11T02:25:12.608Z"
   },
   "frameworks/ghost": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.200Z"
+    "installedAt": "2026-08-11T02:25:12.611Z"
   },
   "frameworks/react-native": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.204Z"
+    "installedAt": "2026-08-11T02:25:12.614Z"
   },
   "frameworks/flutter": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.206Z"
+    "installedAt": "2026-08-11T02:25:12.616Z"
   },
   "platforms/pwa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.209Z"
+    "installedAt": "2026-08-11T02:25:12.620Z"
   },
   "platforms/desktop-cross-platform": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.213Z"
+    "installedAt": "2026-08-11T02:25:12.624Z"
   },
   "platforms/marketing-website": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.216Z"
+    "installedAt": "2026-08-11T02:25:12.626Z"
   },
   "platforms/browser-extension-chrome": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.219Z"
+    "installedAt": "2026-08-11T02:25:12.629Z"
   },
   "platforms/browser-extension-safari": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.221Z"
+    "installedAt": "2026-08-11T02:25:12.631Z"
   },
   "platforms/gpt-apps": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.224Z"
+    "installedAt": "2026-08-11T02:25:12.633Z"
   },
   "platforms/mcp-server": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.227Z"
+    "installedAt": "2026-08-11T02:25:12.636Z"
   },
   "platforms/ios-swift": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.229Z"
+    "installedAt": "2026-08-11T02:25:12.638Z"
   },
   "platforms/android-kotlin": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.233Z"
+    "installedAt": "2026-08-11T02:25:12.642Z"
   },
   "platforms/macos-swift": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.235Z"
+    "installedAt": "2026-08-11T02:25:12.645Z"
   },
   "platforms/windows-native": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.238Z"
+    "installedAt": "2026-08-11T02:25:12.648Z"
   },
   "platforms/wordpress-headless": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.244Z"
+    "installedAt": "2026-08-11T02:25:12.651Z"
   },
   "disciplines/mobile-development": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.247Z"
+    "installedAt": "2026-08-11T02:25:12.654Z"
   },
   "languages/stem-bridge": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.250Z"
+    "installedAt": "2026-08-11T02:25:12.656Z"
   },
   "languages/en": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.253Z"
+    "installedAt": "2026-08-11T02:25:12.659Z"
   },
   "languages/es": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.256Z"
+    "installedAt": "2026-08-11T02:25:12.661Z"
   },
   "languages/fr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.259Z"
+    "installedAt": "2026-08-11T02:25:12.664Z"
   },
   "languages/de": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.262Z"
+    "installedAt": "2026-08-11T02:25:12.667Z"
   },
   "languages/ja": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.268Z"
+    "installedAt": "2026-08-11T02:25:12.669Z"
   },
   "languages/zh-cn": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.271Z"
+    "installedAt": "2026-08-11T02:25:12.672Z"
   },
   "languages/pt": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.274Z"
+    "installedAt": "2026-08-11T02:25:12.675Z"
   },
   "languages/ko": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.278Z"
+    "installedAt": "2026-08-11T02:25:12.678Z"
   },
   "languages/ar": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.284Z"
+    "installedAt": "2026-08-11T02:25:12.681Z"
   },
   "languages/vi": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.290Z"
+    "installedAt": "2026-08-11T02:25:12.683Z"
   },
   "languages/th": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.294Z"
+    "installedAt": "2026-08-11T02:25:12.686Z"
   },
   "languages/id": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.298Z"
+    "installedAt": "2026-08-11T02:25:12.688Z"
   },
   "languages/hi": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.301Z"
+    "installedAt": "2026-08-11T02:25:12.691Z"
   },
   "languages/zh-tw": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.304Z"
+    "installedAt": "2026-08-11T02:25:12.693Z"
   },
   "languages/it": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.307Z"
+    "installedAt": "2026-08-11T02:25:12.695Z"
   },
   "languages/nl": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.311Z"
+    "installedAt": "2026-08-11T02:25:12.699Z"
   },
   "languages/he": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.314Z"
+    "installedAt": "2026-08-11T02:25:12.702Z"
   },
   "languages/typescript": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.317Z"
+    "installedAt": "2026-08-11T02:25:12.704Z"
   },
   "languages/javascript": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.320Z"
+    "installedAt": "2026-08-11T02:25:12.707Z"
   },
   "languages/python": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.323Z"
+    "installedAt": "2026-08-11T02:25:12.710Z"
   },
   "languages/go": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.325Z"
+    "installedAt": "2026-08-11T02:25:12.712Z"
   },
   "languages/rust": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.328Z"
+    "installedAt": "2026-08-11T02:25:12.714Z"
   },
   "languages/php": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.331Z"
+    "installedAt": "2026-08-11T02:25:12.716Z"
   },
   "languages/java": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.333Z"
+    "installedAt": "2026-08-11T02:25:12.719Z"
   },
   "languages/kotlin": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.336Z"
+    "installedAt": "2026-08-11T02:25:12.727Z"
   },
   "languages/swift": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.339Z"
+    "installedAt": "2026-08-11T02:25:12.734Z"
   },
   "languages/dart": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.343Z"
+    "installedAt": "2026-08-11T02:25:12.738Z"
   },
   "languages/ruby": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.346Z"
+    "installedAt": "2026-08-11T02:25:12.741Z"
   },
   "languages/csharp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.349Z"
+    "installedAt": "2026-08-11T02:25:12.745Z"
   },
   "languages/elixir": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.351Z"
+    "installedAt": "2026-08-11T02:25:12.748Z"
   },
   "languages/scala": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.354Z"
+    "installedAt": "2026-08-11T02:25:12.751Z"
   },
   "cms/sanity": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.358Z"
+    "installedAt": "2026-08-11T02:25:12.754Z"
   },
   "cms/strapi": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.361Z"
+    "installedAt": "2026-08-11T02:25:12.757Z"
   },
   "cms/contentful": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.364Z"
+    "installedAt": "2026-08-11T02:25:12.759Z"
   },
   "cms/payload": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.366Z"
+    "installedAt": "2026-08-11T02:25:12.762Z"
   },
   "cms/directus": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.370Z"
+    "installedAt": "2026-08-11T02:25:12.765Z"
   },
   "cms/drupal": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.373Z"
+    "installedAt": "2026-08-11T02:25:12.768Z"
   },
   "cms/storyblok": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.376Z"
+    "installedAt": "2026-08-11T02:25:12.771Z"
   },
   "cms/hygraph": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.379Z"
+    "installedAt": "2026-08-11T02:25:12.774Z"
   },
   "cms/keystone": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.382Z"
+    "installedAt": "2026-08-11T02:25:12.777Z"
   },
   "cms/webflow": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.385Z"
+    "installedAt": "2026-08-11T02:25:12.780Z"
   },
   "cms/wordpress": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.388Z"
+    "installedAt": "2026-08-11T02:25:12.782Z"
   },
   "cms/ghost": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.390Z"
+    "installedAt": "2026-08-11T02:25:12.785Z"
   },
   "browsers/chrome": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.393Z"
+    "installedAt": "2026-08-11T02:25:12.788Z"
   },
   "browsers/firefox": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.396Z"
+    "installedAt": "2026-08-11T02:25:12.790Z"
   },
   "browsers/safari": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.399Z"
+    "installedAt": "2026-08-11T02:25:12.794Z"
   },
   "browsers/edge": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.402Z"
+    "installedAt": "2026-08-11T02:25:12.797Z"
   },
   "browsers/brave": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.405Z"
+    "installedAt": "2026-08-11T02:25:12.800Z"
   },
   "frameworks/remix": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.408Z"
+    "installedAt": "2026-08-11T02:25:12.802Z"
   },
   "frameworks/nuxt": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.411Z"
+    "installedAt": "2026-08-11T02:25:12.804Z"
   },
   "frameworks/sveltekit": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.415Z"
+    "installedAt": "2026-08-11T02:25:12.807Z"
   },
   "frameworks/angular": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.418Z"
+    "installedAt": "2026-08-11T02:25:12.809Z"
   },
   "frameworks/hono": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.420Z"
+    "installedAt": "2026-08-11T02:25:12.812Z"
   },
   "frameworks/bun": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.423Z"
+    "installedAt": "2026-08-11T02:25:12.815Z"
   },
   "frameworks/deno": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.426Z"
+    "installedAt": "2026-08-11T02:25:12.817Z"
   },
   "frameworks/solidjs": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.432Z"
+    "installedAt": "2026-08-11T02:25:12.820Z"
   },
   "frameworks/qwik": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.439Z"
+    "installedAt": "2026-08-11T02:25:12.823Z"
   },
   "frameworks/django": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.442Z"
+    "installedAt": "2026-08-11T02:25:12.825Z"
   },
   "frameworks/fastapi": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.445Z"
+    "installedAt": "2026-08-11T02:25:12.828Z"
   },
   "frameworks/laravel": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.448Z"
+    "installedAt": "2026-08-11T02:25:12.830Z"
   },
   "frameworks/rails": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.450Z"
+    "installedAt": "2026-08-11T02:25:12.832Z"
   },
   "frameworks/spring-boot": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.453Z"
+    "installedAt": "2026-08-11T02:25:12.835Z"
   },
   "frameworks/graphql": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.455Z"
+    "installedAt": "2026-08-11T02:25:12.838Z"
   },
   "frameworks/trpc": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.459Z"
+    "installedAt": "2026-08-11T02:25:12.842Z"
   },
   "frameworks/turbo": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.461Z"
+    "installedAt": "2026-08-11T02:25:12.844Z"
   },
   "disciplines/trunk-based-development": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.464Z"
+    "installedAt": "2026-08-11T02:25:12.847Z"
   },
   "disciplines/tdd-bdd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.466Z"
+    "installedAt": "2026-08-11T02:25:12.850Z"
   },
   "disciplines/continuous-delivery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.470Z"
+    "installedAt": "2026-08-11T02:25:12.853Z"
   },
   "disciplines/domain-driven-design": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.472Z"
+    "installedAt": "2026-08-11T02:25:12.855Z"
   },
   "disciplines/ai-assisted-development": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.475Z"
+    "installedAt": "2026-08-11T02:25:12.858Z"
   },
   "disciplines/edge-computing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.477Z"
+    "installedAt": "2026-08-11T02:25:12.860Z"
   },
   "disciplines/server-components": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.480Z"
+    "installedAt": "2026-08-11T02:25:12.863Z"
   },
   "disciplines/api-design": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.482Z"
+    "installedAt": "2026-08-11T02:25:12.866Z"
   },
   "disciplines/event-driven": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.487Z"
+    "installedAt": "2026-08-11T02:25:12.869Z"
   },
   "disciplines/observability": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.490Z"
+    "installedAt": "2026-08-11T02:25:12.872Z"
   },
   "disciplines/platform-engineering": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.493Z"
+    "installedAt": "2026-08-11T02:25:12.875Z"
   },
   "disciplines/accessibility": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.495Z"
+    "installedAt": "2026-08-11T02:25:12.879Z"
   },
   "disciplines/design-systems": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.498Z"
+    "installedAt": "2026-08-11T02:25:12.882Z"
   },
   "payments/overview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.501Z"
+    "installedAt": "2026-08-11T02:25:12.885Z"
   },
   "payments/stripe": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.505Z"
+    "installedAt": "2026-08-11T02:25:12.887Z"
   },
   "payments/adyen": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.508Z"
+    "installedAt": "2026-08-11T02:25:12.890Z"
   },
   "payments/paypal-braintree": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.512Z"
+    "installedAt": "2026-08-11T02:25:12.893Z"
   },
   "payments/paddle": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.515Z"
+    "installedAt": "2026-08-11T02:25:12.896Z"
   },
   "payments/lemon-squeezy": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.519Z"
+    "installedAt": "2026-08-11T02:25:12.899Z"
   },
   "payments/square": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.522Z"
+    "installedAt": "2026-08-11T02:25:12.902Z"
   },
   "payments/checkout-com": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.529Z"
+    "installedAt": "2026-08-11T02:25:12.904Z"
   },
   "payments/mollie": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.532Z"
+    "installedAt": "2026-08-11T02:25:12.908Z"
   },
   "payments/gocardless": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.535Z"
+    "installedAt": "2026-08-11T02:25:12.911Z"
   },
   "payments/razorpay": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.537Z"
+    "installedAt": "2026-08-11T02:25:12.913Z"
   },
   "payments/apple-google-pay": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.540Z"
+    "installedAt": "2026-08-11T02:25:12.916Z"
   },
   "data/data-hq": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.543Z"
+    "installedAt": "2026-08-11T02:25:12.918Z"
   },
   "data/geo-replication": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.546Z"
+    "installedAt": "2026-08-11T02:25:12.922Z"
   },
   "data/disaster-recovery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.549Z"
+    "installedAt": "2026-08-11T02:25:12.924Z"
   },
   "healthcare/overview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.777Z"
+    "installedAt": "2026-08-11T02:25:14.556Z"
   },
   "healthcare/fhir-r4": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.779Z"
+    "installedAt": "2026-08-11T02:25:14.558Z"
   },
   "healthcare/hl7-v2": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.558Z"
+    "installedAt": "2026-08-11T02:25:12.932Z"
   },
   "healthcare/smart-on-fhir": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.410Z"
+    "installedAt": "2026-08-11T02:25:13.384Z"
   },
   "healthcare/cds-hooks": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.564Z"
+    "installedAt": "2026-08-11T02:25:12.939Z"
   },
   "healthcare/bulk-fhir": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.567Z"
+    "installedAt": "2026-08-11T02:25:12.942Z"
   },
   "healthcare/da-vinci": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.773Z"
+    "installedAt": "2026-08-11T02:25:13.114Z"
   },
   "healthcare/epic": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.882Z"
+    "installedAt": "2026-08-11T02:25:13.787Z"
   },
   "healthcare/cerner-oracle-health": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.589Z"
+    "installedAt": "2026-08-11T02:25:13.508Z"
   },
   "healthcare/athenahealth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.818Z"
+    "installedAt": "2026-08-11T02:25:13.136Z"
   },
   "healthcare/meditech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.221Z"
+    "installedAt": "2026-08-11T02:25:13.233Z"
   },
   "healthcare/eclinicalworks": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.822Z"
+    "installedAt": "2026-08-11T02:25:13.138Z"
   },
   "healthcare/veradigm": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.825Z"
+    "installedAt": "2026-08-11T02:25:13.141Z"
   },
   "healthcare/redox": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.801Z"
+    "installedAt": "2026-08-11T02:25:14.584Z"
   },
   "healthcare/health-gorilla": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.830Z"
+    "installedAt": "2026-08-11T02:25:13.146Z"
   },
   "healthcare/particle-health": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.601Z"
+    "installedAt": "2026-08-11T02:25:13.000Z"
   },
   "healthcare/zus-health": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.604Z"
+    "installedAt": "2026-08-11T02:25:13.004Z"
   },
   "healthcare/metriport": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.608Z"
+    "installedAt": "2026-08-11T02:25:13.007Z"
   },
   "healthcare/flexpa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.614Z"
+    "installedAt": "2026-08-11T02:25:13.010Z"
   },
   "healthcare/1uphealth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.617Z"
+    "installedAt": "2026-08-11T02:25:13.013Z"
   },
   "healthcare/innovaccer": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.621Z"
+    "installedAt": "2026-08-11T02:25:13.017Z"
   },
   "healthcare/intersystems": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.629Z"
+    "installedAt": "2026-08-11T02:25:13.020Z"
   },
   "healthcare/mirth-connect": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.638Z"
+    "installedAt": "2026-08-11T02:25:13.190Z"
   },
   "healthcare/medplum": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.644Z"
+    "installedAt": "2026-08-11T02:25:13.026Z"
   },
   "healthcare/hapi-fhir": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.651Z"
+    "installedAt": "2026-08-11T02:25:13.029Z"
   },
   "healthcare/firely": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.660Z"
+    "installedAt": "2026-08-11T02:25:13.031Z"
   },
   "healthcare/canvas-medical": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.828Z"
+    "installedAt": "2026-08-11T02:25:13.144Z"
   },
   "healthcare/openemr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.673Z"
+    "installedAt": "2026-08-11T02:25:13.036Z"
   },
   "healthcare/dicom": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.679Z"
+    "installedAt": "2026-08-11T02:25:13.039Z"
   },
   "healthcare/surescripts": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.686Z"
+    "installedAt": "2026-08-11T02:25:13.043Z"
   },
   "healthcare/covermymeds": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.690Z"
+    "installedAt": "2026-08-11T02:25:13.045Z"
   },
   "healthcare/change-healthcare": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.700Z"
+    "installedAt": "2026-08-11T02:25:13.048Z"
   },
   "healthcare/waystar": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.707Z"
+    "installedAt": "2026-08-11T02:25:13.050Z"
   },
   "healthcare/availity": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.833Z"
+    "installedAt": "2026-08-11T02:25:13.148Z"
   },
   "healthcare/x12-edi": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.808Z"
+    "installedAt": "2026-08-11T02:25:13.128Z"
   },
   "healthcare/tefca-qhin": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.776Z"
+    "installedAt": "2026-08-11T02:25:13.118Z"
   },
   "healthcare/nhs-fhir": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.857Z"
+    "installedAt": "2026-08-11T02:25:13.172Z"
   },
   "healthcare/terminology": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.784Z"
+    "installedAt": "2026-08-11T02:25:14.565Z"
   },
   "healthcare/phi-engineering": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.782Z"
+    "installedAt": "2026-08-11T02:25:14.562Z"
   },
   "healthcare/telehealth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.792Z"
+    "installedAt": "2026-08-11T02:25:14.573Z"
   },
   "healthcare/wearables": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.731Z"
+    "installedAt": "2026-08-11T02:25:13.074Z"
   },
   "healthcare/validic": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.734Z"
+    "installedAt": "2026-08-11T02:25:13.076Z"
   },
   "healthcare/human-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.737Z"
+    "installedAt": "2026-08-11T02:25:13.079Z"
   },
   "healthcare/fda-samd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.803Z"
+    "installedAt": "2026-08-11T02:25:13.126Z"
   },
   "healthcare/cms-interop": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.771Z"
+    "installedAt": "2026-08-11T02:25:13.111Z"
   },
   "healthcare/overview-us": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.747Z"
+    "installedAt": "2026-08-11T02:25:13.088Z"
   },
   "healthcare/us-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.835Z"
+    "installedAt": "2026-08-11T02:25:13.151Z"
   },
   "healthcare/patient-portal": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.790Z"
+    "installedAt": "2026-08-11T02:25:14.571Z"
   },
   "healthcare/overview-uk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:52.840Z"
+    "installedAt": "2026-08-11T02:25:13.156Z"
   },
   "healthcare/uk-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.168Z"
+    "installedAt": "2026-08-11T02:25:13.193Z"
   },
   "healthcare/mdr-eu": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.244Z"
+    "installedAt": "2026-08-11T02:25:14.130Z"
   },
   "healthcare/overview-ca": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.180Z"
+    "installedAt": "2026-08-11T02:25:13.198Z"
   },
   "healthcare/ca-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.224Z"
+    "installedAt": "2026-08-11T02:25:13.236Z"
   },
   "healthcare/overview-au": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.229Z"
+    "installedAt": "2026-08-11T02:25:13.238Z"
   },
   "healthcare/au-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.260Z"
+    "installedAt": "2026-08-11T02:25:13.273Z"
   },
   "healthcare/overview-apac": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.795Z"
+    "installedAt": "2026-08-11T02:25:14.577Z"
   },
   "healthcare/apac-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.798Z"
+    "installedAt": "2026-08-11T02:25:14.581Z"
   },
   "healthcare/overview-eu": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.241Z"
+    "installedAt": "2026-08-11T02:25:14.128Z"
   },
   "healthcare/eu-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.310Z"
+    "installedAt": "2026-08-11T02:25:13.324Z"
   },
   "healthcare/overview-de": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.313Z"
+    "installedAt": "2026-08-11T02:25:13.327Z"
   },
   "healthcare/de-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.352Z"
+    "installedAt": "2026-08-11T02:25:13.357Z"
   },
   "healthcare/overview-fr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.359Z"
+    "installedAt": "2026-08-11T02:25:13.359Z"
   },
   "healthcare/fr-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.425Z"
+    "installedAt": "2026-08-11T02:25:13.394Z"
   },
   "healthcare/overview-ie": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.432Z"
+    "installedAt": "2026-08-11T02:25:13.397Z"
   },
   "healthcare/ie-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.484Z"
+    "installedAt": "2026-08-11T02:25:13.424Z"
   },
   "healthcare/overview-nl": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.487Z"
+    "installedAt": "2026-08-11T02:25:13.427Z"
   },
   "healthcare/nl-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.520Z"
+    "installedAt": "2026-08-11T02:25:13.453Z"
   },
   "healthcare/overview-ch": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.527Z"
+    "installedAt": "2026-08-11T02:25:13.455Z"
   },
   "healthcare/ch-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.554Z"
+    "installedAt": "2026-08-11T02:25:13.478Z"
   },
   "healthcare/overview-jp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.557Z"
+    "installedAt": "2026-08-11T02:25:13.481Z"
   },
   "healthcare/jp-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.592Z"
+    "installedAt": "2026-08-11T02:25:13.511Z"
   },
   "healthcare/overview-kr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.595Z"
+    "installedAt": "2026-08-11T02:25:13.513Z"
   },
   "healthcare/kr-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.634Z"
+    "installedAt": "2026-08-11T02:25:13.540Z"
   },
   "healthcare/overview-sg": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.639Z"
+    "installedAt": "2026-08-11T02:25:13.543Z"
   },
   "healthcare/sg-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.668Z"
+    "installedAt": "2026-08-11T02:25:13.573Z"
   },
   "healthcare/overview-nz": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.670Z"
+    "installedAt": "2026-08-11T02:25:13.576Z"
   },
   "healthcare/nz-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.702Z"
+    "installedAt": "2026-08-11T02:25:13.604Z"
   },
   "healthcare/overview-in": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.707Z"
+    "installedAt": "2026-08-11T02:25:13.606Z"
   },
   "healthcare/in-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.755Z"
+    "installedAt": "2026-08-11T02:25:13.636Z"
   },
   "healthcare/overview-br": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.758Z"
+    "installedAt": "2026-08-11T02:25:13.640Z"
   },
   "healthcare/br-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.781Z"
+    "installedAt": "2026-08-11T02:25:13.664Z"
   },
   "healthcare/overview-mx": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.783Z"
+    "installedAt": "2026-08-11T02:25:13.666Z"
   },
   "healthcare/mx-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.806Z"
+    "installedAt": "2026-08-11T02:25:13.693Z"
   },
   "healthcare/overview-za": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.808Z"
+    "installedAt": "2026-08-11T02:25:13.695Z"
   },
   "healthcare/za-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.835Z"
+    "installedAt": "2026-08-11T02:25:13.723Z"
   },
   "healthcare/overview-sa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.838Z"
+    "installedAt": "2026-08-11T02:25:13.725Z"
   },
   "healthcare/sa-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.859Z"
+    "installedAt": "2026-08-11T02:25:13.746Z"
   },
   "healthcare/overview-ae": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.862Z"
+    "installedAt": "2026-08-11T02:25:13.749Z"
   },
   "healthcare/ae-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.885Z"
+    "installedAt": "2026-08-11T02:25:13.792Z"
   },
   "healthcare/overview-il": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.888Z"
+    "installedAt": "2026-08-11T02:25:13.796Z"
   },
   "healthcare/il-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.910Z"
+    "installedAt": "2026-08-11T02:25:13.822Z"
   },
   "healthcare/overview-it": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.913Z"
+    "installedAt": "2026-08-11T02:25:13.825Z"
   },
   "healthcare/it-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.945Z"
+    "installedAt": "2026-08-11T02:25:13.853Z"
   },
   "healthcare/overview-es": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.950Z"
+    "installedAt": "2026-08-11T02:25:13.856Z"
   },
   "healthcare/es-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.987Z"
+    "installedAt": "2026-08-11T02:25:13.882Z"
   },
   "healthcare/overview-se": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:55.989Z"
+    "installedAt": "2026-08-11T02:25:13.884Z"
   },
   "healthcare/se-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.020Z"
+    "installedAt": "2026-08-11T02:25:13.912Z"
   },
   "healthcare/overview-no": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.022Z"
+    "installedAt": "2026-08-11T02:25:13.915Z"
   },
   "healthcare/no-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.057Z"
+    "installedAt": "2026-08-11T02:25:13.942Z"
   },
   "healthcare/overview-dk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.060Z"
+    "installedAt": "2026-08-11T02:25:13.944Z"
   },
   "healthcare/dk-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.092Z"
+    "installedAt": "2026-08-11T02:25:13.973Z"
   },
   "healthcare/overview-fi": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.095Z"
+    "installedAt": "2026-08-11T02:25:13.975Z"
   },
   "healthcare/fi-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.125Z"
+    "installedAt": "2026-08-11T02:25:14.001Z"
   },
   "healthcare/overview-at": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.128Z"
+    "installedAt": "2026-08-11T02:25:14.003Z"
   },
   "healthcare/at-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.160Z"
+    "installedAt": "2026-08-11T02:25:14.031Z"
   },
   "healthcare/overview-be": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.162Z"
+    "installedAt": "2026-08-11T02:25:14.033Z"
   },
   "healthcare/be-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.191Z"
+    "installedAt": "2026-08-11T02:25:14.060Z"
   },
   "healthcare/overview-pl": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.194Z"
+    "installedAt": "2026-08-11T02:25:14.063Z"
   },
   "healthcare/pl-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.223Z"
+    "installedAt": "2026-08-11T02:25:14.105Z"
   },
   "healthcare/overview-pt": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.225Z"
+    "installedAt": "2026-08-11T02:25:14.110Z"
   },
   "healthcare/pt-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.254Z"
+    "installedAt": "2026-08-11T02:25:14.140Z"
   },
   "healthcare/overview-tw": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.257Z"
+    "installedAt": "2026-08-11T02:25:14.143Z"
   },
   "healthcare/tw-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.295Z"
+    "installedAt": "2026-08-11T02:25:14.172Z"
   },
   "healthcare/overview-hk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.297Z"
+    "installedAt": "2026-08-11T02:25:14.175Z"
   },
   "healthcare/hk-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.324Z"
+    "installedAt": "2026-08-11T02:25:14.202Z"
   },
   "healthcare/overview-my": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.327Z"
+    "installedAt": "2026-08-11T02:25:14.205Z"
   },
   "healthcare/my-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.357Z"
+    "installedAt": "2026-08-11T02:25:14.230Z"
   },
   "healthcare/overview-th": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.359Z"
+    "installedAt": "2026-08-11T02:25:14.233Z"
   },
   "healthcare/th-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.387Z"
+    "installedAt": "2026-08-11T02:25:14.259Z"
   },
   "healthcare/overview-ph": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.389Z"
+    "installedAt": "2026-08-11T02:25:14.262Z"
   },
   "healthcare/ph-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.416Z"
+    "installedAt": "2026-08-11T02:25:14.289Z"
   },
   "healthcare/overview-id": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.418Z"
+    "installedAt": "2026-08-11T02:25:14.292Z"
   },
   "healthcare/id-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.476Z"
+    "installedAt": "2026-08-11T02:25:14.330Z"
   },
   "healthcare/overview-vn": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.485Z"
+    "installedAt": "2026-08-11T02:25:14.332Z"
   },
   "healthcare/vn-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.529Z"
+    "installedAt": "2026-08-11T02:25:14.360Z"
   },
   "healthcare/overview-cn": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.532Z"
+    "installedAt": "2026-08-11T02:25:14.363Z"
   },
   "healthcare/cn-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.568Z"
+    "installedAt": "2026-08-11T02:25:14.389Z"
   },
   "healthcare/overview-bd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.571Z"
+    "installedAt": "2026-08-11T02:25:14.392Z"
   },
   "healthcare/bd-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.602Z"
+    "installedAt": "2026-08-11T02:25:14.420Z"
   },
   "healthcare/overview-pk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.604Z"
+    "installedAt": "2026-08-11T02:25:14.424Z"
   },
   "healthcare/pk-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.636Z"
+    "installedAt": "2026-08-11T02:25:14.455Z"
   },
   "healthcare/overview-lk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.638Z"
+    "installedAt": "2026-08-11T02:25:14.457Z"
   },
   "healthcare/lk-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.703Z"
+    "installedAt": "2026-08-11T02:25:14.488Z"
   },
   "healthcare/overview-np": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.709Z"
+    "installedAt": "2026-08-11T02:25:14.491Z"
   },
   "healthcare/np-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.738Z"
+    "installedAt": "2026-08-11T02:25:14.520Z"
   },
   "healthcare/overview-kh": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.741Z"
+    "installedAt": "2026-08-11T02:25:14.523Z"
   },
   "healthcare/kh-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.771Z"
+    "installedAt": "2026-08-11T02:25:14.551Z"
   },
   "healthcare/overview-mm": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.774Z"
+    "installedAt": "2026-08-11T02:25:14.553Z"
   },
   "healthcare/mm-support": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.803Z"
+    "installedAt": "2026-08-11T02:25:14.587Z"
   },
   "databases/postgresql": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.807Z"
+    "installedAt": "2026-08-11T02:25:14.591Z"
   },
   "databases/mysql": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.810Z"
+    "installedAt": "2026-08-11T02:25:14.595Z"
   },
   "databases/sql-server": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.813Z"
+    "installedAt": "2026-08-11T02:25:14.598Z"
   },
   "databases/oracle": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.816Z"
+    "installedAt": "2026-08-11T02:25:14.603Z"
   },
   "databases/mongodb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.819Z"
+    "installedAt": "2026-08-11T02:25:14.606Z"
   },
   "databases/redis": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.823Z"
+    "installedAt": "2026-08-11T02:25:14.610Z"
   },
   "databases/dynamodb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.826Z"
+    "installedAt": "2026-08-11T02:25:14.613Z"
   },
   "databases/neon": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.829Z"
+    "installedAt": "2026-08-11T02:25:14.616Z"
   },
   "databases/planetscale": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.832Z"
+    "installedAt": "2026-08-11T02:25:14.618Z"
   },
   "databases/turso": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.835Z"
+    "installedAt": "2026-08-11T02:25:14.621Z"
   },
   "databases/cockroachdb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.838Z"
+    "installedAt": "2026-08-11T02:25:14.624Z"
   },
   "databases/cassandra": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.844Z"
+    "installedAt": "2026-08-11T02:25:14.626Z"
   },
   "databases/clickhouse": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.846Z"
+    "installedAt": "2026-08-11T02:25:14.629Z"
   },
   "databases/duckdb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.849Z"
+    "installedAt": "2026-08-11T02:25:14.631Z"
   },
   "databases/bigquery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.852Z"
+    "installedAt": "2026-08-11T02:25:14.633Z"
   },
   "databases/snowflake": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.854Z"
+    "installedAt": "2026-08-11T02:25:14.636Z"
   },
   "databases/databricks": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.858Z"
+    "installedAt": "2026-08-11T02:25:14.639Z"
   },
   "databases/elasticsearch": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.861Z"
+    "installedAt": "2026-08-11T02:25:14.642Z"
   },
   "databases/opensearch": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.863Z"
+    "installedAt": "2026-08-11T02:25:14.645Z"
   },
   "databases/algolia": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.868Z"
+    "installedAt": "2026-08-11T02:25:14.648Z"
   },
   "databases/meilisearch": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.871Z"
+    "installedAt": "2026-08-11T02:25:14.650Z"
   },
   "databases/typesense": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.874Z"
+    "installedAt": "2026-08-11T02:25:14.652Z"
   },
   "databases/pinecone": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.877Z"
+    "installedAt": "2026-08-11T02:25:14.655Z"
   },
   "databases/weaviate": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.880Z"
+    "installedAt": "2026-08-11T02:25:14.657Z"
   },
   "databases/qdrant": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.883Z"
+    "installedAt": "2026-08-11T02:25:14.660Z"
   },
   "databases/chroma": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.885Z"
+    "installedAt": "2026-08-11T02:25:14.663Z"
   },
   "databases/pgvector": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.889Z"
+    "installedAt": "2026-08-11T02:25:14.666Z"
   },
   "databases/kafka": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.892Z"
+    "installedAt": "2026-08-11T02:25:14.669Z"
   },
   "databases/redpanda": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.895Z"
+    "installedAt": "2026-08-11T02:25:14.672Z"
   },
   "databases/pulsar": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.898Z"
+    "installedAt": "2026-08-11T02:25:14.675Z"
   },
   "databases/rabbitmq": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.900Z"
+    "installedAt": "2026-08-11T02:25:14.677Z"
   },
   "databases/aws-sqs-sns": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.903Z"
+    "installedAt": "2026-08-11T02:25:14.679Z"
   },
   "databases/nats": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.906Z"
+    "installedAt": "2026-08-11T02:25:14.682Z"
   },
   "databases/neo4j": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.909Z"
+    "installedAt": "2026-08-11T02:25:14.684Z"
   },
   "databases/influxdb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.911Z"
+    "installedAt": "2026-08-11T02:25:14.686Z"
   },
   "databases/timescaledb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.914Z"
+    "installedAt": "2026-08-11T02:25:14.689Z"
   },
   "databases/firestore": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.918Z"
+    "installedAt": "2026-08-11T02:25:14.691Z"
   },
   "databases/firebase-rtdb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.993Z"
+    "installedAt": "2026-08-11T02:25:14.694Z"
   },
   "databases/prisma": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:56.997Z"
+    "installedAt": "2026-08-11T02:25:14.697Z"
   },
   "databases/drizzle": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.000Z"
+    "installedAt": "2026-08-11T02:25:14.701Z"
   },
   "databases/dbt": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.003Z"
+    "installedAt": "2026-08-11T02:25:14.703Z"
   },
   "databases/airbyte": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.006Z"
+    "installedAt": "2026-08-11T02:25:14.705Z"
   },
   "databases/airflow": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.009Z"
+    "installedAt": "2026-08-11T02:25:14.708Z"
   },
   "databases/debezium": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.011Z"
+    "installedAt": "2026-08-11T02:25:14.710Z"
   },
   "databases/convex": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.015Z"
+    "installedAt": "2026-08-11T02:25:14.712Z"
   },
   "databases/instantdb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.019Z"
+    "installedAt": "2026-08-11T02:25:14.714Z"
   },
   "databases/pocketbase": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.022Z"
+    "installedAt": "2026-08-11T02:25:14.718Z"
   },
   "databases/appwrite": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.024Z"
+    "installedAt": "2026-08-11T02:25:14.720Z"
   },
   "cloud/aws-overview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.028Z"
+    "installedAt": "2026-08-11T02:25:14.723Z"
   },
   "cloud/aws-ecs": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.030Z"
+    "installedAt": "2026-08-11T02:25:14.726Z"
   },
   "cloud/aws-eks": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.033Z"
+    "installedAt": "2026-08-11T02:25:14.729Z"
   },
   "cloud/aws-lambda": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.035Z"
+    "installedAt": "2026-08-11T02:25:14.731Z"
   },
   "cloud/aws-rds": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.038Z"
+    "installedAt": "2026-08-11T02:25:14.734Z"
   },
   "cloud/aws-s3": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.040Z"
+    "installedAt": "2026-08-11T02:25:14.736Z"
   },
   "cloud/aws-cloudfront": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.043Z"
+    "installedAt": "2026-08-11T02:25:14.738Z"
   },
   "cloud/aws-cognito": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.045Z"
+    "installedAt": "2026-08-11T02:25:14.742Z"
   },
   "cloud/aws-ses": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.048Z"
+    "installedAt": "2026-08-11T02:25:14.744Z"
   },
   "cloud/gcp-overview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.050Z"
+    "installedAt": "2026-08-11T02:25:14.746Z"
   },
   "cloud/gcp-cloud-run": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.053Z"
+    "installedAt": "2026-08-11T02:25:14.749Z"
   },
   "cloud/gcp-gke": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.055Z"
+    "installedAt": "2026-08-11T02:25:14.751Z"
   },
   "cloud/gcp-bigquery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.058Z"
+    "installedAt": "2026-08-11T02:25:14.753Z"
   },
   "cloud/gcp-firebase": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.061Z"
+    "installedAt": "2026-08-11T02:25:14.755Z"
   },
   "cloud/cloudflare-overview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.064Z"
+    "installedAt": "2026-08-11T02:25:14.758Z"
   },
   "cloud/cloudflare-workers": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.066Z"
+    "installedAt": "2026-08-11T02:25:14.760Z"
   },
   "cloud/cloudflare-r2": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.069Z"
+    "installedAt": "2026-08-11T02:25:14.763Z"
   },
   "cloud/cloudflare-d1": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.071Z"
+    "installedAt": "2026-08-11T02:25:14.765Z"
   },
   "cloud/fly-io": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.074Z"
+    "installedAt": "2026-08-11T02:25:14.767Z"
   },
   "cloud/railway": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.076Z"
+    "installedAt": "2026-08-11T02:25:14.769Z"
   },
   "cloud/render": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.079Z"
+    "installedAt": "2026-08-11T02:25:14.771Z"
   },
   "cloud/digitalocean": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.082Z"
+    "installedAt": "2026-08-11T02:25:14.774Z"
   },
   "cloud/terraform": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.084Z"
+    "installedAt": "2026-08-11T02:25:14.778Z"
   },
   "cloud/pulumi": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.087Z"
+    "installedAt": "2026-08-11T02:25:14.780Z"
   },
   "cloud/kubernetes": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.090Z"
+    "installedAt": "2026-08-11T02:25:14.783Z"
   },
   "cloud/docker": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.093Z"
+    "installedAt": "2026-08-11T02:25:14.786Z"
   },
   "cloud/helm": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.095Z"
+    "installedAt": "2026-08-11T02:25:14.788Z"
   },
   "cloud/argocd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.098Z"
+    "installedAt": "2026-08-11T02:25:14.791Z"
   },
   "cloud/gitlab-ci": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.101Z"
+    "installedAt": "2026-08-11T02:25:14.793Z"
   },
   "cloud/circleci": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.104Z"
+    "installedAt": "2026-08-11T02:25:14.795Z"
   },
   "cloud/sst": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.107Z"
+    "installedAt": "2026-08-11T02:25:14.797Z"
   },
   "cloud/serverless-framework": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.109Z"
+    "installedAt": "2026-08-11T02:25:14.800Z"
   },
   "cloud/azure-overview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.112Z"
+    "installedAt": "2026-08-11T02:25:14.803Z"
   },
   "auth/clerk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.116Z"
+    "installedAt": "2026-08-11T02:25:14.806Z"
   },
   "auth/auth0": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.119Z"
+    "installedAt": "2026-08-11T02:25:14.808Z"
   },
   "auth/okta": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.122Z"
+    "installedAt": "2026-08-11T02:25:14.810Z"
   },
   "auth/keycloak": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.125Z"
+    "installedAt": "2026-08-11T02:25:14.812Z"
   },
   "auth/workos": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.127Z"
+    "installedAt": "2026-08-11T02:25:14.815Z"
   },
   "auth/stytch": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.130Z"
+    "installedAt": "2026-08-11T02:25:14.817Z"
   },
   "auth/supabase-auth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.133Z"
+    "installedAt": "2026-08-11T02:25:14.819Z"
   },
   "auth/firebase-auth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.136Z"
+    "installedAt": "2026-08-11T02:25:14.822Z"
   },
   "auth/webauthn-passkeys": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.138Z"
+    "installedAt": "2026-08-11T02:25:14.824Z"
   },
   "auth/saml-oidc": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.140Z"
+    "installedAt": "2026-08-11T02:25:14.827Z"
   },
   "auth/scim": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.143Z"
+    "installedAt": "2026-08-11T02:25:14.829Z"
   },
   "auth/hashicorp-vault": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.145Z"
+    "installedAt": "2026-08-11T02:25:14.831Z"
   },
   "auth/doppler": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.148Z"
+    "installedAt": "2026-08-11T02:25:14.834Z"
   },
   "auth/1password-secrets": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.151Z"
+    "installedAt": "2026-08-11T02:25:14.836Z"
   },
   "ai/openai": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.155Z"
+    "installedAt": "2026-08-11T02:25:14.839Z"
   },
   "ai/anthropic": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.158Z"
+    "installedAt": "2026-08-11T02:25:14.842Z"
   },
   "ai/google-gemini": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.161Z"
+    "installedAt": "2026-08-11T02:25:14.844Z"
   },
   "ai/azure-openai": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.167Z"
+    "installedAt": "2026-08-11T02:25:14.846Z"
   },
   "ai/aws-bedrock": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.170Z"
+    "installedAt": "2026-08-11T02:25:14.849Z"
   },
   "ai/vercel-ai-sdk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.173Z"
+    "installedAt": "2026-08-11T02:25:14.852Z"
   },
   "ai/langchain": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.177Z"
+    "installedAt": "2026-08-11T02:25:14.855Z"
   },
   "ai/langgraph": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.180Z"
+    "installedAt": "2026-08-11T02:25:14.857Z"
   },
   "ai/llamaindex": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.182Z"
+    "installedAt": "2026-08-11T02:25:14.859Z"
   },
   "ai/huggingface": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.185Z"
+    "installedAt": "2026-08-11T02:25:14.862Z"
   },
   "ai/ollama": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.188Z"
+    "installedAt": "2026-08-11T02:25:14.864Z"
   },
   "ai/rag-patterns": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.191Z"
+    "installedAt": "2026-08-11T02:25:14.867Z"
   },
   "ai/ai-evals": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.193Z"
+    "installedAt": "2026-08-11T02:25:14.870Z"
   },
   "ai/crewai": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.196Z"
+    "installedAt": "2026-08-11T02:25:14.872Z"
   },
   "ai/replicate": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.199Z"
+    "installedAt": "2026-08-11T02:25:14.875Z"
   },
   "ai/modal": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.202Z"
+    "installedAt": "2026-08-11T02:25:14.878Z"
   },
   "ai/elevenlabs": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.205Z"
+    "installedAt": "2026-08-11T02:25:14.881Z"
   },
   "ai/deepgram": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.207Z"
+    "installedAt": "2026-08-11T02:25:14.883Z"
   },
   "ai/whisper-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.210Z"
+    "installedAt": "2026-08-11T02:25:14.885Z"
   },
   "ai/braintrust": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.215Z"
+    "installedAt": "2026-08-11T02:25:14.888Z"
   },
   "ai/langsmith": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.219Z"
+    "installedAt": "2026-08-11T02:25:14.890Z"
   },
   "ai/guardrails": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.222Z"
+    "installedAt": "2026-08-11T02:25:14.893Z"
   },
   "integrations/twilio": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.225Z"
+    "installedAt": "2026-08-11T02:25:14.895Z"
   },
   "integrations/sendgrid": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.228Z"
+    "installedAt": "2026-08-11T02:25:14.898Z"
   },
   "integrations/resend": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.231Z"
+    "installedAt": "2026-08-11T02:25:14.902Z"
   },
   "integrations/postmark": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.234Z"
+    "installedAt": "2026-08-11T02:25:14.905Z"
   },
   "integrations/slack": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.237Z"
+    "installedAt": "2026-08-11T02:25:14.908Z"
   },
   "integrations/microsoft-teams": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.241Z"
+    "installedAt": "2026-08-11T02:25:14.922Z"
   },
   "integrations/discord": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.244Z"
+    "installedAt": "2026-08-11T02:25:14.925Z"
   },
   "integrations/zapier": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.247Z"
+    "installedAt": "2026-08-11T02:25:14.927Z"
   },
   "integrations/n8n": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.251Z"
+    "installedAt": "2026-08-11T02:25:14.929Z"
   },
   "integrations/make": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.254Z"
+    "installedAt": "2026-08-11T02:25:14.932Z"
   },
   "integrations/segment": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.258Z"
+    "installedAt": "2026-08-11T02:25:14.935Z"
   },
   "integrations/posthog": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.263Z"
+    "installedAt": "2026-08-11T02:25:14.937Z"
   },
   "integrations/mixpanel": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.268Z"
+    "installedAt": "2026-08-11T02:25:14.939Z"
   },
   "integrations/amplitude": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.272Z"
+    "installedAt": "2026-08-11T02:25:14.943Z"
   },
   "integrations/intercom": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.275Z"
+    "installedAt": "2026-08-11T02:25:14.946Z"
   },
   "integrations/zendesk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.279Z"
+    "installedAt": "2026-08-11T02:25:14.948Z"
   },
   "integrations/customer-io": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.282Z"
+    "installedAt": "2026-08-11T02:25:14.950Z"
   },
   "integrations/braze": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.285Z"
+    "installedAt": "2026-08-11T02:25:14.952Z"
   },
   "integrations/cal-com": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.288Z"
+    "installedAt": "2026-08-11T02:25:14.955Z"
   },
   "integrations/docusign": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.292Z"
+    "installedAt": "2026-08-11T02:25:14.957Z"
   },
   "integrations/notion-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.294Z"
+    "installedAt": "2026-08-11T02:25:14.960Z"
   },
   "integrations/linear": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.298Z"
+    "installedAt": "2026-08-11T02:25:14.964Z"
   },
   "integrations/jira": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.301Z"
+    "installedAt": "2026-08-11T02:25:14.967Z"
   },
   "integrations/hubspot-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.305Z"
+    "installedAt": "2026-08-11T02:25:14.970Z"
   },
   "integrations/salesforce-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.308Z"
+    "installedAt": "2026-08-11T02:25:14.973Z"
   },
   "observability/datadog": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.310Z"
+    "installedAt": "2026-08-11T02:25:14.976Z"
   },
   "observability/sentry": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.313Z"
+    "installedAt": "2026-08-11T02:25:14.978Z"
   },
   "observability/grafana-stack": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.315Z"
+    "installedAt": "2026-08-11T02:25:14.982Z"
   },
   "observability/prometheus": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.318Z"
+    "installedAt": "2026-08-11T02:25:14.984Z"
   },
   "observability/honeycomb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.320Z"
+    "installedAt": "2026-08-11T02:25:14.986Z"
   },
   "observability/pagerduty": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.323Z"
+    "installedAt": "2026-08-11T02:25:14.989Z"
   },
   "observability/incident-io": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.325Z"
+    "installedAt": "2026-08-11T02:25:14.991Z"
   },
   "observability/opentelemetry": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.328Z"
+    "installedAt": "2026-08-11T02:25:14.994Z"
   },
   "observability/new-relic": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.331Z"
+    "installedAt": "2026-08-11T02:25:14.996Z"
   },
   "observability/k6": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.337Z"
+    "installedAt": "2026-08-11T02:25:14.999Z"
   },
   "observability/sonarqube": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.339Z"
+    "installedAt": "2026-08-11T02:25:15.002Z"
   },
   "observability/snyk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.342Z"
+    "installedAt": "2026-08-11T02:25:15.005Z"
   },
   "tools/tailwind-css": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.344Z"
+    "installedAt": "2026-08-11T02:25:15.007Z"
   },
   "tools/shadcn-ui": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.347Z"
+    "installedAt": "2026-08-11T02:25:15.010Z"
   },
   "tools/mui": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.349Z"
+    "installedAt": "2026-08-11T02:25:15.013Z"
   },
   "tools/tanstack-query": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.352Z"
+    "installedAt": "2026-08-11T02:25:15.015Z"
   },
   "tools/tanstack-router": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.354Z"
+    "installedAt": "2026-08-11T02:25:15.017Z"
   },
   "tools/cypress": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.357Z"
+    "installedAt": "2026-08-11T02:25:15.019Z"
   },
   "tools/playwright": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.360Z"
+    "installedAt": "2026-08-11T02:25:15.023Z"
   },
   "tools/webpack": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.363Z"
+    "installedAt": "2026-08-11T02:25:15.026Z"
   },
   "tools/rspack": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.365Z"
+    "installedAt": "2026-08-11T02:25:15.030Z"
   },
   "tools/nx": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.368Z"
+    "installedAt": "2026-08-11T02:25:15.033Z"
   },
   "tools/storybook": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.370Z"
+    "installedAt": "2026-08-11T02:25:15.035Z"
   },
   "tools/htmx": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.373Z"
+    "installedAt": "2026-08-11T02:25:15.038Z"
   },
   "tools/xstate": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.375Z"
+    "installedAt": "2026-08-11T02:25:15.041Z"
   },
   "frameworks/aspnet-core": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.377Z"
+    "installedAt": "2026-08-11T02:25:15.044Z"
   },
   "frameworks/phoenix": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.380Z"
+    "installedAt": "2026-08-11T02:25:15.047Z"
   },
   "frameworks/gin": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.382Z"
+    "installedAt": "2026-08-11T02:25:15.050Z"
   },
   "frameworks/fiber": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.385Z"
+    "installedAt": "2026-08-11T02:25:15.052Z"
   },
   "frameworks/temporal": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.388Z"
+    "installedAt": "2026-08-11T02:25:15.057Z"
   },
   "frameworks/inngest": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.390Z"
+    "installedAt": "2026-08-11T02:25:15.067Z"
   },
   "frameworks/bullmq": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.393Z"
+    "installedAt": "2026-08-11T02:25:15.072Z"
   },
   "frameworks/grpc": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.395Z"
+    "installedAt": "2026-08-11T02:25:15.075Z"
   },
   "frameworks/celery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.398Z"
+    "installedAt": "2026-08-11T02:25:15.077Z"
   },
   "ecommerce/shopify": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.400Z"
+    "installedAt": "2026-08-11T02:25:15.080Z"
   },
   "ecommerce/woocommerce": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.403Z"
+    "installedAt": "2026-08-11T02:25:15.084Z"
   },
   "ecommerce/bigcommerce": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.406Z"
+    "installedAt": "2026-08-11T02:25:15.086Z"
   },
   "ecommerce/medusa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.408Z"
+    "installedAt": "2026-08-11T02:25:15.093Z"
   },
   "ecommerce/saleor": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.413Z"
+    "installedAt": "2026-08-11T02:25:15.098Z"
   },
   "ecommerce/commercetools": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.415Z"
+    "installedAt": "2026-08-11T02:25:15.105Z"
   },
   "crm/salesforce": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.418Z"
+    "installedAt": "2026-08-11T02:25:15.115Z"
   },
   "crm/hubspot": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.421Z"
+    "installedAt": "2026-08-11T02:25:15.119Z"
   },
   "crm/pipedrive": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.426Z"
+    "installedAt": "2026-08-11T02:25:15.122Z"
   },
   "crm/netsuite": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.429Z"
+    "installedAt": "2026-08-11T02:25:15.124Z"
   },
   "crm/workday": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.432Z"
+    "installedAt": "2026-08-11T02:25:15.126Z"
   },
   "crm/dynamics": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.434Z"
+    "installedAt": "2026-08-11T02:25:15.128Z"
   },
   "crm/airtable": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.437Z"
+    "installedAt": "2026-08-11T02:25:15.131Z"
   },
   "crm/monday": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.439Z"
+    "installedAt": "2026-08-11T02:25:15.133Z"
   },
   "crm/asana": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.442Z"
+    "installedAt": "2026-08-11T02:25:15.136Z"
   },
   "crm/servicenow": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.444Z"
+    "installedAt": "2026-08-11T02:25:15.138Z"
   },
   "payments/plaid": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.448Z"
+    "installedAt": "2026-08-11T02:25:15.140Z"
   },
   "payments/klarna": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.450Z"
+    "installedAt": "2026-08-11T02:25:15.143Z"
   },
   "payments/affirm": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.453Z"
+    "installedAt": "2026-08-11T02:25:15.146Z"
   },
   "payments/chargebee": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.455Z"
+    "installedAt": "2026-08-11T02:25:15.148Z"
   },
   "payments/recurly": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.458Z"
+    "installedAt": "2026-08-11T02:25:15.150Z"
   },
   "payments/anrok": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.460Z"
+    "installedAt": "2026-08-11T02:25:15.153Z"
   },
   "payments/avalara": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.462Z"
+    "installedAt": "2026-08-11T02:25:15.159Z"
   },
   "payments/taxjar": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.465Z"
+    "installedAt": "2026-08-11T02:25:15.165Z"
   },
   "payments/stripe-connect": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.468Z"
+    "installedAt": "2026-08-11T02:25:15.168Z"
   },
   "payments/open-banking": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.471Z"
+    "installedAt": "2026-08-11T02:25:15.170Z"
   },
   "payments/ios-android-iap": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.474Z"
+    "installedAt": "2026-08-11T02:25:15.172Z"
   },
   "realtime/websockets": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.477Z"
+    "installedAt": "2026-08-11T02:25:15.175Z"
   },
   "realtime/socketio": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.480Z"
+    "installedAt": "2026-08-11T02:25:15.178Z"
   },
   "realtime/ably": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.482Z"
+    "installedAt": "2026-08-11T02:25:15.180Z"
   },
   "realtime/pusher": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.485Z"
+    "installedAt": "2026-08-11T02:25:15.182Z"
   },
   "realtime/liveblocks": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.487Z"
+    "installedAt": "2026-08-11T02:25:15.185Z"
   },
   "realtime/partykit": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.490Z"
+    "installedAt": "2026-08-11T02:25:15.187Z"
   },
   "realtime/yjs": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.492Z"
+    "installedAt": "2026-08-11T02:25:15.189Z"
   },
   "realtime/livekit": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.495Z"
+    "installedAt": "2026-08-11T02:25:15.192Z"
   },
   "realtime/webrtc": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.500Z"
+    "installedAt": "2026-08-11T02:25:15.194Z"
   },
   "realtime/mux": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.503Z"
+    "installedAt": "2026-08-11T02:25:15.196Z"
   },
   "realtime/cloudinary": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.506Z"
+    "installedAt": "2026-08-11T02:25:15.199Z"
   },
   "edtech/moodle": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.508Z"
+    "installedAt": "2026-08-11T02:25:15.201Z"
   },
   "edtech/canvas": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.511Z"
+    "installedAt": "2026-08-11T02:25:15.203Z"
   },
   "edtech/lti": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.513Z"
+    "installedAt": "2026-08-11T02:25:15.206Z"
   },
   "edtech/scorm": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.516Z"
+    "installedAt": "2026-08-11T02:25:15.208Z"
   },
   "gov/fedramp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.518Z"
+    "installedAt": "2026-08-11T02:25:15.210Z"
   },
   "gov/section-508": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.521Z"
+    "installedAt": "2026-08-11T02:25:15.213Z"
   },
   "gov/login-gov": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.523Z"
+    "installedAt": "2026-08-11T02:25:15.215Z"
   },
   "iot/mqtt": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.525Z"
+    "installedAt": "2026-08-11T02:25:15.217Z"
   },
   "iot/aws-iot-core": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.528Z"
+    "installedAt": "2026-08-11T02:25:15.220Z"
   },
   "gaming/unity": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.531Z"
+    "installedAt": "2026-08-11T02:25:15.222Z"
   },
   "gaming/unreal": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.533Z"
+    "installedAt": "2026-08-11T02:25:15.225Z"
   },
   "gaming/godot": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.536Z"
+    "installedAt": "2026-08-11T02:25:15.228Z"
   },
   "web3/ethereum": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.538Z"
+    "installedAt": "2026-08-11T02:25:15.230Z"
   },
   "web3/solana": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.540Z"
+    "installedAt": "2026-08-11T02:25:15.232Z"
   },
   "maps/mapbox": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.543Z"
+    "installedAt": "2026-08-11T02:25:15.234Z"
   },
   "maps/google-maps": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.545Z"
+    "installedAt": "2026-08-11T02:25:15.236Z"
   },
   "maps/postgis": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.547Z"
+    "installedAt": "2026-08-11T02:25:15.239Z"
   },
   "compliance/ccpa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.550Z"
+    "installedAt": "2026-08-11T02:25:15.241Z"
   },
   "compliance/lgpd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.553Z"
+    "installedAt": "2026-08-11T02:25:15.243Z"
   },
   "compliance/eu-ai-act": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.556Z"
+    "installedAt": "2026-08-11T02:25:15.246Z"
   },
   "compliance/nist-csf": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.559Z"
+    "installedAt": "2026-08-11T02:25:15.249Z"
   },
   "compliance/ferpa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.561Z"
+    "installedAt": "2026-08-11T02:25:15.251Z"
   },
   "compliance/coppa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.565Z"
+    "installedAt": "2026-08-11T02:25:15.254Z"
   },
   "frameworks/axum": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.568Z"
+    "installedAt": "2026-08-11T02:25:15.257Z"
   },
   "frameworks/actix-web": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.582Z"
+    "installedAt": "2026-08-11T02:25:15.259Z"
   },
   "frameworks/koa": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.584Z"
+    "installedAt": "2026-08-11T02:25:15.262Z"
   },
   "frameworks/kong": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.587Z"
+    "installedAt": "2026-08-11T02:25:15.265Z"
   },
   "frameworks/hasura": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.589Z"
+    "installedAt": "2026-08-11T02:25:15.267Z"
   },
   "frameworks/postgrest": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.592Z"
+    "installedAt": "2026-08-11T02:25:15.269Z"
   },
   "frameworks/trigger-dev": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.594Z"
+    "installedAt": "2026-08-11T02:25:15.271Z"
   },
   "frameworks/electric-sql": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.597Z"
+    "installedAt": "2026-08-11T02:25:15.274Z"
   },
   "frameworks/powersync": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.600Z"
+    "installedAt": "2026-08-11T02:25:15.277Z"
   },
   "frameworks/sidekiq": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.602Z"
+    "installedAt": "2026-08-11T02:25:15.280Z"
   },
   "frameworks/apache-camel": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.604Z"
+    "installedAt": "2026-08-11T02:25:15.283Z"
   },
   "frameworks/webhooks-patterns": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.607Z"
+    "installedAt": "2026-08-11T02:25:15.286Z"
   },
   "frameworks/openapi-tooling": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.609Z"
+    "installedAt": "2026-08-11T02:25:15.288Z"
   },
   "frameworks/server-sent-events": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.612Z"
+    "installedAt": "2026-08-11T02:25:15.291Z"
   },
   "tools/preact": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.614Z"
+    "installedAt": "2026-08-11T02:25:15.293Z"
   },
   "tools/lit": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.617Z"
+    "installedAt": "2026-08-11T02:25:15.296Z"
   },
   "tools/alpine-js": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.620Z"
+    "installedAt": "2026-08-11T02:25:15.299Z"
   },
   "tools/chakra-ui": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.624Z"
+    "installedAt": "2026-08-11T02:25:15.302Z"
   },
   "tools/ant-design": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.627Z"
+    "installedAt": "2026-08-11T02:25:15.305Z"
   },
   "tools/fresh": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.630Z"
+    "installedAt": "2026-08-11T02:25:15.308Z"
   },
   "tools/redwoodjs": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.632Z"
+    "installedAt": "2026-08-11T02:25:15.311Z"
   },
   "tools/tanstack-table": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.634Z"
+    "installedAt": "2026-08-11T02:25:15.313Z"
   },
   "tools/tanstack-start": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.637Z"
+    "installedAt": "2026-08-11T02:25:15.315Z"
   },
   "tools/module-federation": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.639Z"
+    "installedAt": "2026-08-11T02:25:15.318Z"
   },
   "tools/zustand": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.642Z"
+    "installedAt": "2026-08-11T02:25:15.321Z"
   },
   "tools/jotai": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.644Z"
+    "installedAt": "2026-08-11T02:25:15.323Z"
   },
   "tools/maestro": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.647Z"
+    "installedAt": "2026-08-11T02:25:15.325Z"
   },
   "tools/phoenix-liveview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.651Z"
+    "installedAt": "2026-08-11T02:25:15.328Z"
   },
   "tools/react-server-components": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.655Z"
+    "installedAt": "2026-08-11T02:25:15.330Z"
   },
   "disciplines/sli-slo": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.657Z"
+    "installedAt": "2026-08-11T02:25:15.333Z"
   },
   "erp/sap": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.660Z"
+    "installedAt": "2026-08-11T02:25:15.336Z"
   },
   "erp/oracle-fusion": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.662Z"
+    "installedAt": "2026-08-11T02:25:15.339Z"
   },
   "erp/microsoft-dynamics-365": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.664Z"
+    "installedAt": "2026-08-11T02:25:15.341Z"
   },
   "hr/greenhouse": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.667Z"
+    "installedAt": "2026-08-11T02:25:15.344Z"
   },
   "hr/lever": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.670Z"
+    "installedAt": "2026-08-11T02:25:15.346Z"
   },
   "hr/ashby": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.672Z"
+    "installedAt": "2026-08-11T02:25:15.348Z"
   },
   "hr/rippling": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.675Z"
+    "installedAt": "2026-08-11T02:25:15.350Z"
   },
   "hr/deel": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.677Z"
+    "installedAt": "2026-08-11T02:25:15.353Z"
   },
   "hr/bamboohr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.680Z"
+    "installedAt": "2026-08-11T02:25:15.355Z"
   },
   "hr/gusto": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.683Z"
+    "installedAt": "2026-08-11T02:25:15.357Z"
   },
   "legal/ironclad": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.685Z"
+    "installedAt": "2026-08-11T02:25:15.360Z"
   },
   "legal/legal-hold": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.688Z"
+    "installedAt": "2026-08-11T02:25:15.362Z"
   },
   "integrations/workato": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.690Z"
+    "installedAt": "2026-08-11T02:25:15.365Z"
   },
   "integrations/tray-io": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.692Z"
+    "installedAt": "2026-08-11T02:25:15.367Z"
   },
   "integrations/mailgun": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.695Z"
+    "installedAt": "2026-08-11T02:25:15.370Z"
   },
   "integrations/amazon-ses": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.697Z"
+    "installedAt": "2026-08-11T02:25:15.372Z"
   },
   "integrations/freshdesk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.700Z"
+    "installedAt": "2026-08-11T02:25:15.374Z"
   },
   "integrations/iterable": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.702Z"
+    "installedAt": "2026-08-11T02:25:15.376Z"
   },
   "integrations/google-analytics-4": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.705Z"
+    "installedAt": "2026-08-11T02:25:15.378Z"
   },
   "integrations/agora": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.708Z"
+    "installedAt": "2026-08-11T02:25:15.381Z"
   },
   "integrations/pubnub": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.711Z"
+    "installedAt": "2026-08-11T02:25:15.383Z"
   },
   "integrations/rudderstack": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.713Z"
+    "installedAt": "2026-08-11T02:25:15.386Z"
   },
   "integrations/zoom-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.716Z"
+    "installedAt": "2026-08-11T02:25:15.388Z"
   },
   "integrations/confluence-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.720Z"
+    "installedAt": "2026-08-11T02:25:15.390Z"
   },
   "integrations/mulesoft": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.723Z"
+    "installedAt": "2026-08-11T02:25:15.393Z"
   },
   "cloud/aws-dr-playbook": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.725Z"
+    "installedAt": "2026-08-11T02:25:15.396Z"
   },
   "cloud/gcp-dr-playbook": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.728Z"
+    "installedAt": "2026-08-11T02:25:15.398Z"
   },
   "cloud/azure-dr-playbook": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.730Z"
+    "installedAt": "2026-08-11T02:25:15.400Z"
   },
   "cloud/heroku": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.732Z"
+    "installedAt": "2026-08-11T02:25:15.402Z"
   },
   "cloud/flux": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.735Z"
+    "installedAt": "2026-08-11T02:25:15.405Z"
   },
   "cloud/kustomize": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.738Z"
+    "installedAt": "2026-08-11T02:25:15.407Z"
   },
   "cloud/caprover": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.740Z"
+    "installedAt": "2026-08-11T02:25:15.411Z"
   },
   "cloud/coolify": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.742Z"
+    "installedAt": "2026-08-11T02:25:15.414Z"
   },
   "cloud/bitbucket-pipelines": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.745Z"
+    "installedAt": "2026-08-11T02:25:15.417Z"
   },
   "cloud/buildkite": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.747Z"
+    "installedAt": "2026-08-11T02:25:15.420Z"
   },
   "cloud/backstage": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.750Z"
+    "installedAt": "2026-08-11T02:25:15.423Z"
   },
   "cloud/multicloud-finops": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.752Z"
+    "installedAt": "2026-08-11T02:25:15.425Z"
   },
   "cloud/wasm-edge": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.758Z"
+    "installedAt": "2026-08-11T02:25:15.428Z"
   },
   "devtools/pnpm": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.760Z"
+    "installedAt": "2026-08-11T02:25:15.431Z"
   },
   "devtools/changesets": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.763Z"
+    "installedAt": "2026-08-11T02:25:15.433Z"
   },
   "devtools/semantic-release": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.766Z"
+    "installedAt": "2026-08-11T02:25:15.437Z"
   },
   "devtools/github-packages": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.768Z"
+    "installedAt": "2026-08-11T02:25:15.439Z"
   },
   "testing/gatling": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.770Z"
+    "installedAt": "2026-08-11T02:25:15.442Z"
   },
   "testing/locust": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.773Z"
+    "installedAt": "2026-08-11T02:25:15.445Z"
   },
   "testing/pact": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.775Z"
+    "installedAt": "2026-08-11T02:25:15.447Z"
   },
   "testing/chaos-engineering": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.777Z"
+    "installedAt": "2026-08-11T02:25:15.450Z"
   },
   "testing/percy": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.780Z"
+    "installedAt": "2026-08-11T02:25:15.452Z"
   },
   "observability/statuspage": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.782Z"
+    "installedAt": "2026-08-11T02:25:15.455Z"
   },
   "observability/better-uptime": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.785Z"
+    "installedAt": "2026-08-11T02:25:15.457Z"
   },
   "observability/opsgenie": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.787Z"
+    "installedAt": "2026-08-11T02:25:15.459Z"
   },
   "observability/lightstep": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.790Z"
+    "installedAt": "2026-08-11T02:25:15.462Z"
   },
   "gaming/steam": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.793Z"
+    "installedAt": "2026-08-11T02:25:15.464Z"
   },
   "gaming/playfab": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.796Z"
+    "installedAt": "2026-08-11T02:25:15.467Z"
   },
   "gaming/roblox": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.798Z"
+    "installedAt": "2026-08-11T02:25:15.470Z"
   },
   "gaming/multiplayer-authoritative": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.801Z"
+    "installedAt": "2026-08-11T02:25:15.472Z"
   },
   "gaming/anti-cheat": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.803Z"
+    "installedAt": "2026-08-11T02:25:15.475Z"
   },
   "gaming/epic-games-store": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.805Z"
+    "installedAt": "2026-08-11T02:25:15.477Z"
   },
   "xr/visionos": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.808Z"
+    "installedAt": "2026-08-11T02:25:15.479Z"
   },
   "xr/meta-quest-openxr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.810Z"
+    "installedAt": "2026-08-11T02:25:15.482Z"
   },
   "xr/webxr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.813Z"
+    "installedAt": "2026-08-11T02:25:15.485Z"
   },
   "xr/arkit-arcore": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.816Z"
+    "installedAt": "2026-08-11T02:25:15.487Z"
   },
   "xr/8th-wall": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.818Z"
+    "installedAt": "2026-08-11T02:25:15.490Z"
   },
   "web3/walletconnect": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.821Z"
+    "installedAt": "2026-08-11T02:25:15.492Z"
   },
   "web3/hardhat-foundry": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.823Z"
+    "installedAt": "2026-08-11T02:25:15.495Z"
   },
   "web3/base-polygon": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.826Z"
+    "installedAt": "2026-08-11T02:25:15.497Z"
   },
   "web3/smart-contract-security": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.828Z"
+    "installedAt": "2026-08-11T02:25:15.499Z"
   },
   "web3/ipfs-arweave": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.831Z"
+    "installedAt": "2026-08-11T02:25:15.501Z"
   },
   "iot/coap": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.834Z"
+    "installedAt": "2026-08-11T02:25:15.504Z"
   },
   "iot/azure-iot-hub": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.836Z"
+    "installedAt": "2026-08-11T02:25:15.506Z"
   },
   "iot/esp32": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.838Z"
+    "installedAt": "2026-08-11T02:25:15.508Z"
   },
   "iot/ros": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.841Z"
+    "installedAt": "2026-08-11T02:25:15.511Z"
   },
   "iot/opc-ua": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.844Z"
+    "installedAt": "2026-08-11T02:25:15.514Z"
   },
   "iot/lorawan": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.847Z"
+    "installedAt": "2026-08-11T02:25:15.516Z"
   },
   "iot/ota-firmware": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.849Z"
+    "installedAt": "2026-08-11T02:25:15.519Z"
   },
   "iot/digital-twins": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.852Z"
+    "installedAt": "2026-08-11T02:25:15.521Z"
   },
   "healthcare/eprescribing-depth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.854Z"
+    "installedAt": "2026-08-11T02:25:15.523Z"
   },
   "healthcare/clinical-ai": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.856Z"
+    "installedAt": "2026-08-11T02:25:15.526Z"
   },
   "healthcare/prior-auth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.859Z"
+    "installedAt": "2026-08-11T02:25:15.528Z"
   },
   "healthcare/lab-interfaces": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.861Z"
+    "installedAt": "2026-08-11T02:25:15.530Z"
   },
   "healthcare/imaging-pacs": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.864Z"
+    "installedAt": "2026-08-11T02:25:15.532Z"
   },
   "healthcare/billing-rcm": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.866Z"
+    "installedAt": "2026-08-11T02:25:15.534Z"
   },
   "healthcare/hie-networks": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.869Z"
+    "installedAt": "2026-08-11T02:25:15.537Z"
   },
   "healthcare/cerner-millennium": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.873Z"
+    "installedAt": "2026-08-11T02:25:15.539Z"
   },
   "databases/fivetran": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.875Z"
+    "installedAt": "2026-08-11T02:25:15.542Z"
   },
   "databases/prefect": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.878Z"
+    "installedAt": "2026-08-11T02:25:15.545Z"
   },
   "databases/dagster": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.881Z"
+    "installedAt": "2026-08-11T02:25:15.547Z"
   },
   "databases/lancedb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.884Z"
+    "installedAt": "2026-08-11T02:25:15.549Z"
   },
   "databases/amazon-neptune": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.887Z"
+    "installedAt": "2026-08-11T02:25:15.551Z"
   },
   "databases/supabase-platform": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.890Z"
+    "installedAt": "2026-08-11T02:25:15.554Z"
   },
   "databases/mariadb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.893Z"
+    "installedAt": "2026-08-11T02:25:15.556Z"
   },
   "databases/keydb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.900Z"
+    "installedAt": "2026-08-11T02:25:15.558Z"
   },
   "databases/upstash": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.905Z"
+    "installedAt": "2026-08-11T02:25:15.561Z"
   },
   "databases/memcached": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.909Z"
+    "installedAt": "2026-08-11T02:25:15.564Z"
   },
   "databases/redshift": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.911Z"
+    "installedAt": "2026-08-11T02:25:15.566Z"
   },
   "databases/singlestore": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.914Z"
+    "installedAt": "2026-08-11T02:25:15.569Z"
   },
   "payments/wise": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.916Z"
+    "installedAt": "2026-08-11T02:25:15.572Z"
   },
   "payments/revolut-business": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.919Z"
+    "installedAt": "2026-08-11T02:25:15.575Z"
   },
   "payments/zuora": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.921Z"
+    "installedAt": "2026-08-11T02:25:15.578Z"
   },
   "payments/afterpay": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.924Z"
+    "installedAt": "2026-08-11T02:25:15.581Z"
   },
   "payments/marqeta": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.927Z"
+    "installedAt": "2026-08-11T02:25:15.583Z"
   },
   "payments/sift": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.929Z"
+    "installedAt": "2026-08-11T02:25:15.605Z"
   },
   "payments/stripe-radar": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.932Z"
+    "installedAt": "2026-08-11T02:25:15.620Z"
   },
   "payments/coinbase-commerce": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.935Z"
+    "installedAt": "2026-08-11T02:25:15.625Z"
   },
   "payments/ledger-accounting": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.938Z"
+    "installedAt": "2026-08-11T02:25:15.628Z"
   },
   "payments/onfido": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.941Z"
+    "installedAt": "2026-08-11T02:25:15.632Z"
   },
   "payments/jumio": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.945Z"
+    "installedAt": "2026-08-11T02:25:15.635Z"
   },
   "payments/mambu": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.947Z"
+    "installedAt": "2026-08-11T02:25:15.638Z"
   },
   "compliance/pipeda": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.950Z"
+    "installedAt": "2026-08-11T02:25:15.640Z"
   },
   "compliance/india-dpdp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.954Z"
+    "installedAt": "2026-08-11T02:25:15.643Z"
   },
   "compliance/pdpa-thailand": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.957Z"
+    "installedAt": "2026-08-11T02:25:15.646Z"
   },
   "compliance/cmmc": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.959Z"
+    "installedAt": "2026-08-11T02:25:15.649Z"
   },
   "compliance/tisax": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.962Z"
+    "installedAt": "2026-08-11T02:25:15.651Z"
   },
   "compliance/data-residency-eu": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.965Z"
+    "installedAt": "2026-08-11T02:25:15.654Z"
   },
   "compliance/data-residency-apac": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.968Z"
+    "installedAt": "2026-08-11T02:25:15.656Z"
   },
   "compliance/data-residency-us": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.972Z"
+    "installedAt": "2026-08-11T02:25:15.659Z"
   },
   "compliance/wcag-22": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.976Z"
+    "installedAt": "2026-08-11T02:25:15.664Z"
   },
   "compliance/oscal": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.979Z"
+    "installedAt": "2026-08-11T02:25:15.666Z"
   },
   "compliance/g-cloud-uk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.982Z"
+    "installedAt": "2026-08-11T02:25:15.668Z"
   },
   "compliance/hipaa-depth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.985Z"
+    "installedAt": "2026-08-11T02:25:15.671Z"
   },
   "cms/datocms": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.987Z"
+    "installedAt": "2026-08-11T02:25:15.674Z"
   },
   "cms/builder-io": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.990Z"
+    "installedAt": "2026-08-11T02:25:15.677Z"
   },
   "cms/tina": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.992Z"
+    "installedAt": "2026-08-11T02:25:15.679Z"
   },
   "languages/clojure": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.995Z"
+    "installedAt": "2026-08-11T02:25:15.682Z"
   },
   "languages/zig": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:57.999Z"
+    "installedAt": "2026-08-11T02:25:15.685Z"
   },
   "languages/lua": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.002Z"
+    "installedAt": "2026-08-11T02:25:15.687Z"
   },
   "languages/r": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.005Z"
+    "installedAt": "2026-08-11T02:25:15.690Z"
   },
   "languages/haskell": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.008Z"
+    "installedAt": "2026-08-11T02:25:15.692Z"
   },
   "languages/ocaml": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.013Z"
+    "installedAt": "2026-08-11T02:25:15.695Z"
   },
   "languages/perl": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.015Z"
+    "installedAt": "2026-08-11T02:25:15.698Z"
   },
   "languages/objective-c": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.018Z"
+    "installedAt": "2026-08-11T02:25:15.700Z"
   },
   "documents/puppeteer-pdf": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.020Z"
+    "installedAt": "2026-08-11T02:25:15.704Z"
   },
   "documents/azure-doc-intelligence": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.023Z"
+    "installedAt": "2026-08-11T02:25:15.707Z"
   },
   "documents/tesseract-ocr": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.026Z"
+    "installedAt": "2026-08-11T02:25:15.709Z"
   },
   "documents/glean": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.028Z"
+    "installedAt": "2026-08-11T02:25:15.711Z"
   },
   "maps/openstreetmap": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.031Z"
+    "installedAt": "2026-08-11T02:25:15.713Z"
   },
   "maps/here-maps": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.033Z"
+    "installedAt": "2026-08-11T02:25:15.716Z"
   },
   "edtech/google-classroom": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.036Z"
+    "installedAt": "2026-08-11T02:25:15.719Z"
   },
   "edtech/proctoring": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.038Z"
+    "installedAt": "2026-08-11T02:25:15.722Z"
   },
   "fintech/thought-machine": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.041Z"
+    "installedAt": "2026-08-11T02:25:15.725Z"
   },
   "fintech/stripe-treasury": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.043Z"
+    "installedAt": "2026-08-11T02:25:15.728Z"
   },
   "ai/semantic-kernel": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.046Z"
+    "installedAt": "2026-08-11T02:25:15.730Z"
   },
   "ai/autogen": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.050Z"
+    "installedAt": "2026-08-11T02:25:15.733Z"
   },
   "ai/cursor-ide": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.052Z"
+    "installedAt": "2026-08-11T02:25:15.735Z"
   },
   "ai/windsurf": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.056Z"
+    "installedAt": "2026-08-11T02:25:15.738Z"
   },
   "ai/assemblyai": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.061Z"
+    "installedAt": "2026-08-11T02:25:15.740Z"
   },
   "ai/stable-diffusion": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.066Z"
+    "installedAt": "2026-08-11T02:25:15.743Z"
   },
   "ai/mlflow": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.070Z"
+    "installedAt": "2026-08-11T02:25:15.747Z"
   },
   "ai/feast": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.075Z"
+    "installedAt": "2026-08-11T02:25:15.750Z"
   },
   "ai/prompt-injection-defense": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.078Z"
+    "installedAt": "2026-08-11T02:25:15.756Z"
   },
   "ai/runpod": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.080Z"
+    "installedAt": "2026-08-11T02:25:15.760Z"
   },
   "ai/weights-biases": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.083Z"
+    "installedAt": "2026-08-11T02:25:15.769Z"
   },
   "ai/apple-intelligence": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.086Z"
+    "installedAt": "2026-08-11T02:25:15.773Z"
   },
   "ai/nvidia-nim": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.088Z"
+    "installedAt": "2026-08-11T02:25:15.775Z"
   },
   "ai/mistral": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.091Z"
+    "installedAt": "2026-08-11T02:25:15.777Z"
   },
   "ai/cohere": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.094Z"
+    "installedAt": "2026-08-11T02:25:15.780Z"
   },
   "cloud/alibaba-cloud": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.096Z"
+    "installedAt": "2026-08-11T02:25:15.783Z"
   },
   "cloud/tencent-cloud": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.099Z"
+    "installedAt": "2026-08-11T02:25:15.785Z"
   },
   "cloud/oracle-cloud": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.101Z"
+    "installedAt": "2026-08-11T02:25:15.788Z"
   },
   "cloud/ibm-cloud": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.104Z"
+    "installedAt": "2026-08-11T02:25:15.790Z"
   },
   "cloud/openshift": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.107Z"
+    "installedAt": "2026-08-11T02:25:15.793Z"
   },
   "cloud/rancher": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.109Z"
+    "installedAt": "2026-08-11T02:25:15.795Z"
   },
   "cloud/istio": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.112Z"
+    "installedAt": "2026-08-11T02:25:15.797Z"
   },
   "cloud/linkerd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.114Z"
+    "installedAt": "2026-08-11T02:25:15.800Z"
   },
   "cloud/ansible": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.118Z"
+    "installedAt": "2026-08-11T02:25:15.803Z"
   },
   "cloud/chef": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.121Z"
+    "installedAt": "2026-08-11T02:25:15.807Z"
   },
   "cloud/puppet": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.124Z"
+    "installedAt": "2026-08-11T02:25:15.809Z"
   },
   "cloud/podman": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.126Z"
+    "installedAt": "2026-08-11T02:25:15.812Z"
   },
   "cloud/buildkit": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.129Z"
+    "installedAt": "2026-08-11T02:25:15.815Z"
   },
   "cloud/aws-sam": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.132Z"
+    "installedAt": "2026-08-11T02:25:15.818Z"
   },
   "cloud/architect": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.137Z"
+    "installedAt": "2026-08-11T02:25:15.820Z"
   },
   "cloud/aws-api-gateway": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.140Z"
+    "installedAt": "2026-08-11T02:25:15.824Z"
   },
   "cloud/aws-secrets-manager": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.143Z"
+    "installedAt": "2026-08-11T02:25:15.826Z"
   },
   "cloud/aws-kms": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.146Z"
+    "installedAt": "2026-08-11T02:25:15.829Z"
   },
   "cloud/aws-waf": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.148Z"
+    "installedAt": "2026-08-11T02:25:15.831Z"
   },
   "cloud/aws-eventbridge": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.151Z"
+    "installedAt": "2026-08-11T02:25:15.835Z"
   },
   "cloud/aws-step-functions": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.154Z"
+    "installedAt": "2026-08-11T02:25:15.837Z"
   },
   "cloud/azure-container-apps": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.157Z"
+    "installedAt": "2026-08-11T02:25:15.840Z"
   },
   "cloud/azure-key-vault": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.159Z"
+    "installedAt": "2026-08-11T02:25:15.843Z"
   },
   "cloud/gcp-pubsub": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.161Z"
+    "installedAt": "2026-08-11T02:25:15.846Z"
   },
   "cloud/hashicorp-consul": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.178Z"
+    "installedAt": "2026-08-11T02:25:15.848Z"
   },
   "cloud/nomad": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.180Z"
+    "installedAt": "2026-08-11T02:25:15.851Z"
   },
   "cloud/fastly": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.182Z"
+    "installedAt": "2026-08-11T02:25:15.854Z"
   },
   "cloud/fastly-compute": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.185Z"
+    "installedAt": "2026-08-11T02:25:15.857Z"
   },
   "cloud/bare-metal-colo": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.187Z"
+    "installedAt": "2026-08-11T02:25:15.859Z"
   },
   "frameworks/supabase-edge-functions": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.190Z"
+    "installedAt": "2026-08-11T02:25:15.862Z"
   },
   "frameworks/tyk": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.193Z"
+    "installedAt": "2026-08-11T02:25:15.865Z"
   },
   "frameworks/apigee": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.196Z"
+    "installedAt": "2026-08-11T02:25:15.868Z"
   },
   "frameworks/restify": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.200Z"
+    "installedAt": "2026-08-11T02:25:15.871Z"
   },
   "frameworks/blitz": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.203Z"
+    "installedAt": "2026-08-11T02:25:15.874Z"
   },
   "frameworks/ember": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.206Z"
+    "installedAt": "2026-08-11T02:25:15.876Z"
   },
   "frameworks/tamagui": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.209Z"
+    "installedAt": "2026-08-11T02:25:15.879Z"
   },
   "frameworks/uniwind": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.212Z"
+    "installedAt": "2026-08-11T02:25:15.882Z"
   },
   "frameworks/wasp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.215Z"
+    "installedAt": "2026-08-11T02:25:15.885Z"
   },
   "frameworks/nestjs-microservices": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.218Z"
+    "installedAt": "2026-08-11T02:25:15.887Z"
   },
   "databases/typeorm": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.221Z"
+    "installedAt": "2026-08-11T02:25:15.890Z"
   },
   "databases/sqlalchemy": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.224Z"
+    "installedAt": "2026-08-11T02:25:15.893Z"
   },
   "databases/ecto": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.229Z"
+    "installedAt": "2026-08-11T02:25:15.897Z"
   },
   "databases/flyway": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.231Z"
+    "installedAt": "2026-08-11T02:25:15.900Z"
   },
   "databases/liquibase": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.234Z"
+    "installedAt": "2026-08-11T02:25:15.904Z"
   },
   "databases/atlas-migrate": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.236Z"
+    "installedAt": "2026-08-11T02:25:15.910Z"
   },
   "databases/confluent": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.239Z"
+    "installedAt": "2026-08-11T02:25:15.912Z"
   },
   "databases/surrealdb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.241Z"
+    "installedAt": "2026-08-11T02:25:15.915Z"
   },
   "databases/fauna": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.244Z"
+    "installedAt": "2026-08-11T02:25:15.918Z"
   },
   "databases/couchdb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.246Z"
+    "installedAt": "2026-08-11T02:25:15.920Z"
   },
   "databases/scylladb": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.249Z"
+    "installedAt": "2026-08-11T02:25:15.923Z"
   },
   "integrations/confluent-kafka": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.254Z"
+    "installedAt": "2026-08-11T02:25:15.926Z"
   },
   "tools/figma-workflow": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.258Z"
+    "installedAt": "2026-08-11T02:25:15.929Z"
   },
   "tools/uploadcare": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.260Z"
+    "installedAt": "2026-08-11T02:25:15.931Z"
   },
   "tools/imgix": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.265Z"
+    "installedAt": "2026-08-11T02:25:15.935Z"
   },
   "tools/web-components": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.267Z"
+    "installedAt": "2026-08-11T02:25:15.938Z"
   },
   "tools/design-tokens": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.270Z"
+    "installedAt": "2026-08-11T02:25:15.941Z"
   },
   "tools/chromatic": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.272Z"
+    "installedAt": "2026-08-11T02:25:15.943Z"
   },
   "tools/maestro-cloud": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.275Z"
+    "installedAt": "2026-08-11T02:25:15.945Z"
   },
   "realtime/ffmpeg": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.277Z"
+    "installedAt": "2026-08-11T02:25:15.948Z"
   },
   "realtime/cloudflare-stream": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.280Z"
+    "installedAt": "2026-08-11T02:25:15.950Z"
   },
   "realtime/agora-extended": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.285Z"
+    "installedAt": "2026-08-11T02:25:15.953Z"
   },
   "realtime/vimeo-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.287Z"
+    "installedAt": "2026-08-11T02:25:15.955Z"
   },
   "realtime/imagekit": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.290Z"
+    "installedAt": "2026-08-11T02:25:15.958Z"
   },
   "ecommerce/shopify-hydrogen": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.292Z"
+    "installedAt": "2026-08-11T02:25:15.961Z"
   },
   "ecommerce/elastic-path": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.295Z"
+    "installedAt": "2026-08-11T02:25:15.964Z"
   },
   "ecommerce/amazon-marketplace": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.298Z"
+    "installedAt": "2026-08-11T02:25:15.967Z"
   },
   "ecommerce/etsy-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.300Z"
+    "installedAt": "2026-08-11T02:25:15.970Z"
   },
   "ecommerce/ebay-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.302Z"
+    "installedAt": "2026-08-11T02:25:15.972Z"
   },
   "ecommerce/shippo": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.305Z"
+    "installedAt": "2026-08-11T02:25:15.975Z"
   },
   "ecommerce/shipbob": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.307Z"
+    "installedAt": "2026-08-11T02:25:15.978Z"
   },
   "ecommerce/square-pos": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.310Z"
+    "installedAt": "2026-08-11T02:25:15.983Z"
   },
   "ecommerce/inventory-management": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.312Z"
+    "installedAt": "2026-08-11T02:25:15.989Z"
   },
   "crm/zoho": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.315Z"
+    "installedAt": "2026-08-11T02:25:15.995Z"
   },
   "crm/zendesk-sell": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.317Z"
+    "installedAt": "2026-08-11T02:25:16.002Z"
   },
   "logistics/flexport": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.320Z"
+    "installedAt": "2026-08-11T02:25:16.008Z"
   },
   "logistics/easypost": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.322Z"
+    "installedAt": "2026-08-11T02:25:16.012Z"
   },
   "auth/magic-link": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.324Z"
+    "installedAt": "2026-08-11T02:25:16.018Z"
   },
   "auth/tailscale": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.327Z"
+    "installedAt": "2026-08-11T02:25:16.020Z"
   },
   "auth/waf-bot-protection": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.329Z"
+    "installedAt": "2026-08-11T02:25:16.023Z"
   },
   "auth/fido-hardware-keys": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.331Z"
+    "installedAt": "2026-08-11T02:25:16.026Z"
   },
   "auth/pam-break-glass": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.334Z"
+    "installedAt": "2026-08-11T02:25:16.029Z"
   },
   "auth/azure-communication": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.336Z"
+    "installedAt": "2026-08-11T02:25:16.032Z"
   },
   "payments/stripe-issuing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.338Z"
+    "installedAt": "2026-08-11T02:25:16.034Z"
   },
   "payments/revenue-recognition": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.341Z"
+    "installedAt": "2026-08-11T02:25:16.036Z"
   },
   "compliance/sox": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.344Z"
+    "installedAt": "2026-08-11T02:25:16.039Z"
   },
   "compliance/pci-dss-depth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.346Z"
+    "installedAt": "2026-08-11T02:25:16.043Z"
   },
   "compliance/cjis": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.349Z"
+    "installedAt": "2026-08-11T02:25:16.045Z"
   },
   "compliance/il5-il6": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.351Z"
+    "installedAt": "2026-08-11T02:25:16.048Z"
   },
   "compliance/pipeda-depth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.354Z"
+    "installedAt": "2026-08-11T02:25:16.051Z"
   },
   "security/pen-test-process": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.356Z"
+    "installedAt": "2026-08-11T02:25:16.054Z"
   },
   "security/bug-bounty": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.359Z"
+    "installedAt": "2026-08-11T02:25:16.056Z"
   },
   "security/owasp-asvs": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.361Z"
+    "installedAt": "2026-08-11T02:25:16.059Z"
   },
   "integrations/calendly": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.364Z"
+    "installedAt": "2026-08-11T02:25:16.062Z"
   },
   "integrations/hellosign": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.367Z"
+    "installedAt": "2026-08-11T02:25:16.064Z"
   },
   "integrations/mailchimp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.370Z"
+    "installedAt": "2026-08-11T02:25:16.066Z"
   },
   "integrations/hubspot-marketing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.373Z"
+    "installedAt": "2026-08-11T02:25:16.069Z"
   },
   "integrations/google-workspace": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.375Z"
+    "installedAt": "2026-08-11T02:25:16.072Z"
   },
   "integrations/microsoft-graph": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.378Z"
+    "installedAt": "2026-08-11T02:25:16.074Z"
   },
   "integrations/stripe-apps": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.381Z"
+    "installedAt": "2026-08-11T02:25:16.076Z"
   },
   "integrations/plaid-assets": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.384Z"
+    "installedAt": "2026-08-11T02:25:16.080Z"
   },
   "integrations/twilio-flex": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.387Z"
+    "installedAt": "2026-08-11T02:25:16.083Z"
   },
   "integrations/amplitude-experiment": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.389Z"
+    "installedAt": "2026-08-11T02:25:16.088Z"
   },
   "integrations/optimizely": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.392Z"
+    "installedAt": "2026-08-11T02:25:16.091Z"
   },
   "integrations/contentful-webhooks": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.395Z"
+    "installedAt": "2026-08-11T02:25:16.093Z"
   },
   "gov/govuk-one-login": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.397Z"
+    "installedAt": "2026-08-11T02:25:16.096Z"
   },
   "gov/oscal-compliance": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.400Z"
+    "installedAt": "2026-08-11T02:25:16.099Z"
   },
   "edtech/coursera-patterns": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.402Z"
+    "installedAt": "2026-08-11T02:25:16.102Z"
   },
   "edtech/academic-integrity": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.405Z"
+    "installedAt": "2026-08-11T02:25:16.105Z"
   },
   "insurance/guidewire": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.407Z"
+    "installedAt": "2026-08-11T02:25:16.107Z"
   },
   "insurance/duck-creek": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.410Z"
+    "installedAt": "2026-08-11T02:25:16.110Z"
   },
   "insurance/claims-automation": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.412Z"
+    "installedAt": "2026-08-11T02:25:16.113Z"
   },
   "proptech/matterport": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.415Z"
+    "installedAt": "2026-08-11T02:25:16.116Z"
   },
   "proptech/mls-reso": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.417Z"
+    "installedAt": "2026-08-11T02:25:16.118Z"
   },
   "martech/adobe-experience": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.423Z"
+    "installedAt": "2026-08-11T02:25:16.120Z"
   },
   "martech/salesforce-marketing-cloud": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.426Z"
+    "installedAt": "2026-08-11T02:25:16.123Z"
   },
   "energy/grid-apis": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.428Z"
+    "installedAt": "2026-08-11T02:25:16.125Z"
   },
   "agtech/john-deere": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.431Z"
+    "installedAt": "2026-08-11T02:25:16.128Z"
   },
   "travel/amadeus": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.433Z"
+    "installedAt": "2026-08-11T02:25:16.130Z"
   },
   "travel/sabre": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.435Z"
+    "installedAt": "2026-08-11T02:25:16.133Z"
   },
   "hospitality/opera-pms": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.438Z"
+    "installedAt": "2026-08-11T02:25:16.135Z"
   },
   "hospitality/mews": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.440Z"
+    "installedAt": "2026-08-11T02:25:16.137Z"
   },
   "media/spotify-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.443Z"
+    "installedAt": "2026-08-11T02:25:16.140Z"
   },
   "media/youtube-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.445Z"
+    "installedAt": "2026-08-11T02:25:16.143Z"
   },
   "media/podcast-rss": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.448Z"
+    "installedAt": "2026-08-11T02:25:16.146Z"
   },
   "ai/midjourney-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.450Z"
+    "installedAt": "2026-08-11T02:25:16.148Z"
   },
   "ai/github-copilot": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.453Z"
+    "installedAt": "2026-08-11T02:25:16.150Z"
   },
   "ai/windsurf-cascade": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.455Z"
+    "installedAt": "2026-08-11T02:25:16.153Z"
   },
   "ai/perplexity-api": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.458Z"
+    "installedAt": "2026-08-11T02:25:16.155Z"
   },
   "ai/groq": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.460Z"
+    "installedAt": "2026-08-11T02:25:16.158Z"
   },
   "ai/together-ai": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.462Z"
+    "installedAt": "2026-08-11T02:25:16.160Z"
   },
   "ai/fireworks-ai": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.465Z"
+    "installedAt": "2026-08-11T02:25:16.163Z"
   },
   "ai/fine-tuning": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.467Z"
+    "installedAt": "2026-08-11T02:25:16.165Z"
   },
   "ai/feature-store": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.470Z"
+    "installedAt": "2026-08-11T02:25:16.168Z"
   },
   "ai/nemo-guardrails": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.472Z"
+    "installedAt": "2026-08-11T02:25:16.171Z"
   },
   "observability/gremlin": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.474Z"
+    "installedAt": "2026-08-11T02:25:16.173Z"
   },
   "observability/litmus": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.477Z"
+    "installedAt": "2026-08-11T02:25:16.176Z"
   },
   "observability/betterstack": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.480Z"
+    "installedAt": "2026-08-11T02:25:16.178Z"
   },
   "devtools/bitbucket": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.482Z"
+    "installedAt": "2026-08-11T02:25:16.181Z"
   },
   "devtools/sonarcloud": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.485Z"
+    "installedAt": "2026-08-11T02:25:16.184Z"
   },
   "devtools/dependabot": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.487Z"
+    "installedAt": "2026-08-11T02:25:16.187Z"
   },
   "devtools/renovate": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.489Z"
+    "installedAt": "2026-08-11T02:25:16.190Z"
   },
   "devtools/turborepo-remote-cache": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.492Z"
+    "installedAt": "2026-08-11T02:25:16.192Z"
   },
   "payments/paytm": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.494Z"
+    "installedAt": "2026-08-11T02:25:16.194Z"
   },
   "payments/mercadopago": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.497Z"
+    "installedAt": "2026-08-11T02:25:16.197Z"
   },
   "payments/paypay": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.500Z"
+    "installedAt": "2026-08-11T02:25:16.200Z"
   },
   "payments/worldpay": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.502Z"
+    "installedAt": "2026-08-11T02:25:16.203Z"
   },
   "languages/fsharp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.505Z"
+    "installedAt": "2026-08-11T02:25:16.206Z"
   },
   "languages/erlang": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.507Z"
+    "installedAt": "2026-08-11T02:25:16.208Z"
   },
   "languages/julia": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.510Z"
+    "installedAt": "2026-08-11T02:25:16.211Z"
   },
   "cis-controls": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.512Z"
+    "installedAt": "2026-08-11T02:25:16.213Z"
   },
   "platform-engineering": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.515Z"
+    "installedAt": "2026-08-11T02:25:16.216Z"
   },
   "finops": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.517Z"
+    "installedAt": "2026-08-11T02:25:16.218Z"
   },
   "green-software": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.520Z"
+    "installedAt": "2026-08-11T02:25:16.224Z"
   },
   "frameworks/electron-depth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.522Z"
+    "installedAt": "2026-08-11T02:25:16.229Z"
   },
   "frameworks/tauri-depth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.528Z"
+    "installedAt": "2026-08-11T02:25:16.232Z"
   },
   "platforms/app-store-connect": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.531Z"
+    "installedAt": "2026-08-11T02:25:16.235Z"
   },
   "platforms/google-play-console": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.534Z"
+    "installedAt": "2026-08-11T02:25:16.239Z"
   },
   "platforms/chrome-web-store": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.536Z"
+    "installedAt": "2026-08-11T02:25:16.243Z"
   },
   "platforms/marketplace-saas-patterns": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.539Z"
+    "installedAt": "2026-08-11T02:25:16.245Z"
   },
   "compliance/cis-benchmarks": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.541Z"
+    "installedAt": "2026-08-11T02:25:16.248Z"
   },
   "healthcare/oracle-health-research": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.544Z"
+    "installedAt": "2026-08-11T02:25:16.250Z"
   },
   "tools/biome": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.546Z"
+    "installedAt": "2026-08-11T02:25:16.253Z"
   },
   "browsers/safari-ios": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.549Z"
+    "installedAt": "2026-08-11T02:25:16.256Z"
   },
   "data/cdc-patterns": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.552Z"
+    "installedAt": "2026-08-11T02:25:16.258Z"
   },
   "data/data-mesh": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.555Z"
+    "installedAt": "2026-08-11T02:25:16.261Z"
   },
   "data/data-contracts": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.557Z"
+    "installedAt": "2026-08-11T02:25:16.263Z"
   },
   "web3/coinbase-wallet": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.560Z"
+    "installedAt": "2026-08-11T02:25:16.278Z"
   },
   "web3/nft-marketplace": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.562Z"
+    "installedAt": "2026-08-11T02:25:16.281Z"
   },
   "platforms/mobile-ui": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.565Z"
+    "installedAt": "2026-08-11T02:25:16.285Z"
   },
   "methodologies/dna-default": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.568Z"
+    "installedAt": "2026-08-11T02:25:16.299Z"
   },
   "methodologies/scrum": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.571Z"
+    "installedAt": "2026-08-11T02:25:16.301Z"
   },
   "methodologies/kanban": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.573Z"
+    "installedAt": "2026-08-11T02:25:16.304Z"
   },
   "methodologies/less": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.575Z"
+    "installedAt": "2026-08-11T02:25:16.306Z"
   },
   "methodologies/safe": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.578Z"
+    "installedAt": "2026-08-11T02:25:16.308Z"
   },
   "methodologies/spotify-model": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.580Z"
+    "installedAt": "2026-08-11T02:25:16.310Z"
   },
   "methodologies/shape-up": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.582Z"
+    "installedAt": "2026-08-11T02:25:16.312Z"
   },
   "methodologies/ticket-writing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.586Z"
+    "installedAt": "2026-08-11T02:25:16.315Z"
   },
   "methodologies/document-writing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.588Z"
+    "installedAt": "2026-08-11T02:25:16.317Z"
   },
   "companies/travel-scale-up": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.591Z"
+    "installedAt": "2026-08-11T02:25:16.320Z"
   },
   "companies/big-tech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.601Z"
+    "installedAt": "2026-08-11T02:25:16.324Z"
   },
   "companies/research-lab": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.622Z"
+    "installedAt": "2026-08-11T02:25:16.326Z"
   },
   "companies/agency": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.625Z"
+    "installedAt": "2026-08-11T02:25:16.329Z"
   },
   "companies/startup": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.627Z"
+    "installedAt": "2026-08-11T02:25:16.331Z"
   },
   "discovery/teams/innovation-lab": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.630Z"
+    "installedAt": "2026-08-11T02:25:16.334Z"
   },
   "discovery/teams/discovery-squad": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.633Z"
+    "installedAt": "2026-08-11T02:25:16.336Z"
   },
   "discovery/teams/embedded-triad": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.637Z"
+    "installedAt": "2026-08-11T02:25:16.339Z"
   },
   "discovery/teams/dual-track-squad": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.640Z"
+    "installedAt": "2026-08-11T02:25:16.342Z"
   },
   "discovery/teams/design-ops": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.643Z"
+    "installedAt": "2026-08-11T02:25:16.345Z"
   },
   "discovery/lifecycle/problem-validation": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.646Z"
+    "installedAt": "2026-08-11T02:25:16.348Z"
   },
   "discovery/lifecycle/solution-validation": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.649Z"
+    "installedAt": "2026-08-11T02:25:16.351Z"
   },
   "discovery/lifecycle/pmf": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.651Z"
+    "installedAt": "2026-08-11T02:25:16.354Z"
   },
   "discovery/lifecycle/growth": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.654Z"
+    "installedAt": "2026-08-11T02:25:16.356Z"
   },
   "discovery/lifecycle/scale": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.656Z"
+    "installedAt": "2026-08-11T02:25:16.359Z"
   },
   "discovery/research-types/generative": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.659Z"
+    "installedAt": "2026-08-11T02:25:16.361Z"
   },
   "discovery/research-types/evaluative": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.663Z"
+    "installedAt": "2026-08-11T02:25:16.364Z"
   },
   "discovery/research-types/attitudinal": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.666Z"
+    "installedAt": "2026-08-11T02:25:16.367Z"
   },
   "discovery/research-types/behavioral": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.669Z"
+    "installedAt": "2026-08-11T02:25:16.370Z"
   },
   "discovery/research-types/mixed-methods": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.671Z"
+    "installedAt": "2026-08-11T02:25:16.373Z"
   },
   "discovery/processes/double-diamond": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.675Z"
+    "installedAt": "2026-08-11T02:25:16.375Z"
   },
   "discovery/processes/lean-startup": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.678Z"
+    "installedAt": "2026-08-11T02:25:16.378Z"
   },
   "discovery/processes/design-thinking": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.681Z"
+    "installedAt": "2026-08-11T02:25:16.380Z"
   },
   "discovery/processes/jtbd-framework": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.684Z"
+    "installedAt": "2026-08-11T02:25:16.383Z"
   },
   "discovery/processes/value-proposition-canvas": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.688Z"
+    "installedAt": "2026-08-11T02:25:16.386Z"
   },
   "discovery/processes/lean-ux": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.691Z"
+    "installedAt": "2026-08-11T02:25:16.388Z"
   },
   "discovery/processes/outcome-driven-innovation": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.694Z"
+    "installedAt": "2026-08-11T02:25:16.391Z"
   },
   "discovery/methods/user-interviews": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.697Z"
+    "installedAt": "2026-08-11T02:25:16.394Z"
   },
   "discovery/methods/contextual-inquiry": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.703Z"
+    "installedAt": "2026-08-11T02:25:16.397Z"
   },
   "discovery/methods/usability-testing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.707Z"
+    "installedAt": "2026-08-11T02:25:16.400Z"
   },
   "discovery/methods/surveys": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.710Z"
+    "installedAt": "2026-08-11T02:25:16.402Z"
   },
   "discovery/methods/card-sorting": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.713Z"
+    "installedAt": "2026-08-11T02:25:16.404Z"
   },
   "discovery/methods/tree-testing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.715Z"
+    "installedAt": "2026-08-11T02:25:16.407Z"
   },
   "discovery/methods/diary-studies": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.718Z"
+    "installedAt": "2026-08-11T02:25:16.409Z"
   },
   "discovery/methods/prototype-testing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.722Z"
+    "installedAt": "2026-08-11T02:25:16.416Z"
   },
   "discovery/methods/concept-testing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.724Z"
+    "installedAt": "2026-08-11T02:25:16.419Z"
   },
   "discovery/methods/jobs-to-be-done": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.727Z"
+    "installedAt": "2026-08-11T02:25:16.422Z"
   },
   "discovery/methods/ethnography": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.730Z"
+    "installedAt": "2026-08-11T02:25:16.425Z"
   },
   "discovery/methods/analytics-review": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.733Z"
+    "installedAt": "2026-08-11T02:25:16.427Z"
   },
   "discovery/methods/competitive-analysis": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.735Z"
+    "installedAt": "2026-08-11T02:25:16.430Z"
   },
   "discovery/methods/pricing-research": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.738Z"
+    "installedAt": "2026-08-11T02:25:16.432Z"
   },
   "discovery/methods/a-b-testing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.742Z"
+    "installedAt": "2026-08-11T02:25:16.435Z"
   },
   "discovery/methods/heatmap-session-replay": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.745Z"
+    "installedAt": "2026-08-11T02:25:16.437Z"
   },
   "discovery/events/design-sprint": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.748Z"
+    "installedAt": "2026-08-11T02:25:16.440Z"
   },
   "discovery/events/discovery-sprint": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.752Z"
+    "installedAt": "2026-08-11T02:25:16.442Z"
   },
   "discovery/events/kickoff-workshop": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.755Z"
+    "installedAt": "2026-08-11T02:25:16.445Z"
   },
   "discovery/events/story-mapping": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.757Z"
+    "installedAt": "2026-08-11T02:25:16.448Z"
   },
   "discovery/events/assumption-mapping": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.760Z"
+    "installedAt": "2026-08-11T02:25:16.451Z"
   },
   "discovery/events/opportunity-mapping": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.763Z"
+    "installedAt": "2026-08-11T02:25:16.454Z"
   },
   "discovery/events/synthesis-session": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.766Z"
+    "installedAt": "2026-08-11T02:25:16.457Z"
   },
   "discovery/events/prioritization-workshop": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.768Z"
+    "installedAt": "2026-08-11T02:25:16.460Z"
   },
   "discovery/events/pivot-review": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.773Z"
+    "installedAt": "2026-08-11T02:25:16.463Z"
   },
   "discovery/events/research-readout": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.778Z"
+    "installedAt": "2026-08-11T02:25:16.465Z"
   },
   "industries/overview": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.785Z"
+    "installedAt": "2026-08-11T02:25:16.469Z"
   },
   "industries/healthcare": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.789Z"
+    "installedAt": "2026-08-11T02:25:16.472Z"
   },
   "industries/fintech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.792Z"
+    "installedAt": "2026-08-11T02:25:16.475Z"
   },
   "industries/ecommerce-retail": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.796Z"
+    "installedAt": "2026-08-11T02:25:16.479Z"
   },
   "industries/edtech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.799Z"
+    "installedAt": "2026-08-11T02:25:16.483Z"
   },
   "industries/gov-public-sector": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.802Z"
+    "installedAt": "2026-08-11T02:25:16.486Z"
   },
   "industries/travel-hospitality": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.805Z"
+    "installedAt": "2026-08-11T02:25:16.489Z"
   },
   "industries/saas-b2b": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.810Z"
+    "installedAt": "2026-08-11T02:25:16.492Z"
   },
   "industries/logistics-supply-chain": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.813Z"
+    "installedAt": "2026-08-11T02:25:16.496Z"
   },
   "industries/media-entertainment": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.816Z"
+    "installedAt": "2026-08-11T02:25:16.499Z"
   },
   "industries/real-estate-proptech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.819Z"
+    "installedAt": "2026-08-11T02:25:16.503Z"
   },
   "industries/energy-utilities": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.822Z"
+    "installedAt": "2026-08-11T02:25:16.506Z"
   },
   "industries/legal-tech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.826Z"
+    "installedAt": "2026-08-11T02:25:16.509Z"
   },
   "companies/solo": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.829Z"
+    "installedAt": "2026-08-11T02:25:16.512Z"
   },
   "companies/scale-up": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.832Z"
+    "installedAt": "2026-08-11T02:25:16.515Z"
   },
   "companies/sme": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.836Z"
+    "installedAt": "2026-08-11T02:25:16.517Z"
   },
   "companies/mid-market": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.839Z"
+    "installedAt": "2026-08-11T02:25:16.521Z"
   },
   "companies/enterprise": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.841Z"
+    "installedAt": "2026-08-11T02:25:16.523Z"
   },
   "companies/nonprofit": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.844Z"
+    "installedAt": "2026-08-11T02:25:16.526Z"
   },
   "companies/platform-marketplace": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.846Z"
+    "installedAt": "2026-08-11T02:25:16.529Z"
   },
   "companies/consultancy": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.849Z"
+    "installedAt": "2026-08-11T02:25:16.531Z"
   },
   "companies/bootstrapped": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.852Z"
+    "installedAt": "2026-08-11T02:25:16.534Z"
   },
   "companies/unicorn": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.854Z"
+    "installedAt": "2026-08-11T02:25:16.537Z"
   },
   "companies/government-digital": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.857Z"
+    "installedAt": "2026-08-11T02:25:16.540Z"
   },
   "methodologies/industry-healthcare": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.861Z"
+    "installedAt": "2026-08-11T02:25:16.542Z"
   },
   "methodologies/industry-fintech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.865Z"
+    "installedAt": "2026-08-11T02:25:16.546Z"
   },
   "methodologies/industry-gov": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.869Z"
+    "installedAt": "2026-08-11T02:25:16.549Z"
   },
   "methodologies/industry-ecommerce": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.872Z"
+    "installedAt": "2026-08-11T02:25:16.551Z"
   },
   "methodologies/industry-edtech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.875Z"
+    "installedAt": "2026-08-11T02:25:16.554Z"
   },
   "methodologies/industry-manufacturing": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.878Z"
+    "installedAt": "2026-08-11T02:25:16.556Z"
   },
   "methodologies/industry-media": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.880Z"
+    "installedAt": "2026-08-11T02:25:16.559Z"
   },
   "methodologies/industry-logistics": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.883Z"
+    "installedAt": "2026-08-11T02:25:16.561Z"
   },
   "methodologies/industry-proptech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.886Z"
+    "installedAt": "2026-08-11T02:25:16.564Z"
   },
   "methodologies/industry-energy": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.889Z"
+    "installedAt": "2026-08-11T02:25:16.566Z"
   },
   "methodologies/industry-legal-tech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.891Z"
+    "installedAt": "2026-08-11T02:25:16.568Z"
   },
   "methodologies/industry-hospitality": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.894Z"
+    "installedAt": "2026-08-11T02:25:16.572Z"
   },
   "methodologies/industry-gaming": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.897Z"
+    "installedAt": "2026-08-11T02:25:16.574Z"
   },
   "methodologies/industry-saas-b2b": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.899Z"
+    "installedAt": "2026-08-11T02:25:16.577Z"
   },
   "methodologies/industry-insurtech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.902Z"
+    "installedAt": "2026-08-11T02:25:16.579Z"
   },
   "methodologies/industry-ai-ml": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.905Z"
+    "installedAt": "2026-08-11T02:25:16.581Z"
   },
   "methodologies/industry-cybersecurity": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.907Z"
+    "installedAt": "2026-08-11T02:25:16.584Z"
   },
   "methodologies/industry-climate-tech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.911Z"
+    "installedAt": "2026-08-11T02:25:16.586Z"
   },
   "methodologies/industry-agritech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.914Z"
+    "installedAt": "2026-08-11T02:25:16.589Z"
   },
   "methodologies/industry-aerospace-defense": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.917Z"
+    "installedAt": "2026-08-11T02:25:16.591Z"
   },
   "methodologies/industry-automotive-mobility": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.920Z"
+    "installedAt": "2026-08-11T02:25:16.593Z"
   },
   "methodologies/industry-telecom": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.923Z"
+    "installedAt": "2026-08-11T02:25:16.596Z"
   },
   "methodologies/industry-crypto-web3": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.925Z"
+    "installedAt": "2026-08-11T02:25:16.599Z"
   },
   "methodologies/industry-hr-tech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.928Z"
+    "installedAt": "2026-08-11T02:25:16.601Z"
   },
   "methodologies/industry-martech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.931Z"
+    "installedAt": "2026-08-11T02:25:16.604Z"
   },
   "methodologies/industry-biotech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.934Z"
+    "installedAt": "2026-08-11T02:25:16.607Z"
   },
   "methodologies/industry-construction-tech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.936Z"
+    "installedAt": "2026-08-11T02:25:16.609Z"
   },
   "methodologies/industry-sports-fitness": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.939Z"
+    "installedAt": "2026-08-11T02:25:16.612Z"
   },
   "methodologies/industry-developer-tools": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.943Z"
+    "installedAt": "2026-08-11T02:25:16.614Z"
   },
   "methodologies/industry-marketplace-platforms": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.945Z"
+    "installedAt": "2026-08-11T02:25:16.617Z"
   },
   "methodologies/industry-nonprofit-civic": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.948Z"
+    "installedAt": "2026-08-11T02:25:16.620Z"
   },
   "methodologies/lean-startup": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.951Z"
+    "installedAt": "2026-08-11T02:25:16.623Z"
   },
   "methodologies/xp": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.953Z"
+    "installedAt": "2026-08-11T02:25:16.625Z"
   },
   "methodologies/dual-track-agile": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.956Z"
+    "installedAt": "2026-08-11T02:25:16.628Z"
   },
   "methodologies/continuous-delivery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.959Z"
+    "installedAt": "2026-08-11T02:25:16.630Z"
   },
   "methodologies/devops": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.962Z"
+    "installedAt": "2026-08-11T02:25:16.633Z"
   },
   "methodologies/sre-ops": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.965Z"
+    "installedAt": "2026-08-11T02:25:16.635Z"
   },
   "methodologies/design-ops": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.967Z"
+    "installedAt": "2026-08-11T02:25:16.638Z"
   },
   "methodologies/product-ops": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.970Z"
+    "installedAt": "2026-08-11T02:25:16.640Z"
   },
   "methodologies/less-huge": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.972Z"
+    "installedAt": "2026-08-11T02:25:16.643Z"
   },
   "methodologies/scrum-of-scrums": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.975Z"
+    "installedAt": "2026-08-11T02:25:16.645Z"
   },
   "methodologies/definition-of-done": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.977Z"
+    "installedAt": "2026-08-11T02:25:16.647Z"
   },
   "methodologies/user-stories": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.979Z"
+    "installedAt": "2026-08-11T02:25:16.649Z"
   },
   "methodologies/estimation-planning-poker": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.982Z"
+    "installedAt": "2026-08-11T02:25:16.652Z"
   },
   "methodologies/wsjf": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.984Z"
+    "installedAt": "2026-08-11T02:25:16.654Z"
   },
   "methodologies/tdd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.987Z"
+    "installedAt": "2026-08-11T02:25:16.656Z"
   },
   "methodologies/bdd": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.990Z"
+    "installedAt": "2026-08-11T02:25:16.660Z"
   },
   "methodologies/pair-mob-programming": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.993Z"
+    "installedAt": "2026-08-11T02:25:16.662Z"
   },
   "methodologies/okr-delivery": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.995Z"
+    "installedAt": "2026-08-11T02:25:16.664Z"
   },
   "methodologies/nexus": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:58.998Z"
+    "installedAt": "2026-08-11T02:25:16.667Z"
   },
   "methodologies/scrum-at-scale": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.001Z"
+    "installedAt": "2026-08-11T02:25:16.670Z"
   },
   "industries/cybersecurity": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.004Z"
+    "installedAt": "2026-08-11T02:25:16.673Z"
   },
   "industries/climate-tech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.009Z"
+    "installedAt": "2026-08-11T02:25:16.676Z"
   },
   "industries/agritech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.012Z"
+    "installedAt": "2026-08-11T02:25:16.678Z"
   },
   "industries/aerospace-defense": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.019Z"
+    "installedAt": "2026-08-11T02:25:16.681Z"
   },
   "industries/automotive-mobility": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.022Z"
+    "installedAt": "2026-08-11T02:25:16.684Z"
   },
   "industries/telecom": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.026Z"
+    "installedAt": "2026-08-11T02:25:16.687Z"
   },
   "industries/crypto-web3": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.029Z"
+    "installedAt": "2026-08-11T02:25:16.691Z"
   },
   "industries/hr-tech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.032Z"
+    "installedAt": "2026-08-11T02:25:16.694Z"
   },
   "industries/martech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.035Z"
+    "installedAt": "2026-08-11T02:25:16.697Z"
   },
   "industries/biotech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.039Z"
+    "installedAt": "2026-08-11T02:25:16.699Z"
   },
   "industries/construction-tech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.042Z"
+    "installedAt": "2026-08-11T02:25:16.702Z"
   },
   "industries/sports-fitness": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.045Z"
+    "installedAt": "2026-08-11T02:25:16.705Z"
   },
   "industries/developer-tools": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.049Z"
+    "installedAt": "2026-08-11T02:25:16.708Z"
   },
   "industries/marketplace-platforms": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.053Z"
+    "installedAt": "2026-08-11T02:25:16.711Z"
   },
   "industries/nonprofit-civic": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.056Z"
+    "installedAt": "2026-08-11T02:25:16.715Z"
   },
   "industries/gaming": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.059Z"
+    "installedAt": "2026-08-11T02:25:16.718Z"
   },
   "industries/manufacturing-software": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.062Z"
+    "installedAt": "2026-08-11T02:25:16.721Z"
   },
   "industries/insurtech": {
     "version": "1.0.0",
-    "installedAt": "2026-07-30T04:41:59.066Z"
+    "installedAt": "2026-08-11T02:25:16.724Z"
   }
 }

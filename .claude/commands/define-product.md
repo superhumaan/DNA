@@ -2,7 +2,8 @@
 description: Define product scope, ICP, surfaces, and non-goals before feature work.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Define product
+---
+# Define product
 
 Lock product identity and scope before feature factory work.
 

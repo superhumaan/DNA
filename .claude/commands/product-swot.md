@@ -2,7 +2,8 @@
 description: SWOT analysis where S/W come from architecture and debt; O/T are labeled when not evidenced.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Product SWOT
+---
+# Product SWOT
 
 Build a SWOT that would embarrass a stub canvas.
 

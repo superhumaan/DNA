@@ -2,7 +2,8 @@
 description: Decompose initiative/epic into stories or scopes per methodology hierarchy.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Break down work
+---
+# Break down work
 
 Decompose work using the team's hierarchy from delivery profile.
 

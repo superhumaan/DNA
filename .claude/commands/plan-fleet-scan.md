@@ -2,7 +2,8 @@
 description: Plan multi-project scan with cache, care signals, and kit/DNA health across a portfolio.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Plan fleet scan
+---
+# Plan fleet scan
 
 Scope: $ARGUMENTS
 

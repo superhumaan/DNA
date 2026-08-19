@@ -4,7 +4,7 @@
   "projectName": "dna-by-humaan",
   "description": "Software project",
   "createdAt": "2026-07-11T10:27:53.301Z",
-  "updatedAt": "2026-07-31T04:28:17.147Z",
+  "updatedAt": "2026-08-12T03:54:36.596Z",
   "stack": {
     "archetype": "react-vite-api",
     "frontend": "react",
@@ -1077,6 +1077,11 @@
     "repo": "DNA",
     "authenticated": true
   },
+  "git": {
+    "projectTag": "DNA",
+    "branchSlug": "dna",
+    "branchingStrategy": "trunk"
+  },
   "ai": {
     "enabled": true,
     "provider": "mock",
@@ -1113,8 +1118,8 @@
   },
   "aiWorkbench": {
     "enabled": true,
-    "lastSyncAt": "2026-07-31T04:28:17.147Z",
-    "catalogVersion": 8,
+    "lastSyncAt": "2026-08-12T03:54:36.596Z",
+    "catalogVersion": 9,
     "stemSource": "bundled"
   },
   "lab": {

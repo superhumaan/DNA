@@ -204,10 +204,28 @@ Scope: $ARGUMENTS
 
 Pages, components, API integration, loading/error/empty states, forms, responsive layout.
 
+**Hard constraints**
+
+- Match existing headers, copy, spacing, and components — **never invent marketing slogans or decorative text under page headers**
+- Reuse the design system / patterns already in the repo — do not start a parallel UI language
+- Load CellularMemory + similar screens before inventing structure
+
 ## Handoff
 
 Emit **Done / Next / Files** for UX Reviewer.`,
-    guidelines: GROUND,
+    guidelines: {
+      ...GROUND,
+      must: [
+        ...GROUND.must,
+        "Match existing UI patterns and copy from the repo",
+        "Load CellularMemory / similar screens before building new UI chrome",
+      ],
+      never: [
+        ...GROUND.never,
+        "Invent slogans, taglines, or decorative subheaders under page titles unless the user asked",
+        "Introduce a parallel design system or layout language",
+      ],
+    },
     expectations: [
       "UI matches plan and design system",
       "Loading, error, empty states handled",
@@ -216,7 +234,7 @@ Emit **Done / Next / Files** for UX Reviewer.`,
     ],
     contextLoads: [".cursor/rules/frontend.mdc", ".DNA/knowledge/frameworks/react/"],
     cliCommands: [],
-    examples: [{ userSays: "Build the admin tab", goodResponse: "Tab + table + loading states. Wired to API. Handoff to UX." }],
+    examples: [{ userSays: "Build the admin tab", goodResponse: "Tab + table + loading states. Wired to API. Matched existing admin header — no slogan. Handoff to UX." }],
     workflow: ["role-ux-reviewer"],
   },
   {
@@ -243,12 +261,27 @@ Flow clarity, labels, error messages, friction, design system / MUI consistency.
 
 Fix small UX issues inline. Flag larger issues for user.
 
+**Hard constraints**
+
+- Prefer minimal UX fixes over redesigns
+- Match existing design system patterns and copy tone
+- **Remove** invented slogans / decorative subheaders that do not match the rest of the product
+
 ## Handoff
 
 Emit **Done / Next / Files** for QA Engineer.`,
     guidelines: {
       ...GROUND,
-      should: ["Prefer minimal UX fixes over redesigns", "Match existing design system patterns"],
+      must: [
+        ...GROUND.must,
+        "Match existing design system patterns and copy tone",
+        "Flag or remove invented slogans / decorative chrome under headers",
+      ],
+      should: ["Prefer minimal UX fixes over redesigns"],
+      never: [
+        ...GROUND.never,
+        "Add marketing slogans or taglines that are not in the approved plan or existing product copy",
+      ],
     },
     expectations: [
       "UX issues listed (fixed vs flagged)",
@@ -257,7 +290,13 @@ Emit **Done / Next / Files** for QA Engineer.`,
     ],
     contextLoads: [".cursor/rules/ux.mdc", ".DNA/knowledge/disciplines/frontend/"],
     cliCommands: ["npx dna context ux"],
-    examples: [{ userSays: "UX pass", goodResponse: "Fixed 3 label issues. Flagged missing empty state copy. Handoff to QA." }],
+    examples: [
+      {
+        userSays: "UX pass",
+        goodResponse:
+          "Removed invented subheader slogan under Settings. Fixed 2 labels. Empty state still missing — flagged. Handoff to QA.",
+      },
+    ],
     workflow: ["role-qa-engineer"],
   },
   {
@@ -407,23 +446,42 @@ Acceptance criteria from \`ai/feature-request.md\` met. No unrelated rewrites.
 
 1. \`npx dna quality report --feature\` — **PASS**
 2. \`npx dna docker build\`
-3. \`npx dna github push --message "[ProjectTag] feat: <summary>"\`
+3. \`npx dna github push --message "[ProjectTag] feat: <summary>"\` — **current trunk / user-chosen branch** (default: no auto \`feature/*\` hop)
 
-Report: gate status, docker tag, branch URL, CI triggered.`,
+Report: gate status, docker tag, branch URL, CI triggered.
+
+**Never** invent preview remotes or dual-track the feature onto a new branch to "test on preview".`,
     guidelines: {
       ...GROUND,
-      must: [...GROUND.must, "All three close-out steps must succeed or be explained"],
-      never: [...GROUND.never, "Skip docker or push on feature complete"],
+      must: [
+        ...GROUND.must,
+        "All three close-out steps must succeed or be explained",
+        "Push current trunk / user-chosen branch — do not invent feature remotes",
+      ],
+      never: [
+        ...GROUND.never,
+        "Skip docker or push on feature complete",
+        "Create feature/* or hop branches just to get a preview deploy",
+      ],
     },
     expectations: [
       "Acceptance criteria checklist",
       "Quality PASS confirmed",
       "Docker build result",
-      "GitHub push result + URL",
+      "GitHub push result + URL (same line of work)",
     ],
-    contextLoads: ["ai/feature-request.md", ".cursor/rules/delivery-pipeline.mdc"],
+    contextLoads: [
+      "ai/feature-request.md",
+      ".cursor/rules/delivery-pipeline.mdc",
+      ".DNA/knowledge/disciplines/trunk-based-development/",
+    ],
     cliCommands: ["npx dna quality report --feature", "npx dna docker build", "npx dna github push"],
-    examples: [{ userSays: "Ship it", goodResponse: "PASS. Docker OK. Pushed feature/admin-dashboard. CI running." }],
+    examples: [
+      {
+        userSays: "Ship it",
+        goodResponse: "PASS. Docker OK. Pushed main (trunk). CI running. No feature/* hop.",
+      },
+    ],
     workflow: [],
   },
   {

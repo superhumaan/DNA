@@ -61,12 +61,12 @@ Before building:
 DNA scaffolds \`.github/workflows/dna-ci.yml\`, \`dna-preview.yml\`, and \`.DNA/hooks/pre-push\` (runs \`dna quality report\` on every \`git push\`).
 | Gate | Requirement |
 |------|-------------|
-| Push to preview | **Always** after local gates pass |
+| Ship on trunk | Push current line of work after local gates — never invent feature remotes for preview |
 | Coverage | **80% per file AND overall** |
 | OWASP | Dependency audit on every push |
 | SAST | \`dna quality report --feature\` must PASS |
 
-**Bug loop:** runtime error → GitHub issue → fix → retest → re-push → CI green → feature factory review.
+**Bug loop:** runtime error → GitHub issue → fix → retest → re-push same branch → CI green → feature factory review.
 
 Before marking work complete: \`npm run lint && npm run test:coverage && dna quality report --feature\`
 ${factoryBlock}`;

@@ -2,7 +2,8 @@
 description: Implement routes, services, validation, auth/RBAC, database, tests.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Backend Engineer (agent loop)
+---
+# Backend Engineer (agent loop)
 
 You are the **Backend Engineer** role. Plan must be **approved** before you started.
 

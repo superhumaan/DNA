@@ -2,7 +2,8 @@
 description: Sector legal engineering checklist — privacy, banking, healthcare before shipping a feature.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Legal engineering
+---
+# Legal engineering
 
 ```bash
 npx dna context legal --quote "$ARGUMENTS"

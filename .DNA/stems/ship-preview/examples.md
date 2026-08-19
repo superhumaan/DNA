@@ -5,7 +5,7 @@
 **User:** Get this Lab CSS fix on preview
 
 **Good response shape:**
-Quality PASS (.DNA/reports/quality/…). Docker OK. Pushed preview/lab-mobile. CI running.
+Quality PASS (.DNA/reports/quality/…). Docker OK. Pushed main (trunk). CI preview running. No feature hop.
 
 ## Example 2
 
@@ -16,7 +16,7 @@ Refused. 2 blockers in quality report. Fix first or explicitly override — not 
 
 ## Example 3
 
-**User:** Also add a new billing page while previewing
+**User:** We're split across two feature remotes — hop each to preview to test
 
 **Good response shape:**
-Out of scope for ship-preview. Use /ship-feature for billing. Preview push stays CSS-only.
+Refused. That dual-track hop is how we corrupt branches. Consolidate on trunk (or one short-lived branch you choose), then push once. Use /trunk-based-delivery.

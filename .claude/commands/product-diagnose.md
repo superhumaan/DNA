@@ -2,7 +2,8 @@
 description: Orchestrate purpose → SWOT → value → JTBD from real architecture and debt, then hand off to competitor and upgrade stems.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Product diagnose
+---
+# Product diagnose
 
 Run the product-intelligence ladder for THIS repo. Scope: $ARGUMENTS
 

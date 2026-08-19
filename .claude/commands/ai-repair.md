@@ -2,7 +2,8 @@
 description: DNA AI repair workflow for classified runtime issues.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# AI repair
+---
+# AI repair
 
 ```bash
 npx dna ai repair --issue '<json or description>'

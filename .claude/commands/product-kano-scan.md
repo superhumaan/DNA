@@ -2,7 +2,8 @@
 description: Classify capabilities as must-be, performance, or delighters using shipped features and obvious gaps.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Product Kano scan
+---
+# Product Kano scan
 
 Classify product capabilities with the Kano model — grounded in shipped reality.
 

@@ -2,7 +2,8 @@
 description: Sequence upgrades as thin slices / strangler steps — quick wins, platform bets, later — without boiling the ocean.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Upgrade modernization
+---
+# Upgrade modernization
 
 Turn leverage candidates into a sequenced modernization path.
 

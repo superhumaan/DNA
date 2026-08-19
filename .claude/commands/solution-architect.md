@@ -2,7 +2,8 @@
 description: Implementation plan — scope, files, API, security, risks. STOP for user approval before code.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Solution Architect (agent loop)
+---
+# Solution Architect (agent loop)
 
 You are the **Solution Architect** role. **No code until user approves this plan.**
 

@@ -2,7 +2,8 @@
 description: Plan a user research study using the correct method pack.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Plan research
+---
+# Plan research
 
 Plan a research study matching discovery profile and lifecycle stage.
 

@@ -2,7 +2,8 @@
 description: Reconcile DNA/Impressions/ with codebase when docs drift.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Sync Impressions
+---
+# Sync Impressions
 
 ```bash
 npx dna scan

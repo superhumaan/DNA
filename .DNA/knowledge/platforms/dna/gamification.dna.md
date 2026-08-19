@@ -1,4 +1,4 @@
-# Gamification (a production app)
+# Gamification (production apps)
 
 ## Badges
 - Catalog with thresholds, prestige tiers, holiday badges

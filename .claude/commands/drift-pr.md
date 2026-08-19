@@ -2,7 +2,8 @@
 description: Open a draft GitHub PR when Impressions drift exceeds threshold.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Impressions drift PR
+---
+# Impressions drift PR
 
 ```bash
 npx dna scan

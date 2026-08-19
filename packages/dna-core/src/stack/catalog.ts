@@ -126,7 +126,12 @@ export const STACK_ARCHETYPES: StackArchetype[] = [
       hosting: ["eas", "vercel"],
     },
     excludes: ["next", "vite", "ghost", "vue", "svelte", "nestjs"],
-    knowledgePacks: ["frameworks/react-native", "disciplines/mobile-development", "disciplines/security"],
+    knowledgePacks: [
+      "frameworks/react-native",
+      "disciplines/mobile-development",
+      "platforms/mobile-ui",
+      "disciplines/security",
+    ],
   },
   {
     id: "ghost-cms",

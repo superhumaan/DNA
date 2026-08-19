@@ -16,6 +16,8 @@ describe("purpose combos", () => {
     expect(getPurposeCombo("combo/product-canvas-creation")?.purpose).toBe(
       "Product canvas creation",
     );
+    expect(getPurposeCombo("combo/expo-mobile")?.stems).toContain("expo-dynamic-builds");
+    expect(getPurposeCombo("combo/expo-mobile")?.required).toContain("frameworks/react-native");
   });
 
   it("resolves required + preferred by default (not recommended)", () => {

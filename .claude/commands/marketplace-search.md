@@ -2,7 +2,8 @@
 description: Search DNA knowledge packs by keyword.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Marketplace search
+---
+# Marketplace search
 
 ```bash
 npx dna marketplace search "<query>"

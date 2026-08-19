@@ -2,7 +2,8 @@
 description: Audit keyboard access, labels, contrast, and prefers-reduced-motion.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Accessibility audit
+---
+# Accessibility audit
 
 Scope: $ARGUMENTS
 

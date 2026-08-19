@@ -2,7 +2,8 @@
 description: Shape a feature brief from strategy — then hand off to plan-feature / agent loop.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Shape feature
+---
+# Shape feature
 
 Produce a feature brief ready for DNA feature factory — **no code, no architect plan yet**.
 

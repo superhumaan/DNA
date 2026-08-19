@@ -47,7 +47,7 @@ function claudeFrontmatter(description: string, hint?: string): string {
     "---",
     "",
   ]
-    .filter(Boolean)
+    .filter((line) => line !== null)
     .join("\n");
 }
 
@@ -131,6 +131,8 @@ Refresh: \`npx dna workbench install\` or \`npx dna stems install\`
   files[STEM_INDEX] = JSON.stringify(
     {
       version: 1,
+      catalogVersion: 9,
+      source: "bundled",
       count: packs.length,
       catalogUrl: "https://dna.humaan.app/intelligence#stem-library",
       packs: packs.map((p) => ({

@@ -1,4 +1,4 @@
-# Azure (a production app, a production app)
+# Azure (production apps, production apps)
 
 ## Services used in production
 - **Azure Container Apps** — SPA + API single container
@@ -6,7 +6,7 @@
 - **Azure Key Vault** — secrets
 - **Azure AD B2C** — production SSO (MSAL + server session exchange)
 - **Azure Communication Email** — transactional email
-- **Azure SQL** — a production app multi-tenant persistence option
+- **Azure SQL** — production apps multi-tenant persistence option
 - **Log Analytics** — observability
 
 ## Terraform

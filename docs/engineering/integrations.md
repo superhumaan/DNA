@@ -67,10 +67,15 @@ Without a stored token or env var, runs in dry-run mode and prints the payload. 
 
 When `ci.pushToPreview` is true (default), `dna ci install` scaffolds `.github/workflows/dna-preview.yml`.
 
+**Branching is separate:** agents ship on **trunk by default** (`git.branchingStrategy: "trunk"`). Preview CI runs on whatever branch was pushed — agents must **not** invent `feature/*` remotes just to get a preview. Opt into legacy hop with `"git": { "branchingStrategy": "feature-branch" }`.
+
 Configure in `.DNA/config.dna.json`:
 
 ```json
 {
+  "git": {
+    "branchingStrategy": "trunk"
+  },
   "ci": {
     "pushToPreview": true,
     "previewProvider": "vercel",

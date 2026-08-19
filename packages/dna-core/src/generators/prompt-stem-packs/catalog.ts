@@ -5,6 +5,7 @@ import { DISCOVERY_STEM_DEFS } from "./catalog-discovery.js";
 import { STRATEGY_STEM_DEFS } from "./catalog-strategy.js";
 import { PRODUCT_INTEL_STEM_DEFS } from "./catalog-product-intel.js";
 import { DAY_TO_DAY_STEM_DEFS } from "./catalog-day-to-day.js";
+import { EXPO_STEM_DEFS } from "./catalog-expo.js";
 
 const GROUND = {
   must: [
@@ -1535,4 +1536,5 @@ Summarize segments synced, conflicts, and resolution strategy.`,
   ...STRATEGY_STEM_DEFS,
   ...PRODUCT_INTEL_STEM_DEFS,
   ...DAY_TO_DAY_STEM_DEFS,
+  ...EXPO_STEM_DEFS,
 ];

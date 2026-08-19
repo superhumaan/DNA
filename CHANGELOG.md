@@ -4,8 +4,19 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+### Added
+- **Trunk-based delivery (default)** — `git.branchingStrategy: trunk` (default on download); stem `/trunk-based-delivery`; foundation pack `disciplines/trunk-based-development`
+- Agents must not invent preview remotes, hop `feature/*` for preview, or invent header slogans — FE/UX + delivery rules updated
+- **Expo / React Native stem packs (catalog v9, 23 stems)** — `/expo-architect`, `/expo-workflow-decision`, `/expo-bff`, `/expo-init`, `/expo-router-navigation`, `/expo-dynamic-builds` (EAS Update OTA), `/expo-eas-build`, `/expo-dev-client`, `/expo-app-config`, `/expo-ios-ship`, `/expo-ios-permissions`, `/expo-android-ship`, `/expo-android-permissions`, `/expo-auth-secure`, `/expo-offline-sync`, `/expo-perf-mobile`, `/expo-a11y-mobile`, `/expo-testing-mobile`, `/expo-notifications`, `/expo-deep-links`, `/expo-store-submit`, `/expo-ci-eas`, `/expo-native-modules`
+- Marketplace combo `combo/expo-mobile`; knowledge: Expo ADR, BFF, EAS, dynamic updates, iOS, Android; alias `frameworks/expo` → `frameworks/react-native`
+
+### Changed
+- **`dna github push`** — no longer auto-creates `feature/*` from main unless `git.branchingStrategy: feature-branch` or `--create-branch`
+- **Delivery pipeline / ship-preview** — trunk ship by default; preview only when the user explicitly asks
+
 ### Docs
 - **v0.9.0 roadmap** — 21 small Planned issues (#29–#49) on [DNA Roadmap](https://github.com/users/superhumaan/projects/3/views/1) / [milestone](https://github.com/superhumaan/DNA/milestone/7): outcome combos, repair learning, architecture graph, memory, factory, IDE extension, MCP, cloud spike. Synced in `docs/product/planning.md` + README.
+- **Expo stems** — catalog v9 (127 stems), combo `combo/expo-mobile`, CLI/workbench docs updated
 
 ## [0.6.27] - 2026-07-31
 

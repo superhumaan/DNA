@@ -2,7 +2,8 @@
 description: Summarize the branch, draft a test plan, and open a PR with gh pr create.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Create pull request
+---
+# Create pull request
 
 Scope: $ARGUMENTS
 

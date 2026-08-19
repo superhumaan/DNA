@@ -28,7 +28,7 @@ DNA development priorities and public roadmap.
 - **Aggressive Repair Loop** — fingerprinted errors, CellularMemory blockers, GitHub issue dedup, `dna ai force-repair` ([docs](../engineering/lab-and-repair-0.6.3.md))
 - **Zero npm dependencies** — published package has no production `dependencies`; internal git, glob, GitHub API, CLI parser, and config validators
 - **Supply-chain transparency** — Socket.dev score improvements, npm provenance, documented network endpoints ([SECURITY.md](../../SECURITY.md))
-- **103 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow (includes strategy ladder + day-to-day operator stems: admin, Tauri, fleet, PR, preview, a11y/perf, incident, MCP, i18n)
+- **127 prompt stem packs** — full Cursor/Claude prompt engineering with guidelines and expectations per workflow (strategy ladder, day-to-day operator stems, **Expo/React Native iOS+Android**: architect, BFF, EAS dynamic builds, store ship)
 - **DNA Workbench** — default on init/doctor/update; `AGENTS.md` intent routing + mandatory 9-role agent loop for engineering work
 - ~1045 knowledge packs in stable channel
 - Platform catalog from four reference production apps
@@ -61,7 +61,8 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Preview deployment workflow ([#10](https://github.com/superhumaan/DNA/issues/10)) | ✅ Shipped |
 | Prompt stem packs + intelligence library (v0.4.0) | ✅ Shipped |
 | Strategy stem ladder — Golden Circle → canvases → North Star/OKRs/KPIs → initiatives → Now/Next/Later (catalog v7) | ✅ Shipped |
-| Day-to-day stems — admin, Tauri, fleet, PR, preview, audits, incident, MCP, i18n (catalog v8, 103 stems) | ✅ Shipped |
+| Day-to-day stems — admin, Tauri, fleet, PR, preview, audits, incident, MCP, i18n (catalog v8) | ✅ Shipped |
+| **Expo / React Native stems** — architect, BFF, EAS dynamic builds, iOS/Android (catalog v9, 127 stems) | ✅ Shipped |
 | **Skeletor bridge** — DNA pulls local fleet into AI context by default when Skeletor is installed (0.6.22) | ✅ Shipped |
 | **Project git naming** — AI commits/PRs use `[MyApp]` / `[DNA]` tags from config (0.6.23) | ✅ Shipped |
 | **npm + GitHub listing polish** (0.6.24) | ✅ Shipped |

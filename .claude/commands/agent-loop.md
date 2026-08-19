@@ -2,7 +2,8 @@
 description: Execute all nine roles in order — stop at architect for approval, then build through ship.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Full agent loop
+---
+# Full agent loop
 
 Execute `ai/agent-loop.md` **role by role**. One role per phase; complete handoffs.
 

@@ -2,7 +2,8 @@
 description: Define operational and health KPIs with owners, thresholds, and review cadence.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Define KPIs
+---
+# Define KPIs
 
 Define **health / operational** metrics the team reviews continuously. KPIs are not OKRs — they monitor the business; OKRs drive change for a period.
 

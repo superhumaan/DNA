@@ -2,7 +2,8 @@
 description: Clarify Why, How, and What for the product or company (Simon Sinek).
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Golden Circle
+---
+# Golden Circle
 
 Define purpose (Why), approach (How), and offering (What) for this project.
 

@@ -2,7 +2,8 @@
 description: Security-focused analysis — auth patterns, secrets, OWASP alignment.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Security audit
+---
+# Security audit
 
 1. `npx dna context security`
 2. `npx dna analyze` — focus auth patterns

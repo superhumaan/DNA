@@ -4,6 +4,7 @@
  */
 
 import type { DnaConfig } from "./schemas.js";
+import { GIT_BRANCHING_STRATEGIES } from "./constants.js";
 
 export interface ProjectGitIdentity {
   /** Display tag in brackets, e.g. MyApp, DNA */
@@ -11,6 +12,8 @@ export interface ProjectGitIdentity {
   /** Lowercase slug for branch prefixes, e.g. myapp, dna */
   branchSlug: string;
 }
+
+export type GitBranchingStrategy = (typeof GIT_BRANCHING_STRATEGIES)[number];
 
 /** Well-known open-source project IDs → display tags. */
 const KNOWN_PROJECT_TAGS: Record<string, string> = {
@@ -66,6 +69,16 @@ export function resolveProjectGitIdentity(
   return { tag, branchSlug };
 }
 
+/**
+ * Default is trunk — agents stay on main / the user-chosen line of work.
+ * Opt into legacy hop with `"git": { "branchingStrategy": "feature-branch" }`.
+ */
+export function resolveGitBranchingStrategy(
+  config?: Pick<DnaConfig, "git"> | null,
+): GitBranchingStrategy {
+  return config?.git?.branchingStrategy === "feature-branch" ? "feature-branch" : "trunk";
+}
+
 export function formatTaggedCommit(
   identity: ProjectGitIdentity,
   type: string,
@@ -112,5 +125,6 @@ export function projectGitNamingSection(identity: ProjectGitIdentity): string {
 - Keep conventional **type** after the tag so semver tools still parse
 - Ship / push examples: \`npx dna github push --message "[${identity.tag}] feat: <summary>"\`
 - DNA AI repair must use this tag (never hardcode a different project brand)
+- **Trunk by default:** stay on \`main\`/\`master\` (or the one branch the user chose). Do **not** invent \`feature/*\` remotes or hop branches to "test on preview". Opt out only with \`"git": { "branchingStrategy": "feature-branch" }\`.
 `;
 }

@@ -2,7 +2,8 @@
 description: Tiered GDPR, HIPAA, ISO 27001, SOC 2, PCI — plan, packs, checklist.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Plan compliance
+---
+# Plan compliance
 
 ```bash
 npx dna compliance list

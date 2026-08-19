@@ -2,7 +2,8 @@
 description: Configure how your team plans, documents, and tickets work.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Methodology setup
+---
+# Methodology setup
 
 Configure DNA delivery profile for how this team actually works.
 

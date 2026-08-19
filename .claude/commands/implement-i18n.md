@@ -2,7 +2,8 @@
 description: Add locales, RTL, and copy — locale routing, translation files, fallback locale.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Implement i18n
+---
+# Implement i18n
 
 Scope: $ARGUMENTS
 

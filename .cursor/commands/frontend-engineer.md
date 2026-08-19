@@ -16,6 +16,12 @@ Scope: $ARGUMENTS
 
 Pages, components, API integration, loading/error/empty states, forms, responsive layout.
 
+**Hard constraints**
+
+- Match existing headers, copy, spacing, and components — **never invent marketing slogans or decorative text under page headers**
+- Reuse the design system / patterns already in the repo — do not start a parallel UI language
+- Load CellularMemory + similar screens before inventing structure
+
 ## Handoff
 
 Emit **Done / Next / Files** for UX Reviewer.

@@ -2,7 +2,8 @@
 description: Effort × impact map for major upgrades with minimal effort — scored from debt, SWOT, and competitor gaps.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Upgrade leverage map
+---
+# Upgrade leverage map
 
 Find **major upgrades with minimal effort** — 80/20 moves grounded in debt and competitive gaps.
 

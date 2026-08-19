@@ -295,7 +295,7 @@ Re-enable with `dna feature-factory install`.
 
 ## commands
 
-Install **DNA Workbench**, **`AGENTS.md`**, **103 prompt stem packs**, and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update. Engineering work routes through the mandatory 9-role agent loop (`ai/agent-loop.md`). Strategy + product-intelligence + day-to-day operator stems (Golden Circle, canvases, diagnose/SWOT/competitors/upgrade leverage, admin/Tauri/fleet/PR/preview/audits) install with the same workbench path.
+Install **DNA Workbench**, **`AGENTS.md`**, **prompt stem packs** (including Expo/React Native iOS+Android), and **`/dna-*` CLI slash commands** (`.DNA/stems/<id>/`, `.cursor/commands/`, skills, always-on rules) by default on init, doctor, and update. Engineering work routes through the mandatory 9-role agent loop (`ai/agent-loop.md`). Strategy + product-intelligence + day-to-day operator stems (Golden Circle, canvases, diagnose/SWOT/competitors/upgrade leverage, admin/Tauri/fleet/PR/preview/audits) install with the same workbench path.
 
 ```bash
 dna workbench install
@@ -331,9 +331,10 @@ Each stem includes: `prompt.md`, `guidelines.md`, `expectations.md`, `context.md
 |----------|----------|
 | Session | `/health-check`, `/dna-update`, `/work-with-dna` |
 | Analysis | `/analyze-project`, `/what-next`, `/scan-project`, `/stack-hosting` |
-| Features | `/ship-feature`, `/plan-rbac`, `/generate-feature`, `/platform-codegen` |
+| Features | `/ship-feature`, `/plan-rbac`, `/generate-feature`, `/platform-codegen`, `/expo-bff` |
 | Agent loop | `/agent-loop`, `/product-analyst`, `/solution-architect`, `/backend-engineer`, … |
-| Quality | `/quality-gate`, `/pre-push-review` |
+| Quality | `/quality-gate`, `/pre-push-review`, `/expo-perf-mobile`, `/expo-a11y-mobile` |
+| Delivery | `/expo-dynamic-builds`, `/expo-eas-build`, `/expo-ios-ship`, `/expo-android-ship` |
 | IVF | `/ivf-shared-library`, `/ivf-execute`, `/plan-ivf` |
 | Docs | `/sync-impressions`, `/drift-pr` |
 | Memory | `/memory-sync`, `/memory-import`, `/memory-export` |
@@ -370,12 +371,15 @@ Opens GitHub in your browser (via GitHub CLI or device flow). Token stored in `~
 
 ### github push
 
-Commit and push the current feature branch (used by feature factory close-out).
+Commit and push the **current branch** (trunk by default — used by feature factory close-out).
 
 ```bash
-dna github push --message "feat: add billing"
-dna github push --branch feature/billing --create-branch
+dna github push --message "[DNA] feat: add billing"
+# Legacy hop (opt-in): create feature/* when on main
+dna github push --message "[DNA] feat: billing" --create-branch
 ```
+
+Default branching strategy is **trunk** (`git.branchingStrategy` in `.DNA/config.dna.json`). Set `"feature-branch"` to restore auto `feature/*` creation when on main.
 
 ### github connect
 

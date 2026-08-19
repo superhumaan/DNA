@@ -2,7 +2,8 @@
 description: Investigate runtime observer data and immune system classifications.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Runtime investigate
+---
+# Runtime investigate
 
 ```bash
 npx dna lab serve --port 3200

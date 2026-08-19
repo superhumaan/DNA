@@ -2,7 +2,8 @@
 description: Turn analyze output into an actionable plan — P1 gaps, IVF, shared library, features.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# What next after analyze?
+---
+# What next after analyze?
 
 The user has analysis output (or will paste it). Turn gaps into an actionable plan.
 

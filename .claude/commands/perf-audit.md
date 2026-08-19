@@ -2,7 +2,8 @@
 description: Core Web Vitals, Tauri cold start, and scan/jank budgets.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Performance audit
+---
+# Performance audit
 
 Scope: $ARGUMENTS
 

@@ -12,7 +12,7 @@ DNA ships as a single npm package with a broad feature surface. This page is the
 | **Skeletor bridge** | `dna skeletor status` / `feed` | When Skeletor is installed, DNA pulls fleet data into AI context by default |
 | Behaviour rules | `.DNA/behaviour/` | Govern how AI writes code, tests, docs, security |
 | neuralNetwork routing | `.DNA/neuralNetwork.json` | Intent → knowledge + Behaviour + memory |
-| **103 prompt stem packs** | `.DNA/stems/` | Guidelines, expectations, workflows + `/` slash commands (strategy ladder + day-to-day operator stems) |
+| **127 prompt stem packs** | `.DNA/stems/` | Guidelines, expectations, workflows + `/` slash commands (strategy ladder, day-to-day, **Expo/React Native iOS+Android**) |
 | **DNA Workbench** | `AGENTS.md`, `.cursor/`, `.claude/` | Always-on co-pilot — rules, skills, `/dna-*` commands |
 | AI tool files | `dna doctor` | Cursor, Claude, Copilot, Windsurf, Gemini |
 | Context export | `dna context <target>` | Feed Cursor, Claude, Copilot |

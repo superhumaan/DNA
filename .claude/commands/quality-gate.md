@@ -2,7 +2,8 @@
 description: Pre-ship lint, coverage, SAST — must PASS before push.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Quality gate
+---
+# Quality gate
 
 Scope: $ARGUMENTS
 

@@ -1,5 +1,5 @@
 ---
-description: DNA delivery pipeline — preview push, bug loop, factory, CI gates on every push
+description: DNA delivery pipeline — trunk ship, bug loop, factory, CI gates on every push
 alwaysApply: true
 ---
 
@@ -7,12 +7,15 @@ alwaysApply: true
 
 You are working on **dna-by-humaan**. DNA never misses a beat — follow this pipeline on **every change**.
 
-## 1. Push to preview (always)
+## 1. Ship on trunk (default)
 
 After local gates pass:
 1. Commit with a clear message using `[DNA] type(scope): summary`
-2. **Push to the preview branch** (or current feature branch — CI deploys preview on every push)
-3. Never leave work only on localhost — preview must stay current
+2. **Push the current line of work** — default is trunk (`main`/`master` or the one branch the user already chose)
+3. Never invent `feature/*` remotes, dual-track WIP, or hop branches "to test on preview"
+4. Branching strategy is **trunk** — dna github push stays on the current branch (no auto feature hop)
+
+Opt out of trunk only via `"git": { "branchingStrategy": "feature-branch" }` in `.DNA/config.dna.json`.
 
 ## 2. Bug loop (automatic)
 
@@ -20,7 +23,7 @@ When runtime, tests, or CI surface a bug:
 1. **Create a bug report** — GitHub issue (DNA auto-creates for high/critical runtime errors)
 2. **Fix the root cause** — load `.DNA/behaviour/`, `.DNA/CellularMemory/`, relevant knowledge
 3. **Retest** — `npm test`, `npm run test:coverage`, `dna quality report --feature`
-4. **Re-push to preview** and confirm CI is green
+4. **Re-push the same line of work** and confirm CI is green
 5. If AI repair opened a PR — review it, never auto-merge
 
 Runtime watches **backend and frontend** by default. Errors land in `.DNA/data/runtime.db`.
@@ -32,13 +35,30 @@ For any user request to build, add, or change:
 2. Run `ai/agent-loop.md` roles in order — plan first, wait for approval
 3. Implement → QA → Code Quality → Final Review
 
-## 4. CI quality gates (every push)
+## 4. Agent must not decide their own fate
 
-**Default (public / OSS):** DNA CI is **advisory**. Set `"ci": { "strict": true }` in `.DNA/config.dna.json` to enforce blocking gates.
+- Do **not** invent preview remotes, slogans under page headers, or parallel architectures
+- Match existing patterns, copy, components, and layout from the repo
+- Load CellularMemory (recent-changes, previous-solutions, blockers) before building so work is not repeated
+- `/ship-preview` only when the user explicitly asks — never as a recovery strategy for dual-tracked branches
 
-**Local:** `.DNA/hooks/pre-push` runs `dna quality report` before every `git push`.
+## 5. CI quality gates (every push)
 
-Before pushing:
+**Default (public / OSS):** DNA CI is **advisory** — workflows report lint, test, coverage, and SAST findings but **never fail the GitHub Actions run**. Set `"ci": { "strict": true }` in `.DNA/config.dna.json` to enforce blocking gates.
+
+**Local:** `.DNA/hooks/pre-push` runs `dna quality report` before every `git push` (advisory by default — never blocks push).
+
+**Remote:** CI (`.github/workflows/dna-ci.yml`) runs on **every push**:
+| Gate | Advisory (default) | Strict (`ci.strict: true`) |
+|------|-------------------|------------------------------|
+| Lint + typecheck | Report | Must pass |
+| Unit tests | Report | Must pass |
+| Code coverage | Report (80% target) | **80% per file AND overall** |
+| OWASP dependency audit | Report | high+ vulnerabilities block |
+| DNA SAST quality scan | Report | blocker/critical = fail |
+| Docker build | Report | Must pass when Dockerfile present |
+
+Before pushing, run locally (or let the pre-push hook run it):
 ```bash
 dna quality report && dna docker build
 ```
@@ -48,11 +68,12 @@ Then push:
 dna github push --message "[DNA] feat: <what you built>"
 ```
 
-Coverage target: 80%.
+GitHub permissions are granted once during `dna init` via browser login — no manual tokens.
 
-## 5. Keep DNA current
+## 6. Keep DNA current
 
-- `dna doctor` / `dna update`
+- `dna doctor` — ensures scaffolding, packs, runtime DB, CI, and AI repair are enabled
+- `dna update` — pull latest knowledge packs
 - Update CellularMemory and Impressions when architecture changes
 
 **Opt out** only via `.DNA/config.dna.json` — defaults are ON.

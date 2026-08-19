@@ -4,7 +4,9 @@
 
 Scope: $ARGUMENTS
 
-Use when work is **already implemented** and needs preview — not a substitute for `ship-feature` when building new scope.
+**Only when the user explicitly asks for preview.** Not a substitute for `ship-feature` or `trunk-based-delivery`. Not a recovery strategy for dual-tracked branches.
+
+Use when work is **already implemented** on the **current line of work** (trunk / user-chosen branch).
 
 ## Evidence bootstrap (run first)
 
@@ -19,7 +21,7 @@ Load `.DNA/neuralNetwork.json`, relevant `.DNA/behaviour/`, CellularMemory (syst
 
 1. `npx dna quality report --feature` — PASS
 2. `npx dna docker build` — success when Dockerfile present
-3. Push **preview / feature branch** (CI deploys preview)
+3. Push the **current branch** (trunk by default — CI may deploy preview from that push)
 
 ```bash
 npx dna quality report --feature
@@ -29,9 +31,10 @@ npx dna github push --message "[DNA] chore: preview <summary>"
 
 ## Checklist
 
+- [ ] User explicitly asked for preview (not agent-invented)
 - [ ] Quality PASS (report path noted)
 - [ ] Docker status
-- [ ] Branch pushed (not force main)
+- [ ] Pushed **same** branch already in use — no new `feature/*` hop
 - [ ] CI/preview URL if available
 - [ ] No unplanned feature factory
 
@@ -48,6 +51,8 @@ npx dna github push --message "[DNA] chore: preview <summary>"
 |------|----------|
 | Quality FAIL | Fix or stop — never "just push" |
 | No Dockerfile | Skip docker with explicit note |
+| Agent tempted to create a new remote "for preview" | Refuse — stay on trunk / current branch; use `/trunk-based-delivery` |
+| Dual-tracked WIP across feature remotes | Stop; consolidate on one line; do not hop |
 | User asks for new feature mid-flight | Redirect to `ship-feature` |
 
 ## Failure modes (must address)

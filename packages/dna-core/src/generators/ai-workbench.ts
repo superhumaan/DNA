@@ -324,6 +324,9 @@ Each command maps to \`.DNA/stems/<id>/\` — read **prompt.md, guidelines.md, e
 | \`/legal-engineering\` | legal-engineering | Sector checklist on a feature |
 | \`/debug-issue\` | debug-issue | Debug + fix loop |
 | \`/ivf-shared-library\` | ivf-shared-library | Extract shared UI library |
+| \`/expo-architect\` | expo-architect | Expo iOS/Android architecture + BFF decisions |
+| \`/expo-dynamic-builds\` | expo-dynamic-builds | EAS Update OTA vs native binary |
+| \`/expo-bff\` | expo-bff | Mobile backend-for-frontend |
 
 Full library (${getPromptStemPacks().length} stems): https://dna.humaan.app/intelligence#stem-library
 
@@ -486,7 +489,7 @@ export function buildIntelligenceWorkbenchCatalog() {
     }));
 
   return {
-      version: 8,
+      version: 9,
       type: "workbench",
       catalogUrl: "https://dna.humaan.app/intelligence",
       generatedBy: "dna workbench install",

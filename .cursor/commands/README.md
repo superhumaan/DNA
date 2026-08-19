@@ -1,6 +1,6 @@
 # DNA intelligence — Cursor commands
 
-**dna-by-humaan** — 103 prompt stem packs (bundled catalog v8) + 48 `/dna-*` CLI commands.
+**dna-by-humaan** — 127 prompt stem packs (bundled catalog v9) + 48 `/dna-*` CLI commands.
 
 ## Prompt stems (`.DNA/stems/<id>/`)
 
@@ -105,12 +105,36 @@ Each stem: **prompt + guidelines + expectations + context + examples**.
 | `/ship-tauri-release` | Ship Tauri release |
 | `/create-pr` | Create pull request |
 | `/ship-preview` | Ship preview |
+| `/trunk-based-delivery` | Trunk-based delivery |
 | `/a11y-audit` | Accessibility audit |
 | `/perf-audit` | Performance audit |
 | `/security-patch-deps` | Security patch dependencies |
 | `/visual-qa-pass` | Visual QA pass |
 | `/incident-postmortem` | Incident postmortem |
 | `/write-release-notes` | Write release notes |
+| `/expo-architect` | Expo architect |
+| `/expo-workflow-decision` | Expo workflow decision |
+| `/expo-bff` | Expo backend for frontend |
+| `/expo-init` | Expo init |
+| `/expo-router-navigation` | Expo Router navigation |
+| `/expo-dynamic-builds` | Expo dynamic builds |
+| `/expo-eas-build` | Expo EAS Build |
+| `/expo-dev-client` | Expo dev client |
+| `/expo-app-config` | Expo app config |
+| `/expo-ios-ship` | Expo iOS ship |
+| `/expo-ios-permissions` | Expo iOS permissions |
+| `/expo-android-ship` | Expo Android ship |
+| `/expo-android-permissions` | Expo Android permissions |
+| `/expo-auth-secure` | Expo auth secure storage |
+| `/expo-offline-sync` | Expo offline sync |
+| `/expo-perf-mobile` | Expo mobile performance |
+| `/expo-a11y-mobile` | Expo mobile accessibility |
+| `/expo-testing-mobile` | Expo mobile testing |
+| `/expo-notifications` | Expo push notifications |
+| `/expo-deep-links` | Expo deep links |
+| `/expo-store-submit` | Expo store submit |
+| `/expo-ci-eas` | Expo CI EAS |
+| `/expo-native-modules` | Expo native modules |
 
 Copy-paste library: https://dna.humaan.app/intelligence#stem-library
 

@@ -1,6 +1,6 @@
 # 2FA / MFA / OTP
 
-## a production app + a production app pattern
+## production apps + production apps pattern
 - Email + password + OTP for local auth
 - Invite-only onboarding with temp password
 - Password reset via OTP flow

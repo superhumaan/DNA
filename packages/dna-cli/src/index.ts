@@ -3,7 +3,7 @@ import { join, dirname } from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { PRODUCT_NAME } from "@superhumaan/dna-config";
+import { PRODUCT_NAME, resolveGitBranchingStrategy } from "@superhumaan/dna-config";
 import {
   scanProject,
   formatScanSummary,
@@ -927,11 +927,11 @@ github
 
 github
   .command("push")
-  .description("Commit and push current feature branch to GitHub")
+  .description("Commit and push current branch to GitHub (trunk by default — no auto feature/* hop)")
   .option("--cwd <path>", "Project root directory")
   .option("-m, --message <text>", "Commit message")
-  .option("--branch <name>", "Branch name (default: current or auto feature/*)")
-  .option("--create-branch", "Create feature/* branch from main if on main")
+  .option("--branch <name>", "Branch name (default: current branch)")
+  .option("--create-branch", "Create feature/* from main when on main (feature-branch mode / explicit opt-in)")
   .action(
     async (options: {
       cwd?: string;
@@ -941,14 +941,22 @@ github
     }) => {
       const root = getRoot(options);
       try {
+        const config = await loadDnaConfig(root);
+        const strategy = resolveGitBranchingStrategy(config);
+        const createBranch =
+          options.createBranch === true ||
+          (options.createBranch === undefined && strategy === "feature-branch");
         const result = await pushFeatureToGitHub({
           root,
           message: options.message ?? "feat: DNA feature factory delivery",
           branch: options.branch,
-          createBranch: options.createBranch ?? true,
+          createBranch,
         });
         console.log(`✓ Pushed to ${result.owner}/${result.repo}`);
         console.log(`  Branch: ${result.branch}`);
+        if (strategy === "trunk" && (result.branch === "main" || result.branch === "master")) {
+          console.log("  (trunk mode — stayed on main; no feature/* hop)");
+        }
         if (result.committed) console.log("  (committed local changes)");
       } catch (err) {
         console.error(err instanceof Error ? err.message : err);

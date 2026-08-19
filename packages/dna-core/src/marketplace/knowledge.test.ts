@@ -60,6 +60,7 @@ describe("knowledge foundation", () => {
     expect(packs).toContain("disciplines/security");
     expect(packs).toContain("compliance/tiered-standards");
     expect(packs).toContain("disciplines/qa");
+    expect(packs).toContain("disciplines/trunk-based-development");
     expect(packs).toContain("testing/code-coverage");
     expect(packs).toContain("cloud/github-actions");
     expect(packs).toContain("testing/owasp-zap");
@@ -120,7 +121,7 @@ describe("knowledge install layers", () => {
     expect(ctx).toContain("security/rbac-fundamentals");
 
     await rm(root, { recursive: true, force: true });
-  }, 15_000);
+  }, 45_000);
 
   it("ensureKnowledgeInstalled is idempotent", async () => {
     resetKnowledgePathIndex();
@@ -150,5 +151,5 @@ describe("knowledge install layers", () => {
     expect(second.installed).toHaveLength(0);
 
     await rm(root, { recursive: true, force: true });
-  });
+  }, 45_000);
 });

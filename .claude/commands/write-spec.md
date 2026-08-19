@@ -2,7 +2,8 @@
 description: Write PRD, design doc, RFC, or pitch per methodology and doc system.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Write spec
+---
+# Write spec
 
 Write specification document matching methodology and doc system.
 

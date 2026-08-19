@@ -18,10 +18,11 @@ Before designing, building, testing, or documenting features:
 10. Do not duplicate components
 11. Do not ignore testing rules
 12. Do not ignore security rules
-13. **Always push to preview** after local gates pass — never leave work un-deployed
-14. **On bugs:** create issue → fix → retest → re-push → confirm CI green
+13. **Ship on trunk** after local gates pass — push the current line of work; never invent feature remotes or hop branches for preview
+14. **On bugs:** create issue → fix → retest → re-push the same branch → confirm CI green
 15. **Before every push:** lint, test, 80% coverage, `dna quality report --feature`
 16. Run feature factory roles for every user-facing change
+17. **Do not decide your own fate** — no invented slogans, no parallel architectures, no dual-tracked preview branches; match existing patterns and load CellularMemory first
 
 After completing work:
 

@@ -11,6 +11,7 @@ import {
   DISCOVERY_TEAM_MODELS,
   DOC_SYSTEMS,
   FEEDBACK_AUTO_MODES,
+  GIT_BRANCHING_STRATEGIES,
   INDUSTRY_SECTORS,
   ISSUE_CATEGORIES,
   PROJECT_STAGES,
@@ -123,9 +124,19 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
   if (d.git !== undefined) {
     const gitObj = expectObject(d.git, "git");
     if (!gitObj.success) return gitObj;
+    const branchingStrategy =
+      gitObj.data.branchingStrategy === undefined
+        ? ok("trunk" as const)
+        : expectEnum(
+            gitObj.data.branchingStrategy,
+            GIT_BRANCHING_STRATEGIES,
+            "git.branchingStrategy",
+          );
+    if (!branchingStrategy.success) return branchingStrategy;
     git = {
       projectTag: optionalString(gitObj.data.projectTag),
       branchSlug: optionalString(gitObj.data.branchSlug),
+      branchingStrategy: branchingStrategy.data,
     };
   }
 
@@ -784,6 +795,12 @@ export interface DnaConfig {
     projectTag?: string;
     /** Branch prefix slug, e.g. myapp — defaults from projectId */
     branchSlug?: string;
+    /**
+     * Branching strategy for `dna github push` and agent ship rules.
+     * Default `trunk` — stay on main; never invent feature remotes for preview.
+     * Set `feature-branch` to allow auto `feature/*` creation when on main.
+     */
+    branchingStrategy?: (typeof GIT_BRANCHING_STRATEGIES)[number];
   };
   ai?: {
     enabled: boolean;

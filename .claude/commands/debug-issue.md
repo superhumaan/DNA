@@ -2,7 +2,8 @@
 description: Runtime error → classify → fix → test → quality → push.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Debug issue
+---
+# Debug issue
 
 Symptom: $ARGUMENTS
 

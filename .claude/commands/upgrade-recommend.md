@@ -2,7 +2,8 @@
 description: Top upgrade recommendations with why, evidence, effort, and handoff into shape-feature — major impact, minimal effort.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Upgrade recommend
+---
+# Upgrade recommend
 
 Synthesize the product-intel ladder into **actionable** upgrade recommendations.
 

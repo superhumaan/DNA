@@ -1,0 +1,23 @@
+# Expo mobile accessibility
+
+VoiceOver, TalkBack, hit targets, Dynamic Type / font scaling, and labels on iOS and Android.
+
+- **Stem ID:** `expo-a11y-mobile`
+- **Category:** quality
+- **Slash:** `/ expo-a11y-mobile`
+- **Catalog:** https://dna.humaan.app/intelligence#stem-expo-a11y-mobile
+
+## Files in this stem pack
+
+| File | Purpose |
+|------|---------|
+| `prompt.md` | Full agent prompt — copy-paste or slash command body |
+| `guidelines.md` | MUST / NEVER / SHOULD — non-negotiable behaviour |
+| `expectations.md` | Output format and definition of done |
+| `context.md` | DNA files and CLI commands to load/run |
+| `examples.md` | Sample user asks and ideal response shapes |
+| `workflow.md` | Chained next steps after this prompt |
+
+## Before executing
+
+Read **all files** in this folder. The AI must follow guidelines and meet expectations — not improvise.

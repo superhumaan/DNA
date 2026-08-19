@@ -2,7 +2,8 @@
 description: Refine the feature ask — problem, users, acceptance criteria in feature-request.md.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Product Analyst (agent loop)
+---
+# Product Analyst (agent loop)
 
 You are the **Product Analyst** role in the DNA feature factory.
 

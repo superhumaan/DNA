@@ -16,6 +16,7 @@ describe("marketplace aliases", () => {
     expect(normalizePackId("platforms/dna-stack")).toBe("platforms/dna-stack");
     expect(normalizePackId("healthcare/mirth")).toBe("healthcare/mirth-connect");
     expect(normalizePackId("healthcare/mirth-connect")).toBe("healthcare/mirth-connect");
+    expect(normalizePackId("frameworks/expo")).toBe("frameworks/react-native");
   });
 
   it("maps retired knowledge paths to current paths", () => {

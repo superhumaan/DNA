@@ -3,10 +3,10 @@
 ## Role hierarchies used in production
 | Project | Roles |
 |---------|-------|
-| a production app | owner → admin → employee |
-| a production app | user → manager → hr → admin → owner |
+| production apps | owner → admin → employee |
+| production apps | user → manager → hr → admin → owner |
 | ops tooling | employee → manager → admin (+ custom per-person) |
-| a production app | employee → admin → owner |
+| production apps | employee → admin → owner |
 
 ## Capability model
 Issue capabilities from server JWT/session — never trust client role strings alone.
@@ -18,5 +18,5 @@ Issue capabilities from server JWT/session — never trust client role strings a
 `menuSegments.js` — each item declares required role/permission.
 Filter segments before render; do not render disabled items for unauthorized users.
 
-## SSO bridge
-Cross-app auth between `*.humaan.app` subdomains — see integrations/sso-bridge.dna.md
+## Optional patterns
+App-layer auth patterns (if needed) belong in your app — not in DNA runtime.

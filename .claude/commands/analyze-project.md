@@ -2,7 +2,8 @@
 description: Deep analysis — stack, auth, integrations, P1–P3 gaps, ordered next steps.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Analyze project
+---
+# Analyze project
 
 Deep understanding through DNA — brownfield, onboarding, or architecture review.
 

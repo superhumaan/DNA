@@ -41,6 +41,9 @@ describe("ai workbench", () => {
     expect(files[".cursor/commands/ship-feature.md"]).toContain("feature factory");
     expect(files[".DNA/stems/analyze-project/prompt.md"]).toContain("Analyze project");
     expect(files[".DNA/stems/what-next-after-analyze/guidelines.md"]).toContain("MUST");
+    expect(files[".cursor/commands/expo-architect.md"]).toContain("Expo architect");
+    expect(files[".cursor/commands/expo-dynamic-builds.md"]).toContain("dynamic");
+    expect(files[".cursor/commands/expo-bff.md"]).toContain("BFF");
 
     const shipClaude = files[".claude/commands/ship-feature.md"];
     expect(shipClaude).toContain("---");

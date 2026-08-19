@@ -66,7 +66,7 @@ RBAC is incomplete if a non-admin can see the link, open the URL, or call the AP
 - Test direct URL bar navigation for both roles
 
 ## Reference projects
-- a production app: AI governance, content policy, data export
-- a production app: live map, feedback moderation, profanity
+- production apps: AI governance, content policy, data export
+- production apps: live map, feedback moderation, profanity
 - ops tooling: org (people, departments), report config
-- a production app: entity templates, data export, usage
+- production apps: entity templates, data export, usage

@@ -109,6 +109,7 @@ export function resolveFoundationPackIds(config: DnaConfig, scan?: ScanResult): 
     "compliance/tiered-standards",
     "legal/tiered-standards",
     "disciplines/qa",
+    "disciplines/trunk-based-development",
     "testing/code-coverage",
     "cloud/github-actions",
     "tools/eslint-prettier",

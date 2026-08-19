@@ -2,7 +2,8 @@
 description: Audit a plan or artifact against how this team actually works.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Align delivery
+---
+# Align delivery
 
 Audit plan, tickets, or spec against delivery profile.
 

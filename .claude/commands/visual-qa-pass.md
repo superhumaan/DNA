@@ -2,7 +2,8 @@
 description: Screenshot/layout consistency across Dashboard, Lab, and Settings.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Visual QA pass
+---
+# Visual QA pass
 
 Scope: $ARGUMENTS
 

@@ -1,9 +1,8 @@
 {
   "version": 1,
-  "catalogVersion": 8,
+  "catalogVersion": 9,
   "source": "bundled",
-  "syncedAt": "2026-07-31T04:28:17.070Z",
-  "count": 103,
+  "count": 127,
   "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
   "packs": [
     {
@@ -1546,6 +1545,22 @@
       ]
     },
     {
+      "id": "trunk-based-delivery",
+      "name": "Trunk-based delivery",
+      "category": "delivery",
+      "slash": "trunk-based-delivery",
+      "path": ".DNA/stems/trunk-based-delivery",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
       "id": "a11y-audit",
       "name": "Accessibility audit",
       "category": "quality",
@@ -1631,6 +1646,374 @@
       "category": "docs",
       "slash": "write-release-notes",
       "path": ".DNA/stems/write-release-notes",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-architect",
+      "name": "Expo architect",
+      "category": "analysis",
+      "slash": "expo-architect",
+      "path": ".DNA/stems/expo-architect",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-workflow-decision",
+      "name": "Expo workflow decision",
+      "category": "analysis",
+      "slash": "expo-workflow-decision",
+      "path": ".DNA/stems/expo-workflow-decision",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-bff",
+      "name": "Expo backend for frontend",
+      "category": "features",
+      "slash": "expo-bff",
+      "path": ".DNA/stems/expo-bff",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-init",
+      "name": "Expo init",
+      "category": "features",
+      "slash": "expo-init",
+      "path": ".DNA/stems/expo-init",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-router-navigation",
+      "name": "Expo Router navigation",
+      "category": "features",
+      "slash": "expo-router-navigation",
+      "path": ".DNA/stems/expo-router-navigation",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-dynamic-builds",
+      "name": "Expo dynamic builds",
+      "category": "delivery",
+      "slash": "expo-dynamic-builds",
+      "path": ".DNA/stems/expo-dynamic-builds",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-eas-build",
+      "name": "Expo EAS Build",
+      "category": "delivery",
+      "slash": "expo-eas-build",
+      "path": ".DNA/stems/expo-eas-build",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-dev-client",
+      "name": "Expo dev client",
+      "category": "delivery",
+      "slash": "expo-dev-client",
+      "path": ".DNA/stems/expo-dev-client",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-app-config",
+      "name": "Expo app config",
+      "category": "features",
+      "slash": "expo-app-config",
+      "path": ".DNA/stems/expo-app-config",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-ios-ship",
+      "name": "Expo iOS ship",
+      "category": "delivery",
+      "slash": "expo-ios-ship",
+      "path": ".DNA/stems/expo-ios-ship",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-ios-permissions",
+      "name": "Expo iOS permissions",
+      "category": "features",
+      "slash": "expo-ios-permissions",
+      "path": ".DNA/stems/expo-ios-permissions",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-android-ship",
+      "name": "Expo Android ship",
+      "category": "delivery",
+      "slash": "expo-android-ship",
+      "path": ".DNA/stems/expo-android-ship",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-android-permissions",
+      "name": "Expo Android permissions",
+      "category": "features",
+      "slash": "expo-android-permissions",
+      "path": ".DNA/stems/expo-android-permissions",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-auth-secure",
+      "name": "Expo auth secure storage",
+      "category": "features",
+      "slash": "expo-auth-secure",
+      "path": ".DNA/stems/expo-auth-secure",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-offline-sync",
+      "name": "Expo offline sync",
+      "category": "features",
+      "slash": "expo-offline-sync",
+      "path": ".DNA/stems/expo-offline-sync",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-perf-mobile",
+      "name": "Expo mobile performance",
+      "category": "quality",
+      "slash": "expo-perf-mobile",
+      "path": ".DNA/stems/expo-perf-mobile",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-a11y-mobile",
+      "name": "Expo mobile accessibility",
+      "category": "quality",
+      "slash": "expo-a11y-mobile",
+      "path": ".DNA/stems/expo-a11y-mobile",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-testing-mobile",
+      "name": "Expo mobile testing",
+      "category": "quality",
+      "slash": "expo-testing-mobile",
+      "path": ".DNA/stems/expo-testing-mobile",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-notifications",
+      "name": "Expo push notifications",
+      "category": "features",
+      "slash": "expo-notifications",
+      "path": ".DNA/stems/expo-notifications",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-deep-links",
+      "name": "Expo deep links",
+      "category": "features",
+      "slash": "expo-deep-links",
+      "path": ".DNA/stems/expo-deep-links",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-store-submit",
+      "name": "Expo store submit",
+      "category": "delivery",
+      "slash": "expo-store-submit",
+      "path": ".DNA/stems/expo-store-submit",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-ci-eas",
+      "name": "Expo CI EAS",
+      "category": "delivery",
+      "slash": "expo-ci-eas",
+      "path": ".DNA/stems/expo-ci-eas",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "expo-native-modules",
+      "name": "Expo native modules",
+      "category": "analysis",
+      "slash": "expo-native-modules",
+      "path": ".DNA/stems/expo-native-modules",
       "files": [
         "README.md",
         "prompt.md",

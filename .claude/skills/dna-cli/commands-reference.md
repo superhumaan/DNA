@@ -524,7 +524,7 @@ List platform features DNA learned from production projects.
 
 ### /dna-platform-projects — Platform Projects
 
-List platform features (`dna platform list`).
+List reference production projects (feature ids via dna platform list).
 
 **CLI:** `npx dna platform projects`
 

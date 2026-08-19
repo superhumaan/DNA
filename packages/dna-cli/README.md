@@ -24,7 +24,7 @@ npx @superhumaan/dna-by-humaan doctor
 
 Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 
-**Latest (v0.6.24):** Project git naming for AI · Skeletor fleet in context by default · 103 stems · 1045 packs · 27 purpose bundles.
+**Latest (v0.6.24):** Project git naming for AI · Skeletor fleet in context by default · 127 stems · 1045 packs · 28 purpose bundles.
 
 ---
 
@@ -87,7 +87,7 @@ npx @superhumaan/dna-by-humaan doctor
 | Included in one `doctor` | |
 |--------------------------|---|
 | `.DNA/` intelligence | behaviour, CellularMemory, immune system, neuralNetwork |
-| **103 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` |
+| **127 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` (Expo/React Native included) |
 | **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills — always on |
 | **Detection** | stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift |
 | **Feature factory** | 9-role loop, quality gates, same template every feature |
@@ -151,7 +151,7 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna scan` | Detect stack, tests, CI, risks |
 | `dna context cursor` | AI-ready context for Cursor / Copilot / Claude |
 | `dna update` | Upgrade CLI + re-apply all installed knowledge packs + force re-inject always-on AI rules |
-| `dna workbench install` | Refresh DNA Workbench + 103 prompt stem packs + `/dna-*` commands + `AGENTS.md` |
+| `dna workbench install` | Refresh DNA Workbench + 127 prompt stem packs + `/dna-*` commands + `AGENTS.md` |
 | `dna stems list` | List prompt stem packs (analyze, ship, agent-loop roles, …) |
 | `dna stems show <id>` | Copy variants and file paths for one stem |
 | `dna commands install` | Refresh `/dna-*` CLI slash commands only (also installed by init/doctor/update) |

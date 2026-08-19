@@ -2,7 +2,8 @@
 description: Solution architecture and stack recommendations from DNA.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Recommend architecture
+---
+# Recommend architecture
 
 ```bash
 npx dna recommend

@@ -2,7 +2,8 @@
 description: OWASP/dependency audit triage with minimal safe upgrades.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Security patch dependencies
+---
+# Security patch dependencies
 
 Scope: $ARGUMENTS
 

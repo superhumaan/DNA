@@ -2,7 +2,8 @@
 description: Configure product discovery — lifecycle, team model, methods, and processes.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Discovery setup
+---
+# Discovery setup
 
 Configure DNA discovery profile for how this team shapes products.
 

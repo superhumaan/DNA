@@ -13,14 +13,14 @@ What ships in the current DNA release channel and what is explicitly out of scop
 | **Runtime** | Express 4/5, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`); Aggressive Repair Loop fingerprints + CellularMemory; EPIPE/ECONNRESET noise filter; outbound third-party capture + browser ingest |
 | **DNA Lab** | Production observability at `/labs` — **mobile shell (≤900px mobile admin parity)** + **APIs reference** (Description / Usage / Received / Sent for every Lab route) + **URL deep links** (`/labs/<tab>`, `/labs/issues/<id>`) + **401 → sign-in** (no Unauthorized toast) + **`requireAuthInProduction: false` open Lab** + dark-theme alerts + force Refresh + Copy issue + analytics Overview + Sentry-density Issues + upgrade DX; Humaan admin UI parity; admin shell + Quality hub; fingerprint-grouped issues; local open access; production auth via `dna register lab` ([#12](https://github.com/superhumaan/DNA/issues/12), [lab-ui-humaan-0.6.7](../engineering/lab-ui-humaan-0.6.7.md), [lab-apis-reference-0.6.18](../engineering/lab-apis-reference-0.6.18.md), [lab-refresh-ux-0.6.16](../engineering/lab-refresh-ux-0.6.16.md)) |
 | **Supply chain** | **Zero production npm dependencies** (v0.4.6+), no install scripts, no self-dependencies, JSON catalog assets, npm provenance, [Socket transparency](../../SECURITY.md#supply-chain-transparency-socketdev--security-scanners) |
-| **Marketplace** | **1045 rich packs** (zero-stubs floor + P0 depth), **27 purpose bundles** (`combo/*`), remote + bundled offline; combo install injects knowledge packs + prompt stems + Cursor rules |
+| **Marketplace** | **1045 rich packs** (zero-stubs floor + P0 depth), **28 purpose bundles** (`combo/*` including `combo/expo-mobile`), remote + bundled offline; combo install injects knowledge packs + prompt stems + Cursor rules |
 | **Public marketplace** | [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles) — bundles-first UX; catalog `bundles[]` |
 | **Platform catalog** | Admin, SSO, RBAC, cloud deploy, CRM, CMS patterns |
 | **Compliance** | Tiered GDPR, UK GDPR, HIPAA, ISO 27001, SOC 2, PCI DSS |
 | **Brownfield** | IVF plans, `document --from-code`, deep analyze |
 | **Feature factory** | Plain-language features + mandatory 9-role agent loop (`AGENTS.md`) |
 | **AI Workbench** | Always-on Cursor/Claude co-pilot — no “use DNA” required |
-| **Prompt stem packs** | 103 copy-paste workflows in `.DNA/stems/` — guidelines, expectations, strategy ladder, product intelligence, day-to-day operator stems (admin/Tauri/fleet/PR/preview/audits), agent-loop roles |
+| **Prompt stem packs** | 127 copy-paste workflows in `.DNA/stems/` — guidelines, expectations, strategy ladder, product intelligence, day-to-day operator stems, **Expo/React Native** (architect, BFF, EAS dynamic builds, iOS/Android), agent-loop roles |
 | **`dna stems`** | List, show, and refresh prompt stem packs |
 | **GitHub** | Connect, auto-issues, push gates, browser login (`dna github login`) |
 | **Preview deploy** | `dna-preview.yml` scaffold with Vercel/Netlify + branch filter |

@@ -2,7 +2,8 @@
 description: Plan/build a KPI grid with panels and hot lists — Issues/Projects style density.
 argument-hint: [context or scope]
 allowed-tools: Bash(npx:*), Bash(dna:*), Read, Grep, Glob, Edit, Write
----# Build analytics dashboard
+---
+# Build analytics dashboard
 
 Scope: $ARGUMENTS
 
