@@ -4,18 +4,20 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.6.20)
+## Current release focus (v0.6.28)
 
+- **Expo / React Native** — 23 stems (architect, BFF, EAS Update/dynamic builds, iOS/Android ship); combo `combo/expo-mobile`
+- **Trunk-based delivery** — default `git.branchingStrategy: trunk`; `dna github push` stays on the current branch
+- **Marketplace purpose bundles** — 28 combos; `dna marketplace install combo/<id>` installs knowledge packs + prompt stems + AI rules; [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles)
+- **Knowledge marketplace** — **1045 rich packs** (0 stubs), 127 stem packs, strategy grounding (`STRATEGY_COMPLETE`)
 - **Lab mobile shell** — mobile-style off-canvas nav ≤900px; sticky chrome; scrollable tables ([docs](../engineering/lab-ui-humaan-0.6.7.md))
-- **Marketplace purpose bundles** — 27 combos; `dna marketplace install combo/<id>` installs knowledge packs + prompt stems + AI rules; [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles)
-- **Knowledge marketplace** — **1045 rich packs** (0 stubs), 103 stem packs, strategy grounding (`STRATEGY_COMPLETE`)
 - **Lab APIs reference** — every Lab route with Description / Usage / Received / Sent; expandable APIs tab ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab URL deep links** — `/labs/<tab>`, `/labs/issues/<id>`; refresh keeps the page; 401 → sign-in (no Unauthorized toast)
 - Prior: `requireAuthInProduction: false` for open Lab (v0.6.18); Lab alert dark theme + force Refresh (v0.6.17)
 
 ## Shipped highlights
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.20)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.28)
 - **Lab mobile shell (v0.6.20)** — mobile admin parity on phones/tablets ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **Lab APIs reference + deep links (v0.6.18)** — full HTTP catalog; History API routing; open-auth flag ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab Refresh UX + Copy issue (v0.6.16)** — disable/spin Refresh; tab-aware reload; issue clipboard ([docs](../engineering/lab-refresh-ux-0.6.16.md))

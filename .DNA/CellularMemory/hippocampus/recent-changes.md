@@ -1,6 +1,11 @@
 # Recent Changes
 
-_Last updated: 2026-08-19_
+_Last updated: 2026-08-20_
+
+## 2026-08-20 — npm 0.6.28
+
+- Bump `@superhumaan/dna-by-humaan` to **0.6.28** (Expo stems, `combo/expo-mobile`, trunk-based delivery).
+- Publish via GitHub Actions `Publish npm` workflow.
 
 ## 2026-08-19 — Expo / React Native stem packs (catalog v9)
 

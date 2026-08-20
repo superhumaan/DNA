@@ -1,5 +1,5 @@
 # Unpublish recent npm versions (<72h) and deprecate older ones.
-# Keeps the current clean latest (default 0.6.27) published.
+# Keeps the current clean latest (default 0.6.28) published.
 
 name: npm unpublish / deprecate
 
@@ -12,7 +12,7 @@ on:
       keep_version:
         description: "Keep this version published (do not unpublish)"
         required: true
-        default: "0.6.27"
+        default: "0.6.28"
 
 jobs:
   scrub:

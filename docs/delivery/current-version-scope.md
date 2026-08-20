@@ -4,7 +4,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.6.23)
+## In scope (v0.6.28)
 
 | Area | Delivered |
 |------|-----------|
@@ -62,7 +62,7 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 | Channel | Command |
 |---------|---------|
-| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.20`) |
+| Stable | Default npm install (`@superhumaan/dna-by-humaan@0.6.28`) |
 | Monorepo dev | `git clone` + `pnpm dna:link` |
 
 ---

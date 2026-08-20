@@ -24,7 +24,7 @@ npx @superhumaan/dna-by-humaan doctor
 
 Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 
-**Latest (v0.6.24):** Project git naming for AI · Skeletor fleet in context by default · 127 stems · 1045 packs · 28 purpose bundles.
+**Latest (v0.6.28):** Expo/React Native stems · `combo/expo-mobile` · trunk-based delivery · 127 stems · 1045 packs · 28 purpose bundles.
 
 ---
 

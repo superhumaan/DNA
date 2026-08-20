@@ -4,6 +4,8 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.28] - 2026-08-20
+
 ### Added
 - **Trunk-based delivery (default)** — `git.branchingStrategy: trunk` (default on download); stem `/trunk-based-delivery`; foundation pack `disciplines/trunk-based-development`
 - Agents must not invent preview remotes, hop `feature/*` for preview, or invent header slogans — FE/UX + delivery rules updated
