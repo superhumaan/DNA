@@ -10,7 +10,7 @@
 | DNA CI | `.github/workflows/dna-ci.yml` | push (all branches), PR | Advisory (`continue-on-error: true` on gates) |
 | DNA Security (ZAP) | `.github/workflows/dna-security.yml` | weekly + dispatch | Only if `vars.STAGING_URL` set |
 | DNA Preview | Disabled for this repository | — | Root is a CLI/runtime monorepo with no deployable preview root |
-| Publish npm | `.github/workflows/publish-npm.yml` | dispatch | Requires `NPM_TOKEN` secret |
+| Publish npm | `.github/workflows/publish-npm.yml` | dispatch | OIDC trusted publishing (`id-token: write`); `NPM_TOKEN` is local fallback only |
 | Cleanup failed runs | `.github/workflows/cleanup-failed-runs.yml` | schedule | Billing-aware |
 
 Config: `.DNA/config.dna.json` → `"ci": { "strict": false, "coverageThreshold": 80, "owasp": true, "pushToPreview": false }`.

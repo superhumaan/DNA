@@ -9,17 +9,30 @@ echo "DNA by Humaan — npm publish"
 echo "==========================="
 echo ""
 
-if [[ -z "${NPM_TOKEN:-}" ]] && [[ -z "${NODE_AUTH_TOKEN:-}" ]] && ! npm whoami &>/dev/null; then
-  echo "Set NPM_TOKEN (or NODE_AUTH_TOKEN) or run npm login first."
-  exit 1
+OIDC_AVAILABLE=0
+if [[ -n "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" && -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]]; then
+  OIDC_AVAILABLE=1
 fi
 
 AUTH_TOKEN="${NPM_TOKEN:-${NODE_AUTH_TOKEN:-}}"
-if [[ -n "$AUTH_TOKEN" ]]; then
+
+if [[ "$OIDC_AVAILABLE" -eq 1 ]]; then
+  echo "→ Auth: GitHub Actions OIDC (trusted publishing)"
+  unset NODE_AUTH_TOKEN
+  # A token in .npmrc / NODE_AUTH_TOKEN blocks OIDC. Keep NPM_TOKEN unset for
+  # the publish process so npm exchanges the ID token instead of a stale secret.
+  unset NPM_TOKEN
+elif [[ -n "$AUTH_TOKEN" ]]; then
+  echo "→ Auth: NPM_TOKEN / NODE_AUTH_TOKEN"
   NPM_USERCONFIG="$(mktemp)"
   trap 'rm -f "$NPM_USERCONFIG"' EXIT
   printf '//registry.npmjs.org/:_authToken=%s\n' "$AUTH_TOKEN" >"$NPM_USERCONFIG"
   export NPM_CONFIG_USERCONFIG="$NPM_USERCONFIG"
+elif npm whoami &>/dev/null; then
+  echo "→ Auth: existing npm login"
+else
+  echo "Set NPM_TOKEN, run npm login, or publish from GitHub Actions with a trusted publisher (publish-npm.yml)."
+  exit 1
 fi
 
 node "$ROOT/scripts/sync-sponsors.mjs"
@@ -36,7 +49,8 @@ fi
 
 echo "→ Publishing @superhumaan/dna-by-humaan..."
 cd "$ROOT/packages/dna-cli"
-pnpm publish --access public --no-git-checks --provenance
+# Call npm directly so ACTIONS_ID_TOKEN_* env vars reach the CLI (pnpm publish can drop them).
+npm publish --access public --provenance
 
 echo ""
 echo "✓ Published. Install:"
