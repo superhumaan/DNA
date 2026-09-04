@@ -25,6 +25,11 @@ apps/web/.next/
 # DNA local data (not committed)
 .DNA/data/
 .DNA/runtime/*.jsonl
+.DNA/runtime/agents.db
+.DNA/runtime/agents.db-wal
+.DNA/runtime/agents.db-shm
+.DNA/runtime/agents.lock
+.DNA/runtime/agents.json
 .DNA/reports/
 .DNA/credentials/
 # DNA local data (not committed)

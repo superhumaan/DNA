@@ -87,6 +87,7 @@ ${buildAgentFlowSection(config)}
 | Quick stack scan | \`npx dna scan\` | Note drift score |
 | New feature / change | Update \`ai/feature-request.md\`; read \`ai/agent-loop.md\` | Stop after architect plan for approval |
 | Domain depth (security, QA, etc.) | \`npx dna context <target>\` | Apply output to session |
+| Agent mesh / live claims | \`npx dna agents status\` | Register, claim paths, \`dna commit\` |
 | Pre-push / done? | \`npx dna quality report --feature\` | PASS required before push |
 | Ship feature | quality PASS → \`npx dna docker build\` → \`npx dna github push\` | Report URLs |
 | Compliance | \`npx dna plan compliance\` | Install packs; implement controls |

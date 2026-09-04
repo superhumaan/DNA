@@ -4,6 +4,20 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.29] - 2026-09-04
+
+### Added
+- **Agent Mesh + Git Guardian** — SQLite registry at `.DNA/runtime/agents.db` (node:sqlite `DatabaseSync` when available; exclusive lockfile + JSON fallback otherwise)
+- CLI: `dna agents status|register|claim|release|heartbeat|context|hook|install|commit` and top-level `dna commit`
+- Fail-open Cursor hooks (`.cursor/hooks.json` + `.cursor/hooks/dna-agent-mesh`) — session register, isolated-coding deny, Git Guardian, path claims, dirty-tree commit gate
+- `dna commit` mutex-stages only this agent's files; `dna github push` uses it when `DNA_AGENT_ID` is set (`skipLocalCommit`)
+- Config: `git.integrationBranch`, `agents.mesh` (default true), `agents.heartbeatTtlSeconds` (default 1800)
+- Doctor line for Agent Mesh; `dna context cursor` appends DNA LIVE COORDINATION
+- Docs: `docs/engineering/agent-mesh.md`
+
+### Changed
+- `git status` porcelain now uses `--porcelain -b -uall`
+
 ## [0.6.28] - 2026-08-20
 
 ### Added

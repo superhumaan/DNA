@@ -173,5 +173,15 @@ export async function generateContext(root: string, target: ContextTarget): Prom
     // Skeletor pull is best-effort — never fail context generation
   }
 
+  if (target === "cursor") {
+    try {
+      const { formatLiveCoordination } = await import("./agents/context.js");
+      const config = await loadDnaConfig(root);
+      sections.push("", await formatLiveCoordination(root, config), "");
+    } catch {
+      // Agent mesh context is best-effort
+    }
+  }
+
   return sections.join("\n");
 }

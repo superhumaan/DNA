@@ -28,7 +28,7 @@ npx @superhumaan/dna-by-humaan doctor
 
 Built by **[Humaan](https://dna.humaan.app)** · **[Superlite](https://superlite.ai)**
 
-**Latest (v0.6.28):** Expo/React Native stems (catalog v9, 127 packs) · `combo/expo-mobile` · trunk-based delivery default.
+**Latest (v0.6.29):** Agent Mesh + Git Guardian — agents register, claim files, cannot create feature branches or finish dirty. Expo stems + trunk delivery remain.
 
 **Team rollouts:** [TEAM-TESTING.md](./TEAM-TESTING.md) · **Portfolio:** [docs/product/portfolio-install.md](./docs/product/portfolio-install.md) · **Docs:** [docs/](./docs/README.md) · **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
 
@@ -321,6 +321,7 @@ DNA is evolving from project scaffold to a full delivery loop: init → feature 
 | Project git naming for AI commits/PRs (v0.6.23) | Jul 2026 | Jul 2026 | Shipped — `[Tag]` on commits/PRs from config; repair uses host project |
 | npm + GitHub listing polish (v0.6.24) | Jul 2026 | Jul 2026 | Shipped — shorter description, hero READMEs, live health link |
 | Expo / React Native stems + trunk delivery (v0.6.28) | Aug 2026 | Aug 2026 | Shipped — 23 Expo stems, `combo/expo-mobile`, trunk-based `dna github push` |
+| Agent Mesh + Git Guardian (v0.6.29) | Sep 2026 | Sep 2026 | Shipped — live agent registry, path claims, fail-open hooks, `dna commit` |
 | [First-party GitHub OAuth app](https://github.com/superhumaan/DNA/issues/11) | Jul 2026 | Sep 2026 | Shipped — setup script + OAuth scaffolding |
 | [IVF Phase 4b — shared library extraction](https://github.com/superhumaan/DNA/issues/16) | Aug 2026 | Oct 2026 | Shipped |
 | [Multi-project CellularMemory sync](https://github.com/superhumaan/DNA/issues/13) | Oct 2026 | Jan 2027 | Shipped |

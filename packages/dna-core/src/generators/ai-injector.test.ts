@@ -54,6 +54,9 @@ describe("ai-injector", () => {
     expect(paths).toContain(".cursor/rules/dna-workbench.mdc");
     expect(paths).toContain(".cursor/rules/product-process.mdc");
     expect(paths).toContain("CLAUDE.md");
+    expect(paths).toContain(".cursor/hooks.json");
+    expect(paths).toContain(".cursor/hooks/dna-agent-mesh");
+    expect(paths).toContain(".DNA/knowledge/platforms/dna/agent-mesh.dna.md");
   });
 
   it("syncs and verifies full injection", async () => {

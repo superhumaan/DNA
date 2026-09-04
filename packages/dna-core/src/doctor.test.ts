@@ -73,6 +73,7 @@ describe("doctor", () => {
     expect(formatted).toContain("Docker scaffold");
     expect(formatted).toContain("Git hooks");
     expect(formatted).toContain("Runtime storage");
+    expect(formatted).toContain("Agent Mesh");
   });
 
   it("prompt local testing hint when AI uses mock provider", async () => {

@@ -4,6 +4,9 @@ export const IMPRESSIONS_DIR = "DNA/Impressions";
 export const DNA_CONFIG_FILE = ".DNA/config.dna.json";
 export const DNA_DATA_DIR = ".DNA/data";
 export const DNA_RUNTIME_DB = ".DNA/data/runtime.db";
+export const DNA_AGENTS_DB = ".DNA/runtime/agents.db";
+export const DNA_AGENTS_LOCK = ".DNA/runtime/agents.lock";
+export const DEFAULT_AGENT_HEARTBEAT_TTL_SECONDS = 1800;
 export const DNA_LAB_DIR = ".DNA/lab";
 export const DNA_LAB_STORE = ".DNA/data/lab-store.json";
 export const DNA_LAB_PAIRING_FILE = ".DNA/lab/pairing.json";
@@ -28,6 +31,11 @@ export const FEEDBACK_AUTO_MODES = ["off", "dna-only", "all"] as const;
 export const DNA_GITIGNORE_ENTRIES = [
   ".DNA/data/",
   ".DNA/runtime/*.jsonl",
+  ".DNA/runtime/agents.db",
+  ".DNA/runtime/agents.db-wal",
+  ".DNA/runtime/agents.db-shm",
+  ".DNA/runtime/agents.lock",
+  ".DNA/runtime/agents.json",
   ".DNA/data/feedback-queue.jsonl",
   ".DNA/data/lab-store.json",
   ".DNA/lab/pairing.json",

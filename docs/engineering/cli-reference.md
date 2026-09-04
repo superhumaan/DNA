@@ -73,6 +73,27 @@ dna memory sync --registry <path>
 
 Conflict strategies: `newest` (default), `keep-local`, `keep-remote`.
 
+## agents / commit
+
+Agent Mesh — live coordination, path claims, and Git Guardian. Hooks are **fail-open** (never lock the editor if `dna` is missing).
+
+```bash
+dna agents status
+dna agents register --type primary --task "ship mesh"
+dna agents claim src/foo.ts
+dna agents heartbeat
+dna agents release
+dna agents context
+dna agents hook          # Cursor hook stdin JSON → permission JSON
+dna agents install       # .cursor/hooks.json + fail-open runner
+dna agents commit -m "[DNA] feat: …"
+dna commit -m "[DNA] feat: …"
+```
+
+On trunk, Git Guardian denies `git checkout -b`, `git add .` / `-A`, raw `git commit`, stash, reset --hard, clean -f. Use `dna commit` and `dna github push`. Isolated coding subagents are denied; explore/review isolated is OK.
+
+See [Agent Mesh](./agent-mesh.md). Config: `git.integrationBranch`, `agents.mesh` (default true), `agents.heartbeatTtlSeconds` (default 1800).
+
 ## skeletor
 
 When [Skeletor](https://dna.humaan.app/skeletor) is installed, DNA pulls the local fleet bridge by default and feeds it to AI (`dna context`, doctor → CellularMemory).

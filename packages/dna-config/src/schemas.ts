@@ -3,6 +3,7 @@ import {
   AI_TOOLS,
   COMPANY_ARCHETYPES,
   COMPLIANCE_OPTIONS,
+  DEFAULT_AGENT_HEARTBEAT_TTL_SECONDS,
   DELIVERY_METHODOLOGIES,
   DISCOVERY_EVENTS,
   DISCOVERY_LIFECYCLE_STAGES,
@@ -137,6 +138,22 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
       projectTag: optionalString(gitObj.data.projectTag),
       branchSlug: optionalString(gitObj.data.branchSlug),
       branchingStrategy: branchingStrategy.data,
+      integrationBranch: optionalString(gitObj.data.integrationBranch),
+    };
+  }
+
+  let agents: DnaConfig["agents"];
+  if (d.agents !== undefined) {
+    const agentsObj = expectObject(d.agents, "agents");
+    if (!agentsObj.success) return agentsObj;
+    const heartbeatTtlSeconds =
+      agentsObj.data.heartbeatTtlSeconds === undefined
+        ? ok(DEFAULT_AGENT_HEARTBEAT_TTL_SECONDS)
+        : expectNumber(agentsObj.data.heartbeatTtlSeconds, "agents.heartbeatTtlSeconds");
+    if (!heartbeatTtlSeconds.success) return heartbeatTtlSeconds;
+    agents = {
+      mesh: withDefault(optionalBoolean(agentsObj.data.mesh), true),
+      heartbeatTtlSeconds: heartbeatTtlSeconds.data,
     };
   }
 
@@ -411,6 +428,7 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     knowledgePacks: knowledgePacks.data,
     github,
     git,
+    agents,
     ai,
     runtime,
     ci,
@@ -801,6 +819,15 @@ export interface DnaConfig {
      * Set `feature-branch` to allow auto `feature/*` creation when on main.
      */
     branchingStrategy?: (typeof GIT_BRANCHING_STRATEGIES)[number];
+    /** Integration / trunk branch. Default treated as main|master. */
+    integrationBranch?: string;
+  };
+  /** Agent Mesh — live coordination, path claims, Git Guardian. */
+  agents?: {
+    /** Default true. Set false to skip hook install and enforcement. */
+    mesh?: boolean;
+    /** Stale heartbeat threshold in seconds. Default 1800. */
+    heartbeatTtlSeconds?: number;
   };
   ai?: {
     enabled: boolean;

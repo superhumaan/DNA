@@ -11,7 +11,8 @@ Share this with colleagues who want to try DNA on their own projects.
 | Layer | Command / feature | What to expect |
 |-------|-------------------|----------------|
 | Project brain | `dna init` | `.DNA/` + `DNA/Impressions/` scaffolded |
-| AI context | `dna context cursor` | Paste-ready context for your AI tool |
+| AI context | `dna context cursor` | Paste-ready context for your AI tool, including DNA LIVE COORDINATION |
+| **Agent Mesh** | `dna agents status` / `dna commit` | Agents register, claim files, cannot create feature branches or finish dirty. Hooks are fail-open. |
 | **Cursor workbench** | `dna init` / `dna doctor` | 127 prompt stem packs + `/dna-*` commands — DNA always on; Expo/React Native stems included; `AGENTS.md` routes engineering work through the 9-role agent loop |
 | **Stem library** | [dna.humaan.app/intelligence](https://dna.humaan.app/intelligence) | Copy prompts + guidelines; each stem has MUST/NEVER rules and expectations |
 | Knowledge packs | `dna marketplace install` | Stack-specific guidance in `.DNA/knowledge/` |

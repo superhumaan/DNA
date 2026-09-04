@@ -4,8 +4,9 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.6.28)
+## Current release focus (v0.6.29)
 
+- **Agent Mesh + Git Guardian** — SQLite registry, path claims, fail-open Cursor hooks, `dna commit` (never `git add` all). Agents cannot create feature branches or finish dirty.
 - **Expo / React Native** — 23 stems (architect, BFF, EAS Update/dynamic builds, iOS/Android ship); combo `combo/expo-mobile`
 - **Trunk-based delivery** — default `git.branchingStrategy: trunk`; `dna github push` stays on the current branch
 - **Marketplace purpose bundles** — 28 combos; `dna marketplace install combo/<id>` installs knowledge packs + prompt stems + AI rules; [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles)
@@ -17,7 +18,8 @@ DNA development priorities and public roadmap.
 
 ## Shipped highlights
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.28)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.29)
+- **Agent Mesh + Git Guardian (v0.6.29)** — `dna agents *`, `dna commit`, fail-open hooks ([docs](../engineering/agent-mesh.md))
 - **Lab mobile shell (v0.6.20)** — mobile admin parity on phones/tablets ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **Lab APIs reference + deep links (v0.6.18)** — full HTTP catalog; History API routing; open-auth flag ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab Refresh UX + Copy issue (v0.6.16)** — disable/spin Refresh; tab-aware reload; issue clipboard ([docs](../engineering/lab-refresh-ux-0.6.16.md))
@@ -64,6 +66,7 @@ See [Current version scope](../delivery/current-version-scope.md).
 | Prompt stem packs + intelligence library (v0.4.0) | ✅ Shipped |
 | Strategy stem ladder — Golden Circle → canvases → North Star/OKRs/KPIs → initiatives → Now/Next/Later (catalog v7) | ✅ Shipped |
 | Day-to-day stems — admin, Tauri, fleet, PR, preview, audits, incident, MCP, i18n (catalog v8) | ✅ Shipped |
+| **Agent Mesh + Git Guardian** — live registry, path claims, fail-open hooks, `dna commit` (v0.6.29) | ✅ Shipped |
 | **Expo / React Native stems** — architect, BFF, EAS dynamic builds, iOS/Android (catalog v9, 127 stems) | ✅ Shipped |
 | **Skeletor bridge** — DNA pulls local fleet into AI context by default when Skeletor is installed (0.6.22) | ✅ Shipped |
 | **Project git naming** — AI commits/PRs use `[MyApp]` / `[DNA]` tags from config (0.6.23) | ✅ Shipped |

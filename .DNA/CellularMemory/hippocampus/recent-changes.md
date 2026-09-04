@@ -1,6 +1,16 @@
 # Recent Changes
 
-_Last updated: 2026-08-20_
+_Last updated: 2026-09-04_
+
+## 2026-09-04 — Agent Mesh + Git Guardian (0.6.29)
+
+- SQLite registry `.DNA/runtime/agents.db` (DatabaseSync or lockfile + JSON fallback).
+- CLI `dna agents *` and top-level `dna commit` (mutex, this agent's files only).
+- Fail-open Cursor hooks: never lock the editor if `dna` is missing. `failClosed: false`.
+- Git Guardian denies feature-branch create, stash, raw add/commit, reset --hard, clean -f on trunk.
+- Path claims → DNA CONFLICT. Dirty stop → DNA COMMIT GATE FAILED.
+- Doctor reports Agent Mesh; `dna context cursor` appends DNA LIVE COORDINATION.
+- Config: `git.integrationBranch`, `agents.mesh`, `agents.heartbeatTtlSeconds`.
 
 ## 2026-08-20 — npm 0.6.28
 

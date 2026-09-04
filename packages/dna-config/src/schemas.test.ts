@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { DnaConfigSchema } from "./schemas.js";
 import {
+  DEFAULT_AGENT_HEARTBEAT_TTL_SECONDS,
+  DNA_AGENTS_DB,
+  DNA_AGENTS_LOCK,
+  DNA_GITIGNORE_ENTRIES,
+} from "./constants.js";
+import {
   formatRepairBranch,
   formatTaggedCommit,
   formatTaggedPrTitle,
+  isIntegrationBranch,
   resolveGitBranchingStrategy,
+  resolveIntegrationBranch,
   resolveProjectGitIdentity,
 } from "./project-git-identity.js";
 
@@ -108,5 +116,51 @@ describe("git project identity config", () => {
     expect(resolveGitBranchingStrategy({ git: { branchingStrategy: "feature-branch" } })).toBe(
       "feature-branch",
     );
+  });
+
+  it("parses git.integrationBranch", () => {
+    const parsed = DnaConfigSchema.parse(
+      base({
+        git: { integrationBranch: "develop" },
+      }),
+    );
+    expect(parsed.git?.integrationBranch).toBe("develop");
+  });
+
+  it("resolves integration branch and treats main/master as trunk", () => {
+    expect(resolveIntegrationBranch(undefined)).toBe("main");
+    expect(resolveIntegrationBranch({ git: { integrationBranch: "develop" } })).toBe("develop");
+    expect(isIntegrationBranch("main", undefined)).toBe(true);
+    expect(isIntegrationBranch("master", undefined)).toBe(true);
+    expect(isIntegrationBranch("feature/x", undefined)).toBe(false);
+    expect(isIntegrationBranch(null, undefined)).toBe(false);
+    expect(isIntegrationBranch("develop", { git: { integrationBranch: "develop" } })).toBe(true);
+    expect(isIntegrationBranch("main", { git: { integrationBranch: "develop" } })).toBe(false);
+  });
+});
+
+describe("agents mesh config", () => {
+  it("parses agents.mesh and heartbeat TTL with defaults", () => {
+    const parsed = DnaConfigSchema.parse(base({ agents: {} }));
+    expect(parsed.agents?.mesh).toBe(true);
+    expect(parsed.agents?.heartbeatTtlSeconds).toBe(DEFAULT_AGENT_HEARTBEAT_TTL_SECONDS);
+  });
+
+  it("parses explicit agents overrides", () => {
+    const parsed = DnaConfigSchema.parse(
+      base({
+        agents: { mesh: false, heartbeatTtlSeconds: 60 },
+      }),
+    );
+    expect(parsed.agents?.mesh).toBe(false);
+    expect(parsed.agents?.heartbeatTtlSeconds).toBe(60);
+  });
+
+  it("exports agents db constants and gitignore entries", () => {
+    expect(DNA_AGENTS_DB).toBe(".DNA/runtime/agents.db");
+    expect(DNA_AGENTS_LOCK).toBe(".DNA/runtime/agents.lock");
+    expect(DNA_GITIGNORE_ENTRIES).toContain(".DNA/runtime/agents.db");
+    expect(DNA_GITIGNORE_ENTRIES).toContain(".DNA/runtime/agents.lock");
+    expect(DNA_GITIGNORE_ENTRIES).toContain(".DNA/runtime/agents.db-wal");
   });
 });

@@ -79,6 +79,28 @@ export function resolveGitBranchingStrategy(
   return config?.git?.branchingStrategy === "feature-branch" ? "feature-branch" : "trunk";
 }
 
+/**
+ * Integration / trunk branch name. Override with `git.integrationBranch`.
+ * Default display name is `main`; `isIntegrationBranch` also treats `master`.
+ */
+export function resolveIntegrationBranch(
+  config?: Pick<DnaConfig, "git"> | null,
+): string {
+  const explicit = config?.git?.integrationBranch?.trim();
+  return explicit || "main";
+}
+
+/** True when `branch` is the project's integration line (main/master or configured). */
+export function isIntegrationBranch(
+  branch: string | null | undefined,
+  config?: Pick<DnaConfig, "git"> | null,
+): boolean {
+  if (!branch) return false;
+  const explicit = config?.git?.integrationBranch?.trim();
+  if (explicit) return branch === explicit;
+  return branch === "main" || branch === "master";
+}
+
 export function formatTaggedCommit(
   identity: ProjectGitIdentity,
   type: string,

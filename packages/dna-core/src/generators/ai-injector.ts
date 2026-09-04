@@ -11,6 +11,7 @@ import { installFeatureFactory } from "./feature-factory.js";
 import { installAiWorkbench, isAiWorkbenchEnabled } from "./ai-workbench.js";
 import { generateNeuralNetwork } from "./neural-network.js";
 import { REASONING_BEHAVIOUR_FILE, REASONING_MARKER } from "./dna-reasoning.js";
+import { AGENT_MESH_REQUIRED_PATHS, installAgentMesh } from "../agents/install.js";
 
 const ALWAYS_ON_MARKER = "DNA is always on";
 const NEVER_WAIT_MARKER = 'wait for the user to say "use DNA"';
@@ -87,6 +88,7 @@ export function getRequiredInjectionPaths(config: DnaConfig): string[] {
     paths.add(".cursor/rules/delivery-pipeline.mdc");
     paths.add(".cursor/skills/dna-workbench/SKILL.md");
     paths.add(".cursor/skills/dna-cli/SKILL.md");
+    for (const path of AGENT_MESH_REQUIRED_PATHS) paths.add(path);
   }
 
   if (config.featureFactory?.enabled !== false) {
@@ -255,6 +257,8 @@ export async function syncAiInjection(
       })),
     );
   }
+
+  written.push(...(await installAgentMesh(root, config)));
 
   const shouldPersist = options.persistConfig ?? force;
   if (shouldPersist) {

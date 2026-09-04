@@ -15,6 +15,7 @@ import { installGitHooks } from "./generators/git-hooks.js";
 import { installDockerScaffold } from "./generators/docker.js";
 import { wireRuntimeMiddleware } from "./generators/wire-runtime.js";
 import { syncAiInjection } from "./generators/ai-injector.js";
+import { installAgentMesh } from "./agents/install.js";
 import { generateBehaviourFiles } from "./generators/behaviour.js";
 import { ensureRuntimeDatabase } from "./storage/runtime-db.js";
 import { writeFileEnsured, writeJsonFile, fileExists, ensureDir } from "./fs.js";
@@ -374,6 +375,8 @@ async function ensureAiAndCi(root: string, config: DnaConfig): Promise<string[]>
 
   const injection = await syncAiInjection(root, config, { scan });
   actions.push(`AI injection synced (${injection.written.length} files)`);
+  const mesh = await installAgentMesh(root, config);
+  if (mesh.length) actions.push(`Agent Mesh installed (${mesh.join(", ")})`);
   if (injection.report.complete) {
     actions.push("AI injection verified — Cursor + Claude always-on rules current");
   } else {

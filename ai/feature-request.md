@@ -1,53 +1,54 @@
 # Feature Request
 
-_Auto-maintained by DNA. Updated 2026-08-19._
+_Auto-maintained by DNA. Updated 2026-09-04._
 
 ## Latest request
 
-> WE NEED react expo stem packs immediately, as many mobile ios and android as possible, best practices. Dynamic builds. Include decision making, architect, even things like backend for frontend.
+> Ship Agent Mesh + Git Guardian on trunk (`main`). SQLite registry, CLI (`dna agents *` + `dna commit`), fail-open Cursor hooks, path claims, `dna commit` mutex (never `git add` all), doctor/injection install, version 0.6.29. Do not add trunk sermons to AGENTS.md. Enforcement is hooks + CLI.
 
 ## Problem
 
-DNA has Tauri/desktop stems and a thin `frameworks/react-native` knowledge pack, but **no Expo / React Native prompt stem library**. Agents building iOS/Android apps improvise Expo Go vs dev client, EAS Update vs native rebuild, App Store vs Play, and whether the app should talk to a BFF.
+Parallel Cursor agents invent `feature/*` branches, run raw `git add` / `git commit`, collide on the same files, and leave dirty trees. Unpublished fail-closed hooks previously locked the editor when the DNA CLI was missing.
 
 ## Pain
 
-- Agents pick Expo Go for production work that needs custom native modules
-- OTA / “dynamic builds” (EAS Update) shipped when native code changed — or native rebuilds when JS-only would suffice
-- No BFF guidance — mobile clients hit raw domain APIs, over-fetch, and leak tokens
-- iOS vs Android permissions, signing, and store policy treated as one checklist
-- Architecture decisions (Router, state, auth storage) reinvented per session
+- Agents create feature branches on a trunk-based repo
+- Two agents write the same path with no coordination
+- Sessions stop dirty with no commit gate
+- Fail-closed hooks lock Cursor when `dna` is not on PATH
 
 ## Users
 
-- Teams shipping Expo / React Native apps on iOS and Android
-- DNA projects using the `mobile-expo` stack archetype
-- Agents that need a decision record before scaffolding or shipping
+- DNA maintainers and squads running multiple Cursor agents on one checkout
+- Agents that must stay on `main`/`master` (or `git.integrationBranch`)
+- Operators installing DNA via `dna doctor`
 
 ## Desired behaviour
 
-1. **Default-on Expo stem packs** — slash commands for architect, BFF, dynamic builds, EAS, iOS, Android, auth, offline, a11y, perf, testing, notifications, deep links
-2. **Decision-first** — `/expo-architect` and `/expo-workflow-decision` produce an ADR before code
-3. **BFF is first-class** — `/expo-bff` plans a mobile Backend-for-Frontend (aggregation, auth exchange, payload shaping)
-4. **Dynamic builds** — `/expo-dynamic-builds` covers EAS Update channels, `runtimeVersion`, what may OTA vs what requires a new binary
-5. **Platform-specific ship** — iOS TestFlight/App Store and Android Play tracks as separate stems
-6. Knowledge pack `frameworks/react-native` deepened so stem `contextLoads` are real, not stubs
-7. Marketplace combo `combo/expo-mobile` installs packs + stems together
+1. SQLite registry at `.DNA/runtime/agents.db` (DatabaseSync when available; exclusive lockfile + fallback store otherwise)
+2. CLI: `dna agents status|register|claim|release|heartbeat|context|hook|install|commit` and top-level `dna commit`
+3. Cursor hooks installed by doctor / AI injection — **fail-open** (`{"permission":"allow"}` exit 0) if CLI missing
+4. Git Guardian denies branch create, stash, raw add/commit, reset --hard, clean -f on trunk; allow `dna commit`, `git status/diff/log`, `dna github push`
+5. Path claims: Write/Delete of another active agent's claim → DNA CONFLICT
+6. `dna commit` stages only this agent's files; `dna github push` uses it when `DNA_AGENT_ID` is set
+7. Doctor reports Agent Mesh; `dna context cursor` appends live coordination
+8. Config: `git.integrationBranch`, `agents.mesh` (default true), `agents.heartbeatTtlSeconds` (default 1800)
 
 ## Edge cases
 
-- No Expo/RN app in repo → stems stop; do not invent a mobile app unless asked
-- Bare / CNG prebuild needed → document native dirs; do not pretend Expo Go is enough
-- Native module or permission change → block OTA; require EAS Build
-- Secrets (Apple certs, Play keystore, EXPO_TOKEN) — names only, never print values
-- Web-only repo using React — do not apply Expo stems
+- DNA CLI missing → hooks fail-open, never lock the editor
+- Current branch unknown → do not deny off-trunk writes
+- Feature-branch config relaxes branch create
+- Isolated explore/review/security-review/bugbot/ci-investigator/cursor-guide allowed; isolated coding denied
+- Stale heartbeats (TTL) are not active claim holders
+- Never `git add .` / `-A` / `--all`
 
 ## Acceptance criteria
 
-- [x] Expo prompt stems exist, quality-baseline compliant (checklist + artifacts + failure modes, 2–3 examples)
-- [x] Stems cover: architect/decisions, BFF, Expo init/router, dynamic builds (EAS Update), EAS Build, dev client, app.config, iOS ship + permissions, Android ship + permissions, auth, offline, perf, a11y, testing, notifications, deep links, store submit, CI, native modules
-- [x] Slash commands install to `.cursor/commands/` and `.claude/commands/`
-- [x] `frameworks/react-native` knowledge includes architecture decisions, BFF, EAS, OTA, iOS, Android
-- [x] `combo/expo-mobile` purpose combo maps to real pack + stem ids
-- [x] Intelligence catalog bumped; tests cover unique ids + Expo quality bar
-- [x] Docs/CHANGELOG updated with new stem family
+- [x] Registry schema + fallback store
+- [x] CLI surface + `dna commit`
+- [x] Fail-open hook runner, `failClosed: false`
+- [x] Git Guardian + path claims + commit gate messages
+- [x] Doctor, injection, context, version 0.6.29, docs
+- [x] Tests in `packages/dna-core/src/agents/*.test.ts` + schema tests
+- [x] Hooks + knowledge installed in this repo

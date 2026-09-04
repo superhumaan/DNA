@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# DNA Agent Mesh — fail-open Cursor hook runner.
+# If dna is missing or this script errors, ALWAYS allow (exit 0 + JSON).
+# A lockout is worse than fail-open.
+
+fail_open() {
+  printf '%s\n' '{"permission":"allow"}'
+  exit 0
+}
+
+trap fail_open ERR
+set +e
+
+INPUT="$(cat 2>/dev/null || true)"
+
+resolve_dna() {
+  if command -v dna >/dev/null 2>&1; then
+    command -v dna
+    return 0
+  fi
+  local here root
+  here="$(cd "$(dirname "$0")" && pwd)"
+  root="$(cd "$here/../.." && pwd)"
+  if [ -x "$root/node_modules/.bin/dna" ]; then
+    printf '%s\n' "$root/node_modules/.bin/dna"
+    return 0
+  fi
+  if [ -f "$root/packages/dna-cli/dist/index.js" ]; then
+    printf '%s\n' "node:$root/packages/dna-cli/dist/index.js"
+    return 0
+  fi
+  return 1
+}
+
+DNA_BIN="$(resolve_dna)" || fail_open
+
+if [ -z "${INPUT}" ]; then
+  fail_open
+fi
+
+if [[ "$DNA_BIN" == node:* ]]; then
+  OUT="$(printf '%s' "$INPUT" | node "${DNA_BIN#node:}" agents hook 2>/dev/null)"
+else
+  OUT="$(printf '%s' "$INPUT" | "$DNA_BIN" agents hook 2>/dev/null)"
+fi
+STATUS=$?
+
+if [ "$STATUS" -ne 0 ] || [ -z "$OUT" ]; then
+  fail_open
+fi
+
+printf '%s\n' "$OUT"
+exit 0

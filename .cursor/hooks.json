@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "./.cursor/hooks/dna-agent-mesh",
+        "failClosed": false
+      }
+    ],
+    "subagentStart": [
+      {
+        "command": "./.cursor/hooks/dna-agent-mesh",
+        "failClosed": false
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "./.cursor/hooks/dna-agent-mesh",
+        "failClosed": false
+      }
+    ],
+    "preToolUse": [
+      {
+        "command": "./.cursor/hooks/dna-agent-mesh",
+        "failClosed": false
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "./.cursor/hooks/dna-agent-mesh",
+        "failClosed": false
+      }
+    ],
+    "stop": [
+      {
+        "command": "./.cursor/hooks/dna-agent-mesh",
+        "failClosed": false
+      }
+    ],
+    "subagentStop": [
+      {
+        "command": "./.cursor/hooks/dna-agent-mesh",
+        "failClosed": false
+      }
+    ]
+  }
+}

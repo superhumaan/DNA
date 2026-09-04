@@ -47,6 +47,19 @@ describe("pushFeatureToGitHub trunk default", () => {
     expect(pushMock).toHaveBeenCalled();
   });
 
+  it("skips local add/commit when skipLocalCommit is set", async () => {
+    statusMock.mockResolvedValue({ current: "main", files: [{ path: "a.ts" }] });
+    const result = await pushFeatureToGitHub({
+      root: "/tmp/repo",
+      message: "feat: x",
+      skipLocalCommit: true,
+    });
+    expect(result.committed).toBe(false);
+    expect(addMock).not.toHaveBeenCalled();
+    expect(commitMock).not.toHaveBeenCalled();
+    expect(pushMock).toHaveBeenCalled();
+  });
+
   it("hops to feature/* only when createBranch is true", async () => {
     const result = await pushFeatureToGitHub({
       root: "/tmp/repo",

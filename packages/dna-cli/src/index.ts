@@ -140,6 +140,20 @@ import {
   formatCliUpgradeResult,
   maybeAutoUpgradeCli,
   syncAutoUpdateForCliVersion,
+  registerAgent,
+  listAgents,
+  claimPaths,
+  releaseAgent,
+  heartbeatAgent,
+  formatAgentStatus,
+  formatLiveCoordination,
+  handleAgentHook,
+  installAgentMesh,
+  commitAgentWork,
+  resolveAgentId,
+  resolveHeartbeatTtl,
+  isAgentType,
+  AGENT_STATUSES,
 } from "@superhumaan/dna-core";
 import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
@@ -946,11 +960,23 @@ github
         const createBranch =
           options.createBranch === true ||
           (options.createBranch === undefined && strategy === "feature-branch");
+        const agentId = resolveAgentId();
+        const skipLocalCommit = Boolean(agentId);
+        const commitMessage = options.message ?? "feat: DNA feature factory delivery";
+        if (agentId) {
+          await commitAgentWork({
+            root,
+            agentId,
+            message: commitMessage,
+            config,
+          });
+        }
         const result = await pushFeatureToGitHub({
           root,
-          message: options.message ?? "feat: DNA feature factory delivery",
+          message: commitMessage,
           branch: options.branch,
           createBranch,
+          skipLocalCommit,
         });
         console.log(`✓ Pushed to ${result.owner}/${result.repo}`);
         console.log(`  Branch: ${result.branch}`);
@@ -2318,6 +2344,211 @@ discovery
   });
 
 const memory = program.command("memory").description("CellularMemory export and import across projects");
+
+const agentsCmd = program.command("agents").description("Agent Mesh — register, claims, Git Guardian, commit");
+
+agentsCmd
+  .command("status")
+  .description("Show registered agents and live claims")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const agents = await listAgents(root);
+    console.log(formatAgentStatus(agents, resolveHeartbeatTtl(config)));
+  });
+
+agentsCmd
+  .command("register")
+  .description("Register this session as a primary or subagent")
+  .option("--cwd <path>", "Project root directory")
+  .option("--id <id>", "Agent id (default: DNA_AGENT_ID or new UUID)")
+  .option("--parent <id>", "Parent agent id")
+  .option("--type <type>", "primary or subagent", "primary")
+  .option("--task <text>", "What this agent is working on")
+  .action(async (options: { cwd?: string; id?: string; parent?: string; type?: string; task?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const rawType = options.type ?? "primary";
+    const type = isAgentType(rawType) ? rawType : "primary";
+    const agent = await registerAgent({
+      root,
+      config,
+      id: resolveAgentId(options.id),
+      parentId: options.parent,
+      type,
+      task: options.task,
+    });
+    console.log(`✓ Registered ${agent.type} ${agent.id}`);
+    if (agent.task) console.log(`  Task: ${agent.task}`);
+    if (agent.branch) console.log(`  Branch: ${agent.branch}`);
+  });
+
+agentsCmd
+  .command("claim")
+  .description("Claim file paths for this agent")
+  .argument("<paths...>", "Paths to claim")
+  .option("--cwd <path>", "Project root directory")
+  .option("--id <id>", "Agent id (default: DNA_AGENT_ID)")
+  .action(async (paths: string[], options: { cwd?: string; id?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const agentId = resolveAgentId(options.id);
+    if (!agentId) {
+      console.error("Set DNA_AGENT_ID or pass --id");
+      process.exit(1);
+    }
+    const result = await claimPaths(root, agentId, paths, config);
+    if (result.conflicts.length) {
+      for (const conflict of result.conflicts) console.error(conflict.message);
+      process.exit(1);
+    }
+    console.log(`✓ Claimed ${paths.length} path(s) for ${agentId}`);
+  });
+
+agentsCmd
+  .command("release")
+  .description("Mark this agent completed (or failed)")
+  .option("--cwd <path>", "Project root directory")
+  .option("--id <id>", "Agent id (default: DNA_AGENT_ID)")
+  .option("--status <status>", "completed or failed", "completed")
+  .action(async (options: { cwd?: string; id?: string; status?: string }) => {
+    const root = getRoot(options);
+    const agentId = resolveAgentId(options.id);
+    if (!agentId) {
+      console.error("Set DNA_AGENT_ID or pass --id");
+      process.exit(1);
+    }
+    const status = (AGENT_STATUSES as readonly string[]).includes(options.status ?? "")
+      ? (options.status as "completed" | "failed" | "idle" | "active")
+      : "completed";
+    const agent = await releaseAgent(root, agentId, status);
+    if (!agent) {
+      console.error(`Unknown agent ${agentId}`);
+      process.exit(1);
+    }
+    console.log(`✓ Released ${agent.id} (${agent.status})`);
+  });
+
+agentsCmd
+  .command("heartbeat")
+  .description("Refresh this agent's heartbeat")
+  .option("--cwd <path>", "Project root directory")
+  .option("--id <id>", "Agent id (default: DNA_AGENT_ID)")
+  .action(async (options: { cwd?: string; id?: string }) => {
+    const root = getRoot(options);
+    const agentId = resolveAgentId(options.id);
+    if (!agentId) {
+      console.error("Set DNA_AGENT_ID or pass --id");
+      process.exit(1);
+    }
+    const agent = await heartbeatAgent(root, agentId);
+    if (!agent) {
+      console.error(`Unknown agent ${agentId}`);
+      process.exit(1);
+    }
+    console.log(`✓ Heartbeat ${agent.id} at ${agent.heartbeat_at}`);
+  });
+
+agentsCmd
+  .command("context")
+  .description("Print DNA LIVE COORDINATION for the current mesh")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    console.log(await formatLiveCoordination(root, config));
+  });
+
+agentsCmd
+  .command("hook")
+  .description("Cursor hook runner — reads JSON on stdin, always fail-open")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    try {
+      const config = await loadDnaConfig(root);
+      const chunks: Buffer[] = [];
+      for await (const chunk of process.stdin) chunks.push(Buffer.from(chunk));
+      const raw = Buffer.concat(chunks).toString("utf-8");
+      const decision = await handleAgentHook({ root, payload: raw, config });
+      process.stdout.write(`${JSON.stringify(decision)}\n`);
+    } catch {
+      process.stdout.write('{"permission":"allow"}\n');
+    }
+  });
+
+agentsCmd
+  .command("install")
+  .description("Install fail-open Cursor hooks and Agent Mesh knowledge")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const written = await installAgentMesh(root, config);
+    if (written.length === 0) {
+      console.log("Agent Mesh disabled (agents.mesh=false)");
+      return;
+    }
+    console.log(`✓ Agent Mesh installed (${written.join(", ")})`);
+  });
+
+agentsCmd
+  .command("commit")
+  .description("Commit only this agent's claimed/modified files")
+  .option("--cwd <path>", "Project root directory")
+  .option("-m, --message <text>", "Commit message")
+  .option("--id <id>", "Agent id (default: DNA_AGENT_ID)")
+  .action(async (options: { cwd?: string; message?: string; id?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const agentId = resolveAgentId(options.id);
+    if (!agentId) {
+      console.error("Set DNA_AGENT_ID or pass --id");
+      process.exit(1);
+    }
+    try {
+      const result = await commitAgentWork({
+        root,
+        agentId,
+        message: options.message ?? "feat: DNA agent commit",
+        config,
+      });
+      console.log(result.committed ? `✓ ${result.message}` : result.message);
+      if (result.staged.length) console.log(`  Staged: ${result.staged.join(", ")}`);
+    } catch (err) {
+      console.error(err instanceof Error ? err.message : err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command("commit")
+  .description("Commit only this agent's claimed/modified files (Agent Mesh)")
+  .option("--cwd <path>", "Project root directory")
+  .option("-m, --message <text>", "Commit message")
+  .option("--id <id>", "Agent id (default: DNA_AGENT_ID)")
+  .action(async (options: { cwd?: string; message?: string; id?: string }) => {
+    const root = getRoot(options);
+    const config = await loadDnaConfig(root);
+    const agentId = resolveAgentId(options.id);
+    if (!agentId) {
+      console.error("Set DNA_AGENT_ID or pass --id");
+      process.exit(1);
+    }
+    try {
+      const result = await commitAgentWork({
+        root,
+        agentId,
+        message: options.message ?? "feat: DNA agent commit",
+        config,
+      });
+      console.log(result.committed ? `✓ ${result.message}` : result.message);
+    } catch (err) {
+      console.error(err instanceof Error ? err.message : err);
+      process.exit(1);
+    }
+  });
 
 const skeletorCmd = program
   .command("skeletor")

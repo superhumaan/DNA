@@ -37,7 +37,7 @@ export class Git {
   }
 
   async status(): Promise<GitStatus> {
-    const { stdout } = await this.run(["status", "--porcelain", "-b"]);
+    const { stdout } = await this.run(["status", "--porcelain", "-b", "-uall"]);
     const lines = stdout.split("\n").filter(Boolean);
     const modified: string[] = [];
     const created: string[] = [];

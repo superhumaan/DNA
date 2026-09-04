@@ -149,6 +149,7 @@ function emptyDoctor(): DoctorReport {
       warnings: [],
     },
     sourceMaps: { count: 0, scanned: 0 },
+    agentMesh: { installed: false, hookExecutable: false, failOpen: false },
     validation: { valid: false, issueCount: 1 },
   };
 }

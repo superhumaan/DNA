@@ -4,10 +4,11 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.6.28)
+## In scope (v0.6.29)
 
 | Area | Delivered |
 |------|-----------|
+| **Agent Mesh + Git Guardian** | SQLite `.DNA/runtime/agents.db`; `dna agents *` + `dna commit`; fail-open Cursor hooks; path claims; Git Guardian denies feature-branch create / raw git add+commit on trunk ([agent-mesh.md](../engineering/agent-mesh.md)) |
 | **Project git naming** | AI commits, PR titles, and repair branches use per-project tags (`[MyApp]`, `[DNA]`, …) from `projectId` / `git.projectTag`; always-on workbench + delivery behaviour + stems |
 | **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace, `dna ai force-repair`, `dna lab installs [--fix]`, `dna update` aligns nested Lab packages |
 | **Runtime** | Express 4/5, Fastify, NestJS, Next.js adapters (Next.js: duck-typed — consumer provides `next`); Aggressive Repair Loop fingerprints + CellularMemory; EPIPE/ECONNRESET noise filter; outbound third-party capture + browser ingest |

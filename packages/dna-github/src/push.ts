@@ -11,6 +11,10 @@ export interface PushFeatureOptions {
    * Default / trunk mode: false — push stays on the current branch.
    */
   createBranch?: boolean;
+  /**
+   * When true, skip local `git add` / `git commit` (Agent Mesh already ran `dna commit`).
+   */
+  skipLocalCommit?: boolean;
 }
 
 export interface PushFeatureResult {
@@ -72,7 +76,7 @@ export async function pushFeatureToGitHub(
   }
 
   let committed = false;
-  if (status.files.length > 0) {
+  if (status.files.length > 0 && !options.skipLocalCommit) {
     await g.add(status.files.map((f) => f.path));
     await g.commit(message);
     committed = true;

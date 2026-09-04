@@ -24,7 +24,7 @@ npx @superhumaan/dna-by-humaan doctor
 
 Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 
-**Latest (v0.6.28):** Expo/React Native stems · `combo/expo-mobile` · trunk-based delivery · 127 stems · 1045 packs · 28 purpose bundles.
+**Latest (v0.6.29):** Agent Mesh + Git Guardian — agents register, claim files, cannot create feature branches or finish dirty. Expo stems + trunk delivery remain.
 
 ---
 
@@ -179,6 +179,8 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna lab installs --fix` | Upgrade every owner package to `@latest` |
 | `dna register lab --url <url>` | Pair local CLI to production Lab (148-digit code) |
 | `dna dashboard` | Legacy alias for `dna lab serve` |
+| `dna agents status` | Agent Mesh — live agents and path claims |
+| `dna commit` | Commit only this agent's claimed/modified files |
 | `dna github connect` | Wire GitHub issues + repair workflow |
 | `dna ai repair` | AI-assisted fix suggestions (dry-run safe) |
 

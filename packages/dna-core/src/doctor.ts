@@ -7,6 +7,7 @@ import { scanProject } from "./scanner.js";
 import { isRealAiProvider } from "./ai-connect.js";
 import { verifyAiInjection } from "./generators/ai-injector.js";
 import { reportLabInstalls, LAB_UPGRADE_NEXT_STEPS } from "./lab/sync-installs.js";
+import { agentMeshInstallStatus } from "./agents/install.js";
 
 export interface DoctorReport {
   dna: { installed: boolean; version?: string };
@@ -31,6 +32,7 @@ export interface DoctorReport {
     warnings: string[];
   };
   sourceMaps: { count: number; scanned: number };
+  agentMesh: { installed: boolean; hookExecutable: boolean; failOpen: boolean };
   validation: { valid: boolean; issueCount: number };
 }
 
@@ -146,6 +148,11 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
     },
     labInstalls,
     sourceMaps,
+    agentMesh: await agentMeshInstallStatus(root).then((s) => ({
+      installed: s.installed && s.hookExecutable,
+      hookExecutable: s.hookExecutable,
+      failOpen: s.failOpen,
+    })),
     validation: {
       valid: validation.valid,
       issueCount: validation.errors.length,
@@ -225,6 +232,7 @@ export async function runDoctorLite(root: string): Promise<DoctorReport> {
     injection: { expected: false, complete: true, missing: [], stale: [] },
     labInstalls,
     sourceMaps: { count: 0, scanned: 0 },
+    agentMesh: { installed: false, hookExecutable: false, failOpen: false },
     validation: {
       valid: dnaInstalled && behaviourMissing.length === 0,
       issueCount: behaviourMissing.length + (dnaInstalled ? 0 : 1),
@@ -277,6 +285,13 @@ export function formatDoctorReport(report: DoctorReport): string {
           : " (disabled)"
     }`,
     labLine,
+    `${status(report.agentMesh.installed && report.agentMesh.failOpen)} Agent Mesh (hooks + Git Guardian)${
+      report.agentMesh.installed
+        ? report.agentMesh.failOpen
+          ? ""
+          : " (hook runner missing fail-open)"
+        : " — run dna agents install"
+    }`,
     `${status(report.sourceMaps.count > 0)} Source maps (${report.sourceMaps.count} registered${report.sourceMaps.scanned ? `, scanned ${report.sourceMaps.scanned}` : ""})`,
     "",
     `${status(report.validation.valid)} Validation (${report.validation.issueCount} issues)`,
