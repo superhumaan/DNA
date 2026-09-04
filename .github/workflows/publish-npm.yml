@@ -23,8 +23,12 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org
+          node-version: 24
+          # Do not set registry-url — it writes an empty _authToken that
+          # blocks npm OIDC trusted publishing (E404 / ENEEDAUTH).
+
+      - name: Use npm CLI with trusted-publishing support
+        run: npm install -g npm@latest && npm --version
 
       - run: pnpm install
 
@@ -41,6 +45,7 @@ jobs:
 
       - name: Publish all @superhumaan/dna-* packages
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # Prefer OIDC trusted publishing. Do not pass NODE_AUTH_TOKEN —
+          # a stale/empty token short-circuits OIDC and npm reports E404.
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: bash scripts/publish-npm.sh
