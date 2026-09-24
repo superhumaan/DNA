@@ -50,7 +50,24 @@ fi
 echo "→ Publishing @superhumaan/dna-by-humaan..."
 cd "$ROOT/packages/dna-cli"
 # Call npm directly so ACTIONS_ID_TOKEN_* env vars reach the CLI (pnpm publish can drop them).
-npm publish --access public --provenance
+publish_ok=0
+if [[ "$OIDC_AVAILABLE" -eq 1 ]]; then
+  if npm publish --access public --provenance; then
+    publish_ok=1
+  else
+    echo "→ OIDC publish was not accepted. Retrying with NPM_TOKEN."
+  fi
+fi
+if [[ "$publish_ok" -eq 0 ]]; then
+  if [[ -z "${AUTH_TOKEN}" ]]; then
+    echo "Publish failed and no NPM_TOKEN is available."
+    exit 1
+  fi
+  NPM_USERCONFIG="$(mktemp)"
+  trap 'rm -f "$NPM_USERCONFIG"' EXIT
+  printf '//registry.npmjs.org/:_authToken=%s\n' "$AUTH_TOKEN" >"$NPM_USERCONFIG"
+  NPM_CONFIG_USERCONFIG="$NPM_USERCONFIG" npm publish --access public
+fi
 
 echo ""
 echo "✓ Published. Install:"
