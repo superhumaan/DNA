@@ -141,8 +141,7 @@ export async function registerPairingOnProduction(
 
 /**
  * Paste-verify: /labs accepts a valid Pairing ID + 148-digit code from `dna register lab`.
- * If POST /pairing/init never reached the server, invent the store row from the paste
- * (code possession is the secret — no gateway allowlist required).
+ * The pairing row must already exist from `dna register lab`. Paste alone does not create it.
  */
 export async function verifyPairingCode(
   root: string,
@@ -163,7 +162,7 @@ export async function verifyPairingCode(
   }
 
   const codeHash = hashValue(trimmedCode);
-  let pairing = await findLabPairing(root, id);
+  const pairing = await findLabPairing(root, id);
 
   if (!pairing) {
     return {

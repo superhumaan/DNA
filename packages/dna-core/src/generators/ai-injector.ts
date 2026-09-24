@@ -13,6 +13,10 @@ import { generateNeuralNetwork } from "./neural-network.js";
 import { REASONING_BEHAVIOUR_FILE, REASONING_MARKER } from "./dna-reasoning.js";
 import { AGENT_MESH_REQUIRED_PATHS, installAgentMesh } from "../agents/install.js";
 
+const ALWAYS_ON_MARKER = "DNA is always on";
+const NEVER_WAIT_MARKER = 'wait for the user to say "use DNA"';
+const CRITICAL_THINKING_MARKER = "Critical thinking";
+
 async function writeUnlessPreserved(root: string, relPath: string, content: string): Promise<boolean> {
   const full = join(root, relPath);
   if (await fileExists(full)) {
@@ -22,8 +26,6 @@ async function writeUnlessPreserved(root: string, relPath: string, content: stri
   await writeFileEnsured(full, content);
   return true;
 }
-const NEVER_WAIT_MARKER = 'wait for the user to say "use DNA"';
-const CRITICAL_THINKING_MARKER = "Critical thinking";
 
 export interface AiInjectionCheck {
   path: string;
