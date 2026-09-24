@@ -42,7 +42,7 @@ dna analyze
 dna context cursor
 ```
 
-Type `/` in Cursor — **127 stems** and **`/dna-*` commands** are already there.
+Type `/` in Cursor — **133 stems** and **`/dna-*` commands** are already there.
 
 ### One-liner (tweet / npm)
 
@@ -230,7 +230,7 @@ your-squad-folder/                    ← dna doctor HERE (once)
 │   ├── rules/                        ← dna-workbench, product-process, delivery, roles…
 │   ├── skills/dna-workbench/         ← session flows + prompt patterns
 │   ├── skills/dna-cli/               ← CLI obedience
-│   └── commands/                     ← 127 stems + /dna-* slash commands
+│   └── commands/                     ← 133 stems + /dna-* slash commands
 ├── .claude/                          ← mirror for Claude Code
 ├── .github/workflows/                ← dna-ci, dna-security, dna-preview, cleanup
 ├── .DNA/
@@ -325,7 +325,7 @@ npm install   # if doctor added runtime package
 | Enterprise stack | Typical cost | DNA portfolio equivalent |
 |------------------|--------------|--------------------------|
 | Cursor / Copilot premium memory | $20–40/seat/mo | `.DNA/` + CellularMemory — persists in git |
-| Custom AI rules + prompt library | Consultant / staff time | 127 stems + rules + skills — installed |
+| Custom AI rules + prompt library | Consultant / staff time | 133 stems + rules + skills — installed |
 | Sentry per service | $26+/mo per project | Runtime observer + immune system → contextual issues |
 | GitHub Teams advanced | Per-seat | `dna github push` + quality gates (browser login) |
 | Backstage / service catalog | Platform team headcount | `parietalLobe` system + dependency maps |

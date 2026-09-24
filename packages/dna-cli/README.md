@@ -87,7 +87,7 @@ npx @superhumaan/dna-by-humaan doctor
 | Included in one `doctor` | |
 |--------------------------|---|
 | `.DNA/` intelligence | behaviour, CellularMemory, immune system, neuralNetwork |
-| **127 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` (Expo/React Native included) |
+| **133 stem packs** + **`/dna-*` commands** | guidelines, expectations, workflows in `.DNA/stems/` (Expo/React Native included) |
 | **AI workbench** | `AGENTS.md`, Cursor + Claude rules/skills — always on |
 | **Detection** | stack, monorepo apps, AI tools, GitHub, healthcare/legal domain, drift |
 | **Feature factory** | 9-role loop, quality gates, same template every feature |

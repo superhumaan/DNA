@@ -10,7 +10,7 @@ DNA development priorities and public roadmap.
 - **Expo / React Native** — 23 stems (architect, BFF, EAS Update/dynamic builds, iOS/Android ship); combo `combo/expo-mobile`
 - **Trunk-based delivery** — default `git.branchingStrategy: trunk`; `dna github push` stays on the current branch
 - **Marketplace purpose bundles** — 28 combos; `dna marketplace install combo/<id>` installs knowledge packs + prompt stems + AI rules; [dna.humaan.app/marketplace#bundles](https://dna.humaan.app/marketplace#bundles)
-- **Knowledge marketplace** — **1045 rich packs** (0 stubs), 127 stem packs, strategy grounding (`STRATEGY_COMPLETE`)
+- **Knowledge marketplace** — **1045 rich packs** (0 stubs), 133 stem packs, strategy grounding (`STRATEGY_COMPLETE`)
 - **Lab mobile shell** — mobile-style off-canvas nav ≤900px; sticky chrome; scrollable tables ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **Lab APIs reference** — every Lab route with Description / Usage / Received / Sent; expandable APIs tab ([docs](../engineering/lab-apis-reference-0.6.18.md))
 - **Lab URL deep links** — `/labs/<tab>`, `/labs/issues/<id>`; refresh keeps the page; 401 → sign-in (no Unauthorized toast)

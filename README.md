@@ -54,7 +54,7 @@ DNA is not a documentation generator. It is:
 cd /path/to/your-project    # or portfolio parent for multi-app squads
 npx @superhumaan/dna-by-humaan doctor
 
-# In Cursor: type / for 127 stems and /dna-* commands — already installed
+# In Cursor: type / for 133 stems and /dna-* commands — already installed
 # Portfolio squads: run doctor on the parent folder, not each repo
 ```
 
