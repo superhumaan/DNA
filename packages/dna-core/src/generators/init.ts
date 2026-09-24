@@ -83,9 +83,10 @@ export async function generateDnaStructure(
     created.push(`.DNA/${relPath}`);
   }
 
-  // Runtime database (replaces legacy JSONL logs)
-  const db = await ensureRuntimeDatabase(root);
-  created.push(db.path);
+  if (answers.installRuntime) {
+    const db = await ensureRuntimeDatabase(root);
+    created.push(db.path);
+  }
 
   // Ensure all impression paths exist (fallback empty)
   for (const relPath of IMPRESSIONS_PATHS) {

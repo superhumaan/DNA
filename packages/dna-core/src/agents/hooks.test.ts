@@ -40,15 +40,26 @@ describe("agent hooks", () => {
     expect(decision.additional_context).toContain(LIVE_COORDINATION_HEADING);
   });
 
-  it("denies isolated coding subagents and allows explore", async () => {
+  it("allows trunk coding subagents and denies off-trunk coding", async () => {
     await scratch();
-    const denied = await handleAgentHook({
+    const allowed = await handleAgentHook({
       root,
       payload: {
         hook_event_name: "subagentStart",
         subagent_type: "generalPurpose",
         is_isolated: true,
         git_branch: "main",
+      },
+    });
+    expect(allowed.permission).toBe("allow");
+
+    const denied = await handleAgentHook({
+      root,
+      payload: {
+        hook_event_name: "subagentStart",
+        subagent_type: "generalPurpose",
+        is_isolated: true,
+        git_branch: "feature/x",
       },
     });
     expect(denied.permission).toBe("deny");

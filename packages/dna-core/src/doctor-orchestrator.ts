@@ -29,6 +29,7 @@ import { documentFromCode } from "./ivf/document.js";
 import { generateIvfPlan } from "./ivf/plan.js";
 import { ALL_IVF_VERTICALS } from "./ivf/verticals.js";
 import { feedSkeletorToAi, formatSkeletorStatus, pullSkeletorData } from "./skeletor/index.js";
+import { labIsRemoved, runtimeIsRemoved } from "./observer-opt-out.js";
 
 export interface DoctorOrchestratorOptions {
   root: string;
@@ -97,7 +98,7 @@ async function ensureEnabledDefaults(root: string, config: DnaConfig): Promise<s
   const actions: string[] = [];
   let changed = false;
 
-  if (!config.runtime?.enabled) {
+  if (!config.runtime?.enabled && !runtimeIsRemoved(config)) {
     config.runtime = {
       ...config.runtime,
       enabled: true,
@@ -276,6 +277,7 @@ async function repairMissingStructure(root: string, config: DnaConfig): Promise<
 
 async function ensureRuntimeAssets(root: string, config: DnaConfig): Promise<string[]> {
   const actions: string[] = [];
+  if (runtimeIsRemoved(config)) return actions;
   const runtimeDir = join(root, ".DNA", "runtime");
 
   await ensureDir(join(root, ".DNA", "data"));
@@ -333,7 +335,7 @@ async function ensureLabScaffold(
   onStatus?: (msg: string) => void,
 ): Promise<string[]> {
   const actions: string[] = [];
-  if (config.lab?.enabled === false) return actions;
+  if (labIsRemoved(config) || config.lab?.enabled === false) return actions;
 
   actions.push(...(await ensureLabStore(root)));
 
@@ -492,6 +494,7 @@ export async function runDoctorOrchestrator(
   let initialized = false;
   let ivfRun = false;
 
+  onStatus?.(checkOnly ? "Scanning project (check only)…" : "Scanning project…");
   const scan = await scanProject(root);
   let config = await loadDnaConfig(root);
 
@@ -533,7 +536,8 @@ export async function runDoctorOrchestrator(
     }
   }
 
-  const report = await runDoctor(root);
+  onStatus?.("Running health check…");
+  const report = await runDoctor(root, { checkOnly, onStatus });
 
   return {
     report,

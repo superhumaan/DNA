@@ -57,15 +57,18 @@ export async function runPostInit(
   }
 
   config.featureFactory = { enabled: answers.installFeatureFactory };
+  const installLab = answers.installLab !== false;
   config.runtime = {
     enabled: answers.installRuntime,
+    removed: answers.installRuntime ? false : true,
     storage: "json",
-    watchBackend: true,
-    watchFrontend: true,
+    watchBackend: answers.installRuntime,
+    watchFrontend: answers.installRuntime,
     environment: "development",
   };
   config.lab = {
-    enabled: true,
+    enabled: installLab,
+    removed: installLab ? false : true,
     path: "/labs",
     requireAuthInProduction: true,
     openLocalWithoutAuth: true,
@@ -103,7 +106,7 @@ export async function runPostInit(
     `.DNA/config.dna.json (featureFactory ${answers.installFeatureFactory ? "enabled" : "disabled"})`,
   );
 
-  if (config.lab?.enabled !== false) {
+  if (installLab) {
     created.push(...(await ensureLabAssets(root)));
     const labWire = await wireLabStack({ root, config, scan });
     created.push(...labWire.wired.map((f) => `lab auto-wired: ${f}`));

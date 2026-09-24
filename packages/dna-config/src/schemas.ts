@@ -213,6 +213,7 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     if (!storage.success) return storage;
     runtime = {
       enabled: withDefault(optionalBoolean(rt.data.enabled), true),
+      removed: optionalBoolean(rt.data.removed),
       environment: optionalString(rt.data.environment),
       // `sqlite` was the historical label for the atomic JSON document stored
       // at runtime.db. Accept old configs, but expose the truthful canonical name.
@@ -385,6 +386,7 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     if (!labObj.success) return labObj;
     lab = {
       enabled: withDefault(optionalBoolean(labObj.data.enabled), true),
+      removed: optionalBoolean(labObj.data.removed),
       path: withDefault(optionalString(labObj.data.path), "/labs"),
       requireAuthInProduction: withDefault(optionalBoolean(labObj.data.requireAuthInProduction), true),
       openLocalWithoutAuth: withDefault(optionalBoolean(labObj.data.openLocalWithoutAuth), true),
@@ -405,6 +407,26 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
       autoReport: autoReport.data,
       includeSuggestedFix: withDefault(optionalBoolean(fb.data.includeSuggestedFix), true),
       endpoint: optionalString(fb.data.endpoint),
+    };
+  }
+
+  let impressions: DnaConfig["impressions"];
+  if (d.impressions !== undefined) {
+    const imp = expectObject(d.impressions, "impressions");
+    if (!imp.success) return imp;
+    impressions = {
+      driftWarningThreshold: optionalNumber(imp.data.driftWarningThreshold),
+      driftCriticalThreshold: optionalNumber(imp.data.driftCriticalThreshold),
+    };
+  }
+
+  let memory: DnaConfig["memory"];
+  if (d.memory !== undefined) {
+    const mem = expectObject(d.memory, "memory");
+    if (!mem.success) return mem;
+    memory = {
+      teamRegistry: optionalString(mem.data.teamRegistry),
+      syncOnPush: optionalBoolean(mem.data.syncOnPush),
     };
   }
 
@@ -432,6 +454,8 @@ function parseDnaConfig(input: unknown): ParseResult<DnaConfig> {
     ai,
     runtime,
     ci,
+    impressions,
+    memory,
     featureFactory,
     aiWorkbench,
     delivery,
@@ -494,6 +518,7 @@ function parseWizardAnswers(input: unknown): ParseResult<WizardAnswers> {
     compliance: compliance.data,
     stage: stage.data,
     installRuntime: withDefault(optionalBoolean(d.installRuntime), true),
+    installLab: withDefault(optionalBoolean(d.installLab), true),
     installFeatureFactory: withDefault(optionalBoolean(d.installFeatureFactory), true),
     installCi: withDefault(optionalBoolean(d.installCi), true),
     configureGithub: withDefault(optionalBoolean(d.configureGithub), true),
@@ -838,6 +863,8 @@ export interface DnaConfig {
   };
   runtime?: {
     enabled: boolean;
+    /** Sticky opt-out. Doctor and update must not recreate the observer. */
+    removed?: boolean;
     environment?: string;
     storage: "json" | "jsonl";
     watchBackend: boolean;
@@ -899,6 +926,8 @@ export interface DnaConfig {
   };
   lab?: {
     enabled: boolean;
+    /** Sticky opt-out. Doctor and update must not recreate Lab. */
+    removed?: boolean;
     path: string;
     requireAuthInProduction: boolean;
     openLocalWithoutAuth: boolean;
@@ -951,6 +980,8 @@ export interface WizardAnswers {
   compliance: (typeof COMPLIANCE_OPTIONS)[number];
   stage: (typeof PROJECT_STAGES)[number];
   installRuntime: boolean;
+  /** Default true. Set false to skip DNA Lab scaffolding. */
+  installLab?: boolean;
   installFeatureFactory: boolean;
   installCi: boolean;
   configureGithub: boolean;

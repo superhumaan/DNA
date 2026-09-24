@@ -12,6 +12,7 @@ export interface FastifyRequestLike {
   url: string;
   method: string;
   dnaStartTime?: number;
+  dnaErrorCaptured?: boolean;
   routerPath?: string;
 }
 
@@ -28,6 +29,7 @@ export function attachFastifyHooks(engine: RuntimeEngine, fastify: FastifyLike):
   fastify.addHook("onResponse", async (...args: unknown[]) => {
     const request = args[0] as FastifyRequestLike;
     const reply = args[1] as FastifyReplyLike;
+    if (request.dnaErrorCaptured) return;
     const start = request.dnaStartTime ?? Date.now();
     observeRequest(engine, {
       endpoint: request.routerPath ?? request.url.split("?")[0] ?? request.url,
@@ -41,6 +43,7 @@ export function attachFastifyHooks(engine: RuntimeEngine, fastify: FastifyLike):
     const request = args[0] as FastifyRequestLike;
     const reply = args[1] as FastifyReplyLike;
     const error = args[2] as Error;
+    request.dnaErrorCaptured = true;
     captureError(engine, error, {
       endpoint: request.routerPath ?? request.url.split("?")[0],
       method: request.method,

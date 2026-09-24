@@ -119,8 +119,9 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 3. **Product Analyst** → refine problem, users, acceptance criteria
 4. **Solution Architect** → implementation plan (scope, files, API, risks)
 5. **STOP — wait for user approval** before any code edits
-6. After approval: **Backend** → **Frontend** → **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
-7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push --message "[DNA] feat: <summary>"`
+6. After approval, **build with parallel subagents on the integration branch**. Split the plan into non-overlapping paths and launch those subagents in one turn. A login system launches a backend subagent (auth API, session, middleware), a frontend subagent (login and session UI), and a test subagent (auth tests) together. Each subagent claims its paths first. They do not edit each other's files and they do not create a feature branch.
+7. After the parallel build: **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
+8. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push --message "[DNA] feat: <summary>"`
 
 ### The 9 roles (sequential — never skip)
 

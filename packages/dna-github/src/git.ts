@@ -132,6 +132,18 @@ export class Git {
     await this.run(["push", ...extra, remote, branch]);
   }
 
+  /** Push with a bearer token that is not written into the remote URL. */
+  async pushWithBearer(remote: string, branch: string, token: string): Promise<void> {
+    await this.run([
+      "-c",
+      `http.extraheader=AUTHORIZATION: bearer ${token}`,
+      "push",
+      "--set-upstream",
+      remote,
+      branch,
+    ]);
+  }
+
   async checkoutLocalBranch(name: string): Promise<void> {
     await this.run(["checkout", "-b", name]);
   }

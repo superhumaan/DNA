@@ -166,18 +166,10 @@ export async function verifyPairingCode(
   let pairing = await findLabPairing(root, id);
 
   if (!pairing) {
-    const now = Date.now();
-    pairing = {
-      pairingId: id,
-      codeHash,
-      projectId: "app",
-      createdAt: new Date(now).toISOString(),
-      expiresAt: new Date(now + PAIRING_TTL_MS).toISOString(),
-      verified: true,
-      verifiedAt: new Date(now).toISOString(),
+    return {
+      ok: false,
+      error: "Pairing not registered — run npx dna register lab, then paste the code",
     };
-    await saveLabPairing(root, pairing);
-    return { ok: true };
   }
 
   if (pairing.verified) {

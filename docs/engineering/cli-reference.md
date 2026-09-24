@@ -18,6 +18,9 @@ Initialise DNA in the current project.
 ```bash
 dna init
 dna init -y                    # non-interactive defaults
+dna init --core                # no runtime observer, no Lab
+dna init --no-runtime          # skip the observer only
+dna init --no-lab              # skip Lab only
 dna init --cwd /path/to/project
 ```
 
@@ -41,6 +44,7 @@ Production observability portal at `/labs` — Monitor (Overview, Issues, Events
 
 ```bash
 dna lab install
+dna lab uninstall           # remove Lab files; stays removed until dna lab install
 dna lab serve
 dna lab serve --port 3200
 dna lab installs            # list nested/stale DNA installs
@@ -239,7 +243,11 @@ Write runtime integration snippets to `.DNA/runtime/`.
 
 ```bash
 dna runtime install
+dna runtime uninstall          # deletes observer files; doctor/update will not restore them
+dna lab uninstall              # deletes Lab files and wiring; doctor/update will not restore them
 ```
+
+`dna runtime install` and `dna lab install` clear that opt-out and put the feature back. Agent Mesh (`.DNA/runtime/agents.db`) is not removed by `dna runtime uninstall`.
 
 ## feature
 

@@ -103,6 +103,11 @@ import {
   runDockerBuild,
   ensureRuntimeDatabase,
   wireRuntimeMiddleware,
+  uninstallRuntime,
+  uninstallLab,
+  clearRuntimeOptOut,
+  clearLabOptOut,
+  labIsRemoved,
   formatImpressionsDriftReport,
   generateImpressionsSyncPlan,
   openImpressionsSyncDraftPr,
@@ -155,7 +160,7 @@ import {
   isAgentType,
   AGENT_STATUSES,
 } from "@superhumaan/dna-core";
-import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET } from "@superhumaan/dna-templates";
+import { RUNTIME_INSTALL_SNIPPET, ENV_EXAMPLE_SNIPPET, BROWSER_RUNTIME_SNIPPET } from "@superhumaan/dna-templates";
 import { createIssue, loginWithWebFlow, pushFeatureToGitHub, resolveGitHubToken } from "@superhumaan/dna-github";
 import { executeRepairWorkflow } from "@superhumaan/dna-ai";
 import {
@@ -190,8 +195,11 @@ program
   .command("init")
   .description("Initialise DNA in the current project")
   .option("-y, --yes", "Non-interactive mode with defaults")
+  .option("--core", "Install DNA without the runtime observer and Lab")
+  .option("--no-runtime", "Skip the runtime observer")
+  .option("--no-lab", "Skip DNA Lab")
   .option("--cwd <path>", "Project root directory")
-  .action(async (options: { yes?: boolean; cwd?: string }) => {
+  .action(async (options: { yes?: boolean; cwd?: string; core?: boolean; runtime?: boolean; lab?: boolean }) => {
     const root = resolveTargetDirectory(options.cwd);
     const scan = await scanProject(root);
     const projectContext = detectProjectContext(scan);
@@ -216,6 +224,12 @@ program
     console.log(formatInitContextBanner(projectContext, defaultProjectName ?? "project"));
 
     const answers = await runInitWizard(!!options.yes, scan, defaultProjectName, defaultDescription);
+    if (options.core || options.runtime === false || existing?.runtime?.removed) {
+      answers.installRuntime = false;
+    }
+    if (options.core || options.lab === false || existing?.lab?.removed) {
+      answers.installLab = false;
+    }
     const result = await runWizard({ root, answers });
 
     if (answers.configureGithub) {
@@ -516,9 +530,11 @@ program
   .action(async (options: { cwd?: string }) => {
     const root = getRoot(options);
     const snippetPath = join(root, ".DNA", "runtime", "install-snippet.ts");
+    const browserPath = join(root, ".DNA", "runtime", "browser-client.ts");
     const envPath = join(root, ".DNA", "runtime", "env.example.snippet");
 
     await writeFile(snippetPath, RUNTIME_INSTALL_SNIPPET, "utf-8");
+    await writeFile(browserPath, BROWSER_RUNTIME_SNIPPET, "utf-8");
     await writeFile(envPath, ENV_EXAMPLE_SNIPPET, "utf-8");
 
     const db = await ensureRuntimeDatabase(root);
@@ -531,13 +547,7 @@ program
 
     const config = await loadDnaConfig(root);
     if (config) {
-      config.runtime = {
-        storage: "json",
-        watchBackend: true,
-        watchFrontend: true,
-        ...config.runtime,
-        enabled: true,
-      };
+      clearRuntimeOptOut(config);
       await writeJsonFile(join(root, ".DNA/config.dna.json"), config);
 
       const wire = await wireRuntimeMiddleware({ root, config });
@@ -550,10 +560,28 @@ program
 
     console.log("\n✓ Runtime install complete");
     console.log(`  ${snippetPath}`);
+    console.log(`  ${browserPath}`);
     console.log(`  ${envPath}`);
     if (!config) {
       console.log("\nRun `dna doctor` to auto-wire middleware for your stack.");
     }
+  });
+
+program
+  .command("runtime uninstall")
+  .description("Remove the runtime observer and keep it removed until dna runtime install")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const removed = await uninstallRuntime(root);
+    console.log("DNA runtime uninstalled");
+    console.log("=======================");
+    if (removed.length === 0) {
+      console.log("  · already removed");
+    }
+    for (const item of removed) console.log(`  ✓ ${item}`);
+    console.log("");
+    console.log("Agent Mesh is unchanged. Restore the observer with `dna runtime install`.");
   });
 
 const featureFactory = program
@@ -1396,6 +1424,7 @@ program
   .option("--ivf", "Run brownfield IVF pipeline (analyze → document → plan)")
   .option("--quote <text>", "IVF integration quote")
   .action(async (options: { cwd?: string; checkOnly?: boolean; ivf?: boolean; quote?: string }) => {
+    console.log(options.checkOnly ? "DNA doctor — check only (no file changes)" : "DNA doctor");
     const result = await runDoctorOrchestrator({
       root: resolveTargetDirectory(options.cwd),
       checkOnly: options.checkOnly,
@@ -1574,7 +1603,7 @@ program
         process.exitCode = 1;
       }
 
-      if (config.lab?.enabled !== false) {
+      if (config.lab?.enabled !== false && !labIsRemoved(config)) {
         await ensureLabAssets(root);
         const labWire = await wireLabStack({ root, config });
         if (labWire.wired.length > 0) {
@@ -2690,11 +2719,16 @@ lab
   .option("--cwd <path>", "Project root directory")
   .action(async (options: { cwd?: string }) => {
     const root = getRoot(options);
-    const config = (await loadDnaConfig(root)) ?? {
+    const loaded = await loadDnaConfig(root);
+    const config = loaded ?? {
       projectId: "app",
       projectName: "app",
       lab: { enabled: true, path: "/labs", requireAuthInProduction: true, openLocalWithoutAuth: true },
     };
+    if (loaded) {
+      clearLabOptOut(loaded);
+      await writeJsonFile(join(root, ".DNA/config.dna.json"), loaded);
+    }
     const created = await ensureLabAssets(root);
     const wire = await wireLabStack({ root, config: config as Awaited<ReturnType<typeof loadDnaConfig>> & object });
     console.log("DNA Lab install");
@@ -2706,6 +2740,23 @@ lab
     console.log("Local:    http://localhost:<port>/labs (no login)");
     console.log("Production: https://<your-domain>/labs");
     console.log("Pair:     npx dna register lab --url https://<your-domain>");
+  });
+
+lab
+  .command("uninstall")
+  .description("Remove DNA Lab files and wiring, and keep Lab removed until dna lab install")
+  .option("--cwd <path>", "Project root directory")
+  .action(async (options: { cwd?: string }) => {
+    const root = getRoot(options);
+    const removed = await uninstallLab(root);
+    console.log("DNA Lab uninstalled");
+    console.log("===================");
+    if (removed.length === 0) {
+      console.log("  · already removed");
+    }
+    for (const item of removed) console.log(`  ✓ ${item}`);
+    console.log("");
+    console.log("Restore Lab with `dna lab install`.");
   });
 
 lab

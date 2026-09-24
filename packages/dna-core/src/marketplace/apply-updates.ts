@@ -1,9 +1,11 @@
 import { join } from "node:path";
+import { readdir } from "node:fs/promises";
 import type { DnaConfig, MarketplaceUpdateResult } from "@superhumaan/dna-config";
 import { readJsonFile } from "../fs.js";
 import { loadDnaConfig } from "../validator.js";
 import { scanProject } from "../scanner.js";
 import { checkMarketplaceUpdates, installKnowledgePackById } from "./install.js";
+import { installPurposeComboAiContext } from "./install-purpose-combo-ai.js";
 import { installFoundationKnowledge } from "./foundation.js";
 
 export interface ApplyMarketplaceUpdatesOptions {
@@ -52,6 +54,18 @@ export async function applyMarketplaceUpdates(
     }
   }
 
+  for (const comboId of await listInstalledPurposeCombos(root)) {
+    try {
+      const ctx = await installPurposeComboAiContext(root, comboId, { refreshInjection: false });
+      if (ctx) refreshed.push(comboId);
+    } catch (error) {
+      failed.push({
+        packId: comboId,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
   let foundationInstalled: string[] = [];
   if (options.foundation !== false && config) {
     const scan = await scanProject(root);
@@ -68,4 +82,21 @@ export async function applyMarketplaceUpdates(
     foundationInstalled: [...new Set(foundationInstalled)],
     failed,
   };
+}
+
+async function listInstalledPurposeCombos(root: string): Promise<string[]> {
+  const dir = join(root, ".DNA", "marketplace", "bundles");
+  let names: string[] = [];
+  try {
+    names = await readdir(dir);
+  } catch {
+    return [];
+  }
+  const ids: string[] = [];
+  for (const name of names) {
+    if (!name.endsWith(".json")) continue;
+    const doc = await readJsonFile<{ id?: string }>(join(dir, name));
+    if (doc?.id?.startsWith("combo/")) ids.push(doc.id);
+  }
+  return ids;
 }

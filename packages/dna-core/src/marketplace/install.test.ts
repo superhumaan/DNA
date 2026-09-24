@@ -79,6 +79,37 @@ describe("marketplace install", () => {
     await rm(root, { recursive: true, force: true });
   });
 
+  it("applyMarketplaceUpdates refreshes installed purpose-combo AI context", async () => {
+    const root = join(tmpdir(), `dna-marketplace-combo-${randomUUID()}`);
+    await mkdir(root, { recursive: true });
+    await writeFile(join(root, "package.json"), JSON.stringify({ name: "mp-combo" }));
+
+    await runWizard({
+      root,
+      answers: {
+        projectDescription: "test",
+        acceptRecommendation: true,
+        aiTools: ["cursor"],
+        compliance: "none",
+        stage: "new",
+        installRuntime: false,
+        configureGithub: false,
+        configureAi: false,
+      },
+    });
+
+    await installKnowledgePackById(root, "combo/pmf-check");
+    const rulePath = join(root, ".cursor", "rules", "dna-bundle-pmf-check.mdc");
+    await writeFile(rulePath, "# stale bundle rule\n");
+
+    const applied = await applyMarketplaceUpdates(root, { foundation: false });
+    expect(applied.refreshed).toContain("combo/pmf-check");
+    expect(await readFile(rulePath, "utf-8")).toContain("combo/pmf-check");
+    expect(await readFile(rulePath, "utf-8")).not.toContain("stale bundle rule");
+
+    await rm(root, { recursive: true, force: true });
+  });
+
   it("installs retired pack IDs via alias", async () => {
     const root = join(tmpdir(), `dna-marketplace-alias-${randomUUID()}`);
     await mkdir(root, { recursive: true });

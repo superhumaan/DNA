@@ -131,7 +131,7 @@ Refresh: \`npx dna workbench install\` or \`npx dna stems install\`
   files[STEM_INDEX] = JSON.stringify(
     {
       version: 1,
-      catalogVersion: 9,
+      catalogVersion: 10,
       source: "bundled",
       count: packs.length,
       catalogUrl: "https://dna.humaan.app/intelligence#stem-library",

@@ -13,7 +13,15 @@ import { generateNeuralNetwork } from "./neural-network.js";
 import { REASONING_BEHAVIOUR_FILE, REASONING_MARKER } from "./dna-reasoning.js";
 import { AGENT_MESH_REQUIRED_PATHS, installAgentMesh } from "../agents/install.js";
 
-const ALWAYS_ON_MARKER = "DNA is always on";
+async function writeUnlessPreserved(root: string, relPath: string, content: string): Promise<boolean> {
+  const full = join(root, relPath);
+  if (await fileExists(full)) {
+    const existing = await readFile(full, "utf-8");
+    if (existing.includes("skeletor-preserve")) return false;
+  }
+  await writeFileEnsured(full, content);
+  return true;
+}
 const NEVER_WAIT_MARKER = 'wait for the user to say "use DNA"';
 const CRITICAL_THINKING_MARKER = "Critical thinking";
 
@@ -227,8 +235,7 @@ export async function syncAiInjection(
   // Reasoning + behaviour — always on by default (no opt-in)
   for (const [file, content] of Object.entries(generateBehaviourFiles(config))) {
     const relPath = `.DNA/behaviour/${file}`;
-    await writeFileEnsured(join(root, relPath), content);
-    written.push(relPath);
+    if (await writeUnlessPreserved(root, relPath, content)) written.push(relPath);
   }
 
   const neuralNetwork = generateNeuralNetwork(config);
@@ -241,8 +248,7 @@ export async function syncAiInjection(
   for (const [relPath, content] of Object.entries(
     generateAiToolFiles(config, answers, featureFactory),
   )) {
-    await writeFileEnsured(join(root, relPath), content);
-    written.push(relPath);
+    if (await writeUnlessPreserved(root, relPath, content)) written.push(relPath);
   }
 
   if (featureFactory) {

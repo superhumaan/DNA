@@ -437,7 +437,7 @@ jobs:
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&
-      \${{ ${deployIf} }}
+      ${deployIf}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

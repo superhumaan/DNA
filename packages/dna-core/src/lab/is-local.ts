@@ -1,6 +1,8 @@
 export function hostFromRequest(req: { headers?: Record<string, string | string[] | undefined> }): string {
-  // Prefer proxy host — edge gateways set X-Forwarded-Host while Node still sees the internal Host.
-  const raw = req.headers?.["x-forwarded-host"] ?? req.headers?.host;
+  // Only honor X-Forwarded-Host when the process is behind a trusted proxy.
+  // Otherwise a client can send X-Forwarded-Host: localhost and skip Lab auth.
+  const trustForwarded = process.env.DNA_LAB_TRUST_FORWARDED_HOST === "1";
+  const raw = (trustForwarded ? req.headers?.["x-forwarded-host"] : undefined) ?? req.headers?.host;
   if (Array.isArray(raw)) return raw[0] ?? "";
   return raw ?? "";
 }

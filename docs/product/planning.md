@@ -4,7 +4,7 @@ DNA development priorities and public roadmap.
 
 ---
 
-## Current release focus (v0.6.29)
+## Current release focus (v0.6.30)
 
 - **Agent Mesh + Git Guardian** — SQLite registry, path claims, fail-open Cursor hooks, `dna commit` (never `git add` all). Agents cannot create feature branches or finish dirty.
 - **Expo / React Native** — 23 stems (architect, BFF, EAS Update/dynamic builds, iOS/Android ship); combo `combo/expo-mobile`
@@ -18,7 +18,8 @@ DNA development priorities and public roadmap.
 
 ## Shipped highlights
 
-- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.29)
+- `npx @superhumaan/dna-by-humaan` on npm — CLI + `/runtime` + `/lab` bundles (v0.6.30)
+- **Runtime and Lab opt-out (v0.6.30)** — `dna init --core`, `--no-runtime`, `--no-lab`; uninstall stays off until reinstall
 - **Agent Mesh + Git Guardian (v0.6.29)** — `dna agents *`, `dna commit`, fail-open hooks ([docs](../engineering/agent-mesh.md))
 - **Lab mobile shell (v0.6.20)** — mobile admin parity on phones/tablets ([docs](../engineering/lab-ui-humaan-0.6.7.md))
 - **Lab APIs reference + deep links (v0.6.18)** — full HTTP catalog; History API routing; open-auth flag ([docs](../engineering/lab-apis-reference-0.6.18.md))

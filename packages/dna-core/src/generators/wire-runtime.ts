@@ -60,6 +60,8 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
+export const runtime = "nodejs";
+
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
@@ -80,7 +82,7 @@ export function wireExpressContent(content: string, projectId: string): string |
   const startBlock = runtimeStartBlock(projectId);
 
   const appLine = result.match(new RegExp(`(const|let|var)\\s+${appVar}\\s*=\\s*express\\s*\\(\\s*\\)`));
-  if (!appLine?.index) return null;
+  if (appLine?.index == null) return null;
 
   if (!result.includes("dnaRuntime.start")) {
     result = result.slice(0, appLine.index) + startBlock + result.slice(appLine.index);
@@ -126,7 +128,7 @@ export function wireFastifyContent(content: string, projectId: string): string |
   const line = result.match(
     new RegExp(`(const|let|var)\\s+${instanceVar}\\s*=\\s*(Fastify|fastify)\\s*\\(`),
   );
-  if (!line?.index) return null;
+  if (line?.index == null) return null;
 
   if (!result.includes("dnaRuntime.start")) {
     result = result.slice(0, line.index) + startBlock + result.slice(line.index);
@@ -260,6 +262,9 @@ export async function wireRuntimeMiddleware(
   options: WireRuntimeOptions,
 ): Promise<WireRuntimeResult> {
   const { root, config } = options;
+  if (config.runtime?.removed === true) {
+    return { wired: [], skipped: ["runtime removed"] };
+  }
   const scan = options.scan ?? (await scanProject(root));
   const projectId = config.projectId ?? config.projectName ?? "app";
   const wired: string[] = [];

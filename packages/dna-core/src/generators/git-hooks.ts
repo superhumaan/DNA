@@ -56,9 +56,13 @@ export async function installGitHooks(root: string, config?: DnaConfig): Promise
     const g = git(root);
     if (await g.checkIsRepo()) {
       const current = await g.getConfig("core.hooksPath");
-      if (current.value !== ".DNA/hooks") {
-        await g.addConfig("core.hooksPath", ".DNA/hooks", false, "local");
-        created.push("git config core.hooksPath=.DNA/hooks");
+      if (current.value && current.value !== ".DNA/hooks") {
+        created.push(`(git hooks left on ${current.value})`);
+      } else if (!current.value) {
+        const gitHook = join(root, ".git", "hooks", "pre-push");
+        await writeFileEnsured(gitHook, generatePrePushHook(strict));
+        await chmod(gitHook, 0o755);
+        created.push(".git/hooks/pre-push");
       }
     }
   } catch {

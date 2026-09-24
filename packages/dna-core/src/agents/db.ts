@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 import { randomUUID } from "node:crypto";
-import { open, readFile, unlink, writeFile, stat } from "node:fs/promises";
+import { open, readFile, unlink, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { DNA_AGENTS_DB, DNA_AGENTS_LOCK } from "@superhumaan/dna-config";
 import { ensureDir, fileExists } from "../fs.js";
@@ -112,8 +112,18 @@ async function acquireExclusiveLock(lockPath: string, timeoutMs = 10_000): Promi
       };
     } catch {
       try {
-        const info = await stat(lockPath);
-        if (Date.now() - info.mtimeMs > 30_000) {
+        const raw = await readFile(lockPath, "utf-8").catch(() => "");
+        const pid = Number(raw.trim());
+        let alive = false;
+        if (Number.isInteger(pid) && pid > 0) {
+          try {
+            process.kill(pid, 0);
+            alive = true;
+          } catch (err) {
+            alive = (err as NodeJS.ErrnoException).code === "EPERM";
+          }
+        }
+        if (!alive) {
           await unlink(lockPath).catch(() => undefined);
         }
       } catch {

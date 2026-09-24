@@ -63,14 +63,14 @@ export async function buildFeedbackPayload(
     platform: process.platform,
     installId,
     projectId: options.config.projectId,
-    command: options.command,
+    command: options.command ? sanitizeText(options.command) : undefined,
     message,
     stack,
     severity: options.severity ?? options.issue?.severity ?? "medium",
     category: options.category ?? options.issue?.category ?? "unknown",
     suggestedFix: options.config.feedback?.includeSuggestedFix
-      ? options.suggestedFix ?? options.issue?.suggestedFix
+      ? sanitizeText(options.suggestedFix ?? options.issue?.suggestedFix ?? "")
       : undefined,
-    reproductionNotes: options.reproductionNotes ?? options.issue?.reproductionNotes,
+    reproductionNotes: sanitizeText(options.reproductionNotes ?? options.issue?.reproductionNotes ?? ""),
   };
 }

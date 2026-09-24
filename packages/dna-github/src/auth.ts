@@ -137,6 +137,7 @@ async function fetchGitHubUser(token: string): Promise<string> {
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
     },
+    signal: AbortSignal.timeout(8_000),
   });
   if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
   const data = (await res.json()) as { login: string };

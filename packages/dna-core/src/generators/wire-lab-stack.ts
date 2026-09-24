@@ -180,7 +180,7 @@ export async function wireVercelLabRewrites(options: WireLabStackOptions): Promi
 /** Wire Lab middleware, Vite dev proxy, and Vercel production rewrites. */
 export async function wireLabStack(options: WireLabStackOptions): Promise<WireLabResult> {
   const { root, config } = options;
-  if (config.lab?.enabled === false) {
+  if (config.lab?.removed === true || config.lab?.enabled === false) {
     return { wired: [], skipped: ["lab disabled in config"] };
   }
 

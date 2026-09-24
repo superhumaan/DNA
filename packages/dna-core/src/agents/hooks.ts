@@ -160,16 +160,14 @@ export async function handleAgentHook(options: {
       const isolated = isIsolated(payload);
       const kind = payload.subagent_type ?? "";
       const branch = payload.git_branch ?? (await detectCurrentBranch(root)).branch;
-      const codingIsolated = isolated && !isReadOnlySubagentType(kind);
-      const offTrunkIsolated =
-        isolated && Boolean(branch) && !isIntegrationBranch(branch, config) && !isReadOnlySubagentType(kind);
-
-      if (codingIsolated || offTrunkIsolated) {
+      const coding = !isReadOnlySubagentType(kind);
+      const onTrunk = Boolean(branch) && isIntegrationBranch(branch, config);
+      if (isolated && coding && !onTrunk) {
         return {
           permission: "deny",
           user_message: GIT_GUARDIAN_DENIED,
           agent_message:
-            "DENIED BY DNA AGENT MESH — isolated coding subagents are not allowed. Explore/review isolated is OK. Stay on trunk.",
+            "DENIED BY DNA AGENT MESH — coding subagents must stay on the integration branch. Explore/review subagents are allowed off trunk. Claim paths before writing.",
         };
       }
 

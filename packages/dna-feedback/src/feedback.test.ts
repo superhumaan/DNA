@@ -32,6 +32,10 @@ describe("sanitizeText", () => {
     expect(result).toContain("[REDACTED]");
     expect(result).not.toContain("ghp_");
   });
+
+  it("strips profanity", () => {
+    expect(sanitizeText("the build is shit")).toBe("the build is [removed]");
+  });
 });
 
 describe("fingerprintFeedback", () => {

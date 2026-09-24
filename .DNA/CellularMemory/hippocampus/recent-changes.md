@@ -1,6 +1,12 @@
 # Recent Changes
 
-_Last updated: 2026-09-04_
+_Last updated: 2026-09-24_
+
+## 2026-09-24 — Runtime and Lab opt-out (0.6.30)
+
+- `dna init --core` / `--no-runtime` / `--no-lab` skips the observer and Lab.
+- `dna runtime uninstall` and `dna lab uninstall` stay removed across doctor and update.
+- Purpose combos refresh on `dna update`. Doctor `--check-only` reports progress and does not write source maps.
 
 ## 2026-09-04 — Agent Mesh + Git Guardian (0.6.29)
 

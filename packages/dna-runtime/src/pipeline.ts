@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import type { ClassifiedIssue, DnaConfig, RuntimeEvent } from "@superhumaan/dna-config";
-import { DnaConfigSchema, DNA_CONFIG_FILE, resolveRepairConfig } from "@superhumaan/dna-config";
+import { DnaConfigSchema, DNA_CONFIG_FILE, resolveRepairConfig, stripInappropriateLanguage } from "@superhumaan/dna-config";
 import {
   classifyIssue,
   getImmuneConfig,
@@ -86,6 +86,12 @@ export async function processRuntimeEvent(
   event: RuntimeEvent,
   options: PipelineOptions,
 ): Promise<PipelineResult> {
+  event = {
+    ...event,
+    message: stripInappropriateLanguage(event.message),
+    stack: event.stack ? stripInappropriateLanguage(event.stack) : event.stack,
+  };
+
   if (isBenignRuntimeMessage(event.message)) {
     return {
       event,
@@ -150,12 +156,11 @@ export async function processRuntimeEvent(
 
   const storage = config?.runtime?.storage ?? "json";
 
-  if (storage === "json") {
-    await writeRuntimeOccurrence(projectRoot, {
-      event: sample.persistEvent ? event : undefined,
-      issue,
-    });
-  } else {
+  await writeRuntimeOccurrence(projectRoot, {
+    event: sample.persistEvent ? event : undefined,
+    issue,
+  });
+  if (storage === "jsonl") {
     if (sample.persistEvent) {
       await appendJsonl(join(dnaRoot, "runtime", "events.jsonl"), event);
     }

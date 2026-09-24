@@ -40,7 +40,11 @@ describe("evaluateGitGuardian", () => {
   it("denies trunk branch create and raw git writes", () => {
     for (const cmd of [
       "git checkout -b topic",
+      "git checkout feature/x",
       "git switch -c topic",
+      "git switch feature/x",
+      "git push --force",
+      "git push --force-with-lease",
       "git branch topic",
       "git worktree add ../x",
       "git stash",
@@ -69,13 +73,15 @@ describe("evaluateGitGuardian", () => {
       config: { git: { branchingStrategy: "feature-branch" as const } },
     };
     expect(evaluateGitGuardian("git checkout -b topic", ctx).permission).toBe("allow");
+    expect(evaluateGitGuardian("git push --force", ctx).permission).toBe("deny");
     expect(evaluateGitGuardian("git add .", ctx).permission).toBe("deny");
   });
 
-  it("denies off-trunk writes only when the branch is known", () => {
+  it("denies writes when the branch is unknown and allows staying on trunk", () => {
     expect(evaluateGitGuardian("git add src/a.ts", feature).permission).toBe("deny");
-    expect(evaluateGitGuardian("git add src/a.ts", unknown).permission).toBe("allow");
+    expect(evaluateGitGuardian("git add src/a.ts", unknown).permission).toBe("deny");
     expect(evaluateGitGuardian("git checkout -b x", unknown).permission).toBe("deny");
+    expect(evaluateGitGuardian("git checkout main", trunk).permission).toBe("allow");
     expect(GIT_GUARDIAN_DENIED).toContain("do not create/switch feature branches");
   });
 });

@@ -69,6 +69,10 @@ describe("express middleware", () => {
       await new Promise((r) => setTimeout(r, 50));
       res.status(500).json({ error: "fail" });
     });
+    app.get("/missing", (_req, res, next) => {
+      res.status(404);
+      next(new Error("missing"));
+    });
 
     app.use(dnaRuntime.errorHandler());
 
@@ -92,6 +96,13 @@ describe("express middleware", () => {
       issues.some((i) => i.summary.includes("Test error")) ||
         events.some((e) => e.message.includes("Test error")),
     ).toBe(true);
+  });
+
+  it("keeps a status the route already set", async () => {
+    const res = await fetch(`http://localhost:${port}/missing`);
+    expect(res.status).toBe(404);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toBe("Request failed");
   });
 
   it("captures 500 responses", async () => {

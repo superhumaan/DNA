@@ -27,7 +27,9 @@ export async function formatLiveCoordination(
     "- Stay on the integration branch. Do not create or switch feature branches.",
     "- Claim files before writing. A DNA CONFLICT deny means another live agent holds the path.",
     "- Never `git add .`, `git add -A`, or raw `git commit`. Use `dna commit`.",
-    "- Isolated coding subagents are denied. Explore/review isolated subagents are allowed.",
+    "- Do not write profanity, slurs, or sexual language into commits, issues, UI copy, or logs. DNA strips it from commits, runtime issues, and feedback.",
+    "- Multi-layer features (for example a login system) are built by parallel subagents on this branch, each with a path claim.",
+    "- Coding subagents off the integration branch are denied. Explore/review subagents may run anywhere.",
     "- A dirty tree at stop is a DNA COMMIT GATE FAILED — review, test, `dna commit`, verify status.",
     "",
   ];

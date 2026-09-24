@@ -33,8 +33,12 @@ function matchCategory(
   discipline: string;
 } {
   for (const rule of classifiers) {
-    if (new RegExp(rule.pattern, "i").test(message)) {
-      return { category: rule.category, discipline: rule.discipline };
+    try {
+      if (new RegExp(rule.pattern, "i").test(message)) {
+        return { category: rule.category, discipline: rule.discipline };
+      }
+    } catch {
+      continue;
     }
   }
 

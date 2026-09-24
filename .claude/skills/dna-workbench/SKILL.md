@@ -73,8 +73,9 @@ Every **build, add, enable, fix, or change** request MUST go through the DNA fea
 3. **Product Analyst** → refine problem, users, acceptance criteria
 4. **Solution Architect** → implementation plan (scope, files, API, risks)
 5. **STOP — wait for user approval** before any code edits
-6. After approval: **Backend** → **Frontend** → **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
-7. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push --message "[DNA] feat: <summary>"` (trunk / current branch — no inventing feature remotes)
+6. After approval, **build with parallel subagents on the integration branch**. Split the plan into non-overlapping paths and launch those subagents in one turn. A login system launches a backend subagent (auth API, session, middleware), a frontend subagent (login and session UI), and a test subagent (auth tests) together. Each subagent claims its paths first. They do not edit each other's files and they do not create a feature branch.
+7. After the parallel build: **UX** → **QA** → **Code Quality** → **Refactor** → **Final Release**
+8. Close: `npx dna quality report --feature` PASS → `npx dna docker build` → `npx dna github push --message "[DNA] feat: <summary>"` (trunk / current branch — no inventing feature remotes)
 
 ### The 9 roles (sequential — never skip)
 
@@ -137,8 +138,14 @@ Each command maps to `.DNA/stems/<id>/` — read **prompt.md, guidelines.md, exp
 | `/expo-architect` | expo-architect | Expo iOS/Android architecture + BFF decisions |
 | `/expo-dynamic-builds` | expo-dynamic-builds | EAS Update OTA vs native binary |
 | `/expo-bff` | expo-bff | Mobile backend-for-frontend |
+| `/ship-macos-menubar` | ship-macos-menubar | Package a native macOS menu-bar app |
+| `/macos-background-agent` | macos-background-agent | Quiet macOS login-item helper |
+| `/publish-internal-app` | publish-internal-app | Dry-run, then the repo's internal publish script |
+| `/wiki` | wiki | Wiki page in the existing theme |
+| `/governed-ai-fleet` | governed-ai-fleet | Site, group, and operator AI apps on one model path |
+| `/companion-client` | companion-client | Satellite client; main app stays source of truth |
 
-Full library (127 stems): https://dna.humaan.app/intelligence#stem-library
+Full library (133 stems): https://dna.humaan.app/intelligence#stem-library
 
 Commands live in `.claude/commands/`. Stem data: `.DNA/stems/`.
 

@@ -1,4 +1,4 @@
-import { join } from "node:path";
+import { join, relative, resolve } from "node:path";
 import type { DnaConfig, KnowledgePack, MarketplaceUpdateResult } from "@superhumaan/dna-config";
 import { writeFileEnsured, readJsonFile, writeJsonFile } from "../fs.js";
 import { loadDnaConfig } from "../validator.js";
@@ -26,10 +26,13 @@ export async function installKnowledgePack(
   pack: KnowledgePack,
 ): Promise<string[]> {
   const installed: string[] = [];
+  const knowledgeRoot = resolve(root, ".DNA", "knowledge");
 
   for (const file of pack.files) {
     if (!file.content) continue;
-    const targetPath = join(root, ".DNA", "knowledge", file.path);
+    const targetPath = resolve(knowledgeRoot, file.path);
+    const rel = relative(knowledgeRoot, targetPath);
+    if (rel.startsWith("..") || rel === "") continue;
     await writeFileEnsured(targetPath, file.content);
     installed.push(`.DNA/knowledge/${file.path}`);
   }

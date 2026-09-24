@@ -41,7 +41,10 @@ async function isGitHubSignedIn(): Promise<boolean> {
   return !!creds?.token;
 }
 
-export async function runDoctor(root: string): Promise<DoctorReport> {
+export async function runDoctor(
+  root: string,
+  options: { checkOnly?: boolean; onStatus?: (message: string) => void } = {},
+): Promise<DoctorReport> {
   const config = await loadDnaConfig(root);
   const validation = await validateProject(root);
   const scan = await scanProject(root);
@@ -75,6 +78,7 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
   } catch {
     // not a git repo
   }
+  options.onStatus?.("Checking GitHub sign-in…");
   const githubSignedIn = await isGitHubSignedIn();
   const injection = config
     ? await verifyAiInjection(root, config)
@@ -90,14 +94,26 @@ export async function runDoctor(root: string): Promise<DoctorReport> {
   };
 
   let sourceMaps = { count: 0, scanned: 0 };
-  try {
-    const { scanAndRegisterSourceMaps } = await import("./lab/scan-sourcemaps.js");
-    const { listSourceMapMeta } = await import("./lab/storage.js");
-    const scanned = await scanAndRegisterSourceMaps(root);
-    const listed = await listSourceMapMeta(root);
-    sourceMaps = { count: listed.length, scanned: scanned.registered };
-  } catch {
-    /* non-fatal */
+  const labActive = config?.lab?.removed !== true && config?.lab?.enabled !== false;
+  if (labActive && !options.checkOnly) {
+    try {
+      options.onStatus?.("Scanning source maps…");
+      const { scanAndRegisterSourceMaps } = await import("./lab/scan-sourcemaps.js");
+      const { listSourceMapMeta } = await import("./lab/storage.js");
+      const scanned = await scanAndRegisterSourceMaps(root);
+      const listed = await listSourceMapMeta(root);
+      sourceMaps = { count: listed.length, scanned: scanned.registered };
+    } catch {
+      /* non-fatal */
+    }
+  } else if (labActive) {
+    try {
+      const { listSourceMapMeta } = await import("./lab/storage.js");
+      const listed = await listSourceMapMeta(root);
+      sourceMaps = { count: listed.length, scanned: 0 };
+    } catch {
+      /* non-fatal */
+    }
   }
 
   return {

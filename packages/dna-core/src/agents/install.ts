@@ -117,7 +117,7 @@ dna commit -m "[DNA] feat: …"
 \`.cursor/hooks.json\` + \`.cursor/hooks/dna-agent-mesh\`
 
 - sessionStart — register + additional_context (\`DNA LIVE COORDINATION\`)
-- subagentStart — register; **DENY** isolated coding subagents (explore/review isolated OK)
+- subagentStart — register trunk subagents; **DENY** coding subagents that are off the integration branch
 - beforeShellExecution + preToolUse — Git Guardian + path claims
 - afterFileEdit — record modified paths
 - stop / subagentStop — dirty tree → followup \`DNA COMMIT GATE FAILED\`
@@ -126,7 +126,7 @@ The runner **must** print \`{"permission":"allow"}\` and exit 0 if \`dna\` is mi
 
 ## Git Guardian
 
-On trunk deny: \`git checkout -b\`, \`switch -c\`, \`git branch\` create, \`worktree add\`, \`stash\`, \`git add .\` / \`-A\` / \`--all\`, raw \`git add\`, raw \`git commit\`, \`reset --hard\`, \`clean -f\`.
+On trunk deny: \`git checkout -b\`, \`git checkout <other-branch>\`, \`switch -c\`, \`git switch <other-branch>\`, \`git branch\` create, \`worktree add\`, \`git push --force\`, \`stash\`, \`git add .\` / \`-A\` / \`--all\`, raw \`git add\`, raw \`git commit\`, \`reset --hard\`, \`clean -f\`. Unknown branch fails closed.
 
 Allow: \`dna commit\`, \`git status/diff/log\`, \`dna github push\`.
 

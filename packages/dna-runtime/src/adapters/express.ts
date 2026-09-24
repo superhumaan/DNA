@@ -19,6 +19,7 @@ export function createExpressMiddleware(engine: RuntimeEngine) {
     const start = Date.now();
 
     res.on("finish", () => {
+      if (res.locals.dnaErrorCaptured) return;
       const requestId = (req.headers["x-request-id"] as string | undefined) ?? undefined;
       observeRequest(engine, {
         endpoint: req.path,
@@ -36,6 +37,7 @@ export function createExpressMiddleware(engine: RuntimeEngine) {
 
 export function createExpressErrorHandler(engine: RuntimeEngine): ErrorRequestHandler {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
+    res.locals.dnaErrorCaptured = true;
     captureError(engine, err, {
       endpoint: req.path,
       method: req.method,
@@ -43,7 +45,10 @@ export function createExpressErrorHandler(engine: RuntimeEngine): ErrorRequestHa
     });
 
     if (!res.headersSent) {
-      res.status(500).json({ error: "Internal Server Error" });
+      const status = res.statusCode >= 400 ? res.statusCode : 500;
+      res.status(status).json({
+        error: status === 500 ? "Internal Server Error" : "Request failed",
+      });
     } else {
       next(err);
     }

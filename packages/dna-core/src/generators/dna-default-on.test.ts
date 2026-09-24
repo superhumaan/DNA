@@ -45,6 +45,7 @@ describe("dna default-on", () => {
     expect(agents).toContain("ai/agent-loop.md");
     expect(agents).toContain("product-process.mdc");
     expect(agents).toContain("No code");
+    expect(agents).toContain("parallel subagents");
     expect(agents).toContain("Engineering work");
     expect(agents).toContain("Q&A");
   });

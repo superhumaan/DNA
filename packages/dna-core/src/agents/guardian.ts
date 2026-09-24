@@ -1,9 +1,5 @@
 import type { DnaConfig } from "@superhumaan/dna-config";
-import {
-  isIntegrationBranch,
-  resolveGitBranchingStrategy,
-  resolveIntegrationBranch,
-} from "@superhumaan/dna-config";
+import { resolveGitBranchingStrategy, resolveIntegrationBranch } from "@superhumaan/dna-config";
 import { GIT_GUARDIAN_DENIED, type GuardianDecision } from "./types.js";
 
 export interface GuardianContext {
@@ -75,6 +71,29 @@ function gitSubcommand(command: string): { sub: string; args: string[] } | null 
   return { sub, args: tokens.slice(gitIdx + 2) };
 }
 
+function positionalArgs(args: string[]): string[] {
+  return args.filter((arg) => arg !== "--" && !arg.startsWith("-"));
+}
+
+/** checkout/switch onto an existing ref. Create flags are handled separately. */
+export function branchSwitchTarget(command: string): string | null {
+  const parsed = gitSubcommand(command);
+  if (!parsed) return null;
+  const { sub, args } = parsed;
+  if (sub === "checkout" && (hasFlag(args, "-b", "-B") || hasFlag(args, "--orphan"))) return null;
+  if (sub === "switch" && (hasFlag(args, "-c", "-C") || hasFlag(args, "--create"))) return null;
+  if (sub !== "checkout" && sub !== "switch") return null;
+  if (args.includes("--")) return null;
+  const positional = positionalArgs(args);
+  return positional[0] ?? null;
+}
+
+export function isForcePush(command: string): boolean {
+  const parsed = gitSubcommand(command);
+  if (parsed?.sub !== "push") return false;
+  return hasFlag(parsed.args, "--force", "--force-with-lease", "-f") || hasShortFlag(parsed.args, "f");
+}
+
 export function isBranchCreateCommand(command: string): boolean {
   const parsed = gitSubcommand(command);
   if (!parsed) return false;
@@ -143,9 +162,6 @@ export function evaluateGitGuardian(command: string, ctx: GuardianContext = {}):
   const config = ctx.config ?? null;
   const strategy = resolveGitBranchingStrategy(config);
   const expected = resolveIntegrationBranch(config);
-  const branch = ctx.currentBranch ?? null;
-  const branchKnown = ctx.branchKnown ?? Boolean(branch);
-  const onTrunk = isIntegrationBranch(branch, config);
   const deny = (extra?: string): GuardianDecision => ({
     permission: "deny",
     reason: extra ?? GIT_GUARDIAN_DENIED,
@@ -153,9 +169,15 @@ export function evaluateGitGuardian(command: string, ctx: GuardianContext = {}):
     agent_message: `${GIT_GUARDIAN_DENIED} Expected branch: ${expected}.`,
   });
 
+  if (isForcePush(trimmed)) return deny();
+
   if (isBranchCreateCommand(trimmed)) {
-    if (strategy === "feature-branch") return { permission: "allow" };
-    return deny();
+    return strategy === "feature-branch" ? { permission: "allow" } : deny();
+  }
+
+  const switchTarget = branchSwitchTarget(trimmed);
+  if (switchTarget && strategy !== "feature-branch" && switchTarget !== expected) {
+    return deny(`DENIED BY DNA GIT GUARDIAN — stay on ${expected}. Do not switch branches.`);
   }
 
   const writeOp =
@@ -166,14 +188,7 @@ export function evaluateGitGuardian(command: string, ctx: GuardianContext = {}):
     isResetHard(trimmed) ||
     isCleanForce(trimmed);
 
-  if (!writeOp) return { permission: "allow" };
-
-  if (onTrunk) return deny();
-
-  // Off-trunk writes: deny only when the current branch is known and not integration.
-  if (branchKnown && !onTrunk) return deny();
-
-  return { permission: "allow" };
+  return writeOp ? deny() : { permission: "allow" };
 }
 
 export function guardianAllowsCommand(command: string, ctx: GuardianContext = {}): boolean {

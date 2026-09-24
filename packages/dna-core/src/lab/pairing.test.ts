@@ -59,7 +59,16 @@ describe("lab pairing", () => {
       expect(short.error).toMatch(/Invalid pairing code/i);
 
       const fromPaste = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
-      expect(fromPaste.ok).toBe(true);
+      expect(fromPaste.ok).toBe(false);
+      expect(fromPaste.error).toMatch(/not registered/i);
+
+      await registerPairingOnProduction(pasteRoot, {
+        pairingId: local.pairingId,
+        codeHash: local.codeHash,
+        projectId: "test-app",
+      });
+      const registered = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
+      expect(registered.ok).toBe(true);
 
       const again = await verifyPairingCode(pasteRoot, local.pairingId, local.code);
       expect(again.ok).toBe(true);

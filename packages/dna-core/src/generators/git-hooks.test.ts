@@ -41,7 +41,7 @@ describe("git hooks", () => {
     await rm(root, { recursive: true, force: true });
   });
 
-  it("wires git core.hooksPath inside a real repo", async () => {
+  it("writes .git/hooks/pre-push without replacing an existing hooksPath", async () => {
     const root = join(tmpdir(), `dna-hooks-git-${randomUUID()}`);
     await mkdir(root, { recursive: true });
     execFileSync("git", ["init"], { cwd: root, stdio: "ignore" });
@@ -49,13 +49,24 @@ describe("git hooks", () => {
     const created = await installGitHooks(root);
 
     expect(created).toContain(".DNA/hooks/pre-push");
-    expect(created).toContain("git config core.hooksPath=.DNA/hooks");
-    const hooksPath = execFileSync("git", ["config", "core.hooksPath"], {
-      cwd: root,
-    })
-      .toString()
-      .trim();
-    expect(hooksPath).toBe(".DNA/hooks");
+    expect(created).toContain(".git/hooks/pre-push");
+    expect(await fileExists(join(root, ".git", "hooks", "pre-push"))).toBe(true);
+    let hooksPath = "";
+    try {
+      hooksPath = execFileSync("git", ["config", "--get", "core.hooksPath"], { cwd: root })
+        .toString()
+        .trim();
+    } catch {
+      hooksPath = "";
+    }
+    expect(hooksPath).toBe("");
+
+    execFileSync("git", ["config", "core.hooksPath", ".husky"], { cwd: root });
+    const kept = await installGitHooks(root);
+    expect(kept.some((line) => line.includes(".husky"))).toBe(true);
+    expect(
+      execFileSync("git", ["config", "--get", "core.hooksPath"], { cwd: root }).toString().trim(),
+    ).toBe(".husky");
 
     await rm(root, { recursive: true, force: true });
   });

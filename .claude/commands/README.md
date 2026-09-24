@@ -1,6 +1,6 @@
 # DNA intelligence — Claude Code commands
 
-**dna-by-humaan** — 127 stems + 48 `/dna-*` commands.
+**dna-by-humaan** — 133 stems + 48 `/dna-*` commands.
 
 Workbench skill: `.claude/skills/dna-workbench/` · CLI skill: `.claude/skills/dna-cli/`
 

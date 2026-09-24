@@ -24,7 +24,7 @@ npx @superhumaan/dna-by-humaan doctor
 
 Built by [Humaan](https://dna.humaan.app) · [Superlite](https://superlite.ai)
 
-**Latest (v0.6.29):** Agent Mesh + Git Guardian — agents register, claim files, cannot create feature branches or finish dirty. Expo stems + trunk delivery remain.
+**Latest (v0.6.30):** `dna init --core` skips runtime and Lab. `dna runtime uninstall` and `dna lab uninstall` stay off across doctor and update. Agent Mesh and trunk delivery remain.
 
 ---
 
@@ -172,8 +172,11 @@ dna plan ivf --quote "Add DNA to our Express monolith"
 | `dna doctor` | Full health check |
 | `dna feedback report` | Report DNA-platform issue upstream (sanitized) |
 | `dna feedback sync` | Flush offline feedback queue |
+| `dna init --core` | Install DNA without the runtime observer and Lab |
 | `dna runtime install` | Framework snippets for production observer |
+| `dna runtime uninstall` | Remove the observer and keep it removed |
 | `dna lab install` | Scaffold DNA Lab at `/labs` + auto-wire middleware |
+| `dna lab uninstall` | Remove Lab files and wiring and keep them removed |
 | `dna lab serve` | Local Lab at `http://localhost:3200/labs` (no login on localhost) |
 | `dna lab installs` | List nested/stale `@superhumaan/dna-by-humaan` installs |
 | `dna lab installs --fix` | Upgrade every owner package to `@latest` |

@@ -116,8 +116,6 @@ async function listSourceFiles(root: string, paths?: string[]): Promise<string[]
   return glob(SOURCE_GLOBS, { cwd: root, ignore: SOURCE_IGNORE, onlyFiles: true });
 }
 
-const DEFAULT_FEATURE_SCOPE_GLOBS = ["packages/**/*.{ts,tsx,js,jsx,mjs,cjs}"];
-
 function scanLinePatterns(content: string, filePath: string): QualityIssue[] {
   const issues: QualityIssue[] = [];
   const lines = content.split("\n");
@@ -243,7 +241,8 @@ export async function runQualityAnalysis(
     targetPaths = await resolveFeaturePaths(root);
     scope = "feature";
     if (targetPaths.length === 0) {
-      targetPaths = DEFAULT_FEATURE_SCOPE_GLOBS;
+      targetPaths = undefined;
+      scope = "full";
     }
   }
 

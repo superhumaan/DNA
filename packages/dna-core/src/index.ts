@@ -27,6 +27,7 @@ export * from "./ai-connect.js";
 export * from "./generators/ci.js";
 export * from "./generators/git-hooks.js";
 export * from "./post-init.js";
+export * from "./observer-opt-out.js";
 export * from "./marketplace/client.js";
 export * from "./marketplace/install.js";
 export * from "./marketplace/apply-updates.js";

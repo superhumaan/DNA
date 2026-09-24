@@ -4,10 +4,11 @@ What ships in the current DNA release channel and what is explicitly out of scop
 
 ---
 
-## In scope (v0.6.29)
+## In scope (v0.6.30)
 
 | Area | Delivered |
 |------|-----------|
+| **Runtime and Lab opt-out** | `dna init --core`, `--no-runtime`, `--no-lab`; `dna runtime uninstall` and `dna lab uninstall` stay off across doctor and update |
 | **Agent Mesh + Git Guardian** | SQLite `.DNA/runtime/agents.db`; `dna agents *` + `dna commit`; fail-open Cursor hooks; path claims; Git Guardian denies feature-branch create / raw git add+commit on trunk ([agent-mesh.md](../engineering/agent-mesh.md)) |
 | **Project git naming** | AI commits, PR titles, and repair branches use per-project tags (`[MyApp]`, `[DNA]`, …) from `projectId` / `git.projectTag`; always-on workbench + delivery behaviour + stems |
 | **CLI** | Full `dna` command surface — init, scan, analyze, plan, context, marketplace, `dna ai force-repair`, `dna lab installs [--fix]`, `dna update` aligns nested Lab packages |

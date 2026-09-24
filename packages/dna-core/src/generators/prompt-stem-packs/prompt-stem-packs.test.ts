@@ -3,6 +3,7 @@ import { PROMPT_STEM_DEFS, getPromptStemPacks, intelligenceStemPackEntries, gene
 import { finalizeStemPack } from "./builder.js";
 import { checkStemQualityBaseline } from "./stem-quality.js";
 import { EXPO_STEM_DEFS, EXPO_STEM_IDS } from "./catalog-expo.js";
+import { SURFACE_STEM_DEFS, SURFACE_STEM_IDS } from "./catalog-surfaces.js";
 
 describe("prompt stem packs", () => {
   it("defines a large stem library", () => {
@@ -139,6 +140,21 @@ describe("prompt stem packs", () => {
     expect(PROMPT_STEM_DEFS.find((d) => d.id === "expo-perf-mobile")?.category).toBe("quality");
   });
 
+  it("surface stems are generic workflows with no borrowed product identity", () => {
+    const banned =
+      /\b(invitrace|fourty|skeletor|colorparty|atlantis|humaan|grab-merch|aistudio|ai-studio|ai-commander|ai-controller|bleep|joli)\b/i;
+    expect(SURFACE_STEM_DEFS.map((d) => d.id)).toEqual([...SURFACE_STEM_IDS]);
+    for (const id of SURFACE_STEM_IDS) {
+      const def = PROMPT_STEM_DEFS.find((d) => d.id === id);
+      expect(def, id).toBeDefined();
+      expect(def?.slash).toBe(id);
+      const quality = checkStemQualityBaseline(def!);
+      expect(quality.ok, `${id}: ${quality.failures.join("; ")}`).toBe(true);
+      const blob = JSON.stringify(def);
+      expect(blob, id).not.toMatch(banned);
+    }
+  });
+
   it("writes Claude slash commands with YAML frontmatter then a heading", () => {
     const files = generatePromptStemPackFiles({
       version: "0.1.0",
@@ -158,7 +174,7 @@ describe("prompt stem packs", () => {
     const claude = files[".claude/commands/expo-bff.md"];
     expect(claude).toMatch(/^---\n/);
     expect(claude).toContain("\n---\n# Expo backend for frontend");
-    expect(JSON.parse(files[".DNA/stems/index.json"]).catalogVersion).toBe(9);
+    expect(JSON.parse(files[".DNA/stems/index.json"]).catalogVersion).toBe(10);
     expect(JSON.parse(files[".DNA/stems/index.json"]).count).toBe(PROMPT_STEM_DEFS.length);
   });
 });

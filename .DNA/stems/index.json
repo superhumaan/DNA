@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "catalogVersion": 9,
+  "catalogVersion": 10,
   "source": "bundled",
-  "count": 127,
+  "count": 133,
   "catalogUrl": "https://dna.humaan.app/intelligence#stem-library",
   "packs": [
     {
@@ -2014,6 +2014,102 @@
       "category": "analysis",
       "slash": "expo-native-modules",
       "path": ".DNA/stems/expo-native-modules",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "ship-macos-menubar",
+      "name": "Ship macOS menu bar",
+      "category": "delivery",
+      "slash": "ship-macos-menubar",
+      "path": ".DNA/stems/ship-macos-menubar",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "macos-background-agent",
+      "name": "macOS background agent",
+      "category": "delivery",
+      "slash": "macos-background-agent",
+      "path": ".DNA/stems/macos-background-agent",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "publish-internal-app",
+      "name": "Publish internal app",
+      "category": "delivery",
+      "slash": "publish-internal-app",
+      "path": ".DNA/stems/publish-internal-app",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "wiki",
+      "name": "Wiki",
+      "category": "docs",
+      "slash": "wiki",
+      "path": ".DNA/stems/wiki",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "governed-ai-fleet",
+      "name": "Governed AI fleet",
+      "category": "features",
+      "slash": "governed-ai-fleet",
+      "path": ".DNA/stems/governed-ai-fleet",
+      "files": [
+        "README.md",
+        "prompt.md",
+        "guidelines.md",
+        "expectations.md",
+        "context.md",
+        "examples.md",
+        "workflow.md"
+      ]
+    },
+    {
+      "id": "companion-client",
+      "name": "Companion client",
+      "category": "features",
+      "slash": "companion-client",
+      "path": ".DNA/stems/companion-client",
       "files": [
         "README.md",
         "prompt.md",

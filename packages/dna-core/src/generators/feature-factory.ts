@@ -170,7 +170,7 @@ When the user says **admin**, **backoffice**, **admin panel**, or **control pane
 2. **Read** \`ai/agent-loop.md\` and execute each role in order
 3. **Plan first** — Solution Architect produces a short implementation plan
 4. **Stop and wait for approval** before editing code
-5. After approval — Backend → Frontend → UX → QA → Code Quality → Refactor → Final Reviewer
+5. After approval — launch **parallel subagents on trunk** for every layer the plan splits (backend, frontend, tests). Example: a login system starts those three together, each with its own path claim. Then UX → QA → Code Quality → Refactor → Final Reviewer
 
 ## Roles (sequential — do not skip)
 
@@ -415,7 +415,21 @@ From the user's latest message (and \`ai/feature-request.md\`):
 
 Decide: data model, API, frontend state, security/permissions, migrations, patterns to reuse.
 
-**Output:** Short implementation plan (scope, files, risks, tests). **Stop — wait for user approval before code.**
+**Output:** Short implementation plan (scope, files, risks, tests) that names which paths each subagent owns. **Stop — wait for user approval before code.**
+
+---
+
+## Parallel build
+
+After approval, launch implementation subagents **in one turn** on the integration branch. Do not build the layers one after another when their files do not overlap.
+
+Example — "add a login system":
+
+- Backend subagent: auth API, session, middleware
+- Frontend subagent: login and session UI
+- Test subagent: auth tests
+
+Each subagent claims its paths before writing. A DNA CONFLICT means stop and pick different files. No feature branches. No agent deletes or rewrites another agent's claimed files.
 
 ---
 

@@ -1,8 +1,8 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import type { DnaConfig } from "@superhumaan/dna-config";
+import { stripInappropriateLanguage, type DnaConfig } from "@superhumaan/dna-config";
 import { git } from "@superhumaan/dna-github";
-import { findClaimConflict } from "./claims.js";
+import { findClaimConflict, pathsOverlap } from "./claims.js";
 import { listLiveAgents, recordLastCommit, withStore } from "./registry.js";
 import { withAgentLock } from "./db.js";
 import { conflictMessage } from "./types.js";
@@ -39,13 +39,17 @@ export function filesForAgentCommit(
   modified: string[],
   dirty: string[],
 ): string[] {
-  const owned = new Set([...claimed, ...modified].map((p) => p.replace(/\\/g, "/")));
-  if (owned.size === 0) return [];
-  return dirty.filter((path) => owned.has(path.replace(/\\/g, "/")));
+  const owned = [...claimed, ...modified].map((p) => p.replace(/\\/g, "/"));
+  if (owned.length === 0) return [];
+  return dirty.filter((path) => {
+    const normalized = path.replace(/\\/g, "/");
+    return owned.some((ownedPath) => pathsOverlap(ownedPath, normalized));
+  });
 }
 
 export async function commitAgentWork(options: AgentCommitOptions): Promise<AgentCommitResult> {
-  const { root, agentId, message, config } = options;
+  const { root, agentId, config } = options;
+  const message = stripInappropriateLanguage(options.message);
   if (!agentId.trim()) {
     throw new Error("DNA_AGENT_ID is required for dna commit");
   }
@@ -99,7 +103,7 @@ export async function commitAgentWork(options: AgentCommitOptions): Promise<Agen
       env: { ...process.env, DNA_AGENT_COMMIT: "1" },
       maxBuffer: 10 * 1024 * 1024,
     });
-    await execFileAsync("git", ["commit", "-m", message], {
+    await execFileAsync("git", ["commit", "-m", message, "--", ...staged], {
       cwd: root,
       env: { ...process.env, DNA_AGENT_COMMIT: "1" },
       maxBuffer: 10 * 1024 * 1024,

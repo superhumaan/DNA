@@ -1,9 +1,12 @@
+import { stripInappropriateLanguage } from "@superhumaan/dna-config";
+
 const SECRET_PATTERNS = [
   /(?:api[_-]?key|token|secret|password|authorization)\s*[:=]\s*['"]?[\w-]{8,}/gi,
   /Bearer\s+[A-Za-z0-9._-]+/gi,
   /ghp_[A-Za-z0-9]{20,}/g,
   /gho_[A-Za-z0-9]{20,}/g,
   /sk-[A-Za-z0-9]{20,}/g,
+  /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g,
 ];
 
 const PATH_HOME = homedirPattern();
@@ -19,7 +22,7 @@ export function sanitizeText(text: string): string {
   for (const pattern of SECRET_PATTERNS) {
     result = result.replace(pattern, "[REDACTED]");
   }
-  return result.slice(0, 8000);
+  return stripInappropriateLanguage(result).slice(0, 8000);
 }
 
 export function sanitizeStack(stack?: string): string | undefined {

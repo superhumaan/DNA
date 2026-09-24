@@ -4,6 +4,18 @@ All notable changes to DNA are documented here.
 
 ## [Unreleased]
 
+## [0.6.30] - 2026-09-24
+
+### Added
+- **Surface stems (catalog v10)** — `/ship-macos-menubar`, `/macos-background-agent`, `/publish-internal-app`, `/wiki`, `/governed-ai-fleet`, `/companion-client`. Generic workflows only; they do not name any product, host, or brand
+- `dna init --core` (also `--no-runtime` and `--no-lab`) installs DNA without the runtime observer and Lab
+- `dna runtime uninstall` and `dna lab uninstall` delete observer and Lab files and wiring. `dna doctor` and `dna update` leave them removed until `dna runtime install` or `dna lab install`
+
+### Fixed
+- `dna update` refreshes installed purpose-combo stems and rules, not only the member knowledge packs
+- `dna doctor --check-only` prints progress immediately, skips source-map writes, and times out a stalled GitHub user lookup
+- Express runtime error handler keeps a 4xx status the route already set
+
 ## [0.6.29] - 2026-09-04
 
 ### Added

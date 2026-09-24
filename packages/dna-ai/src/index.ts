@@ -234,9 +234,7 @@ function parseStructuredPlan(
     diagnosis: parsed.diagnosis ?? issue.summary,
     confidence: parsed.confidence ?? issue.confidence,
     proposedChanges: parsed.proposedChanges ?? [],
-    branchName:
-      parsed.branchName ??
-      formatRepairBranch(identity, issue.fingerprint ?? issue.id.slice(0, 8)),
+    branchName: formatRepairBranch(identity, issue.fingerprint ?? issue.id.slice(0, 8)),
     prTitle: parsed.prTitle ?? formatTaggedPrTitle(identity, "Fix", issue.title),
     prBody: parsed.prBody ?? parsed.diagnosis ?? issue.summary,
     testPlan: parsed.testPlan ?? issue.testRecommendation ?? "Add regression test",

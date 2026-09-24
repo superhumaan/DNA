@@ -31,7 +31,7 @@ export function getBundledCatalog(channel: "stable" | "beta" | "nightly" = "stab
   if (cached) return cached;
 
   const base = loadBaseCatalog();
-  const filtered = base.packs.filter((p) => p.channel === channel || channel === "stable");
+  const filtered = base.packs.filter((p) => p.channel === "stable" || p.channel === channel);
   const byId = new Map<string, KnowledgePack>();
   for (const packEntry of filtered) {
     byId.set(packEntry.id, packEntry);

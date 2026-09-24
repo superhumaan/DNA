@@ -42,8 +42,22 @@ export function createLabMiddleware(options: LabServerOptions): LabMiddleware {
       res as Parameters<typeof handleLabRequest>[1],
       options,
       next,
-    ).then((handled) => {
-      if (!handled && next && !(res as { headersSent?: boolean }).headersSent) next();
-    });
+    )
+      .then((handled) => {
+        if (!handled && next && !(res as { headersSent?: boolean }).headersSent) next();
+      })
+      .catch((err: unknown) => {
+        const response = res as {
+          headersSent?: boolean;
+          statusCode: number;
+          setHeader: (name: string, value: string) => void;
+          end: (body: string) => void;
+        };
+        if (response.headersSent) return;
+        const message = err instanceof Error ? err.message : "Lab request failed";
+        response.statusCode = 500;
+        response.setHeader("content-type", "application/json; charset=utf-8");
+        response.end(JSON.stringify({ error: message }));
+      });
   };
 }

@@ -45,7 +45,9 @@ export async function loadImmuneConfig(dnaRoot: string): Promise<ImmuneConfig> {
     const rulesRaw = JSON.parse(await readFile(rulesPath, "utf-8")) as {
       rules?: ImmuneRule[];
     };
-    rules = rulesRaw.rules ?? [];
+    rules = Array.isArray(rulesRaw.rules)
+      ? rulesRaw.rules.filter((rule) => typeof rule?.condition === "string")
+      : [];
   } catch {
     // use defaults
   }

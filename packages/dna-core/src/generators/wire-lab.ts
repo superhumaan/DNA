@@ -325,7 +325,7 @@ function stackUsesFastify(scan: ScanResult): boolean {
 
 export async function wireLabMiddleware(options: WireLabOptions): Promise<WireLabResult> {
   const { root, config } = options;
-  if (config.lab?.enabled === false) {
+  if (config.lab?.removed === true || config.lab?.enabled === false) {
     return { wired: [], skipped: ["lab disabled in config"] };
   }
 

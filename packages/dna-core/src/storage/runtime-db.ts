@@ -1,5 +1,5 @@
 import { dirname, join } from "node:path";
-import { readFile, rename, writeFile } from "node:fs/promises";
+import { open, readFile, rename, unlink, writeFile } from "node:fs/promises";
 import { DNA_RUNTIME_DB } from "@superhumaan/dna-config";
 import { ensureDir, fileExists } from "../fs.js";
 
@@ -27,11 +27,45 @@ async function withStoreLock<T>(dbPath: string, fn: () => Promise<T>): Promise<T
   locks.set(dbPath, next);
 
   await prev.catch(() => undefined);
+  const releaseFile = await acquireStoreFileLock(`${dbPath}.lock`);
   try {
     return await fn();
   } finally {
+    await releaseFile();
     release();
     if (locks.get(dbPath) === next) locks.delete(dbPath);
+  }
+}
+
+async function acquireStoreFileLock(lockPath: string, timeoutMs = 10_000): Promise<() => Promise<void>> {
+  await ensureDir(dirname(lockPath));
+  const started = Date.now();
+  while (true) {
+    try {
+      const handle = await open(lockPath, "wx");
+      await handle.writeFile(`${process.pid}\n`, "utf-8");
+      return async () => {
+        await handle.close().catch(() => undefined);
+        await unlink(lockPath).catch(() => undefined);
+      };
+    } catch {
+      const raw = await readFile(lockPath, "utf-8").catch(() => "");
+      const pid = Number(raw.trim());
+      let alive = false;
+      if (Number.isInteger(pid) && pid > 0) {
+        try {
+          process.kill(pid, 0);
+          alive = true;
+        } catch (err) {
+          alive = (err as NodeJS.ErrnoException).code === "EPERM";
+        }
+      }
+      if (!alive) await unlink(lockPath).catch(() => undefined);
+      if (Date.now() - started > timeoutMs) {
+        throw new Error(`Runtime store lock timeout: ${lockPath}`);
+      }
+      await new Promise((r) => setTimeout(r, 25));
+    }
   }
 }
 
@@ -124,6 +158,12 @@ async function migrateJsonl(root: string, dbPath: string): Promise<number> {
 
   if (migrated > 0) {
     await saveStore(dbPath, store);
+    for (const file of ["events.jsonl", "issues.jsonl"] as const) {
+      const jsonlPath = join(root, ".DNA", "runtime", file);
+      if (await fileExists(jsonlPath)) {
+        await rename(jsonlPath, `${jsonlPath}.migrated`).catch(() => undefined);
+      }
+    }
   }
 
   return migrated;

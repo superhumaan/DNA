@@ -1,6 +1,6 @@
 # DNA Prompt Stem Packs
 
-**dna-by-humaan** — 127 prompt stem packs installed by DNA Workbench.
+**dna-by-humaan** — 133 prompt stem packs installed by DNA Workbench.
 
 Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, context, and examples** so the AI sticks to the workflow.
 
@@ -62,6 +62,8 @@ Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, conte
 - `expo-offline-sync` — Expo offline sync
 - `expo-notifications` — Expo push notifications
 - `expo-deep-links` — Expo deep links
+- `governed-ai-fleet` — Governed AI fleet
+- `companion-client` — Companion client
 
 ### quality
 - `quality-gate` — Quality gate
@@ -98,6 +100,7 @@ Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, conte
 - `impressions-drift-pr` — Impressions drift PR
 - `document-from-code` — Document from code
 - `write-release-notes` — Write release notes
+- `wiki` — Wiki
 
 ### ivf
 - `plan-ivf` — Plan IVF
@@ -120,6 +123,9 @@ Each stem pack is a **copy-paste prompt** plus **guidelines, expectations, conte
 - `expo-android-ship` — Expo Android ship
 - `expo-store-submit` — Expo store submit
 - `expo-ci-eas` — Expo CI EAS
+- `ship-macos-menubar` — Ship macOS menu bar
+- `macos-background-agent` — macOS background agent
+- `publish-internal-app` — Publish internal app
 
 ### marketplace
 - `marketplace-search` — Marketplace search

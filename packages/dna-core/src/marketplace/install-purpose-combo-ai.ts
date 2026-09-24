@@ -63,6 +63,7 @@ export interface PurposeComboAiInstallResult {
 export async function installPurposeComboAiContext(
   root: string,
   comboId: string,
+  options: { refreshInjection?: boolean } = {},
 ): Promise<PurposeComboAiInstallResult | null> {
   const combo = getPurposeCombo(comboId);
   if (!combo) return null;
@@ -111,16 +112,18 @@ export async function installPurposeComboAiContext(
   });
 
   let injectionPaths: string[] = [];
-  try {
-    const injection = await syncAiInjection(root, config, {
-      force: false,
-      workbench: true,
-      persistConfig: true,
-      verify: false,
-    });
-    injectionPaths = injection.written;
-  } catch {
-    // Knowledge install succeeded; AI injection is best-effort (e.g. incomplete project).
+  if (options.refreshInjection !== false) {
+    try {
+      const injection = await syncAiInjection(root, config, {
+        force: false,
+        workbench: true,
+        persistConfig: true,
+        verify: false,
+      });
+      injectionPaths = injection.written;
+    } catch {
+      // Knowledge install succeeded; AI injection is best-effort (e.g. incomplete project).
+    }
   }
 
   return {

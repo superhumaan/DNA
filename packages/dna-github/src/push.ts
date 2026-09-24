@@ -37,17 +37,6 @@ function slugifyBranch(text: string): string {
   );
 }
 
-function tokenRemoteUrl(remoteUrl: string, token: string): string {
-  if (remoteUrl.startsWith("git@")) {
-    return remoteUrl;
-  }
-  const parsed = remoteUrl.match(/https?:\/\/github\.com\/(.+)/);
-  if (parsed) {
-    return `https://x-access-token:${token}@github.com/${parsed[1]}`;
-  }
-  return remoteUrl;
-}
-
 export async function pushFeatureToGitHub(
   options: PushFeatureOptions,
 ): Promise<PushFeatureResult> {
@@ -82,8 +71,11 @@ export async function pushFeatureToGitHub(
     committed = true;
   }
 
-  const pushUrl = tokenRemoteUrl(remote.remoteUrl, token);
-  await g.push(pushUrl, branch, ["--set-upstream"]);
+  if (token && !remote.remoteUrl.startsWith("git@")) {
+    await g.pushWithBearer(remote.remoteUrl, branch, token);
+  } else {
+    await g.push(remote.remoteUrl, branch, ["--set-upstream"]);
+  }
 
   return {
     branch,
