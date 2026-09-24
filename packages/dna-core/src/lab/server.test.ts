@@ -378,11 +378,14 @@ describe("lab server", () => {
     });
 
     port = await listenOnEphemeralPort(server);
+    const previousTrust = process.env.DNA_LAB_TRUST_FORWARDED_HOST;
+    process.env.DNA_LAB_TRUST_FORWARDED_HOST = "1";
     const publicHeaders = {
       Host: `127.0.0.1:${port}`,
       "X-Forwarded-Host": "preview.example.test",
       "Content-Type": "application/json",
     };
+    try {
 
     const boot = await fetch(`http://127.0.0.1:${port}/api/dna/labs/bootstrap`, {
       headers: publicHeaders,
@@ -404,6 +407,10 @@ describe("lab server", () => {
     expect(otp.status).toBe(200);
     const otpBody = (await otp.json()) as { devOtp?: string };
     expect(otpBody.devOtp).toBeUndefined();
+    } finally {
+      if (previousTrust === undefined) delete process.env.DNA_LAB_TRUST_FORWARDED_HOST;
+      else process.env.DNA_LAB_TRUST_FORWARDED_HOST = previousTrust;
+    }
   });
 
   it("rejects forged pairing callbacks and accepts a valid HMAC", async () => {

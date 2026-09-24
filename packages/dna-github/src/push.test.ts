@@ -15,6 +15,7 @@ vi.mock("./git.js", () => ({
     add: addMock,
     commit: commitMock,
     push: pushMock,
+    pushWithBearer: pushMock,
   }),
 }));
 
